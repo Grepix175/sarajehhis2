@@ -902,6 +902,8 @@ class Patient extends CI_Controller {
         $data['page_title'] = "Add Patient";
         $data['form_error'] = [];
         $data['country_list'] = $this->general_model->country_list();
+        $data['patient_category_list'] = $this->general_model->patient_category_list();
+
 
         $data['simulation_list'] = $this->general_model->simulation_list();
         $data['religion_list'] = $this->general_model->religion_list();
@@ -912,6 +914,7 @@ class Patient extends CI_Controller {
         $data['insurance_company_list'] = $this->general_model->insurance_company_list();   
         $reg_no = generate_unique_id(4);
         $post = $this->input->post();
+        
         $data['form_data'] = array(
                                     "data_id"=>"",
                                     "branch_id"=>"",
@@ -966,10 +969,13 @@ class Patient extends CI_Controller {
                                     'f_h_simulation'=>'',
                                     'capture_finger'=>'',  // Added By Nitin Sharma 04/02/2024
                                     'fingerprint_photo'=>'', // Added By Nitin Sharma 04/02/2024
-                                    'created_date'=>date('m/d/Y H:i:s')
+                                    'created_date'=>date('m/d/Y H:i:s'),
+                                    'patient_category'=>''
                                   );
         if(isset($post) && !empty($post))
         { 
+
+        
             $valid_response = $this->_validate();
             $data['form_data'] = $valid_response['form_data']; 
             if($this->form_validation->run() == TRUE)
@@ -1002,7 +1008,8 @@ class Patient extends CI_Controller {
                // } 
                  
                 ////////////////////////////////////////
-
+                // print_r($post);
+                // die();
 
                 $this->session->set_flashdata('success','Patient successfully added.');
                 redirect(base_url('patient'));
@@ -1014,6 +1021,10 @@ class Patient extends CI_Controller {
             }       
         }
         $this->session->unset_userdata('comission_data');
+        // echo "<pre>";
+        // print_r($data);
+        // echo "</pre>";
+        // die();
         $this->load->view('patient/add',$data);
     }
 

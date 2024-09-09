@@ -586,14 +586,18 @@ $this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.ad
 	{  
 		$user_data = $this->session->userdata('auth_users');
 		$post = $this->input->post(); 
-		 
-			if($post['insurance_type']==0){
-			$insurance_type_id='';
-			$insurance_company='';
-		}else{
-			$insurance_type_id=$post['insurance_type_id'];
-			$insurance_company =$post['ins_company_id'];
-		}
+		// ini_set('display_errors', 1);
+
+		//if(!empty($post['insurance_type']) && isset($post['insurance_type']))
+		// {
+
+			// if($post['insurance_type']==0){
+			// 	$insurance_type_id='';
+			// 	$insurance_company='';
+			// }else{
+			// 	$insurance_type_id=$post['insurance_type_id'];
+			// 	$insurance_company =$post['ins_company_id'];
+			// }
 
 		$anniversary='';
 		if(!empty($post['anniversary']) && isset($post['anniversary']))
@@ -606,46 +610,47 @@ $this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.ad
 					//'patient_code'=>$post['patient_code'],
 					"mobile_no"=>$post['mobile_no'],
 					"gender"=>$post['gender'],
-					"adhar_no"=>$post['adhar_no'], 
+					// "adhar_no"=>$post['adhar_no'], 
 					"age_y"=>$post['age_y'],
 					"age_m"=>$post['age_m'],
 					"age_d"=>$post['age_d'],
 					"age_h"=>$post['age_h'],
+					"patient_category" => $post['patient_category'],
 					'dob'=>date('Y-m-d', strtotime($post['dob'])),
 					'anniversary'=>$anniversary,
-					"city_id"=>$post['city_id'],
+					// "city_id"=>$post['city_id'],
 					"state_id"=>$post['state_id'],
-					"country_id"=>$post['country_id'],
+					// "country_id"=>$post['country_id'],
 					"pincode"=>$post['pincode'],
-					"marital_status"=>$post['marital_status'],
-					"religion_id"=>$post['religion_id'],
+					// "marital_status"=>$post['marital_status'],
+					// "religion_id"=>$post['religion_id'],
 					//'f_h_simulation'=>$post['f_h_simulation'],
 					//"father_husband"=>$post['father_husband'],
-					"mother"=>$post['mother'],
-					"guardian_name"=>$post['guardian_name'],
-					"guardian_email"=>$post['guardian_email'],
-					"guardian_phone"=>$post['guardian_phone'],
-					"relation_id"=>$post['relation_id'],
-					"patient_email"=>$post['patient_email'],
-					"monthly_income"=>$post['monthly_income'],
-					"occupation"=>$post['occupation'],
+					// "mother"=>$post['mother'],
+					// "guardian_name"=>$post['guardian_name'],
+					// "guardian_email"=>$post['guardian_email'],
+					// "guardian_phone"=>$post['guardian_phone'],
+					// "relation_id"=>$post['relation_id'],
+					// "patient_email"=>$post['patient_email'],
+					// "monthly_income"=>$post['monthly_income'],
+					// "occupation"=>$post['occupation'],
 					'relation_type'=>$post['relation_type'],
 					'relation_name'=>$post['relation_name'],
 					'relation_simulation_id'=>$post['relation_simulation_id'],
-					"insurance_type"=>$post['insurance_type'],
-					"insurance_type_id"=>$insurance_type_id,
-					"ins_company_id"=>$insurance_company,
-					"polocy_no"=>$post['polocy_no'],
-					"tpa_id"=>$post['tpa_id'],
-					"ins_amount"=>$post['ins_amount'],
-					"ins_authorization_no"=>$post['ins_authorization_no'], 
-					"status"=>$post['status'],
-					"remark"=>$post['remark'],
+					// "insurance_type"=>$post['insurance_type'],
+					// "insurance_type_id"=>$insurance_type_id,
+					// "ins_company_id"=>$insurance_company,
+					// "polocy_no"=>$post['polocy_no'],
+					// "tpa_id"=>$post['tpa_id'],
+					// "ins_amount"=>$post['ins_amount'],
+					// "ins_authorization_no"=>$post['ins_authorization_no'], 
+					// "status"=>$post['status'],
+					// "remark"=>$post['remark'],
 				    // 	Added By Nitin Sharma 04/02/2024
-				    "capture_finger"=>$post['capture_finger'],
-					"fingerprint_photo"=>$post['fingerprint_photo'],
+				    // "capture_finger"=>$post['capture_finger'],
+					// "fingerprint_photo"=>$post['fingerprint_photo'],
 				    // 	Added By Nitin Sharma 04/02/2024
-					"created_date"=>date('Y-m-d H:i:s', strtotime($post['created_date'])) 
+					// "created_date"=>date('Y-m-d H:i:s', strtotime($post['created_date'])) 
 				         ); 
 		if(empty($post['address']))
 		{
@@ -713,7 +718,7 @@ $this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.ad
 			$this->db->set('branch_id',$user_data['parent_id']);
 			//$this->db->set('created_date',date('Y-m-d H:i:s'));
 			$this->db->insert('hms_patient',$data); 
-			//echo $this->db->last_query();die;
+			// echo $this->db->last_query();die;
 			$data_id = $this->db->insert_id();   
 
 			$data = array(     
@@ -721,7 +726,7 @@ $this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.ad
 					"parent_id"=>$data_id,
 					"username"=>'PAT000'.$data_id,
 					"password"=>md5('PASS'.$data_id),
-					"email"=>$post['patient_email'], 
+					// "email"=>$post['patient_email'], 
 					"status"=>'1',
 					"ip_address"=>$_SERVER['REMOTE_ADDR'],
 					"created_by"=>$user_data['id'],

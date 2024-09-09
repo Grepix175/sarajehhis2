@@ -112,6 +112,8 @@ $field_list = mandatory_section_field_list(2);
 
       </div>
 
+      
+
     <div class="grp-full">
         <div class="grp">
               <label> 
@@ -178,6 +180,37 @@ $field_list = mandatory_section_field_list(2);
         </div>
       </div>
 
+      <div class="grp-full">
+          <div class="grp">
+            <label>Patient Category</label>
+            <div class="box-right">
+                <select name="patient_category" id="patient_category">
+                  <option value="">Select Patient Category</option>
+                  <?php
+                  
+                  if(!empty($patient_category_list))
+                  {
+                    foreach($patient_category_list as $patient_category)
+                    {
+                      $selected_patient_category = "";
+                      if($patient_category->id==$form_data['patient_category_id'])
+                      {
+                        $selected_patient_category = 'selected="selected"';
+                      }
+                      echo '<option value="'.$patient_category->id.'" '.$selected_patient_category.'>'.$patient_category->patient_category.'</option>';
+                    }
+                  }
+                  ?> 
+                </select>
+            </div>
+          </div>
+          <?php if(in_array('51',$users_data['permission']['action'])) {
+          ?>
+               <div class="grp-right">
+                    <a title="Add Religion" class="btn-new" href="javascript:void(0)" onClick=""><i class="fa fa-plus"></i> New</a>
+               </div>
+          <?php } ?>
+      </div>
 
       <div class="grp">
         <label>Gender 
@@ -199,7 +232,7 @@ $field_list = mandatory_section_field_list(2);
 
 
       <div class="grp">
-        <label>Age 
+        <label>Age  <span class="star">*</span>
          <?php if(!empty($field_list)){
                     if($field_list[1]['mandatory_field_id']==7 && $field_list[1]['mandatory_branch_id']==$users_data['parent_id']){?>         
                          <span class="star">*</span>
@@ -225,7 +258,7 @@ $field_list = mandatory_section_field_list(2);
 
       
 
-      <div class="grp">
+      <!-- <div class="grp">
         <label>Address 1</label>
         <div class="box-right">
             <input type="text" name="address" id="address" class="address" maxlength="255" value="<?php echo $form_data['address']; ?>"/>
@@ -242,9 +275,9 @@ $field_list = mandatory_section_field_list(2);
         <div class="box-right">
             <input type="text" name="address_third" id="address_third" class="address" maxlength="255" value="<?php echo $form_data['address_third']; ?>"/>
         </div>
-      </div>
+      </div> -->
 
-      <div class="grp">
+      <!-- <div class="grp">
         <label>Aadhaar No.</label>
         <div class="box-right">
             <input type="text" name="adhar_no" id="adhar_no" class="adhar_no numeric" value="<?php echo $form_data['adhar_no']; ?>" maxlength="16" />
@@ -253,10 +286,10 @@ $field_list = mandatory_section_field_list(2);
                     
              ?>
         </div>
-      </div>
+      </div> -->
  
       
-      <div class="grp">
+      <!-- <div class="grp">
         <label>Country</label>
         <div class="box-right">
             <select name="country_id" id="country_id" class="pat-select1" onChange="return get_state(this.value);">
@@ -277,7 +310,7 @@ $field_list = mandatory_section_field_list(2);
                   ?> 
                 </select>
         </div>
-      </div>
+      </div> -->
 
       <div class="grp">
         <label>State</label>
@@ -303,7 +336,7 @@ $field_list = mandatory_section_field_list(2);
         </div>
       </div>
 
-      <div class="grp">
+      <!-- <div class="grp">
         <label>City</label>
         <div class="box-right">
             <select name="city_id" id="city_id">
@@ -327,7 +360,7 @@ $field_list = mandatory_section_field_list(2);
               ?>
             </select>
         </div>
-      </div>     
+      </div>      -->
 
 
       <div class="grp">
@@ -339,22 +372,22 @@ $field_list = mandatory_section_field_list(2);
       </div>
 
 
-      <div class="grp">
+      <!-- <div class="grp">
         <label>Marital Status</label>
         <div class="box-right">
             <input type="radio" name="marital_status" value="1" <?php if($form_data['marital_status']==1){ echo 'checked="checked"'; } ?> onclick="set_married(1);" > Married
             <input type="radio" name="marital_status" value="0" <?php if($form_data['marital_status']==0){ echo 'checked="checked"'; } ?> onclick="set_married(0);"> Unmarried
         </div>
-      </div>
+      </div> -->
 
-      <div class="grp">
+      <!-- <div class="grp">
         <label>Marriage Anniversary</label>
         <div class="box-right">
               <input type="text" class="datepicker" readonly="" name="anniversary" id="anniversary" value="<?php echo $form_data['anniversary']; ?>" /> 
             </div>
-      </div>
+      </div> -->
 
-      <div class="grp-full">
+      <!-- <div class="grp-full">
           <div class="grp">
             <label>Religion</label>
             <div class="box-right">
@@ -383,7 +416,7 @@ $field_list = mandatory_section_field_list(2);
                     <a title="Add Religion" class="btn-new" href="javascript:void(0)" onClick="religion_modal()"><i class="fa fa-plus"></i> New</a>
                </div>
           <?php } ?>
-      </div>
+      </div> -->
 
 
       <div class="grp">
@@ -395,18 +428,18 @@ $field_list = mandatory_section_field_list(2);
 
  
       
-      <div class="grp">
+      <!-- <div class="grp">
         <label>Mother Name</label>
         <div class="box-right">
             <input type="text" name="mother" class="alpha_space_name" id="mother" value="<?php echo $form_data['mother']; ?>" />
         </div>
-      </div>
+      </div> -->
 
     </div> <!-- // -->
 
     <div class="pat-col">
       
-      <div class="grp">
+      <!-- <div class="grp">
         <label>Guardian Name</label>
         <div class="box-right">
             <input type="text" name="guardian_name" class="alpha_space_name input_focus" id="guardian_name" value="<?php echo $form_data['guardian_name']; ?>" />
@@ -420,9 +453,9 @@ $field_list = mandatory_section_field_list(2);
           
             <?php if(!empty($form_error)){ echo form_error('guardian_email'); } ?>
         </div>
-      </div>
+      </div> -->
       
-      <div class="grp">
+      <!-- <div class="grp">
         <label>Guardian Mobile</label>
         <div class="box-right">
             <input type="text" name="country_code" value="+91" readonly="" class="country_code" placeholder="+91">
@@ -527,10 +560,10 @@ $field_list = mandatory_section_field_list(2);
                     <a title="Add Insurance Type" class="btn-new" href="javascript:void(0)" onClick="insurance_type_modal()"><i class="fa fa-plus"></i> New</a>
                </div>
           <?php } ?>
-      </div>
+      </div> -->
 
 
-      <div class="grp-full">
+      <!-- <div class="grp-full">
           <div class="grp">
             <label>Name</label>
             <div class="box-right">
@@ -559,51 +592,51 @@ $field_list = mandatory_section_field_list(2);
                     <a title="Add Insurance Company" class="btn-new" href="javascript:void(0)" onClick="insurance_company_modal()"><i class="fa fa-plus"></i> New</a>
                </div>
           <?php } ?>
-      </div>
+      </div> -->
       
-      <div class="grp">
+      <!-- <div class="grp">
         <label>Policy No.</label>
         <div class="box-right">
             <input type="text" name="polocy_no" class="alpha_numeric" id="polocy_no" value="<?php echo $form_data['polocy_no']; ?>" maxlength="20" />
         </div>
-      </div>
+      </div> -->
       
-      <div class="grp">
+      <!-- <div class="grp">
         <label>TPA ID</label>
         <div class="box-right">
             <input type="text" name="tpa_id" class="alpha_numeric"  id="tpa_id" value="<?php echo $form_data['tpa_id']; ?>"  data-toggle="tooltip" title="Third Party Adminstrator!"/>
         </div>
-      </div>
+      </div> -->
       
-      <div class="grp">
+      <!-- <div class="grp">
         <label>Insurance Amount</label>
         <div class="box-right">
             <input type="text" name="ins_amount" class="price_float" id="ins_amount" value="<?php echo $form_data['ins_amount']; ?>" onKeyPress="return isNumberKey(event);" />
         </div>
-      </div>
+      </div> -->
       
-      <div class="grp">
+      <!-- <div class="grp">
         <label>Authorization No.</label>
         <div class="box-right">
             <input type="text" name="ins_authorization_no" class="alpha_numeric" id="ins_authorization_no" value="<?php echo $form_data['ins_authorization_no']; ?>" />
         </div>
-      </div>
+      </div> -->
 
       
-      <div class="grp">
+      <!-- <div class="grp">
         <label>Created Date</label>
         <div class="box-right" style="position: relative">
             <input type="text" name="created_date" class="datepicker3 m_input_default" id="created_date" value="<?php echo $form_data['created_date']; ?>" />
         </div>
-      </div>       
+      </div>        -->
       
-      <div class="grp">
+      <!-- <div class="grp">
         <label>Status</label>
         <div class="box-right">
             <input type="radio" name="status" value="1" <?php if($form_data['status']==1){ echo 'checked="checked"'; } ?>> Active &nbsp;
             <input type="radio" name="status" value="0" <?php if($form_data['status']==0){ echo 'checked="checked"'; } ?>> Inactive
         </div>
-      </div>
+      </div> -->
 
       <div class="grp">
         <label></label>
@@ -631,7 +664,7 @@ $field_list = mandatory_section_field_list(2);
                     <img id="pimg" src="<?php echo $img_path; ?>" class="img-responsive">
                </div>
                <!--Added By Nitin Sharma 04/02/2024-->
-               <div class="photo fingerprint"  onclick="captureFP()">
+               <!-- <div class="photo fingerprint"  onclick="captureFP()">
                   <?php
                   $img_path = base_url('assets/images/finger_sacan.png');
                   if(!empty($form_data['data_id']) && !empty($form_data['fingerprint_photo'])){
@@ -641,7 +674,7 @@ $field_list = mandatory_section_field_list(2);
                   <img id="FPImage1" src="<?php echo $img_path; ?>" class="img-responsive" >
                   <input type="hidden" id="capture_finger" name="capture_finger" value="" />
                   <input type="hidden" id="fingerprint_photo" name="fingerprint_photo" value="" />
-                </div>
+                </div> -->
                 <!--Added By Nitin Sharma 04/02/2024-->
         </div>
         <div class="pat-col-right-box2">
@@ -693,10 +726,10 @@ $field_list = mandatory_section_field_list(2);
         <?php
         }
         ?>  
-        <div class="pat-col-right-box2">
+        <!-- <div class="pat-col-right-box2">
           <strong>Remarks</strong>
           <textarea id="remark" class="alpha_numeric_space" name="remark" maxlength="255"><?php echo $form_data['remark']; ?></textarea>
-        </div>
+        </div> -->
     </div> <!-- // -->
 
 </div> <!-- content-inner -->
