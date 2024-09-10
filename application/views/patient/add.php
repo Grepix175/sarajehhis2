@@ -207,7 +207,7 @@ $field_list = mandatory_section_field_list(2);
           <?php if(in_array('51',$users_data['permission']['action'])) {
           ?>
                <div class="grp-right">
-                    <a title="Add Religion" class="btn-new" href="javascript:void(0)" onClick=""><i class="fa fa-plus"></i> New</a>
+                  <a title="Add Religion" class="btn-new" href="javascript:void(0)" onClick="patient_category_modal()"><i class="fa fa-plus"></i> New</a>
                </div>
           <?php } ?>
       </div>
@@ -252,41 +252,31 @@ $field_list = mandatory_section_field_list(2);
                               } 
                          }
                     }
+                    if(!empty($form_error)){ echo form_error('age_y'); } 
                ?>
         </div>
       </div>
 
       
 
-      <!-- <div class="grp">
-        <label>Address 1</label>
+     <div class="grp">
+        <label>Village/Town : </label>
         <div class="box-right">
             <input type="text" name="address" id="address" class="address" maxlength="255" value="<?php echo $form_data['address']; ?>"/>
+            <?php 
+                             if(!empty($form_error)){ echo form_error('address'); } ?>
         </div>
+        
       </div>
       <div class="grp">
-        <label>Address 2</label>
+        <label>Dist./Taluk/Thana : </label>
         <div class="box-right">
             <input type="text" name="address_second" id="address_second" class="address" maxlength="255" value="<?php echo $form_data['address_second']; ?>"/>
         </div>
       </div>
-       <div class="grp">
-        <label>Address 3</label>
-        <div class="box-right">
-            <input type="text" name="address_third" id="address_third" class="address" maxlength="255" value="<?php echo $form_data['address_third']; ?>"/>
-        </div>
-      </div> -->
+       
 
-      <!-- <div class="grp">
-        <label>Aadhaar No.</label>
-        <div class="box-right">
-            <input type="text" name="adhar_no" id="adhar_no" class="adhar_no numeric" value="<?php echo $form_data['adhar_no']; ?>" maxlength="16" />
-            <?php 
-              if(!empty($form_error)){ echo form_error('adhar_no'); } 
-                    
-             ?>
-        </div>
-      </div> -->
+      
  
       
       <!-- <div class="grp">
@@ -336,31 +326,7 @@ $field_list = mandatory_section_field_list(2);
         </div>
       </div>
 
-      <!-- <div class="grp">
-        <label>City</label>
-        <div class="box-right">
-            <select name="city_id" id="city_id">
-              <option>Select City</option>
-              <?php
-               if(!empty($form_data['state_id']))
-               {
-                  $city_list = city_list($form_data['state_id']);
-                  if(!empty($city_list))
-                  {
-                     foreach($city_list as $city)
-                     {
-                      ?>   
-                        <option value="<?php echo $city->id; ?>" <?php if(!empty($form_data['city_id']) && $form_data['city_id'] == $city->id){ echo 'selected="selected"'; } ?>>
-                        <?php echo $city->city; ?> 
-                        </option>
-                      <?php
-                     }
-                  }
-               }
-              ?>
-            </select>
-        </div>
-      </div>      -->
+      
 
 
       <div class="grp">
@@ -372,20 +338,7 @@ $field_list = mandatory_section_field_list(2);
       </div>
 
 
-      <!-- <div class="grp">
-        <label>Marital Status</label>
-        <div class="box-right">
-            <input type="radio" name="marital_status" value="1" <?php if($form_data['marital_status']==1){ echo 'checked="checked"'; } ?> onclick="set_married(1);" > Married
-            <input type="radio" name="marital_status" value="0" <?php if($form_data['marital_status']==0){ echo 'checked="checked"'; } ?> onclick="set_married(0);"> Unmarried
-        </div>
-      </div> -->
-
-      <!-- <div class="grp">
-        <label>Marriage Anniversary</label>
-        <div class="box-right">
-              <input type="text" class="datepicker" readonly="" name="anniversary" id="anniversary" value="<?php echo $form_data['anniversary']; ?>" /> 
-            </div>
-      </div> -->
+     
 
       <!-- <div class="grp-full">
           <div class="grp">
@@ -426,6 +379,26 @@ $field_list = mandatory_section_field_list(2);
         </div>
       </div>
 
+      <div class="grp">
+        <label>Patient Email</label>
+        <div class="box-right">
+            <input type="text" name="patient_email" data-toggle="tooltip"  title="Email should be like abc@example.com." class="tooltip-text tool_tip email_address" id="patient_email" value="<?php echo $form_data['patient_email']; ?>" />
+          
+            <?php if(!empty($form_error)){ echo form_error('patient_email'); } ?>
+        </div>
+      </div>
+
+      
+
+      <div class="grp">
+        <label></label>
+        <div class="box-right">
+            <button class="btn-update" id="form_submit">
+            <i class="fa fa-save"></i> Save</button>
+            <a href="<?php echo base_url('patient'); ?>" class="btn-update" style="text-decoration:none!important;color:#FFF;padding:8px 2em;"><i class="fa fa-sign-out"></i> Exit</a>
+        </div>
+      </div>
+
  
       
       <!-- <div class="grp">
@@ -444,16 +417,9 @@ $field_list = mandatory_section_field_list(2);
         <div class="box-right">
             <input type="text" name="guardian_name" class="alpha_space_name input_focus" id="guardian_name" value="<?php echo $form_data['guardian_name']; ?>" />
         </div>
-      </div>
-      
-      <div class="grp">
-        <label>Guardian Email</label>
-        <div class="box-right">
-            <input type="text" name="guardian_email" data-toggle="tooltip"  title="Email should be like abc@example.com." class="tooltip-text tool_tip email_address" id="guardian_email" value="<?php echo $form_data['guardian_email']; ?>" />
-          
-            <?php if(!empty($form_error)){ echo form_error('guardian_email'); } ?>
-        </div>
       </div> -->
+      
+      
       
       <!-- <div class="grp">
         <label>Guardian Mobile</label>
@@ -496,14 +462,7 @@ $field_list = mandatory_section_field_list(2);
           <?php } ?>
       </div>
       
-      <div class="grp">
-        <label>Patient Email</label>
-        <div class="box-right">
-            <input type="text" name="patient_email" data-toggle="tooltip"  title="Email should be like abc@example.com." class="tooltip-text tool_tip email_address" id="patient_email" value="<?php echo $form_data['patient_email']; ?>" />
-          
-            <?php if(!empty($form_error)){ echo form_error('patient_email'); } ?>
-        </div>
-      </div>
+      
       
       <div class="grp">
         <label>Monthly Income</label>
@@ -638,14 +597,7 @@ $field_list = mandatory_section_field_list(2);
         </div>
       </div> -->
 
-      <div class="grp">
-        <label></label>
-        <div class="box-right">
-            <button class="btn-update" id="form_submit">
-            <i class="fa fa-save"></i> Save</button>
-            <a href="<?php echo base_url('patient'); ?>" class="btn-update" style="text-decoration:none!important;color:#FFF;padding:8px 2em;"><i class="fa fa-sign-out"></i> Exit</a>
-        </div>
-      </div>
+      
 
     </div> <!-- // --> 
 
@@ -962,6 +914,19 @@ $(document).ready(function(){
       function(){
       $modal.modal('show');
       });
+  }
+  
+  function patient_category_modal()
+  {
+      var $modal = $('#load_add_patient_category_modal_popup');
+      $modal.load('<?php echo base_url().'patient_category/add/' ?>',
+      {
+        //'id1': '1',
+        //'id2': '2'
+        },
+      function(){
+      $modal.modal('show');
+      });
   } 
 
   function insurance_type_modal()
@@ -1070,6 +1035,11 @@ $(document).ready(function(){
     $(this).find('.inputFocus').focus();
   });
 });
+$(document).ready(function(){
+  $('#load_add_patient_category_modal_popup').on('shown.bs.modal', function(e){
+    $(this).find('.inputFocus').focus();
+  });
+});
 
 $(document).ready(function(){
   $('#load_add_relation_modal_popup').on('shown.bs.modal', function(e){
@@ -1118,6 +1088,7 @@ if(!empty($sim_id) && $form_data['data_id']=='')
 ?>
 <div id="load_add_simulation_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
 <div id="load_add_religion_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
+<div id="load_add_patient_category_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
 <div id="load_add_relation_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
 <div id="load_add_insurance_type_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
 <div id="load_add_insurance_company_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>

@@ -907,11 +907,10 @@ class Patient extends CI_Controller {
 
         $data['simulation_list'] = $this->general_model->simulation_list();
         $data['religion_list'] = $this->general_model->religion_list();
-        $data['relation_list'] = $this->general_model->relation_list();
         $data['gardian_relation_list'] = $this->general_model->gardian_relation_list();
         // print_r($data['gardian_relation_list']);die;
-        $data['insurance_type_list'] = $this->general_model->insurance_type_list();
-        $data['insurance_company_list'] = $this->general_model->insurance_company_list();   
+        //$data['insurance_type_list'] = $this->general_model->insurance_type_list();
+        //$data['insurance_company_list'] = $this->general_model->insurance_company_list();   
         $reg_no = generate_unique_id(4);
         $post = $this->input->post();
         
@@ -977,6 +976,8 @@ class Patient extends CI_Controller {
 
         
             $valid_response = $this->_validate();
+
+           
             $data['form_data'] = $valid_response['form_data']; 
             if($this->form_validation->run() == TRUE)
             {
@@ -1016,7 +1017,8 @@ class Patient extends CI_Controller {
             }
             else
             {
-               
+                // print_r($valid_response['form_data']);
+            // die();
                 $data['form_error'] = validation_errors();  
             }       
         }
@@ -1199,6 +1201,8 @@ class Patient extends CI_Controller {
         $this->form_validation->set_rules('patient_name', 'patient name', 'trim|required');
         $this->form_validation->set_rules('gender', 'gender', 'trim|required'); 
         $this->form_validation->set_rules('adhar_no', 'aadhaar no.', 'min_length[12]|max_length[16]'); 
+        $this->form_validation->set_rules('age_y', 'age year', 'trim|required');
+        $this->form_validation->set_rules('address', 'Village/Town', 'trim|required');
         
           
           if(!empty($field_list))

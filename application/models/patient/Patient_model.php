@@ -628,10 +628,10 @@ $this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.ad
 					//"father_husband"=>$post['father_husband'],
 					// "mother"=>$post['mother'],
 					// "guardian_name"=>$post['guardian_name'],
-					// "guardian_email"=>$post['guardian_email'],
+					//"guardian_email"=>$post['guardian_email'],
 					// "guardian_phone"=>$post['guardian_phone'],
 					// "relation_id"=>$post['relation_id'],
-					// "patient_email"=>$post['patient_email'],
+					 "patient_email"=>$post['patient_email'],
 					// "monthly_income"=>$post['monthly_income'],
 					// "occupation"=>$post['occupation'],
 					'relation_type'=>$post['relation_type'],
@@ -652,6 +652,7 @@ $this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.ad
 				    // 	Added By Nitin Sharma 04/02/2024
 					// "created_date"=>date('Y-m-d H:i:s', strtotime($post['created_date'])) 
 				         ); 
+
 		if(empty($post['address']))
 		{
            $data['address'] = "";
