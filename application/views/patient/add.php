@@ -193,7 +193,7 @@ $field_list = mandatory_section_field_list(2);
                     foreach($patient_category_list as $patient_category)
                     {
                       $selected_patient_category = "";
-                      if($patient_category->id==$form_data['patient_category_id'])
+                      if($patient_category->id==$form_data['patient_category'])
                       {
                         $selected_patient_category = 'selected="selected"';
                       }

@@ -971,6 +971,7 @@ class Patient extends CI_Controller {
                                     'created_date'=>date('m/d/Y H:i:s'),
                                     'patient_category'=>''
                                   );
+                                  
         if(isset($post) && !empty($post))
         { 
 
@@ -1046,6 +1047,7 @@ class Patient extends CI_Controller {
         $data['simulation_list'] = $this->general_model->simulation_list();
         $data['religion_list'] = $this->general_model->religion_list();
         $data['relation_list'] = $this->general_model->relation_list();
+        $data['patient_category_list'] = $this->general_model->patient_category_list();
         $data['gardian_relation_list'] = $this->general_model->gardian_relation_list();
         $data['insurance_type_list'] = $this->general_model->insurance_type_list();
         $data['insurance_company_list'] = $this->general_model->insurance_company_list();   
@@ -1105,6 +1107,7 @@ class Patient extends CI_Controller {
                                     "address_third"=>$result['address3'],
                                     "city_id"=>$result['city_id'],
                                     "state_id"=>$result['state_id'],
+                                    
                                     "country_id"=>$result['country_id'],
                                     "pincode"=>$result['pincode'],
                                     "marital_status"=>$result['marital_status'],
@@ -1136,8 +1139,11 @@ class Patient extends CI_Controller {
                                      'dob'=>$dob,
                                      'anniversary'=>$anniversary,
                                      'f_h_simulation'=>$result['f_h_simulation'],
-                                     'created_date'=>date('m/d/Y h:i A', strtotime($result['created_date']))
+                                     'created_date'=>date('m/d/Y h:i A', strtotime($result['created_date'])),
+                                     "patient_category"=>$result['patient_category'],
                                    );  
+                                //    print_r($data);
+                                //    die();
         if(isset($post) && !empty($post))
         {   
 
@@ -1183,6 +1189,8 @@ class Patient extends CI_Controller {
         }
 
        $this->session->unset_userdata('comission_data'); 
+
+       
        $this->load->view('patient/add',$data);       
       }
     }

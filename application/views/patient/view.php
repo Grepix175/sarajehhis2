@@ -25,6 +25,13 @@
             </div>
 
             <div class="row m-b-5">
+              <div class="col-xs-6"><label>Patient Category </label></div>
+              <div class="col-xs-6">
+                <?php echo $form_data['patient_category_name']; ?>
+              </div>
+            </div>
+
+            <div class="row m-b-5">
               <div class="col-xs-6"><label> Mobile No. </label></div>
               <div class="col-xs-6">
                 <?php echo $form_data['mobile_no']; ?>
@@ -39,6 +46,7 @@
                    ?>
               </div>
             </div>
+            
             <div class="row">
               <div class="col-xs-6"><label>Age </label></div>
               <div class="col-xs-6">
@@ -51,7 +59,7 @@
                       {
                         $year = 'Year';
                       }
-                      $age .= $form_data['age_y']." ".$year;
+                      $age .= $form_data['age_y']." ,".$year;
                     }
                     if($form_data['age_m']>0)
                     {
@@ -60,7 +68,7 @@
                       {
                         $month = 'Month';
                       }
-                      $age .= ", ".$form_data['age_m']." ".$month;
+                      $age .= " ".$form_data['age_m']." ".$month;
                     }
                     if($form_data['age_d']>0)
                     {
