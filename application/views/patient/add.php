@@ -650,7 +650,7 @@ $field_list = mandatory_section_field_list(2);
         if(!empty($form_data['data_id']) && $form_data['data_id']>0)
         {
         ?>
-          <div class="pat-col-right-box2">
+          <!-- <div class="pat-col-right-box2">
             <strong>Username</strong>
             <input type="text" id="username" class="alpha_numeric_space" readonly="" name="username" value="<?php echo $form_data['username']; ?>" />
           </div>
@@ -672,7 +672,7 @@ $field_list = mandatory_section_field_list(2);
                              Password length should be 6-20 character only.
                         </div>
                    </div>
-              </div>  
+              </div>   -->
             <?php if(!empty($form_error)){ echo form_error('password'); } ?>
           </div> 
         <?php

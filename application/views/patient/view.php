@@ -162,18 +162,7 @@
               <div class="col-xs-12 text-center"><img src="<?php echo $img_path; ?>" width="100px"></div>
             </div>
 
-            <div class="row m-b-5">
-              <div class="col-xs-4"><label>Username </label></div>
-              <div class="col-xs-8">
-                <?php echo $form_data['username']; ?> 
-              </div>
-            </div>
-            <div class="row m-b-5">
-              <div class="col-xs-4"><label>Remarks </label></div>
-              <div class="col-xs-8">
-                <?php echo $form_data['remark']; ?> 
-              </div>
-            </div>
+            <!--  -->
           
         </div> <!-- 4 -->
       </div> <!-- row -->

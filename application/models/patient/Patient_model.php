@@ -618,39 +618,13 @@ $this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.ad
 					"patient_category" => $post['patient_category'],
 					'dob'=>date('Y-m-d', strtotime($post['dob'])),
 					'anniversary'=>$anniversary,
-					// "city_id"=>$post['city_id'],
-					"state_id"=>$post['state_id'],
-					// "country_id"=>$post['country_id'],
-					"pincode"=>$post['pincode'],
-					// "marital_status"=>$post['marital_status'],
-					// "religion_id"=>$post['religion_id'],
-					//'f_h_simulation'=>$post['f_h_simulation'],
-					//"father_husband"=>$post['father_husband'],
-					// "mother"=>$post['mother'],
-					// "guardian_name"=>$post['guardian_name'],
-					//"guardian_email"=>$post['guardian_email'],
-					// "guardian_phone"=>$post['guardian_phone'],
-					// "relation_id"=>$post['relation_id'],
-					 "patient_email"=>$post['patient_email'],
-					// "monthly_income"=>$post['monthly_income'],
-					// "occupation"=>$post['occupation'],
+					"state_id"=>$post['state_id'],					
+					"pincode"=>$post['pincode'],					
+					 "patient_email"=>$post['patient_email'],					
 					'relation_type'=>$post['relation_type'],
 					'relation_name'=>$post['relation_name'],
 					'relation_simulation_id'=>$post['relation_simulation_id'],
-					// "insurance_type"=>$post['insurance_type'],
-					// "insurance_type_id"=>$insurance_type_id,
-					// "ins_company_id"=>$insurance_company,
-					// "polocy_no"=>$post['polocy_no'],
-					// "tpa_id"=>$post['tpa_id'],
-					// "ins_amount"=>$post['ins_amount'],
-					// "ins_authorization_no"=>$post['ins_authorization_no'], 
-					// "status"=>$post['status'],
-					// "remark"=>$post['remark'],
-				    // 	Added By Nitin Sharma 04/02/2024
-				    // "capture_finger"=>$post['capture_finger'],
-					// "fingerprint_photo"=>$post['fingerprint_photo'],
-				    // 	Added By Nitin Sharma 04/02/2024
-					// "created_date"=>date('Y-m-d H:i:s', strtotime($post['created_date'])) 
+					
 				         ); 
 
 		if(empty($post['address']))
