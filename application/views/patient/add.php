@@ -64,6 +64,44 @@ $field_list = mandatory_section_field_list(2);
       <?php } ?>
 
       <div class="grp-full">
+          <div class="grp">
+            <label>Patient Category  <span class="star">*</span>
+              </label>
+           
+            <div class="box-right">
+                <select name="patient_category" id="patient_category">
+                  <option value="">Select Patient Category</option>
+                  <?php
+                  
+                  if(!empty($patient_category_list))
+                  {
+                    foreach($patient_category_list as $patient_category)
+                    {
+                      $selected_patient_category = "";
+                      if($patient_category->id==$form_data['patient_category'])
+                      {
+                        $selected_patient_category = 'selected="selected"';
+                      }
+                      echo '<option value="'.$patient_category->id.'" '.$selected_patient_category.'>'.$patient_category->patient_category.'</option>';
+                    }
+                  }
+                  ?> 
+                </select>
+                <?php 
+                              if(!empty($form_error)){ echo form_error('patient_category'); } 
+                    
+             ?>
+            </div>
+          </div>
+          
+          <?php if(in_array('51',$users_data['permission']['action'])) {
+          ?>
+               <div class="grp-right">
+                  <a title="Add Religion" class="btn-new" href="javascript:void(0)" onClick="patient_category_modal()"><i class="fa fa-plus"></i> New</a>
+               </div>
+          <?php } ?>
+      </div>
+      <div class="grp-full">
         <div class="grp">
               <label>Patient Name <span class="star">*</span> </label>
             <div class="box-right">
@@ -155,64 +193,7 @@ $field_list = mandatory_section_field_list(2);
           </div>
        </div>
 
-      <div class="grp">
-        <label>Mobile No. 
-        <?php if(!empty($field_list)){
-                    if($field_list[0]['mandatory_field_id']==5 && $field_list[0]['mandatory_branch_id']==$users_data['parent_id']){?>         
-                         <span class="star">*</span>
-                    <?php 
-                    }
-               } 
-          ?>
-        </label>
-        <div class="box-right">
-           <!-- <input type="text" maxlength="10" name="mobile_no" value="<?php echo $form_data['mobile_no']; ?>"    data-toggle="tooltip"  title="Allow only numeric." class="tooltip-text tool_tip numeric">  -->
-       <input type="text" name="country_code" value="+91" readonly="" class="country_code" placeholder="+91"> 
-       <input type="text" name="mobile_no" id="mobile_no" maxlength="10" class="number numeric" placeholder="eg.9897221234" value="<?php echo $form_data['mobile_no']; ?>"  onkeyup="get_patient_detail_by_mobile();"/> 
-           <?php if(!empty($field_list)){
-                         if($field_list[0]['mandatory_field_id']=='5' && $field_list[0]['mandatory_branch_id']==$users_data['parent_id']){
-                              if(!empty($form_error)){ echo form_error('mobile_no'); 
-                              } 
-                         }
-                    }
-          ?>
-
-        </div>
-      </div>
-
-      <div class="grp-full">
-          <div class="grp">
-            <label>Patient Category</label>
-            <div class="box-right">
-                <select name="patient_category" id="patient_category">
-                  <option value="">Select Patient Category</option>
-                  <?php
-                  
-                  if(!empty($patient_category_list))
-                  {
-                    foreach($patient_category_list as $patient_category)
-                    {
-                      $selected_patient_category = "";
-                      if($patient_category->id==$form_data['patient_category'])
-                      {
-                        $selected_patient_category = 'selected="selected"';
-                      }
-                      echo '<option value="'.$patient_category->id.'" '.$selected_patient_category.'>'.$patient_category->patient_category.'</option>';
-                    }
-                  }
-                  ?> 
-                </select>
-            </div>
-          </div>
-          <?php if(in_array('51',$users_data['permission']['action'])) {
-          ?>
-               <div class="grp-right">
-                  <a title="Add Religion" class="btn-new" href="javascript:void(0)" onClick="patient_category_modal()"><i class="fa fa-plus"></i> New</a>
-               </div>
-          <?php } ?>
-      </div>
-
-      <div class="grp">
+       <div class="grp">
         <label>Gender 
          
                          <span class="star">*</span>
@@ -229,7 +210,6 @@ $field_list = mandatory_section_field_list(2);
              ?>
         </div>
       </div>
-
 
       <div class="grp">
         <label>Age  <span class="star">*</span>
@@ -257,10 +237,59 @@ $field_list = mandatory_section_field_list(2);
         </div>
       </div>
 
+
+      <div class="grp">
+        <label>DOB</label>
+        <div class="box-right">
+              <input type="text" class="datepicker" readonly="" name="dob" id="dob" value="<?php echo $form_data['dob']; ?>"  onchange="showAge(this.value);"/> 
+        </div>
+      </div>
+
+      <div class="grp">
+        <label>Mobile No. 
+        <?php if(!empty($field_list)){
+                    if($field_list[0]['mandatory_field_id']==5 && $field_list[0]['mandatory_branch_id']==$users_data['parent_id']){?>         
+                         <span class="star">*</span>
+                    <?php 
+                    }
+               } 
+          ?>
+        </label>
+        <div class="box-right">
+           <!-- <input type="text" maxlength="10" name="mobile_no" value="<?php echo $form_data['mobile_no']; ?>"    data-toggle="tooltip"  title="Allow only numeric." class="tooltip-text tool_tip numeric">  -->
+       <input type="text" name="country_code" value="+91" readonly="" class="country_code" placeholder="+91"> 
+       <input type="text" name="mobile_no" id="mobile_no" maxlength="10" class="number numeric" placeholder="eg.9897221234" value="<?php echo $form_data['mobile_no']; ?>"  onkeyup="get_patient_detail_by_mobile();"/> 
+           <?php if(!empty($field_list)){
+                         if($field_list[0]['mandatory_field_id']=='5' && $field_list[0]['mandatory_branch_id']==$users_data['parent_id']){
+                              if(!empty($form_error)){ echo form_error('mobile_no'); 
+                              } 
+                         }
+                    }
+          ?>
+
+        </div>
+      </div>
+
+      <div class="grp">
+        <label>Email</label>
+        <div class="box-right">
+            <input type="text" name="patient_email" data-toggle="tooltip"  title="Email should be like abc@example.com." class="tooltip-text tool_tip email_address" id="patient_email" value="<?php echo $form_data['patient_email']; ?>" />
+          
+            <?php if(!empty($form_error)){ echo form_error('patient_email'); } ?>
+        </div>
+      </div>
+
+      
+
+      
+
+
+      
+
       
 
      <div class="grp">
-        <label>Village/Town : </label>
+        <label>Village/Town : <span class="star">*</span> </label>
         <div class="box-right">
             <input type="text" name="address" id="address" class="address" maxlength="255" value="<?php echo $form_data['address']; ?>"/>
             <?php 
@@ -338,6 +367,24 @@ $field_list = mandatory_section_field_list(2);
       </div>
 
 
+      <div class="grp">
+        <?php 
+        if(isset($form_data['patient_code_auto'])  && !empty($form_data['patient_code_auto']) )
+        { 
+          $token=$form_data['patient_code_auto']; }else{
+            $token = rand(100000, 999999);
+
+          }
+        ?>
+        <label>Token No</label>
+          <div class="box-right">
+            <div class=""><?php echo $token; ?></div>
+            <input type="hidden" name="patient_code_auto" id="patient_code_auto" value="<?php echo $token; ?>" />
+          </div>
+
+      </div>
+
+
      
 
       <!-- <div class="grp-full">
@@ -372,21 +419,9 @@ $field_list = mandatory_section_field_list(2);
       </div> -->
 
 
-      <div class="grp">
-        <label>DOB</label>
-        <div class="box-right">
-              <input type="text" class="datepicker" readonly="" name="dob" id="dob" value="<?php echo $form_data['dob']; ?>"  onchange="showAge(this.value);"/> 
-        </div>
-      </div>
+      
 
-      <div class="grp">
-        <label>Patient Email</label>
-        <div class="box-right">
-            <input type="text" name="patient_email" data-toggle="tooltip"  title="Email should be like abc@example.com." class="tooltip-text tool_tip email_address" id="patient_email" value="<?php echo $form_data['patient_email']; ?>" />
-          
-            <?php if(!empty($form_error)){ echo form_error('patient_email'); } ?>
-        </div>
-      </div>
+      
 
       
 
@@ -602,18 +637,18 @@ $field_list = mandatory_section_field_list(2);
     </div> <!-- // --> 
 
     <div class="pat-col">
-        <div class="pat-col-right-box">
+        <div class="pat-col-right-box" style="display:flex; flex-direction: column">
             <!--Editing by Nitin Sharma 04/02/2024-->
-               <strong><center>Patient Photo/Finger Print</center></strong> 
+               <strong><center>Patient Face/Pic Capture</center></strong> 
                <!--Editing by Nitin Sharma 04/02/2024-->
-               <div class="photo">
+               <div class="photo" >
                     <?php
                          $img_path = base_url('assets/images/photo.png');
                          if(!empty($form_data['data_id']) && !empty($form_data['old_img'])){
                               $img_path = ROOT_UPLOADS_PATH.'patients/'.$form_data['old_img'];
                          }  
                     ?>
-                    <img id="pimg" src="<?php echo $img_path; ?>" class="img-responsive">
+                    <img id="pimg"  src="<?php echo $img_path; ?>" class="img-responsive">
                </div>
                <!--Added By Nitin Sharma 04/02/2024-->
                <!-- <div class="photo fingerprint"  onclick="captureFP()">
@@ -629,8 +664,13 @@ $field_list = mandatory_section_field_list(2);
                 </div> -->
                 <!--Added By Nitin Sharma 04/02/2024-->
         </div>
-        <div class="pat-col-right-box2">
-               <strong>Select Image</strong>
+        <div class="pat-col-right-box2" style=" 
+                                                  display: flex;
+                                                  flex-direction: column;
+                                                  align-items: center;
+                                                  gap: 1rem
+                                              ">
+               <strong style="margin: 0;">Select Image</strong>
                     <input type="hidden" name="old_img"  value="<?php echo $form_data['old_img']; ?>" />
                     <input type="hidden" id="capture_img" name="capture_img" value="" />
                     <div style="float: left;width: 100%; font-weight: bold;text-align: center;">
@@ -639,7 +679,7 @@ $field_list = mandatory_section_field_list(2);
                     <div style="float: left;width: 100%; font-weight: bold;text-align: center;">
                     OR
                     </div>
-                    <input type="file" id="img-input" accept="image/*" name="photo">
+                    <input type="file" id="img-input" style="margin:0;" accept="image/*" name="photo">
                     <?php
                          if(isset($photo_error) && !empty($photo_error)){
                               echo '<div class="text-danger">'.$photo_error.'</div>';
@@ -744,7 +784,7 @@ $this->load->view('include/footer');
                     async : false,
                    success: function(datas) {
                    var data = $.parseJSON(datas);
-
+                    console.log(data)
                    if(data.st==1)
                   { 
 

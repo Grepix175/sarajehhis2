@@ -251,7 +251,7 @@ function reset_search(ele)
 
 <!-- //////////////////////[ Left side bar ]////////////////////// -->
 <?php if($users_data['emp_id']==0){  ?>
-<div class="toggleBtn"><i class="fa fa-angle-right"></i></div>
+<div class="toggleBtn" style="display:none"><i class="fa fa-angle-right"></i></div>
 <div class="toggleBox">
   <a>Exit <i class="fa fa-sign-out"></i></a>
   <form id="checkbox_data_form">
@@ -415,10 +415,10 @@ function reset_search(ele)
 
       <div class="col-sm-4 text-right">
           <!--Added By Nitin Sharma 04/02/2024-->
-          <a class="btn-custom" id="scan_finger" onclick="captureFP()">Scan Finger</a>
+          <!-- <a class="btn-custom" id="scan_finger" onclick="captureFP()">Scan Finger</a> -->
           <!--Added By Nitin Sharma 04/02/2024-->
           <a class="btn-custom" id="reset_date" onclick="reset_search(this.form);">Reset</a>
-          <a class="btn-custom" id="adv_search"><i class="fa fa-cubes"></i> Advance Search</a>
+          <!-- <a class="btn-custom" id="adv_search"><i class="fa fa-cubes"></i> Advance Search</a> -->
           
       </div> <!-- 4 -->
     </div> <!-- row -->
@@ -491,9 +491,9 @@ function reset_search(ele)
         <i class="fa fa-file-excel-o"></i> Excel
         </a>
 
-        <a data-toggle="tooltip"  title="Download list in csv" href="<?php echo base_url('patient/patient_csv'); ?>" class="btn-anchor m-b-2">
+        <!-- <a data-toggle="tooltip"  title="Download list in csv" href="<?php echo base_url('patient/patient_csv'); ?>" class="btn-anchor m-b-2">
         <i class="fa fa-file-word-o"></i> CSV
-        </a>
+        </a> -->
 
         <a data-toggle="tooltip"  title="Download list in pdf" href="<?php echo base_url('patient/patient_pdf'); ?>" class="btn-anchor m-b-2">
         <i class="fa fa-file-pdf-o"></i> PDF

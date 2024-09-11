@@ -120,7 +120,7 @@ class Patient extends CI_Controller {
                 {
                   $month = 'Month';
                 }
-                $age .= ", ".$age_m." ".$month;
+                $age .= " ".$age_m." ".$month;
                 }
                 if($age_d>0)
                 {
@@ -969,23 +969,32 @@ class Patient extends CI_Controller {
                                     'capture_finger'=>'',  // Added By Nitin Sharma 04/02/2024
                                     'fingerprint_photo'=>'', // Added By Nitin Sharma 04/02/2024
                                     'created_date'=>date('m/d/Y H:i:s'),
-                                    'patient_category'=>''
+                                    'patient_category'=>'',
+                                    'patient_code_auto' => ''
                                   );
                                   
         if(isset($post) && !empty($post))
         { 
 
         
+
             $valid_response = $this->_validate();
 
-           
-            $data['form_data'] = $valid_response['form_data']; 
+            
+            
+            
+            // $data['form_data'] = $valid_response['form_data']; 
+            // echo "<pre>";
+            // print_r($data);
+            // echo "</pre>";
+            // die;
             if($this->form_validation->run() == TRUE)
             {
                 if($post['capture_img']!="")
                 {
                     $valid_response['photo_name'] = $post['capture_img'];
                 } 
+            
                 $patient_id =  $this->patient->save($valid_response['photo_name']);
                 /////// Send SMS /////////
                 //print_r($users_data['permission']['action']);die;
@@ -1141,6 +1150,7 @@ class Patient extends CI_Controller {
                                      'f_h_simulation'=>$result['f_h_simulation'],
                                      'created_date'=>date('m/d/Y h:i A', strtotime($result['created_date'])),
                                      "patient_category"=>$result['patient_category'],
+                                     "patient_code_auto"=>$result['patient_code_auto'],
                                    );  
                                 //    print_r($data);
                                 //    die();
@@ -1211,6 +1221,7 @@ class Patient extends CI_Controller {
         $this->form_validation->set_rules('adhar_no', 'aadhaar no.', 'min_length[12]|max_length[16]'); 
         $this->form_validation->set_rules('age_y', 'age year', 'trim|required');
         $this->form_validation->set_rules('address', 'Village/Town', 'trim|required');
+        $this->form_validation->set_rules('patient_category', 'patient category', 'trim|required');
         
           
           if(!empty($field_list))
