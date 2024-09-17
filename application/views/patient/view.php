@@ -17,17 +17,19 @@
               </div>
             </div>
 
-            <div class="row m-b-5">
-              <div class="col-xs-6"><label>Patient Name </label></div>
-              <div class="col-xs-6">
-                <?php echo $form_data['simulation'].' '.$form_data['patient_name']; ?>
-              </div>
-            </div>
+            
 
             <div class="row m-b-5">
               <div class="col-xs-6"><label>Patient Category </label></div>
               <div class="col-xs-6">
                 <?php echo $form_data['patient_category_name']; ?>
+              </div>
+            </div>
+            
+            <div class="row m-b-5">
+              <div class="col-xs-6"><label>Patient Name </label></div>
+              <div class="col-xs-6">
+                <?php echo $form_data['simulation'].' '.$form_data['patient_name']; ?>
               </div>
             </div>
 
@@ -38,12 +40,25 @@
               </div>
             </div>
             <div class="row m-b-5">
+              <div class="col-xs-6"><label>Email </label></div>
+              <div class="col-xs-6">
+                <?php echo $form_data['patient_email']; ?>
+              </div>
+            </div>
+            <div class="row m-b-5">
               <div class="col-xs-6"><label>Gender </label></div>
               <div class="col-xs-6">
                 <?php 
                     $gender = array('0'=>'Female','1'=>'Male','2'=>'Others');
                     echo $gender[$form_data['gender']]; 
                    ?>
+              </div>
+            </div>
+            
+            <div class="row m-b-5">
+              <div class="col-xs-6"><label> Aadhaar No. </label></div>
+              <div class="col-xs-6">
+                <?php echo $form_data['adhar_no']; ?>
               </div>
             </div>
             
@@ -91,7 +106,7 @@
 
             
 
-              <div class="row m-b-5">
+            <div class="row m-b-5">
               <div class="col-xs-6"><label> Village/Town </label></div>
               <div class="col-xs-6">
                 <?php echo $form_data['address']; ?>
@@ -134,12 +149,7 @@
               </div>
             </div>
 
-            <div class="row m-b-5">
-              <div class="col-xs-6"><label>Patient Email </label></div>
-              <div class="col-xs-6">
-                <?php echo $form_data['patient_email']; ?>
-              </div>
-            </div>
+            
      
            
 

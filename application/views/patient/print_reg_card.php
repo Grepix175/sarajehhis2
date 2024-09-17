@@ -1,4 +1,6 @@
-<?php   if(!empty($patient_data['relation']))
+<?php  
+// "<pre>";print_r($patient_data); die;
+if(!empty($patient_data['relation']))
         {
             $rel_simulation = get_simulation_name($patient_data['relation_simulation_id']);
             $template_data = str_replace("{parent_relation_type}",$patient_data['relation'],$template_data);
@@ -169,7 +171,7 @@ $template_data = str_replace("{patient_category_name}",$patient_data['patient_ca
     $patient_age =  $age;
     $gender_age = $patient_age;
     
-    $dat = date('d-m-Y',strtotime($patient_data['created_date']));
+    $dat = date('d-m-Y H:i', strtotime($patient_data['created_date']));
     $template_data = str_replace("{reg_date}",$dat,$template_data);
     $template_data = str_replace("{pin_code}",$patient_data['pincode'],$template_data);
     

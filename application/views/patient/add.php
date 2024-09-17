@@ -35,6 +35,38 @@ $field_list = mandatory_section_field_list(2);
 <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datepicker.css">
 <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datepicker.js"></script>
 
+<style>
+#patient_form .pat-col > .grp{
+    width:80%;
+}
+#patient_form input[type="text"], #patient_form input[type="password"], #patient_form input[type="date"] ,#patient_form select,#patient_form .pat-col > .grp > .box-right{
+    width:300px;
+}
+#patient_form #mobile_no {
+    width:145px;
+}
+#patient_form .pat-col > .grp-full > .grp > .box-right > input[type="text"] {
+    width:203px;
+}
+#patient_form .pat-col > .grp-full > .grp > .box-right{
+    width:300px;
+}
+#patient_form .pat-col{
+    width:50%;
+}
+#patient_form .country_code{
+    width:50px!important;
+}
+#patient_form #simulation_id,#patient_form #relation_simulation_id{
+    width:30%;
+}
+#patient_form #age_y,#patient_form #age_m,#patient_form #age_d, #patient_form #age_h{
+    width:29px;
+}
+#patient_form #patient_category{
+    width:200px;
+}
+</style>
 <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datetimepicker.css">
 <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datetimepicker.js"></script>
 <body onLoad="set_tpa(<?php echo $form_data['insurance_type']; ?>); set_married(<?php echo $form_data['marital_status']; ?>);"> 
@@ -105,41 +137,57 @@ $field_list = mandatory_section_field_list(2);
         <div class="grp">
               <label>Patient Name <span class="star">*</span> </label>
             <div class="box-right">
+    
                 <select name="simulation_id" id="simulation_id" class="pat-select1" onChange="find_gender(this.value)">
-                  <!-- <option value="">Select</option> -->
-                  <?php
-                  if(!empty($simulation_list))
-                  {
-                    $s = 1;
-                    $sim_id = '';
-                    foreach($simulation_list as $simulation)
-                    {
-                      $selected_simulation = '';
-                      
-                      if($simulation->id==$form_data['simulation_id'])
-                      {
-                         $selected_simulation = 'selected="selected"';
-                      }
-                      if($s==1)
-                      {
-                        $sim_id = $simulation->id;
-                      }
-                      echo '<option value="'.$simulation->id.'" '.$selected_simulation.'>'.$simulation->simulation.'</option>';
-                    $s++;
-                    }
-
-                  }
-                  ?> 
+                
+            
+                    <?php 
+                    if (!empty($simulation_list)) {
+                
+                        $seen_names = array();
+            
+                
+                        foreach ($simulation_list as $simulation) {
+                            
+                            if (empty($simulation->id) || empty($simulation->simulation)) {
+                                continue;
+                            }
+            
+                            
+                            if (in_array($simulation->simulation, $seen_names)) {
+                                continue;
+                            }
+            
+                            
+                            $seen_names[] = $simulation->simulation;
+            
+                            
+                            $selected_simulation = ($simulation->id == $form_data['simulation_id']) ? 'selected="selected"' : '';
+                        ?>
+                            
+                            <option value="<?php echo htmlspecialchars($simulation->id); ?>" <?php echo $selected_simulation; ?>>
+                                <?php echo htmlspecialchars($simulation->simulation); ?>
+                            </option>
+                        <?php 
+                        }
+                    } 
+                    ?>
                 </select> 
-                <input type="text" name="patient_name"  class="alpha_space_name txt_firstCap" id="patient_name" value="<?php echo $form_data['patient_name']; ?>"  autofocus/>
-               
+            
+                <!-- Text input for patient name -->
+                <input type="text" name="patient_name" class="alpha_space_name txt_firstCap" id="patient_name" 
+                       value="<?php echo htmlspecialchars($form_data['patient_name']); ?>" autofocus />
+            
+                <!-- Display form errors -->
                 <?php 
-                             if(!empty($form_error)){ echo form_error('patient_name'); }
-                             if(!empty($form_error)){ echo form_error('simulation_id'); } 
-
-                        
+                // Display error messages if any
+                if (!empty($form_error)): 
+                    echo form_error('patient_name'); 
+                    echo form_error('simulation_id'); 
+                endif; 
                 ?>
             </div>
+
           </div>
           <?php if(in_array('65',$users_data['permission']['action'])) {
           ?>
@@ -162,34 +210,34 @@ $field_list = mandatory_section_field_list(2);
              <?php }?>
              </select></label>
             <div class="box-right">
+    
                 <select name="relation_simulation_id" id="relation_simulation_id" class="pat-select1">
-                  <!-- <option value="">Select</option> -->
-                  <?php
-                  if(!empty($simulation_list))
-                  {
-                    $s = 1;
-                    $sim_id = '';
-                    foreach($simulation_list as $simulation)
-                    {
-                      $selected_simulation = '';
-                      
-                      if($simulation->id==$form_data['relation_simulation_id'])
-                      {
-                         $selected_simulation = 'selected="selected"';
-                      }
-                      if($s==1)
-                      {
-                        $sim_id = $simulation->id;
-                      }
-                      echo '<option value="'.$simulation->id.'" '.$selected_simulation.'>'.$simulation->simulation.'</option>';
-                    $s++;
-                    }
-
-                  }
-                  ?> 
+                    <?php 
+                    if (!empty($simulation_list)) {
+                        $seen_names = array();
+                        foreach ($simulation_list as $simulation) {
+                            
+                            if (empty($simulation->id) || empty($simulation->simulation)) {
+                                continue;
+                            }
+                            if (in_array($simulation->simulation, $seen_names)) {
+                                continue;
+                            }
+                            $seen_names[] = $simulation->simulation;
+                            $selected_simulation = ($simulation->id == $form_data['relation_simulation_id']) ? 'selected="selected"' : '';
+                        ?>
+                            <option value="<?php echo htmlspecialchars($simulation->id); ?>" <?php echo $selected_simulation; ?>>
+                                <?php echo htmlspecialchars($simulation->simulation); ?>
+                            </option>
+                        <?php 
+                        }
+                    } 
+                    ?>
                 </select> 
-              <input type="text" value="<?php if(isset($form_data['relation_name'])){ echo $form_data['relation_name'];}?>" class="alpha_space_name" name="relation_name" id="relation_name"/>
+                <input type="text" value="<?php echo isset($form_data['relation_name']) ? htmlspecialchars($form_data['relation_name']) : ''; ?>" 
+                       class="alpha_space_name" name="relation_name" id="relation_name"/>
             </div>
+
           </div>
        </div>
 
@@ -225,7 +273,7 @@ $field_list = mandatory_section_field_list(2);
             <input type="text" name="age_y" id="age_y" class="numeric input-tiny2 media_input_tiny" maxlength="3" value="<?php echo $form_data['age_y']; ?>" onchange="getAsDate();"> Y &nbsp;
             <input type="text" name="age_m" id="age_m" class="numeric input-tiny2 media_input_tiny" maxlength="2" value="<?php echo $form_data['age_m']; ?>" onchange="getAsDate();"> M &nbsp;
             <input type="text" name="age_d" id="age_d" class="input-tiny2 media_input_tiny numeric" maxlength="2" value="<?php echo $form_data['age_d']; ?>" onchange="getAsDate();"> D
-            <input type="text" name="age_h" class="input-tiny2 media_input_tiny numeric" maxlength="2" value="<?php echo $form_data['age_h']; ?>"> H
+            <input type="text" name="age_h" id="age_h" class="input-tiny2 media_input_tiny numeric" maxlength="2" value="<?php echo $form_data['age_h']; ?>"> H
             <?php if(!empty($field_list)){
                          if($field_list[1]['mandatory_field_id']=='7' && $field_list[1]['mandatory_branch_id']==$users_data['parent_id']){
                               if(!empty($form_error)){ echo form_error('age_y'); 
@@ -278,6 +326,17 @@ $field_list = mandatory_section_field_list(2);
             <?php if(!empty($form_error)){ echo form_error('patient_email'); } ?>
         </div>
       </div>
+      
+      <div class="grp">
+        <label>Aadhaar No.</label>
+        <div class="box-right">
+            <input type="text" name="adhar_no" id="adhar_no" class="adhar_no numeric" value="<?php echo $form_data['adhar_no']; ?>" maxlength="16" />
+            <?php 
+              if(!empty($form_error)){ echo form_error('adhar_no'); } 
+                    
+             ?>
+        </div>
+      </div>
 
       
 
@@ -289,7 +348,7 @@ $field_list = mandatory_section_field_list(2);
       
 
      <div class="grp">
-        <label>Village/Town : <span class="star">*</span> </label>
+        <label>Village/Town<span class="star">*</span> </label>
         <div class="box-right">
             <input type="text" name="address" id="address" class="address" maxlength="255" value="<?php echo $form_data['address']; ?>"/>
             <?php 
@@ -298,7 +357,7 @@ $field_list = mandatory_section_field_list(2);
         
       </div>
       <div class="grp">
-        <label>Dist./Taluk/Thana : </label>
+        <label>Dist./Taluk/Thana </label>
         <div class="box-right">
             <input type="text" name="address_second" id="address_second" class="address" maxlength="255" value="<?php echo $form_data['address_second']; ?>"/>
         </div>

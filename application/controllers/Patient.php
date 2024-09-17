@@ -53,6 +53,9 @@ class Patient extends CI_Controller {
         $no = $_POST['start'];
         $i = 1;
         $total_num = count($list);
+    //     echo "<pre>";
+    //     print_r ($list);
+    // die();
         foreach ($list as $patient) { 
             $no++;
             $row = array();
@@ -96,8 +99,8 @@ class Patient extends CI_Controller {
             $row[] = $patient->patient_code; 
             $row[] = $patient->patient_name;
             $row[] = $relation_name;
-            $row[] = $patient->mobile_no;
             $row[] = $gender[$patient->gender];
+            
             ///////////// Age calculation //////////
                 $age_y = $patient->age_y;
                 $age_m = $patient->age_m;
@@ -139,6 +142,7 @@ class Patient extends CI_Controller {
                 } 
             ///////////////////////////////////////
             $row[] = $age; 
+            $row[] = $patient->mobile_no;
             if(!empty($patient->address) && $patient->address!=', , ')
             {
                 $row[] = rtrim($patient->address,' ,');
@@ -200,14 +204,20 @@ class Patient extends CI_Controller {
                        $btn_edit = ' <a  href="'.base_url('patient/edit/'.$patient->id).'" style="'.$patient->id.'" title="Edit"><i class="fa fa-pencil"></i> Edit</a> ';
                     }
                 }
+                if(in_array('117',$users_data['permission']['action'])) 
+                {
+                  $btn_view = ' <a class="" onclick="return view_patient('.$patient->id.','.$patient->branch_id.')" href="javascript:void(0)" title="View"><i class="fa fa-info-circle"></i> View </a>';
+                }
+                
                 if(in_array('358',$users_data['permission']['section'])) 
                 {
                     $btn_sales_canteen = '<li><a href="'.base_url('canteen/sale/add/?reg='.$patient->id).'" style="'.$patient->id.'" title="Sale Canteen"><i class="fa fa-plus"></i> Sale Canteen</a></li>';
                 } 
-                   if(in_array('117',$users_data['permission']['action'])) 
-                    {
-                       $btn_view = ' <a class="btn-custom" onclick="return view_patient('.$patient->id.','.$patient->branch_id.')" href="javascript:void(0)" title="View"><i class="fa fa-info-circle"></i> View </a>';
-                    }
+                $reg_card_url = "'".base_url('patient/print_reg_card/?patient_id='.$patient->id.'&branch_id='.$patient->branch_id)."'";
+
+                $btn_reg_card_url = '<a class="btn-custom"  onClick="return print_window_page('.$reg_card_url.')" style="'.$patient->id.'" title="History"><i class="fa fa-print"></i> Print</a>';
+                
+                  
                      
                 $barcode_url = "'".base_url('patient/print_barcode/'.$patient->id)."'";
                 $btn_barcode = '<li><a onClick="return print_barcode_page('.$barcode_url.')" href="javascript:void(0)" title="Print Barcode" data-url=""><i class="fa fa-barcode"></i>Print Barcode</a></li>';
@@ -342,9 +352,7 @@ class Patient extends CI_Controller {
                     }
                     
             
-            $reg_card_url = "'".base_url('patient/print_reg_card/?patient_id='.$patient->id.'&branch_id='.$patient->branch_id)."'";
-
-                $btn_reg_card_url = ' <li><a  onClick="return print_window_page('.$reg_card_url.')" style="'.$patient->id.'" title="History"><i class="fa fa-print"></i> Print Reg. Card</a></li>';
+                 
                 
                 $btn_reg_card = ' <a  href="'.base_url('reg_card_setting/').'" style="'.$patient->id.'" title="Edit"><i class="fa fa-print"></i> Reg. Card Prt Setting</a> ';
                 
@@ -363,11 +371,11 @@ class Patient extends CI_Controller {
             $btn_a = '<div class="slidedown">
             <button disabled  class="btn-custom">More <span class="caret"></span></button>
             <ul class="slidedown-content">
-            '.$btn_edit.$btn_barcode.$btn_delete.$btn_appointment.$btn_booking.$btn_camp_booking.$btn_day_care.$btn_recipient_booking.$btn_dialysis_booking.$btn_dialysis_appointment.$btn_billing.$btn_sales_medicine.$btn_sales_return_medicine.$btn_ipd_booking.$btn_ot_booking.$btn_pathology_booking.$btn_proforma_booking.$btn_sales_vaccine.$btn_sales_return_vaccine.$btn_ambulance_booking.$btn_amb_enquiry.$btn_sales_canteen.$btn_history.$btn_consolidate_payment.$btncertificate.$btn_upload_document.$btn_reg_card_url.$btn_reg_card.'
+            '.$btn_edit.$btn_view.$btn_barcode.$btn_delete.$btn_appointment.$btn_booking.$btn_camp_booking.$btn_day_care.$btn_recipient_booking.$btn_dialysis_booking.$btn_dialysis_appointment.$btn_billing.$btn_sales_medicine.$btn_sales_return_medicine.$btn_ipd_booking.$btn_ot_booking.$btn_pathology_booking.$btn_proforma_booking.$btn_sales_vaccine.$btn_sales_return_vaccine.$btn_ambulance_booking.$btn_amb_enquiry.$btn_sales_canteen.$btn_history.$btn_consolidate_payment.$btncertificate.$btn_upload_document.$btn_reg_card.'
             </ul>
             </div> ';
               
-                $row[] = $btn_report_print.$btn_view.$btn_a;  
+                $row[] = $btn_report_print.$btn_reg_card_url.$btn_a;  
             $data[] = $row;
             $i++;
         } 
@@ -1588,10 +1596,10 @@ public function ipd_printtemplate_dropdown()
                $btn_restore = ' <a onClick="return restore_patient('.$patient->id.');" class="btn-custom" href="javascript:void(0)"  title="Restore"><i class="fa fa-window-restore" aria-hidden="true"></i> Restore </a>';
             } 
             
-            if(in_array('117',$users_data['permission']['action'])) 
-            {
-                $btn_view = ' <a class="btn-custom" onclick="return view_patient('.$patient->id.')" href="javascript:void(0)" title="View"><i class="fa fa-info-circle"></i> View </a>';
-            } 
+            // if(in_array('117',$users_data['permission']['action'])) 
+            // {
+            //     $btn_view = ' <a class="btn-custom" onclick="return view_patient('.$patient->id.')" href="javascript:void(0)" title="View"><i class="fa fa-info-circle"></i> View </a>';
+            // } 
             
             if(in_array('119',$users_data['permission']['action'])) 
             {
@@ -1752,133 +1760,151 @@ public function ipd_printtemplate_dropdown()
 
     public function patient_excel()
     {
+        
         // Starting the PHPExcel library
         $this->load->library('excel');
         $this->excel->IO_factory();
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->getProperties()->setTitle("export")->setDescription("none");
         $objPHPExcel->setActiveSheetIndex(0);
-        // Field names in the first row
-        $data= get_setting_value('PATIENT_REG_NO');
-        $fields = array($data,'Patient Name','Patient Relation','Mobile No.','Gender','Age','Address','Created Date');
-         $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-          $col = 0;
-          $row_heading =1;
-        foreach ($fields as $field)
-        {
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 1, $field);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(22);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
-                $objPHPExcel->getActiveSheet()->getStyle($row_heading)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle($row_heading)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-                $col++;
-                $row_heading++;
+        
+        $from_date = $this->input->get('from_date');
+        $to_date = $this->input->get('to_date');
+        // Main header with date range if provided
+        $mainHeader = "Patient List";
+        if (!empty($from_date) && !empty($to_date)) {
+            $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
         }
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:H1');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', $mainHeader);
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true)->setSize(16);
+    
+        // Blank row after the main header
+        $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20); // Set height for visibility
+        
+        $headerRow = 2;
+        if (!empty($from_date) || !empty($to_date)) {
+            $dateRange = '';
+            if (!empty($from_date)) {
+                $dateRange .= 'From Date: ' . date('d-m-Y', strtotime($from_date)) . ' ';
+            }
+            if (!empty($to_date)) {
+                $dateRange .= 'To Date: ' . date('d-m-Y', strtotime($to_date));
+            }
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $headerRow);
+            $objPHPExcel->getActiveSheet()->getStyle('A' . $headerRow)->getFont()->setItalic(true);
+            $headerRow++;
+        }
+    
+        // Field names in the next row
+        $data = get_setting_value('PATIENT_REG_NO');
+        $fields = array($data, 'Patient Name', 'Patient Relation', 'Mobile No.', 'Gender', 'Age', 'Address', 'Created Date');
+        
+        $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getDefaultStyle()->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        
+        $col = 0;
+        foreach ($fields as $field) {
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $headerRow, $field);
+            $col++;
+        }
+    
+        $headerStyle = array(
+            'font' => array(
+                'bold' => true
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $headerRow . ':H' . $headerRow)->applyFromArray($headerStyle);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        
+        // Fetching the table data
         $list = $this->patient->search_patient_data();
         $rowData = array();
-        $data= array();
-        if(!empty($list))
-        {
-            
-            $i=0;
-            foreach($list as $patients)
-            {
-                $genders = array('0'=>'Female', '1'=>'Male', '2'=>'Other');
+        $data = array();
+        if (!empty($list)) {
+            $i = 0;
+            foreach ($list as $patients) {
+                $genders = array('0' => 'Female', '1' => 'Male', '2' => 'Other');
                 $gender = $genders[$patients->gender];
                 $age_y = $patients->age_y;
                 $age_m = $patients->age_m;
                 $age_d = $patients->age_d;
                 $age = "";
-                if($age_y>0)
-                {
-                $year = 'Years';
-                if($age_y==1)
-                {
-                  $year = 'Year';
+                if ($age_y > 0) {
+                    $year = 'Years';
+                    if ($age_y == 1) {
+                        $year = 'Year';
+                    }
+                    $age .= $age_y . " " . $year;
                 }
-                $age .= $age_y." ".$year;
+                if ($age_m > 0) {
+                    $month = 'Months';
+                    if ($age_m == 1) {
+                        $month = 'Month';
+                    }
+                    $age .= "/ " . $age_m . " " . $month;
                 }
-                if($age_m>0)
-                {
-                $month = 'Months';
-                if($age_m==1)
-                {
-                  $month = 'Month';
+                if ($age_d > 0) {
+                    $day = 'Days';
+                    if ($age_d == 1) {
+                        $day = 'Day';
+                    }
+                    $age .= "/ " . $age_d . " " . $day;
                 }
-                $age .= "/ ".$age_m." ".$month;
-                }
-                if($age_d>0)
-                {
-                $day = 'Days';
-                if($age_d==1)
-                {
-                  $day = 'Day';
-                }
-                $age .= "/ ".$age_d." ".$day;
-                }
-                $patient_age =  $age;
+                $patient_age = $age;
                 $created_date = date('d-m-Y h:i A', strtotime($patients->created_date));
                 
-                $relation_name='';
-            if(!empty($patients->relation_name))
-            {
-                $relation_name = $patients->patient_relation." ".$patients->relation_name;  
-            }
-            
+                $relation_name = '';
+                if (!empty($patients->relation_name)) {
+                    $relation_name = $patients->patient_relation . " " . $patients->relation_name;
+                }
                 
-                array_push($rowData,$patients->patient_code,$patients->patient_name,$relation_name,$patients->mobile_no,$gender,$patient_age,$patients->address,$created_date);
+                array_push($rowData, $patients->patient_code, $patients->patient_name, $relation_name, $patients->mobile_no, $gender, $patient_age, $patients->address, $created_date);
                 $count = count($rowData);
-                for($j=0;$j<$count;$j++)
-                {
+                for ($j = 0; $j < $count; $j++) {
                     $data[$i][$fields[$j]] = $rowData[$j];
                 }
                 unset($rowData);
                 $rowData = array();
-                $i++;  
+                $i++;
             }
-             
         }
-        // Fetching the table data
-        $row = 2;
-        if(!empty($data))
-        {
-            foreach($data as $patients_data)
-            {
+    
+        $row = $headerRow + 1;
+        if (!empty($data)) {
+            foreach ($data as $patients_data) {
                 $col = 0;
-                $row_val=1;
-                foreach ($fields as $field)
-                { 
+                foreach ($fields as $field) {
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $patients_data[$field]);
-                    $objPHPExcel->getActiveSheet()->getStyle($row_val)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                    $objPHPExcel->getActiveSheet()->getStyle($row_val)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                    $objPHPExcel->getActiveSheet()->getStyle($row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    $objPHPExcel->getActiveSheet()->getStyle($row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                     $col++;
-                    $row_val++;
                 }
-
                 $row++;
             }
             $objPHPExcel->setActiveSheetIndex(0);
             $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         }
-          
+        
         // Sending headers to force the user to download the file
         header('Content-Type: application/vnd.ms-excel charset=UTF-8');
-        header("Content-Disposition: attachment; filename=patient_list_".time().".xls");
-        header("Pragma: no-cache"); 
+        header("Content-Disposition: attachment; filename=patient_list_" . time() . ".xls");
+        header("Pragma: no-cache");
         header("Expires: 0");
-        if(!empty($data))
-        {
+        if (!empty($data)) {
             ob_end_clean();
             $objWriter->save('php://output');
         }
     }
+
 
     public function patient_csv()
     {
@@ -1986,18 +2012,53 @@ public function ipd_printtemplate_dropdown()
       
     }
 
+    // public function patient_pdf()
+    // {    
+    //     $data['print_status']="";
+    //     $data['data_list'] = $this->patient->search_patient_data();
+         
+    //     $this->load->view('patient/patient_html',$data);
+    //     $html = $this->output->get_output();
+    //     // Load library
+    //     $this->load->library('pdf');
+    //     // Convert to PDF
+    //     $this->pdf->load_html($html);
+    //     $this->pdf->render();
+    //     $this->pdf->stream("patient_list_".time().".pdf");
+    // }
     public function patient_pdf()
     {    
-        $data['print_status']="";
-        $data['data_list'] = $this->patient->search_patient_data();
-        $this->load->view('patient/patient_html',$data);
-        $html = $this->output->get_output();
-        // Load library
-        $this->load->library('pdf');
-        // Convert to PDF
-        $this->pdf->load_html($html);
-        $this->pdf->render();
-        $this->pdf->stream("patient_list_".time().".pdf");
+        // Increase memory limit and execution time
+    ini_set('memory_limit', '2048M');
+    ini_set('max_execution_time', 300);
+
+    // Get the 'from_date' and 'to_date' from request
+    $from_date = $this->input->get('from_date');
+    $to_date = $this->input->get('to_date');
+    
+    // Fetch doctor data
+    $this->load->model('patient_model');
+    $data['data_list'] = $this->patient_model->search_patient_data();
+    
+    // Create main header with date range if available
+    $mainHeader = "Patient List";
+    if (!empty($from_date) && !empty($to_date)) {
+        $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
+    }
+    $data['mainHeader'] = $mainHeader;
+
+    // Load the HTML view into a variable
+    $this->load->view('patient/patient_html', $data);
+    $html = $this->output->get_output();
+    
+    // Load the PDF library
+    $this->load->library('pdf');
+    // Generate the PDF
+    $this->pdf->load_html($html); 
+    $this->pdf->render();
+    
+    // Output the generated PDF (force download)
+    $this->pdf->stream("patient_list_" . time() . ".pdf", array("Attachment" => 1));
     }
     public function patient_print()
     {    
@@ -2022,7 +2083,11 @@ public function ipd_printtemplate_dropdown()
     
     public function import_patient_excel()
     {
-        //unauthorise_permission(97,628);
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
+
+        // unauthorise_permission(97,628);
         $this->load->library('form_validation');
         $this->load->library('excel');
         $data['page_title'] = 'Import Patient excel';
@@ -2030,7 +2095,7 @@ public function ipd_printtemplate_dropdown()
         $header = array();
         $path='';
 
-        //print_r($_FILES); die;
+        // print_r($_FILES); die;
         if(isset($_FILES) && !empty($_FILES))
         {
           
@@ -2052,7 +2117,7 @@ public function ipd_printtemplate_dropdown()
                     $error = array('error' => $this->upload->display_errors()); 
                     $data['file_upload_eror'] = $error; 
 
-                    echo "<pre> dfd";print_r(DIR_UPLOAD_PATH.'patient/'); exit;
+                   // echo "<pre> dfd";print_r(DIR_UPLOAD_PATH.'patient/'); exit;
                 }
                 else 
                 { 
@@ -2061,14 +2126,18 @@ public function ipd_printtemplate_dropdown()
 
                     //read file from path
                     $objPHPExcel = PHPExcel_IOFactory::load($path);
+                    
+                    
                     //get only the Cell Collection
                     $cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
+                    
                     //extract to a PHP readable array format
                     foreach ($cell_collection as $cell) 
                     {
                         $column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
                         $row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
                         $data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();
+                        
                         //header will/should be in row 1 only. of course this can be modified to suit your need.
                         if ($row == 1) 
                         {
@@ -2078,14 +2147,16 @@ public function ipd_printtemplate_dropdown()
                         {
                             $arr_data[$row][$column] = $data_value;
                         }
+                        
                     }
+                    
                     //send the data in an array format
                     $data['header'] = $header;
                     $data['values'] = $arr_data;
                    
                 }
-
-                //echo "<pre>";print_r($arr_data); exit;
+                
+                // echo "<pre>";print_r($arr_data); exit;
                 if(!empty($arr_data))
                 {
                     //echo '<pre>'; print_r($arr_data); exit;
@@ -2098,10 +2169,15 @@ public function ipd_printtemplate_dropdown()
                     $array_values_keys = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF','AG','AH','AI','AJ','AK','AL','AM');
                     $patient_data = array();
                     
+                    
                     $j=0;
                     $m=0;
                     $data='';
                     $patient_all_data= array();
+                    
+                    // print_r($patient_all_data);
+                    // die;
+
                     for($i=0;$i<$total_patient;$i++)
                     {
                         $med_data_count_values[$i] = count($arrs_data[$i]);
@@ -2151,7 +2227,8 @@ public function ipd_printtemplate_dropdown()
             $objPHPExcel->getProperties()->setTitle("export")->setDescription("none");
             $objPHPExcel->setActiveSheetIndex(0);
             // Field names in the first row
-            $fields = array('Simulation','Patient Name(*)','Relation Type','Relation Simulation','Relation Name','Mobile No.','Gender (Male=1,Female=0,Others=2)','Age Year(yyyy)','Age Month(mm)','Age Day(dd)','Age Hours','Dob(dd-mm-yyyy)','Address1','Address2','Address3','Aadhaar No.','Country','State','City','Pin Code','Marital Status(Married=1,Unmarried=0)','Marriage Anniversary(dd-mm-yyyy)','Religion','Mother Name','Guardian Name','Guardian Email','Guardian Mobile','Relation','Patient Email','Monthly Income','Occupation','Insurance Type(Normal=0,TPA=1)','Insurance Type','Insurance Company','Policy No.','TPA ID','Insurance Amount','Authorization No.');
+            // $fields = array('Simulation','Patient Name(*)','Relation Type','Relation Simulation','Relation Name','Mobile No.','Gender (Male=1,Female=0,Others=2)','Age Year(yyyy)','Age Month(mm)','Age Day(dd)','Age Hours','Dob(dd-mm-yyyy)','Address1','Address2','Address3','Aadhaar No.','Country','State','City','Pin Code','Marital Status(Married=1,Unmarried=0)','Marriage Anniversary(dd-mm-yyyy)','Religion','Mother Name','Guardian Name','Guardian Email','Guardian Mobile','Relation','Patient Email','Monthly Income','Occupation','Insurance Type(Normal=0,TPA=1)','Insurance Type','Insurance Company','Policy No.','TPA ID','Insurance Amount','Authorization No.');
+            $fields = array('Simulation','Patient Name(*)','Relation Type','Relation Simulation','Relation Name','Mobile No.','Aadhaar No','Gender (Male=1,Female=0,Others=2)','Age Year(yyyy)','Age Month(mm)','Age Day(dd)','Age Hours','Dob(dd-mm-yyyy)','Village/Town','Dist./Taluk/Thana','State','Pin Code','Patient Email');
 
             
       

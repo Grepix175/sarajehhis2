@@ -166,7 +166,7 @@ function allbranch_delete(allVals)
 <!-- //////////////////////[ Left side bar ]////////////////////// -->
 <?php if($users_data['emp_id']==0)
 {?>
-<div class="toggleBtn"><i class="fa fa-angle-right"></i></div>
+<!--<div class="toggleBtn"><i class="fa fa-angle-right"></i></div>-->
 <div class="toggleBox">
   <a>Exit <i class="fa fa-sign-out"></i></a>
   <form id="checkbox_data_form">
@@ -250,7 +250,7 @@ function allbranch_delete(allVals)
       <td> 
             <input value="Reset" class="btn-custom" onclick="clear_form_elements(this.form)" type="button">
             
-          <a class="btn-custom" id="adv_search"><i class="fa fa-cubes"></i> Advance Search</a>
+          <!--<a class="btn-custom" id="adv_search"><i class="fa fa-cubes"></i> Advance Search</a>-->
           
       </td>
     </tr>
@@ -411,15 +411,17 @@ function allbranch_delete(allVals)
   				    <i class="fa fa-plus"></i> New
   			     </button>
 
-              <a href="<?php echo base_url('doctors/doctors_excel'); ?>" class="btn-anchor m-b-2">
-              <i class="fa fa-file-excel-o"></i> Excel
-              </a>
+              <!--<a href="<?php //echo base_url('doctors/doctors_excel'); ?>" class="btn-anchor m-b-2">-->
+              <!--<i class="fa fa-file-excel-o"></i> Excel-->
+              <a href="#" id="download_excel" class="btn-anchor m-b-2">
+                    <i class="fa fa-file-excel-o"></i> Excel
+            </a>
 
-              <a href="<?php echo base_url('doctors/doctors_csv'); ?>" class="btn-anchor m-b-2">
-              <i class="fa fa-file-word-o"></i> CSV
-              </a>
 
-              <a href="<?php echo base_url('doctors/doctors_pdf'); ?>" class="btn-anchor m-b-2">
+              <!--<a href="<?php echo base_url('doctors/doctors_pdf'); ?>" class="btn-anchor m-b-2">-->
+              <!--<i class="fa fa-file-pdf-o"></i> PDF-->
+              <!--</a>-->
+              <a href="#" id="download_pdf" class="btn-anchor m-b-2">
               <i class="fa fa-file-pdf-o"></i> PDF
               </a>
 
@@ -694,6 +696,50 @@ $(document).ready(function() {
       $('.inputFocus').focus();
    })
 }); 
+ document.getElementById('download_excel').addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent the default anchor behavior
+
+    // Get the from_date and to_date values
+    var fromDate = document.getElementById('start_date').value;
+    var toDate = document.getElementById('end_date').value;
+    
+    // Construct the URL with query parameters
+    var url = '<?php echo base_url("doctors/doctors_excel"); ?>';
+
+    // Append dates to the URL if they exist
+    if (fromDate || toDate) {
+        url += '?';
+        if (fromDate) {
+            url += 'from_date=' + encodeURIComponent(fromDate);
+        }
+        if (toDate) {
+            url += (fromDate ? '&' : '') + 'to_date=' + encodeURIComponent(toDate);
+        }
+    }
+    window.location.href = url;
+});
+ document.getElementById('download_pdf').addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent the default anchor behavior
+
+    // Get the from_date and to_date values
+    var fromDate = document.getElementById('start_date').value;
+    var toDate = document.getElementById('end_date').value;
+    
+    // Construct the URL with query parameters
+    var url = '<?php echo base_url("doctors/doctors_pdf"); ?>';
+
+    // Append dates to the URL if they exist
+    if (fromDate || toDate) {
+        url += '?';
+        if (fromDate) {
+            url += 'from_date=' + encodeURIComponent(fromDate);
+        }
+        if (toDate) {
+            url += (fromDate ? '&' : '') + 'to_date=' + encodeURIComponent(toDate);
+        }
+    }
+    window.location.href = url;
+});
 </script> 
 <!-- Confirmation Box -->
 
