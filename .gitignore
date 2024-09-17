@@ -1,0 +1,3 @@
+# Ignore config files
+config/config.php
+config/database.php
