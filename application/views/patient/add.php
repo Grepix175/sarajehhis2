@@ -441,6 +441,8 @@ $field_list = mandatory_section_field_list(2);
             <input type="hidden" name="patient_code_auto" id="patient_code_auto" value="<?php echo $token; ?>" />
           </div>
 
+          
+
       </div>
 
 
@@ -851,6 +853,7 @@ $this->load->view('include/footer');
                     $("#registered").attr('checked', true);
                     $('#new').attr('checked', false);
                     $('#patient_code').val(data.patient_detail.patient_code);
+                    $('#patient_code_auto').val(data.patient_detail.patient_code_auto);
                     $('#patient_name').val(data.patient_detail.patient_name);
                     $('#relation_name').val(data.patient_detail.relation_name);
                     $('#mobile_no').val(data.patient_detail.mobile_no);

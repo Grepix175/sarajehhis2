@@ -53,9 +53,9 @@ class Patient extends CI_Controller {
         $no = $_POST['start'];
         $i = 1;
         $total_num = count($list);
-    //     echo "<pre>";
-    //     print_r ($list);
-    // die();
+        //     echo "<pre>";
+        //     print_r ($list);
+        // die();
         foreach ($list as $patient) { 
             $no++;
             $row = array();
@@ -374,8 +374,13 @@ class Patient extends CI_Controller {
             '.$btn_edit.$btn_view.$btn_barcode.$btn_delete.$btn_appointment.$btn_booking.$btn_camp_booking.$btn_day_care.$btn_recipient_booking.$btn_dialysis_booking.$btn_dialysis_appointment.$btn_billing.$btn_sales_medicine.$btn_sales_return_medicine.$btn_ipd_booking.$btn_ot_booking.$btn_pathology_booking.$btn_proforma_booking.$btn_sales_vaccine.$btn_sales_return_vaccine.$btn_ambulance_booking.$btn_amb_enquiry.$btn_sales_canteen.$btn_history.$btn_consolidate_payment.$btncertificate.$btn_upload_document.$btn_reg_card.'
             </ul>
             </div> ';
+            
+            $btn_token = '';
+            if (empty($patient->patient_code_auto)) {
+                $btn_token = '<a class="btn-custom" href="' . base_url('patient/generate_token/' . $patient->id) . '" style="' . $patient->id . '" title="History">Token</a>';
+            }
               
-                $row[] = $btn_report_print.$btn_reg_card_url.$btn_a;  
+                $row[] = $btn_token.$btn_report_print.$btn_reg_card_url.$btn_a;  
             $data[] = $row;
             $i++;
         } 
@@ -389,6 +394,29 @@ class Patient extends CI_Controller {
         //output to json format
         //echo "<pre>"; print_r($output); die; 
         echo json_encode($output);
+    }
+    public function generate_token($id = null)
+    {
+        if ($id) {
+            // Proceed with your logic here
+            // For example, generate a token or perform some action
+            // ...
+            $this->load->model('token_no/Tokenno_model');
+            $this->load->model('token_no/Tokenno_model');
+            $tokenno=$this->Tokenno_model->get_token();
+
+            $data_token['patient_id']=$id;
+            $data_token['token_no']=$tokenno;
+
+            $this->Tokenno_model->save($data_token);
+            
+            $data_token_edit['id']=$id;
+            $data_token_edit['patient_code_auto']=$tokenno;
+
+            $this->patient->update_token($data_token_edit);
+            redirect('patient');
+        }
+        
     }
  /* patient history ajax by mamta */
     public function patient_history($id='',$branch_id='')
@@ -905,7 +933,8 @@ class Patient extends CI_Controller {
     {
         unauthorise_permission(19,114);
         $this->load->library('form_validation');
-        $this->load->model('general/general_model'); 
+        $this->load->model('general/general_model');
+        $this->load->model('token_no/Tokenno_model');
         $users_data = $this->session->userdata('auth_users');
         $data['page_title'] = "Add Patient";
         $data['form_error'] = [];
@@ -921,11 +950,16 @@ class Patient extends CI_Controller {
         //$data['insurance_company_list'] = $this->general_model->insurance_company_list();   
         $reg_no = generate_unique_id(4);
         $post = $this->input->post();
+        $tokenno=$this->Tokenno_model->get_token();
+        
+        
+
         
         $data['form_data'] = array(
                                     "data_id"=>"",
                                     "branch_id"=>"",
                                     "patient_code"=>$reg_no, 
+                                    "patient_code_auto"=>$tokenno, 
                                     "patient_name"=>"",
                                     "simulation_id"=>"",
                                     "mobile_no"=>"",
@@ -977,8 +1011,7 @@ class Patient extends CI_Controller {
                                     'capture_finger'=>'',  // Added By Nitin Sharma 04/02/2024
                                     'fingerprint_photo'=>'', // Added By Nitin Sharma 04/02/2024
                                     'created_date'=>date('m/d/Y H:i:s'),
-                                    'patient_category'=>'',
-                                    'patient_code_auto' => ''
+                                    'patient_category'=>''
                                   );
                                   
         if(isset($post) && !empty($post))
@@ -993,7 +1026,7 @@ class Patient extends CI_Controller {
             
             // $data['form_data'] = $valid_response['form_data']; 
             // echo "<pre>";
-            // print_r($data);
+            // print_r();
             // echo "</pre>";
             // die;
             if($this->form_validation->run() == TRUE)
@@ -1004,7 +1037,16 @@ class Patient extends CI_Controller {
                 } 
             
                 $patient_id =  $this->patient->save($valid_response['photo_name']);
+                // $patient_id=6666;
+                
+                $data_token['patient_id']=$patient_id;
+                $data_token['token_no']=$post['patient_code_auto'];
+
+                $patient_id =  $this->Tokenno_model->save($data_token);
                 /////// Send SMS /////////
+
+                
+                
                 //print_r($users_data['permission']['action']);die;
                 if(in_array('640',$users_data['permission']['action']))
                 {

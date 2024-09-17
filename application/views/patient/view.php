@@ -127,12 +127,6 @@
               </div>
             </div>
 
-           
-           
-
-            
-
-            
             <?php if($form_data['dob']!='1970-01-01' && $form_data['dob']!='0000-00-00'){ ?>
             <div class="row m-b-5">
               <div class="col-xs-6"><label>DOB</label></div>
@@ -146,6 +140,13 @@
               <div class="col-xs-6"><label> <?php echo $form_data['relation']; ?></label></div>
               <div class="col-xs-6">
                 <?php if(!empty($form_data['relation_name'])){ echo $form_data['rel_simulation'].' '.$form_data['relation_name']; } ?>
+              </div>
+            </div>
+
+            <div class="row m-b-5">
+              <div class="col-xs-6"><label> Token No </label></div>
+              <div class="col-xs-6">
+                <?php echo ucfirst(strtolower($form_data['patient_code_auto'])); ?> 
               </div>
             </div>
 
