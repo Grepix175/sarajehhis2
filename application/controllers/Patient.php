@@ -1811,6 +1811,7 @@ public function ipd_printtemplate_dropdown()
         $this->load->library('excel');
         $this->excel->IO_factory();
         $objPHPExcel = new PHPExcel();
+        "<pre>";print_r('Hello'); die;
         $objPHPExcel->getProperties()->setTitle("export")->setDescription("none");
         $objPHPExcel->setActiveSheetIndex(0);
         
@@ -1828,7 +1829,6 @@ public function ipd_printtemplate_dropdown()
     
         // Blank row after the main header
         $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20); // Set height for visibility
-        
         $headerRow = 2;
         if (!empty($from_date) || !empty($to_date)) {
             $dateRange = '';
@@ -1873,6 +1873,7 @@ public function ipd_printtemplate_dropdown()
         
         // Fetching the table data
         $list = $this->patient->search_patient_data();
+        "<pre>";print_r($list); die;
         $rowData = array();
         $data = array();
         if (!empty($list)) {
