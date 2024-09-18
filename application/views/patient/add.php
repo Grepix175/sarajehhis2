@@ -35,38 +35,6 @@ $field_list = mandatory_section_field_list(2);
 <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datepicker.css">
 <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datepicker.js"></script>
 
-<style>
-#patient_form .pat-col > .grp{
-    width:80%;
-}
-#patient_form input[type="text"], #patient_form input[type="password"], #patient_form input[type="date"] ,#patient_form select,#patient_form .pat-col > .grp > .box-right{
-    width:300px;
-}
-#patient_form #mobile_no {
-    width:145px;
-}
-#patient_form .pat-col > .grp-full > .grp > .box-right > input[type="text"] {
-    width:203px;
-}
-#patient_form .pat-col > .grp-full > .grp > .box-right{
-    width:300px;
-}
-#patient_form .pat-col{
-    width:50%;
-}
-#patient_form .country_code{
-    width:50px!important;
-}
-#patient_form #simulation_id,#patient_form #relation_simulation_id{
-    width:30%;
-}
-#patient_form #age_y,#patient_form #age_m,#patient_form #age_d, #patient_form #age_h{
-    width:29px;
-}
-#patient_form #patient_category{
-    width:200px;
-}
-</style>
 <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datetimepicker.css">
 <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datetimepicker.js"></script>
 <body onLoad="set_tpa(<?php echo $form_data['insurance_type']; ?>); set_married(<?php echo $form_data['marital_status']; ?>);"> 
@@ -96,98 +64,44 @@ $field_list = mandatory_section_field_list(2);
       <?php } ?>
 
       <div class="grp-full">
-          <div class="grp">
-            <label>Patient Category  <span class="star">*</span>
-              </label>
-           
-            <div class="box-right">
-                <select name="patient_category" id="patient_category">
-                  <option value="">Select Patient Category</option>
-                  <?php
-                  
-                  if(!empty($patient_category_list))
-                  {
-                    foreach($patient_category_list as $patient_category)
-                    {
-                      $selected_patient_category = "";
-                      if($patient_category->id==$form_data['patient_category'])
-                      {
-                        $selected_patient_category = 'selected="selected"';
-                      }
-                      echo '<option value="'.$patient_category->id.'" '.$selected_patient_category.'>'.$patient_category->patient_category.'</option>';
-                    }
-                  }
-                  ?> 
-                </select>
-                <?php 
-                              if(!empty($form_error)){ echo form_error('patient_category'); } 
-                    
-             ?>
-            </div>
-          </div>
-          
-          <?php if(in_array('51',$users_data['permission']['action'])) {
-          ?>
-               <div class="grp-right">
-                  <a title="Add Religion" class="btn-new" href="javascript:void(0)" onClick="patient_category_modal()"><i class="fa fa-plus"></i> New</a>
-               </div>
-          <?php } ?>
-      </div>
-      <div class="grp-full">
         <div class="grp">
               <label>Patient Name <span class="star">*</span> </label>
             <div class="box-right">
-    
                 <select name="simulation_id" id="simulation_id" class="pat-select1" onChange="find_gender(this.value)">
-                
-            
-                    <?php 
-                    if (!empty($simulation_list)) {
-                
-                        $seen_names = array();
-            
-                
-                        foreach ($simulation_list as $simulation) {
-                            
-                            if (empty($simulation->id) || empty($simulation->simulation)) {
-                                continue;
-                            }
-            
-                            
-                            if (in_array($simulation->simulation, $seen_names)) {
-                                continue;
-                            }
-            
-                            
-                            $seen_names[] = $simulation->simulation;
-            
-                            
-                            $selected_simulation = ($simulation->id == $form_data['simulation_id']) ? 'selected="selected"' : '';
-                        ?>
-                            
-                            <option value="<?php echo htmlspecialchars($simulation->id); ?>" <?php echo $selected_simulation; ?>>
-                                <?php echo htmlspecialchars($simulation->simulation); ?>
-                            </option>
-                        <?php 
-                        }
-                    } 
-                    ?>
+                  <!-- <option value="">Select</option> -->
+                  <?php
+                  if(!empty($simulation_list))
+                  {
+                    $s = 1;
+                    $sim_id = '';
+                    foreach($simulation_list as $simulation)
+                    {
+                      $selected_simulation = '';
+                      
+                      if($simulation->id==$form_data['simulation_id'])
+                      {
+                         $selected_simulation = 'selected="selected"';
+                      }
+                      if($s==1)
+                      {
+                        $sim_id = $simulation->id;
+                      }
+                      echo '<option value="'.$simulation->id.'" '.$selected_simulation.'>'.$simulation->simulation.'</option>';
+                    $s++;
+                    }
+
+                  }
+                  ?> 
                 </select> 
-            
-                <!-- Text input for patient name -->
-                <input type="text" name="patient_name" class="alpha_space_name txt_firstCap" id="patient_name" 
-                       value="<?php echo htmlspecialchars($form_data['patient_name']); ?>" autofocus />
-            
-                <!-- Display form errors -->
+                <input type="text" name="patient_name"  class="alpha_space_name txt_firstCap" id="patient_name" value="<?php echo $form_data['patient_name']; ?>"  autofocus/>
+               
                 <?php 
-                // Display error messages if any
-                if (!empty($form_error)): 
-                    echo form_error('patient_name'); 
-                    echo form_error('simulation_id'); 
-                endif; 
+                             if(!empty($form_error)){ echo form_error('patient_name'); }
+                             if(!empty($form_error)){ echo form_error('simulation_id'); } 
+
+                        
                 ?>
             </div>
-
           </div>
           <?php if(in_array('65',$users_data['permission']['action'])) {
           ?>
@@ -197,8 +111,6 @@ $field_list = mandatory_section_field_list(2);
           <?php } ?>
 
       </div>
-
-      
 
     <div class="grp-full">
         <div class="grp">
@@ -210,88 +122,36 @@ $field_list = mandatory_section_field_list(2);
              <?php }?>
              </select></label>
             <div class="box-right">
-    
                 <select name="relation_simulation_id" id="relation_simulation_id" class="pat-select1">
-                    <?php 
-                    if (!empty($simulation_list)) {
-                        $seen_names = array();
-                        foreach ($simulation_list as $simulation) {
-                            
-                            if (empty($simulation->id) || empty($simulation->simulation)) {
-                                continue;
-                            }
-                            if (in_array($simulation->simulation, $seen_names)) {
-                                continue;
-                            }
-                            $seen_names[] = $simulation->simulation;
-                            $selected_simulation = ($simulation->id == $form_data['relation_simulation_id']) ? 'selected="selected"' : '';
-                        ?>
-                            <option value="<?php echo htmlspecialchars($simulation->id); ?>" <?php echo $selected_simulation; ?>>
-                                <?php echo htmlspecialchars($simulation->simulation); ?>
-                            </option>
-                        <?php 
-                        }
-                    } 
-                    ?>
-                </select> 
-                <input type="text" value="<?php echo isset($form_data['relation_name']) ? htmlspecialchars($form_data['relation_name']) : ''; ?>" 
-                       class="alpha_space_name" name="relation_name" id="relation_name"/>
-            </div>
+                  <!-- <option value="">Select</option> -->
+                  <?php
+                  if(!empty($simulation_list))
+                  {
+                    $s = 1;
+                    $sim_id = '';
+                    foreach($simulation_list as $simulation)
+                    {
+                      $selected_simulation = '';
+                      
+                      if($simulation->id==$form_data['relation_simulation_id'])
+                      {
+                         $selected_simulation = 'selected="selected"';
+                      }
+                      if($s==1)
+                      {
+                        $sim_id = $simulation->id;
+                      }
+                      echo '<option value="'.$simulation->id.'" '.$selected_simulation.'>'.$simulation->simulation.'</option>';
+                    $s++;
+                    }
 
+                  }
+                  ?> 
+                </select> 
+              <input type="text" value="<?php if(isset($form_data['relation_name'])){ echo $form_data['relation_name'];}?>" class="alpha_space_name" name="relation_name" id="relation_name"/>
+            </div>
           </div>
        </div>
-
-       <div class="grp">
-        <label>Gender 
-         
-                         <span class="star">*</span>
-                
-        
-        </label>
-        <div class="box-right" id="gender">
-            <input type="radio" name="gender" value="1" <?php if($form_data['gender']==1){ echo 'checked="checked"'; } ?>> Male &nbsp;
-            <input type="radio" name="gender" value="0" <?php if($form_data['gender']==0){ echo 'checked="checked"'; } ?>> Female
-             <input type="radio" name="gender" value="2" <?php if($form_data['gender']==2){ echo 'checked="checked"'; } ?>> Others
-            <?php 
-                              if(!empty($form_error)){ echo form_error('gender'); } 
-                    
-             ?>
-        </div>
-      </div>
-
-      <div class="grp">
-        <label>Age  <span class="star">*</span>
-         <?php if(!empty($field_list)){
-                    if($field_list[1]['mandatory_field_id']==7 && $field_list[1]['mandatory_branch_id']==$users_data['parent_id']){?>         
-                         <span class="star">*</span>
-                    <?php 
-                    }
-               } 
-          ?>
-        </label>
-        <div class="box-right">
-            <input type="text" name="age_y" id="age_y" class="numeric input-tiny2 media_input_tiny" maxlength="3" value="<?php echo $form_data['age_y']; ?>" onchange="getAsDate();"> Y &nbsp;
-            <input type="text" name="age_m" id="age_m" class="numeric input-tiny2 media_input_tiny" maxlength="2" value="<?php echo $form_data['age_m']; ?>" onchange="getAsDate();"> M &nbsp;
-            <input type="text" name="age_d" id="age_d" class="input-tiny2 media_input_tiny numeric" maxlength="2" value="<?php echo $form_data['age_d']; ?>" onchange="getAsDate();"> D
-            <input type="text" name="age_h" id="age_h" class="input-tiny2 media_input_tiny numeric" maxlength="2" value="<?php echo $form_data['age_h']; ?>"> H
-            <?php if(!empty($field_list)){
-                         if($field_list[1]['mandatory_field_id']=='7' && $field_list[1]['mandatory_branch_id']==$users_data['parent_id']){
-                              if(!empty($form_error)){ echo form_error('age_y'); 
-                              } 
-                         }
-                    }
-                    if(!empty($form_error)){ echo form_error('age_y'); } 
-               ?>
-        </div>
-      </div>
-
-
-      <div class="grp">
-        <label>DOB</label>
-        <div class="box-right">
-              <input type="text" class="datepicker" readonly="" name="dob" id="dob" value="<?php echo $form_data['dob']; ?>"  onchange="showAge(this.value);"/> 
-        </div>
-      </div>
 
       <div class="grp">
         <label>Mobile No. 
@@ -318,15 +178,72 @@ $field_list = mandatory_section_field_list(2);
         </div>
       </div>
 
+
       <div class="grp">
-        <label>Email</label>
-        <div class="box-right">
-            <input type="text" name="patient_email" data-toggle="tooltip"  title="Email should be like abc@example.com." class="tooltip-text tool_tip email_address" id="patient_email" value="<?php echo $form_data['patient_email']; ?>" />
-          
-            <?php if(!empty($form_error)){ echo form_error('patient_email'); } ?>
+        <label>Gender 
+         
+                         <span class="star">*</span>
+                
+        
+        </label>
+        <div class="box-right" id="gender">
+            <input type="radio" name="gender" value="1" <?php if($form_data['gender']==1){ echo 'checked="checked"'; } ?>> Male &nbsp;
+            <input type="radio" name="gender" value="0" <?php if($form_data['gender']==0){ echo 'checked="checked"'; } ?>> Female
+             <input type="radio" name="gender" value="2" <?php if($form_data['gender']==2){ echo 'checked="checked"'; } ?>> Others
+            <?php 
+                              if(!empty($form_error)){ echo form_error('gender'); } 
+                    
+             ?>
         </div>
       </div>
+
+
+      <div class="grp">
+        <label>Age 
+         <?php if(!empty($field_list)){
+                    if($field_list[1]['mandatory_field_id']==7 && $field_list[1]['mandatory_branch_id']==$users_data['parent_id']){?>         
+                         <span class="star">*</span>
+                    <?php 
+                    }
+               } 
+          ?>
+        </label>
+        <div class="box-right">
+            <input type="text" name="age_y" id="age_y" class="numeric input-tiny2 media_input_tiny" maxlength="3" value="<?php echo $form_data['age_y']; ?>" onchange="getAsDate();"> Y &nbsp;
+            <input type="text" name="age_m" id="age_m" class="numeric input-tiny2 media_input_tiny" maxlength="2" value="<?php echo $form_data['age_m']; ?>" onchange="getAsDate();"> M &nbsp;
+            <input type="text" name="age_d" id="age_d" class="input-tiny2 media_input_tiny numeric" maxlength="2" value="<?php echo $form_data['age_d']; ?>" onchange="getAsDate();"> D
+            <input type="text" name="age_h" class="input-tiny2 media_input_tiny numeric" maxlength="2" value="<?php echo $form_data['age_h']; ?>"> H
+            <?php if(!empty($field_list)){
+                         if($field_list[1]['mandatory_field_id']=='7' && $field_list[1]['mandatory_branch_id']==$users_data['parent_id']){
+                              if(!empty($form_error)){ echo form_error('age_y'); 
+                              } 
+                         }
+                    }
+               ?>
+        </div>
+      </div>
+
       
+
+      <div class="grp">
+        <label>Address 1</label>
+        <div class="box-right">
+            <input type="text" name="address" id="address" class="address" maxlength="255" value="<?php echo $form_data['address']; ?>"/>
+        </div>
+      </div>
+      <div class="grp">
+        <label>Address 2</label>
+        <div class="box-right">
+            <input type="text" name="address_second" id="address_second" class="address" maxlength="255" value="<?php echo $form_data['address_second']; ?>"/>
+        </div>
+      </div>
+       <div class="grp">
+        <label>Address 3</label>
+        <div class="box-right">
+            <input type="text" name="address_third" id="address_third" class="address" maxlength="255" value="<?php echo $form_data['address_third']; ?>"/>
+        </div>
+      </div>
+
       <div class="grp">
         <label>Aadhaar No.</label>
         <div class="box-right">
@@ -337,37 +254,9 @@ $field_list = mandatory_section_field_list(2);
              ?>
         </div>
       </div>
-
-      
-
-      
-
-
-      
-
-      
-
-     <div class="grp">
-        <label>Village/Town<span class="star">*</span> </label>
-        <div class="box-right">
-            <input type="text" name="address" id="address" class="address" maxlength="255" value="<?php echo $form_data['address']; ?>"/>
-            <?php 
-                             if(!empty($form_error)){ echo form_error('address'); } ?>
-        </div>
-        
-      </div>
-      <div class="grp">
-        <label>Dist./Taluk/Thana </label>
-        <div class="box-right">
-            <input type="text" name="address_second" id="address_second" class="address" maxlength="255" value="<?php echo $form_data['address_second']; ?>"/>
-        </div>
-      </div>
-       
-
-      
  
       
-      <!-- <div class="grp">
+      <div class="grp">
         <label>Country</label>
         <div class="box-right">
             <select name="country_id" id="country_id" class="pat-select1" onChange="return get_state(this.value);">
@@ -388,7 +277,7 @@ $field_list = mandatory_section_field_list(2);
                   ?> 
                 </select>
         </div>
-      </div> -->
+      </div>
 
       <div class="grp">
         <label>State</label>
@@ -414,7 +303,31 @@ $field_list = mandatory_section_field_list(2);
         </div>
       </div>
 
-      
+      <div class="grp">
+        <label>City</label>
+        <div class="box-right">
+            <select name="city_id" id="city_id">
+              <option>Select City</option>
+              <?php
+               if(!empty($form_data['state_id']))
+               {
+                  $city_list = city_list($form_data['state_id']);
+                  if(!empty($city_list))
+                  {
+                     foreach($city_list as $city)
+                     {
+                      ?>   
+                        <option value="<?php echo $city->id; ?>" <?php if(!empty($form_data['city_id']) && $form_data['city_id'] == $city->id){ echo 'selected="selected"'; } ?>>
+                        <?php echo $city->city; ?> 
+                        </option>
+                      <?php
+                     }
+                  }
+               }
+              ?>
+            </select>
+        </div>
+      </div>     
 
 
       <div class="grp">
@@ -427,26 +340,21 @@ $field_list = mandatory_section_field_list(2);
 
 
       <div class="grp">
-        <?php 
-        if(isset($form_data['patient_code_auto'])  && !empty($form_data['patient_code_auto']) )
-        { 
-          $token=$form_data['patient_code_auto']; }else{
-            $token = rand(100000, 999999);
-
-          }
-        ?>
-        <label>Token No</label>
-          <div class="box-right">
-            <div class=""><?php echo $token; ?></div>
-            <input type="hidden" name="patient_code_auto" id="patient_code_auto" value="<?php echo $token; ?>" />
-          </div>
-
+        <label>Marital Status</label>
+        <div class="box-right">
+            <input type="radio" name="marital_status" value="1" <?php if($form_data['marital_status']==1){ echo 'checked="checked"'; } ?> onclick="set_married(1);" > Married
+            <input type="radio" name="marital_status" value="0" <?php if($form_data['marital_status']==0){ echo 'checked="checked"'; } ?> onclick="set_married(0);"> Unmarried
+        </div>
       </div>
 
+      <div class="grp">
+        <label>Marriage Anniversary</label>
+        <div class="box-right">
+              <input type="text" class="datepicker" readonly="" name="anniversary" id="anniversary" value="<?php echo $form_data['anniversary']; ?>" /> 
+            </div>
+      </div>
 
-     
-
-      <!-- <div class="grp-full">
+      <div class="grp-full">
           <div class="grp">
             <label>Religion</label>
             <div class="box-right">
@@ -475,47 +383,46 @@ $field_list = mandatory_section_field_list(2);
                     <a title="Add Religion" class="btn-new" href="javascript:void(0)" onClick="religion_modal()"><i class="fa fa-plus"></i> New</a>
                </div>
           <?php } ?>
-      </div> -->
+      </div>
 
-
-      
-
-      
-
-      
 
       <div class="grp">
-        <label></label>
+        <label>DOB</label>
         <div class="box-right">
-            <button class="btn-update" id="form_submit">
-            <i class="fa fa-save"></i> Save</button>
-            <a href="<?php echo base_url('patient'); ?>" class="btn-update" style="text-decoration:none!important;color:#FFF;padding:8px 2em;"><i class="fa fa-sign-out"></i> Exit</a>
+              <input type="text" class="datepicker" readonly="" name="dob" id="dob" value="<?php echo $form_data['dob']; ?>"  onchange="showAge(this.value);"/> 
         </div>
       </div>
 
  
       
-      <!-- <div class="grp">
+      <div class="grp">
         <label>Mother Name</label>
         <div class="box-right">
             <input type="text" name="mother" class="alpha_space_name" id="mother" value="<?php echo $form_data['mother']; ?>" />
         </div>
-      </div> -->
+      </div>
 
     </div> <!-- // -->
 
     <div class="pat-col">
       
-      <!-- <div class="grp">
+      <div class="grp">
         <label>Guardian Name</label>
         <div class="box-right">
             <input type="text" name="guardian_name" class="alpha_space_name input_focus" id="guardian_name" value="<?php echo $form_data['guardian_name']; ?>" />
         </div>
-      </div> -->
+      </div>
       
+      <div class="grp">
+        <label>Guardian Email</label>
+        <div class="box-right">
+            <input type="text" name="guardian_email" data-toggle="tooltip"  title="Email should be like abc@example.com." class="tooltip-text tool_tip email_address" id="guardian_email" value="<?php echo $form_data['guardian_email']; ?>" />
+          
+            <?php if(!empty($form_error)){ echo form_error('guardian_email'); } ?>
+        </div>
+      </div>
       
-      
-      <!-- <div class="grp">
+      <div class="grp">
         <label>Guardian Mobile</label>
         <div class="box-right">
             <input type="text" name="country_code" value="+91" readonly="" class="country_code" placeholder="+91">
@@ -556,7 +463,14 @@ $field_list = mandatory_section_field_list(2);
           <?php } ?>
       </div>
       
-      
+      <div class="grp">
+        <label>Patient Email</label>
+        <div class="box-right">
+            <input type="text" name="patient_email" data-toggle="tooltip"  title="Email should be like abc@example.com." class="tooltip-text tool_tip email_address" id="patient_email" value="<?php echo $form_data['patient_email']; ?>" />
+          
+            <?php if(!empty($form_error)){ echo form_error('patient_email'); } ?>
+        </div>
+      </div>
       
       <div class="grp">
         <label>Monthly Income</label>
@@ -613,10 +527,10 @@ $field_list = mandatory_section_field_list(2);
                     <a title="Add Insurance Type" class="btn-new" href="javascript:void(0)" onClick="insurance_type_modal()"><i class="fa fa-plus"></i> New</a>
                </div>
           <?php } ?>
-      </div> -->
+      </div>
 
 
-      <!-- <div class="grp-full">
+      <div class="grp-full">
           <div class="grp">
             <label>Name</label>
             <div class="box-right">
@@ -645,72 +559,79 @@ $field_list = mandatory_section_field_list(2);
                     <a title="Add Insurance Company" class="btn-new" href="javascript:void(0)" onClick="insurance_company_modal()"><i class="fa fa-plus"></i> New</a>
                </div>
           <?php } ?>
-      </div> -->
+      </div>
       
-      <!-- <div class="grp">
+      <div class="grp">
         <label>Policy No.</label>
         <div class="box-right">
             <input type="text" name="polocy_no" class="alpha_numeric" id="polocy_no" value="<?php echo $form_data['polocy_no']; ?>" maxlength="20" />
         </div>
-      </div> -->
+      </div>
       
-      <!-- <div class="grp">
+      <div class="grp">
         <label>TPA ID</label>
         <div class="box-right">
             <input type="text" name="tpa_id" class="alpha_numeric"  id="tpa_id" value="<?php echo $form_data['tpa_id']; ?>"  data-toggle="tooltip" title="Third Party Adminstrator!"/>
         </div>
-      </div> -->
+      </div>
       
-      <!-- <div class="grp">
+      <div class="grp">
         <label>Insurance Amount</label>
         <div class="box-right">
             <input type="text" name="ins_amount" class="price_float" id="ins_amount" value="<?php echo $form_data['ins_amount']; ?>" onKeyPress="return isNumberKey(event);" />
         </div>
-      </div> -->
+      </div>
       
-      <!-- <div class="grp">
+      <div class="grp">
         <label>Authorization No.</label>
         <div class="box-right">
             <input type="text" name="ins_authorization_no" class="alpha_numeric" id="ins_authorization_no" value="<?php echo $form_data['ins_authorization_no']; ?>" />
         </div>
-      </div> -->
+      </div>
 
       
-      <!-- <div class="grp">
+      <div class="grp">
         <label>Created Date</label>
         <div class="box-right" style="position: relative">
             <input type="text" name="created_date" class="datepicker3 m_input_default" id="created_date" value="<?php echo $form_data['created_date']; ?>" />
         </div>
-      </div>        -->
+      </div>       
       
-      <!-- <div class="grp">
+      <div class="grp">
         <label>Status</label>
         <div class="box-right">
             <input type="radio" name="status" value="1" <?php if($form_data['status']==1){ echo 'checked="checked"'; } ?>> Active &nbsp;
             <input type="radio" name="status" value="0" <?php if($form_data['status']==0){ echo 'checked="checked"'; } ?>> Inactive
         </div>
-      </div> -->
+      </div>
 
-      
+      <div class="grp">
+        <label></label>
+        <div class="box-right">
+            <button class="btn-update" id="form_submit">
+            <i class="fa fa-save"></i> Save</button>
+            <a href="<?php echo base_url('patient'); ?>" class="btn-update" style="text-decoration:none!important;color:#FFF;padding:8px 2em;"><i class="fa fa-sign-out"></i> Exit</a>
+        </div>
+      </div>
 
     </div> <!-- // --> 
 
     <div class="pat-col">
-        <div class="pat-col-right-box" style="display:flex; flex-direction: column">
+        <div class="pat-col-right-box">
             <!--Editing by Nitin Sharma 04/02/2024-->
-               <strong><center>Patient Face/Pic Capture</center></strong> 
+               <strong><center>Patient Photo/Finger Print</center></strong> 
                <!--Editing by Nitin Sharma 04/02/2024-->
-               <div class="photo" >
+               <div class="photo">
                     <?php
                          $img_path = base_url('assets/images/photo.png');
                          if(!empty($form_data['data_id']) && !empty($form_data['old_img'])){
                               $img_path = ROOT_UPLOADS_PATH.'patients/'.$form_data['old_img'];
                          }  
                     ?>
-                    <img id="pimg"  src="<?php echo $img_path; ?>" class="img-responsive">
+                    <img id="pimg" src="<?php echo $img_path; ?>" class="img-responsive">
                </div>
                <!--Added By Nitin Sharma 04/02/2024-->
-               <!-- <div class="photo fingerprint"  onclick="captureFP()">
+               <div class="photo fingerprint"  onclick="captureFP()">
                   <?php
                   $img_path = base_url('assets/images/finger_sacan.png');
                   if(!empty($form_data['data_id']) && !empty($form_data['fingerprint_photo'])){
@@ -720,16 +641,11 @@ $field_list = mandatory_section_field_list(2);
                   <img id="FPImage1" src="<?php echo $img_path; ?>" class="img-responsive" >
                   <input type="hidden" id="capture_finger" name="capture_finger" value="" />
                   <input type="hidden" id="fingerprint_photo" name="fingerprint_photo" value="" />
-                </div> -->
+                </div>
                 <!--Added By Nitin Sharma 04/02/2024-->
         </div>
-        <div class="pat-col-right-box2" style=" 
-                                                  display: flex;
-                                                  flex-direction: column;
-                                                  align-items: center;
-                                                  gap: 1rem
-                                              ">
-               <strong style="margin: 0;">Select Image</strong>
+        <div class="pat-col-right-box2">
+               <strong>Select Image</strong>
                     <input type="hidden" name="old_img"  value="<?php echo $form_data['old_img']; ?>" />
                     <input type="hidden" id="capture_img" name="capture_img" value="" />
                     <div style="float: left;width: 100%; font-weight: bold;text-align: center;">
@@ -738,7 +654,7 @@ $field_list = mandatory_section_field_list(2);
                     <div style="float: left;width: 100%; font-weight: bold;text-align: center;">
                     OR
                     </div>
-                    <input type="file" id="img-input" style="margin:0;" accept="image/*" name="photo">
+                    <input type="file" id="img-input" accept="image/*" name="photo">
                     <?php
                          if(isset($photo_error) && !empty($photo_error)){
                               echo '<div class="text-danger">'.$photo_error.'</div>';
@@ -749,7 +665,7 @@ $field_list = mandatory_section_field_list(2);
         if(!empty($form_data['data_id']) && $form_data['data_id']>0)
         {
         ?>
-          <!-- <div class="pat-col-right-box2">
+          <div class="pat-col-right-box2">
             <strong>Username</strong>
             <input type="text" id="username" class="alpha_numeric_space" readonly="" name="username" value="<?php echo $form_data['username']; ?>" />
           </div>
@@ -771,16 +687,16 @@ $field_list = mandatory_section_field_list(2);
                              Password length should be 6-20 character only.
                         </div>
                    </div>
-              </div>   -->
+              </div>  
             <?php if(!empty($form_error)){ echo form_error('password'); } ?>
           </div> 
         <?php
         }
         ?>  
-        <!-- <div class="pat-col-right-box2">
+        <div class="pat-col-right-box2">
           <strong>Remarks</strong>
           <textarea id="remark" class="alpha_numeric_space" name="remark" maxlength="255"><?php echo $form_data['remark']; ?></textarea>
-        </div> -->
+        </div>
     </div> <!-- // -->
 
 </div> <!-- content-inner -->
@@ -843,7 +759,7 @@ $this->load->view('include/footer');
                     async : false,
                    success: function(datas) {
                    var data = $.parseJSON(datas);
-                    console.log(data)
+
                    if(data.st==1)
                   { 
 
@@ -1013,19 +929,6 @@ $(document).ready(function(){
       function(){
       $modal.modal('show');
       });
-  }
-  
-  function patient_category_modal()
-  {
-      var $modal = $('#load_add_patient_category_modal_popup');
-      $modal.load('<?php echo base_url().'patient_category/add/' ?>',
-      {
-        //'id1': '1',
-        //'id2': '2'
-        },
-      function(){
-      $modal.modal('show');
-      });
   } 
 
   function insurance_type_modal()
@@ -1134,11 +1037,6 @@ $(document).ready(function(){
     $(this).find('.inputFocus').focus();
   });
 });
-$(document).ready(function(){
-  $('#load_add_patient_category_modal_popup').on('shown.bs.modal', function(e){
-    $(this).find('.inputFocus').focus();
-  });
-});
 
 $(document).ready(function(){
   $('#load_add_relation_modal_popup').on('shown.bs.modal', function(e){
@@ -1187,7 +1085,6 @@ if(!empty($sim_id) && $form_data['data_id']=='')
 ?>
 <div id="load_add_simulation_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
 <div id="load_add_religion_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
-<div id="load_add_patient_category_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
 <div id="load_add_relation_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
 <div id="load_add_insurance_type_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
 <div id="load_add_insurance_company_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>

@@ -135,13 +135,20 @@ $field_list = mandatory_section_field_list(1);
                     ?>
                          <div class="row m-b-5">
                               <div class="col-xs-4">
-                                   <strong>Incentive Limit <span class="star">*</span></strong>
+                                   <strong>Sharing Pattern <span class="star">*</span></strong>
+<sup class="info"><a href="javascript:void(null)" class="small info"> ?<span>Sharing pattern are of two type <br> Commision: Commission is a sum of money that is paid to an doctor upon completion of a task<br> Transaction:Basically this is used in Pathalogy it is type of doctor which paid before completion of any task. </span></a></sup>
                               </div>
-                              
                               <div class="col-xs-8">
                       
-                                <input type="text" name="incentive_limit"   value="<?php echo $form_data['incentive_limit'] ?? '' ?>" class="" autofocus> 
-
+                                   <select name="doctor_pay_type" id="doctor_pay_type" onchange="get_comission(this.value);">
+                                        <option value="">Select Sharing Pattern</option>
+                        
+                                        <option value="1" <?php if(1==$form_data['doctor_pay_type']){ echo 'selected="selected"'; } ?>>Commission</option>
+                                        <?php if(in_array('145',$users_data['permission']['section'])){ ?>
+                                        <option value="2" <?php if(2==$form_data['doctor_pay_type']){ echo 'selected="selected"'; } ?>>Transaction</option>
+                                        <?php } ?>
+                                   </select>
+                                   <?php if(!empty($form_error)){ echo form_error('doctor_pay_type'); } ?>
                               </div>
                          </div> <!-- row -->
                          
@@ -184,7 +191,7 @@ $field_list = mandatory_section_field_list(1);
 
                   <div class="row m-b-5">
                      <div class="col-xs-4" id="share_lable">
-                        <strong>Incentive %</strong>
+                        <strong>Share Details</strong>
                      </div>
                      <div class="col-xs-8" id="share_input">
                         <input type="hidden" name="doctor_commission_data" value="" />
@@ -213,39 +220,36 @@ $field_list = mandatory_section_field_list(1);
                       </div>
                       <div class="col-xs-8">
                         <select name="doctor_type">
-                            <option value="0" <?php if($form_data['doctor_type']==0 ){ echo 'selected="selected"'; } ?>>Referral</option>
+                            <option value="0" <?php if($form_data['doctor_type']==0){ echo 'selected="selected"'; } ?>>Referral</option>
                             <option value="1" <?php if($form_data['doctor_type']==1){ echo 'selected="selected"'; } ?>>Attended</option>
-                            <option value="2" <?php if($form_data['doctor_type']==2 || empty($form_data['doctor_type'])){ echo 'selected="selected"'; } ?>>Both</option>
+                            <option value="2" <?php if($form_data['doctor_type']==2){ echo 'selected="selected"'; } ?>>Both</option>
                         </select>
-                        
-   
-                        
                         <?php if(!empty($form_error)){ echo form_error('doctor_type'); } ?>
                       </div>
                     </div> <!-- row -->
 
                     
-                    <!--<div class="row m-b-5">-->
-                     <!--<div class="col-xs-4">-->
-                     <!--   <strong>Marketing Person </strong>-->
-                     <!--</div>-->
-                     <!--<div class="col-xs-8">-->
-                        <!--<select name="marketing_person_id" id="marketing_person_id">-->
-                           <!--<option value=""> Select Person </option>-->
-                           <?php /*
+                    <div class="row m-b-5">
+                     <div class="col-xs-4">
+                        <strong>Marketing Person </strong>
+                     </div>
+                     <div class="col-xs-8">
+                        <select name="marketing_person_id" id="marketing_person_id">
+                           <option value=""> Select Person </option>
+                           <?php
                               if(!empty($person_list))
                               {
                               foreach($person_list as $person)
                               {
-                                */?>
-                                <option value="<?php/* echo $person->id; */?>" <?php/* if($person->id==$form_data['marketing_person_id']){ echo 'selected="selected"'; } */?>><? /*php echo $person->name;*/ ?></option>
-                                <?php/*
+                                ?>
+                                <option value="<?php echo $person->id; ?>" <?php if($person->id==$form_data['marketing_person_id']){ echo 'selected="selected"'; } ?>><?php echo $person->name; ?></option>
+                                <?php
                               }
                             }
-                          */ ?> 
-                        <!--</select>-->
-                     <!--</div>-->
-                  <!--</div> <!-- row -->
+                           ?> 
+                        </select>
+                     </div>
+                  </div> <!-- row -->
 
 
                   <?php 
@@ -363,7 +367,6 @@ $field_list = mandatory_section_field_list(1);
 
                   <?php 
                   $users_data = $this->session->userdata('auth_users');
-                  /*
                   if(in_array('588',$users_data['permission']['action'])) 
                   { ?> 
                     <div class="row m-b-5">
@@ -384,7 +387,7 @@ $field_list = mandatory_section_field_list(1);
                   <?php } else { ?>
                    <input type="hidden" name="schedule_type" value="2">
                    <input type="hidden" name="doctor_panel_type" value="2">
-                  <?php } */ ?>
+                  <?php } ?>
 
 
                   
@@ -642,33 +645,31 @@ $field_list = mandatory_section_field_list(1);
                     </div>  -->
  <?php 
  $users_data = $this->session->userdata('auth_users');
- 
  if(in_array('588',$users_data['permission']['action'])) 
  { ?> 
-            <!--<div class="row m-b-5">-->
-            <!--<div class="col-xs-4">-->
-            <!--<strong> Available Days</strong>-->
-            <!--</div>-->
-            <!--  <div class="col-xs-8">-->
-            <!--  <div id="day_check">-->
-              <?php /* print_r($available_day);
+<div class="row m-b-5">
+            <div class="col-xs-4">
+            <strong> Available Days</strong>
+            </div>
+              <div class="col-xs-8">
+              <div id="day_check">
+              <?php //print_r($available_day);
               foreach ($days_list as $value) 
               { 
-*/
-                  ?>
-                  <!--<input type="checkbox" class="day_check" name="check_day[]" id="check-<?php //echo $value->id; ?>" value="<?php //echo $value->id; ?>" onClick="checkdays('<?php //echo $value->id; ?>','<?php //echo $value->day_name; ?>');" <?php //if(isset($available_day[$value->id])){ echo 'checked'; } ?> > <?php //echo $value->day_name; ?>-->
-                    <?php /*
 
-              }*/
+                  ?>
+                  <input type="checkbox" class="day_check" name="check_day[]" id="check-<?php echo $value->id; ?>" value="<?php echo $value->id; ?>" onClick="checkdays('<?php echo $value->id; ?>','<?php echo $value->day_name; ?>');" <?php if(isset($available_day[$value->id])){ echo 'checked'; } ?> > <?php echo $value->day_name; ?>
+                    <?php
+
+              }
               ?>
-            <!--  </div>-->
-            <!--   <div>-->
-            <!--   <input type="checkbox" name="checkall" id="check_all" onclick="clone_rows();" value="1"> All day Time like First Day Selection </div>-->
+              </div>
+               <div>
+               <input type="checkbox" name="checkall" id="check_all" onclick="clone_rows();" value="1"> All day Time like First Day Selection </div>
                    
-            <!--</div>-->
-            <!--</div>-->
+            </div>
+            </div>
           <?php
-          
           if(!empty($available_day))
           {
             foreach ($available_day as $key=>$value) 
@@ -725,22 +726,22 @@ $field_list = mandatory_section_field_list(1);
           
                    
 
-          <!--<div class="row m-b-5">-->
+          <div class="row m-b-5">
 
-               <!-- <div class="col-xs-4">-->
-               <!--     <strong>Per Patient Time</strong>-->
-               <!--</div>-->
-               <!--<div class="col-xs-8">-->
+                <div class="col-xs-4">
+                    <strong>Per Patient Time</strong>
+               </div>
+               <div class="col-xs-8">
                     
-               <!--     <input type="text"  name="per_patient_timing" class="" id="per_patient_timing" value="<?php echo $form_data['per_patient_timing']; ?>"> Min.-->
+                    <input type="text"  name="per_patient_timing" class="" id="per_patient_timing" value="<?php echo $form_data['per_patient_timing']; ?>"> Min.
 
-               <!--</div>-->
+               </div>
           </div>  <!-- row -->
 
                     <!-- row -->
-                <?php }else{ ?>  
-                <input type="hidden"  name="per_patient_timing" value="0"> 
-                <?php } ?>
+<?php }else{ ?>  
+<input type="hidden"  name="per_patient_timing" value="0"> 
+<?php } ?>
 
                   
                 </div> <!-- 6 // Right -->
@@ -753,33 +754,33 @@ $field_list = mandatory_section_field_list(1);
 
 
               </div> <!-- ROW -->
-              <!--<div class="row">-->
-              <!--  <div class="col-xs-12">-->
-              <!--  <div class="row m-b-5">-->
-              <!--       <div class="col-xs-2"><label>Separate Header For </label></div>-->
-              <!--       <div class="col-xs-8">-->
-              <!--          <input type="checkbox"  name="opd_header" value="1" id="opd_header" <?php if(!empty($form_data['opd_header'])){ echo 'checked'; } ?> > OPD &nbsp; -->
+              <div class="row">
+                <div class="col-xs-12">
+                <div class="row m-b-5">
+                     <div class="col-xs-2"><label>Separate Header For </label></div>
+                     <div class="col-xs-8">
+                        <input type="checkbox"  name="opd_header" value="1" id="opd_header" <?php if(!empty($form_data['opd_header'])){ echo 'checked'; } ?> > OPD &nbsp; 
 
-              <!--          <input type="checkbox"  name="billing_header" value="1" id="billing_header"  <?php if(!empty($form_data['billing_header'])){ echo 'checked'; } ?> > Billing &nbsp; -->
+                        <input type="checkbox"  name="billing_header" value="1" id="billing_header"  <?php if(!empty($form_data['billing_header'])){ echo 'checked'; } ?> > Billing &nbsp; 
 
-              <!--          <input type="checkbox"  name="prescription_header" value="1" id="prescription_header" <?php if(!empty($form_data['prescription_header'])){ echo 'checked'; } ?> > Prescription &nbsp; -->
+                        <input type="checkbox"  name="prescription_header" value="1" id="prescription_header" <?php if(!empty($form_data['prescription_header'])){ echo 'checked'; } ?> > Prescription &nbsp; 
 
-              <!--        </div>-->
-              <!--    </div>-->
-              <!--  </div>-->
-              <!--</div>-->
+                      </div>
+                  </div>
+                </div>
+              </div>
 
-              <div class="row" >
-              <!--  <div class="col-xs-12">-->
-              <!--  <div class="row m-b-5">-->
-              <!--       <div class="col-xs-2"><label>Separate Header</label></div>-->
-              <!--       <div class="col-xs-8">-->
-              <!--          <input type="radio" name="seprate_header" value="1" onClick="return set_header(1)" <?php if($form_data['seprate_header']==1){ echo 'checked';} ?> > Yes &nbsp;-->
-              <!--            <input type="radio" name="seprate_header" value="2" onClick="return set_header(2)" <?php if($form_data['seprate_header']==2){ echo 'checked';}?>> No-->
-              <!--        </div>-->
-              <!--    </div>-->
-              <!--  </div>-->
-              <!--</div>-->
+              <div class="row">
+                <div class="col-xs-12">
+                <div class="row m-b-5">
+                     <div class="col-xs-2"><label>Separate Header</label></div>
+                     <div class="col-xs-8">
+                        <input type="radio" name="seprate_header" value="1" onClick="return set_header(1)" <?php if($form_data['seprate_header']==1){ echo 'checked';} ?> > Yes &nbsp;
+                          <input type="radio" name="seprate_header" value="2" onClick="return set_header(2)" <?php if($form_data['seprate_header']==2){ echo 'checked';}?>> No
+                      </div>
+                  </div>
+                </div>
+              </div>
                <div class="row" id="headers_content" <?php if($form_data['seprate_header']!=1){ ?> style="display: none;" <?php } ?>>
                 <div class="col-xs-12">
 
@@ -1033,7 +1034,6 @@ CKEDITOR.instances[instance].updateElement();
            $('#save-doctor').attr('disabled');
            },
     success: function(result) {
-        console.log(result);
       if(result==1)
       {
         $('#load_add_modal_popup').modal('hide');

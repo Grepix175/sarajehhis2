@@ -30,10 +30,9 @@ class Dashboard extends CI_Controller {
 		$data['start_end_dates']=$this->branch_model->get_data_new_feature();
 		$this->load->model('general/general_model'); 
 		$data['expiry_notice']=$this->general_model->expiry_notice();
-		// $vehical_expiry
-		// $driving_license_expiry
-		$data['expiry_docs']=$this->dashboard_model->ambulance_doc_expiry();
-        $data['expiry_driving_license']=$this->general_model->driving_license_expiry();
+		
+		$data['expiry_docs']=$this->dashboard_model->ambulance_doc_expiry($vehical_expiry);
+        $data['expiry_driving_license']=$this->general_model->driving_license_expiry($driving_license_expiry);
         
         
         if(in_array('165',$users_data['permission']['section']))

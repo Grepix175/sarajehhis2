@@ -31,12 +31,10 @@
                   </div>
 
                   <div class="row m-b-5">
-                    <div class="col-sm-5"><label> Incentive Limit </label></div>
-                    <div class="col-sm-7">
-                    <?php 
-                    echo $form_data['incentive_limit'];
-                    //$doc_comission = array('1'=>'Commission', '2'=>'Transaction');
-                    //echo $doc_comission[$form_data['doctor_pay_type']]; 
+                    <div class="col-sm-5"><label> Sharing Pattern </label></div>
+                    <div class="col-sm-7"><?php 
+                    $doc_comission = array('1'=>'Commission', '2'=>'Transaction');
+                    echo $doc_comission[$form_data['doctor_pay_type']]; 
                    ?></div>
                   </div>
 
@@ -83,16 +81,16 @@
                   -->
  </div>
 
-                  <!--<div class="row m-b-5">-->
-                  <!--  <div class="col-sm-5"><label>Marketing Person  </label></div>-->
-                  <!--  <div class="col-sm-7">-->
+                  <div class="row m-b-5">
+                    <div class="col-sm-5"><label>Marketing Person  </label></div>
+                    <div class="col-sm-7">
                       <?php 
                       //$doc_comission = array('1'=>'Commission', '2'=>'Transaction');
                       ////$doctor_type = array('0'=>'Referral','1'=>'Attended','2'=>'Referral/Attended');
-                      //echo $form_data['marketing_person']; //$doctor_types = $doctor_type[$form_data['doctor_type']];; 
+                      echo $form_data['marketing_person']; //$doctor_types = $doctor_type[$form_data['doctor_type']];; 
                      ?>
-                  <!-- </div>-->
-                  <!--</div>-->
+                   </div>
+                  </div>
 
                  
 
@@ -203,105 +201,88 @@
 
                    
 
-              <!--      <div class="row m-b-5">-->
-              <!--          <div class="col-xs-4">-->
-              <!--          <strong> Available Days</strong>-->
-              <!--          </div>-->
-              <!--          <div class="col-xs-8">-->
-              <!--<div id="day_check">-->
+                    <div class="row m-b-5">
+            <div class="col-xs-4">
+            <strong> Available Days</strong>
+            </div>
+              <div class="col-xs-8">
+              <div id="day_check">
               <?php //print_r($available_day);
-              //foreach ($days_list as $value) 
-              //{ 
+              foreach ($days_list as $value) 
+              { 
 
                   ?>
-                  <?php// if(isset($available_day[$value->id]))
-                  //{ 
-                  ?> 
-                  <!--<div>-->
-                      <?php //echo $value->day_name; ?>
-                    <!--</div>-->
-                  <?php 
-                  //} 
-                  ?>
+                  <?php if(isset($available_day[$value->id]))
+                  { ?> 
+                  <div><?php echo $value->day_name; ?></div>
+                  <?php } ?>
                   
                     <?php
 
-              //}
+              }
               ?>
-            <!--  </div>-->
-            <!--   <div>-->
-            <!--    </div>-->
+              </div>
+               <div>
+                </div>
                    
-            <!--</div>-->
-            <!--        </div>-->
+            </div>
+            </div>
           <?php
-          //if(!empty($available_day))
-          //{
-            //foreach ($available_day as $key=>$value) 
-            //{
+          if(!empty($available_day))
+          {
+            foreach ($available_day as $key=>$value) 
+            {
                   ?>
-                        <!--<div><div class="row m-b-5">-->
-                        <!--  <div class="col-xs-4"><strong>-->
-                              <?php  //echo $value; ?> 
-                              <!--</strong></div>-->
-                          <!--<div class="col-xs-8">-->
-                          <!--<table class="schedule_timing" id="doctor_time_table_day_-->
-                          <?php //echo $key; ?>
-                          <!--">-->
-                          <!--<thead>-->
-                          <!--        <tr>-->
-                          <!--            <td>From </td>-->
-                          <!--            <td>To </td>-->
+                        <div><div class="row m-b-5">
+                          <div class="col-xs-4"><strong><?php  echo $value; ?> </strong></div>
+                          <div class="col-xs-8">
+                          <table class="schedule_timing" id="doctor_time_table_day_<?php echo $key; ?>">
+                          <thead>
+                                  <tr>
+                                      <td>From </td>
+                                      <td>To </td>
                                       
-                          <!--        </tr>-->
-                          <!--</thead>-->
-                          <!--<tbody>-->
+                                  </tr>
+                          </thead>
+                          <tbody>
                           <?php 
-                         //$doctor_availablity_time = get_doctor_schedule_time($key,$form_data['id']);
-                          //if(!empty($doctor_availablity_time))
-                          //{
-                            // $k=0;
-                             //foreach ($doctor_availablity_time as $doctor_time) 
-                             //{ 
+                         $doctor_availablity_time = get_doctor_schedule_time($key,$form_data['id']);
+                          if(!empty($doctor_availablity_time))
+                          {
+                             $k=0;
+                             foreach ($doctor_availablity_time as $doctor_time) 
+                             { 
                           ?>
-                              <!--<tr>-->
-                              <!--      <td>-->
-                                        <?php //echo $doctor_time->from_time; ?>
-                                    <!--</td>-->
-                                    <!--<td>-->
-                                        <?php //echo $doctor_time->to_time; ?>
-                              <!--      </td>-->
+                              <tr>
+                                    <td><?php echo $doctor_time->from_time; ?></td>
+                                    <td><?php echo $doctor_time->to_time; ?></td>
                                     
-                              <!--</tr>-->
+                              </tr>
                              <?php 
-                              //$k++;
-                              //} 
-                            //}
+                              $k++;
+                              } 
+                            }
                           ?>
-                          <!--</tbody>-->
-                          <!--</table>-->
-                          <!--</div>-->
-                          <!--</div>-->
-                          <!--</div>-->
+                          </tbody>
+                          </table>
+                          </div>
+                          </div>
+                          </div>
                       <?php 
-            //}
-          //}
+            }
+          }
 
           
 
           ?>
 
-         <!--<div class="row m-b-5">-->
+         <div class="row m-b-5">
 
-         <!--   <div class="col-xs-4">-->
-         <!--       <strong>Per Patient Time</strong>-->
-         <!--  </div>-->
-         <!--  <div class="col-xs-8">-->
-               <?php //echo $form_data['per_patient_timing']; ?>
-               <!--Min.-->
-            <!--</div>-->
-        <!--</div>  -->
-        <!-- row -->
+            <div class="col-xs-4">
+                <strong>Per Patient Time</strong>
+           </div>
+           <div class="col-xs-8"><?php echo $form_data['per_patient_timing']; ?> Min.</div>
+        </div>  <!-- row -->
                      
 
                    
