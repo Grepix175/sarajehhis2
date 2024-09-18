@@ -26,7 +26,7 @@ class Reg_card_setting extends CI_Controller {
 
         
         $data['reg_card_setting_list'] = $this->reg_card_setting->get_master_unique();
-       
+        // "<pre>";print_r($data['reg_card_setting_list']); die;
         $this->load->view('reg_card_setting/add',$data);
     }
 

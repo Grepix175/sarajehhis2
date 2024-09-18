@@ -13,6 +13,7 @@ class Patient extends CI_Controller {
         //$this->load->library('form_validation');
     }
 
+
     
     public function index()
     {  
@@ -33,8 +34,11 @@ class Patient extends CI_Controller {
         }
         // End Defaul Search
 
+        $reg_no = $this->input->get('reg_no'); // patient registration number
+        $name = $this->input->get('name'); 
+        
         $data['page_title'] = 'Patient List'; 
-        $data['form_data'] = array('patient_code'=>'','patient_name'=>'','adhar_no'=>'','mobile_no'=>'','address'=>'','start_date'=>$start_date, 'end_date'=>$end_date);
+        $data['form_data'] = array('patient_code'=>!empty($reg_no) ? $reg_no : '','patient_name'=>!empty($name) ? $name : '','adhar_no'=>'','mobile_no'=>'','address'=>'','start_date'=>$start_date, 'end_date'=>$end_date);
         $this->load->view('patient/list',$data);
     }
 

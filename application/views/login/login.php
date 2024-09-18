@@ -62,22 +62,46 @@
 <script>
 $("#login_form").on("submit", function(event) {
 	event.preventDefault();
+	// Get return_url from the URL if present
+    var urlParams = new URLSearchParams(window.location.search);
+    var returnUrl = urlParams.get('return_url');
+    
+    // Construct the login URL with return_url if it exists
+    var loginUrl = "<?php echo base_url('login'); ?>";
+    if (returnUrl) {
+        loginUrl += "?return_url=" + encodeURIComponent(returnUrl);
+    }
 	$('.overlay-loader').show();
 	$.ajax({
-		url: "<?php echo base_url('login'); ?>",
+		url: loginUrl,
 		type: "post", 
 		data: $(this).serialize(),
+		dataType: "json",
 		success: function(result)
 		{  
-		   if(result==1)
-		   {
-		   	   window.location.href="<?php echo base_url('dashboard'); ?>";
-		   } 
-		   else
-		   { 
-               $('#login_form_box').html(result);
-		   } 
-           $('.overlay-loader').hide();
+		// 	console.log(result);
+
+		// 	return;
+		//    if(result==1)
+		//    {
+		//    	   window.location.href="<?php echo base_url('dashboard'); ?>";
+		//    } 
+		//    else
+		//    { 
+        //        $('#login_form_box').html(result);
+		//    } 
+        //    $('.overlay-loader').hide();
+		if(result) {
+                // If return_url is present, redirect there; otherwise, to dashboard
+                if (result.return_url != 0) {
+                    window.location.href = decodeURIComponent(result.return_url);
+                } else {
+                    window.location.href = "<?php echo base_url('dashboard'); ?>";
+                }
+            } else { 
+                $('#login_form_box').html(result);
+            }
+            $('.overlay-loader').hide();
 		   
 		}
 		});
