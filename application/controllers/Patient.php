@@ -1873,7 +1873,7 @@ public function ipd_printtemplate_dropdown()
         
         // Fetching the table data
         $list = $this->patient->search_patient_data();
-        "<pre>";print_r($list); die;
+        // "<pre>";print_r($list); die;
         $rowData = array();
         $data = array();
         if (!empty($list)) {
