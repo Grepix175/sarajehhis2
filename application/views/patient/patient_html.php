@@ -21,8 +21,21 @@ td,th
 	padding-left:3px;
   font:13px Arial;
 }
+ .header-title {
+    text-align: center;  /* Center the text */
+    font-weight: bold;   /* Make the text bold */
+    font-size: 18px;     /* Increase font size */
+    padding: 10px;       /* Add padding inside the div */
+    border: 2px solid black;  /* Add a solid border */
+    margin-bottom: 20px; /* Add margin below for spacing */
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box; /* Ensure padding does not affect width */
+}
 </style>
 </head><body>
+    
+    <div class="header-title"><?php echo $mainHeader; ?></div>
 <table width="100%" cellpadding="0" cellspacing="0" border="1px">
  <tr> 
     <th style="text-align: left;"><?php echo $data= get_setting_value('PATIENT_REG_NO');?></th>

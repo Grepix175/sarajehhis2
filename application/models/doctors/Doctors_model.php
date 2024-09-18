@@ -2,7 +2,7 @@
 class Doctors_model extends CI_Model 
 {
 	var $table = 'hms_doctors';
-	var $column = array('hms_doctors.id','hms_doctors.doctor_code','hms_doctors.doctor_name','hms_specialization.specialization', 'hms_doctors.mobile_no', 'hms_doctors.doctor_type','hms_doctors.doctor_pay_type', 'hms_employees.name',  'hms_doctors.consultant_charge', 'hms_doctors.emergency_charge', 'hms_doctors.dob', 'hms_doctors.anniversary', 'hms_doctors.doctor_panel_type', 'hms_doctors.schedule_type', 'hms_doctors.address', 'hms_doctors.email', 'hms_doctors.alt_mobile_no', 'hms_doctors.landline_no', 'hms_doctors.pan_no', 'hms_doctors.doc_reg_no', 'hms_doctors.per_patient_timing' , 'hms_doctors.status' );  
+	var $column = array('hms_doctors.id','hms_doctors.doctor_code','hms_doctors.incentive_limit','hms_doctors.doctor_name','hms_specialization.specialization', 'hms_doctors.mobile_no', 'hms_doctors.doctor_type','hms_doctors.doctor_pay_type', 'hms_employees.name',  'hms_doctors.consultant_charge', 'hms_doctors.emergency_charge', 'hms_doctors.dob', 'hms_doctors.anniversary', 'hms_doctors.doctor_panel_type', 'hms_doctors.schedule_type', 'hms_doctors.address', 'hms_doctors.email', 'hms_doctors.alt_mobile_no', 'hms_doctors.landline_no', 'hms_doctors.pan_no', 'hms_doctors.doc_reg_no', 'hms_doctors.per_patient_timing' , 'hms_doctors.status' );  
     var $order = array('id' => 'desc'); 
 
 	public function __construct()
@@ -249,6 +249,7 @@ class Doctors_model extends CI_Model
                              'opd_header'=>$post['opd_header'],
                             'billing_header'=>$post['billing_header'],
                             'prescription_header'=>$post['prescription_header'],
+                            'incentive_limit'=>$post['incentive_limit'],
 							/*'schedule_type'=>$post['schedule_type'],
 							'days'=>$post['days'],
 							'timings'=>$post['timings']*/
@@ -358,6 +359,7 @@ class Doctors_model extends CI_Model
 			{
 				$this->db->set('signature',$filename);
 			}
+			
 			$reg_no = generate_unique_id(3);
 			$this->db->set('doctor_code',$reg_no);
 			$this->db->set('ip_address',$_SERVER['REMOTE_ADDR']);

@@ -290,15 +290,22 @@ class Doctors extends CI_Controller {
                                     'header_content'=>'',
                                     'opd_header'=>'',
                                     'billing_header'=>'',
-                                    'prescription_header'=>''
+                                    'prescription_header'=>'',
+                                    'incentive_limit'=>''
+
 
  			                      );
+ 		
+ 	    
         if(isset($post) && !empty($post))
         {   
             $data['form_data'] = $this->_validate();
+        
+            // print_r($this->form_validation->run());
+            // die;
             if($this->form_validation->run() == TRUE)
             {
-                
+                  
                 if(!empty($_FILES['sign_img']['name']))
                 { 
                 $config['upload_path']   = DIR_UPLOAD_PATH.'doctor_signature/'; 
@@ -317,6 +324,8 @@ class Doctors extends CI_Controller {
                 }
                 else
                 {
+                
+               
                  $doctor_id = $this->doctors->save(); 
                 }
                  //$doctor_id = $this->doctors->save();
@@ -402,6 +411,7 @@ class Doctors extends CI_Controller {
                                     "doctor_code"=>$result['doctor_code'],
                                     "doctor_type"=>$result['doctor_type'],
                                     "doctor_name"=>$result['doctor_name'],
+                                    "incentive_limit"=>$result['incentive_limit'],
                                     "specilization_id"=>$result['specilization_id'],
                                     "mobile_no"=>$result['mobile_no'],
                                     "address"=>$result['address'],
@@ -536,16 +546,16 @@ class Doctors extends CI_Controller {
         $this->form_validation->set_rules('doctor_type', 'doctor type', 'trim|required'); 
         $this->form_validation->set_rules('doctor_name', 'doctor name', 'trim|required');
         $this->form_validation->set_rules('specilization_id', 'specilization', 'trim|required'); 
-        $this->form_validation->set_rules('doctor_pay_type', 'sharing pattern', 'trim|required');   
+        // $this->form_validation->set_rules('doctor_pay_type', 'sharing pattern', 'trim|required');   
         if(!empty($post['data_id']) && empty($comission_data))
         {
            $comission_data =  $this->doctors->doc_comission_data($post['data_id']);
         }
         
-         if(isset($post) && $post['doctor_pay_type']==2)
-        {
-          $this->form_validation->set_rules('rate_plan_id', 'rate list', 'trim|required');   
-        } 
+        //  if(isset($post) && $post['doctor_pay_type']==2)
+        // {
+        //   $this->form_validation->set_rules('rate_plan_id', 'rate list', 'trim|required');   
+        // } 
         
        if($post['doctor_pay_type']==1 && empty($comission_data) && empty($post['data_id']))
        {
@@ -982,94 +992,113 @@ class Doctors extends CI_Controller {
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->getProperties()->setTitle("export")->setDescription("none");
         $objPHPExcel->setActiveSheetIndex(0);
-        // Field names in the first row
+    
+        // Main header
+        
+        $from_date = $this->input->get('from_date');
+        $to_date = $this->input->get('to_date');
+        // Main header with date range if provided
+        $mainHeader = "Doctor List";
+        if (!empty($from_date) && !empty($to_date)) {
+            $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
+        }
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', $mainHeader);
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true)->setSize(14);
+    
+        // Blank row after the main header
+        $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20); // Set height for visibility
+    
+        // Field names in the third row (after main header and blank row)
         $fields = array('Doctor Reg. No.','Doctor Name','Specialization','Doctor Type','Mobile','Status');
-        $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-          $col = 0;
-          $row_heading =1;
+        $col = 0;
+        $row_heading = 2; // Header row starts from row 3
+    
         foreach ($fields as $field)
         {
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 1, $field);
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row_heading, $field);
             $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
-              $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-              $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
-              $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(22);
-              $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
-              $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
-              $objPHPExcel->getActiveSheet()->getStyle($row_heading)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-              $objPHPExcel->getActiveSheet()->getStyle($row_heading)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(25);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(18);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getStyle($row_heading)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle($row_heading)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             $col++;
-            $row_heading++;
         }
+    
+        $headerStyle = array(
+            'font' => array(
+                'bold' => true
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A3:F3')->applyFromArray($headerStyle); // Apply header style to the correct row
+    
+        // Fetching the data
         $list = $this->doctors->search_doctor_data();
         $rowData = array();
         $data= array();
-        if(!empty($list))
+        if (!empty($list))
         {
-           
-            $i=0;
-            foreach($list as $doctors)
+            $i = 0;
+            foreach ($list as $doctors)
             {
                 $state = "";
-                if(!empty($doctors->state))
+                if (!empty($doctors->state))
                 {
                     $state = " ( ".ucfirst(strtolower($doctors->state))." )";
                 }
                 $doctor_type = array('0'=>'Referral','1'=>'Attended','2'=>'Referral/Attended');
-                $specilization_name ="";
                 $specilization_name = $this->general_model->get_specilization_name($doctors->specilization_id);
                 $doctor_types = $doctor_type[$doctors->doctor_type];
                 $status = array('0'=>'Inactive','1'=>'Active');
                 $doctor_status = $status[$doctors->status];
-                array_push($rowData,$doctors->doctor_code,$doctors->doctor_name,$specilization_name,$doctor_types,$doctors->mobile_no,$doctor_status);
+                array_push($rowData, $doctors->doctor_code, $doctors->doctor_name, $specilization_name, $doctor_types, $doctors->mobile_no, $doctor_status);
                 $count = count($rowData);
-                for($j=0;$j<$count;$j++)
+                for ($j = 0; $j < $count; $j++)
                 {
                     $data[$i][$fields[$j]] = $rowData[$j];
                 }
                 unset($rowData);
                 $rowData = array();
-                $i++;  
+                $i++;
             }
-             
         }
-
-          // Fetching the table data
-          $row = 2;
-          if(!empty($data))
-          {
-              foreach($data as $doctors_data)
-              {
-                   $col = 0;
-                   $row_val =1;
-                   foreach ($fields as $field)
-                   { 
-                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $doctors_data[$field]);
-                        $objPHPExcel->getActiveSheet()->getStyle($row_val)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                        $objPHPExcel->getActiveSheet()->getStyle($row_val)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-                        $col++;
-                        $row_val++;
-                   }
-                   $row++;
-              }
-              $objPHPExcel->setActiveSheetIndex(0);
-              $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
-          }
-          
-          // Sending headers to force the user to download the file
-          header('Content-Type: application/octet-stream charset=UTF-8');
-          header("Content-Disposition: attachment; filename=doctor_list_".time().".xls");
-         header("Pragma: no-cache"); 
-         header("Expires: 0");
-         if(!empty($data))
-         {
+    
+        // Fetching the table data
+        $row = 4; // Start data from row 4
+        if (!empty($data))
+        {
+            foreach ($data as $doctors_data)
+            {
+                $col = 0;
+                foreach ($fields as $field)
+                {
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $doctors_data[$field]);
+                    $objPHPExcel->getActiveSheet()->getStyle($row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    $objPHPExcel->getActiveSheet()->getStyle($row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                    $col++;
+                }
+                $row++;
+            }
+            $objPHPExcel->setActiveSheetIndex(0);
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        }
+    
+        // Sending headers to force the user to download the file
+        header('Content-Type: application/octet-stream charset=UTF-8');
+        header("Content-Disposition: attachment; filename=doctor_list_" . time() . ".xls");
+        header("Pragma: no-cache"); 
+        header("Expires: 0");
+        if (!empty($data))
+        {
             ob_end_clean();
             $objWriter->save('php://output');
         }
-        
-    
     }
+
 
     public function doctors_csv()
     {
@@ -1150,20 +1179,50 @@ class Doctors extends CI_Controller {
         }
        
     }
-
     public function doctors_pdf()
     {    
-        $data['print_status']="";
+        // Get the 'from_date' and 'to_date' from request
+        $from_date = $this->input->get('from_date');
+        $to_date = $this->input->get('to_date');
+        
+        // Fetch doctor data
         $data['data_list'] = $this->doctors->search_doctor_data();
-        $this->load->view('doctors/doctors_html',$data);
+        
+        // Create main header with date range if available
+        $mainHeader = "Doctor List";
+        if (!empty($from_date) && !empty($to_date)) {
+            $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
+        }
+        $data['mainHeader'] = $mainHeader; // Pass the header to the view
+    
+        // Load the HTML view into a variable
+        $this->load->view('doctors/doctors_html', $data); // View with HTML structure
         $html = $this->output->get_output();
-        // Load library
+        
+        // Load the PDF library
         $this->load->library('pdf');
-        // Convert to PDF
-        $this->pdf->load_html($html);
-        $this->pdf->render();
-        $this->pdf->stream("doctors_list_".time().".pdf");
+        
+        // Generate the PDF
+        $this->pdf->load_html($html);   // Load the HTML content into dompdf
+        $this->pdf->render();           // Render the PDF from HTML
+        
+        // Output the generated PDF (force download)
+        $this->pdf->stream("doctors_list_" . time() . ".pdf", array("Attachment" => 1));  // Set Attachment to 1 to force download
     }
+
+    // public function doctors_pdf()
+    // {    
+    //     $data['print_status']="";
+    //     $data['data_list'] = $this->doctors->search_doctor_data();
+    //     $this->load->view('doctors/doctors_html',$data);
+    //     $html = $this->output->get_output();
+    //     // Load library
+    //     $this->load->library('pdf');
+    //     // Convert to PDF
+    //     $this->pdf->load_html($html);
+    //     $this->pdf->render();
+    //     $this->pdf->stream("doctors_list_".time().".pdf");
+    // }
     public function doctors_print()
     {    
       $data['print_status']="1";

@@ -3,7 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Patient_model extends CI_Model 
 {
 	var $table = 'hms_patient';
-	var $column = array('hms_patient.id','hms_patient.patient_code','hms_patient.patient_name', 'hms_patient.relation_name','hms_patient.mobile_no','hms_patient.gender','hms_patient.age_y', 'hms_patient.address', 'hms_patient.adhar_no', 'hms_patient.marital_status', 'hms_patient.anniversary', 'hms_religion.religion', 'hms_patient.dob', 'hms_patient.mother', 'hms_patient.guardian_name','hms_patient.guardian_email', 'hms_patient.guardian_phone', 'hms_relation.relation', 'hms_patient.patient_email','hms_patient.monthly_income', 'hms_patient.occupation', 'hms_patient.insurance_type','hms_insurance_type.insurance_type' , 'hms_insurance_company.insurance_company','hms_patient.polocy_no', 'hms_patient.tpa_id','hms_patient.ins_amount', 'hms_patient.ins_authorization_no','hms_patient.created_date');  
+    // 	'hms_patient.village',
+	var $column = array('hms_patient.id','hms_patient.patient_code_auto','hms_patient.patient_code','hms_patient.patient_name', 'hms_patient.relation_name','hms_patient.mobile_no','hms_patient.gender','hms_patient.age_y', 'hms_patient.address', 'hms_patient.adhar_no', 'hms_patient.marital_status', 'hms_patient.anniversary', 'hms_religion.religion', 'hms_patient.dob', 'hms_patient.mother', 'hms_patient.guardian_name','hms_patient.guardian_email', 'hms_patient.guardian_phone', 'hms_relation.relation', 'hms_patient.patient_email','hms_patient.monthly_income', 'hms_patient.occupation', 'hms_patient.insurance_type','hms_insurance_type.insurance_type' , 'hms_insurance_company.insurance_company','hms_patient.polocy_no', 'hms_patient.tpa_id','hms_patient.ins_amount', 'hms_patient.ins_authorization_no','hms_patient.created_date');  
 	var $order = array('id' => 'desc'); 
 
 	public function __construct()
@@ -19,7 +20,7 @@ class Patient_model extends CI_Model
         $sub_branch_details = $this->session->userdata('sub_branches_data');
 		$search = $this->session->userdata('patient_search');
         // changes by Nitin sharma 04/02/2024
-		$this->db->select("hms_patient.id,hms_patient.capture_finger,hms_patient.branch_id,hms_patient.patient_name,hms_patient.patient_code,hms_patient.simulation_id,hms_patient.first_name,hms_patient.last_name,hms_patient.adhar_no,hms_patient.relation_type,hms_patient.relation_simulation_id,hms_patient.relation_name,hms_patient.mobile_no,hms_patient.gender,hms_patient.dob,hms_patient.anniversary,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h,hms_patient.marital_status,hms_patient.height,hms_patient.weight,hms_patient.religion_id,hms_patient.pincode,hms_patient.other_city,hms_patient.city_id,hms_patient.state_id,hms_patient.country_id,hms_patient.f_h_simulation,hms_patient.father_husband,hms_patient.mother,hms_patient.guardian_name,hms_patient.guardian_email,hms_patient.guardian_phone,hms_patient.relation_id,hms_patient.camp_id,hms_patient.patient_email,hms_patient.monthly_income,hms_patient.occupation,hms_patient.photo,hms_patient.insurance_type,hms_patient.insurance_type_id,hms_patient.ins_company_id,hms_patient.polocy_no,hms_patient.tpa_id,hms_patient.ins_amount,hms_patient.ins_authorization_no,hms_patient.remark,hms_patient.status,hms_patient.anni_sms_year,hms_patient.anni_email_send_year,hms_patient.birth_sms_year,hms_patient.birth_email_year,hms_patient.is_deleted,hms_patient.created_date,hms_cities.city, hms_state.state,hms_gardian_relation.relation, (CASE When hms_patient.relation_type=1 THEN 'Son/o' When hms_patient.relation_type=2 THEN 'Husband/o' When hms_patient.relation_type=3 THEN 'Baby/o' When hms_patient.relation_type=4 THEN 'Father/o' When hms_patient.relation_type=5 THEN 'Daughter/o' When hms_patient.relation_type=6 THEN 'Wife/o'When hms_patient.relation_type=14 THEN 'Brother' Else '' END) as patient_relation,concat_ws(', ',hms_patient.address, hms_patient.address2, hms_patient.address3) as address, (Case When hms_patient.marital_status=0 Then 'Unmarried' ELSE 'Married' END) as marital_status, hms_religion.religion, hms_relation.relation, (CASE WHEN hms_patient.insurance_type=1 THEN 'TPA' Else 'Normal' END ) as ins_type, hms_insurance_company.insurance_company, hms_insurance_type.insurance_type,(select id from hms_ipd_booking where hms_ipd_booking.patient_id=hms_patient.id AND hms_ipd_booking.is_deleted=0 AND hms_ipd_booking.discharge_status=0 ORDER BY hms_ipd_booking.id DESC LIMIT 1) as running 
+		$this->db->select("hms_patient.id,hms_patient.capture_finger,hms_patient.branch_id,hms_patient.patient_name,hms_patient.patient_code,hms_patient.simulation_id,hms_patient.first_name,hms_patient.last_name,hms_patient.adhar_no,hms_patient.relation_type,hms_patient.relation_simulation_id,hms_patient.relation_name,hms_patient.mobile_no,hms_patient.gender,hms_patient.dob,hms_patient.anniversary,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h,hms_patient.marital_status,hms_patient.height,hms_patient.weight,hms_patient.religion_id,hms_patient.pincode,hms_patient.other_city,hms_patient.city_id,hms_patient.state_id,hms_patient.patient_category,hms_patient.country_id,hms_patient.f_h_simulation,hms_patient.father_husband,hms_patient.mother,hms_patient.guardian_name,hms_patient.guardian_email,hms_patient.guardian_phone,hms_patient.relation_id,hms_patient.camp_id,hms_patient.patient_email,hms_patient.monthly_income,hms_patient.occupation,hms_patient.photo,hms_patient.insurance_type,hms_patient.insurance_type_id,hms_patient.ins_company_id,hms_patient.polocy_no,hms_patient.tpa_id,hms_patient.ins_amount,hms_patient.ins_authorization_no,hms_patient.remark,hms_patient.status,hms_patient.anni_sms_year,hms_patient.anni_email_send_year,hms_patient.birth_sms_year,hms_patient.birth_email_year,hms_patient.is_deleted,hms_patient.created_date,hms_cities.city, hms_state.state,hms_gardian_relation.relation, (CASE When hms_patient.relation_type=1 THEN 'Son/o' When hms_patient.relation_type=2 THEN 'Husband/o' When hms_patient.relation_type=3 THEN 'Baby/o' When hms_patient.relation_type=4 THEN 'Father/o' When hms_patient.relation_type=5 THEN 'Daughter/o' When hms_patient.relation_type=6 THEN 'Wife/o'When hms_patient.relation_type=14 THEN 'Brother' Else '' END) as patient_relation,hms_patient.address, hms_patient.address2, hms_patient.address3, (Case When hms_patient.marital_status=0 Then 'Unmarried' ELSE 'Married' END) as marital_status, hms_religion.religion, hms_relation.relation, (CASE WHEN hms_patient.insurance_type=1 THEN 'TPA' Else 'Normal' END ) as ins_type, hms_insurance_company.insurance_company, hms_insurance_type.insurance_type,(select id from hms_ipd_booking where hms_ipd_booking.patient_id=hms_patient.id AND hms_ipd_booking.is_deleted=0 AND hms_ipd_booking.discharge_status=0 ORDER BY hms_ipd_booking.id DESC LIMIT 1) as running 
 			"); 
 		// changes by Nitin sharma 04/02/2024
 		$this->db->join("hms_gardian_relation", "hms_gardian_relation.id=hms_patient.relation_type",'left'); 
@@ -29,6 +30,7 @@ class Patient_model extends CI_Model
 		$this->db->join('hms_relation', 'hms_relation.id=hms_patient.relation_id', 'left');
 		 $this->db->join('hms_insurance_type ','hms_insurance_type.id=hms_patient.insurance_type_id', 'left');
         $this->db->join('hms_insurance_company','hms_insurance_company.id=hms_patient.ins_company_id', 'left');
+        $this->db->join('hms_patient_category','hms_patient_category.id=hms_patient.patient_category', 'left');
     
        $this->db->where('hms_patient.is_deleted','0'); 
         if(isset($search['branch_id']) && $search['branch_id']!=''){
@@ -505,7 +507,7 @@ $this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.ad
 	{ 
 		/*$this->db->select("hms_patient.*, hms_cities.city, hms_state.state, hms_countries.country, hms_simulation.simulation,hms_sim.simulation as rel_simulation, hms_religion.religion, hms_relation.relation as gardian_relation, hms_insurance_type.insurance_type as insurance_types, hms_insurance_company.insurance_company, hms_users.username,hms_gardian_relation.relation,hms_patient.modified_date as patient_modified_date");*/
         //changed by Nitin Sharma 04/02/2024 		
-		$this->db->select("hms_patient.capture_finger,hms_patient.fingerprint_photo,hms_patient.id,hms_patient.branch_id,hms_patient.patient_name,hms_patient.patient_code,hms_patient.simulation_id,hms_patient.first_name,hms_patient.last_name,hms_patient.adhar_no,hms_patient.relation_type,hms_patient.relation_simulation_id,hms_patient.relation_name,hms_patient.mobile_no,hms_patient.gender,hms_patient.dob,hms_patient.anniversary,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h,hms_patient.marital_status,hms_patient.height,hms_patient.weight,hms_patient.religion_id,hms_patient.address,hms_patient.address2,hms_patient.address3,hms_patient.pincode,hms_patient.other_city,hms_patient.city_id,hms_patient.state_id,hms_patient.country_id,hms_patient.f_h_simulation,hms_patient.father_husband,hms_patient.mother,hms_patient.guardian_name,hms_patient.guardian_email,hms_patient.guardian_phone,hms_patient.relation_id,hms_patient.camp_id,hms_patient.patient_email,hms_patient.monthly_income,hms_patient.occupation,hms_patient.photo,hms_patient.insurance_type,hms_patient.insurance_type_id,hms_patient.ins_company_id,hms_patient.polocy_no,hms_patient.tpa_id,hms_patient.ins_amount,hms_patient.ins_authorization_no,hms_patient.remark,hms_patient.status,hms_patient.anni_sms_year,hms_patient.anni_email_send_year,hms_patient.birth_sms_year,hms_patient.birth_email_year,hms_patient.is_deleted,hms_patient.created_date,hms_cities.city, hms_state.state, hms_countries.country, hms_simulation.simulation,hms_sim.simulation as rel_simulation, hms_religion.religion, hms_relation.relation as gardian_relation, hms_insurance_type.insurance_type as insurance_types, hms_insurance_company.insurance_company, hms_users.username,hms_gardian_relation.relation,hms_patient.modified_date as patient_modified_date"); 
+		$this->db->select("hms_patient.capture_finger,hms_patient.patient_code_auto,hms_patient.fingerprint_photo,hms_patient.id,hms_patient.branch_id,hms_patient.patient_category,hms_patient.patient_name,hms_patient.patient_code,hms_patient.simulation_id,hms_patient.first_name,hms_patient.last_name,hms_patient.adhar_no,hms_patient.relation_type,hms_patient.relation_simulation_id,hms_patient.relation_name,hms_patient.mobile_no,hms_patient.gender,hms_patient.dob,hms_patient.anniversary,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h,hms_patient.marital_status,hms_patient.height,hms_patient.weight,hms_patient.religion_id,hms_patient.address,hms_patient.address2,hms_patient.address3,hms_patient.pincode,hms_patient.other_city,hms_patient.city_id,hms_patient.state_id,hms_patient.country_id,hms_patient.f_h_simulation,hms_patient.father_husband,hms_patient.mother,hms_patient.guardian_name,hms_patient.guardian_email,hms_patient.guardian_phone,hms_patient.relation_id,hms_patient.camp_id,hms_patient.patient_email,hms_patient.monthly_income,hms_patient.occupation,hms_patient.photo,hms_patient.insurance_type,hms_patient.insurance_type_id,hms_patient.ins_company_id,hms_patient.polocy_no,hms_patient.tpa_id,hms_patient.ins_amount,hms_patient.ins_authorization_no,hms_patient.remark,hms_patient.status,hms_patient.anni_sms_year,hms_patient.anni_email_send_year,hms_patient.birth_sms_year,hms_patient.birth_email_year,hms_patient.is_deleted,hms_patient.created_date,hms_cities.city, hms_state.state, hms_countries.country, hms_simulation.simulation,hms_sim.simulation as rel_simulation, hms_religion.religion, hms_relation.relation as gardian_relation, hms_insurance_type.insurance_type as insurance_types, hms_insurance_company.insurance_company, hms_users.username,hms_gardian_relation.relation,hms_patient.modified_date as patient_modified_date,hms_patient_category.patient_category as patient_category_name"); 
 		//changed by Nitin Sharma 04/02/2024
 		$this->db->from('hms_patient'); 
 		$this->db->where('hms_patient.id',$id);
@@ -517,6 +519,7 @@ $this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.ad
 		$this->db->join('hms_cities','hms_cities.id=hms_patient.city_id','left');
         $this->db->join('hms_state','hms_state.id=hms_patient.state_id','left');
         $this->db->join('hms_simulation','hms_simulation.id=hms_patient.simulation_id','left');
+		$this->db->join('hms_patient_category','hms_patient_category.id=hms_patient.patient_category','left');
 
         $this->db->join("hms_gardian_relation", "hms_gardian_relation.id=hms_patient.relation_type",'left'); 
          $this->db->join('hms_simulation as hms_sim','hms_sim.id=hms_patient.relation_simulation_id','left');
@@ -524,6 +527,7 @@ $this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.ad
         $this->db->join('hms_insurance_company','hms_insurance_company.id=hms_patient.ins_company_id','left');
 		$query = $this->db->get(); 
 		$result  = $query->row_array();
+		
 		//echo $this->db->last_query(); exit;
 		return $result;
 	}
@@ -586,14 +590,19 @@ $this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.ad
 	{  
 		$user_data = $this->session->userdata('auth_users');
 		$post = $this->input->post(); 
-		 
-			if($post['insurance_type']==0){
-			$insurance_type_id='';
-			$insurance_company='';
-		}else{
-			$insurance_type_id=$post['insurance_type_id'];
-			$insurance_company =$post['ins_company_id'];
-		}
+		
+		// ini_set('display_errors', 1);
+
+		//if(!empty($post['insurance_type']) && isset($post['insurance_type']))
+		// {
+
+			// if($post['insurance_type']==0){
+			// 	$insurance_type_id='';
+			// 	$insurance_company='';
+			// }else{
+			// 	$insurance_type_id=$post['insurance_type_id'];
+			// 	$insurance_company =$post['ins_company_id'];
+			// }
 
 		$anniversary='';
 		if(!empty($post['anniversary']) && isset($post['anniversary']))
@@ -611,42 +620,19 @@ $this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.ad
 					"age_m"=>$post['age_m'],
 					"age_d"=>$post['age_d'],
 					"age_h"=>$post['age_h'],
+					"patient_category" => $post['patient_category'],
 					'dob'=>date('Y-m-d', strtotime($post['dob'])),
 					'anniversary'=>$anniversary,
-					"city_id"=>$post['city_id'],
-					"state_id"=>$post['state_id'],
-					"country_id"=>$post['country_id'],
-					"pincode"=>$post['pincode'],
-					"marital_status"=>$post['marital_status'],
-					"religion_id"=>$post['religion_id'],
-					//'f_h_simulation'=>$post['f_h_simulation'],
-					//"father_husband"=>$post['father_husband'],
-					"mother"=>$post['mother'],
-					"guardian_name"=>$post['guardian_name'],
-					"guardian_email"=>$post['guardian_email'],
-					"guardian_phone"=>$post['guardian_phone'],
-					"relation_id"=>$post['relation_id'],
-					"patient_email"=>$post['patient_email'],
-					"monthly_income"=>$post['monthly_income'],
-					"occupation"=>$post['occupation'],
+					"state_id"=>$post['state_id'],					
+					"pincode"=>$post['pincode'],					
+					 "patient_email"=>$post['patient_email'],					
 					'relation_type'=>$post['relation_type'],
 					'relation_name'=>$post['relation_name'],
 					'relation_simulation_id'=>$post['relation_simulation_id'],
-					"insurance_type"=>$post['insurance_type'],
-					"insurance_type_id"=>$insurance_type_id,
-					"ins_company_id"=>$insurance_company,
-					"polocy_no"=>$post['polocy_no'],
-					"tpa_id"=>$post['tpa_id'],
-					"ins_amount"=>$post['ins_amount'],
-					"ins_authorization_no"=>$post['ins_authorization_no'], 
-					"status"=>$post['status'],
-					"remark"=>$post['remark'],
-				    // 	Added By Nitin Sharma 04/02/2024
-				    "capture_finger"=>$post['capture_finger'],
-					"fingerprint_photo"=>$post['fingerprint_photo'],
-				    // 	Added By Nitin Sharma 04/02/2024
-					"created_date"=>date('Y-m-d H:i:s', strtotime($post['created_date'])) 
+					'patient_code_auto'=>$post['patient_code_auto'],
+					
 				         ); 
+
 		if(empty($post['address']))
 		{
            $data['address'] = "";
@@ -713,7 +699,7 @@ $this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.ad
 			$this->db->set('branch_id',$user_data['parent_id']);
 			//$this->db->set('created_date',date('Y-m-d H:i:s'));
 			$this->db->insert('hms_patient',$data); 
-			//echo $this->db->last_query();die;
+			// echo $this->db->last_query();die;
 			$data_id = $this->db->insert_id();   
 
 			$data = array(     
@@ -721,7 +707,7 @@ $this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.ad
 					"parent_id"=>$data_id,
 					"username"=>'PAT000'.$data_id,
 					"password"=>md5('PASS'.$data_id),
-					"email"=>$post['patient_email'], 
+					// "email"=>$post['patient_email'], 
 					"status"=>'1',
 					"ip_address"=>$_SERVER['REMOTE_ADDR'],
 					"created_by"=>$user_data['id'],
@@ -1003,8 +989,8 @@ $this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.ad
 
 		}
 		$this->db->order_by('hms_patient.id','desc');
-	    $query = $this->db->get(); 
-        //echo $this->db->last_query();die;
+	    $query = $this->db->get();
+        // echo $this->db->last_query();
 		$data= $query->result();
 		
 		return $data;
@@ -2140,9 +2126,10 @@ $patient_code = generate_unique_id(4);
 	}
 	
 	function getAge($date,$module='')
-	{   //$date = date('Y-m-d',$date);
+	{   $date = date('Y-m-d',$date);
 		$dob = new DateTime($date);
 		$now = new DateTime();
+	   // echo "okay";print_r($dob);die;
 		if($module==1)
 		{
 		return $now->diff($dob)->y;
