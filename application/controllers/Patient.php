@@ -1811,7 +1811,7 @@ public function ipd_printtemplate_dropdown()
         $this->load->library('excel');
         $this->excel->IO_factory();
         $objPHPExcel = new PHPExcel();
-        "<pre>";print_r('Hello'); die;
+        // "<pre>";print_r('Hello'); die;
         $objPHPExcel->getProperties()->setTitle("export")->setDescription("none");
         $objPHPExcel->setActiveSheetIndex(0);
         
