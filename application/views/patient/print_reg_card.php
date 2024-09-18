@@ -1,13 +1,13 @@
 <?php  
 // Load necessary libraries
-use Endroid\QrCode\Builder\Builder;
-use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel;
-use Endroid\QrCode\Label\LabelAlignment;
-use Endroid\QrCode\Writer\PngWriter;
-use Symfony\Component\HttpFoundation\Response;
-use Endroid\QrCode\Label\Font\NotoSans;
-
+// use Endroid\QrCode\Builder\Builder;
+// use Endroid\QrCode\Encoding\Encoding;
+// use Endroid\QrCode\ErrorCorrectionLevel;
+// use Endroid\QrCode\Label\LabelAlignment;
+// use Endroid\QrCode\Writer\PngWriter;
+// use Symfony\Component\HttpFoundation\Response;
+// use Endroid\QrCode\Label\Font\NotoSans;
+include('application/libraries/phpqrcode/qrlib.php');
 // "<pre>";print_r($patient_data); die;
 
 if (!empty($patient_data['relation'])) {
@@ -36,33 +36,19 @@ $template_data = str_replace("{patient_reg_no}", $patient_reg_no, $template_data
 $qr_content = base_url('patient') . '?reg_no=' . $patient_reg_no . '&name=' . $patient_data['patient_name'];
 
 try {
-    // $fontPath = FCPATH . 'assets/fonts/NotoSans-Regular.ttf';
-    $qrCode = Builder::create()
-        ->writer(new PngWriter()) // Define the output format
-        ->data($qr_content) // Set the content of the QR code
-        ->encoding(new Encoding('UTF-8')) // Set the encoding
-        ->errorCorrectionLevel(ErrorCorrectionLevel::High) // Error correction level
-        ->size(100) // Set size
-        ->margin(10) // Set margin
-        ->labelText('Scan the code') // Add a label under the QR code
-        ->labelFont(new NotoSans(10)) // Font size for the label
-        ->labelAlignment(LabelAlignment::Center) // Align the label to center
-        ->build(); // Build the QR code
 
-    // Define the file path where the QR code will be saved
-    $qrCodeFilePath = 'assets/images/qr_images/qr_image_' . $patient_reg_no . '.png';
+    // Set the URL you want the QR code to redirect to when scanned
+$redirect_url = $qr_content;
+// QR code file path
+$qr_file = 'assets/images/qr_images/qr_image_' . $patient_data['patient_code'] . '.png';
 
-    // Ensure the directory exists
-    if (!file_exists(FCPATH . 'assets/images/qr_images/')) {
-        mkdir(FCPATH . 'assets/images/qr_images/', 0777, true); // Create directory if it doesn't exist
-    }
+// Generate the QR code with the redirect URL
+QRcode::png($redirect_url, $qr_file, QR_ECLEVEL_L, 3, 2);
 
-    // Save the QR code image to a file
-    $qrCode->saveToFile(FCPATH . $qrCodeFilePath); // Save QR image in the server
-
-    // Embed the QR code into your template
-    $qrCodeUrl = base_url($qrCodeFilePath); // Dynamically create the full URL for the QR code image
-    $template_data = str_replace("{patient_qr_code}", '<img src="' . $qrCodeUrl . '" alt="QR Code" />', $template_data);
+// Embed the QR code image in the template
+$qrCodeUrl = base_url($qr_file);
+$qr_code_image_tag = '<img src="' . $qrCodeUrl . '" alt="QR Code" />';
+$template_data = str_replace("{patient_qr_code}", $qr_code_image_tag, $template_data);
 
 } catch (\Exception $e) {
     echo 'Error generating QR code: ' . $e->getMessage();
