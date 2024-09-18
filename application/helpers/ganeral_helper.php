@@ -1,21 +1,12 @@
 <?php
 function auth_users()
 {
-	// $CI =& get_instance();
-	// $auth_users = $CI->session->userdata('auth_users');
-	// if(!isset($auth_users) || empty($auth_users))
-	// {
-    //     redirect(base_url('login'));
-	// } 	
 	$CI =& get_instance();
-    $auth_users = $CI->session->userdata('auth_users');
-    
-    if (!isset($auth_users) || empty($auth_users)) {
-        // Get the current URL to use as return_url
-        $return_url = urlencode(current_url() . '?' . $_SERVER['QUERY_STRING']);
-        // Redirect to login with return_url query string
-        redirect(base_url('login?return_url=' . $return_url));
-    }
+	$auth_users = $CI->session->userdata('auth_users');
+	if(!isset($auth_users) || empty($auth_users))
+	{
+        redirect(base_url('login'));
+	} 	
 }
 
 function get_adv_id($paid_date='',$paid_amount='',$ipd_id='')

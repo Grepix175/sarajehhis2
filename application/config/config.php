@@ -23,11 +23,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-// $config['base_url'] = 'https://devfl4.sarasolutions.in/sarajehhis2/';
-$config['base_url'] = 'http://localhost/sarajehhis2/';
+// $config['base_url'] = 'https://devfl4.sarasolutions.in/sarajehhis/';
+
+$config['base_url'] = 'http://localhost/sarajehhis/';
  
 /*
-2|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
 | Index File
 |--------------------------------------------------------------------------
 |
@@ -137,7 +138,7 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = TRUE;
+$config['composer_autoload'] = FALSE;
 
 /*
 |--------------------------------------------------------------------------
@@ -533,7 +534,7 @@ $config['proxy_ips'] = '';
 
 ////// System Constant /////////
 define('BASE_PATH','https://devfl4.sarasolutions.in/');
-define('DIR_APP_PATH','/home2/devfl4sarasluti/public_html/sarajehhis2/application/');
+define('DIR_APP_PATH','/home2/devfl4sarasluti/public_html/sarajehhis/application/');
 define('ROOT_JS_PATH', $config['base_url'].'assets/js/');
 define('ROOT_CSS_PATH', $config['base_url'].'assets/css/');
 define('ROOT_IMAGES_PATH', $config['base_url'].'assets/images/');
@@ -547,10 +548,10 @@ define('SMTP_PASSWORD','ssss@123');
 //define('PAGE_TITLE','');
 define('PAGE_TITLE','');
 
-define('DIR_UPLOAD_PATH','/home2/devfl4sarasluti/public_html/sarajehhis2/assets/uploads/');
-define('DIR_UPLOAD_BARCODE_PATH','/home2/devfl4sarasluti/public_html/sarajehhis2/assets/uploads/barcode/');
+define('DIR_UPLOAD_PATH','/home2/devfl4sarasluti/public_html/sarajehhis/assets/uploads/');
+define('DIR_UPLOAD_BARCODE_PATH','/home2/devfl4sarasluti/public_html/sarajehhis/assets/uploads/barcode/');
 
-define('DIR_UPLOAD_MEDICINE_BARCODE_PATH','/home2/devfl4sarasluti/public_html/sarajehhis2/assets/uploads/medicine_barcode/');
+define('DIR_UPLOAD_MEDICINE_BARCODE_PATH','/home2/devfl4sarasluti/public_html/sarajehhis/assets/uploads/medicine_barcode/');
 
 define('BARCODE_FS_PATH', $config['base_url'].'assets/uploads/barcode/'); 
 define('MEDICINE_BARCODE_FS_PATH', $config['base_url'].'assets/uploads/medicine_barcode/');

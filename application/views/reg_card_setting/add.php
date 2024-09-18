@@ -66,7 +66,7 @@ $user_data = $this->session->userdata('auth_users');
 
 
     <?php
-        
+     
         if(!empty($reg_card_setting_list))
         {
           foreach($reg_card_setting_list as $setting_list)

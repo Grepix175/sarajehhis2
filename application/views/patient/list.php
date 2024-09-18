@@ -17,36 +17,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>menu_style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>menu_for_all.css">
 <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>withoutresponsive.css">
-<style>
-/* Wrapper for the search input and the clear button */
-.clearable {
-    position: relative;
-    display: inline-block;
-}
-
-.clearable input {
-    padding-right: 30px; /* Add space for the clear button */
-}
-
-.clearable .clear-icon {
-    position: absolute;
-    right: 10px; /* Position the button inside the input */
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    font-size: 16px; /* Adjust the size of the icon */
-    color: #999;
-    display: none; /* Hide the clear icon initially */
-}
-
-.clearable input:not(:placeholder-shown) + .clear-icon {
-    display: block; /* Show the clear icon when there is text */
-}
-
-.clearable .clear-icon:hover {
-    color: #333; /* Change color on hover */
-}
-</style>
 
 <!-- js -->
 <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>jquery.min.js"></script>
@@ -60,8 +30,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datepicker.css">
 <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datepicker.js"></script>
 <script type="text/javascript">
-
-
 
 
 
@@ -211,7 +179,6 @@ function allbranch_delete(allVals)
 
 function reset_search(ele)
 { 
-    
     $('#start_date_patient').val('');
     $('#end_date_patient').val('');
     $('#mobile_no').val('');
@@ -284,16 +251,13 @@ function reset_search(ele)
 
 <!-- //////////////////////[ Left side bar ]////////////////////// -->
 <?php if($users_data['emp_id']==0){  ?>
-<!--<div class="toggleBtn" style="display:block"><i class="fa fa-angle-right"></i></div>-->
+<div class="toggleBtn"><i class="fa fa-angle-right"></i></div>
 <div class="toggleBox">
   <a>Exit <i class="fa fa-sign-out"></i></a>
   <form id="checkbox_data_form">
       <table class="table table-bordered table-striped table-hover">
         <tbody>
             <?php  
-            // echo "<pre>";
-            // print_r($checkbox_list);
-            // die;
                 $unchecked_column = [];
                 foreach ($checkbox_list as $checkbox_list_data ) 
                 {
@@ -451,10 +415,10 @@ function reset_search(ele)
 
       <div class="col-sm-4 text-right">
           <!--Added By Nitin Sharma 04/02/2024-->
-          <!-- <a class="btn-custom" id="scan_finger" onclick="captureFP()">Scan Finger</a> -->
+          <a class="btn-custom" id="scan_finger" onclick="captureFP()">Scan Finger</a>
           <!--Added By Nitin Sharma 04/02/2024-->
           <a class="btn-custom" id="reset_date" onclick="reset_search(this.form);">Reset</a>
-          <!-- <a class="btn-custom" id="adv_search"><i class="fa fa-cubes"></i> Advance Search</a> -->
+          <a class="btn-custom" id="adv_search"><i class="fa fa-cubes"></i> Advance Search</a>
           
       </div> <!-- 4 -->
     </div> <!-- row -->
@@ -473,12 +437,12 @@ function reset_search(ele)
                 <tr>
                     <th width="40" align="center"> <input onclick="selectall();" type="checkbox" name="selectall" class="" id="selectAll" value=""> </th> 
                     <th> <?php echo $data= get_setting_value('PATIENT_REG_NO');?> </th> 
-                    <th> Patient Category </th> 
-                    <th> Patient Name </th>
+                    <th> Patient Name </th> 
+                    <th> Patient Relation </th>
+                    <th> Mobile No. </th> 
                     <th> Gender </th>  
                     <th> Age </th> 
-                    <th> Mobile No. </th> 
-                    <th> Village/Town </th> 
+                    <th> Address </th> 
                     <th> Aadhaar No. </th>
                     <th> Marital Status </th>
                     <th> Anniversary </th>
@@ -523,21 +487,15 @@ function reset_search(ele)
   				<i class="fa fa-plus"></i> New
   			</button>
 
-        <!--<a data-toggle="tooltip"  title="Download list in excel" href="<?php echo base_url('patient/patient_excel'); ?>" class="btn-anchor m-b-2">-->
-        <!--<i class="fa fa-file-excel-o"></i> Excel-->
-        <!--</a>-->
-        <a data-toggle="tooltip"  title="Download list in excel" href="#" id="pa_download_excel" class="btn-anchor m-b-2">
+        <a data-toggle="tooltip"  title="Download list in excel" href="<?php echo base_url('patient/patient_excel'); ?>" class="btn-anchor m-b-2">
         <i class="fa fa-file-excel-o"></i> Excel
         </a>
 
-        <!-- <a data-toggle="tooltip"  title="Download list in csv" href="<?php echo base_url('patient/patient_csv'); ?>" class="btn-anchor m-b-2">
+        <a data-toggle="tooltip"  title="Download list in csv" href="<?php echo base_url('patient/patient_csv'); ?>" class="btn-anchor m-b-2">
         <i class="fa fa-file-word-o"></i> CSV
-        </a> -->
+        </a>
 
-        <!--<a data-toggle="tooltip"  title="Download list in pdf" href="<?php echo base_url('patient/patient_pdf'); ?>" class="btn-anchor m-b-2">-->
-        <!--<i class="fa fa-file-pdf-o"></i> PDF-->
-        <!--</a>-->
-        <a data-toggle="tooltip"  title="Download list in pdf" href="#" id="pa_download_pdf" class="btn-anchor m-b-2">
+        <a data-toggle="tooltip"  title="Download list in pdf" href="<?php echo base_url('patient/patient_pdf'); ?>" class="btn-anchor m-b-2">
         <i class="fa fa-file-pdf-o"></i> PDF
         </a>
 
@@ -625,52 +583,32 @@ form_submit('1');
 var save_method; 
 var table;
 <?php if(in_array('113',$users_data['permission']['action'])): ?>
-     table = $('#table').DataTable({  
-        "processing": true, 
-        "serverSide": true, 
-        "order": [], 
-        "pageLength": 20,
-        "ajax": {
-            "url": "<?php echo base_url('patient/ajax_list')?>",
-            "type": "POST",
-        }, 
-        "columnDefs": [
-            { 
-                "targets": [0, -1], //first and last columns
-                "orderable": false, //set not orderable
-            },
-        ],
-        // Adjust the search input
-        "initComplete": function() {
-            // Wrap the search input with a clearable div
-            var searchInput = $('.dataTables_filter input');
-            searchInput.wrap('<div class="clearable"></div>');
-            searchInput.attr('type', 'text'); // Ensure it's type=text
+     $(document).ready(function() { 
+         table = $('#table').DataTable({  
+             "processing": true, 
+             "serverSide": true, 
+             "order": [], 
+             "pageLength": '20',
+             "ajax": {
+                 "url": "<?php echo base_url('patient/ajax_list')?>",
+                 "type": "POST",
+                 
+             }, 
+             "columnDefs": [
+             { 
+                 "targets": [ 0 , -1 ], //last column
+                 "orderable": false, //set not orderable
 
-            // Append the custom clear button (cross icon)
-            searchInput.after('<span class="clear-icon">&#10006;</span>'); // Cross icon as X
+             },
+             ],
+         });
+        $('.tog-col').on( 'click', function (e) 
+        {
+          var column = table.column( $(this).attr('data-column') );
+          column.visible( ! column.visible() );
+        });
 
-            // Show/hide the clear icon based on input value
-            searchInput.on('input', function() {
-                var input = $(this);
-                input.siblings('.clear-icon').toggle(input.val().length > 0);
-            });
-
-            // Handle clear icon click
-            $('.clear-icon').on('click', function() {
-                var input = $(this).siblings('input');
-                input.val(''); // Clear input value
-                input.trigger('input'); // Trigger input change to hide icon
-                table.search('').draw(); // Reset DataTable search
-            });
-        }
-    });
-
-    // Handle column visibility toggling
-    $('.tog-col').on('click', function(e) {
-        var column = table.column($(this).attr('data-column'));
-        column.visible(!column.visible());
-    });
+     }); 
 <?php endif;?>
 
  <?php
@@ -976,54 +914,6 @@ table.columns([<?php echo $implode_checked_column; ?>]).visible(false);
       xmlhttp.send(params);
     }
 
- document.getElementById('pa_download_excel').addEventListener('click', function(e) {
-    e.preventDefault(); // Prevent the default anchor behavior
-
-    // Get the from_date and to_date values
-    var fromDate = document.getElementById('start_date_patient').value;
-    var toDate = document.getElementById('end_date_patient').value;
-    
-    // Construct the URL with query parameters
-    var url = '<?php echo base_url("patient/patient_excel"); ?>';
-
-    // Append dates to the URL if they exist
-    if (fromDate || toDate) {
-        url += '?';
-        if (fromDate) {
-            url += 'from_date=' + encodeURIComponent(fromDate);
-        }
-        if (toDate) {
-            url += (fromDate ? '&' : '') + 'to_date=' + encodeURIComponent(toDate);
-        }
-    }
-    window.location.href = url;
-});
- document.getElementById('pa_download_pdf').addEventListener('click', function(e) {
-    e.preventDefault(); // Prevent the default anchor behavior
-
-    // Get the from_date and to_date values
-    var fromDate = document.getElementById('start_date_patient').value;
-    var toDate = document.getElementById('end_date_patient').value;
-    
-    // Parse the dates to JavaScript Date objects
-    var fromDateObj = new Date(fromDate);
-    var toDateObj = new Date(toDate);
-    
-    // Check if fromDate or toDate is null or if the range is more than 1 month
-    if (!fromDate || !toDate || (toDateObj > new Date(fromDateObj.setMonth(fromDateObj.getMonth() + 1)))) {
-        alert('Please select both "From Date" and "To Date" with a maximum range of 1 month.');
-        return; // Stop further execution
-    }
-    
-    // Proceed if the dates are valid
-    // Construct the URL with query parameters
-    var url = '<?php echo base_url("patient/patient_pdf"); ?>';
-    url += '?from_date=' + encodeURIComponent(fromDate) + '&to_date=' + encodeURIComponent(toDate);
-
-
-    // Redirect to the generated URL
-    window.location.href = url;
-});
 
 
   </script>
