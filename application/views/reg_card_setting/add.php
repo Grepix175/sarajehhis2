@@ -120,7 +120,7 @@ $user_data = $this->session->userdata('auth_users');
           </div>
       
         <div class="col-xs-9">
-             <textarea cols="45" readonly="" class="print_textarea">{patient_reg_no},{patient_name},{patient_age},{patient_address},{mobile_no} </textarea>
+             <textarea cols="45" readonly="" class="print_textarea">{patient_reg_no},{patient_name},{patient_age},{patient_address},{mobile_no},{patient_qr_code} </textarea>
         </div>
      </div>
      </div>
