@@ -238,7 +238,7 @@ $field_list = mandatory_section_field_list(1);
                               foreach($person_list as $person)
                               {
                                 */?>
-                                <option value="<?php/* echo $person->id; */?>" <?php/* if($person->id==$form_data['marketing_person_id']){ echo 'selected="selected"'; } */?>><? /*php echo $person->name;*/ ?></option>
+                              <!--  <option value="<?php/* echo $person->id; */?>" <?php/* if($person->id==$form_data['marketing_person_id']){ echo 'selected="selected"'; } */?>><? /*php echo $person->name;*/ ?></option>
                                 <?php/*
                               }
                             }
