@@ -20,8 +20,11 @@ class Patient_model extends CI_Model
         $sub_branch_details = $this->session->userdata('sub_branches_data');
 		$search = $this->session->userdata('patient_search');
         // changes by Nitin sharma 04/02/2024
-		$this->db->select("hms_patient.id,hms_patient.capture_finger,hms_patient.branch_id,hms_patient.patient_code_auto,hms_patient.patient_name,hms_patient.patient_code,hms_patient.simulation_id,hms_patient.first_name,hms_patient.last_name,hms_patient.adhar_no,hms_patient.relation_type,hms_patient.relation_simulation_id,hms_patient.relation_name,hms_patient.mobile_no,hms_patient.gender,hms_patient.dob,hms_patient.anniversary,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h,hms_patient.marital_status,hms_patient.height,hms_patient.weight,hms_patient.religion_id,hms_patient.pincode,hms_patient.other_city,hms_patient.city_id,hms_patient.state_id,hms_patient.patient_category,hms_patient.country_id,hms_patient.f_h_simulation,hms_patient.father_husband,hms_patient.mother,hms_patient.guardian_name,hms_patient.guardian_email,hms_patient.guardian_phone,hms_patient.relation_id,hms_patient.camp_id,hms_patient.patient_email,hms_patient.monthly_income,hms_patient.occupation,hms_patient.photo,hms_patient.insurance_type,hms_patient.insurance_type_id,hms_patient.ins_company_id,hms_patient.polocy_no,hms_patient.tpa_id,hms_patient.ins_amount,hms_patient.ins_authorization_no,hms_patient.remark,hms_patient.status,hms_patient.anni_sms_year,hms_patient.anni_email_send_year,hms_patient.birth_sms_year,hms_patient.birth_email_year,hms_patient.is_deleted,hms_patient.created_date,hms_cities.city, hms_state.state,hms_gardian_relation.relation, (CASE When hms_patient.relation_type=1 THEN 'Son/o' When hms_patient.relation_type=2 THEN 'Husband/o' When hms_patient.relation_type=3 THEN 'Baby/o' When hms_patient.relation_type=4 THEN 'Father/o' When hms_patient.relation_type=5 THEN 'Daughter/o' When hms_patient.relation_type=6 THEN 'Wife/o'When hms_patient.relation_type=14 THEN 'Brother' Else '' END) as patient_relation,hms_patient.address, hms_patient.address2, hms_patient.address3, (Case When hms_patient.marital_status=0 Then 'Unmarried' ELSE 'Married' END) as marital_status, hms_religion.religion, hms_relation.relation, (CASE WHEN hms_patient.insurance_type=1 THEN 'TPA' Else 'Normal' END ) as ins_type, hms_insurance_company.insurance_company, hms_insurance_type.insurance_type,(select id from hms_ipd_booking where hms_ipd_booking.patient_id=hms_patient.id AND hms_ipd_booking.is_deleted=0 AND hms_ipd_booking.discharge_status=0 ORDER BY hms_ipd_booking.id DESC LIMIT 1) as running 
-			"); 
+		$this->db->select("hms_patient.id,hms_patient.capture_finger,hms_patient.branch_id,hms_patient.patient_code_auto,hms_patient.patient_name,hms_patient.patient_code,hms_patient.simulation_id,hms_patient.first_name,hms_patient.last_name,hms_patient.adhar_no,hms_patient.relation_type,hms_patient.relation_simulation_id,hms_patient.relation_name,hms_patient.mobile_no,hms_patient.gender,hms_patient.dob,hms_patient.anniversary,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h,hms_patient.marital_status,hms_patient.height,hms_patient.weight,hms_patient.religion_id,hms_patient.pincode,hms_patient.other_city,hms_patient.city_id,hms_patient.state_id,hms_patient.patient_category,hms_patient.country_id,hms_patient.f_h_simulation,hms_patient.father_husband,hms_patient.mother,hms_patient.guardian_name,hms_patient.guardian_email,hms_patient.guardian_phone,hms_patient.relation_id,hms_patient.camp_id,hms_patient.patient_email,hms_patient.monthly_income,hms_patient.occupation,hms_patient.photo,hms_patient.insurance_type,hms_patient.insurance_type_id,hms_patient.ins_company_id,hms_patient.polocy_no,hms_patient.tpa_id,hms_patient.ins_amount,hms_patient.ins_authorization_no,hms_patient.remark,hms_patient.status,hms_patient.anni_sms_year,hms_patient.anni_email_send_year,hms_patient.birth_sms_year,hms_patient.birth_email_year,hms_patient.is_deleted,hms_patient.created_date,hms_cities.city, hms_state.state,hms_gardian_relation.relation, (CASE When hms_patient.relation_type=1 THEN 'Son/o' When hms_patient.relation_type=2 THEN 'Husband/o' When hms_patient.relation_type=3 THEN 'Baby/o' When hms_patient.relation_type=4 THEN 'Father/o' When hms_patient.relation_type=5 THEN 'Daughter/o' When hms_patient.relation_type=6 THEN 'Wife/o'When hms_patient.relation_type=14 THEN 'Brother' Else '' END) as patient_relation,hms_patient.address, hms_patient.address2, hms_patient.address3, (Case When hms_patient.marital_status=0 Then 'Unmarried' ELSE 'Married' END) as marital_status, hms_religion.religion, hms_relation.relation, (CASE WHEN hms_patient.insurance_type=1 THEN 'TPA' Else 'Normal' END ) as ins_type, hms_insurance_company.insurance_company, hms_insurance_type.insurance_type,(select id from hms_ipd_booking where hms_ipd_booking.patient_id=hms_patient.id AND hms_ipd_booking.is_deleted=0 AND hms_ipd_booking.discharge_status=0 ORDER BY hms_ipd_booking.id DESC LIMIT 1) as running,(CASE WHEN (SELECT COUNT(*) 
+                FROM hms_token 
+                WHERE hms_token.patient_id = hms_patient.id 
+                AND DATE(hms_token.created_date) = CURDATE()) > 0 
+    THEN '1' ELSE '0' END) as has_token"); 
 		// changes by Nitin sharma 04/02/2024
 		$this->db->join("hms_gardian_relation", "hms_gardian_relation.id=hms_patient.relation_type",'left'); 
 		$this->db->join('hms_cities','hms_cities.id=hms_patient.city_id','left');
@@ -83,7 +86,7 @@ class Patient_model extends CI_Model
 			if(isset($search['address']) && !empty($search['address']))
 			{
 				
-$this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.address3) like "%'.trim($search['address']).'%"');
+		$this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.address3) like "%'.trim($search['address']).'%"');
 			}
 
 			if(isset($search['country_id']) && !empty($search['country_id']))
@@ -597,8 +600,8 @@ $this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.ad
 	{  
 		$user_data = $this->session->userdata('auth_users');
 		$post = $this->input->post(); 
-		print_r($post);
-		die();
+		// print_r($post);
+		// die();
 		
 		// ini_set('display_errors', 1);
 
