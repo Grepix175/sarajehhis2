@@ -29,64 +29,71 @@ class Token_no extends CI_Controller
         }
 
         $data['page_title'] = 'Token List';
-        $data['form_data'] = array('token_no' => '', 'patient_id' => '', 'status' => '');
+        $data['form_data'] = array('token_no' => '', 'patient_id' => '', 'status' => '', 'from_date' => '', 'to_date' => '');
         $this->load->view('token_grid/opd_token_list', $data);
     }
 
     // AJAX method to fetch the token list for display
     public function ajax_list()
-{
-    $users_data = $this->session->userdata('auth_users');
-    $list = $this->token_no->get_datatables();  // Fetch token list with search applied
-    $data = array();
-    $no = $_POST['start'];
-    $i = 1;
+    {
 
-    foreach ($list as $test) {
-        $no++;
-        $row = array();
+        $users_data = $this->session->userdata('auth_users');
+        $opd_search = $this->session->userdata('token_search'); // Get filter criteria from session
 
-        // Add the "Token No." and "Patient Name"
-        $row[] = $test->token_no;
-        $row[] = $test->patient_name;
+        // Check if search criteria are set and adjust the query accordingly
+        $this->token_no->set_filter_criteria($opd_search); // Pass the filter criteria to the model
 
-        // Add the "Status" as text instead of a dropdown
-        $row[] = ($test->status == 1) ? 'Active' : 'Inactive';
+        $list = $this->token_no->get_datatables();  // Fetch token list with filter criteria
+        $data = array();
+        $no = $_POST['start'];
+        $i = 1;
 
-        // Add Action button that redirects to another page and passes the patient ID
-        $action_url = base_url("opd/booking/" . $test->patient_id);  // Assuming 'opd/booking' is the route to the booking page
-        $row[] = '<a href="' . $action_url . '" class="btn-custom" style="23" title="Edit">Book Now</a>';
+        foreach ($list as $test) {
+            $no++;
+            $row = array();
+            $row[] = $test->token_no;
+            $row[] = $test->patient_name;
+            $row[] = $test->status == 1 ? 'Pending' : 'Complete';
+            $action_url = base_url("opd/booking/" . $test->patient_id);
+            $row[] = '<a href="' . $action_url . '" class="btn-custom" style="23" title="Edit">Book Now</a>';
 
-        $data[] = $row;
-        $i++;
+            $data[] = $row;
+            $i++;
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->token_no->count_all(),  // Correct reference to model
+            "recordsFiltered" => $this->token_no->count_filtered(),  // Correct reference to model
+            "data" => $data,
+        );
+
+        echo json_encode($output);
     }
-
-    $output = array(
-        "draw" => $_POST['draw'],
-        "recordsTotal" => $this->token_no->count_all(),  // Total record count
-        "recordsFiltered" => $this->token_no->count_filtered(),  // Filtered record count after search
-        "data" => $data,
-    );
-
-    echo json_encode($output);  // Return data in JSON format for DataTables
-}
-
-
-
-
     // Method to handle search filters
     public function advance_search()
     {
         $post = $this->input->post();
         if (!empty($post)) {
-            $this->session->set_userdata('token_search', $post);
+            // Set the filter criteria (status, from_date, to_date) in the session
+            $search_criteria = array(
+                'search_type' => $post['search_type'],   // Status filter
+                'from_date' => !empty($post['from_date']) ? $post['from_date'] : null,   // From date filter
+                'to_date' => !empty($post['to_date']) ? $post['to_date'] : null          // To date filter
+            );
+
+            $this->session->set_userdata('token_search', $search_criteria);
         }
+
         $opd_search = $this->session->userdata('token_search');
         if (!empty($opd_search)) {
+            // Optionally prepare the response data for form pre-filling or debugging
             $data['form_data'] = $opd_search;
         }
+
         return 'ok';
     }
+
 
     // Method to update the status of a token
     public function update_token_status()
