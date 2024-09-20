@@ -46,7 +46,7 @@ $field_list = mandatory_section_field_list(2);
     width:145px;
 }
 #patient_form .pat-col > .grp-full > .grp > .box-right > input[type="text"] {
-    width:203px;
+    width:233px;
 }
 #patient_form .pat-col > .grp-full > .grp > .box-right{
     width:300px;
@@ -58,13 +58,13 @@ $field_list = mandatory_section_field_list(2);
     width:50px!important;
 }
 #patient_form #simulation_id,#patient_form #relation_simulation_id{
-    width:30%;
+    width:20%;
 }
 #patient_form #age_y,#patient_form #age_m,#patient_form #age_d, #patient_form #age_h{
     width:29px;
 }
 #patient_form #patient_category{
-    width:200px;
+    /* width:200px; */
 }
 </style>
 <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datetimepicker.css">
@@ -352,7 +352,7 @@ $field_list = mandatory_section_field_list(2);
         <div class="box-right">
             <input type="text" name="address" id="address" class="address" maxlength="255" value="<?php echo $form_data['address']; ?>"/>
             <?php 
-                             if(!empty($form_error)){ echo form_error('address'); } ?>
+                             //if(!empty($form_error)){ echo form_error('address'); } ?>
         </div>
         
       </div>
@@ -578,8 +578,8 @@ $field_list = mandatory_section_field_list(2);
       <div class="grp">
         <label>Insurance Type</label>
         <div class="box-right">
-            <input type="radio" name="insurance_type" value="0" <?php if($form_data['insurance_type']==0){ echo 'checked="checked"'; } ?> onClick="return set_tpa(0)"> Normal &nbsp;
-            <input type="radio" name="insurance_type" value="1" <?php if($form_data['insurance_type']==1){ echo 'checked="checked"'; } ?> onClick="return set_tpa(1)"> Panel
+            <input type="radio" name="insurance_type" value="0" <?php //if($form_data['insurance_type']==0){ echo 'checked="checked"'; } ?> onClick="return set_tpa(0)"> Normal &nbsp;
+            <input type="radio" name="insurance_type" value="1" <?php //if($form_data['insurance_type']==1){ echo 'checked="checked"'; } ?> onClick="return set_tpa(1)"> Panel
         </div>
       <sup class="info"><a href="javascript:void(null)" class="small info"> ?<span>It is a policy which have two type <br> Normal:It is simple type policy <br> Panel:Third Party Adminstrater (TPA) is an organization that processes insurance claims or certain aspects of employee benefit plans for a separate entity.</span></a></sup>
       </div>

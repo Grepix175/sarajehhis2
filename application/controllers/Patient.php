@@ -1021,15 +1021,8 @@ class Patient extends CI_Controller {
                                   
         if(isset($post) && !empty($post))
         { 
-
-        
-
-            $valid_response = $this->_validate();
-
-            
-            
-            
-            // $data['form_data'] = $valid_response['form_data']; 
+            $valid_response = $this->_validate();            
+            $data['form_data'] = $valid_response['form_data']; 
             // echo "<pre>";
             // print_r();
             // echo "</pre>";
@@ -1170,8 +1163,7 @@ class Patient extends CI_Controller {
                                     "address_second"=>$result['address2'],
                                     "address_third"=>$result['address3'],
                                     "city_id"=>$result['city_id'],
-                                    "state_id"=>$result['state_id'],
-                                    
+                                    "state_id"=>$result['state_id'],                                    
                                     "country_id"=>$result['country_id'],
                                     "pincode"=>$result['pincode'],
                                     "marital_status"=>$result['marital_status'],
@@ -1275,7 +1267,7 @@ class Patient extends CI_Controller {
         $this->form_validation->set_rules('gender', 'gender', 'trim|required'); 
         $this->form_validation->set_rules('adhar_no', 'aadhaar no.', 'min_length[12]|max_length[16]'); 
         $this->form_validation->set_rules('age_y', 'age year', 'trim|required');
-        $this->form_validation->set_rules('address', 'Village/Town', 'trim|required');
+        // $this->form_validation->set_rules('address', 'Village/Town', 'trim|required');
         $this->form_validation->set_rules('patient_category', 'patient category', 'trim|required');
         
           
@@ -1323,10 +1315,7 @@ class Patient extends CI_Controller {
                $data['photo_name']  =  $file_data['file_name']; 
             } 
             else
-            {
-                
-               
-              
+            { 
                 $this->form_validation->set_rules('photo', 'photo', 'trim|required'); 
                 $data['photo_error'] = $this->upload->display_errors();
                 //print_r($data['photo_error']);die;
@@ -1375,42 +1364,42 @@ class Patient extends CI_Controller {
                                 "age_h"=>$post['age_h'], 
                                 "address"=>$post['address'],
                                 "address_second"=>$post['address_second'],
-                                "address_third"=>$post['address_third'],
+                                // "address_third"=>$post['address_third'],
                                 "adhar_no"=>$post['adhar_no'],
                                 "city_id"=>$post['city_id'],
                                 "state_id"=>$post['state_id'],
                                 "country_id"=>$post['country_id'],
                                 "pincode"=>$post['pincode'],
-                                "marital_status"=>$post['marital_status'],
-                                "religion_id"=>$post['religion_id'],
+                                // "marital_status"=>$post['marital_status'],
+                                // "religion_id"=>$post['religion_id'],
                                 //"father_husband"=>$post['father_husband'],
-                                "mother"=>$post['mother'],
-                                "guardian_name"=>$post['guardian_name'],
-                                "guardian_email"=>$post['guardian_email'],
-                                "guardian_phone"=>$post['guardian_phone'],
-                                "relation_id"=>$post['relation_id'],
+                                // "mother"=>$post['mother'],
+                                // "guardian_name"=>$post['guardian_name'],
+                                // "guardian_email"=>$post['guardian_email'],
+                                // "guardian_phone"=>$post['guardian_phone'],
+                                // "relation_id"=>$post['relation_id'],
                                 "patient_email"=>$post['patient_email'],
-                                "monthly_income"=>$post['monthly_income'],
-                                "occupation"=>$post['occupation'],
-                                "insurance_type"=>$post['insurance_type'],
+                                // "monthly_income"=>$post['monthly_income'],
+                                // "occupation"=>$post['occupation'],
+                                // "insurance_type"=>$post['insurance_type'],
                                 "insurance_type_id"=>$insurance_type_id,
                                 "old_img"=>$post['old_img'],
                                 "ins_company_id"=>$ins_company_id,
-                                "polocy_no"=>$post['polocy_no'],
-                                "tpa_id"=>$post['tpa_id'],
-                                "ins_amount"=>$post['ins_amount'],
-                                "ins_authorization_no"=>$post['ins_authorization_no'], 
-                                "status"=>$post['status'] ,
+                                // "polocy_no"=>$post['polocy_no'],
+                                // "tpa_id"=>$post['tpa_id'],
+                                // "ins_amount"=>$post['ins_amount'],
+                                // "ins_authorization_no"=>$post['ins_authorization_no'], 
+                                // "status"=>$post['status'] ,
                                 "relation_type"=>$post['relation_type'],
                                 "relation_name"=>$post['relation_name'],
                                 "relation_simulation_id"=>$post['relation_simulation_id'],
-                                 "remark"=>$post['remark'],
+                                //  "remark"=>$post['remark'],
                                 "country_code"=>"+91",
                                 "username"=>$username,
-                                'f_h_simulation'=>$post['f_h_simulation'],
-                                'anniversary'=>$post['anniversary'],
+                                // 'f_h_simulation'=>$post['f_h_simulation'],
+                                // 'anniversary'=>$post['anniversary'],
                                 'dob'=>$post['dob'],
-                                'created_date'=>$post['created_date']
+                                // 'created_date'=>$post['created_date']
                                ); 
             if(!empty($post['data_id']))
             {
