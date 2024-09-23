@@ -380,8 +380,8 @@ class Patient extends CI_Controller {
             </div> ';
             
             $btn_token = '';
-            if (empty($patient->patient_code_auto)) {
-                $btn_token = '<a class="btn-custom" href="' . base_url('patient/generate_token/' . $patient->id) . '" style="' . $patient->id . '" title="History">Token</a>';
+            if ($patient->has_token == '0') { 
+                $btn_token = '<a class="btn-custom" href="' . base_url('patient/generate_token/' . $patient->id) . '" style="' . $patient->id . '" title="History">Generate Token</a>';
             }
               
                 $row[] = $btn_token.$btn_report_print.$btn_reg_card_url.$btn_a;  
@@ -418,7 +418,8 @@ class Patient extends CI_Controller {
             $data_token_edit['patient_code_auto']=$tokenno;
 
             $this->patient->update_token($data_token_edit);
-            redirect('patient');
+            $this->session->set_flashdata('success','Patient token generate successfully.');
+            redirect(base_url('patient'));
         }
         
     }
