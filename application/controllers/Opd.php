@@ -828,6 +828,15 @@ class Opd extends CI_Controller
     $patient_category = "";
     $patient_category_name = "";
     $authorize_person = "";
+    $corporate_id= '';
+    $auth_no= '';
+    $employee_no= '';
+    $auth_issue_date= '';
+    $department_id= '';
+    $cost= '';
+    $subsidy_id= '';
+    $subsidy_created= '';
+    $subsidy_amount= '';
     if ($pid > 0) {
       $this->load->model('patient/patient_model');
       $patient_data = $this->patient_model->get_by_id($pid);
@@ -912,9 +921,7 @@ class Opd extends CI_Controller
 
       $data['specialization_list'] = $this->general_model->specialization_list();
       $data['attended_doctor_list'] = $this->opd->attended_doctor_list();
-      $data['corporate_list'] = $this->opd->corporate_list();
-      $data['subsidy_list'] = $this->opd->subsidy_list();
-      $data['department_list'] = $this->opd->department_list();
+     
       $opd_specialization = $lead_data['specialization_id'];
       $opd_attended_doctor = $lead_data['attended_doctor'];
       $doctor_data = $this->general_model->doctors_list($lead_data['attended_doctor']);
@@ -1037,7 +1044,14 @@ class Opd extends CI_Controller
     if (!empty($post['appointment_date'])) {
       $appointment_date = $post['appointment_date'];
     }
-
+    $data['corporate_list'] = $this->opd->corporate_list();
+    $data['subsidy_list'] = $this->opd->subsidy_list();
+    $data['department_list'] = $this->opd->department_list();
+    // echo "<pre>";
+    // print_r($data['corporate_list']);
+    // print_r($data['subsidy_list']);
+    // print_r($data['department_list']);
+    // die;
     $data['gardian_relation_list'] = $this->general_model->gardian_relation_list();
     $data['doctor_available_time'] = $this->general_model->doctor_time($attended_doctor);
     $data['doctor_available_slot'] = $this->get_doctor_slot($attended_doctor, $available_time, $doctor_slot, $appointment_date);
@@ -1166,14 +1180,20 @@ class Opd extends CI_Controller
       "ins_authorization_no" => $ins_authorization_no,
       "corporate_id" => '',
       "auth_no" => '',
-      "emp_no" => '',
+      "employee_no" => '',
       "auth_issue_date" => '',
       "department_id" => '',
       "cost" => '',
+      "subsidy_id" => '',
+      "subsidy_created" => '',
+      "subsidy_amount" => '',
     );
 
     
     if (isset($post) && !empty($post)) {
+      // echo "<pre>";
+      // print_r($data['form_data']);
+      // die;
       $data['form_data'] = $this->_validateform();
       if ($this->form_validation->run() == TRUE) {
         $booking_id = $this->opd->save_booking();
@@ -1375,13 +1395,16 @@ class Opd extends CI_Controller
 
   public function edit_booking($id = "")
   {
+    // echo "<pre>";
+    // print_r($id); 
+    // die;
     unauthorise_permission(85, 524);
     $users_data = $this->session->userdata('auth_users');
     if (isset($id) && !empty($id) && is_numeric($id)) {
       $this->load->model('general/general_model');
       $post = $this->input->post();
       $result = $this->opd->get_by_id($id);
-      //print '<pre>' ;print_r($result);die;
+      // print '<pre>' ;print_r($result);die;
       $data['simulation_array'] = $this->general_model->simulation_list();
       $data['country_list'] = $this->general_model->country_list();
       $data['simulation_list'] = $this->general_model->simulation_list();
@@ -1543,6 +1566,25 @@ class Opd extends CI_Controller
         'mlc' => $result['mlc'],
         'patient_category' => $result['patient_category'],
         'authorize_person' => $result['authorize_person'],
+        'corporate_id' => $result['corporate_id'],
+        'auth_no' => $result['auth_no'],
+        'employee_no' => $result['employee_no'],
+        'auth_issue_date' => $result['auth_issue_date'],
+        'department_id' => $result['department_id'],
+        'cost' => $result['cost'],
+        'subsidy_id' => $result['subsidy_id'],
+        'subsidy_create' => $result['subsidy_create'],
+        'subsidy_amount' => $result['subsidy_amount'],
+        'patient_category_name' => $result['patient_category_name'],
+        "corporate_id" => $result['corporate_id'] ?? 0,
+        "auth_no" => $result['auth_no'] ?? '',
+        "employee_no" => $result['employee_no'] ?? '',
+        "auth_issue_date" => date('Y-m-d H:i:s', strtotime($result['auth_issue_date'])) ?? '',
+        "department_id" => $result['department_id'] ?? 0,
+        "cost" => $result['cost'] ?? '',
+        "subsidy_id" => $result['subsidy_id'] ?? 0,
+        "subsidy_created" => date('Y-m-d H:i:s', strtotime($result['subsidy_created']))  ?? '',
+        "subsidy_amount" => $result['subsidy_amount'] ?? '',
       );
       if (isset($post) && !empty($post)) {
         $data['form_data'] = $this->_validateform();
@@ -2866,7 +2908,9 @@ class Opd extends CI_Controller
     $template_format = $this->opd->template_format(array('section_id' => 1, 'types' => 1), $branch_id);
     //print_r($get_by_id_data); exit;
     //Package
-    $package_id = $get_by_id_data['opd_list'][0]->package_id;
+    // $package_id = $get_by_id_data['opd_list'][0]->package_id;
+    $package_id = !empty($get_by_id_data['opd_list'][0]->package_id) ? $get_by_id_data['opd_list'][0]->package_id : null;
+
     $data['template_data'] = $template_format;
     //print_r($data['template_data']);
     $data['all_detail'] = $get_by_id_data;
@@ -2874,7 +2918,9 @@ class Opd extends CI_Controller
     // print_r($data);die;
     $this->load->model('general/general_model');
     $transaction_id = $this->general_model->get_transaction_id($booking_id, 2, 7);   //2 section id and 7 type
-    $data['transaction_id'] = $transaction_id[0]->field_value;
+  
+    // $data['transaction_id'] = $transaction_id[0]->field_value;
+    $data['transaction_id'] = $data['transaction_id'] = !empty($transaction_id[0]->field_value) ? $transaction_id[0]->field_value : null;
     $this->load->model('address_print_setting/address_print_setting_model', 'address_setting');
     $data['address_setting_list'] = $this->address_setting->get_master_unique();
     $this->load->model('time_print_setting/time_print_setting_model', 'time_setting');

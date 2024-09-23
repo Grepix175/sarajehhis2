@@ -874,20 +874,30 @@ $field_list = mandatory_section_field_list(3);
 
             <?php //} ?>
 
-
+            <?php
+            // echo "<pre>";
+            // print_r($form_data['patient_category_name']);
+            // die; 
+            ?>
             <div class="row m-b-5">
               <div class="col-md-12">
                 <div class="row">
+                  <?php
+                  // echo "<pre>";
+                  // print_r($form_data);
+                  // die;
+                  ?>
                   <!-- <div class="col-md-5"><b>Patient Category</b></div> -->
+                  <input type="hidden" name="patient_category" value="<?php echo $form_data['patient_category']; ?>">
                   <div class="col-md-7" id="patient_category">
-                    <input type="hidden" name="patient_category" value="Corporate"
+                    <input type="hidden" name="" value="Corporate"
                       onclick="update_doctor_panel_charges(); set_tpa1('<?php echo $form_data['patient_category_name']; ?>')"
                       <?php if ($form_data['patient_category_name'] == 'Corporate') {
                         echo 'checked="checked"';
                       } ?>>
                     <!-- Corporate &nbsp; -->
 
-                    <input type="hidden" name="patient_category" value="Subsidy"
+                    <input type="hidden" name="" value="Subsidy"
                       onclick="update_doctor_panel_charges(); set_tpa1('<?php echo $form_data['patient_category_name']; ?>')"
                       <?php if ($form_data['patient_category_name'] == 'Subsidy') {
                         echo 'checked="checked"';
@@ -919,14 +929,14 @@ $field_list = mandatory_section_field_list(3);
                             if ($corporate->id == $form_data['corporate_id']) {
                               $selected_co_id = 'selected="selected"';
                             }
-                            echo '<option value="' . $corporate->id . '" ' . $selected_co_id . '>' . $corporate->name . '</option>';
+                            echo '<option value="' . $corporate->corporate_id . '" ' . $selected_co_id . '>' . $corporate->corporate_name . '</option>';
                           }
                         }
                         ?>
                       </select>
 
                       <?php //if (in_array('72', $users_data['permission']['action'])) { ?>
-                        <!-- <a title="Add Insurance Type" class="btn-new" onclick="insurance_type_modal()"
+                      <!-- <a title="Add Insurance Type" class="btn-new" onclick="insurance_type_modal()"
                           id="insurance_type_modal()"><i class="fa fa-plus"></i> New</a> -->
                       <?php //} ?>
                     </div>
@@ -950,8 +960,8 @@ $field_list = mandatory_section_field_list(3);
                   <div class="row">
                     <div class="col-md-5"><b>Employee No</b></div>
                     <div class="col-md-7">
-                      <input type="text" name="emp_no" class="emp_no" id="emp_no"
-                        value="<?php echo $form_data['emp_no']; ?>" />
+                      <input type="text" name="employee_no" class="employee_no" id="employee_no"
+                        value="<?php echo $form_data['employee_no']; ?>" />
                     </div>
                   </div>
                 </div>
@@ -962,8 +972,10 @@ $field_list = mandatory_section_field_list(3);
                   <div class="row">
                     <div class="col-md-5"><b>Auth Issue Date</b></div>
                     <div class="col-md-7">
-                      <input type="text" name="auth_issue_date" class="price_float" id="auth_issue_date"
-                        value="<?php echo $form_data['auth_issue_date']; ?>" onKeyPress="return isNumberKey(event);" />
+                      <!-- <input type="text" name="auth_issue_date" class="price_float" id="auth_issue_date"
+                        value="<?php echo $form_data['auth_issue_date']; ?>" onKeyPress="return isNumberKey(event);" /> -->
+                      <input type="text" name="auth_issue_date" class="validity_date m_input_default"
+                        value="<?php echo $form_data['auth_issue_date']; ?>" id="validity_date" readonly="true" />
                     </div>
                   </div>
                 </div>
@@ -983,7 +995,7 @@ $field_list = mandatory_section_field_list(3);
                             if ($department->id == $form_data['department_id']) {
                               $selected_de_id = 'selected="selected"';
                             }
-                            echo '<option value="' . $department->id . '" ' . $selected_de_id . '>' . $department->name . '</option>';
+                            echo '<option value="' . $department->department_id . '" ' . $selected_de_id . '>' . $department->department_name . '</option>';
                           }
                         }
                         ?>
@@ -1005,7 +1017,10 @@ $field_list = mandatory_section_field_list(3);
               </div> <!-- row -->
 
             </div>
-
+            <?php
+            // print_r($subsidy_list);
+            // die; 
+            ?>
             <!-- Subsidy Section -->
             <div id="subsidy_box"
               style="display: <?php echo ($form_data['patient_category_name'] == 'Subsidy') ? 'block' : 'none'; ?>">
@@ -1015,24 +1030,24 @@ $field_list = mandatory_section_field_list(3);
                   <div class="row">
                     <div class="col-md-5"><b>Subsidy Authrity Name</b></div>
                     <div class="col-md-7">
-                      <select name="insurance_type_id" id="insurance_type_id" class="w-150px m_select_btn">
+                      <select name="subsidy_id" id="subsidy_id" class="w-150px m_select_btn">
                         <option value="">Select Subsidy</option>
                         <?php
-                        if (!empty($insurance_type_list)) {
-                          foreach ($insurance_type_list as $insurance_type) {
-                            $selected_ins_type = "";
-                            if ($insurance_type->id == $form_data['insurance_type_id']) {
-                              $selected_ins_type = 'selected="selected"';
+                        if (!empty($subsidy_list)) {
+                          foreach ($subsidy_list as $subsidy) {
+                            $selected_subsidy = "";
+                            if ($subsidy->id == $form_data['subsidy_id']) {
+                              $selected_subsidy = 'selected="selected"';
                             }
-                            echo '<option value="' . $insurance_type->id . '" ' . $selected_ins_type . '>' . $insurance_type->insurance_type . '</option>';
+                            echo '<option value="' . $subsidy->subsidy_id . '" ' . $selected_subsidy . '>' . $subsidy->subsidy_name . '</option>';
                           }
                         }
                         ?>
                       </select>
 
                       <?php if (in_array('72', $users_data['permission']['action'])) { ?>
-                        <a title="Add Insurance Type" class="btn-new" onclick="insurance_type_modal()"
-                          id="insurance_type_modal()"><i class="fa fa-plus"></i> New</a>
+                        <!-- <a title="Add Insurance Type" class="btn-new" onclick="insurance_type_modal()"
+                          id="insurance_type_modal()"><i class="fa fa-plus"></i> New</a> -->
                       <?php } ?>
                     </div>
                   </div>
@@ -1044,8 +1059,10 @@ $field_list = mandatory_section_field_list(3);
                   <div class="row">
                     <div class="col-md-5"><b>Subsidy Created</b></div>
                     <div class="col-md-7">
-                      <input type="text" name="polocy_no" class="alpha_numeric" id="polocy_no"
-                        value="<?php echo $form_data['polocy_no']; ?>" maxlength="20" />
+                      <!-- <input type="text" name="polocy_no" class="alpha_numeric" id="polocy_no"
+                        value="<?php echo $form_data['polocy_no']; ?>" maxlength="20" /> -->
+                      <input type="text" name="subsidy_created" class="validity_date m_input_default"
+                        value="<?php echo $form_data['subsidy_created']; ?>" id="validity_date" readonly="true" />
                     </div>
                   </div>
                 </div>
@@ -1055,8 +1072,8 @@ $field_list = mandatory_section_field_list(3);
                   <div class="row">
                     <div class="col-md-5"><b>Subsidy Amount</b></div>
                     <div class="col-md-7">
-                      <input type="text" name="tpa_id" class="alpha_numeric" id="tpa_id"
-                        value="<?php echo $form_data['tpa_id']; ?>" />
+                      <input type="text" name="subsidy_amount" class="alpha_numeric" id="subsidy_amount"
+                        value="<?php echo $form_data['subsidy_amount']; ?>" />
                     </div>
                   </div>
                 </div>
@@ -1066,7 +1083,6 @@ $field_list = mandatory_section_field_list(3);
 
 
 
-            <?php if ($form_data['patient_category_name'] != 'Panel') { ?>
               <!-- If the patient_category_name is NOT 'Panel', show Booking Date -->
               <div class="row m-b-5">
                 <div class="col-md-12">
@@ -1080,7 +1096,6 @@ $field_list = mandatory_section_field_list(3);
                   </div>
                 </div>
               </div>
-            <?php } ?>
 
 
             <div class="row m-b-5">
@@ -1252,17 +1267,17 @@ $field_list = mandatory_section_field_list(3);
             </div>
 
             <?php if ($form_data['patient_category_name'] != 'Panel') { ?>
-            <div class="row m-b-5" id="booking_time" <?php /* if(empty($form_data['booking_time']) || $form_data['booking_time']=='00:00:00'){ ?> style="display: none;" <?php  }*/ ?>>
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-5"><b>Booking Time </b></div>
-                  <div class="col-md-7">
-                    <input type="text" name="booking_time" id="bookingtime" class="datepicker3 m_input_default"
-                      value="<?php echo $form_data['booking_time']; ?>" />
+              <div class="row m-b-5" id="booking_time" <?php /* if(empty($form_data['booking_time']) || $form_data['booking_time']=='00:00:00'){ ?> style="display: none;" <?php  }*/ ?>>
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-5"><b>Booking Time </b></div>
+                    <div class="col-md-7">
+                      <input type="text" name="booking_time" id="bookingtime" class="datepicker3 m_input_default"
+                        value="<?php echo $form_data['booking_time']; ?>" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div> <!-- row -->
+              </div> <!-- row -->
             <?php } ?>
 
 
@@ -1284,17 +1299,17 @@ $field_list = mandatory_section_field_list(3);
             <!-- row -->
 
             <?php if ($form_data['patient_category_name'] != 'Panel') { ?>
-            <div class="row m-b-5">
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-5"><b>Validity Date</b></div>
-                  <div class="col-md-7">
-                    <input type="text" name="validity_date" class="validity_date m_input_default"
-                      value="<?php echo $form_data['validity_date']; ?>" id="validity_date" readonly="true" />
+              <div class="row m-b-5">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-5"><b>Validity Date</b></div>
+                    <div class="col-md-7">
+                      <input type="text" name="validity_date" class="validity_date m_input_default"
+                        value="<?php echo $form_data['validity_date']; ?>" id="validity_date" readonly="true" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div> <!-- row -->
+              </div> <!-- row -->
             <?php } ?>
             <div class="row m-b-5">
               <div class="col-md-12">
@@ -1348,6 +1363,115 @@ $field_list = mandatory_section_field_list(3);
                 </div>
               </div> -->
             <?php } ?>
+            <?php if ($form_data['patient_category_name'] == 'Panel') { ?>
+              <div class="row m-b-5">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-5"><b>Type</b></div>
+                    <div class="col-md-7">
+                      <select name="insurance_type_id" id="insurance_type_id" class="w-150px m_select_btn">
+                        <option value="">Select Insurance Type</option>
+                        <?php
+                        if (!empty($insurance_type_list)) {
+                          foreach ($insurance_type_list as $insurance_type) {
+                            $selected_ins_type = "";
+                            if ($insurance_type->id == $form_data['insurance_type_id']) {
+                              $selected_ins_type = 'selected="selected"';
+                            }
+                            echo '<option value="' . $insurance_type->id . '" ' . $selected_ins_type . '>' . $insurance_type->insurance_type . '</option>';
+                          }
+                        }
+                        ?>
+                      </select>
+
+                      <?php if (in_array('72', $users_data['permission']['action'])) { ?>
+                        <a title="Add Insurance Type" class="btn-new" onclick="insurance_type_modal()"
+                          id="insurance_type_modal()"><i class="fa fa-plus"></i> New</a>
+
+
+
+                      <?php } ?>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row m-b-5">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-5"><b>Name</b></div>
+                    <div class="col-md-7">
+                      <select name="ins_company_id" id="ins_company_id" class="w-150px m_select_btn"
+                        onchange="update_doctor_panel_charges();">
+                        <option value="">Select Insurance Company</option>
+                        <?php
+                        if (!empty($insurance_company_list)) {
+                          foreach ($insurance_company_list as $insurance_company) {
+                            $selected_company = '';
+                            if ($insurance_company->id == $form_data['ins_company_id']) {
+                              $selected_company = 'selected="selected"';
+                            }
+                            echo '<option value="' . $insurance_company->id . '" ' . $selected_company . '>' . $insurance_company->insurance_company . '</option>';
+                          }
+                        }
+                        ?>
+                      </select>
+
+                      <?php if (in_array('79', $users_data['permission']['action'])) { ?>
+                        <a title="Add Insurance Company" class="btn-new" id="insurance_company_modal"
+                          onclick="insurance_company_modal()"><i class="fa fa-plus"></i> New</a>
+                      <?php } ?>
+                    </div>
+                  </div>
+                </div>
+              </div> 
+
+              <div class="row m-b-5">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-5"><b>Policy No.</b></div>
+                    <div class="col-md-7">
+                      <input type="text" name="polocy_no" class="alpha_numeric" id="polocy_no"
+                        value="<?php echo $form_data['polocy_no']; ?>" maxlength="20" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row m-b-5">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-5"><b>TPA ID</b></div>
+                    <div class="col-md-7">
+                      <input type="text" name="tpa_id" class="alpha_numeric" id="tpa_id"
+                        value="<?php echo $form_data['tpa_id']; ?>" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row m-b-5">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-5"><b>Insurance Amount</b></div>
+                    <div class="col-md-7">
+                      <input type="text" name="ins_amount" class="price_float" id="ins_amount"
+                        value="<?php echo $form_data['ins_amount']; ?>" onKeyPress="return isNumberKey(event);" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row m-b-5">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-5"><b>Authorization No.</b></div>
+                    <div class="col-md-7">
+                      <input type="text" name="ins_authorization_no" class="alpha_numeric" id="ins_authorization_no"
+                        value="<?php echo $form_data['ins_authorization_no']; ?>" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <?php } ?>
             <!-- row -->
             <!-- <div id="panel_box">
               <div class="row m-b-5">
@@ -1382,82 +1506,7 @@ $field_list = mandatory_section_field_list(3);
                 </div>
               </div> row -->
 
-              <!-- <div class="row m-b-5">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-5"><b>Name</b></div>
-                    <div class="col-md-7">
-                      <select name="ins_company_id" id="ins_company_id" class="w-150px m_select_btn"
-                        onchange="update_doctor_panel_charges();">
-                        <option value="">Select Insurance Company</option>
-                        <?php
-                        if (!empty($insurance_company_list)) {
-                          foreach ($insurance_company_list as $insurance_company) {
-                            $selected_company = '';
-                            if ($insurance_company->id == $form_data['ins_company_id']) {
-                              $selected_company = 'selected="selected"';
-                            }
-                            echo '<option value="' . $insurance_company->id . '" ' . $selected_company . '>' . $insurance_company->insurance_company . '</option>';
-                          }
-                        }
-                        ?>
-                      </select>
 
-                      <?php if (in_array('79', $users_data['permission']['action'])) { ?>
-                        <a title="Add Insurance Company" class="btn-new" id="insurance_company_modal"
-                          onclick="insurance_company_modal()"><i class="fa fa-plus"></i> New</a>
-                      <?php } ?>
-                    </div>
-                  </div>
-                </div>
-              </div> row -->
-
-              <!-- <div class="row m-b-5">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-5"><b>Policy No.</b></div>
-                    <div class="col-md-7">
-                      <input type="text" name="polocy_no" class="alpha_numeric" id="polocy_no"
-                        value="<?php echo $form_data['polocy_no']; ?>" maxlength="20" />
-                    </div>
-                  </div>
-                </div>
-              </div> row -->
-              <!-- <div class="row m-b-5">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-5"><b>TPA ID</b></div>
-                    <div class="col-md-7">
-                      <input type="text" name="tpa_id" class="alpha_numeric" id="tpa_id"
-                        value="<?php echo $form_data['tpa_id']; ?>" />
-                    </div>
-                  </div>
-                </div>
-              </div> row -->
-
-              <!-- <div class="row m-b-5">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-5"><b>Insurance Amount</b></div>
-                    <div class="col-md-7">
-                      <input type="text" name="ins_amount" class="price_float" id="ins_amount"
-                        value="<?php echo $form_data['ins_amount']; ?>" onKeyPress="return isNumberKey(event);" />
-                    </div>
-                  </div>
-                </div>
-              </div> row -->
-
-              <!-- <div class="row m-b-5">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-5"><b>Authorization No.</b></div>
-                    <div class="col-md-7">
-                      <input type="text" name="ins_authorization_no" class="alpha_numeric" id="ins_authorization_no"
-                        value="<?php echo $form_data['ins_authorization_no']; ?>" />
-                    </div>
-                  </div>
-                </div>
-              </div> row -->
 
             <!-- </div> -->
             <!--  <div class="row m-b-5">
@@ -2928,18 +2977,18 @@ $field_list = mandatory_section_field_list(3);
         // console.log(p_cate,'==========')
         if (val == 0) {
           // $('#panel_box').slideUp();
-          $('#insurance_type_id').attr("disabled", true);
-          $('#insurance_type_id').val('');
-          $('#ins_company_id').attr("disabled", true);
-          $('#ins_company_id').val('');
-          $('#polocy_no').attr("readonly", "readonly");
-          $('#polocy_no').val('');
-          $('#tpa_id').attr("readonly", "readonly");
-          $('#tpa_id').val('');
-          $('#ins_amount').attr("readonly", "readonly");
-          $('#ins_amount').val('');
-          $('#ins_authorization_no').attr("readonly", "readonly");
-          $('#ins_authorization_no').val('');
+          // $('#insurance_type_id').attr("disabled", true);
+          // $('#insurance_type_id').val('');
+          // $('#ins_company_id').attr("disabled", true);
+          // $('#ins_company_id').val('');
+          // $('#polocy_no').attr("readonly", "readonly");
+          // $('#polocy_no').val('');
+          // $('#tpa_id').attr("readonly", "readonly");
+          // $('#tpa_id').val('');
+          // $('#ins_amount').attr("readonly", "readonly");
+          // $('#ins_amount').val('');
+          // $('#ins_authorization_no').attr("readonly", "readonly");
+          // $('#ins_authorization_no').val('');
 
         }
         else {
