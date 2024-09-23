@@ -166,7 +166,7 @@ $field_list = mandatory_section_field_list(3);
             // print_r($form_data);
             // die;
             ?>
-              <input type="hidden" name="branch_id" id="" value="<?php echo $form_data['branch_id'];?>" />
+              <input type="hidden" name="branch_id" id="branch_id" value="<?php echo $form_data['branch_id'];?>" />
             <!-- <div class="row m-b-5">
               <div class="col-md-12">
                 <div class="row">
