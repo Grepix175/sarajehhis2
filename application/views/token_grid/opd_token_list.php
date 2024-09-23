@@ -91,134 +91,103 @@ $user_role = $users_data['users_role'];
 
 
     <?php if (isset($user_role) && $user_role != 4 && $user_role != 3) { ?>
-      <form name="search_form" id="search_form" style="margin-top: 10px;">
-        <div class="row" style="margin-bottom: 15px;">
-          <?php //if ($branch_type == 2) { ?>
-            <!-- <div class="col-sm-4" id="show_special">
-              <div class="col-xs-3"><label>Specialization</label></div>
-              <div class="col-xs-8">
-                <select name="specialization_id" id="specialization_id" class="m_input_default"
-                  onchange="return form_submit();">
-                  <option value="0">Select Specialization</option>
-                  <?php
-                  //if (!empty($specialization_list)) {
-                    //foreach ($specialization_list as $specializationlist) {
-                      ?>
-                      <option value="<?php //echo $specializationlist->id; ?>"><?php //echo $specializationlist->specialization; ?>
-                      </option>
-                      <?php
-                    //}
-                  //}
-                  ?>
-                </select>
+      <form name="search_form" id="search_form" class="search_form " style="margin-top: 10px;">
+
+        <div class="row">
+          <!-- ///////////////// -->
+          <div class="col-sm-4">
+            <div class="row m-b-5">
+              <div class="col-xs-5"><label>From Date</label></div>
+              <div class="col-xs-7">
+                <input id="from_date" name="from_date" class=" start_datepicker m_input_default" type="text"
+                  value="<?php echo $form_data['from_date'] ?>">
               </div>
-            </div> -->
-          <?php } //else if ($branch_type == 1) { ?>
+            </div>
+            <div class="row m-b-5">
+              <div class="col-xs-5"><label>Status</label></div>
+              <div class="col-xs-7">
+                <!-- Pending (Default) -->
+                <label class="radio-inline">
+                  <input type="radio" name="search_type" value="1" id="search_type_default"
+                    onclick="return form_submit();" <?php if (!isset($form_data['search_type']) || $form_data['search_type'] == '1') { ?> checked="checked" <?php } ?>>
+                  Pending
+                </label>
 
-              <!-- <div class="col-sm-4">
-                <div class="col-xs-4"><label>Doctor Name</label></div>
-                <div class="col-xs-7">
-                  <select name="doctor_id" id="doctor_id" class="m_input_default" onchange="return form_submit();">
-                    <option value="0">Select Doctor</option> -->
-                    <?php
-                    // $doctor_list = doctor_specilization_list('', $users_data['branch_id']);
-                    // if (!empty($doctor_list)) {
-                    //   foreach ($doctor_list as $doctor) {
-                        ?>
-                        <!--<option value="<?php //echo $doctor->id; ?>"><?php //echo $doctor->doctor_name; ?></option> -->
-                      <?php
-                      //}
-                    //}
-                    ?>
-                  </select>
-                </div>
+                <!-- Completed -->
+                <label class="radio-inline">
+                  <input type="radio" name="search_type" value="2" id="search_type_waiting"
+                    onclick="return form_submit();" <?php if (isset($form_data['search_type']) && $form_data['search_type'] == '2') { ?> checked="checked" <?php } ?>>
+                  Completed
+                </label>
+
+                <!-- All -->
+                <label class="radio-inline">
+                  <input type="radio" name="search_type" value="" id="search_type_process" onclick="return form_submit();"
+                    <?php if (isset($form_data['search_type']) && $form_data['search_type'] == '') { ?> checked="checked"
+                    <?php } ?>>
+                  All
+                </label>
               </div>
-          <?php //} ?>
-          <div class="col-sm-4 mb-5">
-    <div class="row">
-        <div class="col-xs-12">
-            <label for="status">Status</label>
-        </div>
-        <div class="col-xs-12">
-            <!-- Pending (Default) -->
-            <label class="radio-inline">
-                <input type="radio" name="search_type" value="1" id="search_type_default" onclick="return form_submit();"
-                <?php if (!isset($form_data['search_type']) || $form_data['search_type'] == '1') { ?> checked="checked" <?php } ?>>
-                Pending
-            </label>
-
-            <!-- Completed -->
-            <label class="radio-inline">
-                <input type="radio" name="search_type" value="2" id="search_type_waiting" onclick="return form_submit();"
-                <?php if (isset($form_data['search_type']) && $form_data['search_type'] == '2') { ?> checked="checked" <?php } ?>>
-                Completed
-            </label>
-
-            <!-- All -->
-            <label class="radio-inline">
-                <input type="radio" name="search_type" value="" id="search_type_process" onclick="return form_submit();"
-                <?php if (isset($form_data['search_type']) && $form_data['search_type'] == '') { ?> checked="checked" <?php } ?>>
-                All
-            </label>
-        </div>
-    </div>
-</div>
-
-<!-- Date Filter Form -->
-<form name="search_form" id="search_form" style="margin-top: 10px;">
-    <div class="row">
-        <!-- From Date Field -->
-        <div class="col-sm-6 mb-3">
-            <div class="form-group row">
-                <label for="from_date" class="col-xs-5 col-form-label">From Date</label>
-                <div class="col-xs-7">
-                    <input id="from_date" name="from_date" class="form-control start_datepicker" type="text"
-                           value="<?php echo isset($form_data['from_date']) ? $form_data['from_date'] : ''; ?>">
-                </div>
             </div>
-        </div>
+          </div> <!-- 4 -->
 
-        <!-- To Date Field -->
-        <div class="col-sm-6 mb-3">
-            <div class="form-group row">
-                <label for="to_date" class="col-xs-5 col-form-label">To Date</label>
-                <div class="col-xs-7">
-                    <input id="to_date" name="to_date" class="form-control end_datepicker" type="text"
-                           value="<?php echo isset($form_data['to_date']) ? $form_data['to_date'] : ''; ?>">
-                </div>
+
+          <!-- ///////////////// -->
+          <div class="col-sm-4">
+            <div class="row m-b-5">
+              <div class="col-xs-5"><label>To Date</label></div>
+              <div class="col-xs-7">
+                <input name="to_date" id="to_date" class="end_datepicker m_input_default"
+                  value="<?php echo $form_data['to_date'] ?>" type="text">
+              </div>
             </div>
-        </div>
-    </div>
-</form>
+
+            <?php //if(in_array('1',$permission_section)){ ?>
+           
 
 
 
-        <?php //} else { ?>
-          <input type="hidden" name="branch_id" id="branch_id" value="<?php echo $users_data['parent_id']; ?>">
-        <?php //} ?>
-      </div> <!-- row -->
-    </form>
+          </div> <!-- 4 -->
 
 
-      <form>
-        <!-- bootstrap data table -->
-        <div class="hr-scroll">
-          <table id="table" class="table table-striped table-bordered opd_booking_list " cellspacing="0" width="100%">
-            <thead class="bg-theme">
-              <tr>
-                <th width="20%">Token No.</th>
-                <th>Patient Name</th>
-                <?php //if ($branch_type == 2) { ?>
-                  <!-- <th>Specialization Name</th> -->
-                <?php //} else { ?>
-                  <th>Status</th>
-                <?php //} ?>
-                <th>Action </th>
-              </tr>
-            </thead>
-          </table>
-        </div>
+          <!-- ///////////////// -->
+
+          <div class="col-sm-4">
+            <input value="Reset" class="btn-custom" onclick="clear_form_elements(this.form)" type="button">
+            
+
+
+          </div> <!-- 4 -->
+        </div> <!-- row -->
+
+
       </form>
+    <?php } ?>
+
+
+
+
+
+
+    <form>
+      <!-- bootstrap data table -->
+      <div class="hr-scroll">
+        <table id="table" class="table table-striped table-bordered opd_booking_list " cellspacing="0" width="100%">
+          <thead class="bg-theme">
+            <tr>
+              <th width="20%">Token No.</th>
+              <th>Patient Name</th>
+              <?php //if ($branch_type == 2) { ?>
+              <!-- <th>Specialization Name</th> -->
+              <?php //} else { ?>
+              <th>Status</th>
+              <?php //} ?>
+              <th>Action </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </form>
 
 
     <?php
@@ -252,7 +221,7 @@ $user_role = $users_data['users_role'];
         $.ajax({
           url: "<?php echo base_url('token_no/advance_search/'); ?>",
           type: 'POST',
-          data: { doctor_id: doctor_id, specialization_id: specialization_id, search_type: search_type, from_date: start_date,to_date: end_date },
+          data: { doctor_id: doctor_id, specialization_id: specialization_id, search_type: search_type, from_date: start_date, to_date: end_date },
           success: function (result) {
             if (vals != "1") {
               reload_table();
@@ -302,21 +271,21 @@ $user_role = $users_data['users_role'];
           reload_table();
         }, 60000);
         $('.start_datepicker').datepicker({
-              format: 'yyyy-mm-dd', // Use the correct date format
-              autoclose: true, 
-              endDate: new Date(), 
-          }).on("change", function(selectedDate) { 
-              var start_date = $('.start_datepicker').val();
-              $('.end_datepicker').datepicker('setStartDate', start_date); 
-              form_submit();
-          });
+          format: 'yyyy-mm-dd', // Use the correct date format
+          autoclose: true,
+          endDate: new Date(),
+        }).on("change", function (selectedDate) {
+          var start_date = $('.start_datepicker').val();
+          $('.end_datepicker').datepicker('setStartDate', start_date);
+          form_submit();
+        });
 
-          $('.end_datepicker').datepicker({
-              format: 'yyyy-mm-dd', // Use the correct date format
-              autoclose: true,  
-          }).on("change", function(selectedDate) {   
-              form_submit();
-          });
+        $('.end_datepicker').datepicker({
+          format: 'yyyy-mm-dd', // Use the correct date format
+          autoclose: true,
+        }).on("change", function (selectedDate) {
+          form_submit();
+        });
 
       });
 
