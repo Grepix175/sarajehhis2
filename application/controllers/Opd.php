@@ -34,7 +34,7 @@ class Opd extends CI_Controller
       $end_date = date('d-m-Y');
     }
     // End Defaul Search
-    $data['form_data'] = array('patient_name' => '', 'mobile_no' => '', 'booking_code' => '', 'mobile_no' => '', 'specialization_id' => '', 'start_date' => $start_date, 'end_date' => $end_date);
+    $data['form_data'] = array('patient_name' => '', 'mobile_no' => '', 'booking_code' => '', 'mobile_no' => '', 'specialization_id' => '', 'start_date' => $start_date, 'end_date' => $end_date,'emergency_booking' => '');
     $this->load->model('general/general_model');
     $data['specialization_list'] = $this->general_model->specialization_list();
     //echo "<pre>";print_r($data['specialization_list']); exit;
@@ -1576,7 +1576,7 @@ class Opd extends CI_Controller
         'subsidy_create' => $result['subsidy_create'],
         'subsidy_amount' => $result['subsidy_amount'],
         'patient_category_name' => $result['patient_category_name'],
-        "corporate_id" => $result['corporate_id'] ?? 0,
+        "corporate_id" => $result['corporate_id'] ?? '',
         "auth_no" => $result['auth_no'] ?? '',
         "employee_no" => $result['employee_no'] ?? '',
         "auth_issue_date" => date('Y-m-d H:i:s', strtotime($result['auth_issue_date'])) ?? '',

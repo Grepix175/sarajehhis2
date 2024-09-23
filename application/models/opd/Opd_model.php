@@ -682,7 +682,7 @@ class Opd_model extends CI_Model
 	{
 		$users_data = $this->session->userdata('auth_users');
 		$this->db->select('corporate_id,corporate_name');
-		$this->db->order_by('corporate_id', 'Desc');
+		$this->db->order_by('corporate_id', 'Asc');
 		$query = $this->db->get('hms_corporate');
 		$result = $query->result();
 		//echo $this->db->last_query(); 

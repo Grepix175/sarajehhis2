@@ -920,20 +920,21 @@ $field_list = mandatory_section_field_list(3);
                   <div class="row">
                     <div class="col-md-5"><b>Corporate Name</b></div>
                     <div class="col-md-7">
-                      <select name="corporate_id" id="corporate_id" class="w-150px m_select_btn">
-                        <option value="">Select Corporate Name</option>
-                        <?php
-                        if (!empty($corporate_list)) {
-                          foreach ($corporate_list as $corporate) {
-                            $selected_co_id = "";
-                            if ($corporate->id == $form_data['corporate_id']) {
-                              $selected_co_id = 'selected="selected"';
-                            }
-                            echo '<option value="' . $corporate->corporate_id . '" ' . $selected_co_id . '>' . $corporate->corporate_name . '</option>';
-                          }
-                        }
-                        ?>
-                      </select>
+                    <select name="corporate_id" id="corporate_id" class="w-150px m_select_btn">
+  <option value="">Select Corporate Name</option>
+  <?php
+  if (!empty($corporate_list)) {
+    foreach ($corporate_list as $corporate) {
+      $selected_co_id = "";
+      if ($corporate->id == $form_data['corporate_id']) {
+        $selected_co_id = 'selected="selected"';
+      }
+      echo '<option value="' . $corporate->id . '" ' . $selected_co_id . '>' . $corporate->corporate_name . '</option>';
+    }
+  }
+  ?>
+</select>
+
 
                       <?php //if (in_array('72', $users_data['permission']['action'])) { ?>
                       <!-- <a title="Add Insurance Type" class="btn-new" onclick="insurance_type_modal()"
