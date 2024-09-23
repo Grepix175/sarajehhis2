@@ -101,8 +101,9 @@ class Patient extends CI_Controller {
             }
             $gender = array('0'=>'Female', '1'=>'Male','2'=>'Others');
             $row[] = $patient->patient_code; 
+            $row[] = $patient->patient_category_name;
             $row[] = $patient->patient_name;
-            $row[] = $relation_name;
+            // $row[] = $relation_name;
             $row[] = $gender[$patient->gender];
             
             ///////////// Age calculation //////////
