@@ -450,12 +450,13 @@ class Opd_model extends CI_Model
 	public function get_by_id($id)
 	{
 		$user_data = $this->session->userdata('auth_users');
-		$this->db->select('hms_opd_booking.*,hms_opd_booking.policy_no as polocy_no,hms_opd_booking.insurance_type_id as insurance_type, hms_patient.simulation_id, hms_patient.patient_code, hms_patient.patient_name, hms_patient.mobile_no, hms_patient.gender, hms_patient.age_y, hms_patient.age_m, hms_patient.age_d, hms_patient.address,hms_patient.address2,hms_patient.address3, hms_patient.patient_code, hms_patient.city_id, hms_patient.state_id, hms_patient.country_id,hms_patient.adhar_no, hms_patient.patient_email,hms_patient.relation_type,hms_patient.relation_name,hms_patient.relation_simulation_id,hms_patient.dob,hms_patient.modified_date as patient_modified_date');
+		$this->db->select('hms_opd_booking.*,hms_opd_booking.policy_no as polocy_no,hms_opd_booking.insurance_type_id as insurance_type, hms_patient.simulation_id, hms_patient.patient_code, hms_patient.patient_name, hms_patient.mobile_no, hms_patient.gender, hms_patient.age_y, hms_patient.age_m, hms_patient.age_d, hms_patient.address,hms_patient.address2,hms_patient.address3, hms_patient.patient_code, hms_patient.city_id, hms_patient.state_id, hms_patient.country_id,hms_patient.adhar_no, hms_patient.patient_email,hms_patient.relation_type,hms_patient.relation_name,hms_patient.relation_simulation_id,hms_patient.dob,hms_patient.modified_date as patient_modified_date,hms_patient_category.patient_category as patient_category_name');
 
 		//,hms_patient.insurance_type,hms_patient.insurance_type_id,hms_patient.ins_company_id,hms_patient.polocy_no,hms_patient.tpa_id,hms_patient.ins_amount,hms_patient.ins_authorization_no
 
 		$this->db->from('hms_opd_booking');
 		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id');
+		$this->db->join('hms_patient_category', 'hms_patient_category.id = hms_opd_booking.patient_category');
 		$this->db->where('hms_opd_booking.branch_id', $user_data['parent_id']);
 		$this->db->where('hms_opd_booking.id', $id);
 		$this->db->where('hms_opd_booking.is_deleted', '0');
@@ -680,8 +681,8 @@ class Opd_model extends CI_Model
 	public function corporate_list()
 	{
 		$users_data = $this->session->userdata('auth_users');
-		$this->db->select('id,name');
-		$this->db->order_by('hms_corporate', 'Desc');
+		$this->db->select('corporate_id,corporate_name');
+		$this->db->order_by('corporate_id', 'Asc');
 		$query = $this->db->get('hms_corporate');
 		$result = $query->result();
 		//echo $this->db->last_query(); 
@@ -694,8 +695,8 @@ class Opd_model extends CI_Model
 	public function subsidy_list()
 	{
 		$users_data = $this->session->userdata('auth_users');
-		$this->db->select('id,name');
-		$this->db->order_by('hms_subsidy', 'Desc');
+		$this->db->select('subsidy_id,subsidy_name');
+		$this->db->order_by('subsidy_id', 'Desc');
 		$query = $this->db->get('hms_subsidy');
 		$result = $query->result();
 		//echo $this->db->last_query(); 
@@ -704,9 +705,9 @@ class Opd_model extends CI_Model
 	public function department_list()
 	{
 		$users_data = $this->session->userdata('auth_users');
-		$this->db->select('id,name');
-		$this->db->order_by('hms_department', 'Desc');
-		$query = $this->db->get('hms_department');
+		$this->db->select('department_id,department_name');
+		$this->db->order_by('department_id', 'Desc');
+		$query = $this->db->get('hms_department_master');
 		$result = $query->result();
 		//echo $this->db->last_query(); 
 		return $result;
@@ -753,10 +754,11 @@ class Opd_model extends CI_Model
 			$token_type = $token_type_data['type'];
 			if ($token_type == '0') //hospital wise token no
 			{
-
 				$patient_token_details_for_hospital = $this->get_patient_token_details_for_type_hospital($booking_date, $token_type);
-				//print_r($patient_token_details_for_hospital);die;
-				if ($patient_token_details_for_hospital['token_no'] > '0') {
+				// print_r($patient_token_details_for_hospital);
+				// die;
+				// print_r($patient_token_details_for_hospital);die;
+				if ($patient_token_details_for_hospital && $patient_token_details_for_hospital['token_no'] > '0') {
 					$token_no = $patient_token_details_for_hospital['token_no'] + 1;
 					//echo $token_no;die;
 				} else {
@@ -806,7 +808,7 @@ class Opd_model extends CI_Model
 		$user_data = $this->session->userdata('auth_users');
 		$post = $this->input->post();
 
-		//echo "<pre>";print_r($post);die;
+		// echo "<pre>";print_r($post);die;
 
 		if (!empty($post['branch_id'])) {
 			$branch_id = $post['branch_id'];
@@ -884,10 +886,10 @@ class Opd_model extends CI_Model
 			"insurance_type" => $pannel_type,
 			"insurance_type_id" => $insurance_type_id,
 			"ins_company_id" => $ins_company_id,
-			"polocy_no" => $post['polocy_no'],
-			"tpa_id" => $post['tpa_id'],
-			"ins_amount" => $post['ins_amount'],
-			"ins_authorization_no" => $post['ins_authorization_no'],
+			// "polocy_no" => $post['polocy_no'],
+			// "tpa_id" => $post['tpa_id'],
+			// "ins_amount" => $post['ins_amount'],
+			// "ins_authorization_no" => $post['ins_authorization_no'],
 			'status' => 1,
 			'ip_address' => $_SERVER['REMOTE_ADDR'],
 			"patient_category" => $post['patient_category'],
@@ -920,12 +922,15 @@ class Opd_model extends CI_Model
 		if (empty($post['mlc_status'])) {
 			$post['mlc_status'] = 0;
 		}
-
+		// echo "<pre>";
+		// print_r($post);
+		
 		if (empty($post['data_id'])) {
 			$new_token = $this->generate_token_on_run_time($branch_id, $post['attended_doctor'], $post['booking_date'], $post['specialization']);
 		} else {
 			$new_token = $post['token_no'];
 		}
+		
 
 		if (!empty($post['booking_time'])) {
 			$opd_time = date('H:i:s', strtotime(date('d-m-Y') . ' ' . $post['booking_time']));
@@ -934,12 +939,12 @@ class Opd_model extends CI_Model
 		}
 
 		$data_test = array(
-			'referral_doctor' => $post['referral_doctor'],
+			// 'referral_doctor' => $post['referral_doctor'],
 			'branch_id' => $branch_id,
-			'ref_by_other' => $post['ref_by_other'],
+			// 'ref_by_other' => $post['ref_by_other'],
 			'specialization_id' => $post['specialization'],
 			'attended_doctor' => $post['attended_doctor'],
-			'diseases' => $post['diseases'],
+			// 'diseases' => $post['diseases'],
 			'package_id' => $post['package_id'],
 			'package_amount' => $package_price,
 			'type' => 2,
@@ -947,7 +952,7 @@ class Opd_model extends CI_Model
 			'total_amount' => $post['total_amount'],
 			'kit_amount' => $post['kit_amount'],
 			'consultants_charge' => $post['consultants_charge'],
-			'next_app_date' => date('Y-m-d', strtotime($post['next_app_date'])),
+			// 'next_app_date' => date('Y-m-d', strtotime($post['next_app_date'])),
 			'discount' => $post['discount'],
 			'net_amount' => $post['net_amount'],
 			'balance' => $post['net_amount'] - $post['paid_amount'],
@@ -955,30 +960,42 @@ class Opd_model extends CI_Model
 			'validity_date' => date('Y-m-d', strtotime($post['validity_date'])),
 			'booking_time' => $opd_time,
 			'opd_type' => $post['opd_type'],
-			'pannel_type' => $post['pannel_type'],
+			// 'pannel_type' => $post['pannel_type'],
 			'confirm_date' => date('Y-m-d H:i:s'),
 			'booking_status' => $booking_status,
-			'source_from' => $post['source_from'],
+			// 'source_from' => $post['source_from'],
 			'remarks' => $post['remarks'],
-			'referred_by' => $post['referred_by'],
-			'referral_hospital' => $post['referral_hospital'],
+			// 'referred_by' => $post['referred_by'],
+			// 'referral_hospital' => $post['referral_hospital'],
 			'token_no' => $new_token,
 			'available_time' => $post['available_time'],
 			'time_value' => $available_time_value,
 			'doctor_slot' => $doctor_slot,
 			'insurance_type_id' => $insurance_type_id,
 			'ins_company_id' => $ins_company_id,
-			'policy_no' => $post['polocy_no'],
-			'tpa_id' => $post['tpa_id'],
-			'ins_amount' => $post['ins_amount'],
-			'ins_authorization_no' => $post['ins_authorization_no'],
+			// 'policy_no' => $post['polocy_no'],
+			// 'tpa_id' => $post['tpa_id'],
+			// 'ins_amount' => $post['ins_amount'],
+			// 'ins_authorization_no' => $post['ins_authorization_no'],
 			'booking_type' => $booking_type,
 			'mlc_status' => $post['mlc_status'],
 			'mlc' => $post['mlc'],
 			"patient_category" => $post['patient_category'],
-			"authorize_person" => $post['authorize_person'],
+			// "authorize_person" => $post['authorize_person'],
+			"corporate_id" => $post['corporate_id'] ?? 0,
+			"auth_no" => $post['auth_no'] ?? '',
+			"employee_no" => $post['employee_no'] ?? '',
+			"auth_issue_date" => date('Y-m-d H:i:s', strtotime($post['auth_issue_date'])) ?? '',
+			"department_id" => $post['department_id'] ?? 0,
+			"cost" => $post['cost'] ?? '',
+			"subsidy_id" => $post['subsidy_id'] ?? 0,
+			"subsidy_created" => date('Y-m-d H:i:s', strtotime($post['subsidy_created']))  ?? '',
+			"subsidy_amount" => $post['subsidy_amount'] ?? '',
 			// eye module add
 		);
+		// echo "<pre>";
+		// print_r($data_test);
+		// die;
 		//for payment
 		if ($post['pay_now'] == 1) {
 			$data_pay_test = array(
@@ -1106,6 +1123,15 @@ class Opd_model extends CI_Model
 					'cyclo_start_time' => date('Y-m-d H:i'),
 					'cyclo_time' => date('Y-m-d H:i'),
 					'app_type' => 0,
+					"corporate_id" => $post['corporate_id'],
+					"auth_no" => $post['auth_no'],
+					"employee_no" => $post['employee_no'],
+					"auth_issue_date" => date('Y-m-d H:i:s',$post['auth_issue_date']),
+					"department_id" => $post['department_id'],
+					"cost" => $post['cost'],
+					"subsidy_id" => $post['subsidy_id'],
+					"subsidy_created" => date('Y-m-d H:i:s',$post['subsidy_created']),
+					"subsidy_amount" => $post['subsidy_amount'],
 
 
 
@@ -1127,7 +1153,8 @@ class Opd_model extends CI_Model
 							   'booking_status'=>0
 					   );*/
 
-
+				// print_r($appointment_data);
+				// die;
 				$this->db->set('patient_id', $post['patient_id']);
 				$this->db->set('created_by', $user_data['id']);
 				$this->db->set('created_date', date('Y-m-d H:i:s'));
@@ -1389,7 +1416,7 @@ class Opd_model extends CI_Model
 
 			/*Generate Token */
 			$data_token = array(
-				'branch_id' => $post['branch_id'],
+				'branch_id' => $post['branch_id'] ?? 0,
 				'patient_id' => $patient_id,
 				'doctor_id' => $post['attended_doctor'],
 				'booking_date' => date("Y-m-d", strtotime($post['booking_date'])),
