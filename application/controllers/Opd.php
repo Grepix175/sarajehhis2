@@ -789,6 +789,7 @@ class Opd extends CI_Controller
     $address_third = "";
     $city_id = $city_id;
     $state_id = $state_id;
+    $pincode = '';
     $country_id = "99";
     $patient_email = "";
     $patient_bp = "";
@@ -881,6 +882,7 @@ class Opd extends CI_Controller
         $address_third = $patient_data['address3'];
         $city_id = $patient_data['city_id'];
         $state_id = $patient_data['state_id'];
+        $pincode = $patient_data['pincode'];
         $country_id = $patient_data['country_id'];
         $patient_email = $patient_data['patient_email'];
         $insurance_type = $patient_data['insurance_type'];
@@ -1123,6 +1125,7 @@ class Opd extends CI_Controller
       'address_third' => $address_third,
       'city_id' => $city_id,
       'state_id' => $state_id,
+      'pincode' => $pincode,
       'country_id' => $country_id,
       'specialization' => '',
       'referral_doctor' => "",
@@ -1291,7 +1294,9 @@ class Opd extends CI_Controller
       }
     }
 
-
+    // echo "<pre>";
+    // print_r($data['form_data']);
+    // die;
     $data['simulation_array'] = $this->general_model->simulation_list();
     $this->load->view('opd/booking', $data);
   }
@@ -1516,6 +1521,7 @@ class Opd extends CI_Controller
         'address_third' => $result['address3'],
         'city_id' => $result['city_id'],
         'state_id' => $result['state_id'],
+        'pincode' => $result['pincode'],
         'country_id' => $result['country_id'],
         'package_id' => $result['package_id'],
         'referral_doctor' => $result['referral_doctor'],
@@ -2650,6 +2656,7 @@ class Opd extends CI_Controller
     $particulars = "";
     $city_id = '';
     $state_id = "";
+    $pincode = "";
     $country_id = "99";
     $attended_doctor = "";
     $diseases = "";
@@ -2673,6 +2680,7 @@ class Opd extends CI_Controller
         $address = $patient_data['address'];
         $city_id = $patient_data['city_id'];
         $state_id = $patient_data['state_id'];
+        $pincode = $patient_data['pincode'];
         $country_id = $patient_data['country_id'];
         $patient_email = $patient_data['patient_email'];
 
@@ -2712,6 +2720,7 @@ class Opd extends CI_Controller
       'address' => $address,
       'city_id' => $city_id,
       'state_id' => $state_id,
+      'pincode' => $pincode,
       'country_id' => $country_id,
       'patient_email' => $patient_email,
       'booking_date' => date('d-m-Y'),
