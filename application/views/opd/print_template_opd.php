@@ -1,9 +1,10 @@
 <?php 
 $user_detail = $this->session->userdata('auth_users');
 $users_data = $this->session->userdata('auth_users');
+$mlc = '';
 /* start thermal printing */
     //address print
- $template_data->template = str_replace("{patient_category_name}",$all_detail['opd_list'][0]->patient_category_name,$template_data->template);
+$template_data->template = str_replace("{patient_category_name}",$all_detail['opd_list'][0]->patient_category_name,$template_data->template);
 
 $template_data->template = str_replace("{authorize_person_name}",$all_detail['opd_list'][0]->authorize_person_name,$template_data->template);   
     if(empty($address_setting_list))

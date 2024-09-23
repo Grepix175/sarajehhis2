@@ -1420,6 +1420,9 @@ class Opd extends CI_Controller
       $data['gardian_relation_list'] = $this->general_model->gardian_relation_list();
       $data['patient_category'] = $this->general_model->patient_category_list();
       $data['authrize_person_list'] = $this->general_model->authrize_person_list();
+      $data['corporate_list'] = $this->opd->corporate_list();
+      $data['subsidy_list'] = $this->opd->subsidy_list();
+      $data['department_list'] = $this->opd->department_list();
       $data['page_title'] = "Update OPD Booking";
       $post = $this->input->post();
       $data['form_error'] = '';
@@ -1488,7 +1491,7 @@ class Opd extends CI_Controller
 
       $age_d = $present_age['age_d'];
 
-      //echo "<pre>";print_r($result); die;
+      // echo "<pre>";print_r($result); die;
       $data['form_data'] = array(
         'data_id' => $result['id'],
         'branch_id' => $result['branch_id'],
@@ -1566,24 +1569,15 @@ class Opd extends CI_Controller
         'mlc' => $result['mlc'],
         'patient_category' => $result['patient_category'],
         'authorize_person' => $result['authorize_person'],
-        'corporate_id' => $result['corporate_id'],
-        'auth_no' => $result['auth_no'],
-        'employee_no' => $result['employee_no'],
-        'auth_issue_date' => $result['auth_issue_date'],
-        'department_id' => $result['department_id'],
-        'cost' => $result['cost'],
-        'subsidy_id' => $result['subsidy_id'],
-        'subsidy_create' => $result['subsidy_create'],
-        'subsidy_amount' => $result['subsidy_amount'],
         'patient_category_name' => $result['patient_category_name'],
         "corporate_id" => $result['corporate_id'] ?? '',
         "auth_no" => $result['auth_no'] ?? '',
         "employee_no" => $result['employee_no'] ?? '',
-        "auth_issue_date" => date('Y-m-d H:i:s', strtotime($result['auth_issue_date'])) ?? '',
+        "auth_issue_date" => date('Y-m-d', strtotime($result['auth_issue_date'])) ?? '',
         "department_id" => $result['department_id'] ?? 0,
         "cost" => $result['cost'] ?? '',
         "subsidy_id" => $result['subsidy_id'] ?? 0,
-        "subsidy_created" => date('Y-m-d H:i:s', strtotime($result['subsidy_created']))  ?? '',
+        "subsidy_created" => date('Y-m-d', strtotime($result['subsidy_created']))  ?? '',
         "subsidy_amount" => $result['subsidy_amount'] ?? '',
       );
       if (isset($post) && !empty($post)) {
