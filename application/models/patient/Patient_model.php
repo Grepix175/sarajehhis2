@@ -25,7 +25,7 @@ class Patient_model extends CI_Model
                 FROM hms_token 
                 WHERE hms_token.patient_id = hms_patient.id 
                 AND DATE(hms_token.created_date) = CURDATE()) > 0 
-    THEN '1' ELSE '0' END) as has_token"); 
+    THEN '1' ELSE '0' END) as has_token,,hms_patient_category.patient_category as patient_category_name"); 
 
 		// changes by Nitin sharma 04/02/2024
 		$this->db->join("hms_gardian_relation", "hms_gardian_relation.id=hms_patient.relation_type", 'left');
@@ -618,7 +618,7 @@ class Patient_model extends CI_Model
 			$this->db->set('ip_address', $_SERVER['REMOTE_ADDR']);
 			$this->db->set('created_by', $user_data['id']);
 			$this->db->set('branch_id', $user_data['parent_id']);
-			//$this->db->set('created_date',date('Y-m-d H:i:s'));
+			$this->db->set('created_date',date('Y-m-d H:i:s'));
 			$this->db->insert('hms_patient', $data);
 			// echo $this->db->last_query();die;
 			$data_id = $this->db->insert_id();

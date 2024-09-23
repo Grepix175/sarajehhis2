@@ -348,7 +348,7 @@ $field_list = mandatory_section_field_list(2);
       
 
      <div class="grp">
-        <label>Village/Town<span class="star">*</span> </label>
+        <label>Village/Town</label>
         <div class="box-right">
             <input type="text" name="address" id="address" class="address" maxlength="255" value="<?php echo $form_data['address']; ?>"/>
             <?php 
