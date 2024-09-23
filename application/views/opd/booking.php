@@ -920,20 +920,21 @@ $field_list = mandatory_section_field_list(3);
                   <div class="row">
                     <div class="col-md-5"><b>Corporate Name</b></div>
                     <div class="col-md-7">
-                    <select name="corporate_id" id="corporate_id" class="w-150px m_select_btn">
-  <option value="">Select Corporate Name</option>
-  <?php
-  if (!empty($corporate_list)) {
-    foreach ($corporate_list as $corporate) {
-      $selected_co_id = "";
-      if ($corporate->id == $form_data['corporate_id']) {
-        $selected_co_id = 'selected="selected"';
-      }
-      echo '<option value="' . $corporate->id . '" ' . $selected_co_id . '>' . $corporate->corporate_name . '</option>';
-    }
-  }
-  ?>
-</select>
+                      <select name="corporate_id" id="corporate_id" class="w-150px m_select_btn">
+                        <option value="" <?php echo empty($form_data['corporate_id']) ? 'selected="selected"' : ''; ?>>
+                          Select Corporate Name</option>
+                        <?php
+                        if (!empty($corporate_list)) {
+                          foreach ($corporate_list as $corporate) {
+                            $selected_co_id = "";
+                            if ($corporate->corporate_id == $form_data['corporate_id']) { // Ensure IDs match
+                              $selected_co_id = 'selected="selected"';
+                            }
+                            echo '<option value="' . $corporate->corporate_id . '" ' . $selected_co_id . '>' . $corporate->corporate_name . '</option>';
+                          }
+                        }
+                        ?>
+                      </select>
 
 
                       <?php //if (in_array('72', $users_data['permission']['action'])) { ?>
@@ -988,12 +989,13 @@ $field_list = mandatory_section_field_list(3);
                     <div class="col-md-5"><b>Department</b></div>
                     <div class="col-md-7">
                       <select name="department_id" id="department_id" class="w-150px m_select_btn">
-                        <option value="">Select Department Name</option>
+                        <option value="" <?php echo empty($form_data['department_id']) ? 'selected="selected"' : ''; ?>>
+                          Select Department Name</option>
                         <?php
                         if (!empty($department_list)) {
                           foreach ($department_list as $department) {
                             $selected_de_id = "";
-                            if ($department->id == $form_data['department_id']) {
+                            if ($department->department_id == $form_data['department_id']) { // Ensure department IDs match
                               $selected_de_id = 'selected="selected"';
                             }
                             echo '<option value="' . $department->department_id . '" ' . $selected_de_id . '>' . $department->department_name . '</option>';
@@ -1001,6 +1003,7 @@ $field_list = mandatory_section_field_list(3);
                         }
                         ?>
                       </select>
+
                     </div>
                   </div>
                 </div>
@@ -1084,19 +1087,19 @@ $field_list = mandatory_section_field_list(3);
 
 
 
-              <!-- If the patient_category_name is NOT 'Panel', show Booking Date -->
-              <div class="row m-b-5">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-5"><b>Booking Date</b></div>
-                    <div class="col-md-7">
-                      <input type="text" name="booking_date" id="booking_date" class="datepicker m_input_default"
-                        value="<?php echo $form_data['booking_date']; ?>"
-                        onchange="generate_token_by_date(this.value); get_available_days('',this.value); <?php if ($form_data['data_id'] == '') { ?> consultant_charge('',this.value); get_validity_date_in_between('',this.value); change_validity_date('',this.value);<?php } ?> " />
-                    </div>
+            <!-- If the patient_category_name is NOT 'Panel', show Booking Date -->
+            <div class="row m-b-5">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-5"><b>Booking Date</b></div>
+                  <div class="col-md-7">
+                    <input type="text" name="booking_date" id="booking_date" class="datepicker m_input_default"
+                      value="<?php echo $form_data['booking_date']; ?>"
+                      onchange="generate_token_by_date(this.value); get_available_days('',this.value); <?php if ($form_data['data_id'] == '') { ?> consultant_charge('',this.value); get_validity_date_in_between('',this.value); change_validity_date('',this.value);<?php } ?> " />
                   </div>
                 </div>
               </div>
+            </div>
 
 
             <div class="row m-b-5">
@@ -1424,7 +1427,7 @@ $field_list = mandatory_section_field_list(3);
                     </div>
                   </div>
                 </div>
-              </div> 
+              </div>
 
               <div class="row m-b-5">
                 <div class="col-md-12">
