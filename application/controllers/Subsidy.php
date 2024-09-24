@@ -316,7 +316,7 @@ class Subsidy extends CI_Controller
     public function trash($id = "")
     {
         unauthorise_permission('411', '2490');
-        $this->load->model('subsidy/subsid_archive_model', 'subsid_archive');
+        $this->load->model('subsidy/subsidy_archive_model', 'subsid_archive');
         if (!empty($id) && $id > 0) {
             $result = $this->subsid_archive->trash($id);
             $response = "Subsidy successfully deleted parmanently.";
