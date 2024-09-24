@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Corporate extends CI_Controller {
+class Subsidy extends CI_Controller {
 
     public function __construct()
     {
         parent::__construct();
         auth_users();
-        $this->load->model('corporate/Corporate_model','corporate');
+        $this->load->model('subsidy/Subsidy_model','subsidy');
         $this->load->library('form_validation');
     }
 
@@ -15,8 +15,8 @@ class Corporate extends CI_Controller {
     { 
         
         unauthorise_permission('411','2485');
-        $data['page_title'] = 'Corporate List'; 
-        $this->load->view('corporate/list',$data);
+        $data['page_title'] = 'Subsidy List'; 
+        $this->load->view('subsidy/list',$data);
     }
 
     public function ajax_list()
@@ -25,7 +25,7 @@ class Corporate extends CI_Controller {
         $users_data = $this->session->userdata('auth_users');
         $sub_branch_details = $this->session->userdata('sub_branches_data');
         $parent_branch_details = $this->session->userdata('parent_branches_data');
-        $list = $this->corporate->get_datatables();
+        $list = $this->subsidy->get_datatables();
         // echo "<pre>";
         // print_r($list);
         // die;
@@ -33,11 +33,11 @@ class Corporate extends CI_Controller {
         $no = $_POST['start'];
         $i = 1;
         $total_num = count($list);
-        foreach ($list as $corporate) {
+        foreach ($list as $subsidy) {
          // print_r($expense_category);die;
             $no++;
             $row = array();
-            if($corporate->corporate_status==1)
+            if($subsidy->subsidy_status==1)
             {
                 $status = '<font color="green">Active</font>';
             }   
@@ -61,27 +61,27 @@ class Corporate extends CI_Controller {
            
             ////////// Check list end ///////////// 
             $checkboxs = "";
-            // if($users_data['parent_id']==$corporate->branch_id)
-            if($corporate)
+            // if($users_data['parent_id']==$subsidy->branch_id)
+            if($subsidy)
             {
-               $row[] = '<input type="checkbox" name="employee[]" class="checklist" value="'.$corporate->corporate_id.'">'.$check_script;
+               $row[] = '<input type="checkbox" name="employee[]" class="checklist" value="'.$subsidy->subsidy_id.'">'.$check_script;
             }else{
                $row[]='';
             }
             
-            $row[] = $corporate->corporate_name;  
+            $row[] = $subsidy->subsidy_name;  
             $row[] = $status;
-            $row[] = date('d-M-Y H:i A',strtotime($corporate->created_date)); 
+            $row[] = date('d-M-Y H:i A',strtotime($subsidy->created_date)); 
             $btnedit='';
             $btndelete='';
          
-            if($corporate)
+            if($subsidy)
             {
               if(in_array('2487',$users_data['permission']['action'])){
-               $btnedit =' <a onClick="return edit_patient_category('.$corporate->corporate_id.');" class="btn-custom" href="javascript:void(0)" style="'.$corporate->corporate_id.'" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>';
+               $btnedit =' <a onClick="return edit_subsidy('.$subsidy->subsidy_id.');" class="btn-custom" href="javascript:void(0)" style="'.$subsidy->subsidy_id.'" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>';
               }
               if(in_array('2488',$users_data['permission']['action'])){
-                    $btndelete = ' <a class="btn-custom" onClick="return delete_patient_category('.$corporate->corporate_id.')" href="javascript:void(0)" title="Delete" data-url="550"><i class="fa fa-trash"></i> Delete</a> ';   
+                    $btndelete = ' <a class="btn-custom" onClick="return delete_subsidy('.$subsidy->subsidy_id.')" href="javascript:void(0)" title="Delete" data-url="550"><i class="fa fa-trash"></i> Delete</a> ';   
                }
             }
             
@@ -95,8 +95,8 @@ class Corporate extends CI_Controller {
 
         $output = array(
                         "draw" => $_POST['draw'],
-                        "recordsTotal" => $this->corporate->count_all(),
-                        "recordsFiltered" => $this->corporate->count_filtered(),
+                        "recordsTotal" => $this->subsidy->count_all(),
+                        "recordsFiltered" => $this->subsidy->count_filtered(),
                         "data" => $data,
                 );
         //output to json format
@@ -107,13 +107,13 @@ class Corporate extends CI_Controller {
     public function add()
     {
         unauthorise_permission('411','2486');
-        $data['page_title'] = "Add Corporate";  
+        $data['page_title'] = "Add Subsidy";  
         $post = $this->input->post();
         $data['form_error'] = []; 
         $data['form_data'] = array(
                                   'data_id'=>"", 
-                                  'corporate_name'=>"",
-                                  'corporate_status'=>"1",
+                                  'subsidy_name'=>"",
+                                  'subsidy_status'=>"1",
                                  
                                   );    
 
@@ -122,7 +122,7 @@ class Corporate extends CI_Controller {
             $data['form_data'] = $this->_validate();
             if($this->form_validation->run() == TRUE)
             {
-                $this->corporate->save();
+                $this->subsidy->save();
                 echo 1;
                 return false;
                 
@@ -132,7 +132,7 @@ class Corporate extends CI_Controller {
                 $data['form_error'] = validation_errors();  
             }     
         }
-       $this->load->view('corporate/add',$data);       
+       $this->load->view('subsidy/add',$data);       
     }
     
     public function edit($id="")
@@ -140,14 +140,14 @@ class Corporate extends CI_Controller {
      unauthorise_permission('411','2486');
      if(isset($id) && !empty($id) && is_numeric($id))
       {      
-        $result = $this->corporate->get_by_id($id);  
-        $data['page_title'] = "Update Corporate";  
+        $result = $this->subsidy->get_by_id($id);  
+        $data['page_title'] = "Update Subsidy";  
         $post = $this->input->post();
         $data['form_error'] = ''; 
         $data['form_data'] = array(
-                                  'data_id'=>$result['corporate_id'],
-                                  'corporate_name'=>$result['corporate_name'], 
-                                  'corporate_status'=>$result['corporate_status'],
+                                  'data_id'=>$result['subsidy_id'],
+                                  'subsidy_name'=>$result['subsidy_name'], 
+                                  'subsidy_status'=>$result['subsidy_status'],
                                   
                                   );  
         
@@ -156,7 +156,7 @@ class Corporate extends CI_Controller {
             $data['form_data'] = $this->_validate();
             if($this->form_validation->run() == TRUE)
             {
-                $this->corporate->save();
+                $this->subsidy->save();
                 echo 1;
                 return false;
                 
@@ -166,7 +166,7 @@ class Corporate extends CI_Controller {
                 $data['form_error'] = validation_errors();  
             }     
         }
-       $this->load->view('corporate/add',$data);       
+       $this->load->view('subsidy/add',$data);       
       }
     }
      
@@ -174,15 +174,15 @@ class Corporate extends CI_Controller {
     {
         $post = $this->input->post();    
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');  
-        $this->form_validation->set_rules('corporate_name', 'Corporate name', 'trim|required'); 
+        $this->form_validation->set_rules('subsidy_name', 'Subsidy name', 'trim|required'); 
         
         if ($this->form_validation->run() == FALSE) 
         {  
             $reg_no = generate_unique_id(2); 
             $data['form_data'] = array(
                                         // 'data_id'=>$post['data_id'],
-                                        'corporate_name'=>$post['corporate_name'], 
-                                        'corporate_status'=>$post['corporate_status'],
+                                        'subsidy_name'=>$post['subsidy_name'], 
+                                        'subsidy_status'=>$post['subsidy_status'],
                                         
                                        ); 
             return $data['form_data'];
@@ -195,8 +195,8 @@ class Corporate extends CI_Controller {
        if(!empty($id) && $id>0)
        {
            
-           $result = $this->corporate->delete($id);
-           $response = "Corporate successfully deleted.";
+           $result = $this->subsidy->delete($id);
+           $response = "Subsidy successfully deleted.";
            echo $response;
        }
     }
@@ -207,8 +207,8 @@ class Corporate extends CI_Controller {
         $post = $this->input->post();  
         if(!empty($post))
         {
-            $result = $this->corporate->deleteall($post['row_id']);
-            $response = "Corporate successfully deleted.";
+            $result = $this->subsidy->deleteall($post['row_id']);
+            $response = "Subsidy successfully deleted.";
             echo $response;
         }
     }
@@ -217,9 +217,9 @@ class Corporate extends CI_Controller {
     {  
      if(isset($id) && !empty($id) && is_numeric($id))
       {      
-        $data['form_data'] = $this->corporate->get_by_id($id);  
-        $data['page_title'] = $data['form_data']['corporate_name']." detail";
-        $this->load->view('corporate/view',$data);     
+        $data['form_data'] = $this->subsidy->get_by_id($id);  
+        $data['page_title'] = $data['form_data']['subsidy_name']." detail";
+        $this->load->view('subsidy/view',$data);     
       }
     }  
 
@@ -228,31 +228,31 @@ class Corporate extends CI_Controller {
     public function archive()
     {
         unauthorise_permission('411','2489');
-        $data['page_title'] = 'Corporate Archive List';
+        $data['page_title'] = 'Subsidy Archive List';
         $this->load->helper('url');
-        $this->load->view('corporate/archive',$data);
+        $this->load->view('subsidy/archive',$data);
     }
 
     public function archive_ajax_list()
     {
         unauthorise_permission('411','2489');
-        $this->load->model('corporate/Corporate_archive_model','corporate_archive'); 
+        $this->load->model('subsidy/Corporate_archive_model','subsid_archive'); 
         $users_data = $this->session->userdata('auth_users');
         // $branch_id = $this->input->post('branch_id');
           $list='';
         
-               $list = $this->corporate_archive->get_datatables();
+               $list = $this->subsid_archive->get_datatables();
               
              
         $data = array();
         $no = $_POST['start'];
         $i = 1;
         $total_num = count($list);
-        foreach ($list as $corporate) {
+        foreach ($list as $subsidy) {
          // print_r($expense_category);die;
             $no++;
             $row = array();
-            if($corporate->corporate_status==1)
+            if($subsidy->subsidy_status==1)
             {
                 $status = '<font color="green">Active</font>';
             }   
@@ -274,23 +274,23 @@ class Corporate extends CI_Controller {
                               })</script>";
             }                 
             ////////// Check list end ///////////// 
-           if($users_data['parent_id']==$corporate->branch_id){
-               $row[] = '<input type="checkbox" name="employee[]" class="checklist" value="'.$corporate->corporate_id.'">'.$check_script;
+           if($users_data['parent_id']==$subsidy->branch_id){
+               $row[] = '<input type="checkbox" name="employee[]" class="checklist" value="'.$subsidy->subsidy_id.'">'.$check_script;
            }else{
                $row[]='';
            } 
-            $row[] = $corporate->corporate_name;  
+            $row[] = $subsidy->subsidy_name;  
             $row[] = $status;
-            $row[] = date('d-M-Y H:i A',strtotime($corporate->created_date)); 
+            $row[] = date('d-M-Y H:i A',strtotime($subsidy->created_date)); 
             
             $btnrestore='';
             $btndelete='';
-            if($users_data['parent_id']==$corporate->branch_id){
+            if($users_data['parent_id']==$subsidy->branch_id){
                  if(in_array('2491',$users_data['permission']['action'])){
-                    $btnrestore = ' <a onClick="return restore_patient_category('.$corporate->id.');" class="btn-custom" href="javascript:void(0)"  title="Restore"><i class="fa fa-window-restore" aria-hidden="true"></i> Restore </a>';
+                    $btnrestore = ' <a onClick="return restore_patient_category('.$subsidy->id.');" class="btn-custom" href="javascript:void(0)"  title="Restore"><i class="fa fa-window-restore" aria-hidden="true"></i> Restore </a>';
                    }
                    if(in_array('2490',$users_data['permission']['action'])){
-                         $btndelete = ' <a onClick="return trash('.$corporate->id.');" class="btn-custom" href="javascript:void(0)" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>'; 
+                         $btndelete = ' <a onClick="return trash('.$subsidy->id.');" class="btn-custom" href="javascript:void(0)" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>'; 
                     }
                }
                $row[] = $btnrestore.$btndelete;
@@ -302,8 +302,8 @@ class Corporate extends CI_Controller {
 
         $output = array(
                         "draw" => $_POST['draw'],
-                        "recordsTotal" => $this->corporate_archive->count_all(),
-                        "recordsFiltered" => $this->corporate_archive->count_filtered(),
+                        "recordsTotal" => $this->subsid_archive->count_all(),
+                        "recordsFiltered" => $this->subsid_archive->count_filtered(),
                         "data" => $data,
                 );
         //output to json format
@@ -313,11 +313,11 @@ class Corporate extends CI_Controller {
     public function restore($id="")
     {
         unauthorise_permission('411','2491');
-        $this->load->model('corporate/corporate_archive_model','corporate_archive');
+        $this->load->model('subsidy/corporate_archive_model','subsid_archive');
        if(!empty($id) && $id>0)
        {
-           $result = $this->corporate_archive->restore($id);
-           $response = "Corporate successfully restore in Expense Category list.";
+           $result = $this->subsid_archive->restore($id);
+           $response = "Subsidy successfully restore in Expense Category list.";
            echo $response;
        }
     }
@@ -325,12 +325,12 @@ class Corporate extends CI_Controller {
     function restoreall()
     { 
         unauthorise_permission('411','2491');
-        $this->load->model('corporate/corporate_archive_model','corporate_archive');
+        $this->load->model('subsidy/corporate_archive_model','subsid_archive');
         $post = $this->input->post();  
         if(!empty($post))
         {
-            $result = $this->corporate_archive->restoreall($post['row_id']);
-            $response = "Corporate successfully restore in Corporate list.";
+            $result = $this->subsid_archive->restoreall($post['row_id']);
+            $response = "Subsidy successfully restore in Subsidy list.";
             echo $response;
         }
     }
@@ -338,11 +338,11 @@ class Corporate extends CI_Controller {
     public function trash($id="")
     {
         unauthorise_permission('411','2490');
-        $this->load->model('/corporate_archive_model','corporate_archive');
+        $this->load->model('/corporate_archive_model','subsid_archive');
        if(!empty($id) && $id>0)
        {
-           $result = $this->corporate_archive->trash($id);
-           $response = "Corporate successfully deleted parmanently.";
+           $result = $this->subsid_archive->trash($id);
+           $response = "Subsidy successfully deleted parmanently.";
            echo $response;
        }
     }
@@ -350,12 +350,12 @@ class Corporate extends CI_Controller {
     function trashall()
     {
         unauthorise_permission('411','2490');
-        $this->load->model('corporate/corporate_archive_model','corporate_archive');
+        $this->load->model('subsidy/corporate_archive_model','subsid_archive');
         $post = $this->input->post();  
         if(!empty($post))
         {
-            $result = $this->corporate_archive->trashall($post['row_id']);
-            $response = "Corporate successfully deleted parmanently.";
+            $result = $this->subsid_archive->trashall($post['row_id']);
+            $response = "Subsidy successfully deleted parmanently.";
             echo $response;
         }
     }
@@ -363,13 +363,13 @@ class Corporate extends CI_Controller {
 
   public function patient_category_dropdown()
   {
-      $corporate_list = $this->corporate->corporate_list();
-      $dropdown = '<option value="">Select Corporate</option>'; 
+      $corporate_list = $this->subsidy->corporate_list();
+      $dropdown = '<option value="">Select Subsidy</option>'; 
       if(!empty($corporate_list))
       {
-        foreach($corporate_list as $corporate)
+        foreach($corporate_list as $subsidy)
         {
-           $dropdown .= '<option value="'.$corporate->id.'">'.$corporate->patient_category.'</option>';
+           $dropdown .= '<option value="'.$subsidy->id.'">'.$subsidy->patient_category.'</option>';
         }
       } 
       echo $dropdown; 

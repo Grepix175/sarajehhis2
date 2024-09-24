@@ -20,7 +20,21 @@ $user_role = $users_data['users_role'];
   <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>menu_style.css">
   <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>menu_for_all.css">
   <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>withoutresponsive.css">
+  <style>
+    .radio-label {
+      margin-right: 6px;
+      font-size: 12px;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+      font-weight: normal;
+      /* Ensures the font is not bold */
+      display: inline-flex;
+      align-items: center;
+    }
 
+    .radio-label input[type="radio"] {
+      margin-right: 5px;
+    }
+  </style>
   <!-- js -->
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>jquery.min.js"></script>
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap.min.js"></script>
@@ -107,20 +121,27 @@ $user_role = $users_data['users_role'];
                 <div class="col-xs-5"><label>Status</label></div>
                 <div class="col-xs-7">
                   <!-- Pending (Default) -->
+                  <label class="radio-label">
                     <input type="radio" name="search_type" value="1" id="search_type_default"
-                      onclick="return form_submit();" <?php if (!isset($form_data['search_type']) || $form_data['search_type'] == '1') { ?> checked="checked" <?php } ?>>
-                    Pending
+                      onclick="return form_submit();" checked="checked">
+                    <span style="margin-top: 5px;">Pending</span>
+                  </label>
 
                   <!-- Completed -->
+                  <label class="radio-label">
                     <input type="radio" name="search_type" value="2" id="search_type_waiting"
-                      onclick="return form_submit();" <?php if (isset($form_data['search_type']) && $form_data['search_type'] == '2') { ?> checked="checked" <?php } ?>>
-                    Completed
+                      onclick="return form_submit();">
+                    <span style="margin-top: 5px;">Completed</span>
+                  </label>
 
                   <!-- All -->
+                  <label class="radio-label">
                     <input type="radio" name="search_type" value="" id="search_type_process"
-                      onclick="return form_submit();" <?php if (isset($form_data['search_type']) && $form_data['search_type'] == '') { ?> checked="checked" <?php } ?>>
-                    All
+                      onclick="return form_submit();">
+                    <span style="margin-top: 5px;">All</span>
+                  </label>
                 </div>
+
               </div>
             </div> <!-- 4 -->
 
@@ -148,7 +169,8 @@ $user_role = $users_data['users_role'];
             <!-- ///////////////// -->
 
             <div class="col-sm-4">
-              <input value="Reset" class="btn-custom" onclick="clear_form_elements(this.form)" type="button">
+              <input value="Reset" class="btn-custom" onclick="reset_search(this.form)" type="button"
+                style="float: right;">
 
 
 
@@ -176,7 +198,7 @@ $user_role = $users_data['users_role'];
           </div>
         </form>
       </div>
-      <div class="userlist-right" style="margin-top: 72px;">
+      <div class="userlist-right" style="margin-top: 0px;">
         <div class="btns">
           <!-- <button class="btn-update" id="modal_add">
             <i class="fa fa-plus"></i> New
