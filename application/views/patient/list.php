@@ -468,8 +468,6 @@
 
         </form>
 
-
-
         <form>
           <div class="hr-scroll">
             <?php if (in_array('113', $users_data['permission']['action'])): ?>
