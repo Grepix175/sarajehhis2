@@ -21,9 +21,9 @@ class Corporate_model extends CI_Model
 		$sub_branch_details = $this->session->userdata('sub_branches_data');
 		$this->db->select("hms_corporate.*");
 		$this->db->from($this->table);
-		// $this->db->where('hms_corporate.is_deleted', '0');
+		$this->db->where('hms_corporate.is_deleted', '0');
 
-		// $this->db->where('hms_corporate.branch_id', $users_data['parent_id']);
+		$this->db->where('hms_corporate.branch_id', $users_data['parent_id']);
 
 		$i = 0;
 
@@ -83,9 +83,9 @@ class Corporate_model extends CI_Model
 	{
 		$user_data = $this->session->userdata('auth_users');
 		$this->db->select('*');
-		// $this->db->where('branch_id', $user_data['parent_id']);
+		$this->db->where('branch_id', $user_data['parent_id']);
 		$this->db->where('corporate_status', 1);
-		// $this->db->where('is_deleted', 0);
+		$this->db->where('is_deleted', 0);
 		$this->db->order_by('corporate_id', 'ASC');
 		$query = $this->db->get('hms_corporate');
 		return $query->result();
@@ -96,7 +96,7 @@ class Corporate_model extends CI_Model
 		$this->db->select('hms_corporate.*');
 		$this->db->from('hms_corporate');
 		$this->db->where('hms_corporate.corporate_id', $id);
-		// $this->db->where('hms_corporate.is_deleted', '0');
+		$this->db->where('hms_corporate.is_deleted', '0');
 		$query = $this->db->get();
 		return $query->row_array();
 	}
@@ -106,39 +106,35 @@ class Corporate_model extends CI_Model
 		$user_data = $this->session->userdata('auth_users');
 		$post = $this->input->post();
 		$data = array(
-			// 'branch_id' => $user_data['parent_id'],
+			'branch_id' => $user_data['parent_id'],
 			'corporate_name' => $post['corporate_name'],
 			'corporate_status' => $post['corporate_status'],
-
-			// 'ip_address' => $_SERVER['REMOTE_ADDR']
+			'ip_address' => $_SERVER['REMOTE_ADDR']
 		);
 		if (!empty($post['data_id']) && $post['data_id'] > 0) {
-			// $this->db->set('modified_by', $user_data['id']);
-			// $this->db->set('modified_date', date('Y-m-d H:i:s'));
+			$this->db->set('modified_by', $user_data['id']);
+			$this->db->set('modified_date', date('Y-m-d H:i:s'));
 			$this->db->where('corporate_id', $post['data_id']);
 			$this->db->update('hms_corporate', $data);
 		} else {
-			// $this->db->set('created_by', $user_data['id']);
+			$this->db->set('created_by', $user_data['id']);
 			$this->db->set('created_date', date('Y-m-d H:i:s'));
 			$this->db->insert('hms_corporate', $data);
 		}
 	}
 	public function delete($id = "")
 	{
-		if (!empty($id) && $id > 0) {
-			// Permanently delete the record from the database
-			$this->db->where('corporate_id', $id);
-			$this->db->delete('hms_corporate');
-	
-			// Optionally: check if the deletion was successful
-			if($this->db->affected_rows() > 0) {
-				return true; // Record successfully deleted
-			} else {
-				return false; // Failed to delete record
-			}
-		} else {
-			return false; // Invalid ID
-		}
+		if(!empty($id) && $id>0)
+    	{
+
+			$user_data = $this->session->userdata('auth_users');
+			$this->db->set('is_deleted',1);
+			$this->db->set('deleted_by',$user_data['id']);
+			$this->db->set('deleted_date',date('Y-m-d H:i:s'));
+			$this->db->where('corporate_id',$id);
+			$this->db->update('hms_corporate');
+			//echo $this->db->last_query();die;
+    	} 
 	}
 	
 
@@ -154,11 +150,11 @@ class Corporate_model extends CI_Model
 			}
 			$corporate_ids = implode(',', $id_list);
 			$user_data = $this->session->userdata('auth_users');
-			// $this->db->set('is_deleted', 1);
-			// $this->db->set('deleted_by', $user_data['id']);
-			// $this->db->set('deleted_date', date('Y-m-d H:i:s'));
+			$this->db->set('is_deleted', 1);
+			$this->db->set('deleted_by', $user_data['id']);
+			$this->db->set('deleted_date', date('Y-m-d H:i:s'));
 			$this->db->where('corporate_id IN (' . $corporate_ids . ')');
-			$this->db->delete('hms_corporate');
+			$this->db->update('hms_corporate');
 			//echo $this->db->last_query();die;
 		}
 	}

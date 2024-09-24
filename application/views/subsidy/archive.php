@@ -40,7 +40,7 @@ $(document).ready(function() {
         "serverSide": true, 
         "order": [], 
         "ajax": {
-            "url": "<?php echo base_url('corporate/archive_ajax_list')?>",
+            "url": "<?php echo base_url('subsidy/archive_ajax_list')?>",
             "type": "POST",
              "data":function(d){
                d.branch_id =  $("#sub_branch_id :selected").val();
@@ -63,7 +63,7 @@ $(document).ready(function() {
 $(document).ready(function(){
 var $modal = $('#load_add_modal_popup');
 $('#modal_add').on('click', function(){
-$modal.load('<?php echo base_url().'corporate/add/' ?>',
+$modal.load('<?php echo base_url().'subsidy/add/' ?>',
 {
   //'id1': '1',
   //'id2': '2'
@@ -81,7 +81,7 @@ $modal.modal('show');
 function view_employee(id)
 {
   var $modal = $('#load_add_modal_popup');
-  $modal.load('<?php echo base_url().'corporate/view/' ?>'+id,
+  $modal.load('<?php echo base_url().'subsidy/view/' ?>'+id,
   {
     //'id1': '1',
     //'id2': '2'
@@ -128,7 +128,7 @@ function allbranch_delete(allVals)
         { 
             $.ajax({
                       type: "POST",
-                      url: "<?php echo base_url('patient_category/restoreall');?>",
+                      url: "<?php echo base_url('subsidy/restoreall');?>",
                       data: {row_id: allVals},
                       success: function(result) 
                       {
@@ -220,7 +220,7 @@ function allbranch_delete(allVals)
                     <i class="fa fa-refresh"></i> Reload
                </button>
           <?php } ?> 
-        <button class="btn-update" onclick="window.location.href='<?php echo base_url('corporate'); ?>'">
+        <button class="btn-update" onclick="window.location.href='<?php echo base_url('subsidy'); ?>'">
           <i class="fa fa-sign-out"></i> Exit
         </button>
   		</div>
@@ -249,7 +249,7 @@ $this->load->view('include/footer');
     .one('click', '#delete', function(e)
     { 
         $.ajax({
-                 url: "<?php echo base_url('patient_category/restore/'); ?>"+employee_type_id, 
+                 url: "<?php echo base_url('subsidy/restore/'); ?>"+employee_type_id, 
                  success: function(result)
                  {
                     flash_session_msg(result);
@@ -283,7 +283,7 @@ $this->load->view('include/footer');
     .one('click', '#delete', function(e)
     { 
         $.ajax({
-                 url: "<?php echo base_url('patient_category/trash/'); ?>"+patient_category_id, 
+                 url: "<?php echo base_url('subsidy/trash/'); ?>"+patient_category_id, 
                  success: function(result)
                  {
                     flash_session_msg(result);
@@ -305,7 +305,7 @@ $this->load->view('include/footer');
         { 
             $.ajax({
                       type: "POST",
-                      url: "<?php echo base_url('patient_category/trashall');?>",
+                      url: "<?php echo base_url('subsidy/trashall');?>",
                       data: {row_id: allVals},
                       success: function(result) 
                       {

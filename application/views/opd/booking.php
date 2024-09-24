@@ -1999,7 +1999,7 @@ $field_list = mandatory_section_field_list(3);
         });
         function toggleSections() {
           var selectedCategory = $('#patient_category option:selected').text().trim().toLowerCase();
-
+          
           if (selectedCategory === 'corporate') {
             $('#corporate_box').slideDown();
             $('#subsidy_box').slideUp();
@@ -3081,44 +3081,44 @@ $field_list = mandatory_section_field_list(3);
           $('#ins_authorization_no').removeAttr("readonly", "readonly");
         }
       }
-      function set_tpa1(val) {
-        console.log(val, '==========');
-        if (val == 'Corporate') {
-          $('#corporate_box').slideDown(); // Show corporate
-          $('#subsidy_box').slideUp();
-          $('#panel_box').slideUp();     // Hide subsidy
-        } else if (val == 'Subsidy') {
-          $('#corporate_box').slideUp();
-          $('#panel_box').slideUp();   // Hide corporate
-          $('#subsidy_box').slideDown();   // Show subsidy
-        } else {
-          if (val == 0) {
-            $('#panel_box').slideUp();
-            $('#insurance_type_id').attr("disabled", true);
-            $('#insurance_type_id').val('');
-            $('#ins_company_id').attr("disabled", true);
-            $('#ins_company_id').val('');
-            $('#polocy_no').attr("readonly", "readonly");
-            $('#polocy_no').val('');
-            $('#tpa_id').attr("readonly", "readonly");
-            $('#tpa_id').val('');
-            $('#ins_amount').attr("readonly", "readonly");
-            $('#ins_amount').val('');
-            $('#ins_authorization_no').attr("readonly", "readonly");
-            $('#ins_authorization_no').val('');
+      // function set_tpa1(val) {
+      //   // console.log(val, '==========');
+      //   if (val == 'Corporate') {
+      //     $('#corporate_box').slideDown(); // Show corporate
+      //     $('#subsidy_box').slideUp();
+      //     $('#panel_box').slideUp();     // Hide subsidy
+      //   } else if (val == 'Subsidy') {
+      //     $('#corporate_box').slideUp();
+      //     $('#panel_box').slideUp();   // Hide corporate
+      //     $('#subsidy_box').slideDown();   // Show subsidy
+      //   } else {
+      //     if (val == 0) {
+      //       $('#panel_box').slideUp();
+      //       $('#insurance_type_id').attr("disabled", true);
+      //       $('#insurance_type_id').val('');
+      //       $('#ins_company_id').attr("disabled", true);
+      //       $('#ins_company_id').val('');
+      //       $('#polocy_no').attr("readonly", "readonly");
+      //       $('#polocy_no').val('');
+      //       $('#tpa_id').attr("readonly", "readonly");
+      //       $('#tpa_id').val('');
+      //       $('#ins_amount').attr("readonly", "readonly");
+      //       $('#ins_amount').val('');
+      //       $('#ins_authorization_no').attr("readonly", "readonly");
+      //       $('#ins_authorization_no').val('');
 
-          }
-          else {
-            $('#panel_box').slideDown();
-            $('#insurance_type_id').attr("disabled", false);
-            $('#ins_company_id').attr("disabled", false);
-            $('#polocy_no').removeAttr("readonly", "readonly");
-            $('#tpa_id').removeAttr("readonly", "readonly");
-            $('#ins_amount').removeAttr("readonly", "readonly");
-            $('#ins_authorization_no').removeAttr("readonly", "readonly");
-          }
-        }
-      }
+      //     }
+      //     else {
+      //       // $('#panel_box').slideDown();
+      //       $('#insurance_type_id').attr("disabled", false);
+      //       $('#ins_company_id').attr("disabled", false);
+      //       $('#polocy_no').removeAttr("readonly", "readonly");
+      //       $('#tpa_id').removeAttr("readonly", "readonly");
+      //       $('#ins_amount').removeAttr("readonly", "readonly");
+      //       $('#ins_authorization_no').removeAttr("readonly", "readonly");
+      //     }
+      //   }
+      // }
 
 
       $(document).ready(function () {

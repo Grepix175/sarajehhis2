@@ -69,7 +69,8 @@ $field_list = mandatory_section_field_list(2);
 </style>
 <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datetimepicker.css">
 <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datetimepicker.js"></script>
-<body onLoad="set_tpa(<?php echo $form_data['insurance_type']; ?>); set_married(<?php echo $form_data['marital_status']; ?>);"> 
+<!-- <body onLoad="set_tpa(<?php echo $form_data['insurance_type']; ?>); set_married(<?php echo $form_data['marital_status']; ?>);">  -->
+<body > 
 <div class="container-fluid">
  <?php
   $this->load->view('include/header');
@@ -337,15 +338,6 @@ $field_list = mandatory_section_field_list(2);
              ?>
         </div>
       </div>
-
-      
-
-      
-
-
-      
-
-      
 
      <div class="grp">
         <label>Village/Town</label>

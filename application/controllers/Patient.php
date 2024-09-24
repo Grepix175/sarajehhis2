@@ -1351,11 +1351,13 @@ class Patient extends CI_Controller {
             {
                 $username = $post['username'];
             }
-
+            $this->load->model('token_no/Tokenno_model');
+            $tokenno=$this->Tokenno_model->get_token();
             $data['form_data'] = array(
                                 "data_id"=>$post['data_id'], 
                                 "patient_code"=>$reg_no, 
                                 "patient_name"=>$post['patient_name'],
+                                "patient_category"=>$post['patient_category'],
                                 "simulation_id"=>$post['simulation_id'],
                                 "mobile_no"=>$post['mobile_no'],
                                 "gender"=>$post['gender'],
@@ -1367,10 +1369,11 @@ class Patient extends CI_Controller {
                                 "address_second"=>$post['address_second'],
                                 // "address_third"=>$post['address_third'],
                                 "adhar_no"=>$post['adhar_no'],
-                                "city_id"=>$post['city_id'],
+                                // "city_id"=>$post['city_id'],
                                 "state_id"=>$post['state_id'],
-                                "country_id"=>$post['country_id'],
+                                // "country_id"=>$post['country_id'],
                                 "pincode"=>$post['pincode'],
+                                "patient_code_auto"=>$tokenno,
                                 // "marital_status"=>$post['marital_status'],
                                 // "religion_id"=>$post['religion_id'],
                                 //"father_husband"=>$post['father_husband'],
