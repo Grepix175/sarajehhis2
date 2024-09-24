@@ -39,11 +39,13 @@ $users_data = $this->session->userdata('auth_users');
           "processing": true,
           "serverSide": true,
           "order": [],
-          "pageLength": '20',
           "ajax": {
-            "url": "<?php echo base_url('subsidy/ajax_list') ?>",
+            "url": "<?php echo base_url('department_master/archive_ajax_list') ?>",
             "type": "POST",
-
+            "data": function (d) {
+              d.branch_id = $("#sub_branch_id :selected").val();
+              return d;
+            }
           },
           "columnDefs": [
             {
@@ -59,9 +61,9 @@ $users_data = $this->session->userdata('auth_users');
 
 
     $(document).ready(function () {
-      var $modal = $('#load_add_subsidy_popup');
+      var $modal = $('#load_add_modal_popup');
       $('#modal_add').on('click', function () {
-        $modal.load('<?php echo base_url() . 'subsidy/add/' ?>',
+        $modal.load('<?php echo base_url() . 'department_master/add/' ?>',
           {
             //'id1': '1',
             //'id2': '2'
@@ -74,21 +76,11 @@ $users_data = $this->session->userdata('auth_users');
 
     });
 
-    function edit_subsidy(id) {
-      var $modal = $('#load_add_subsidy_popup');
-      $modal.load('<?php echo base_url() . 'subsidy/edit/' ?>' + id,
-        {
-          //'id1': '1',
-          //'id2': '2'
-        },
-        function () {
-          $modal.modal('show');
-        });
-    }
 
-    function view_patient_category(id) {
-      var $modal = $('#load_add_subsidy_popup');
-      $modal.load('<?php echo base_url() . 'subsidy/view/' ?>' + id,
+
+    function view_employee(id) {
+      var $modal = $('#load_add_modal_popup');
+      $modal.load('<?php echo base_url() . 'department_master/view/' ?>' + id,
         {
           //'id1': '1',
           //'id2': '2'
@@ -102,13 +94,16 @@ $users_data = $this->session->userdata('auth_users');
       table.ajax.reload(null, false); //reload datatable ajax 
     }
 
-
+    function flash_session_msg(val) {
+      $('#flash_msg_text').html(val);
+      $('#flash_session').slideDown('slow').delay(1500).slideUp('slow');
+    }
 
     function checkboxValues() {
       $('#table').dataTable();
       var allVals = [];
       $(':checkbox').each(function () {
-        if ($(this).prop('checked') == true) {
+        if ($(this).prop('checked') == true && !isNaN($(this).val())) {
           allVals.push($(this).val());
         }
       });
@@ -124,7 +119,7 @@ $users_data = $this->session->userdata('auth_users');
           .one('click', '#delete', function (e) {
             $.ajax({
               type: "POST",
-              url: "<?php echo base_url('subsidy/deleteall'); ?>",
+              url: "<?php echo base_url('department_master/restoreall'); ?>",
               data: { row_id: allVals },
               success: function (result) {
                 flash_session_msg(result);
@@ -142,10 +137,16 @@ $users_data = $this->session->userdata('auth_users');
     }
   </script>
 
+
+
+
 </head>
 
 <body>
-
+  <div id="flash_msg" class="booked_session_flash" style="display: none;">
+    <i class="fa fa-check-circle"></i>
+    <span id="flash_msg_text"></span>
+  </div>
 
   <div class="container-fluid">
     <?php
@@ -155,28 +156,24 @@ $users_data = $this->session->userdata('auth_users');
     <!-- ============================= Main content start here ===================================== -->
     <section class="userlist">
       <div class="userlist-box">
-
-        <div class="row m-b-5">
-          <div class="col-xs-12">
-            <div class="row">
-              <div class="col-xs-6">
-
-              </div>
-              <div class="col-xs-6"></div>
-            </div>
+        <div class="col-md-12">
+          <div class="col-md-12 text-center" style="font-size:12px;">
+            *Data that have been in Archive more than 60 days will be automatically deleted.
           </div>
+          <div class="col-md-3"></div>
         </div>
+
+        <div id="child_branch" class="patient_sub_branch"></div>
         <form>
           <?php if (in_array('2485', $users_data['permission']['action'])) {
             ?>
             <!-- bootstrap data table -->
-            <table id="table" class="table table-striped table-bordered patient_category_list" cellspacing="0"
-              width="100%">
+            <table id="table" class="table table-striped table-bordered corporate_archive" cellspacing="0" width="100%">
               <thead class="bg-theme">
                 <tr>
                   <th width="40" align="center"> <input type="checkbox" name="selectall" class="" id="selectAll" value="">
                   </th>
-                  <th> Subsidy Name </th>
+                  <th> Department Name </th>
                   <th> Status </th>
                   <th> Created Date </th>
                   <th> Action </th>
@@ -184,36 +181,37 @@ $users_data = $this->session->userdata('auth_users');
               </thead>
             </table>
           <?php } ?>
+
         </form>
+
+
       </div> <!-- close -->
+
+
+
+
+
       <div class="userlist-right">
         <div class="btns">
-          <?php if (in_array('2486', $users_data['permission']['action'])) {
-            ?>
-            <button class="btn-update" id="modal_add">
-              <i class="fa fa-plus"></i> New
-            </button>
-          <?php } ?>
-          <?php if (in_array('2488', $users_data['permission']['action'])) {
+          <?php if (in_array('2491', $users_data['permission']['action'])) {
             ?>
             <button class="btn-update" id="deleteAll" onclick="return checkboxValues();">
+              <i class="fa fa-window-restore" aria-hidden="true"></i> Restore
+            </button>
+          <?php } ?>
+          <?php if (in_array('2490', $users_data['permission']['action'])) {
+            ?>
+            <button class="btn-update" id="deleteAll" onclick="return checkboxValuestrash();">
               <i class="fa fa-trash"></i> Delete
             </button>
           <?php } ?>
-          <?php if (in_array('2486', $users_data['permission']['action'])) {
+          <?php if (in_array('2490', $users_data['permission']['action'])) {
             ?>
             <button class="btn-update" onclick="reload_table()">
               <i class="fa fa-refresh"></i> Reload
             </button>
           <?php } ?>
-          <?php if (in_array('2489', $users_data['permission']['action'])) {
-            ?>
-            <button class="btn-update"
-              onclick="window.location.href='<?php echo base_url('subsidy/archive'); ?>'">
-              <i class="fa fa-archive"></i> Archive
-            </button>
-          <?php } ?>
-          <button class="btn-update" onclick="window.location.href='<?php echo base_url(); ?>'">
+          <button class="btn-update" onclick="window.location.href='<?php echo base_url('department_master'); ?>'">
             <i class="fa fa-sign-out"></i> Exit
           </button>
         </div>
@@ -222,21 +220,25 @@ $users_data = $this->session->userdata('auth_users');
 
       <!-- cbranch-rslt close -->
 
+
+
+
+
     </section> <!-- cbranch -->
     <?php
     $this->load->view('include/footer');
     ?>
-
     <script>
 
-      function delete_subsidy(rate_id) {
+      function restore_patient_category(employee_type_id) {
+
         $('#confirm').modal({
           backdrop: 'static',
           keyboard: false
         })
           .one('click', '#delete', function (e) {
             $.ajax({
-              url: "<?php echo base_url('subsidy/delete/'); ?>" + rate_id,
+              url: "<?php echo base_url('department_master/restore/'); ?>" + employee_type_id,
               success: function (result) {
                 flash_session_msg(result);
                 reload_table();
@@ -244,13 +246,61 @@ $users_data = $this->session->userdata('auth_users');
             });
           });
       }
-      $(document).ready(function () {
-        $('#load_add_subsidy_popup').on('shown.bs.modal', function (e) {
-          $('.inputFocus').focus();
+
+
+      function checkboxValuestrash() {
+        $('#table').dataTable();
+        var allVals = [];
+        $(':checkbox').each(function () {
+          if ($(this).prop('checked') == true) {
+            allVals.push($(this).val());
+          }
+        });
+        trashall(allVals);
+      }
+
+      function trash(patient_category_id) {
+        $('#confirm').modal({
+          backdrop: 'static',
+          keyboard: false,
         })
-      });  
+          .one('click', '#delete', function (e) {
+            $.ajax({
+              url: "<?php echo base_url('department_master/trash/'); ?>" + patient_category_id,
+              success: function (result) {
+                flash_session_msg(result);
+                reload_table();
+              }
+            });
+          });
+      }
+
+      function trashall(allVals) {
+        if (allVals != "") {
+          $('#confirm').modal({
+            backdrop: 'static',
+            keyboard: false
+          })
+            .one('click', '#delete', function (e) {
+              $.ajax({
+                type: "POST",
+                url: "<?php echo base_url('department_master/trashall'); ?>",
+                data: { row_id: allVals },
+                success: function (result) {
+                  flash_session_msg(result);
+                  reload_table();
+                }
+              });
+            });
+        }
+        else {
+          $('#confirm-select').modal({
+            backdrop: 'static',
+            keyboard: false
+          });
+        }
+      }
     </script>
-    <!-- Confirmation Box -->
 
     <div id="confirm-select" class="modal fade dlt-modal">
       <div class="modal-dialog">
@@ -266,26 +316,23 @@ $users_data = $this->session->userdata('auth_users');
       </div>
     </div> <!-- modal -->
 
-
+    <!-- Confirmation Box -->
     <div id="confirm" class="modal fade dlt-modal">
-      <div class="modal-dialog">
+      <div class="modal-dialog delete-modal">
         <div class="modal-content">
           <div class="modal-header bg-theme">
-            <h4>Are You Sure?</h4>
+            <h4>Are you sure?</h4>
           </div>
-          <div class="modal-body" style="font-size:8px;">*Data that have been in Archive more than 60 days will be
-            automatically deleted.</div>
+          <!-- <div class="modal-body"></div> -->
           <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn-update" id="delete">Confirm</button>
-            <button type="button" data-dismiss="modal" class="btn-cancel">Cancel</button>
+            <button type="button" data-dismiss="modal" class="btn-cancel">Close</button>
           </div>
         </div>
       </div>
-    </div> <!-- modal -->
-
+    </div>
     <!-- Confirmation Box end -->
-    <div id="load_add_subsidy_popup" class="modal fade" role="dialog" data-backdrop="static"
-      data-keyboard="false"></div>
+    <div id="load_add_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
   </div><!-- container-fluid -->
 </body>
 

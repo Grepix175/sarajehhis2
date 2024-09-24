@@ -1,11 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Corporate_archive_model extends CI_Model {
+class Department_master_archive_model extends CI_Model {
 
-	var $table = 'hms_corporate';
-	var $column = array('hms_corporate.corporate_id', 'hms_corporate.corporate_name', 'hms_corporate.corporate_status', 'hms_corporate.created_date');
-	var $order = array('corporate_id' => 'desc');
+	var $table = 'hms_department_master';
+	var $column = array('hms_department_master.department_id', 'hms_department_master.department_name', 'hms_department_master.department_status', 'hms_department_master.created_date');
+	var $order = array('department_id' => 'desc');
 
 	public function __construct()
 	{
@@ -16,11 +16,11 @@ class Corporate_archive_model extends CI_Model {
 	private function _get_datatables_query()
 	{
 		$users_data = $this->session->userdata("auth_users");
-		$this->db->select("hms_corporate.*"); 
+		$this->db->select("hms_department_master.*"); 
 		$this->db->from($this->table);
-        $this->db->where('hms_corporate.is_deleted','1');
+        $this->db->where('hms_department_master.is_deleted','1');
         
-		 $this->db->where('hms_corporate.branch_id = "'.$users_data['parent_id'].'"');
+		 $this->db->where('hms_department_master.branch_id = "'.$users_data['parent_id'].'"');
 	
 		$i = 0;
 	
@@ -82,14 +82,15 @@ class Corporate_archive_model extends CI_Model {
 
 	public function restore($id="")
     {
+		
     	if(!empty($id) && $id>0)
     	{
 			$user_data = $this->session->userdata('auth_users');
 			$this->db->set('is_deleted',0);
 			$this->db->set('deleted_by',$user_data['id']);
 			$this->db->set('deleted_date',date('Y-m-d H:i:s'));
-			$this->db->where('corporate_id',$id);
-			$this->db->update('hms_corporate');
+			$this->db->where('department_id',$id);
+			$this->db->update('hms_department_master');
     	} 
     }
 
@@ -110,8 +111,8 @@ class Corporate_archive_model extends CI_Model {
 			$this->db->set('is_deleted',0);
 			$this->db->set('deleted_by',$user_data['id']);
 			$this->db->set('deleted_date',date('Y-m-d H:i:s'));
-			$this->db->where('corporate_id IN ('.$emp_ids.')');
-			$this->db->update('hms_corporate');
+			$this->db->where('department_id IN ('.$emp_ids.')');
+			$this->db->update('hms_department_master');
     	} 
     }
 
@@ -120,7 +121,7 @@ class Corporate_archive_model extends CI_Model {
    //  	if(!empty($id) && $id>0)
    //  	{  
 			// $this->db->where('id',$id);
-			// $this->db->delete('hms_corporate');
+			// $this->db->delete('hms_department_master');
    //  	} 
     	if(!empty($id) && $id>0)
     	{
@@ -129,8 +130,8 @@ class Corporate_archive_model extends CI_Model {
 			$this->db->set('is_deleted',2);
 			$this->db->set('deleted_by',$user_data['id']);
 			$this->db->set('deleted_date',date('Y-m-d H:i:s'));
-			$this->db->where('corporate_id',$id);
-			$this->db->update('hms_corporate');
+			$this->db->where('department_id',$id);
+			$this->db->update('hms_department_master');
 			//echo $this->db->last_query();die;
     	} 
     }
@@ -149,7 +150,7 @@ class Corporate_archive_model extends CI_Model {
    //  		}
    //  		$branch_ids = implode(',', $id_list); 
 			// $this->db->where('id IN ('.$branch_ids.')');
-			// $this->db->delete('hms_corporate');
+			// $this->db->delete('hms_department_master');
    //  	} 
     	if(!empty($ids))
     	{
@@ -166,8 +167,8 @@ class Corporate_archive_model extends CI_Model {
 			$this->db->set('is_deleted',2);
 			$this->db->set('deleted_by',$user_data['id']);
 			$this->db->set('deleted_date',date('Y-m-d H:i:s'));
-			$this->db->where('corporate_id IN ('.$branch_ids.')');
-			$this->db->update('hms_corporate');
+			$this->db->where('department_id IN ('.$branch_ids.')');
+			$this->db->update('hms_department_master');
     	} 
     }
  

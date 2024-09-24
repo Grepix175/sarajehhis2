@@ -208,10 +208,10 @@ $users_data = $this->session->userdata('auth_users');
           <?php } ?>
           <?php if (in_array('2489', $users_data['permission']['action'])) {
             ?>
-            <!-- <button class="btn-update"
-              onclick="window.location.href='<?php //echo base_url('corporate/archive'); ?>'">
+            <button class="btn-update"
+              onclick="window.location.href='<?php echo base_url('corporate/archive'); ?>'">
               <i class="fa fa-archive"></i> Archive
-            </button> -->
+            </button>
           <?php } ?>
           <button class="btn-update" onclick="window.location.href='<?php echo base_url(); ?>'">
             <i class="fa fa-sign-out"></i> Exit

@@ -41,7 +41,7 @@ $users_data = $this->session->userdata('auth_users');
           "order": [],
           "pageLength": '20',
           "ajax": {
-            "url": "<?php echo base_url('subsidy/ajax_list') ?>",
+            "url": "<?php echo base_url('department_master/ajax_list') ?>",
             "type": "POST",
 
           },
@@ -59,9 +59,9 @@ $users_data = $this->session->userdata('auth_users');
 
 
     $(document).ready(function () {
-      var $modal = $('#load_add_subsidy_popup');
+      var $modal = $('#load_add_department_master_popup');
       $('#modal_add').on('click', function () {
-        $modal.load('<?php echo base_url() . 'subsidy/add/' ?>',
+        $modal.load('<?php echo base_url() . 'department_master/add/' ?>',
           {
             //'id1': '1',
             //'id2': '2'
@@ -75,8 +75,8 @@ $users_data = $this->session->userdata('auth_users');
     });
 
     function edit_subsidy(id) {
-      var $modal = $('#load_add_subsidy_popup');
-      $modal.load('<?php echo base_url() . 'subsidy/edit/' ?>' + id,
+      var $modal = $('#load_add_department_master_popup');
+      $modal.load('<?php echo base_url() . 'department_master/edit/' ?>' + id,
         {
           //'id1': '1',
           //'id2': '2'
@@ -87,8 +87,8 @@ $users_data = $this->session->userdata('auth_users');
     }
 
     function view_patient_category(id) {
-      var $modal = $('#load_add_subsidy_popup');
-      $modal.load('<?php echo base_url() . 'subsidy/view/' ?>' + id,
+      var $modal = $('#load_add_department_master_popup');
+      $modal.load('<?php echo base_url() . 'department_master/view/' ?>' + id,
         {
           //'id1': '1',
           //'id2': '2'
@@ -124,7 +124,7 @@ $users_data = $this->session->userdata('auth_users');
           .one('click', '#delete', function (e) {
             $.ajax({
               type: "POST",
-              url: "<?php echo base_url('subsidy/deleteall'); ?>",
+              url: "<?php echo base_url('department_master/deleteall'); ?>",
               data: { row_id: allVals },
               success: function (result) {
                 flash_session_msg(result);
@@ -176,7 +176,7 @@ $users_data = $this->session->userdata('auth_users');
                 <tr>
                   <th width="40" align="center"> <input type="checkbox" name="selectall" class="" id="selectAll" value="">
                   </th>
-                  <th> Subsidy Name </th>
+                  <th> Department Name </th>
                   <th> Status </th>
                   <th> Created Date </th>
                   <th> Action </th>
@@ -209,7 +209,7 @@ $users_data = $this->session->userdata('auth_users');
           <?php if (in_array('2489', $users_data['permission']['action'])) {
             ?>
             <button class="btn-update"
-              onclick="window.location.href='<?php echo base_url('subsidy/archive'); ?>'">
+              onclick="window.location.href='<?php echo base_url('department_master/archive'); ?>'">
               <i class="fa fa-archive"></i> Archive
             </button>
           <?php } ?>
@@ -236,7 +236,7 @@ $users_data = $this->session->userdata('auth_users');
         })
           .one('click', '#delete', function (e) {
             $.ajax({
-              url: "<?php echo base_url('subsidy/delete/'); ?>" + rate_id,
+              url: "<?php echo base_url('department_master/delete/'); ?>" + rate_id,
               success: function (result) {
                 flash_session_msg(result);
                 reload_table();
@@ -245,7 +245,7 @@ $users_data = $this->session->userdata('auth_users');
           });
       }
       $(document).ready(function () {
-        $('#load_add_subsidy_popup').on('shown.bs.modal', function (e) {
+        $('#load_add_department_master_popup').on('shown.bs.modal', function (e) {
           $('.inputFocus').focus();
         })
       });  
@@ -284,7 +284,7 @@ $users_data = $this->session->userdata('auth_users');
     </div> <!-- modal -->
 
     <!-- Confirmation Box end -->
-    <div id="load_add_subsidy_popup" class="modal fade" role="dialog" data-backdrop="static"
+    <div id="load_add_department_master_popup" class="modal fade" role="dialog" data-backdrop="static"
       data-keyboard="false"></div>
   </div><!-- container-fluid -->
 </body>
