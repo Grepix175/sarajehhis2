@@ -1,12 +1,12 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Corporate_model extends CI_Model
+class Subsidy_model extends CI_Model
 {
 
-	var $table = 'hms_corporate';
-	var $column = array('hms_corporate.corporate_id', 'hms_corporate.corporate_name', 'hms_corporate.corporate_status', 'hms_corporate.created_date');
-	var $order = array('corporate_id' => 'desc');
+	var $table = 'hms_subsidy';
+	var $column = array('hms_subsidy.subsidy_id', 'hms_subsidy.subsidy_name', 'hms_subsidy.subsidy_status', 'hms_subsidy.created_date');
+	var $order = array('subsidy_id' => 'desc');
 
 	public function __construct()
 	{
@@ -19,11 +19,11 @@ class Corporate_model extends CI_Model
 		$users_data = $this->session->userdata('auth_users');
 		$parent_branch_details = $this->session->userdata('parent_branches_data');
 		$sub_branch_details = $this->session->userdata('sub_branches_data');
-		$this->db->select("hms_corporate.*");
+		$this->db->select("hms_subsidy.*");
 		$this->db->from($this->table);
-		// $this->db->where('hms_corporate.is_deleted', '0');
+		// $this->db->where('hms_subsidy.is_deleted', '0');
 
-		// $this->db->where('hms_corporate.branch_id', $users_data['parent_id']);
+		// $this->db->where('hms_subsidy.branch_id', $users_data['parent_id']);
 
 		$i = 0;
 
@@ -84,19 +84,19 @@ class Corporate_model extends CI_Model
 		$user_data = $this->session->userdata('auth_users');
 		$this->db->select('*');
 		// $this->db->where('branch_id', $user_data['parent_id']);
-		$this->db->where('corporate_status', 1);
+		$this->db->where('subsidy_status', 1);
 		// $this->db->where('is_deleted', 0);
-		$this->db->order_by('corporate_id', 'ASC');
-		$query = $this->db->get('hms_corporate');
+		$this->db->order_by('subsidy_id', 'ASC');
+		$query = $this->db->get('hms_subsidy');
 		return $query->result();
 	}
 
 	public function get_by_id($id)
 	{
-		$this->db->select('hms_corporate.*');
-		$this->db->from('hms_corporate');
-		$this->db->where('hms_corporate.corporate_id', $id);
-		// $this->db->where('hms_corporate.is_deleted', '0');
+		$this->db->select('hms_subsidy.*');
+		$this->db->from('hms_subsidy');
+		$this->db->where('hms_subsidy.subsidy_id', $id);
+		// $this->db->where('hms_subsidy.is_deleted', '0');
 		$query = $this->db->get();
 		return $query->row_array();
 	}
@@ -107,28 +107,28 @@ class Corporate_model extends CI_Model
 		$post = $this->input->post();
 		$data = array(
 			// 'branch_id' => $user_data['parent_id'],
-			'corporate_name' => $post['corporate_name'],
-			'corporate_status' => $post['corporate_status'],
+			'subsidy_name' => $post['subsidy_name'],
+			'subsidy_status' => $post['subsidy_status'],
 
 			// 'ip_address' => $_SERVER['REMOTE_ADDR']
 		);
 		if (!empty($post['data_id']) && $post['data_id'] > 0) {
 			// $this->db->set('modified_by', $user_data['id']);
 			// $this->db->set('modified_date', date('Y-m-d H:i:s'));
-			$this->db->where('corporate_id', $post['data_id']);
-			$this->db->update('hms_corporate', $data);
+			$this->db->where('subsidy_id', $post['data_id']);
+			$this->db->update('hms_subsidy', $data);
 		} else {
 			// $this->db->set('created_by', $user_data['id']);
 			$this->db->set('created_date', date('Y-m-d H:i:s'));
-			$this->db->insert('hms_corporate', $data);
+			$this->db->insert('hms_subsidy', $data);
 		}
 	}
 	public function delete($id = "")
 	{
 		if (!empty($id) && $id > 0) {
 			// Permanently delete the record from the database
-			$this->db->where('corporate_id', $id);
-			$this->db->delete('hms_corporate');
+			$this->db->where('subsidy_id', $id);
+			$this->db->delete('hms_subsidy');
 	
 			// Optionally: check if the deletion was successful
 			if($this->db->affected_rows() > 0) {
@@ -152,13 +152,13 @@ class Corporate_model extends CI_Model
 					$id_list[] = $id;
 				}
 			}
-			$corporate_ids = implode(',', $id_list);
+			$subsidy_ids = implode(',', $id_list);
 			$user_data = $this->session->userdata('auth_users');
 			// $this->db->set('is_deleted', 1);
 			// $this->db->set('deleted_by', $user_data['id']);
 			// $this->db->set('deleted_date', date('Y-m-d H:i:s'));
-			$this->db->where('corporate_id IN (' . $corporate_ids . ')');
-			$this->db->delete('hms_corporate');
+			$this->db->where('subsidy_id IN (' . $subsidy_ids . ')');
+			$this->db->delete('hms_subsidy');
 			//echo $this->db->last_query();die;
 		}
 	}

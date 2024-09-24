@@ -30,7 +30,7 @@ class Appointment extends CI_Controller {
             $end_date = date('d-m-Y');
         }
         // End Defaul Search
-        $data['form_data'] = array('patient_name'=>'','mobile_no'=>'','appointment_code'=>'','mobile_no'=>'','appointment_from_date'=>$start_date, 'appointment_end_date'=>$end_date,'app_status'=>1);
+        $data['form_data'] = array('patient_name'=>'','mobile_no'=>'','appointment_code'=>'','mobile_no'=>'','appointment_from_date'=>$start_date, 'appointment_end_date'=>$end_date,'app_status'=>1,'running' =>'');
         $this->session->set_userdata('appointment_search', $data['form_data']);
         $data['page_title'] = 'Appointment List'; 
         $this->load->view('appointment/list',$data);
