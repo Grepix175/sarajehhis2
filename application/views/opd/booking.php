@@ -72,7 +72,7 @@ $field_list = mandatory_section_field_list(3);
 </head>
 
 <body
-  onLoad="set_tpa1('<?php echo $form_data['patient_category_name']; ?>'),set_tpa(<?php echo $form_data['pannel_type'] ?>) <?php if (empty($form_data['data_id']) && !empty($form_data['specialization_id']) && !empty($form_data['attended_doctor'])) { ?> ,set_default_doct(<?php echo $form_data['specialization_id']; ?>, <?php echo $form_data['attended_doctor']; ?>) <?php } ?>">
+  onLoad="set_tpa(<?php echo $form_data['pannel_type'] ?>) <?php if (empty($form_data['data_id']) && !empty($form_data['specialization_id']) && !empty($form_data['attended_doctor'])) { ?> ,set_default_doct(<?php echo $form_data['specialization_id']; ?>, <?php echo $form_data['attended_doctor']; ?>) <?php } ?>">
 
 
   <div class="container-fluid">
@@ -96,16 +96,16 @@ $field_list = mandatory_section_field_list(3);
 
 
 
-            <div class="row">
+            <!-- <div class="row">
               <div class="col-md-12">
                 <div class="grp">
-                  <!-- <span class="new_patient"><input type="radio" name="new_patient" <?php //if(empty($form_data['patient_id'])) { ?> checked <?php //} ?> > <label>New Patient</label></span> -->
+                  <span class="new_patient"><input type="radio" name="new_patient" <?php //if(empty($form_data['patient_id'])) { ?> checked <?php //} ?> > <label>New Patient</label></span>
                   <span class="new_patient"><input type="radio" name="new_patient"
                       onClick="window.location='<?php echo base_url('patient'); ?>';" <?php if (!empty($form_data['patient_id'])) { ?> checked <?php } ?>> <label>Registered
                       Patient</label></span>
                 </div>
               </div>
-            </div> <!-- endRow -->
+            </div> endRow -->
 
 
 
@@ -166,7 +166,7 @@ $field_list = mandatory_section_field_list(3);
             // print_r($form_data);
             // die;
             ?>
-              <input type="hidden" name="branch_id" id="branch_id" value="<?php echo $form_data['branch_id'];?>" />
+            <input type="hidden" name="branch_id" id="branch_id" value="<?php echo $form_data['branch_id']; ?>" />
             <!-- <div class="row m-b-5">
               <div class="col-md-12">
                 <div class="row">
@@ -256,10 +256,10 @@ $field_list = mandatory_section_field_list(3);
                   }
                   ?>
                 </select>
-                <input type="text" name="patient_name" id="patient_name" style="width:108px!important;"
+                <input type="text" name="patient_name" id="patient_name" style="width:135px!important;"
                   value="<?php echo $form_data['patient_name']; ?>" class="mr-name m_name txt_firstCap" autofocus />
-                <a title="Add Simulation" href="javascript:void(0)" onclick="simulation_modal()" class="btn-new"><i
-                    class="fa fa-plus"></i> New</a>
+                <!-- <a title="Add Simulation" href="javascript:void(0)" onclick="simulation_modal()" class="btn-new"><i
+                    class="fa fa-plus"></i> New</a> -->
                 <div class="clear">
                   <?php if (!empty($form_error)) {
                     echo form_error('simulation_id');
@@ -318,38 +318,7 @@ $field_list = mandatory_section_field_list(3);
             <!-- new code by mamta -->
 
 
-            <div class="row m-b-5">
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-4"><b>Mobile No.
-                      <?php if (!empty($field_list)) {
-                        if ($field_list[0]['mandatory_field_id'] == 25 && $field_list[0]['mandatory_branch_id'] == $users_data['parent_id']) { ?>
-                          <span class="star">*</span>
-                          <?php
-                        }
-                      }
-                      ?>
-                    </b></div>
-                  <div class="col-md-8">
-                    <input type="text" name="" readonly="readonly" value="<?php echo $form_data['country_code']; ?>"
-                      class="country_code m_c_code" placeholder="+91">
 
-                    <input type="text" maxlength="10" id="mobile_no" name="mobile_no" data-toggle="tooltip"
-                      title="Allow only numeric." class="tooltip-text tool_tip numeric number m_number"
-                      placeholder="eg.9897221234" value="<?php echo $form_data['mobile_no']; ?>"
-                      onkeyup="get_patient_detail_by_mobile();">
-                    <?php if (!empty($field_list)) {
-                      if ($field_list[0]['mandatory_field_id'] == '25' && $field_list[0]['mandatory_branch_id'] == $users_data['parent_id']) {
-                        if (!empty($form_error)) {
-                          echo form_error('mobile_no');
-                        }
-                      }
-                    }
-                    ?>
-                  </div>
-                </div>
-              </div>
-            </div> <!-- row -->
 
 
             <div class="row m-b-5">
@@ -407,7 +376,7 @@ $field_list = mandatory_section_field_list(3);
               </div>
             </div> <!-- row -->
 
-            <div class="row m-b-5">
+            <!-- <div class="row m-b-5">
               <div class="col-md-12">
                 <div class="row">
                   <div class="col-md-4"></div>
@@ -419,9 +388,9 @@ $field_list = mandatory_section_field_list(3);
                   </div>
                 </div>
               </div>
-            </div> <!-- row -->
+            </div> row -->
 
-            <div class="more_content" id="patient_info" style="display: none;">
+            <div class="more_content" id="patient_info" style="display: block;">
 
               <div class="row m-b-5" id="pedic_spec">
                 <div class="col-md-12">
@@ -436,12 +405,43 @@ $field_list = mandatory_section_field_list(3);
               </div>
 
 
+              <div class="row m-b-5">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-4"><b>Mobile No.
+                        <?php if (!empty($field_list)) {
+                          if ($field_list[0]['mandatory_field_id'] == 25 && $field_list[0]['mandatory_branch_id'] == $users_data['parent_id']) { ?>
+                            <span class="star">*</span>
+                            <?php
+                          }
+                        }
+                        ?>
+                      </b></div>
+                    <div class="col-md-8">
+                      <input type="text" name="" readonly="readonly" value="<?php echo $form_data['country_code']; ?>"
+                        class="country_code m_c_code" placeholder="+91">
 
+                      <input type="text" maxlength="10" id="mobile_no" name="mobile_no" data-toggle="tooltip"
+                        title="Allow only numeric." class="tooltip-text tool_tip numeric number m_number"
+                        placeholder="eg.9897221234" value="<?php echo $form_data['mobile_no']; ?>"
+                        onkeyup="get_patient_detail_by_mobile();">
+                      <?php if (!empty($field_list)) {
+                        if ($field_list[0]['mandatory_field_id'] == '25' && $field_list[0]['mandatory_branch_id'] == $users_data['parent_id']) {
+                          if (!empty($form_error)) {
+                            echo form_error('mobile_no');
+                          }
+                        }
+                      }
+                      ?>
+                    </div>
+                  </div>
+                </div>
+              </div> <!-- row -->
 
               <div class="row m-b-5">
                 <div class="col-md-12">
                   <div class="row">
-                    <div class="col-md-4"><b>Email Id </b></div>
+                    <div class="col-md-4"><b>Email </b></div>
                     <div class="col-md-8">
                       <input type="text" name="patient_email" class="email_address m_input_default"
                         value="<?php echo $form_data['patient_email']; ?>">
@@ -452,6 +452,20 @@ $field_list = mandatory_section_field_list(3);
                   </div>
                 </div>
               </div> <!-- row -->
+              <div class="row m-b-4">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-4"><b>Aadhaar No.</b></div>
+                    <div class="col-md-8">
+                      <input type="text" name="adhar_no" id="adhar_no" class="m_input_default"
+                        value="<?php echo $form_data['adhar_no']; ?>" class="numeric" />
+                      <?php if (!empty($form_error)) {
+                        echo form_error('adhar_no');
+                      } ?>
+                    </div>
+                  </div>
+                </div>
+              </div> 
 
               <div class="row m-b-4">
                 <div class="col-md-12">
@@ -476,61 +490,6 @@ $field_list = mandatory_section_field_list(3);
                   </div>
                 </div>
               </div>
-
-              <div class="row m-b-4">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-4"><b>PIN Code</b></div>
-                    <div class="col-md-8">
-                      <input type="text" name="pincode" id="address_third" class="address" maxlength="255"
-                        value="<?php echo $form_data['pincode']; ?>" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row m-b-4">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-4"><b>Aadhaar No.</b></div>
-                    <div class="col-md-8">
-                      <input type="text" name="adhar_no" id="adhar_no" class="m_input_default"
-                        value="<?php echo $form_data['adhar_no']; ?>" class="numeric" />
-                      <?php if (!empty($form_error)) {
-                        echo form_error('adhar_no');
-                      } ?>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-
-              <!-- <div class="row m-b-5">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-4"><b>Country</b></div>
-                    <div class="col-md-8">
-                      <select name="country_id" id="countrys_id" class="m_input_default"
-                        onchange="return get_state(this.value);">
-                        <option value="">Select Country</option>
-                        <?php
-                        if (!empty($country_list)) {
-                          foreach ($country_list as $country) {
-                            $selected_country = "";
-                            if ($country->id == $form_data['country_id']) {
-                              $selected_country = 'selected="selected"';
-                            }
-                            echo '<option value="' . $country->id . '" ' . $selected_country . '>' . $country->country . '</option>';
-                          }
-                        }
-                        ?>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div> row -->
-
-
               <div class="row m-b-5">
                 <div class="col-md-12">
                   <div class="row">
@@ -560,6 +519,61 @@ $field_list = mandatory_section_field_list(3);
                   </div>
                 </div>
               </div> <!-- row -->
+
+              <div class="row m-b-4">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-4"><b>PIN Code</b></div>
+                    <div class="col-md-8">
+                      <input type="text" name="pincode" id="address_third" class="address" maxlength="255"
+                        value="<?php echo $form_data['pincode']; ?>" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row m-b-4">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-4"><b>Token No.</b></div>
+                  <div class="col-md-8">
+                    <input type="text" id="token_no" readonly class="m_input_default" name="token_no"
+                      value="<?php echo $form_data['token_no']; ?>" />
+                  </div>
+                </div>
+              </div>
+            </div> <!-- row -->
+
+              
+
+
+              <!-- <div class="row m-b-5">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-4"><b>Country</b></div>
+                    <div class="col-md-8">
+                      <select name="country_id" id="countrys_id" class="m_input_default"
+                        onchange="return get_state(this.value);">
+                        <option value="">Select Country</option>
+                        <?php
+                        if (!empty($country_list)) {
+                          foreach ($country_list as $country) {
+                            $selected_country = "";
+                            if ($country->id == $form_data['country_id']) {
+                              $selected_country = 'selected="selected"';
+                            }
+                            echo '<option value="' . $country->id . '" ' . $selected_country . '>' . $country->country . '</option>';
+                          }
+                        }
+                        ?>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div> row -->
+
+
+              
 
 
               <!-- <div class="row m-b-5">
@@ -923,7 +937,8 @@ $field_list = mandatory_section_field_list(3);
                   <div class="row">
                     <div class="col-md-5"><b>Patient Category</b></div>
                     <div class="col-md-7">
-                      <select name="patient_category" id="patient_category" class="m_select_btn">
+                      <select name="patient_category" id="patient_category" class="m_select_btn"
+                        onChange="handlePaymentMode();">
                         <option value="">Select Category</option>
                         <?php
                         if (!empty($patient_category)) {
@@ -931,7 +946,8 @@ $field_list = mandatory_section_field_list(3);
                             ?>
                             <option <?php if ($form_data['patient_category'] == $patientcategory->id) {
                               echo 'selected="selected"';
-                            } ?> value="<?php echo $patientcategory->id; ?>">
+                            } ?> value="<?php echo $patientcategory->id; ?>"
+                              data-category-name="<?php echo $patientcategory->patient_category; ?>">
                               <?php echo $patientcategory->patient_category; ?>
                             </option>
                             <?php
@@ -1270,7 +1286,7 @@ $field_list = mandatory_section_field_list(3);
                     ?></b>
                   </div>
                   <div class="col-md-7" id="specilizationid">
-                    <select name="specialization" class="w-150px m_select_btn" id="specilization_id"
+                    <select name="specialization" class="m_select_btn" id="specilization_id"
                       onChange="return get_doctor_specilization(this.value);">
                       <option value="">Select Specialization</option>
                       <?php
@@ -1287,11 +1303,11 @@ $field_list = mandatory_section_field_list(3);
                       }
                       ?>
                     </select>
-                    <?php if (in_array('44', $users_data['permission']['action'])) {
-                      ?>
-                      <a title="Add Specialization" href="javascript:void(0)" onclick=" return add_spacialization();"
-                        class="btn-new"><i class="fa fa-plus"></i> New</a>
-                    <?php } ?>
+                    <?php //if (in_array('44', $users_data['permission']['action'])) {
+                    ?>
+                    <!-- <a title="Add Specialization" href="javascript:void(0)" onclick=" return add_spacialization();"
+                        class="btn-new"><i class="fa fa-plus"></i> New</a> -->
+                    <?php //} ?>
                     <?php //if(!empty($form_error)){ echo form_error('specialization'); } ?>
                     <?php if (!empty($field_list)) {
                       if ($field_list[2]['mandatory_field_id'] == '41' && $field_list[2]['mandatory_branch_id'] == $users_data['parent_id']) {
@@ -1320,7 +1336,7 @@ $field_list = mandatory_section_field_list(3);
                           which have two forms one is attended other is referral it may be both. </span></a></sup>
                   </div>
                   <div class="col-md-7">
-                    <select name="attended_doctor" class="w-150px m_select_btn" id="attended_doctor"
+                    <select name="attended_doctor" class="m_select_btn" id="attended_doctor"
                       onchange="consultant_charge(this.value);  generate_token(this.value);  <?php if (!empty($form_data['patient_id']) && $form_data['data_id'] == '') { ?> get_validity_date_in_between(this.value); change_validity_date(this.value);<?php } ?>">
                       <option value="">Select Consultant</option>
                       <?php
@@ -1345,10 +1361,10 @@ $field_list = mandatory_section_field_list(3);
                       ?>
                     </select>
 
-                    <?php if (in_array('122', $users_data['permission']['action'])) {
-                      ?>
-                      <a title="Add Consultant" class="btn-new" id="doctor_add_modal_2"><i class="fa fa-plus"></i> New</a>
-                    <?php } ?>
+                    <?php //if (in_array('122', $users_data['permission']['action'])) {
+                    ?>
+                    <!-- <a title="Add Consultant" class="btn-new" id="doctor_add_modal_2"><i class="fa fa-plus"></i> New</a> -->
+                    <?php //} ?>
                     <?php //if(!empty($form_error)){ echo form_error('attended_doctor'); } ?>
                     <?php if (!empty($field_list)) {
                       if ($field_list[3]['mandatory_field_id'] == '42' && $field_list[3]['mandatory_branch_id'] == $users_data['parent_id']) {
@@ -1443,17 +1459,7 @@ $field_list = mandatory_section_field_list(3);
             <!-- row -->
 
 
-            <div class="row m-b-5">
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-5"><b>Token No.</b></div>
-                  <div class="col-md-7">
-                    <input type="text" id="token_no" readonly class="m_input_default" name="token_no"
-                      value="<?php echo $form_data['token_no']; ?>" />
-                  </div>
-                </div>
-              </div>
-            </div> <!-- row -->
+            
 
             <!-- row -->
 
@@ -1689,16 +1695,17 @@ $field_list = mandatory_section_field_list(3);
               <div class="row m-b-5 opd_m_left">
                 <div class="col-md-5"><b>Mode of Payment</b></div>
                 <div class="col-md-7 opd_p_left">
-                  <select name="payment_mode" class="m_input_default" onChange="payment_function(this.value, '');">
+                  <select name="payment_mode" id="payment_mode" class="m_input_default"
+                    onChange="payment_function(this.value, '');">
                     <?php
-                    foreach ($payment_mode as $payment_mode) {
+                    foreach ($payment_mode as $mode) {
                       // Check if the current form's payment_mode matches OR if patient_category_name is Corporate, Subsidy, or Panel
-                      $is_selected = $form_data['payment_mode'] == $payment_mode->id
-                        || in_array($form_data['patient_category_name'], ['Corporate', 'Subsidy', 'Panel']) && strtolower($payment_mode->payment_mode) == 'billed';
+                      $is_selected = $form_data['payment_mode'] == $mode->id
+                        || in_array($form_data['patient_category_name'], ['Corporate', 'Subsidy', 'Panel']) && strtolower($mode->payment_mode) == 'billed';
                       ?>
-                      <option value="<?php echo $payment_mode->id; ?>" <?php if ($is_selected)
+                      <option value="<?php echo $mode->id; ?>" <?php if ($is_selected)
                            echo 'selected'; ?>>
-                        <?php echo $payment_mode->payment_mode; ?>
+                        <?php echo $mode->payment_mode; ?>
                       </option>
                     <?php } ?>
                   </select>
@@ -1981,6 +1988,30 @@ $field_list = mandatory_section_field_list(3);
         $('#age_m').val(agemonth);
         $('#age_d').val(ageday);
       }
+
+      function handlePaymentMode() {
+        var patientCategoryElement = document.getElementById("patient_category");
+        var selectedCategory = patientCategoryElement.options[patientCategoryElement.selectedIndex].getAttribute("data-category-name");
+
+        var paymentModeElement = document.getElementById("payment_mode");
+
+        // Automatically select "Billed" if category is Corporate, Subsidy, or Panel, otherwise "Cash"
+        if (['Corporate', 'Subsidy', 'Panel'].includes(selectedCategory)) {
+          for (var i = 0; i < paymentModeElement.options.length; i++) {
+            if (paymentModeElement.options[i].text.toLowerCase() === 'billed') {
+              paymentModeElement.selectedIndex = i;
+              break;
+            }
+          }
+        } else {
+          for (var i = 0; i < paymentModeElement.options.length; i++) {
+            if (paymentModeElement.options[i].text.toLowerCase() === 'cash') {
+              paymentModeElement.selectedIndex = i;
+              break;
+            }
+          }
+        }
+      }
       $(document).ready(function () {
         $('.datepicker_dob').datepicker({
           format: 'dd-mm-yyyy',
@@ -1999,7 +2030,7 @@ $field_list = mandatory_section_field_list(3);
         });
         function toggleSections() {
           var selectedCategory = $('#patient_category option:selected').text().trim().toLowerCase();
-          
+
           if (selectedCategory === 'corporate') {
             $('#corporate_box').slideDown();
             $('#subsidy_box').slideUp();
@@ -2024,6 +2055,9 @@ $field_list = mandatory_section_field_list(3);
             toggleSections();
           });
         });
+
+
+
 
       });
 
