@@ -34,7 +34,7 @@ class Opd extends CI_Controller
       $end_date = date('d-m-Y');
     }
     // End Defaul Search
-    $data['form_data'] = array('patient_name' => '', 'mobile_no' => '', 'booking_code' => '', 'mobile_no' => '', 'specialization_id' => '', 'start_date' => $start_date, 'end_date' => $end_date,'emergency_booking' => '');
+    $data['form_data'] = array('patient_name' => '', 'mobile_no' => '', 'booking_code' => '', 'mobile_no' => '', 'specialization_id' => '', 'start_date' => $start_date, 'end_date' => $end_date, 'emergency_booking' => '');
     $this->load->model('general/general_model');
     $data['specialization_list'] = $this->general_model->specialization_list();
     //echo "<pre>";print_r($data['specialization_list']); exit;
@@ -829,15 +829,15 @@ class Opd extends CI_Controller
     $patient_category = "";
     $patient_category_name = "";
     $authorize_person = "";
-    $corporate_id= '';
-    $auth_no= '';
-    $employee_no= '';
-    $auth_issue_date= '';
-    $department_id= '';
-    $cost= '';
-    $subsidy_id= '';
-    $subsidy_created= '';
-    $subsidy_amount= '';
+    $corporate_id = '';
+    $auth_no = '';
+    $employee_no = '';
+    $auth_issue_date = '';
+    $department_id = '';
+    $cost = '';
+    $subsidy_id = '';
+    $subsidy_created = '';
+    $subsidy_amount = '';
     if ($pid > 0) {
       $this->load->model('patient/patient_model');
       $patient_data = $this->patient_model->get_by_id($pid);
@@ -857,7 +857,7 @@ class Opd extends CI_Controller
         $patient_category = $patient_data['patient_category'];
         $patient_category_name = $patient_data['patient_category_name'];
         $token_no = $patient_data['token_no'];
-        
+
         $authorize_person = $patient_data['authorize_person'] ?? '';
 
         if ($patient_data['dob'] == '1970-01-01' || $patient_data['dob'] == "0000-00-00") {
@@ -923,7 +923,7 @@ class Opd extends CI_Controller
 
       $data['specialization_list'] = $this->general_model->specialization_list();
       $data['attended_doctor_list'] = $this->opd->attended_doctor_list();
-     
+
       $opd_specialization = $lead_data['specialization_id'];
       $opd_attended_doctor = $lead_data['attended_doctor'];
       $doctor_data = $this->general_model->doctors_list($lead_data['attended_doctor']);
@@ -1192,7 +1192,7 @@ class Opd extends CI_Controller
       "subsidy_amount" => '',
     );
 
-    
+
     if (isset($post) && !empty($post)) {
       // echo "<pre>";
       // print_r($data['form_data']);
@@ -1583,7 +1583,7 @@ class Opd extends CI_Controller
         "department_id" => $result['department_id'] ?? 0,
         "cost" => $result['cost'] ?? '',
         "subsidy_id" => $result['subsidy_id'] ?? 0,
-        "subsidy_created" => date('Y-m-d', strtotime($result['subsidy_created']))  ?? '',
+        "subsidy_created" => date('Y-m-d', strtotime($result['subsidy_created'])) ?? '',
         "subsidy_amount" => $result['subsidy_amount'] ?? '',
       );
       if (isset($post) && !empty($post)) {
@@ -2921,7 +2921,7 @@ class Opd extends CI_Controller
     // print_r($data);die;
     $this->load->model('general/general_model');
     $transaction_id = $this->general_model->get_transaction_id($booking_id, 2, 7);   //2 section id and 7 type
-  
+
     // $data['transaction_id'] = $transaction_id[0]->field_value;
     $data['transaction_id'] = $data['transaction_id'] = !empty($transaction_id[0]->field_value) ? $transaction_id[0]->field_value : null;
     $this->load->model('address_print_setting/address_print_setting_model', 'address_setting');

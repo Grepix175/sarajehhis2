@@ -682,6 +682,7 @@ class Opd_model extends CI_Model
 	{
 		$users_data = $this->session->userdata('auth_users');
 		$this->db->select('corporate_id,corporate_name');
+		$this->db->where('is_deleted', 0);
 		$this->db->order_by('corporate_id', 'Asc');
 		$query = $this->db->get('hms_corporate');
 		$result = $query->result();
@@ -696,6 +697,7 @@ class Opd_model extends CI_Model
 	{
 		$users_data = $this->session->userdata('auth_users');
 		$this->db->select('subsidy_id,subsidy_name');
+		$this->db->where('is_deleted', 0);
 		$this->db->order_by('subsidy_id', 'Desc');
 		$query = $this->db->get('hms_subsidy');
 		$result = $query->result();
@@ -706,6 +708,7 @@ class Opd_model extends CI_Model
 	{
 		$users_data = $this->session->userdata('auth_users');
 		$this->db->select('department_id,department_name');
+		$this->db->where('is_deleted', 0);
 		$this->db->order_by('department_id', 'Desc');
 		$query = $this->db->get('hms_department_master');
 		$result = $query->result();
