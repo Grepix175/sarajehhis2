@@ -43,7 +43,7 @@ $field_list = mandatory_section_field_list(2);
     width:300px;
 }
 #patient_form #mobile_no {
-    width:145px;
+    width:246px;
 }
 #patient_form .pat-col > .grp-full > .grp > .box-right > input[type="text"] {
     width:233px;
@@ -127,12 +127,12 @@ $field_list = mandatory_section_field_list(2);
             </div>
           </div>
           
-          <?php if(in_array('51',$users_data['permission']['action'])) {
+          <?php //if(in_array('51',$users_data['permission']['action'])) {
           ?>
-               <div class="grp-right">
+               <!-- <div class="grp-right">
                   <a title="Add Religion" class="btn-new" href="javascript:void(0)" onClick="patient_category_modal()"><i class="fa fa-plus"></i> New</a>
-               </div>
-          <?php } ?>
+               </div> -->
+          <?php //} ?>
       </div>
       <div class="grp-full">
         <div class="grp">
@@ -190,12 +190,12 @@ $field_list = mandatory_section_field_list(2);
             </div>
 
           </div>
-          <?php if(in_array('65',$users_data['permission']['action'])) {
+          <?php //if(in_array('65',$users_data['permission']['action'])) {
           ?>
-               <div class="grp-right">
+               <!-- <div class="grp-right">
                     <a title="Add Simulation" href="javascript:void(0)" onClick="simulation_modal()" class="btn-new"><i class="fa fa-plus"></i> New</a>
-               </div>
-          <?php } ?>
+               </div> -->
+          <?php //} ?>
 
       </div>
 
