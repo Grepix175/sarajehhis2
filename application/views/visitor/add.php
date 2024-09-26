@@ -244,7 +244,7 @@ $field_list = mandatory_section_field_list(2);
 
                   <!-- Text input for patient name -->
                   <input type="text" name="visitor_name" class="alpha_space_name txt_firstCap" id="visitor_name"
-                    value="<?php echo htmlspecialchars($form_data['visitor_name']); ?>" autofocus style="width: 250px;" />
+                    value="<?php echo htmlspecialchars($form_data['visitor_name']); ?>" autofocus style="width: 245px;" />
 
                   <!-- Display form errors -->
                   <?php
@@ -302,7 +302,7 @@ $field_list = mandatory_section_field_list(2);
               <div class="box-right" style="width: 459px;padding-left: 3rem;">
                 <!-- <input type="text" maxlength="10" name="mobile_no" value="<?php echo $form_data['mobile_no']; ?>"    data-toggle="tooltip"  title="Allow only numeric." class="tooltip-text tool_tip numeric">  -->
                 <input type="text" name="country_code" value="+91" readonly="" class="country_code" placeholder="+91">
-                <input type="text" name="mobile_no" id="mobile_no" maxlength="10" class="number numeric" placeholder="eg.9897221234" value="<?php echo $form_data['mobile_no']; ?>" onkeyup="get_patient_detail_by_mobile();" style="width: 250px;" />
+                <input type="text" name="mobile_no" id="mobile_no" maxlength="10" class="number numeric" placeholder="eg.9897221234" value="<?php echo $form_data['mobile_no']; ?>" onkeyup="get_patient_detail_by_mobile();" style="width: 245px;" />
                 <?php if (!empty($field_list)) {
                   if ($field_list[0]['mandatory_field_id'] == '5' && $field_list[0]['mandatory_branch_id'] == $users_data['parent_id']) {
                     if (!empty($form_error)) {

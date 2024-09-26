@@ -1331,7 +1331,7 @@ class Visitor extends CI_Controller
         $from_date = $this->input->get('from_date');
         $to_date = $this->input->get('to_date');
         // Main header with date range if provided
-        $mainHeader = "Patient List";
+        $mainHeader = "Visitor List";
         if (!empty($from_date) && !empty($to_date)) {
             $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
         }
@@ -1358,7 +1358,7 @@ class Visitor extends CI_Controller
 
         // Field names in the next row
         $data = get_setting_value('PATIENT_REG_NO');
-        $fields = array($data, 'Patient Name', 'Patient Relation', 'Mobile No.', 'Gender', 'Age', 'Address', 'Created Date');
+        $fields = array($data, 'Visitor Type', 'From', 'Visitor Name',  'Mobile No.', 'Purpose', 'Employee', 'Created Date');
 
         $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getDefaultStyle()->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
@@ -1385,49 +1385,49 @@ class Visitor extends CI_Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
 
         // Fetching the table data
-        $list = $this->patient->search_patient_data();
+        $list = $this->visitor->search_patient_data();
         // "<pre>";print_r($list); die;
         $rowData = array();
         $data = array();
         if (!empty($list)) {
             $i = 0;
-            foreach ($list as $patients) {
-                $genders = array('0' => 'Female', '1' => 'Male', '2' => 'Other');
-                $gender = $genders[$patients->gender];
-                $age_y = $patients->age_y;
-                $age_m = $patients->age_m;
-                $age_d = $patients->age_d;
-                $age = "";
-                if ($age_y > 0) {
-                    $year = 'Years';
-                    if ($age_y == 1) {
-                        $year = 'Year';
-                    }
-                    $age .= $age_y . " " . $year;
-                }
-                if ($age_m > 0) {
-                    $month = 'Months';
-                    if ($age_m == 1) {
-                        $month = 'Month';
-                    }
-                    $age .= "/ " . $age_m . " " . $month;
-                }
-                if ($age_d > 0) {
-                    $day = 'Days';
-                    if ($age_d == 1) {
-                        $day = 'Day';
-                    }
-                    $age .= "/ " . $age_d . " " . $day;
-                }
-                $patient_age = $age;
-                $created_date = date('d-m-Y h:i A', strtotime($patients->created_date));
+            foreach ($list as $visitor) {
+                // $genders = array('0' => 'Female', '1' => 'Male', '2' => 'Other');
+                // $gender = $genders[$visitor->gender];
+                // $age_y = $visitor->age_y;
+                // $age_m = $visitor->age_m;
+                // $age_d = $visitor->age_d;
+                // $age = "";
+                // if ($age_y > 0) {
+                //     $year = 'Years';
+                //     if ($age_y == 1) {
+                //         $year = 'Year';
+                //     }
+                //     $age .= $age_y . " " . $year;
+                // }
+                // if ($age_m > 0) {
+                //     $month = 'Months';
+                //     if ($age_m == 1) {
+                //         $month = 'Month';
+                //     }
+                //     $age .= "/ " . $age_m . " " . $month;
+                // }
+                // if ($age_d > 0) {
+                //     $day = 'Days';
+                //     if ($age_d == 1) {
+                //         $day = 'Day';
+                //     }
+                //     $age .= "/ " . $age_d . " " . $day;
+                // }
+                // $patient_age = $age;
+                $created_date = date('d-m-Y h:i A', strtotime($visitor->created_date));
 
                 $relation_name = '';
-                if (!empty($patients->relation_name)) {
-                    $relation_name = $patients->patient_relation . " " . $patients->relation_name;
+                if (!empty($visitor->relation_name)) {
+                    $relation_name = $visitor->patient_relation . " " . $visitor->relation_name;
                 }
 
-                array_push($rowData, $patients->patient_code, $patients->patient_name, $relation_name, $patients->mobile_no, $gender, $patient_age, $patients->address, $created_date);
+                array_push($rowData, $visitor->visitor_type_name, $visitor->from, $visitor->visitor_name, $visitor->mobile_no, $visitor->purpose, $created_date);
                 $count = count($rowData);
                 for ($j = 0; $j < $count; $j++) {
                     $data[$i][$fields[$j]] = $rowData[$j];
@@ -1456,7 +1456,7 @@ class Visitor extends CI_Controller
 
         // Sending headers to force the user to download the file
         header('Content-Type: application/vnd.ms-excel charset=UTF-8');
-        header("Content-Disposition: attachment; filename=patient_list_" . time() . ".xls");
+        header("Content-Disposition: attachment; filename=visitor_list_" . time() . ".xls");
         header("Pragma: no-cache");
         header("Expires: 0");
         if (!empty($data)) {
@@ -1489,7 +1489,7 @@ class Visitor extends CI_Controller
         if (!empty($list)) {
 
             $i = 0;
-            foreach ($list as $patients) {
+            foreach ($list as $visitor) {
                 $genders = array('0' => 'Female', '1' => 'Male', '2' => 'Other');
                 $gender = $genders[$patients->gender];
                 $age_y = $patients->age_y;
@@ -1583,18 +1583,21 @@ class Visitor extends CI_Controller
         $to_date = $this->input->get('to_date');
 
         // Fetch doctor data
-        $this->load->model('patient_model');
-        $data['data_list'] = $this->patient_model->search_patient_data();
-
+        $this->load->model('visitor_model');
+        $data['data_list'] = $this->visitor_model->search_patient_data();
         // Create main header with date range if available
-        $mainHeader = "Patient List";
+        $mainHeader = "Visitor List";
         if (!empty($from_date) && !empty($to_date)) {
             $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
         }
+        // echo "<pre>";
+        // print_r($data);
+        // print_r($mainHeader);
+        // die;
         $data['mainHeader'] = $mainHeader;
 
         // Load the HTML view into a variable
-        $this->load->view('patient/patient_html', $data);
+        $this->load->view('visitor/visitor_html', $data);
         $html = $this->output->get_output();
 
         // Load the PDF library
@@ -1604,7 +1607,7 @@ class Visitor extends CI_Controller
         $this->pdf->render();
 
         // Output the generated PDF (force download)
-        $this->pdf->stream("patient_list_" . time() . ".pdf", array("Attachment" => 1));
+        $this->pdf->stream("visitor_list_" . time() . ".pdf", array("Attachment" => 1));
     }
     public function patient_print()
     {

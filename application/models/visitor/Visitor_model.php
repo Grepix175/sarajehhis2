@@ -388,16 +388,29 @@ class Visitor_model extends CI_Model
 
 		$search = $this->session->userdata('patient_search');
 		$users_data = $this->session->userdata('auth_users');
-		$this->db->select("hms_patient.id,hms_patient.branch_id,hms_patient.patient_name,hms_patient.patient_code,hms_patient.simulation_id,hms_patient.first_name,hms_patient.last_name,hms_patient.adhar_no,hms_patient.relation_type,hms_patient.relation_simulation_id,hms_patient.relation_name,hms_patient.mobile_no,hms_patient.gender,hms_patient.dob,hms_patient.anniversary,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h,hms_patient.marital_status,hms_patient.height,hms_patient.weight,hms_patient.religion_id,hms_patient.address,hms_patient.address2,hms_patient.address3,hms_patient.pincode,hms_patient.other_city,hms_patient.city_id,hms_patient.state_id,hms_patient.country_id,hms_patient.f_h_simulation,hms_patient.father_husband,hms_patient.mother,hms_patient.guardian_name,hms_patient.guardian_email,hms_patient.guardian_phone,hms_patient.relation_id,hms_patient.camp_id,hms_patient.patient_email,hms_patient.monthly_income,hms_patient.occupation,hms_patient.photo,hms_patient.insurance_type,hms_patient.insurance_type_id,hms_patient.ins_company_id,hms_patient.polocy_no,hms_patient.tpa_id,hms_patient.ins_amount,hms_patient.ins_authorization_no,hms_patient.remark,hms_patient.status,hms_patient.anni_sms_year,hms_patient.anni_email_send_year,hms_patient.birth_sms_year,hms_patient.birth_email_year,hms_patient.is_deleted,hms_patient.created_date, hms_cities.city, hms_state.state,hms_gardian_relation.relation,(CASE When hms_patient.relation_type=1 THEN 'Son/o' When hms_patient.relation_type=2 THEN 'Husband/o' When hms_patient.relation_type=3 THEN 'Baby/o' When hms_patient.relation_type=4 THEN 'Father/o' When hms_patient.relation_type=5 THEN 'Daughter/o' When hms_patient.relation_type=6 THEN 'Wife/o'When hms_patient.relation_type=14 THEN 'Brother' Else '' END) as patient_relation");
-		$this->db->join('hms_cities', 'hms_cities.id=hms_patient.city_id', 'left');
-		$this->db->join('hms_state', 'hms_state.id=hms_patient.state_id', 'left');
-		$this->db->join("hms_gardian_relation", "hms_gardian_relation.id=hms_patient.relation_type", 'left');
-		$this->db->where('hms_patient.is_deleted', '0');
+		$this->db->select("hms_visitor.id, 
+				   hms_visitor.branch_id,
+                   hms_visitor.visitor_type_id, 
+                   hms_visitor.from, 
+                   hms_visitor.visitor_name, 
+                   hms_visitor.mobile_no, 
+                   hms_visitor.purpose, 
+                   hms_visitor.created_date, 
+                   hms_visitor.emp_id,
+                   hms_visitor_type.visitor_type as visitor_type_name,
+                   hms_employees.name as employee_name");
+
+		// $this->db->from('hms_visitor');
+		$this->db->join('hms_visitor_type', 'hms_visitor_type.id = hms_visitor.visitor_type_id', 'left');
+		$this->db->join('hms_employees', 'hms_employees.id = hms_visitor.emp_id', 'left');
+		$this->db->where('hms_visitor_type.is_deleted', '0');
+		$this->db->where('hms_visitor.branch_id = "'.$users_data['parent_id'].'"');
+		$this->db->where('hms_visitor.is_deleted', '0');
 		//$this->db->where('hms_patient.branch_id',$users_data['parent_id']);
 		if (isset($search['branch_id']) && $search['branch_id'] != '') {
-			$this->db->where('hms_patient.branch_id', $search['branch_id']);
+			$this->db->where('hms_visitor.branch_id', $search['branch_id']);
 		} else {
-			$this->db->where('hms_patient.branch_id', $users_data['parent_id']);
+			$this->db->where('hms_visitor.branch_id', $users_data['parent_id']);
 		}
 		$this->db->from($this->table);
 		$i = 0;
@@ -405,151 +418,151 @@ class Visitor_model extends CI_Model
 
 			if (!empty($search['start_date'])) {
 				$start_date = date('Y-m-d', strtotime($search['start_date'])) . ' 00:00:00';
-				$this->db->where('hms_patient.created_date >= "' . $start_date . '"');
+				$this->db->where('hms_visitor.created_date >= "' . $start_date . '"');
 			}
 
 			if (!empty($search['end_date'])) {
 				$end_date = date('Y-m-d', strtotime($search['end_date'])) . " 23:59:59";
-				$this->db->where('hms_patient.created_date <= "' . $end_date . '"');
+				$this->db->where('hms_visitor.created_date <= "' . $end_date . '"');
 			}
 
-			if (!empty($search['simulation_id'])) {
-				$this->db->where('hms_patient.simulation_id', $search['simulation_id']);
+			// if (!empty($search['simulation_id'])) {
+			// 	$this->db->where('hms_visitor.simulation_id', $search['simulation_id']);
+			// }
+
+			if (!empty($search['visitor_name'])) {
+				$this->db->where('LOWER(hms_visitor.visitor_name) LIKE "%' . strtolower($search['visitor_name']) . '%"');
 			}
 
-			if (!empty($search['patient_name'])) {
-				$this->db->where('LOWER(hms_patient.patient_name) LIKE "%' . strtolower($search['patient_name']) . '%"');
-			}
-
-			if (!empty($search['patient_code'])) {
-				$this->db->where('hms_patient.patient_code', $search['patient_code']);
-			}
+			// if (!empty($search['patient_code'])) {
+			// 	$this->db->where('hms_visitor.patient_code', $search['patient_code']);
+			// }
 
 			if (!empty($search['mobile_no'])) {
-				$this->db->where('hms_patient.mobile_no LIKE "' . $search['mobile_no'] . '%"');
+				$this->db->where('hms_visitor.mobile_no LIKE "' . $search['mobile_no'] . '%"');
 			}
-			if (!empty($search['relation_name'])) {
-				$this->db->where('hms_patient.relation_name LIKE "' . $search['relation_name'] . '%"');
-			}
-			if (!empty($search['relation_type'])) {
-				$this->db->where('hms_patient.relation_type', $search['relation_type']);
-			}
+			// if (!empty($search['relation_name'])) {
+			// 	$this->db->where('hms_visitor.relation_name LIKE "' . $search['relation_name'] . '%"');
+			// }
+			// if (!empty($search['relation_type'])) {
+			// 	$this->db->where('hms_visitor.relation_type', $search['relation_type']);
+			// }
 
 
-			if (isset($search['gender']) && $search['gender'] != "") {
-				$this->db->where('hms_patient.gender', $search['gender']);
-			}
+			// if (isset($search['gender']) && $search['gender'] != "") {
+			// 	$this->db->where('hms_visitor.gender', $search['gender']);
+			// }
 
-			if (!empty($search['address'])) {
-				//$this->db->where('hms_patient.address LIKE "'.$search['address'].'%"');
-				//$this->db->where('hms_patient.address LIKE "'.$search['address'].'%"');
-				//$this->db->or_where('hms_patient.address2 LIKE "'.$search['address'].'%"');
-				//$this->db->or_where('hms_patient.address3 LIKE "'.$search['address'].'%"');
-				$this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.address3) like "%' . trim($search['address']) . '%"');
-			}
+			// if (!empty($search['address'])) {
+			// 	//$this->db->where('hms_visitor.address LIKE "'.$search['address'].'%"');
+			// 	//$this->db->where('hms_visitor.address LIKE "'.$search['address'].'%"');
+			// 	//$this->db->or_where('hms_visitor.address2 LIKE "'.$search['address'].'%"');
+			// 	//$this->db->or_where('hms_visitor.address3 LIKE "'.$search['address'].'%"');
+			// 	$this->db->where('CONCAT(hms_visitor.address,hms_visitor.address2,hms_visitor.address3) like "%' . trim($search['address']) . '%"');
+			// }
 
-			if (!empty($search['country_id'])) {
-				$this->db->where('hms_patient.country_id', $search['country_id']);
-			}
+			// if (!empty($search['country_id'])) {
+			// 	$this->db->where('hms_visitor.country_id', $search['country_id']);
+			// }
 
-			if (!empty($search['state_id'])) {
-				$this->db->where('hms_patient.state_id', $search['state_id']);
-			}
+			// if (!empty($search['state_id'])) {
+			// 	$this->db->where('hms_visitor.state_id', $search['state_id']);
+			// }
 
-			if (!empty($search['city_id'])) {
-				$this->db->where('hms_patient.city_id', $search['city_id']);
-			}
+			// if (!empty($search['city_id'])) {
+			// 	$this->db->where('hms_visitor.city_id', $search['city_id']);
+			// }
 
-			if (!empty($search['pincode'])) {
-				$this->db->where('hms_patient.pincode LIKE "' . $search['pincode'] . '%"');
-			}
+			// if (!empty($search['pincode'])) {
+			// 	$this->db->where('hms_visitor.pincode LIKE "' . $search['pincode'] . '%"');
+			// }
 
-			if (isset($search['marital_status']) && $search['marital_status'] != "") {
-				$this->db->where('hms_patient.marital_status', $search['marital_status']);
-			}
+			// if (isset($search['marital_status']) && $search['marital_status'] != "") {
+			// 	$this->db->where('hms_visitor.marital_status', $search['marital_status']);
+			// }
 
-			if (!empty($search['religion_id'])) {
-				$this->db->where('hms_patient.religion_id', $search['religion_id']);
-			}
+			// if (!empty($search['religion_id'])) {
+			// 	$this->db->where('hms_visitor.religion_id', $search['religion_id']);
+			// }
 
-			if (!empty($search['father_husband'])) {
-				$this->db->where('hms_patient.father_husband LIKE "' . $search['father_husband'] . '%"');
-			}
+			// if (!empty($search['father_husband'])) {
+			// 	$this->db->where('hms_visitor.father_husband LIKE "' . $search['father_husband'] . '%"');
+			// }
 
-			if (!empty($search['mother'])) {
-				$this->db->where('hms_patient.mother LIKE "' . $search['mother'] . '%"');
-			}
+			// if (!empty($search['mother'])) {
+			// 	$this->db->where('hms_visitor.mother LIKE "' . $search['mother'] . '%"');
+			// }
 
-			if (!empty($search['guardian_name'])) {
-				$this->db->where('hms_patient.guardian_name LIKE "' . $search['guardian_name'] . '%"');
-			}
+			// if (!empty($search['guardian_name'])) {
+			// 	$this->db->where('hms_visitor.guardian_name LIKE "' . $search['guardian_name'] . '%"');
+			// }
 
-			if (!empty($search['guardian_email'])) {
-				$this->db->where('hms_patient.guardian_email LIKE "' . $search['guardian_email'] . '%"');
-			}
+			// if (!empty($search['guardian_email'])) {
+			// 	$this->db->where('hms_visitor.guardian_email LIKE "' . $search['guardian_email'] . '%"');
+			// }
 
-			if (!empty($search['guardian_phone'])) {
-				$this->db->where('hms_patient.guardian_phone LIKE "' . $search['guardian_phone'] . '%"');
-			}
+			// if (!empty($search['guardian_phone'])) {
+			// 	$this->db->where('hms_visitor.guardian_phone LIKE "' . $search['guardian_phone'] . '%"');
+			// }
 
-			if (!empty($search['relation_id'])) {
-				$this->db->where('hms_patient.relation_id', $search['relation_id']);
-			}
+			// if (!empty($search['relation_id'])) {
+			// 	$this->db->where('hms_visitor.relation_id', $search['relation_id']);
+			// }
 
-			if (!empty($search['patient_email'])) {
-				$this->db->where('hms_patient.patient_email LIKE "' . $search['patient_email'] . '%"');
-			}
+			// if (!empty($search['patient_email'])) {
+			// 	$this->db->where('hms_visitor.patient_email LIKE "' . $search['patient_email'] . '%"');
+			// }
 
-			if (!empty($search['monthly_income'])) {
-				$this->db->where('hms_patient.monthly_income', $search['monthly_income']);
-			}
+			// if (!empty($search['monthly_income'])) {
+			// 	$this->db->where('hms_visitor.monthly_income', $search['monthly_income']);
+			// }
 
-			if (!empty($search['occupation'])) {
-				$this->db->where('hms_patient.occupation LIKE "' . $search['occupation'] . '%"');
-			}
+			// if (!empty($search['occupation'])) {
+			// 	$this->db->where('hms_visitor.occupation LIKE "' . $search['occupation'] . '%"');
+			// }
 
-			if (isset($search['insurance_type']) && $search['insurance_type'] != "") {
-				$this->db->where('hms_patient.insurance_type', $search['insurance_type']);
-			}
+			// if (isset($search['insurance_type']) && $search['insurance_type'] != "") {
+			// 	$this->db->where('hms_visitor.insurance_type', $search['insurance_type']);
+			// }
 
-			if (isset($search['insurance_type_id']) && $search['insurance_type_id'] != "") {
-				$this->db->where('hms_patient.insurance_type_id', $search['insurance_type_id']);
-			}
+			// if (isset($search['insurance_type_id']) && $search['insurance_type_id'] != "") {
+			// 	$this->db->where('hms_visitor.insurance_type_id', $search['insurance_type_id']);
+			// }
 
-			if (isset($search['ins_company_id']) && $search['ins_company_id'] != "") {
-				$this->db->where('hms_patient.ins_company_id', $search['ins_company_id']);
-			}
+			// if (isset($search['ins_company_id']) && $search['ins_company_id'] != "") {
+			// 	$this->db->where('hms_visitor.ins_company_id', $search['ins_company_id']);
+			// }
 
-			if ($search['polocy_no'] != "") {
-				$this->db->where('hms_patient.polocy_no', $search['polocy_no']);
-			}
+			// if ($search['polocy_no'] != "") {
+			// 	$this->db->where('hms_visitor.polocy_no', $search['polocy_no']);
+			// }
 
-			if ($search['tpa_id'] != "") {
-				$this->db->where('hms_patient.tpa_id', $search['tpa_id']);
-			}
+			// if ($search['tpa_id'] != "") {
+			// 	$this->db->where('hms_visitor.tpa_id', $search['tpa_id']);
+			// }
 
-			if ($search['ins_amount'] != "") {
-				$this->db->where('hms_patient.ins_amount', $search['ins_amount']);
-			}
+			// if ($search['ins_amount'] != "") {
+			// 	$this->db->where('hms_visitor.ins_amount', $search['ins_amount']);
+			// }
 
-			if ($search['ins_authorization_no'] != "") {
-				$this->db->where('hms_patient.ins_authorization_no', $search['ins_authorization_no']);
-			}
+			// if ($search['ins_authorization_no'] != "") {
+			// 	$this->db->where('hms_visitor.ins_authorization_no', $search['ins_authorization_no']);
+			// }
 
-			if (isset($search['status']) && $search['status'] != "") {
-				$this->db->where('status', $search['status']);
-			}
+			// if (isset($search['status']) && $search['status'] != "") {
+			// 	$this->db->where('status', $search['status']);
+			// }
 
-			if (isset($search['adhar_no']) && isset($search['adhar_no']) && $search['adhar_no'] != "") {
-				$this->db->where('hms_patient.adhar_no', $search['adhar_no']);
-			}
-			if (!empty($search['relation_simulation_id'])) {
-				$this->db->where('hms_patient.relation_simulation_id ', $search['relation_simulation_id']);
-			}
-
-
+			// if (isset($search['adhar_no']) && isset($search['adhar_no']) && $search['adhar_no'] != "") {
+			// 	$this->db->where('hms_visitor.adhar_no', $search['adhar_no']);
+			// }
+			// if (!empty($search['relation_simulation_id'])) {
+			// 	$this->db->where('hms_visitor.relation_simulation_id ', $search['relation_simulation_id']);
+			// }
+	
 		}
-		$this->db->order_by('hms_patient.id', 'desc');
+		
+		$this->db->order_by('hms_visitor.id', 'desc');
 		$query = $this->db->get();
 		// echo $this->db->last_query();
 		$data = $query->result();
