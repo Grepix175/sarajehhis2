@@ -937,6 +937,7 @@ class Patient extends CI_Controller {
 
     public function add()
     {
+        
         unauthorise_permission(19,114);
         $this->load->library('form_validation');
         $this->load->model('general/general_model');
@@ -1019,15 +1020,17 @@ class Patient extends CI_Controller {
                                     'created_date'=>date('m/d/Y H:i:s'),
                                     'patient_category'=>''
                                   );
+
+        // echo "<pre>";
+        // print_r($post);
+        // echo "</pre>";
+        // die;
                                   
         if(isset($post) && !empty($post))
         { 
             $valid_response = $this->_validate();            
             $data['form_data'] = $valid_response['form_data']; 
-            // echo "<pre>";
-            // print_r();
-            // echo "</pre>";
-            // die;
+           
             if($this->form_validation->run() == TRUE)
             {
                 if($post['capture_img']!="")
@@ -1266,8 +1269,8 @@ class Patient extends CI_Controller {
         $this->form_validation->set_rules('simulation_id', 'simulation', 'trim|required'); 
         $this->form_validation->set_rules('patient_name', 'patient name', 'trim|required');
         $this->form_validation->set_rules('gender', 'gender', 'trim|required'); 
-        $this->form_validation->set_rules('adhar_no', 'aadhaar no.', 'min_length[12]|max_length[16]'); 
-        $this->form_validation->set_rules('age_y', 'age year', 'trim|required');
+        // $this->form_validation->set_rules('adhar_no', 'aadhaar no.', 'min_length[12]|max_length[16]'); 
+        // $this->form_validation->set_rules('age_y', 'age year', 'trim|required');
         // $this->form_validation->set_rules('address', 'Village/Town', 'trim|required');
         $this->form_validation->set_rules('patient_category', 'patient category', 'trim|required');
         
@@ -1280,14 +1283,14 @@ class Patient extends CI_Controller {
                 $this->form_validation->set_rules('mobile_no', 'mobile no.', 'trim|required|numeric|min_length[10]|max_length[10]');
             }
            
-            if($field_list[1]['mandatory_field_id']=='7' && $field_list[1]['mandatory_branch_id']==$users_data['parent_id'])
-            { 
-                //$this->form_validation->set_rules('age_y', 'age', 'trim|required');
-                if(($post['age_y']=='0' && $post['age_m']=='0' && $post['age_d']=='0' && $post['age_h']=='0') || ((empty($post['age_y']) && empty($post['age_m']) && empty($post['age_d']) && empty($post['age_h']))) )
-                    {   
-                        $this->form_validation->set_rules('age_y', 'age', 'trim|required|numeric|is_natural_no_zero|max_length[3]');
-                    }
-            }
+            // if($field_list[1]['mandatory_field_id']=='7' && $field_list[1]['mandatory_branch_id']==$users_data['parent_id'])
+            // { 
+            //     //$this->form_validation->set_rules('age_y', 'age', 'trim|required');
+            //     if(($post['age_y']=='0' && $post['age_m']=='0' && $post['age_d']=='0' && $post['age_h']=='0') || ((empty($post['age_y']) && empty($post['age_m']) && empty($post['age_d']) && empty($post['age_h']))) )
+            //         {   
+            //             $this->form_validation->set_rules('age_y', 'age', 'trim|required|numeric|is_natural_no_zero|max_length[3]');
+            //         }
+            // }
           }
 
         if(!empty($post['data_id']) && !empty($post['password']))
@@ -1361,18 +1364,18 @@ class Patient extends CI_Controller {
                                 "simulation_id"=>$post['simulation_id'],
                                 "mobile_no"=>$post['mobile_no'],
                                 "gender"=>$post['gender'],
-                                "age_y"=>$post['age_y'],
-                                "age_m"=>$post['age_m'],
-                                "age_d"=>$post['age_d'],
-                                "age_h"=>$post['age_h'], 
-                                "address"=>$post['address'],
-                                "address_second"=>$post['address_second'],
+                                // "age_y"=>$post['age_y'],
+                                // "age_m"=>$post['age_m'],
+                                // "age_d"=>$post['age_d'],
+                                // "age_h"=>$post['age_h'], 
+                                // "address"=>$post['address'],
+                                // "address_second"=>$post['address_second'],
                                 // "address_third"=>$post['address_third'],
-                                "adhar_no"=>$post['adhar_no'],
+                                // "adhar_no"=>$post['adhar_no'],
                                 // "city_id"=>$post['city_id'],
-                                "state_id"=>$post['state_id'],
+                                // "state_id"=>$post['state_id'],
                                 // "country_id"=>$post['country_id'],
-                                "pincode"=>$post['pincode'],
+                                // "pincode"=>$post['pincode'],
                                 "patient_code_auto"=>$tokenno,
                                 // "marital_status"=>$post['marital_status'],
                                 // "religion_id"=>$post['religion_id'],
@@ -1382,7 +1385,7 @@ class Patient extends CI_Controller {
                                 // "guardian_email"=>$post['guardian_email'],
                                 // "guardian_phone"=>$post['guardian_phone'],
                                 // "relation_id"=>$post['relation_id'],
-                                "patient_email"=>$post['patient_email'],
+                                // "patient_email"=>$post['patient_email'],
                                 // "monthly_income"=>$post['monthly_income'],
                                 // "occupation"=>$post['occupation'],
                                 // "insurance_type"=>$post['insurance_type'],
@@ -1394,15 +1397,15 @@ class Patient extends CI_Controller {
                                 // "ins_amount"=>$post['ins_amount'],
                                 // "ins_authorization_no"=>$post['ins_authorization_no'], 
                                 // "status"=>$post['status'] ,
-                                "relation_type"=>$post['relation_type'],
-                                "relation_name"=>$post['relation_name'],
-                                "relation_simulation_id"=>$post['relation_simulation_id'],
+                                // "relation_type"=>$post['relation_type'],
+                                // "relation_name"=>$post['relation_name'],
+                                // "relation_simulation_id"=>$post['relation_simulation_id'],
                                 //  "remark"=>$post['remark'],
                                 "country_code"=>"+91",
                                 "username"=>$username,
                                 // 'f_h_simulation'=>$post['f_h_simulation'],
                                 // 'anniversary'=>$post['anniversary'],
-                                'dob'=>$post['dob'],
+                                // 'dob'=>$post['dob'],
                                 // 'created_date'=>$post['created_date']
                                ); 
             if(!empty($post['data_id']))

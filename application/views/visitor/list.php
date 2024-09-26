@@ -90,7 +90,7 @@
     $(document).ready(function () {
       var $modal = $('#load_add_modal_popup');
       $('#doctor_add_modal').on('click', function () {
-        $modal.load('<?php echo base_url() . 'patient/add/' ?>',
+        $modal.load('<?php echo base_url() . 'visitor/add/' ?>',
           {
             //'id1': '1',
             //'id2': '2'
@@ -103,7 +103,7 @@
 
 
       $('#adv_search').on('click', function () {
-        $modal.load('<?php echo base_url() . 'patient/advance_search/' ?>',
+        $modal.load('<?php echo base_url() . 'visitor/advance_search/' ?>',
           {
           },
           function () {
@@ -117,7 +117,7 @@
 
     function edit_patient(id) {
       var $modal = $('#load_add_modal_popup');
-      $modal.load('<?php echo base_url() . 'patient/edit/' ?>' + id,
+      $modal.load('<?php echo base_url() . 'visitor/edit/' ?>' + id,
         {
           //'id1': '1',
           //'id2': '2'
@@ -129,7 +129,7 @@
 
     function view_patient(id) {
       var $modal = $('#load_add_modal_popup');
-      $modal.load('<?php echo base_url() . 'patient/view/' ?>' + id,
+      $modal.load('<?php echo base_url() . 'visitor/view/' ?>' + id,
         {
           //'id1': '1',
           //'id2': '2'
@@ -151,7 +151,7 @@
 
     function barcode_patient(id) {
       var $modal = $('#load_add_modal_popup');
-      $modal.load('<?php echo base_url() . 'patient/barcode/' ?>' + id,
+      $modal.load('<?php echo base_url() . 'visitor/barcode/' ?>' + id,
         {
           //'id1': '1',
           //'id2': '2'
@@ -163,7 +163,7 @@
 
     function view_certificate(id) {
       var $modal = $('#load_add_modal_popup');
-      $modal.load('<?php echo base_url() . 'patient/doctor_certificate/' ?>' + id,
+      $modal.load('<?php echo base_url() . 'visitor/doctor_certificate/' ?>' + id,
         {
           //'id1': '1',
           //'id2': '2'
@@ -200,7 +200,7 @@
           .one('click', '#delete', function (e) {
             $.ajax({
               type: "POST",
-              url: "<?php echo base_url('patient/deleteall'); ?>",
+              url: "<?php echo base_url('visitor/deleteall'); ?>",
               data: { row_id: allVals },
               success: function (result) {
                 flash_session_msg(result);
@@ -227,7 +227,7 @@
       $('#patient_name').val('');
       $('#patient_code').val('');
       $.ajax({
-        url: "<?php echo base_url(); ?>patient/reset_search/",
+        url: "<?php echo base_url(); ?>visitor/reset_search/",
         success: function (result) {
           //reload_table();
           $(ele).find(':input').each(function () {
@@ -357,13 +357,6 @@
                 </div>
               </div>
               <div class="row m-b-5">
-                <div class="col-xs-5"><label><?php echo $data = get_setting_value('PATIENT_REG_NO'); ?></label></div>
-                <div class="col-xs-7">
-                  <input name="patient_code" class="m_input_default" id="patient_code" onkeyup="return form_submit();"
-                    value="<?php echo $form_data['patient_code'] ?>" type="text" autofocus="">
-                </div>
-              </div>
-              <div class="row m-b-5">
                 <div class="col-xs-5"><label>Mobile No.</label></div>
                 <div class="col-xs-7">
                   <input name="mobile_no" value="<?php echo $form_data['mobile_no'] ?>" id="mobile_no"
@@ -374,14 +367,10 @@
                 <div class="col-xs-5"><label>Patient/Visitor</label></div>
                 <div class="col-xs-7">
                   <div class="col-md-12">
-                    <!-- <div class="grp">
-                      <span class="new_patient"><input type="radio" name="new_patient" <?php //if(empty($form_data['patient_id'])) { ?> checked <?php //} ?>> <label>Patient</label></span>
-                      <span class="new_patient"><input type="radio" name="new_patient"
-                          onClick="window.location='<?php echo base_url('visitor'); ?>';" <?php if (!empty($form_data['patient_id'])) { ?> checked <?php } ?>> <label>Visitor</label></span>
-                    </div> -->
                     <div class="grp">
                       <span class="new_patient">
-                        <input type="radio" name="new_patient" id="patient_radio" onClick="window.location='<?php echo base_url('patient'); ?>';">
+                        <input type="radio" name="new_patient" id="patient_radio"
+                          onClick="window.location='<?php echo base_url('patient'); ?>';">
                         <label>Patient</label>
                       </span>
 
@@ -395,75 +384,7 @@
                 </div>
               </div>
 
-              <?php
-              $users_data = $this->session->userdata('auth_users');
-              $user_data = $this->session->userdata('auth_users');
 
-              if (array_key_exists("permission", $users_data)) {
-                $permission_section = $users_data['permission']['section'];
-                $permission_action = $users_data['permission']['action'];
-              } else {
-                $permission_section = array();
-                $permission_action = array();
-              }
-              //print_r($permission_action);
-              
-              $new_branch_data = array();
-              $users_data = $this->session->userdata('auth_users');
-              $sub_branch_details = $this->session->userdata('sub_branches_data');
-              $parent_branch_details = $this->session->userdata('parent_branches_data');
-
-
-              if (!empty($users_data['parent_id'])) {
-                $new_branch_data['id'] = $users_data['parent_id'];
-
-                $users_new_data[] = $new_branch_data;
-                $merg_branch = array_merge($users_new_data, $sub_branch_details);
-
-                $ids = array_column($merg_branch, 'id');
-                $branch_id = implode(',', $ids);
-                $option = '<option value="' . $branch_id . '">All</option>';
-              }
-
-              ?>
-              <?php if (in_array('1', $permission_section)) { ?>
-                <div class="row m-b-5">
-                  <div class="col-xs-5"><label>Branch</label></div>
-                  <div class="col-xs-7">
-
-
-
-                    <select name="branch_id" class="m_input_default" id="branch_id" onchange="return form_submit();">
-                      <?php echo $option; ?>
-                      <option selected="selected" <?php if (isset($_POST['branch_id']) && $_POST['branch_id'] == $users_data['parent_id']) {
-                        echo 'selected="selected"';
-                      } ?>
-                        value="<?php echo $users_data['parent_id']; ?>">Self</option>';
-                      <?php
-                      if (!empty($sub_branch_details)) {
-                        $i = 0;
-                        foreach ($sub_branch_details as $key => $value) {
-                          ?>
-                          <option value="<?php echo $sub_branch_details[$i]['id']; ?>" <?php if (isset($_POST['branch_id']) && $_POST['branch_id'] == $sub_branch_details[$i]['id']) {
-                               echo 'selected="selected"';
-                             } ?>>
-                            <?php echo $sub_branch_details[$i]['branch_name']; ?>
-                          </option>
-                          <?php
-                          $i = $i + 1;
-                        }
-
-                      }
-                      ?>
-                    </select>
-
-
-                  </div>
-                </div>
-
-              <?php } else { ?>
-                <input type="hidden" name="branch_id" id="branch_id" value="<?php echo $users_data['parent_id']; ?>">
-              <?php } ?>
             </div> <!-- 4 -->
 
             <div class="col-sm-4">
@@ -476,19 +397,10 @@
                 </div>
               </div>
               <div class="row m-b-5">
-                <div class="col-xs-5"><label>Patient Name</label></div>
+                <div class="col-xs-5"><label>Visitor Name</label></div>
                 <div class="col-xs-7">
-                  <input name="patient_name" value="<?php echo $form_data['patient_name'] ?>" id="patient_name"
+                  <input name="visitor_name" value="<?php echo $form_data['visitor_name'] ?>" id="visitor_name"
                     onkeyup="return form_submit();" class="alpha_space m_input_default" value="" type="text">
-                </div>
-              </div>
-              <div class="row m-b-5">
-                <div class="col-xs-5"><label>Address</label></div>
-                <div class="col-xs-7">
-                  <input style=" margin-top: 5px;
-    height: 40px;" name="address" value="<?php echo $form_data['address'] ?>" id="address"
-                    onkeyup="return form_submit();" class="alpha_space m_input_default"
-                    value="<?php echo $form_data['address']; ?>" type="text">
                 </div>
               </div>
 
@@ -517,33 +429,12 @@
                   <tr>
                     <th width="40" align="center"> <input onclick="selectall();" type="checkbox" name="selectall" class=""
                         id="selectAll" value=""> </th>
-                    <th> <?php echo $data = get_setting_value('PATIENT_REG_NO'); ?> </th>
-                    <th> Patient Category </th>
-                    <th> Patient Name </th>
-                    <th> Gender </th>
-                    <th> Age </th>
+                    <th> Visitor Type </th>
+                    <th> From </th>
+                    <th> Visitor Name </th>
                     <th> Mobile No. </th>
-                    <th> Village/Town </th>
-                    <th> Aadhaar No. </th>
-                    <th> Marital Status </th>
-                    <th> Anniversary </th>
-                    <th> Religion </th>
-                    <th> DOB </th>
-                    <th> Mother Name</th>
-                    <th> Guardian Name </th>
-                    <th> Guardian Email </th>
-                    <th> Guardian Phone </th>
-                    <th> Relation </th>
-                    <th> Patient Email </th>
-                    <th> Monthly Income </th>
-                    <th> Occupation </th>
-                    <th> Insurance Type </th>
-                    <th> Insurance Name </th>
-                    <th> Company Name </th>
-                    <th> Policy No </th>
-                    <th> TPA ID </th>
-                    <th> Insurance Amount </th>
-                    <th> Authorization No. </th>
+                    <th> Purpose </th>
+                    <th> Emp Name </th>
                     <th> Created Date </th>
                     <th> Action </th>
                   </tr>
@@ -565,11 +456,11 @@
           <div class="btns">
             <?php if (in_array('114', $users_data['permission']['action'])): ?>
               <button class="btn-update" data-toggle="tooltip" title="Add New patient"
-                onclick="window.location.href='<?php echo base_url('patient/add'); ?>'">
+                onclick="window.location.href='<?php echo base_url('visitor/add'); ?>'">
                 <i class="fa fa-plus"></i> New
               </button>
 
-              <!--<a data-toggle="tooltip"  title="Download list in excel" href="<?php echo base_url('patient/patient_excel'); ?>" class="btn-anchor m-b-2">-->
+              <!--<a data-toggle="tooltip"  title="Download list in excel" href="<?php echo base_url('visitor/patient_excel'); ?>" class="btn-anchor m-b-2">-->
               <!--<i class="fa fa-file-excel-o"></i> Excel-->
               <!--</a>-->
               <a data-toggle="tooltip" title="Download list in excel" href="#" id="pa_download_excel"
@@ -577,21 +468,16 @@
                 <i class="fa fa-file-excel-o"></i> Excel
               </a>
 
-              <!-- <a data-toggle="tooltip"  title="Download list in csv" href="<?php echo base_url('patient/patient_csv'); ?>" class="btn-anchor m-b-2">
+              <!-- <a data-toggle="tooltip"  title="Download list in csv" href="<?php echo base_url('visitor/patient_csv'); ?>" class="btn-anchor m-b-2">
         <i class="fa fa-file-word-o"></i> CSV
         </a> -->
 
-              <!--<a data-toggle="tooltip"  title="Download list in pdf" href="<?php echo base_url('patient/patient_pdf'); ?>" class="btn-anchor m-b-2">-->
+              <!--<a data-toggle="tooltip"  title="Download list in pdf" href="<?php echo base_url('visitor/patient_pdf'); ?>" class="btn-anchor m-b-2">-->
               <!--<i class="fa fa-file-pdf-o"></i> PDF-->
               <!--</a>-->
               <a data-toggle="tooltip" title="Download list in pdf" href="#" id="pa_download_pdf"
                 class="btn-anchor m-b-2">
                 <i class="fa fa-file-pdf-o"></i> PDF
-              </a>
-
-              <a data-toggle="tooltip" title="Print patient list" href="javascript:void(0)" class="btn-anchor m-b-2"
-                onClick="return print_window_page('<?php echo base_url("patient/patient_print"); ?>');">
-                <i class="fa fa-print"></i> Print
               </a>
 
             <?php endif; ?>
@@ -602,27 +488,6 @@
               </button>
             <?php endif; ?>
 
-            <?php
-            if (in_array('627', $users_data['permission']['action'])) { ?>
-              <a data-toggle="tooltip" title="Sample export in excel"
-                href="<?php echo base_url('patient/sample_import_patient_excel'); ?>" class="btn-anchor m-b-2">
-                <i class="fa fa-file-excel-o"></i> Sample(.xls)
-              </a>
-            <?php }
-            if (in_array('628', $users_data['permission']['action'])) { ?>
-              <a data-toggle="tooltip" title="Import patient list" id="open_model" href="javascript:void(0)"
-                class="btn-anchor m-b-2">
-                <i class="fa fa-file-excel-o"></i> Import(.xls)
-              </a>
-            <?php }
-
-            ?>
-
-            <button data-toggle="tooltip" title="Archive patient list" class="btn-exit"
-              onclick="window.location.href='<?php echo base_url('patient/feedback'); ?>'">
-              <i class="fa fa-comments-o"></i> Feedback
-            </button>
-
             <?php if (in_array('113', $users_data['permission']['action'])): ?>
               <button data-toggle="tooltip" title="Page reload" class="btn-update" onclick="reload_table()">
                 <i class="fa fa-refresh"></i> Reload
@@ -630,7 +495,7 @@
             <?php endif; ?>
             <?php if (in_array('118', $users_data['permission']['action'])): ?>
               <button data-toggle="tooltip" title="Archive patient list" class="btn-exit"
-                onclick="window.location.href='<?php echo base_url('patient/archive'); ?>'">
+                onclick="window.location.href='<?php echo base_url('visitor/archive'); ?>'">
                 <i class="fa fa-archive"></i> Archive
               </button>
             <?php endif; ?>
@@ -659,9 +524,9 @@
         if (vals != '1') {
           $('#overlay-loader').show();
         }
-
+        console.log('=============')
         $.ajax({
-          url: "<?php echo base_url('patient/advance_search/'); ?>",
+          url: "<?php echo base_url('visitor/advance_search/'); ?>",
           type: "post",
           data: $('#search_form_list').serialize(),
           success: function (result) {
@@ -683,7 +548,7 @@
           "order": [],
           "pageLength": 20,
           "ajax": {
-            "url": "<?php echo base_url('patient/ajax_list') ?>",
+            "url": "<?php echo base_url('visitor/ajax_list') ?>",
             "type": "POST",
           },
           "columnDefs": [
@@ -754,7 +619,7 @@
         })
           .one('click', '#delete', function (e) {
             $.ajax({
-              url: "<?php echo base_url('patient/delete/'); ?>" + patient_id,
+              url: "<?php echo base_url('visitor/delete/'); ?>" + patient_id,
               success: function (result) {
                 flash_session_msg(result);
                 reload_table();
@@ -907,7 +772,7 @@
     var $modal = $('#load_patient_import_modal_popup');
     $('#open_model').on('click', function () {
       //  alert();
-      $modal.load('<?php echo base_url() . 'patient/import_patient_excel' ?>',
+      $modal.load('<?php echo base_url() . 'visitor/import_patient_excel' ?>',
         {
         },
         function () {
@@ -979,7 +844,7 @@
 
     function getPatientLists(branchId, callback) {
       $.ajax({
-        url: "<?php echo base_url(); ?>patient/patientFingerTemplateBase64Lists",
+        url: "<?php echo base_url(); ?>visitor/patientFingerTemplateBase64Lists",
         type: "POST",
         data: { branch_id: branchId },
         success: function (response) {
@@ -1027,7 +892,7 @@
       var toDate = document.getElementById('end_date_patient').value;
 
       // Construct the URL with query parameters
-      var url = '<?php echo base_url("patient/patient_excel"); ?>';
+      var url = '<?php echo base_url("visitor/patient_excel"); ?>';
 
       // Append dates to the URL if they exist
       if (fromDate || toDate) {
@@ -1060,7 +925,7 @@
 
       // Proceed if the dates are valid
       // Construct the URL with query parameters
-      var url = '<?php echo base_url("patient/patient_pdf"); ?>';
+      var url = '<?php echo base_url("visitor/patient_pdf"); ?>';
       url += '?from_date=' + encodeURIComponent(fromDate) + '&to_date=' + encodeURIComponent(toDate);
 
 

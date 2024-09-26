@@ -1,10 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-class Patient_model extends CI_Model
+class Visitor_model extends CI_Model
 {
-	var $table = 'hms_patient';
+	var $table = 'hms_visitor';
 	// 	'hms_patient.village',
-	var $column = array('hms_patient.id', 'hms_patient.patient_code_auto', 'hms_patient.patient_code', 'hms_patient.patient_name', 'hms_patient.relation_name', 'hms_patient.mobile_no', 'hms_patient.gender', 'hms_patient.age_y', 'hms_patient.address', 'hms_patient.adhar_no', 'hms_patient.marital_status', 'hms_patient.anniversary', 'hms_religion.religion', 'hms_patient.dob', 'hms_patient.mother', 'hms_patient.guardian_name', 'hms_patient.guardian_email', 'hms_patient.guardian_phone', 'hms_relation.relation', 'hms_patient.patient_email', 'hms_patient.monthly_income', 'hms_patient.occupation', 'hms_patient.insurance_type', 'hms_insurance_type.insurance_type', 'hms_insurance_company.insurance_company', 'hms_patient.polocy_no', 'hms_patient.tpa_id', 'hms_patient.ins_amount', 'hms_patient.ins_authorization_no', 'hms_patient.created_date');
+	var $column = array('hms_visitor.id', 'hms_visitor.branch_id', 'hms_visitor.visitor_type_id', 'hms_visitor.from', 'hms_visitor.visitor_name', 'hms_visitor.mobile_no', 'hms_visitor.purpose', 'hms_visitor.emp_id', 'hms_visitor.created_date','hms_visitor.simulation_id');
 	var $order = array('id' => 'desc');
 
 	public function __construct()
@@ -20,28 +20,30 @@ class Patient_model extends CI_Model
 		$sub_branch_details = $this->session->userdata('sub_branches_data');
 		$search = $this->session->userdata('patient_search');
 
-        // changes by Nitin sharma 04/02/2024
-		$this->db->select("hms_patient.id,hms_patient.capture_finger,hms_patient.branch_id,hms_patient.patient_code_auto,hms_patient.patient_name,hms_patient.patient_code,hms_patient.simulation_id,hms_patient.first_name,hms_patient.last_name,hms_patient.adhar_no,hms_patient.relation_type,hms_patient.relation_simulation_id,hms_patient.relation_name,hms_patient.mobile_no,hms_patient.gender,hms_patient.dob,hms_patient.anniversary,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h,hms_patient.marital_status,hms_patient.height,hms_patient.weight,hms_patient.religion_id,hms_patient.pincode,hms_patient.other_city,hms_patient.city_id,hms_patient.state_id,hms_patient.patient_category,hms_patient.country_id,hms_patient.f_h_simulation,hms_patient.father_husband,hms_patient.mother,hms_patient.guardian_name,hms_patient.guardian_email,hms_patient.guardian_phone,hms_patient.relation_id,hms_patient.camp_id,hms_patient.patient_email,hms_patient.monthly_income,hms_patient.occupation,hms_patient.photo,hms_patient.insurance_type,hms_patient.insurance_type_id,hms_patient.ins_company_id,hms_patient.polocy_no,hms_patient.tpa_id,hms_patient.ins_amount,hms_patient.ins_authorization_no,hms_patient.remark,hms_patient.status,hms_patient.anni_sms_year,hms_patient.anni_email_send_year,hms_patient.birth_sms_year,hms_patient.birth_email_year,hms_patient.is_deleted,hms_patient.created_date,hms_cities.city, hms_state.state,hms_gardian_relation.relation, (CASE When hms_patient.relation_type=1 THEN 'Son/o' When hms_patient.relation_type=2 THEN 'Husband/o' When hms_patient.relation_type=3 THEN 'Baby/o' When hms_patient.relation_type=4 THEN 'Father/o' When hms_patient.relation_type=5 THEN 'Daughter/o' When hms_patient.relation_type=6 THEN 'Wife/o'When hms_patient.relation_type=14 THEN 'Brother' Else '' END) as patient_relation,hms_patient.address, hms_patient.address2, hms_patient.address3, (Case When hms_patient.marital_status=0 Then 'Unmarried' ELSE 'Married' END) as marital_status, hms_religion.religion, hms_relation.relation, (CASE WHEN hms_patient.insurance_type=1 THEN 'TPA' Else 'Normal' END ) as ins_type, hms_insurance_company.insurance_company, hms_insurance_type.insurance_type,(select id from hms_ipd_booking where hms_ipd_booking.patient_id=hms_patient.id AND hms_ipd_booking.is_deleted=0 AND hms_ipd_booking.discharge_status=0 ORDER BY hms_ipd_booking.id DESC LIMIT 1) as running,(CASE WHEN (SELECT COUNT(*) 
-                FROM hms_token 
-                WHERE hms_token.patient_id = hms_patient.id 
-                AND DATE(hms_token.created_date) = CURDATE()) > 0 
-    THEN '1' ELSE '0' END) as has_token,,hms_patient_category.patient_category as patient_category_name"); 
-
 		// changes by Nitin sharma 04/02/2024
-		$this->db->join("hms_gardian_relation", "hms_gardian_relation.id=hms_patient.relation_type", 'left');
-		$this->db->join('hms_cities', 'hms_cities.id=hms_patient.city_id', 'left');
-		$this->db->join('hms_state', 'hms_state.id=hms_patient.state_id', 'left');
-		$this->db->join('hms_religion', 'hms_religion.id=hms_patient.religion_id', 'left');
-		$this->db->join('hms_relation', 'hms_relation.id=hms_patient.relation_id', 'left');
-		$this->db->join('hms_insurance_type ', 'hms_insurance_type.id=hms_patient.insurance_type_id', 'left');
-		$this->db->join('hms_insurance_company', 'hms_insurance_company.id=hms_patient.ins_company_id', 'left');
-		$this->db->join('hms_patient_category', 'hms_patient_category.id=hms_patient.patient_category', 'left');
+		$this->db->select("hms_visitor.id, 
+				   hms_visitor.branch_id,
+                   hms_visitor.visitor_type_id, 
+                   hms_visitor.from, 
+                   hms_visitor.visitor_name, 
+                   hms_visitor.mobile_no, 
+                   hms_visitor.purpose, 
+                   hms_visitor.created_date, 
+                   hms_visitor.emp_id,
+                   hms_visitor_type.visitor_type as visitor_type_name,
+                   hms_employees.name as employee_name");
 
-		$this->db->where('hms_patient.is_deleted', '0');
+		// $this->db->from('hms_visitor');
+		$this->db->join('hms_visitor_type', 'hms_visitor_type.id = hms_visitor.visitor_type_id', 'left');
+		$this->db->join('hms_employees', 'hms_employees.id = hms_visitor.emp_id', 'left');
+		$this->db->where('hms_visitor_type.is_deleted', '0');
+		$this->db->where('hms_visitor.branch_id = "'.$users_data['parent_id'].'"');
+		$this->db->where('hms_visitor.is_deleted', '0');
+
 		if (isset($search['branch_id']) && $search['branch_id'] != '') {
-			$this->db->where('hms_patient.branch_id', $search['branch_id']);
+			$this->db->where('hms_visitor.branch_id', $search['branch_id']);
 		} else {
-			$this->db->where('hms_patient.branch_id', $users_data['parent_id']);
+			$this->db->where('hms_visitor.branch_id', $users_data['parent_id']);
 		}
 		/////// Search query start //////////////
 
@@ -49,153 +51,28 @@ class Patient_model extends CI_Model
 
 			if (isset($search['start_date']) && !empty($search['start_date'])) {
 				$start_date = date('Y-m-d', strtotime($search['start_date'])) . ' 00:00:00';
-				$this->db->where('hms_patient.created_date >= "' . $start_date . '"');
+				$this->db->where('hms_visitor.created_date >= "' . $start_date . '"');
 			}
 
 			if (isset($search['end_date']) && !empty($search['end_date'])) {
 				$end_date = date('Y-m-d', strtotime($search['end_date'])) . ' 23:59:59';
-				$this->db->where('hms_patient.created_date <= "' . $end_date . '"');
+				$this->db->where('hms_visitor.created_date <= "' . $end_date . '"');
 			}
 
-			if (isset($search['simulation_id']) && !empty($search['simulation_id'])) {
-				$this->db->where('hms_patient.simulation_id', $search['simulation_id']);
-			}
-
-			if (isset($search['patient_name']) && !empty($search['patient_name'])) {
-				$this->db->where('hms_patient.patient_name LIKE "%' . trim($search['patient_name']) . '%"');
-			}
-
-			if (isset($search['patient_code']) && !empty($search['patient_code'])) {
-				$this->db->where('hms_patient.patient_code LIKE "%' . $search['patient_code'] . '%"');
+			if (isset($search['visitor_name']) && !empty($search['visitor_name'])) {
+				$this->db->where('hms_visitor.visitor_name LIKE "%' . trim($search['visitor_name']) . '%"');
 			}
 
 			if (isset($search['mobile_no']) && !empty($search['mobile_no'])) {
-				$this->db->where('hms_patient.mobile_no LIKE "%' . $search['mobile_no'] . '%"');
+				$this->db->where('hms_visitor.mobile_no LIKE "%' . $search['mobile_no'] . '%"');
+			}
+			if (isset($search['from']) && !empty($search['from'])) {
+				$this->db->where('hms_visitor.fron LIKE "%' . $search['fron'] . '%"');
+			}
+			if (isset($search['purpose']) && !empty($search['purpose'])) {
+				$this->db->where('hms_visitor.purpose LIKE "%' . $search['purpose'] . '%"');
 			}
 
-			if (isset($search['gender']) && $search['gender'] != "") {
-				$this->db->where('hms_patient.gender', $search['gender']);
-			}
-
-			if (isset($search['address']) && !empty($search['address'])) {
-
-				$this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.address3) like "%' . trim($search['address']) . '%"');
-
-			}
-
-			if (isset($search['country_id']) && !empty($search['country_id'])) {
-				$this->db->where('hms_patient.country_id', $search['country_id']);
-			}
-
-			if (isset($search['state_id']) && !empty($search['state_id'])) {
-				$this->db->where('hms_patient.state_id', $search['state_id']);
-			}
-
-			if (isset($search['city_id']) && !empty($search['city_id'])) {
-				$this->db->where('hms_patient.city_id', $search['city_id']);
-			}
-
-			if (isset($search['pincode']) && !empty($search['pincode'])) {
-				$this->db->where('hms_patient.pincode LIKE "' . $search['pincode'] . '%"');
-			}
-
-			if (isset($search['marital_status']) && isset($search['marital_status']) && $search['marital_status'] != "") {
-				$this->db->where('hms_patient.marital_status', $search['marital_status']);
-			}
-
-			if (isset($search['religion_id']) && !empty($search['religion_id'])) {
-				$this->db->where('hms_patient.religion_id', $search['religion_id']);
-			}
-
-			if (isset($search['father_husband']) && !empty($search['father_husband'])) {
-				$this->db->where('hms_patient.father_husband LIKE "' . $search['father_husband'] . '%"');
-			}
-
-			if (isset($search['mother']) && !empty($search['mother'])) {
-				$this->db->where('hms_patient.mother LIKE "' . $search['mother'] . '%"');
-			}
-
-			if (isset($search['guardian_name']) && !empty($search['guardian_name'])) {
-				$this->db->where('hms_patient.guardian_name LIKE "' . $search['guardian_name'] . '%"');
-			}
-
-			if (isset($search['guardian_email']) && !empty($search['guardian_email'])) {
-				$this->db->where('hms_patient.guardian_email LIKE "' . $search['guardian_email'] . '%"');
-			}
-
-			if (isset($search['guardian_phone']) && !empty($search['guardian_phone'])) {
-				$this->db->where('hms_patient.guardian_phone LIKE "' . $search['guardian_phone'] . '%"');
-			}
-
-			if (isset($search['relation_id']) && !empty($search['relation_id'])) {
-				$this->db->where('hms_patient.relation_id', $search['relation_id']);
-			}
-
-			if (isset($search['patient_email']) && !empty($search['patient_email'])) {
-				$this->db->where('hms_patient.patient_email LIKE "' . $search['patient_email'] . '%"');
-			}
-
-			if (isset($search['monthly_income']) && !empty($search['monthly_income'])) {
-				$this->db->where('hms_patient.monthly_income', $search['monthly_income']);
-			}
-
-			if (isset($search['occupation']) && !empty($search['occupation'])) {
-				$this->db->where('hms_patient.occupation LIKE "' . $search['occupation'] . '%"');
-			}
-
-			if (isset($search['insurance_type']) && isset($search['insurance_type']) && $search['insurance_type'] != "") {
-				$this->db->where('hms_patient.insurance_type', $search['insurance_type']);
-			}
-
-			if (isset($search['insurance_type_id']) && isset($search['insurance_type_id']) && $search['insurance_type_id'] != "") {
-				$this->db->where('hms_patient.insurance_type_id', $search['insurance_type_id']);
-			}
-
-			if (isset($search['ins_company_id']) && isset($search['ins_company_id']) && $search['ins_company_id'] != "") {
-				$this->db->where('hms_patient.ins_company_id', $search['ins_company_id']);
-			}
-
-			if (isset($search['polocy_no']) && $search['polocy_no'] != "") {
-				$this->db->where('hms_patient.polocy_no', $search['polocy_no']);
-			}
-
-			if (isset($search['tpa_id']) && $search['tpa_id'] != "") {
-				$this->db->where('hms_patient.tpa_id', $search['tpa_id']);
-			}
-
-			if (isset($search['start_age_y']) && !empty($search['start_age_y'])) {
-				$this->db->where('hms_patient.age_y >= "' . $search['start_age_y'] . '"');
-			}
-
-			if (isset($search['end_age_y']) && !empty($search['end_age_y'])) {
-				$this->db->where('hms_patient.age_y <= "' . $search['end_age_y'] . '"');
-			}
-
-			if (isset($search['ins_amount']) && $search['ins_amount'] != "") {
-				$this->db->where('hms_patient.ins_amount', $search['ins_amount']);
-			}
-
-			if (isset($search['ins_authorization_no']) && $search['ins_authorization_no'] != "") {
-				$this->db->where('hms_patient.ins_authorization_no', $search['ins_authorization_no']);
-			}
-
-			if (isset($search['status']) && isset($search['status']) && $search['status'] != "") {
-				$this->db->where('hms_patient.status', $search['status']);
-			}
-
-			if (isset($search['adhar_no']) && isset($search['adhar_no']) && $search['adhar_no'] != "") {
-				$this->db->where('hms_patient.adhar_no', $search['adhar_no']);
-			}
-			if (!empty($search['relation_name'])) {
-				$this->db->where('hms_patient.relation_name LIKE "' . $search['relation_name'] . '%"');
-			}
-			if (!empty($search['relation_type']) && !empty($search['relation_name'])) {
-				$this->db->where('hms_patient.relation_type', $search['relation_type']);
-			}
-
-			if (!empty($search['relation_simulation_id'])) {
-				$this->db->where('hms_patient.relation_simulation_id ', $search['relation_simulation_id']);
-			}
 		}
 
 		/////// Search query end //////////////
@@ -239,7 +116,6 @@ class Patient_model extends CI_Model
 		if ($_POST['length'] != -1)
 			$this->db->limit($_POST['length'], $_POST['start']);
 		$query = $this->db->get();
-		//echo $this->db->last_query();die;
 		return $query->result();
 	}
 
@@ -256,15 +132,15 @@ class Patient_model extends CI_Model
 		$users_data = $this->session->userdata('auth_users');
 		$parent_branch_details = $this->session->userdata('parent_branches_data');
 		$sub_branch_details = $this->session->userdata('sub_branches_data');
-		$search = $this->session->userdata('patient_search');
+		$search = $this->session->userdata('visitor_search');
 
 
 		$this->db->from($this->table);
 
 		if (isset($search['branch_id']) && $search['branch_id'] != '') {
-			$this->db->where('hms_patient.branch_id IN (' . $search['branch_id'] . ')');
+			$this->db->where('hms_visitor.branch_id IN (' . $search['branch_id'] . ')');
 		} else {
-			$this->db->where('hms_patient.branch_id', $users_data['parent_id']);
+			$this->db->where('hms_visitor.branch_id', $users_data['parent_id']);
 		}
 		/////// Search query start //////////////
 
@@ -272,152 +148,31 @@ class Patient_model extends CI_Model
 
 			if (isset($search['start_date']) && !empty($search['start_date'])) {
 				$start_date = date('Y-m-d', strtotime($search['start_date'])) . ' 00:00:00';
-				$this->db->where('hms_patient.created_date >= "' . $start_date . '"');
+				$this->db->where('hms_visitor.created_date >= "' . $start_date . '"');
 			}
 
 			if (isset($search['end_date']) && !empty($search['end_date'])) {
 				$end_date = date('Y-m-d', strtotime($search['end_date'])) . ' 23:59:59';
-				$this->db->where('hms_patient.created_date <= "' . $end_date . '"');
+				$this->db->where('hms_visitor.created_date <= "' . $end_date . '"');
 			}
 
-			if (isset($search['simulation_id']) && !empty($search['simulation_id'])) {
-				$this->db->where('hms_patient.simulation_id', $search['simulation_id']);
-			}
-
-			if (isset($search['patient_name']) && !empty($search['patient_name'])) {
-				$this->db->where('hms_patient.patient_name LIKE "%' . trim($search['patient_name']) . '%"');
-			}
-
-			if (isset($search['patient_code']) && !empty($search['patient_code'])) {
-				$this->db->where('hms_patient.patient_code LIKE "%' . $search['patient_code'] . '%"');
+			if (isset($search['visitor_name']) && !empty($search['visitor_name'])) {
+				$this->db->where('hms_visitor.visitor_name LIKE "%' . trim($search['visitor_name']) . '%"');
 			}
 
 			if (isset($search['mobile_no']) && !empty($search['mobile_no'])) {
-				$this->db->where('hms_patient.mobile_no LIKE "%' . $search['mobile_no'] . '%"');
+				$this->db->where('hms_visitor.mobile_no LIKE "%' . $search['mobile_no'] . '%"');
+			}
+			if (isset($search['from']) && !empty($search['from'])) {
+				$this->db->where('hms_visitor.from LIKE "%' . $search['from'] . '%"');
 			}
 
-			if (isset($search['gender']) && $search['gender'] != "") {
-				$this->db->where('hms_patient.gender', $search['gender']);
+
+			if (isset($search['purpose']) && $search['purpose'] != "") {
+				$this->db->where('hms_visitor.purpose', $search['purpose']);
 			}
 
-			if (isset($search['address']) && !empty($search['address'])) {
 
-				$this->db->where('CONCAT(hms_patient.address,hms_patient.address2,hms_patient.address3) like "%' . trim($search['address']) . '%"');
-			}
-
-			if (isset($search['country_id']) && !empty($search['country_id'])) {
-				$this->db->where('hms_patient.country_id', $search['country_id']);
-			}
-
-			if (isset($search['state_id']) && !empty($search['state_id'])) {
-				$this->db->where('hms_patient.state_id', $search['state_id']);
-			}
-
-			if (isset($search['city_id']) && !empty($search['city_id'])) {
-				$this->db->where('hms_patient.city_id', $search['city_id']);
-			}
-
-			if (isset($search['pincode']) && !empty($search['pincode'])) {
-				$this->db->where('hms_patient.pincode LIKE "' . $search['pincode'] . '%"');
-			}
-
-			if (isset($search['marital_status']) && isset($search['marital_status']) && $search['marital_status'] != "") {
-				$this->db->where('hms_patient.marital_status', $search['marital_status']);
-			}
-
-			if (isset($search['religion_id']) && !empty($search['religion_id'])) {
-				$this->db->where('hms_patient.religion_id', $search['religion_id']);
-			}
-
-			if (isset($search['father_husband']) && !empty($search['father_husband'])) {
-				$this->db->where('hms_patient.father_husband LIKE "' . $search['father_husband'] . '%"');
-			}
-
-			if (isset($search['mother']) && !empty($search['mother'])) {
-				$this->db->where('hms_patient.mother LIKE "' . $search['mother'] . '%"');
-			}
-
-			if (isset($search['guardian_name']) && !empty($search['guardian_name'])) {
-				$this->db->where('hms_patient.guardian_name LIKE "' . $search['guardian_name'] . '%"');
-			}
-
-			if (isset($search['guardian_email']) && !empty($search['guardian_email'])) {
-				$this->db->where('hms_patient.guardian_email LIKE "' . $search['guardian_email'] . '%"');
-			}
-
-			if (isset($search['guardian_phone']) && !empty($search['guardian_phone'])) {
-				$this->db->where('hms_patient.guardian_phone LIKE "' . $search['guardian_phone'] . '%"');
-			}
-
-			if (isset($search['relation_id']) && !empty($search['relation_id'])) {
-				$this->db->where('hms_patient.relation_id', $search['relation_id']);
-			}
-
-			if (isset($search['patient_email']) && !empty($search['patient_email'])) {
-				$this->db->where('hms_patient.patient_email LIKE "' . $search['patient_email'] . '%"');
-			}
-
-			if (isset($search['monthly_income']) && !empty($search['monthly_income'])) {
-				$this->db->where('hms_patient.monthly_income', $search['monthly_income']);
-			}
-
-			if (isset($search['occupation']) && !empty($search['occupation'])) {
-				$this->db->where('hms_patient.occupation LIKE "' . $search['occupation'] . '%"');
-			}
-
-			if (isset($search['insurance_type']) && isset($search['insurance_type']) && $search['insurance_type'] != "") {
-				$this->db->where('hms_patient.insurance_type', $search['insurance_type']);
-			}
-
-			if (isset($search['insurance_type_id']) && isset($search['insurance_type_id']) && $search['insurance_type_id'] != "") {
-				$this->db->where('hms_patient.insurance_type_id', $search['insurance_type_id']);
-			}
-
-			if (isset($search['ins_company_id']) && isset($search['ins_company_id']) && $search['ins_company_id'] != "") {
-				$this->db->where('hms_patient.ins_company_id', $search['ins_company_id']);
-			}
-
-			if (isset($search['polocy_no']) && $search['polocy_no'] != "") {
-				$this->db->where('hms_patient.polocy_no', $search['polocy_no']);
-			}
-
-			if (isset($search['tpa_id']) && $search['tpa_id'] != "") {
-				$this->db->where('hms_patient.tpa_id', $search['tpa_id']);
-			}
-
-			if (isset($search['start_age_y']) && !empty($search['start_age_y'])) {
-				$this->db->where('hms_patient.age_y >= "' . $search['start_age_y'] . '"');
-			}
-
-			if (isset($search['end_age_y']) && !empty($search['end_age_y'])) {
-				$this->db->where('hms_patient.age_y <= "' . $search['end_age_y'] . '"');
-			}
-
-			if (isset($search['ins_amount']) && $search['ins_amount'] != "") {
-				$this->db->where('hms_patient.ins_amount', $search['ins_amount']);
-			}
-
-			if (isset($search['ins_authorization_no']) && $search['ins_authorization_no'] != "") {
-				$this->db->where('hms_patient.ins_authorization_no', $search['ins_authorization_no']);
-			}
-
-			if (isset($search['status']) && isset($search['status']) && $search['status'] != "") {
-				$this->db->where('hms_patient.status', $search['status']);
-			}
-
-			if (isset($search['adhar_no']) && isset($search['adhar_no']) && $search['adhar_no'] != "") {
-				$this->db->where('hms_patient.adhar_no', $search['adhar_no']);
-			}
-			if (!empty($search['relation_name'])) {
-				$this->db->where('hms_patient.relation_name LIKE "' . $search['relation_name'] . '%"');
-			}
-			if (!empty($search['relation_type']) && !empty($search['relation_name'])) {
-				$this->db->where('hms_patient.relation_type', $search['relation_type']);
-			}
-
-			if (!empty($search['relation_simulation_id'])) {
-				$this->db->where('hms_patient.relation_simulation_id ', $search['relation_simulation_id']);
-			}
 		}
 
 		$query = $this->db->get();
@@ -431,96 +186,34 @@ class Patient_model extends CI_Model
 
 	public function get_by_id($id)
 	{
-		/*$this->db->select("hms_patient.*, hms_cities.city, hms_state.state, hms_countries.country, hms_simulation.simulation,hms_sim.simulation as rel_simulation, hms_religion.religion, hms_relation.relation as gardian_relation, hms_insurance_type.insurance_type as insurance_types, hms_insurance_company.insurance_company, hms_users.username,hms_gardian_relation.relation,hms_patient.modified_date as patient_modified_date");*/
-		//changed by Nitin Sharma 04/02/2024 		
-		$this->db->select("hms_patient.capture_finger,hms_patient.patient_code_auto,hms_patient.fingerprint_photo,hms_patient.id,hms_patient.branch_id,hms_patient.patient_category,hms_patient.patient_name,hms_patient.patient_code,hms_patient.simulation_id,hms_patient.first_name,hms_patient.last_name,hms_patient.adhar_no,hms_patient.relation_type,hms_patient.relation_simulation_id,hms_patient.relation_name,hms_patient.mobile_no,hms_patient.gender,hms_patient.dob,hms_patient.anniversary,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h,hms_patient.marital_status,hms_patient.height,hms_patient.weight,hms_patient.religion_id,hms_patient.address,hms_patient.address2,hms_patient.address3,hms_patient.pincode,hms_patient.other_city,hms_patient.city_id,hms_patient.state_id,hms_patient.country_id,hms_patient.f_h_simulation,hms_patient.father_husband,hms_patient.mother,hms_patient.guardian_name,hms_patient.guardian_email,hms_patient.guardian_phone,hms_patient.relation_id,hms_patient.camp_id,hms_patient.patient_email,hms_patient.monthly_income,hms_patient.occupation,hms_patient.photo,hms_patient.insurance_type,hms_patient.insurance_type_id,hms_patient.ins_company_id,hms_patient.polocy_no,hms_patient.tpa_id,hms_patient.ins_amount,hms_patient.ins_authorization_no,hms_patient.remark,hms_patient.status,hms_patient.anni_sms_year,hms_patient.anni_email_send_year,hms_patient.birth_sms_year,hms_patient.birth_email_year,hms_patient.is_deleted,hms_patient.created_date,hms_cities.city, hms_state.state, hms_countries.country, hms_simulation.simulation,hms_sim.simulation as rel_simulation, hms_religion.religion, hms_relation.relation as gardian_relation, hms_insurance_type.insurance_type as insurance_types, hms_insurance_company.insurance_company, hms_users.username,hms_gardian_relation.relation,hms_patient.modified_date as patient_modified_date,hms_patient_category.patient_category as patient_category_name,hms_token.token_no");
-		//changed by Nitin Sharma 04/02/2024
-		$this->db->from('hms_patient');
-		$this->db->where('hms_patient.id', $id);
-		// $this->db->where('hms_patient.is_deleted','0'); 
-		$this->db->join('hms_users', 'hms_users.parent_id=hms_patient.id AND hms_users.users_role=4', 'left');
-		$this->db->join('hms_religion', 'hms_religion.id=hms_patient.religion_id', 'left');
-		$this->db->join('hms_relation', 'hms_relation.id=hms_patient.relation_id', 'left');
-		$this->db->join('hms_countries', 'hms_countries.id=hms_patient.country_id', 'left');
-		$this->db->join('hms_cities', 'hms_cities.id=hms_patient.city_id', 'left');
-		$this->db->join('hms_state', 'hms_state.id=hms_patient.state_id', 'left');
-		$this->db->join('hms_simulation', 'hms_simulation.id=hms_patient.simulation_id', 'left');
-		$this->db->join('hms_patient_category', 'hms_patient_category.id=hms_patient.patient_category', 'left');
+		$this->db->select("hms_visitor.id, 
+                   hms_visitor.visitor_type_id, 
+                   hms_visitor.simulation_id, 
+                   hms_visitor.from, 
+                   hms_visitor.visitor_name, 
+                   hms_visitor.mobile_no, 
+                   hms_visitor.purpose, 
+                   hms_visitor.emp_id, 
+                   hms_visitor_type.visitor_type as visitor_type_name, 
+                   hms_employees.name as employee_name, 
+                   hms_visitor.modified_date");
 
-		$this->db->join("hms_gardian_relation", "hms_gardian_relation.id=hms_patient.relation_type", 'left');
-		$this->db->join('hms_simulation as hms_sim', 'hms_sim.id=hms_patient.relation_simulation_id', 'left');
-		$this->db->join('hms_insurance_type', 'hms_insurance_type.id=hms_patient.insurance_type_id', 'left');
-		$this->db->join('hms_insurance_company', 'hms_insurance_company.id=hms_patient.ins_company_id', 'left');
-		$this->db->join('hms_token','hms_token.patient_id=hms_patient.id','left');
+		$this->db->from('hms_visitor');
+
+		$this->db->where('hms_visitor.id', $id);
+
+		$this->db->join('hms_visitor_type', 'hms_visitor_type.id = hms_visitor.visitor_type_id', 'left');
+
+		$this->db->join('hms_employees', 'hms_employees.id = hms_visitor.emp_id', 'left');
+
 		$query = $this->db->get();
 		$result = $query->row_array();
 
-		//echo $this->db->last_query(); exit;
+		// echo $this->db->last_query(); exit;
+
 		return $result;
 	}
-
-	function get_doctor_data($id)
-	{ //echo $id;die;
-
-		$this->db->select("*");
-		$this->db->from('hms_doctors');
-		$this->db->where('hms_doctors.id', $id);
-		$query = $this->db->get();
-		return $query->row_array();
-
-	}
-	function get_doctor_name($id)
-	{
-		$this->db->select("*");
-		$this->db->from('hms_doctors');
-		$this->db->where('hms_doctors.branch_id', $id);
-		$query = $this->db->get();
-		return $query->result_array();
-
-	}
-	function get_doctor_signature_data($id, $branch_id)
-	{
-		$this->db->select("*");
-		$this->db->from('hms_signature');
-		$this->db->where('hms_signature.doctor_id', $id);
-		$this->db->where('hms_signature.branch_id', $branch_id);
-		$query = $this->db->get();
-		return $query->row_array();
-
-
-	}
-	function get_template_data()
-	{
-		$user_data = $this->session->userdata('auth_users');
-		$parent_id = $user_data['parent_id'];
-		$this->db->select("*");
-		$this->db->from('hms_doctor_certificate');
-		$this->db->where('hms_doctor_certificate.is_deleted', 0);
-		$this->db->where('hms_doctor_certificate.branch_id', $parent_id);
-		$query = $this->db->get();
-		return $query->result_array();
-
-
-	}
-	function get_template_data_by_branch_id($branch_id, $template_id)
-	{
-
-		$this->db->select("*");
-		$this->db->from('hms_doctor_certificate');
-		$this->db->where('hms_doctor_certificate.branch_id', $branch_id);
-		$this->db->where('hms_doctor_certificate.id', $template_id);
-		$query = $this->db->get();
-		return $query->row_array();
-
-	}
-	public function update_token($data = '')
-	{
-		// print_r($data);
-		$this->db->where('id', $data['id']);
-		$this->db->update('hms_patient', $data);
-		// die('update_tokenaDSADSA');
-	}
-	public function save($filename = "")
+	public function save()
 	{
 		$user_data = $this->session->userdata('auth_users');
 
@@ -546,119 +239,106 @@ class Patient_model extends CI_Model
 			$anniversary = date('Y-m-d', strtotime($post['anniversary']));
 		}
 		$data = array(
-			"patient_name" => $post['patient_name'],
+			"visitor_type_id" => $post['visitor_type_id'],
+			"visitor_name" => $post['visitor_name'],
+			"from" => $post['from'],
 			"simulation_id" => $post['simulation_id'],
 			//'patient_code'=>$post['patient_code'],
 			"mobile_no" => $post['mobile_no'],
-			"gender" => $post['gender'],
+			"purpose" => $post['purpose'],
+			"emp_id" => $post['emp_id'],
+			// "gender" => $post['gender'],
 			// "adhar_no" => $post['adhar_no'],
 			// "age_y" => $post['age_y'],
 			// "age_m" => $post['age_m'],
 			// "age_d" => $post['age_d'],
 			// "age_h" => $post['age_h'],
-			"patient_category" => $post['patient_category'],
+			// "patient_category" => $post['patient_category'],
 			// 'dob' => date('Y-m-d', strtotime($post['dob'])),
-			'anniversary' => $anniversary,
+			// 'anniversary' => $anniversary,
 			// "state_id" => $post['state_id'],
 			// "pincode" => $post['pincode'],
 			// "patient_email" => $post['patient_email'],
 			// 'relation_type' => $post['relation_type'],
 			// 'relation_name' => $post['relation_name'],
 			// 'relation_simulation_id' => $post['relation_simulation_id'],
-			'patient_code_auto' => $post['patient_code_auto'],
+			// 'patient_code_auto' => $post['patient_code_auto'],
 
 		);
 
-		if (empty($post['address'])) {
-			$data['address'] = "";
-		} else {
-			$data['address'] = $post['address'];
-		}
 
-		if (empty($post['address_second'])) {
-			$data['address2'] = "";
-		} else {
-			$data['address2'] = $post['address_second'];
-		}
-		if (empty($post['address_third'])) {
-			$data['address3'] = "";
-		} else {
-			$data['address3'] = $post['address_third'];
-		}
 		if (!empty($post['data_id']) && $post['data_id'] > 0) {
-			if (!empty($filename)) {
-				$this->db->set('photo', $filename);
-			}
+			// echo "<pew>";
+			// print_r($data);
+			// die;
 			$this->db->set('ip_address', $_SERVER['REMOTE_ADDR']);
 			$this->db->set('modified_by', $user_data['id']);
 			$this->db->set('modified_date', date('Y-m-d H:i:s'));
 			$this->db->where('id', $post['data_id']);
-			$this->db->update('hms_patient', $data);
+			$this->db->update('hms_visitor', $data);
 
 			$data_id = $post['data_id'];
-			$data = array(
-				"email" => $post['patient_email'],
-			);
-			$this->db->where('parent_id', $data_id);
-			$this->db->where('users_role', '4');
-			$this->db->update('hms_users', $data);
+			// $data = array(
+			// 	"email" => $post['patient_email'],
+			// );
+			// $this->db->where('parent_id', $data_id);
+			// $this->db->where('users_role', '4');
+			// $this->db->update('hms_users', $data);
 
-			if (!empty($post['data_id']) && !empty($post['password'])) {
-				$this->db->set('password', md5($post['password']));
-				$this->db->where('users_role', 4);
-				$this->db->where('parent_id', $post['data_id']);
-				$this->db->update('hms_users');
-			}
+			// if (!empty($post['data_id']) && !empty($post['password'])) {
+			// 	$this->db->set('password', md5($post['password']));
+			// 	$this->db->where('users_role', 4);
+			// 	$this->db->where('parent_id', $post['data_id']);
+			// 	$this->db->update('hms_users');
+			// }
 		} else {
-			if (!empty($filename)) {
-				$this->db->set('photo', $filename);
-			}
+
 			$reg_no = generate_unique_id(4);
-			$this->db->set('patient_code', $reg_no);
+			// $this->db->set('patient_code', $reg_no);
 			$this->db->set('ip_address', $_SERVER['REMOTE_ADDR']);
 			$this->db->set('created_by', $user_data['id']);
 			$this->db->set('branch_id', $user_data['parent_id']);
-			$this->db->set('created_date',date('Y-m-d H:i:s'));
-			$this->db->insert('hms_patient', $data);
+			$this->db->set('created_date', date('Y-m-d H:i:s'));
+			$this->db->insert('hms_visitor', $data);
 			// echo $this->db->last_query();die;
 			$data_id = $this->db->insert_id();
 
-			$data = array(
-				"users_role" => 4,
-				"parent_id" => $data_id,
-				"username" => 'PAT000' . $data_id,
-				"password" => md5('PASS' . $data_id),
-				// "email"=>$post['patient_email'], 
-				"status" => '1',
-				"ip_address" => $_SERVER['REMOTE_ADDR'],
-				"created_by" => $user_data['id'],
-				"created_date" => date('Y-m-d H:i:s')
-			);
-			$this->db->insert('hms_users', $data);
-			$users_id = $this->db->insert_id();
+			// $data = array(
+			// 	"users_role" => 4,
+			// 	"parent_id" => $data_id,
+			// 	"username" => 'PAT000' . $data_id,
+			// 	"password" => md5('PASS' . $data_id),
+			// 	// "email"=>$post['patient_email'], 
+			// 	"status" => '1',
+			// 	"ip_address" => $_SERVER['REMOTE_ADDR'],
+			// 	"created_by" => $user_data['id'],
+			// 	"created_date" => date('Y-m-d H:i:s')
+			// );
+			// $this->db->insert('hms_users', $data);
+			// $users_id = $this->db->insert_id();
 
 			/*$this->db->select('*');
-					 $this->db->where('users_role','4');
-					 $query = $this->db->get('hms_permission_to_role');		 
-					 $permission_list = $query->result();
-					 if(!empty($permission_list))
-					 {
-						 foreach($permission_list as $permission)
-						 {
-							 $data = array(
-									 'users_role' =>4,
-									 'users_id' => $users_id,
-									 'master_id' => $data_id,
-									 'section_id' => $permission->section_id,
-									 'action_id' => $permission->action_id, 
-									 'permission_status' => '1',
-									 'ip_address' => $_SERVER['REMOTE_ADDR'],
-									 'created_by' =>$user_data['id'],
-									 'created_date' =>date('Y-m-d H:i:s'),
-								  );
-							 $this->db->insert('hms_permission_to_users',$data);
-						 }
-					 } */
+			$this->db->where('users_role','4');
+			$query = $this->db->get('hms_permission_to_role');		 
+			$permission_list = $query->result();
+			if(!empty($permission_list))
+			{
+				foreach($permission_list as $permission)
+				{
+					$data = array(
+							'users_role' =>4,
+							'users_id' => $users_id,
+							'master_id' => $data_id,
+							'section_id' => $permission->section_id,
+							'action_id' => $permission->action_id, 
+							'permission_status' => '1',
+							'ip_address' => $_SERVER['REMOTE_ADDR'],
+							'created_by' =>$user_data['id'],
+							'created_date' =>date('Y-m-d H:i:s'),
+						);
+					$this->db->insert('hms_permission_to_users',$data);
+				}
+			} */
 		}
 		return $data_id;
 	}
@@ -671,7 +351,7 @@ class Patient_model extends CI_Model
 			$this->db->set('deleted_by', $user_data['id']);
 			$this->db->set('deleted_date', date('Y-m-d H:i:s'));
 			$this->db->where('id', $id);
-			$this->db->update('hms_patient');
+			$this->db->update('hms_visitor');
 		}
 	}
 
@@ -690,7 +370,7 @@ class Patient_model extends CI_Model
 			$this->db->set('deleted_by', $user_data['id']);
 			$this->db->set('deleted_date', date('Y-m-d H:i:s'));
 			$this->db->where('id IN (' . $branch_ids . ')');
-			$this->db->update('hms_patient');
+			$this->db->update('hms_visitor');
 		}
 	}
 
@@ -1042,16 +722,16 @@ class Patient_model extends CI_Model
 		if ($_POST['length'] != -1)
 			$this->db->limit($_POST['length'], $_POST['start']);
 		/*if(!empty($medicine_id) && !empty($batch_no))
-		   {*/
+										 {*/
 		$query = $this->db->get();
 		//echo $this->db->last_query();die;
 		return $query->result();
 		/*}
-		   else
-		   {
-			   $result = array();
-			   return $result;
-		   }*/
+										 else
+										 {
+											 $result = array();
+											 return $result;
+										 }*/
 	}
 
 	private function _get_patient_history_datatables_query($patient_id = "0", $type = "1", $branch_id = '')
@@ -1292,145 +972,7 @@ class Patient_model extends CI_Model
 
 
 	}
-	private function _get_patient_history_datatables_query20200124($patient_id = "0", $type = "1", $branch_id = '')
-	{
 
-		$users_data = $this->session->userdata('auth_users');
-		if (!empty($type) && $type == 1) //purchase
-		{
-			//echo $patient_id;die;
-			$this->db->select("hms_opd_booking.id,hms_opd_booking.booking_code as number,hms_opd_booking.booking_date as date,hms_doctors.doctor_name,hms_opd_booking.net_amount as amount,hms_opd_booking.branch_id");
-			$this->db->join('hms_doctors', 'hms_doctors.id =hms_opd_booking.attended_doctor', 'left');
-			$this->db->from('hms_opd_booking');
-			if (!empty($branch_id)) {
-				$this->db->where('hms_opd_booking.branch_id', $branch_id);
-			} else {
-				$this->db->where('hms_opd_booking.branch_id', $users_data['parent_id']);
-			}
-
-			$this->db->where('hms_opd_booking.patient_id', $patient_id);
-			$this->db->where('hms_opd_booking.type', 2);
-
-			$this->db->where('hms_opd_booking.is_deleted', 0);
-			$this->db->order_by('hms_opd_booking.id', 'ASC');
-			//echo $this->db->last_query(); 
-
-		}
-		if (!empty($type) && $type == 2) //purchase return
-		{
-			$this->db->select("hms_opd_booking.id,hms_opd_booking.reciept_code as number,hms_opd_booking.booking_date as date,hms_opd_booking.net_amount as amount,hms_doctors.doctor_name as doctor_name,hms_opd_booking.branch_id");
-			$this->db->join('hms_doctors', 'hms_doctors.id =hms_opd_booking.attended_doctor', 'left');
-			$this->db->from('hms_opd_booking');
-			//$this->db->where('hms_opd_booking.branch_id',$users_data['parent_id']);
-			if (!empty($branch_id)) {
-				$this->db->where('hms_opd_booking.branch_id', $branch_id);
-			} else {
-				$this->db->where('hms_opd_booking.branch_id', $users_data['parent_id']);
-			}
-			$this->db->where('hms_opd_booking.patient_id', $patient_id);
-			$this->db->where('hms_opd_booking.type', 3);
-
-			$this->db->where('hms_opd_booking.is_deleted', 0);
-			$this->db->order_by('hms_opd_booking.id', 'ASC');
-			//echo $this->db->last_query();
-		}
-		if (!empty($type) && $type == 3) //Sale purchase_id  patient_id 	
-		{
-			$this->db->select("hms_medicine_sale.sale_no as number,hms_medicine_sale.id,hms_medicine_sale.sale_date as date,hms_medicine_sale.net_amount as amount,hms_medicine_sale.branch_id");
-			$this->db->from('hms_medicine_sale');
-
-			$this->db->join('hms_branch', 'hms_medicine_sale.branch_id=hms_branch.id', 'left');
-
-			$this->db->join('hms_patient', 'hms_medicine_sale.patient_id=hms_patient.id', 'left');
-
-
-			//$this->db->join('hms_medicine_company','hms_medicine_entry.manuf_company=hms_medicine_company.id','left');
-
-			//$this->db->where('hms_medicine_sale.branch_id',$users_data['parent_id']);
-			if (!empty($branch_id)) {
-				$this->db->where('hms_medicine_sale.branch_id', $branch_id);
-			} else {
-				$this->db->where('hms_medicine_sale.branch_id', $users_data['parent_id']);
-			}
-			$this->db->where('hms_medicine_sale.patient_id', $patient_id);
-
-			$this->db->where('hms_medicine_sale.is_deleted', 0);
-			$this->db->order_by('hms_medicine_sale.id', 'ASC');
-			//echo $this->db->last_query();
-		}
-
-		if (!empty($type) && $type == 4) //IPD  	
-		{
-			$this->db->select("hms_ipd_booking.id,hms_ipd_booking.ipd_no as number,hms_ipd_booking.admission_date as date,hms_ipd_booking.advance_payment as amount,hms_doctors.doctor_name as doctor_name,hms_ipd_booking.branch_id");
-			$this->db->join('hms_doctors', 'hms_doctors.id =hms_ipd_booking.attend_doctor_id', 'left');
-			$this->db->from('hms_ipd_booking');
-			if (!empty($branch_id)) {
-				$this->db->where('hms_ipd_booking.branch_id', $branch_id);
-			} else {
-				$this->db->where('hms_ipd_booking.branch_id', $users_data['parent_id']);
-			}
-
-			$this->db->where('hms_ipd_booking.patient_id', $patient_id);
-			$this->db->where('hms_ipd_booking.is_deleted', 0);
-			$this->db->order_by('hms_ipd_booking.id', 'ASC');
-			//echo $this->db->last_query();
-		}
-
-		if (!empty($type) && $type == 5) //pathology
-		{
-			$this->db->select('path_test_booking.id,path_test_booking.branch_id,path_test_booking.lab_reg_no as number, path_test_booking.booking_date as date,path_test_booking.net_amount as amount,hms_doctors.doctor_name as doctor_name');
-
-			$this->db->join('hms_doctors', 'hms_doctors.id =path_test_booking.attended_doctor', 'left');
-			$this->db->from('path_test_booking');
-			if (!empty($patient_id)) {
-				$this->db->where('path_test_booking.patient_id', $patient_id);
-			}
-			$this->db->order_by('path_test_booking.id', 'desc');
-
-			$this->db->where('path_test_booking.is_deleted', 0);
-			$this->db->order_by('path_test_booking.id', 'ASC');
-			//$result = $query->result(); 
-			//echo $this->db->last_query();
-
-		}
-
-		/*if(!empty($type) && $type==4) //Sale return
-			  {
-				  $this->db->select("hms_medicine_sale_return_medicine.*,hms_branch.branch_name,hms_medicine_sale_return.patient_id,hms_medicine_sale_return.patient_id as purchase_order_id,hms_medicine_sale_return.created_date as purchase_date,hms_patient.patient_name as vendor_name,(select company_name from hms_medicine_company as cmpny where cmpny.id = hms_medicine_entry.manuf_company) as company_name,hms_medicine_entry.medicine_name,hms_medicine_entry.medicine_code"); 
-				  $this->db->from('hms_medicine_sale_return_medicine');   
-				  
-				  $this->db->join('hms_medicine_sale_return','hms_medicine_sale_return.id = hms_medicine_sale_return_medicine.sales_return_id','left'); 
-				  $this->db->join('hms_branch','hms_medicine_sale_return.branch_id=hms_branch.id','left');
-				  
-				  $this->db->join('hms_patient','hms_medicine_sale_return.patient_id=hms_patient.id','left'); 
-				  
-				  $this->db->join('hms_medicine_entry','hms_medicine_sale_return_medicine.medicine_id=hms_medicine_entry.id','left');
-				  
-				  //$this->db->join('hms_medicine_company','hms_medicine_entry.manuf_company=hms_medicine_company.id','left');
-
-				  $this->db->where('hms_medicine_sale_return.branch_id',$users_data['parent_id']);
-				  $this->db->where('hms_medicine_sale_return_medicine.medicine_id',$medicine_id);
-				  
-				  $this->db->where('hms_medicine_sale_return.is_deleted',0);
-				  $this->db->order_by('hms_medicine_sale_return.id','ASC');
-			  }
-			  if(!empty($type) && $type==5) //Branch allot
-			  {
-				  $this->db->select('hms_medicine_entry.*,hms_medicine_company.company_name,hms_medicine_stock.debit as quantity,hms_medicine_stock.created_date,hms_medicine_stock.parent_id,hms_branch.branch_name');
-				  $this->db->from('hms_medicine_entry');
-				  $this->db->join('hms_medicine_company','hms_medicine_entry.manuf_company=hms_medicine_company.id','left');
-
-				  $this->db->join('hms_medicine_stock','hms_medicine_stock.m_id=hms_medicine_entry.id');
-
-				  $this->db->join('hms_branch','hms_medicine_stock.parent_id=hms_branch.id','left');
-				  //$this->db->where('hms_medicine_stock.branch_id',$users_data['parent_id']);
-				  $this->db->where('hms_medicine_stock.type',$type);
-				  $this->db->where('hms_medicine_stock.debit > 0');
-				  $this->db->where('hms_medicine_stock.m_id',$medicine_id);
-				  $this->db->order_by('hms_medicine_stock.id','ASC');
-				  //echo $this->db->last_query();
-			  }*/
-	}
 
 
 	function get_patient_history_count_filtered($patient_id = "", $type = '')
@@ -1842,41 +1384,41 @@ class Patient_model extends CI_Model
 					$data_id = $this->db->insert_id();
 
 					/*$data = array(     
-										   "users_role"=>4,
-										   "parent_id"=>$data_id,
-										   "username"=>'PAT000'.$data_id,
-										   "password"=>md5('PASS'.$data_id),
-										   "email"=>$patient_data['patient_email'], 
-										   "status"=>'1',
-										   "ip_address"=>$_SERVER['REMOTE_ADDR'],
-										   "created_by"=>$users_data['id'],
-										   "created_date" =>date('Y-m-d H:i:s')
-												); 
-								   $this->db->insert('hms_users',$data);	
-								   $users_id = $this->db->insert_id();*/
+																													  "users_role"=>4,
+																													  "parent_id"=>$data_id,
+																													  "username"=>'PAT000'.$data_id,
+																													  "password"=>md5('PASS'.$data_id),
+																													  "email"=>$patient_data['patient_email'], 
+																													  "status"=>'1',
+																													  "ip_address"=>$_SERVER['REMOTE_ADDR'],
+																													  "created_by"=>$users_data['id'],
+																													  "created_date" =>date('Y-m-d H:i:s')
+																														   ); 
+																											  $this->db->insert('hms_users',$data);	
+																											  $users_id = $this->db->insert_id();*/
 
 					/*$this->db->select('*');
-								   $this->db->where('users_role','4');
-								   $query = $this->db->get('hms_permission_to_role');		 
-								   $permission_list = $query->result();
-								   if(!empty($permission_list))
-								   {
-									   foreach($permission_list as $permission)
-									   {
-										   $data = array(
-												   'users_role' =>4,
-												   'users_id' => $users_id,
-												   'master_id' => $data_id,
-												   'section_id' => $permission->section_id,
-												   'action_id' => $permission->action_id, 
-												   'permission_status' => '1',
-												   'ip_address' => $_SERVER['REMOTE_ADDR'],
-												   'created_by' =>$users_data['id'],
-												   'created_date' =>date('Y-m-d H:i:s'),
-												);
-										   $this->db->insert('hms_permission_to_users',$data);
-									   }
-								   }*/
+																											  $this->db->where('users_role','4');
+																											  $query = $this->db->get('hms_permission_to_role');		 
+																											  $permission_list = $query->result();
+																											  if(!empty($permission_list))
+																											  {
+																												  foreach($permission_list as $permission)
+																												  {
+																													  $data = array(
+																															  'users_role' =>4,
+																															  'users_id' => $users_id,
+																															  'master_id' => $data_id,
+																															  'section_id' => $permission->section_id,
+																															  'action_id' => $permission->action_id, 
+																															  'permission_status' => '1',
+																															  'ip_address' => $_SERVER['REMOTE_ADDR'],
+																															  'created_by' =>$users_data['id'],
+																															  'created_date' =>date('Y-m-d H:i:s'),
+																														   );
+																													  $this->db->insert('hms_permission_to_users',$data);
+																												  }
+																											  }*/
 					//echo $this->db->last_query(); exit;
 				}
 			}
