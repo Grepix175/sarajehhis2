@@ -1,16 +1,16 @@
 <html>
 
 <head>
-  <title>Patient Report</title>
+  <title>Visitor Report</title>
   <?php
-  if ($print_status == 1) {
+  // if ($print_status == 1) {
     ?>
     <script type="text/javascript">
       window.print();
       window.onfocus = function () { window.close(); }
     </script>
   <?php
-  }
+  // }
   ?>
   <style>
     body {
@@ -60,9 +60,6 @@
     </tr>
     <?php
     if (!empty($data_list)) {
-      // echo "<pre>";
-      // print_r($data_list);
-      // die;
       $i = 1;
       foreach ($data_list as $visitor) {
         // $genders = array('0'=>'Female','1'=>'Male','2'=>'Other');

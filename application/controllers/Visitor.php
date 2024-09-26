@@ -1591,15 +1591,15 @@ class Visitor extends CI_Controller
         if (!empty($from_date) && !empty($to_date)) {
             $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
         }
-        // echo "<pre>";
-        // print_r($data);
-        // print_r($mainHeader);
-        // die;
         $data['mainHeader'] = $mainHeader;
-
+        
         // Load the HTML view into a variable
         $this->load->view('visitor/visitor_html', $data);
         $html = $this->output->get_output();
+        // echo "<pre>";
+        // print_r($data);
+        // print_r($html);
+        // die;
 
         // Load the PDF library
         $this->load->library('pdf');
