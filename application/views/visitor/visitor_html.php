@@ -60,9 +60,9 @@
     </tr>
     <?php
     if (!empty($data_list)) {
-      echo "<pre>";
-      print_r($data_list);
-      die;
+      // echo "<pre>";
+      // print_r($data_list);
+      // die;
       $i = 1;
       foreach ($data_list as $visitor) {
         // $genders = array('0'=>'Female','1'=>'Male','2'=>'Other');
