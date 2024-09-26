@@ -643,6 +643,23 @@ class General_model extends CI_Model {
         $result = $query->result(); 
         return $result; 
     } 
+    public function visitor_list($id='')
+    {
+        $users_data = $this->session->userdata('auth_users');
+        $user_data = $this->session->userdata('auth_users');
+        $this->db->select('*');  
+        // $this->db->where('status','1'); 
+        $this->db->order_by('visitor_type','ASC');
+        $this->db->where('is_deleted',0); 
+        if(!empty($id))
+        {
+            $this->db->where('id',$id);
+        }
+        $this->db->where('branch_id',$users_data['parent_id']);
+        $query = $this->db->get('hms_visitor_type');
+        $result = $query->result(); 
+        return $result; 
+    } 
 
     public function specialization_list($branch_id="")
     {
