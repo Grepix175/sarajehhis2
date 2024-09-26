@@ -49,7 +49,6 @@
   <div class="header-title"><?php echo $mainHeader; ?></div>
   <table width="100%" cellpadding="0" cellspacing="0" border="1px">
     <tr>
-      <th style="text-align: left;"><?php echo $data = get_setting_value('PATIENT_REG_NO'); ?></th>
       <th style="text-align: left;">Visitor Type</th>
       <th style="text-align: left;">From</th>
       <th style="text-align: left;">Visitor Name</th>

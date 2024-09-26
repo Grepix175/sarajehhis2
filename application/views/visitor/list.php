@@ -914,14 +914,14 @@
       var toDate = document.getElementById('end_date_patient').value;
 
       // Parse the dates to JavaScript Date objects
-      var fromDateObj = new Date(fromDate);
-      var toDateObj = new Date(toDate);
+      // var fromDateObj = new Date(fromDate);
+      // var toDateObj = new Date(toDate);
 
-      // Check if fromDate or toDate is null or if the range is more than 1 month
-      if (!fromDate || !toDate || (toDateObj > new Date(fromDateObj.setMonth(fromDateObj.getMonth() + 1)))) {
-        alert('Please select both "From Date" and "To Date" with a maximum range of 1 month.');
-        return; // Stop further execution
-      }
+      // // Check if fromDate or toDate is null or if the range is more than 1 month
+      // if (!fromDate || !toDate || (toDateObj > new Date(fromDateObj.setMonth(fromDateObj.getMonth() + 1)))) {
+      //   alert('Please select both "From Date" and "To Date" with a maximum range of 1 month.');
+      //   return; // Stop further execution
+      // }
 
       // Proceed if the dates are valid
       // Construct the URL with query parameters
