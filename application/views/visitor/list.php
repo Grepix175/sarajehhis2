@@ -460,7 +460,7 @@
                 <i class="fa fa-plus"></i> New
               </button>
 
-              <!--<a data-toggle="tooltip"  title="Download list in excel" href="<?php echo base_url('visitor/patient_excel'); ?>" class="btn-anchor m-b-2">-->
+              <!--<a data-toggle="tooltip"  title="Download list in excel" href="<?php echo base_url('visitor/visitor_excel'); ?>" class="btn-anchor m-b-2">-->
               <!--<i class="fa fa-file-excel-o"></i> Excel-->
               <!--</a>-->
               <a data-toggle="tooltip" title="Download list in excel" href="#" id="pa_download_excel"
@@ -472,7 +472,7 @@
         <i class="fa fa-file-word-o"></i> CSV
         </a> -->
 
-              <!--<a data-toggle="tooltip"  title="Download list in pdf" href="<?php echo base_url('visitor/patient_pdf'); ?>" class="btn-anchor m-b-2">-->
+              <!--<a data-toggle="tooltip"  title="Download list in pdf" href="<?php echo base_url('visitor/visitor_pdf'); ?>" class="btn-anchor m-b-2">-->
               <!--<i class="fa fa-file-pdf-o"></i> PDF-->
               <!--</a>-->
               <a data-toggle="tooltip" title="Download list in pdf" href="#" id="pa_download_pdf"
@@ -892,7 +892,7 @@
       var toDate = document.getElementById('end_date_patient').value;
 
       // Construct the URL with query parameters
-      var url = '<?php echo base_url("visitor/patient_excel"); ?>';
+      var url = '<?php echo base_url("visitor/visitor_excel"); ?>';
 
       // Append dates to the URL if they exist
       if (fromDate || toDate) {
@@ -925,7 +925,7 @@
 
       // Proceed if the dates are valid
       // Construct the URL with query parameters
-      var url = '<?php echo base_url("visitor/patient_pdf"); ?>';
+      var url = '<?php echo base_url("visitor/visitor_pdf"); ?>';
       url += '?from_date=' + encodeURIComponent(fromDate) + '&to_date=' + encodeURIComponent(toDate);
 
 

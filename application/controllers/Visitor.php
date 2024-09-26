@@ -1357,8 +1357,8 @@ class Visitor extends CI_Controller
         }
 
         // Field names in the next row
-        $data = get_setting_value('PATIENT_REG_NO');
-        $fields = array($data, 'Visitor Type', 'From', 'Visitor Name',  'Mobile No.', 'Purpose', 'Employee', 'Created Date');
+        // $data = get_setting_value('PATIENT_REG_NO');
+        $fields = array('Visitor Type', 'From', 'Visitor Name',  'Mobile No.', 'Purpose', 'Employee', 'Created Date');
 
         $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getDefaultStyle()->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
@@ -1427,7 +1427,7 @@ class Visitor extends CI_Controller
                     $relation_name = $visitor->patient_relation . " " . $visitor->relation_name;
                 }
 
-                array_push($rowData, $visitor->visitor_type_name, $visitor->from, $visitor->visitor_name, $visitor->mobile_no, $visitor->purpose, $created_date);
+                array_push($rowData, $visitor->visitor_type_name, $visitor->from, $visitor->visitor_name, $visitor->mobile_no, $visitor->purpose, $visitor->employee_name, $created_date);
                 $count = count($rowData);
                 for ($j = 0; $j < $count; $j++) {
                     $data[$i][$fields[$j]] = $rowData[$j];
@@ -1572,7 +1572,8 @@ class Visitor extends CI_Controller
     //     $this->pdf->render();
     //     $this->pdf->stream("patient_list_".time().".pdf");
     // }
-    public function patient_pdf()
+    
+    public function visitor_pdf()
     {
         // Increase memory limit and execution time
         ini_set('memory_limit', '2048M');
