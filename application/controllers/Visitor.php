@@ -1317,7 +1317,7 @@ class Visitor extends CI_Controller
 
 
 
-    public function patient_excel()
+    public function visitor_excel()
     {
 
         // Starting the PHPExcel library
