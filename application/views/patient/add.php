@@ -249,7 +249,7 @@ $field_list = mandatory_section_field_list(2);
             <div class="grp-full">
               <div class="grp" style="width: 115%;">
                 <label>Patient Name <span class="star">*</span> </label>
-                <div class="box-right" style="width: 552px;padding-left: 3rem;">
+                <div class="box-right" style="width: 552px;padding-left: 2.5rem;">
 
                   <select name="simulation_id" id="simulation_id" class="pat-select1 select-height"
                     onChange="find_gender(this.value)" style="padding-left: 0rem;">
@@ -426,7 +426,7 @@ $field_list = mandatory_section_field_list(2);
                 }
                 ?>
               </label>
-              <div class="box-right" style="width: 553px;padding-left: 3rem;">
+              <div class="box-right" style="width: 553px;padding-left: 2.5rem;">
                 <!-- <input type="text" maxlength="10" name="mobile_no" value="<?php echo $form_data['mobile_no']; ?>"    data-toggle="tooltip"  title="Allow only numeric." class="tooltip-text tool_tip numeric">  -->
                 <input type="text" name="country_code" value="+91" readonly="" class="country_code input-height"
                   placeholder="+91">

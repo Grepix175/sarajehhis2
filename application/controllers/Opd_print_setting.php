@@ -25,6 +25,9 @@ class Opd_print_setting extends CI_Controller {
 	{
         unauthorise_permission(87,555);
       $get_data= $this->opd_print->template_format();
+    //   echo "<pre>";
+    //   print_r($get_data);
+    //   die;
       if(count($get_data)>0)
       {
           $data_id=$get_data['id'];
