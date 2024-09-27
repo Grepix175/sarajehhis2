@@ -33,8 +33,11 @@ class Opd extends CI_Controller
       $start_date = date('d-m-Y');
       $end_date = date('d-m-Y');
     }
+    $reg_no = $this->input->get('reg_no'); // patient registration number
+    // print_r($reg_no);die;
+    $name = $this->input->get('name');
     // End Defaul Search
-    $data['form_data'] = array('patient_name' => '', 'mobile_no' => '', 'booking_code' => '', 'mobile_no' => '', 'specialization_id' => '', 'start_date' => $start_date, 'end_date' => $end_date, 'emergency_booking' => '');
+    $data['form_data'] = array('booking_code' => !empty($reg_no) ? $reg_no : '','patient_name' => !empty($name) ? $name : '', 'mobile_no' => '',  'mobile_no' => '', 'specialization_id' => '', 'start_date' => $start_date, 'end_date' => $end_date, 'emergency_booking' => '');
     $this->load->model('general/general_model');
     $data['specialization_list'] = $this->general_model->specialization_list();
     //echo "<pre>";print_r($data['specialization_list']); exit;
@@ -336,7 +339,7 @@ class Opd extends CI_Controller
 
       $print_barcode_url = "'" . base_url('opd/print_barcode/' . $test->id) . "'";
       $btn_print = '<a class="btn-custom" href="javascript:void(0)" onClick="return print_window_page(' . $print_pdf_url . ')"  title="Print" ><i class="fa fa-print"></i> Print  </a>';
-
+      
       $print_consolidated_url = "'" . base_url('opd/print_consolidate_dbooking_report/' . $test->id . '/' . $test->branch_id) . "'";
       $opd_consolidated_bill = '<li> <a onClick="return print_window_page(' . $print_consolidated_url . ')" style="' . $test->id . '" title="Print Consolidated Bill"><i class="fa fa-print"></i> Print Consolidated Bill</a></li>';
       $btn_print_label = ' <a onClick="return print_label(' . $test->id . ');"  href="javascript:void(0)" style="' . $test->id . '" title="Print"><i class="fa fa-print"></i> Print Label</a>';
@@ -2907,7 +2910,8 @@ class Opd extends CI_Controller
       $booking_id = '';
     }
     $get_by_id_data = $this->opd->get_all_detail_print($booking_id, $branch_id);
-    //print_r($get_by_id_data);die;
+    // echo "<pre>";
+    // print_r($get_by_id_data);die;
     $template_format = $this->opd->template_format(array('section_id' => 1, 'types' => 1), $branch_id);
     //print_r($get_by_id_data); exit;
     //Package
@@ -2918,7 +2922,7 @@ class Opd extends CI_Controller
     //print_r($data['template_data']);
     $data['all_detail'] = $get_by_id_data;
     $data['page_type'] = 'Booking';
-    // print_r($data);die;
+    // print_r($data['all_detail']);die;
     $this->load->model('general/general_model');
     $transaction_id = $this->general_model->get_transaction_id($booking_id, 2, 7);   //2 section id and 7 type
 
@@ -2928,6 +2932,7 @@ class Opd extends CI_Controller
     $data['address_setting_list'] = $this->address_setting->get_master_unique();
     $this->load->model('time_print_setting/time_print_setting_model', 'time_setting');
     $data['time_setting'] = $this->time_setting->get_master_unique();
+    // print_r($get_by_id_data);die;
     $this->load->view('opd/print_template_opd', $data);
   }
 
