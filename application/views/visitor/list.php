@@ -434,7 +434,7 @@
                     <th> Visitor Name </th>
                     <th> Mobile No. </th>
                     <th> Purpose </th>
-                    <th> Emp Name </th>
+                    <th> Meeting with Whom</th>
                     <th> Created Date </th>
                     <th> Action </th>
                   </tr>
