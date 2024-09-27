@@ -597,7 +597,8 @@ class Visitor extends CI_Controller
             "mobile_no" => "",
             "purpose" => "",
             "emp_id" => "",
-            
+            "photo"=>"",
+            "old_img"=>"",
         );
 
         // echo "<pre>";
@@ -610,11 +611,11 @@ class Visitor extends CI_Controller
             $data['form_data'] = $valid_response['form_data'];
 
             if ($this->form_validation->run() == TRUE) {
-                // if ($post['capture_img'] != "") {
-                //     $valid_response['photo_name'] = $post['capture_img'];
-                // }
-                // $valid_response['photo_name']
-                $patient_id = $this->visitor->save();
+                if ($post['capture_img'] != "") {
+                    $valid_response['photo_name'] = $post['capture_img'];
+                }
+                
+                $patient_id = $this->visitor->save($valid_response['photo_name']);
                 // $patient_id=6666;
 
                 $data_token['patient_id'] = $patient_id;
@@ -737,8 +738,8 @@ class Visitor extends CI_Controller
                 // "patient_email" => $result['patient_email'],
                 // "monthly_income" => $result['monthly_income'],
                 // "occupation" => $result['occupation'],
-                // "old_img" => $result['photo'],
-                // "photo" => $result['photo'],
+                "old_img" => $result['photo'],
+                "photo" => $result['photo'],
                 // "insurance_type" => $result['insurance_type'],
                 // "insurance_type_id" => $result['insurance_type_id'],
                 // "ins_company_id" => $result['ins_company_id'],
@@ -759,36 +760,37 @@ class Visitor extends CI_Controller
                 // "patient_category" => $result['patient_category'],
                 // "patient_code_auto" => $result['patient_code_auto'],
             );
-            //    print_r($data);
+            // echo "<pre>";
+            //    print_r($post);
             //    die();
             if (isset($post) && !empty($post)) {
 
                 $valid_response = $this->_validate();
                 $data['form_data'] = $valid_response['form_data'];
-                // $data['photo_error'] = $valid_response['photo_error'];
+                $data['photo_error'] = $valid_response['photo_error'];
                 if ($this->form_validation->run() == TRUE) {
                     /////// Send SMS /////////
-                    //echo '<pre>'; print_r($users_data['permission']['action']);die;
                     if (in_array('640', $users_data['permission']['action'])) {
                         if (!empty($post['mobile_no']) && $result['mobile_no'] != $post['mobile_no']) {
                             $parameter = array('{visitor_name}' => $post['visitor_name'], '{mobile_no}' => $post['mobile_no']);
-
+                            
                             send_sms('update_patient_mobile', 28, '', $post['mobile_no'], $parameter);
                         }
                     }
                     /////////////////////////
+                    
+                    if (!empty($post['old_img']) && !empty($valid_response['photo_name']) && file_exists(DIR_UPLOAD_PATH . 'patients/' . $post['old_img']) && $post['old_img'] !== $valid_response['photo_name']) {
 
-                    // if (!empty($post['old_img']) && !empty($valid_response['photo_name']) && file_exists(DIR_UPLOAD_PATH . 'patients/' . $post['old_img']) && $post['old_img'] !== $valid_response['photo_name']) {
+                        
+                        unlink(DIR_UPLOAD_PATH . 'visitor/' . $post['old_img']);
+                    }
+                    
+                    if ($post['capture_img'] != "") {
+                        $valid_response['photo_name'] = $post['capture_img'];
+                    }
+                    echo '<pre>'; print_r($valid_response['photo_name']);die;
 
-
-                    //     unlink(DIR_UPLOAD_PATH . 'patients/' . $post['old_img']);
-                    // }
-
-                    // if ($post['capture_img'] != "") {
-                    //     $valid_response['photo_name'] = $post['capture_img'];
-                    // }
-
-                    $this->visitor->save();
+                    $this->visitor->save($valid_response['photo_name']);
                     $this->session->set_flashdata('success', 'Visitor successfully updated.');
                     redirect(base_url('visitor'));
 

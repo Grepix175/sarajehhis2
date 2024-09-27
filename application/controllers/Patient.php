@@ -2470,7 +2470,7 @@ public function upload_document($patient_id='')
         //echo "<pre>";print_r($post); exit;
         $age_year = $post['year'];
         $age_years = date("Y",strtotime("-".$age_year." year"));
-        
+        $monthl = '';
         
         $age_month = $post['month'];
         $age_day = $post['day'];
@@ -2500,7 +2500,7 @@ public function upload_document($patient_id='')
             }
             else
             {
-              $monthl = '0'.$age_month;  
+              $monthl = $age_month;  
             }
            
         }
@@ -2511,6 +2511,25 @@ public function upload_document($patient_id='')
        echo  $dob = $dayl.'-'.$monthl.'-'.$age_years;
         
     }
+    // function getAge() {
+    //     $post = $this->input->post();
+        
+    //     // Handle Year
+    //     $age_year = isset($post['year']) && !empty($post['year']) ? $post['year'] : 0; // Default to 0 if not provided
+    //     $age_years = date("Y", strtotime("-" . intval($age_year) . " year"));
+    
+    //     // Handle Day
+    //     $age_day = isset($post['day']) && !empty($post['day']) ? intval($post['day']) : date('d');
+    //     $dayl = ($age_day < 10) ? '0' . $age_day : $age_day; // Add leading zero if needed
+    
+    //     // Handle Month
+    //     $age_month = isset($post['month']) && !empty($post['month']) && $post['month'] != '-1' ? intval($post['month']) : date('m');
+    //     $monthl = ($age_month < 10) ? '0' . $age_month : $age_month; // Add leading zero if needed
+    
+    //     // Format the date of birth
+    //     echo $dob = $dayl . '-' . $monthl . '-' . $age_years;
+    // }
+    
     
     public function print_reg_card()
      {

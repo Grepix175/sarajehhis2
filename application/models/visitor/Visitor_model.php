@@ -4,7 +4,7 @@ class Visitor_model extends CI_Model
 {
 	var $table = 'hms_visitor';
 	// 	'hms_patient.village',
-	var $column = array('hms_visitor.id', 'hms_visitor.branch_id', 'hms_visitor.visitor_type_id', 'hms_visitor.from', 'hms_visitor.visitor_name', 'hms_visitor.mobile_no', 'hms_visitor.purpose', 'hms_visitor.emp_id', 'hms_visitor.created_date','hms_visitor.simulation_id');
+	var $column = array('hms_visitor.id', 'hms_visitor.branch_id', 'hms_visitor.visitor_type_id', 'hms_visitor.from', 'hms_visitor.visitor_name', 'hms_visitor.mobile_no', 'hms_visitor.purpose', 'hms_visitor.emp_id', 'hms_visitor.created_date','hms_visitor.simulation_id','hms_visitor.photo');
 	var $order = array('id' => 'desc');
 
 	public function __construct()
@@ -30,6 +30,7 @@ class Visitor_model extends CI_Model
                    hms_visitor.purpose, 
                    hms_visitor.created_date, 
                    hms_visitor.emp_id,
+				   hms_visitor.photo,
                    hms_visitor_type.visitor_type as visitor_type_name,
                    hms_employees.name as employee_name");
 
@@ -194,6 +195,7 @@ class Visitor_model extends CI_Model
                    hms_visitor.mobile_no, 
                    hms_visitor.purpose, 
                    hms_visitor.emp_id, 
+				   hms_visitor.photo,
                    hms_visitor_type.visitor_type as visitor_type_name, 
                    hms_employees.name as employee_name, 
                    hms_visitor.modified_date");
@@ -213,7 +215,7 @@ class Visitor_model extends CI_Model
 
 		return $result;
 	}
-	public function save()
+	public function save($filename="")
 	{
 		$user_data = $this->session->userdata('auth_users');
 
@@ -269,8 +271,12 @@ class Visitor_model extends CI_Model
 
 		if (!empty($post['data_id']) && $post['data_id'] > 0) {
 			// echo "<pew>";
-			// print_r($data);
+			// print_r($filename);
 			// die;
+			if(!empty($filename))
+			{
+				$this->db->set('photo',$filename);
+			}
 			$this->db->set('ip_address', $_SERVER['REMOTE_ADDR']);
 			$this->db->set('modified_by', $user_data['id']);
 			$this->db->set('modified_date', date('Y-m-d H:i:s'));
@@ -292,8 +298,12 @@ class Visitor_model extends CI_Model
 			// 	$this->db->update('hms_users');
 			// }
 		} else {
+			if(!empty($filename))
+			{
+				$this->db->set('photo',$filename);
+			}
 
-			$reg_no = generate_unique_id(4);
+			// $reg_no = generate_unique_id(4);
 			// $this->db->set('patient_code', $reg_no);
 			$this->db->set('ip_address', $_SERVER['REMOTE_ADDR']);
 			$this->db->set('created_by', $user_data['id']);

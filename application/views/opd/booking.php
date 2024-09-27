@@ -343,6 +343,8 @@ $field_list = mandatory_section_field_list(3);
               </div>
             </div> <!-- row -->
 
+            
+
             <div class="row m-b-5">
               <div class="col-md-12">
                 <div class="row">
@@ -358,11 +360,11 @@ $field_list = mandatory_section_field_list(3);
 
                   <div class="col-md-8">
                     <input type="text" id="age_y" name="age_y" class="input-tiny m_tiny numeric" maxlength="3"
-                      value="<?php echo $form_data['age_y']; ?>"> Y &nbsp;
+                      value="<?php echo $form_data['age_y']; ?>" onchange="getAsDate();"> Y &nbsp;
                     <input type="text" id="age_m" name="age_m" class="input-tiny m_tiny numeric" maxlength="2"
-                      value="<?php echo $form_data['age_m']; ?>"> M &nbsp;
+                      value="<?php echo $form_data['age_m']; ?>" onchange="getAsDate();"> M &nbsp;
                     <input type="text" id="age_d" name="age_d" class="input-tiny m_tiny numeric" maxlength="2"
-                      value="<?php echo $form_data['age_d']; ?>"> D
+                      value="<?php echo $form_data['age_d']; ?>" onchange="getAsDate();"> D
                     <?php if (!empty($field_list)) {
                       if ($field_list[1]['mandatory_field_id'] == '26' && $field_list[1]['mandatory_branch_id'] == $users_data['parent_id']) {
                         if (!empty($form_error)) {
@@ -397,8 +399,7 @@ $field_list = mandatory_section_field_list(3);
                   <div class="row">
                     <div class="col-md-4"><b>DOB</b></div>
                     <div class="col-md-8">
-                      <input type="text" class="datepicker_dob" readonly="" name="dob" id="dob"
-                        value="<?php echo $form_data['dob']; ?>" /> <!-- onchange="showAge(this.value);"-->
+                    <input type="text" class="datepicker" readonly="" name="dob" id="dob" value="<?php echo $form_data['dob']; ?>"  onchange="showAge(this.value);"/>  <!-- onchange="showAge(this.value);"-->
                     </div>
                   </div>
                 </div>
@@ -1988,6 +1989,34 @@ $field_list = mandatory_section_field_list(3);
         $('#age_m').val(agemonth);
         $('#age_d').val(ageday);
       }
+
+      function getAsDate() {
+      var day = parseInt($("#age_d").val());
+      if (isNaN(day)) {
+        var day = 0;
+      }
+      var month = parseInt($("#age_m").val() - 1);
+      if (isNaN(month)) {
+        var month = 0;
+      }
+      var year = parseInt($("#age_y").val());
+      if (isNaN(year)) {
+        var year = 0;
+      }
+      $.ajax({
+        url: "<?php echo base_url(); ?>patient/getAge/",
+
+        type: 'POST',
+        data: {
+          day: day,
+          month: month,
+          year: year
+        },
+        success: function(result) {
+          $('#dob').val(result);
+        }
+      });
+    }
 
       function handlePaymentMode() {
         var patientCategoryElement = document.getElementById("patient_category");
