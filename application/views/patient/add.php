@@ -36,27 +36,27 @@ $field_list = mandatory_section_field_list(2);
   <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datepicker.css">
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datepicker.js"></script>
   <script>
-   window.addEventListener('DOMContentLoaded', function () {
-  var currentUrl = window.location.href;
+    window.addEventListener('DOMContentLoaded', function () {
+      var currentUrl = window.location.href;
 
-  // Check if the URL contains 'visitor'
-  if (currentUrl.indexOf('/visitor') !== -1) {
-    var path = currentUrl.split('/visitor')[1];  // Get the part after '/visitor'
-    
-    // Remove any leading slash from 'path'
-    path = path.charAt(0) === '/' ? path.substring(1) : path;
-    
-    // If path is 'add', select the Visitor radio button
-    if (path === 'add') {
-      document.getElementById('visitor_radio').checked = true;
-    } else {
-      document.getElementById('patient_radio').checked = true;  // Default to Patient if not 'add'
-    }
-  } else {
-    // If the URL doesn't contain 'visitor', select the Patient radio button
-    document.getElementById('patient_radio').checked = true;
-  }
-});
+      // Check if the URL contains 'visitor'
+      if (currentUrl.indexOf('/visitor') !== -1) {
+        var path = currentUrl.split('/visitor')[1]; // Get the part after '/visitor'
+
+        // Remove any leading slash from 'path'
+        path = path.charAt(0) === '/' ? path.substring(1) : path;
+
+        // If path is 'add', select the Visitor radio button
+        if (path === 'add') {
+          document.getElementById('visitor_radio').checked = true;
+        } else {
+          document.getElementById('patient_radio').checked = true; // Default to Patient if not 'add'
+        }
+      } else {
+        // If the URL doesn't contain 'visitor', select the Patient radio button
+        document.getElementById('patient_radio').checked = true;
+      }
+    });
   </script>
   <style>
     #patient_form .pat-col>.grp {
@@ -104,7 +104,53 @@ $field_list = mandatory_section_field_list(2);
     }
 
     #patient_form #patient_category {
-      width: 428px;
+      /* width: 480px; */
+    }
+
+    /* .input-height {
+      height: 35px !important;
+      padding: 8px;
+      font-size: 14px;
+    }
+
+    .select-height {
+      height: 35px !important;
+      padding: 2px;
+      font-size: 14px;
+
+    } */
+
+    .input-height {
+      height: 45px !important;
+      padding: 8px;
+      font-size: 14px;
+      width: 434px !important;
+    }
+
+    .select-height {
+      height: 45px !important;
+      padding: 2px;
+      font-size: 14px;
+      width: 480px;
+      
+    }
+
+    /* Target the main Select2 container */
+    .select2-container .select2-selection--single {
+      height: 40px !important;
+      /* width: 380px !important; */
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+      line-height: 40px !important;
+      font-size: 14px;
+      /* width: 380px !important; */
+    }
+
+    /* Adjust the dropdown arrow (caret) */
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+      height: 40px !important;
+      /* width: 380px !important; */
     }
   </style>
   <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datetimepicker.css">
@@ -120,7 +166,8 @@ $field_list = mandatory_section_field_list(2);
     <!-- ============================= Main content start here ===================================== -->
     <!-- Patient Details page -->
     <section class="content">
-      <form id="patient_form" name="ptaient_form" action="<?php echo current_url(); ?>" method="post" enctype="multipart/form-data">
+      <form id="patient_form" name="ptaient_form" action="<?php echo current_url(); ?>" method="post"
+        enctype="multipart/form-data">
         <input type="hidden" name="data_id" id="patient_id" value="<?php echo $form_data['data_id']; ?>">
         <div class="content-inner">
 
@@ -129,15 +176,15 @@ $field_list = mandatory_section_field_list(2);
               <div class="col-md-12">
                 <!-- <div class="grp">
             <span class="new_patient"><input type="radio" name="new_patient" <?php //if(empty($form_data['patient_id'])) { 
-                                                                              ?> checked <?php //} 
-                                                                                                                                      ?> > <label>Patient</label></span>
+            ?> checked <?php //} 
+             ?> > <label>Patient</label></span>
             <span class="new_patient"><input type="radio" name="new_patient"
                 onClick="window.location='<?php echo base_url('patient'); ?>';" <?php if (!empty($form_data['patient_id'])) { ?> checked <?php } ?>> <label>Visitor</label></span>
           </div> -->
                 <div class="grp">
                   <span class="new_patient">
                     <input type="radio" name="new_patient" id="patient_radio"
-                      onClick="window.location='<?php echo base_url('patient'); ?>';">
+                      onClick="window.location='<?php echo base_url('patient/add'); ?>';">
                     <label>Patient</label>
                   </span>
 
@@ -155,7 +202,7 @@ $field_list = mandatory_section_field_list(2);
                 </label>
 
                 <div class="box-right">
-                  <select name="patient_category" id="patient_category">
+                  <select name="patient_category" id="patient_category" class="m_input_default select-height">
                     <option value="">Select Patient Category</option>
                     <?php
 
@@ -189,21 +236,23 @@ $field_list = mandatory_section_field_list(2);
             </div>
             <?php $data = get_setting_value('PATIENT_REG_NO');
             if (!empty($data) && isset($data)) {
-            ?>
+              ?>
               <div class="grp">
                 <label><?php echo $data; ?></label>
                 <div class="box-right"><?php echo $form_data['patient_code']; ?></div>
-                <input type="hidden" name="patient_code" id="patient_code" value="<?php echo $form_data['patient_code']; ?>" />
+                <input type="hidden" name="patient_code" id="patient_code"
+                  value="<?php echo $form_data['patient_code']; ?>" />
               </div>
             <?php } ?>
 
 
             <div class="grp-full">
-              <div class="grp" style="width: 100%;">
+              <div class="grp" style="width: 115%;">
                 <label>Patient Name <span class="star">*</span> </label>
-                <div class="box-right" style="width: 459px;padding-left: 3rem;">
+                <div class="box-right" style="width: 552px;padding-left: 3rem;">
 
-                  <select name="simulation_id" id="simulation_id" class="pat-select1" onChange="find_gender(this.value)" style="padding-left: 0rem;">
+                  <select name="simulation_id" id="simulation_id" class="pat-select1 select-height"
+                    onChange="find_gender(this.value)" style="padding-left: 0rem;">
 
 
                     <?php
@@ -228,20 +277,21 @@ $field_list = mandatory_section_field_list(2);
 
 
                         $selected_simulation = ($simulation->id == $form_data['simulation_id']) ? 'selected="selected"' : '';
-                    ?>
+                        ?>
 
                         <option value="<?php echo htmlspecialchars($simulation->id); ?>" <?php echo $selected_simulation; ?>>
                           <?php echo htmlspecialchars($simulation->simulation); ?>
                         </option>
-                    <?php
+                        <?php
                       }
                     }
                     ?>
                   </select>
 
                   <!-- Text input for patient name -->
-                  <input type="text" name="patient_name" class="alpha_space_name txt_firstCap" id="patient_name"
-                    value="<?php echo htmlspecialchars($form_data['patient_name']); ?>" autofocus style="width: 375px;" />
+                  <input type="text" name="patient_name" class="alpha_space_name txt_firstCap input-height"
+                    id="patient_name" value="<?php echo htmlspecialchars($form_data['patient_name']); ?>" autofocus
+                    style="width: 374px;" />
 
                   <!-- Display form errors -->
                   <?php
@@ -272,8 +322,8 @@ $field_list = mandatory_section_field_list(2);
               <select name="relation_type"  class="w-90px" onchange="father_husband_son(this.value);">
              <?php foreach ($gardian_relation_list as $gardian_list) { ?>
               <option value="<?php echo $gardian_list->id; ?>" <?php if (isset($form_data['relation_type']) && $form_data['relation_type'] == $gardian_list->id) {
-                                                                echo 'selected';
-                                                              } ?>><?php echo $gardian_list->relation; ?></option>
+                   echo 'selected';
+                 } ?>><?php echo $gardian_list->relation; ?></option>
              <?php } ?>
              </select></label>
             <div class="box-right">
@@ -292,14 +342,14 @@ $field_list = mandatory_section_field_list(2);
                         }
                         $seen_names[] = $simulation->simulation;
                         $selected_simulation = ($simulation->id == $form_data['relation_simulation_id']) ? 'selected="selected"' : '';
-                    ?>
+                        ?>
                             <option value="<?php echo htmlspecialchars($simulation->id); ?>" <?php echo $selected_simulation; ?>>
                                 <?php echo htmlspecialchars($simulation->simulation); ?>
                             </option>
                         <?php
                       }
                     }
-                        ?>
+                    ?>
                 </select> 
                 <input type="text" value="<?php echo isset($form_data['relation_name']) ? htmlspecialchars($form_data['relation_name']) : ''; ?>" 
                        class="alpha_space_name" name="relation_name" id="relation_name"/>
@@ -312,14 +362,14 @@ $field_list = mandatory_section_field_list(2);
               <label>Gender <span class="star">*</span></label>
               <div class="box-right" id="gender">
                 <input type="radio" name="gender" value="1" <?php if ($form_data['gender'] == 1) {
-                                                              echo 'checked="checked"';
-                                                            } ?>> Male &nbsp;
+                  echo 'checked="checked"';
+                } ?>> Male &nbsp;
                 <input type="radio" name="gender" value="0" <?php if ($form_data['gender'] == 0) {
-                                                              echo 'checked="checked"';
-                                                            } ?>> Female
+                  echo 'checked="checked"';
+                } ?>> Female
                 <input type="radio" name="gender" value="2" <?php if ($form_data['gender'] == 2) {
-                                                              echo 'checked="checked"';
-                                                            } ?>> Others
+                  echo 'checked="checked"';
+                } ?>> Others
                 <?php
                 if (!empty($form_error)) {
                   echo form_error('gender');
@@ -332,12 +382,12 @@ $field_list = mandatory_section_field_list(2);
             <!-- <div class="grp">
         <label>Age  <span class="star">*</span>
          <?php if (!empty($field_list)) {
-            if ($field_list[1]['mandatory_field_id'] == 7 && $field_list[1]['mandatory_branch_id'] == $users_data['parent_id']) { ?>         
+           if ($field_list[1]['mandatory_field_id'] == 7 && $field_list[1]['mandatory_branch_id'] == $users_data['parent_id']) { ?>         
                          <span class="star">*</span>
                     <?php
-                  }
-                }
-                    ?>
+           }
+         }
+         ?>
         </label>
         <div class="box-right">
             <input type="text" name="age_y" id="age_y" class="numeric input-tiny2 media_input_tiny" maxlength="3" value="<?php echo $form_data['age_y']; ?>" onchange="getAsDate();"> Y &nbsp;
@@ -366,20 +416,23 @@ $field_list = mandatory_section_field_list(2);
         </div>
       </div> -->
 
-            <div class="grp" style="width: 100%;">
+            <div class="grp" style="width: 115%;">
               <label>Mobile No.
                 <?php if (!empty($field_list)) {
                   if ($field_list[0]['mandatory_field_id'] == 5 && $field_list[0]['mandatory_branch_id'] == $users_data['parent_id']) { ?>
                     <span class="star">*</span>
-                <?php
+                    <?php
                   }
                 }
                 ?>
               </label>
-              <div class="box-right" style="width: 459px;padding-left: 3rem;">
+              <div class="box-right" style="width: 553px;padding-left: 3rem;">
                 <!-- <input type="text" maxlength="10" name="mobile_no" value="<?php echo $form_data['mobile_no']; ?>"    data-toggle="tooltip"  title="Allow only numeric." class="tooltip-text tool_tip numeric">  -->
-                <input type="text" name="country_code" value="+91" readonly="" class="country_code" placeholder="+91">
-                <input type="text" name="mobile_no" id="mobile_no" maxlength="10" class="number numeric" placeholder="eg.9897221234" value="<?php echo $form_data['mobile_no']; ?>" onkeyup="get_patient_detail_by_mobile();" style="width: 375px;" />
+                <input type="text" name="country_code" value="+91" readonly="" class="country_code input-height"
+                  placeholder="+91">
+                <input type="text" name="mobile_no" id="mobile_no" maxlength="10" class="number numeric "
+                  placeholder="eg.9897221234" value="<?php echo $form_data['mobile_no']; ?>"
+                  onkeyup="get_patient_detail_by_mobile();" style="width: 444px;height: 46px;" />
                 <?php if (!empty($field_list)) {
                   if ($field_list[0]['mandatory_field_id'] == '5' && $field_list[0]['mandatory_branch_id'] == $users_data['parent_id']) {
                     if (!empty($form_error)) {
@@ -468,15 +521,15 @@ $field_list = mandatory_section_field_list(2);
                 $state_list = state_list($form_data['country_id']);
                 if (!empty($state_list)) {
                   foreach ($state_list as $state) {
-              ?>   
+                    ?>   
                       <option value="<?php echo $state->id; ?>" <?php if (!empty($form_data['state_id']) && $form_data['state_id'] == $state->id) {
-                                                                  echo 'selected="selected"';
-                                                                } ?>><?php echo $state->state; ?></option>
+                           echo 'selected="selected"';
+                         } ?>><?php echo $state->state; ?></option>
                     <?php
                   }
                 }
               }
-                    ?>
+              ?>
             </select>
         </div>
       </div> -->
@@ -497,7 +550,7 @@ $field_list = mandatory_section_field_list(2);
 
             <div class="grp">
               <?php
-              if (isset($form_data['patient_code_auto'])  && !empty($form_data['patient_code_auto'])) {
+              if (isset($form_data['patient_code_auto']) && !empty($form_data['patient_code_auto'])) {
                 $token = $form_data['patient_code_auto'];
               } else {
                 $token = rand(100000, 999999);
@@ -537,7 +590,7 @@ $field_list = mandatory_section_field_list(2);
             </div>
           </div>
           <?php if (in_array('51', $users_data['permission']['action'])) {
-          ?>
+            ?>
                <div class="grp-right">
                     <a title="Add Religion" class="btn-new" href="javascript:void(0)" onClick="religion_modal()"><i class="fa fa-plus"></i> New</a>
                </div>
@@ -556,7 +609,9 @@ $field_list = mandatory_section_field_list(2);
               <div class="box-right">
                 <button class="btn-update" id="form_submit">
                   <i class="fa fa-save"></i> Save</button>
-                <a href="<?php echo base_url('patient'); ?>" class="btn-update" style="text-decoration:none!important;color:#FFF;padding:8px 2em;"><i class="fa fa-sign-out"></i> Exit</a>
+                <a href="<?php echo base_url('patient'); ?>" class="btn-update"
+                  style="text-decoration:none!important;color:#FFF;padding:8px 2em;"><i class="fa fa-sign-out"></i>
+                  Exit</a>
               </div>
             </div>
 
@@ -615,7 +670,7 @@ $field_list = mandatory_section_field_list(2);
             </div>
           </div>
           <?php if (in_array('58', $users_data['permission']['action'])) {
-          ?>
+            ?>
                <div class="grp-right">
                     <a title="Add Relation" class="btn-new" href="javascript:void(0)" onClick="relation_modal()"><i class="fa fa-plus"></i> New</a>
                </div>
@@ -645,9 +700,9 @@ $field_list = mandatory_section_field_list(2);
         <label>Insurance Type</label>
         <div class="box-right">
             <input type="radio" name="insurance_type" value="0" <?php //if($form_data['insurance_type']==0){ echo 'checked="checked"'; } 
-                                                                ?> onClick="return set_tpa(0)"> Normal &nbsp;
+            ?> onClick="return set_tpa(0)"> Normal &nbsp;
             <input type="radio" name="insurance_type" value="1" <?php //if($form_data['insurance_type']==1){ echo 'checked="checked"'; } 
-                                                                ?> onClick="return set_tpa(1)"> Panel
+            ?> onClick="return set_tpa(1)"> Panel
         </div>
       <sup class="info"><a href="javascript:void(null)" class="small info"> ?<span>It is a policy which have two type <br> Normal:It is simple type policy <br> Panel:Third Party Adminstrater (TPA) is an organization that processes insurance claims or certain aspects of employee benefit plans for a separate entity.</span></a></sup>
       </div>
@@ -675,7 +730,7 @@ $field_list = mandatory_section_field_list(2);
             </div>
           </div>
           <?php if (in_array('72', $users_data['permission']['action'])) {
-          ?>
+            ?>
                <div class="grp-right">
                     <a title="Add Insurance Type" class="btn-new" href="javascript:void(0)" onClick="insurance_type_modal()"><i class="fa fa-plus"></i> New</a>
                </div>
@@ -704,7 +759,7 @@ $field_list = mandatory_section_field_list(2);
             </div>
           </div>
           <?php if (in_array('79', $users_data['permission']['action'])) {
-          ?>
+            ?>
                <div class="grp-right">
                     <a title="Add Insurance Company" class="btn-new" href="javascript:void(0)" onClick="insurance_company_modal()"><i class="fa fa-plus"></i> New</a>
                </div>
@@ -751,11 +806,11 @@ $field_list = mandatory_section_field_list(2);
         <label>Status</label>
         <div class="box-right">
             <input type="radio" name="status" value="1" <?php if ($form_data['status'] == 1) {
-                                                          echo 'checked="checked"';
-                                                        } ?>> Active &nbsp;
+              echo 'checked="checked"';
+            } ?>> Active &nbsp;
             <input type="radio" name="status" value="0" <?php if ($form_data['status'] == 0) {
-                                                          echo 'checked="checked"';
-                                                        } ?>> Inactive
+              echo 'checked="checked"';
+            } ?>> Inactive
         </div>
       </div> -->
 
@@ -763,8 +818,9 @@ $field_list = mandatory_section_field_list(2);
 
           </div> <!-- // -->
 
-          <div class="pat-col" style="gap: 1rem; padding: 5px; max-width: 200px; float:right; margin-right:180px;">
-            <div class="pat-col-right-box" style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+          <div class="pat-col" style="gap: 1rem; padding: 5px; max-width: 200px; float:left; margin-left:100px;">
+            <div class="pat-col-right-box"
+              style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
               <!--Editing by Nitin Sharma 04/02/2024-->
               <strong>
                 <center>Patient Face/Pic Capture</center>
@@ -803,7 +859,8 @@ $field_list = mandatory_section_field_list(2);
               <input type="hidden" name="old_img" value="<?php echo $form_data['old_img']; ?>" />
               <input type="hidden" id="capture_img" name="capture_img" value="" />
               <div style="float: left;width: 100%; font-weight: bold;text-align: center;">
-                <a href="javascript:void(0);" onclick="return start_cam()"><img src="<?php echo ROOT_IMAGES_PATH . 'camera.png'; ?>"></a>
+                <a href="javascript:void(0);" onclick="return start_cam()"><img
+                    src="<?php echo ROOT_IMAGES_PATH . 'camera.png'; ?>"></a>
               </div>
               <div style="float: left;width: 100%; font-weight: bold;text-align: center;">
                 OR
@@ -817,7 +874,7 @@ $field_list = mandatory_section_field_list(2);
             </div>
             <?php
             if (!empty($form_data['data_id']) && $form_data['data_id'] > 0) {
-            ?>
+              ?>
               <!-- <div class="pat-col-right-box2">
             <strong>Username</strong>
             <input type="text" id="username" class="alpha_numeric_space" readonly="" name="username" value="<?php echo $form_data['username']; ?>" />
@@ -844,11 +901,11 @@ $field_list = mandatory_section_field_list(2);
               <?php if (!empty($form_error)) {
                 echo form_error('password');
               } ?>
-          </div>
-        <?php
+            </div>
+            <?php
             }
-        ?>
-        <!-- <div class="pat-col-right-box2">
+            ?>
+          <!-- <div class="pat-col-right-box2">
           <strong>Remarks</strong>
           <textarea id="remark" class="alpha_numeric_space" name="remark" maxlength="255"><?php echo $form_data['remark']; ?></textarea>
         </div> -->
@@ -877,7 +934,7 @@ $field_list = mandatory_section_field_list(2);
           url: "<?php echo site_url('opd/get_patient_detail_no_mobile'); ?>/" + val,
           type: 'POST',
           async: false,
-          success: function(datas) {
+          success: function (datas) {
             var data = $.parseJSON(datas);
             if (data.st == 1) {
               // Add response in Modal body
@@ -892,9 +949,9 @@ $field_list = mandatory_section_field_list(2);
       }
     };
 
-    $(document).ready(function() {
+    $(document).ready(function () {
 
-      $("#proceed").click(function() {
+      $("#proceed").click(function () {
 
         if ($('input[name="patient_id"]:checked').length == 0) {
 
@@ -908,7 +965,7 @@ $field_list = mandatory_section_field_list(2);
             url: "<?php echo site_url('opd/get_patient_detail_byid'); ?>/" + radioValue,
             type: 'POST',
             async: false,
-            success: function(datas) {
+            success: function (datas) {
               var data = $.parseJSON(datas);
               console.log(data)
               if (data.st == 1) {
@@ -965,7 +1022,7 @@ $field_list = mandatory_section_field_list(2);
           month: month,
           year: year
         },
-        success: function(result) {
+        success: function (result) {
           $('#dob').val(result);
         }
       });
@@ -986,14 +1043,14 @@ $field_list = mandatory_section_field_list(2);
 
 
 
-    $(document).on("click", function(e) {
+    $(document).on("click", function (e) {
       if (!$(".password_id").is(e.target)) {
         //if your box isn't the target of click, hide it
         $(".brn_1").hide();
       }
     });
 
-    $(document).ready(function() {
+    $(document).ready(function () {
       $('[data-toggle="tooltip"]').tooltip({
         placement: 'right',
         trigger: 'focus'
@@ -1006,7 +1063,7 @@ $field_list = mandatory_section_field_list(2);
       if (input.files && input.files[0]) {
         var reader = new FileReader();
 
-        reader.onload = function(e) {
+        reader.onload = function (e) {
           $('#pimg').attr('src', e.target.result);
         }
 
@@ -1014,7 +1071,7 @@ $field_list = mandatory_section_field_list(2);
       }
     }
 
-    $("#img-input").change(function() {
+    $("#img-input").change(function () {
       readURL(this);
     });
 
@@ -1023,7 +1080,7 @@ $field_list = mandatory_section_field_list(2);
       if (id !== '') {
         $.post('<?php echo base_url() . 'simulation/find_gender' ?>', {
           'simulation_id': id
-        }, function(result) {
+        }, function (result) {
           if (result !== '') {
             $("#gender").html(result);
           }
@@ -1034,10 +1091,10 @@ $field_list = mandatory_section_field_list(2);
     function simulation_modal() {
       var $modal = $('#load_add_simulation_modal_popup');
       $modal.load('<?php echo base_url() . 'simulation/add/' ?>', {
-          //'id1': '1',
-          //'id2': '2'
-        },
-        function() {
+        //'id1': '1',
+        //'id2': '2'
+      },
+        function () {
           $modal.modal('show');
         });
     }
@@ -1045,10 +1102,10 @@ $field_list = mandatory_section_field_list(2);
     function start_cam() {
       var $modal = $('#load_start_cam_modal_popup');
       $modal.load('<?php echo base_url() . 'patient/start_cam/' ?>', {
-          //'id1': '1',
-          //'id2': '2'
-        },
-        function() {
+        //'id1': '1',
+        //'id2': '2'
+      },
+        function () {
           $modal.modal('show');
         });
     }
@@ -1056,10 +1113,10 @@ $field_list = mandatory_section_field_list(2);
     function relation_modal() {
       var $modal = $('#load_add_relation_modal_popup');
       $modal.load('<?php echo base_url() . 'relation/add/' ?>', {
-          //'id1': '1',
-          //'id2': '2'
-        },
-        function() {
+        //'id1': '1',
+        //'id2': '2'
+      },
+        function () {
           $modal.modal('show');
         });
     }
@@ -1067,10 +1124,10 @@ $field_list = mandatory_section_field_list(2);
     function religion_modal() {
       var $modal = $('#load_add_religion_modal_popup');
       $modal.load('<?php echo base_url() . 'religion/add/' ?>', {
-          //'id1': '1',
-          //'id2': '2'
-        },
-        function() {
+        //'id1': '1',
+        //'id2': '2'
+      },
+        function () {
           $modal.modal('show');
         });
     }
@@ -1078,10 +1135,10 @@ $field_list = mandatory_section_field_list(2);
     function patient_category_modal() {
       var $modal = $('#load_add_patient_category_modal_popup');
       $modal.load('<?php echo base_url() . 'patient_category/add/' ?>', {
-          //'id1': '1',
-          //'id2': '2'
-        },
-        function() {
+        //'id1': '1',
+        //'id2': '2'
+      },
+        function () {
           $modal.modal('show');
         });
     }
@@ -1089,10 +1146,10 @@ $field_list = mandatory_section_field_list(2);
     function insurance_type_modal() {
       var $modal = $('#load_add_insurance_type_modal_popup');
       $modal.load('<?php echo base_url() . 'insurance_type/add/' ?>', {
-          //'id1': '1',
-          //'id2': '2'
-        },
-        function() {
+        //'id1': '1',
+        //'id2': '2'
+      },
+        function () {
           $modal.modal('show');
         });
     }
@@ -1100,10 +1157,10 @@ $field_list = mandatory_section_field_list(2);
     function insurance_company_modal() {
       var $modal = $('#load_add_insurance_company_modal_popup');
       $modal.load('<?php echo base_url() . 'insurance_company/add/' ?>', {
-          //'id1': '1',
-          //'id2': '2'
-        },
-        function() {
+        //'id1': '1',
+        //'id2': '2'
+      },
+        function () {
           $modal.modal('show');
         });
     }
@@ -1111,7 +1168,7 @@ $field_list = mandatory_section_field_list(2);
     function get_state(country_id) {
       $.ajax({
         url: "<?php echo base_url(); ?>general/state_list/" + country_id,
-        success: function(result) {
+        success: function (result) {
           $('#state_id').html(result);
         }
       });
@@ -1121,7 +1178,7 @@ $field_list = mandatory_section_field_list(2);
     function get_city(state_id) {
       $.ajax({
         url: "<?php echo base_url(); ?>general/city_list/" + state_id,
-        success: function(result) {
+        success: function (result) {
           $('#city_id').html(result);
         }
       });
@@ -1137,7 +1194,7 @@ $field_list = mandatory_section_field_list(2);
       }
     }
 
-    $('#form_submit').on("click", function() {
+    $('#form_submit').on("click", function () {
       $(':input[id=form_submit]').prop('disabled', true);
       $('#patient_form').submit();
 
@@ -1171,37 +1228,37 @@ $field_list = mandatory_section_field_list(2);
       }
     }
 
-    $(document).ready(function() {
-      $('#load_add_simulation_modal_popup').on('shown.bs.modal', function(e) {
+    $(document).ready(function () {
+      $('#load_add_simulation_modal_popup').on('shown.bs.modal', function (e) {
         $(this).find('.inputFocus').focus();
       });
     });
 
-    $(document).ready(function() {
-      $('#load_add_religion_modal_popup').on('shown.bs.modal', function(e) {
+    $(document).ready(function () {
+      $('#load_add_religion_modal_popup').on('shown.bs.modal', function (e) {
         $(this).find('.inputFocus').focus();
       });
     });
-    $(document).ready(function() {
-      $('#load_add_patient_category_modal_popup').on('shown.bs.modal', function(e) {
-        $(this).find('.inputFocus').focus();
-      });
-    });
-
-    $(document).ready(function() {
-      $('#load_add_relation_modal_popup').on('shown.bs.modal', function(e) {
+    $(document).ready(function () {
+      $('#load_add_patient_category_modal_popup').on('shown.bs.modal', function (e) {
         $(this).find('.inputFocus').focus();
       });
     });
 
-    $(document).ready(function() {
-      $('#load_add_modal_popup').on('shown.bs.modal', function(e) {
+    $(document).ready(function () {
+      $('#load_add_relation_modal_popup').on('shown.bs.modal', function (e) {
+        $(this).find('.inputFocus').focus();
+      });
+    });
+
+    $(document).ready(function () {
+      $('#load_add_modal_popup').on('shown.bs.modal', function (e) {
         $(this).find('.inputFocus').focus();
       });
     });
 
 
-    $(".txt_firstCap").on('keyup', function() {
+    $(".txt_firstCap").on('keyup', function () {
 
       var str = $('.txt_firstCap').val();
       var part_val = str.split(" ");
@@ -1214,7 +1271,7 @@ $field_list = mandatory_section_field_list(2);
 
     });
 
-    $(document).ready(function() {
+    $(document).ready(function () {
       $('.datepicker').datepicker({
         //format: 'dd-mm-yyyy',
         dateFormat: 'dd-mm-yy',
@@ -1231,13 +1288,20 @@ $field_list = mandatory_section_field_list(2);
     echo '<script>find_gender(' . $sim_id . ');</script>';
   }
   ?>
-  <div id="load_add_simulation_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
-  <div id="load_add_religion_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
-  <div id="load_add_patient_category_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
-  <div id="load_add_relation_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
-  <div id="load_add_insurance_type_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
-  <div id="load_add_insurance_company_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
-  <div id="load_start_cam_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
+  <div id="load_add_simulation_modal_popup" class="modal fade" role="dialog" data-backdrop="static"
+    data-keyboard="false"></div>
+  <div id="load_add_religion_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+  </div>
+  <div id="load_add_patient_category_modal_popup" class="modal fade" role="dialog" data-backdrop="static"
+    data-keyboard="false"></div>
+  <div id="load_add_relation_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+  </div>
+  <div id="load_add_insurance_type_modal_popup" class="modal fade" role="dialog" data-backdrop="static"
+    data-keyboard="false"></div>
+  <div id="load_add_insurance_company_modal_popup" class="modal fade" role="dialog" data-backdrop="static"
+    data-keyboard="false"></div>
+  <div id="load_start_cam_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+  </div>
   </div><!-- container-fluid -->
   <div id="patient_proceed" class="modal fade dlt-modal">
     <div class="modal-dialog">
@@ -1320,7 +1384,7 @@ $field_list = mandatory_section_field_list(2);
     var uri = "https://localhost:8443/SGIFPCapture";
 
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
+    xmlhttp.onreadystatechange = function () {
       if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
         fpobject = JSON.parse(xmlhttp.responseText);
         successCall(fpobject);
@@ -1337,15 +1401,25 @@ $field_list = mandatory_section_field_list(2);
     xmlhttp.open("POST", uri, true);
     xmlhttp.send(params);
 
-    xmlhttp.onerror = function() {
+    xmlhttp.onerror = function () {
       failCall(xmlhttp.statusText);
     };
   }
 </script>
 <!--Added By Nitin Sharma 04/02/2024-->
 <!--new css-->
-<link href="<?php echo ROOT_CSS_PATH; ?>jquery-ui.css"
-  rel="stylesheet">
+<link href="<?php echo ROOT_CSS_PATH; ?>jquery-ui.css" rel="stylesheet">
 <script src="<?php echo ROOT_JS_PATH; ?>jquery-ui.js"></script>
 
-<!--new css-->
+
+
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+  $("#patient_category").select2();
+  $("#patient_category").select2({
+    width: '500px' // Set your desired width
+});
+  
+</script>
+  <!--new css-->

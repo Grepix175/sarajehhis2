@@ -36,14 +36,7 @@ $field_list = mandatory_section_field_list(2);
   <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datepicker.css">
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datepicker.js"></script>
 
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script>
-  $("#refered_id").select2();
-  $("#attended_doctor").select2();
-  $(".SampleCollectedBy").select2(); 
-  $(".staff_refrenace_id").select2();
-</script>
+
 
 
   <style>
@@ -94,6 +87,40 @@ $field_list = mandatory_section_field_list(2);
     #patient_form #patient_category {
       width: 428px;
     }
+
+    .input-height {
+      height: 45px !important;
+      padding: 8px;
+      font-size: 14px;
+      width: 500px !important;
+    }
+
+    .select-height {
+      height: 45px !important;
+      padding: 2px;
+      font-size: 14px;
+      width: 480px;
+      
+    }
+
+    /* Target the main Select2 container */
+    .select2-container .select2-selection--single {
+      height: 40px !important;
+      /* width: 380px !important; */
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+      line-height: 40px !important;
+      font-size: 14px;
+      /* width: 380px !important; */
+    }
+
+    /* Adjust the dropdown arrow (caret) */
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+      height: 40px !important;
+      /* width: 380px !important; */
+    }
+    
   </style>
   <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datetimepicker.css">
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datetimepicker.js"></script>
@@ -126,7 +153,7 @@ $field_list = mandatory_section_field_list(2);
                 <div class="grp">
                   <span class="new_patient">
                     <input type="radio" name="new_patient" id="patient_radio"
-                      onClick="window.location='<?php echo base_url('patient'); ?>';">
+                      onClick="window.location='<?php echo base_url('patient/add'); ?>';">
                     <label>Patient</label>
                   </span>
 
@@ -144,10 +171,9 @@ $field_list = mandatory_section_field_list(2);
                 </label>
 
                 <div class="box-right">
-                  <select name="visitor_type_id" id="visitor_type_id">
+                  <select name="visitor_type_id" id="visitor_type_id" class="m_input_default select-height">
                     <option value="">Select Visitor Type</option>
                     <?php
-
                     if (!empty($visitor_list)) {
                       foreach ($visitor_list as $visitor) {
                         $selected_visitor_type = "";
@@ -195,7 +221,7 @@ $field_list = mandatory_section_field_list(2);
             <div class="grp">
               <label>From <span class="star">*</span></label>
               <div class="box-right">
-                <input type="text" name="from" id="form" class="from" maxlength="255"
+                <input type="text" name="from" id="form" class="from input-height" maxlength="255"
                   value="<?php echo $form_data['from']; ?>" />
                 <?php
                 if (!empty($form_error)) {
@@ -204,38 +230,25 @@ $field_list = mandatory_section_field_list(2);
               </div>
             </div>
             <div class="grp-full">
-              <div class="grp" style="width: 100%;">
+              <div class="grp" style="width: 115%;">
                 <label>Visitor Name <span class="star">*</span> </label>
-                <div class="box-right" style="width: 459px;padding-left: 3rem;">
+                <div class="box-right" style="width: 553px;padding-left: 3rem;">
 
-                  <select name="simulation_id" id="simulation_id" class="pat-select1" onChange="find_gender(this.value)"
-                    style="padding-left: 0rem;">
-
-
+                  <select name="simulation_id" id="simulation_id" class="pat-select1 select-height"
+                    onChange="find_gender(this.value)">
                     <?php
                     if (!empty($simulation_list)) {
-
                       $seen_names = array();
-
-
                       foreach ($simulation_list as $simulation) {
-
                         if (empty($simulation->id) || empty($simulation->simulation)) {
                           continue;
                         }
-
-
                         if (in_array($simulation->simulation, $seen_names)) {
                           continue;
                         }
-
-
                         $seen_names[] = $simulation->simulation;
-
-
                         $selected_simulation = ($simulation->id == $form_data['simulation_id']) ? 'selected="selected"' : '';
                         ?>
-
                         <option value="<?php echo htmlspecialchars($simulation->id); ?>" <?php echo $selected_simulation; ?>>
                           <?php echo htmlspecialchars($simulation->simulation); ?>
                         </option>
@@ -245,10 +258,11 @@ $field_list = mandatory_section_field_list(2);
                     ?>
                   </select>
 
+
                   <!-- Text input for patient name -->
-                  <input type="text" name="visitor_name" class="alpha_space_name txt_firstCap" id="visitor_name"
-                    value="<?php echo htmlspecialchars($form_data['visitor_name']); ?>" autofocus
-                    style="width: 245px;" />
+                  <input type="text" name="visitor_name" class="alpha_space_name txt_firstCap input-height"
+                    id="visitor_name" value="<?php echo htmlspecialchars($form_data['visitor_name']); ?>" autofocus
+                    style="width: 435px !important;height: 45px !important;" />
 
                   <!-- Display form errors -->
                   <?php
@@ -293,7 +307,7 @@ $field_list = mandatory_section_field_list(2);
 
 
 
-            <div class="grp" style="width: 100%;">
+            <div class="grp" style="width: 115%;">
               <label>Mobile No.
                 <?php if (!empty($field_list)) {
                   if ($field_list[0]['mandatory_field_id'] == 5 && $field_list[0]['mandatory_branch_id'] == $users_data['parent_id']) { ?>
@@ -303,12 +317,12 @@ $field_list = mandatory_section_field_list(2);
                 }
                 ?>
               </label>
-              <div class="box-right" style="width: 459px;padding-left: 3rem;">
+              <div class="box-right" style="width: 553px;padding-left: 3rem;">
                 <!-- <input type="text" maxlength="10" name="mobile_no" value="<?php echo $form_data['mobile_no']; ?>"    data-toggle="tooltip"  title="Allow only numeric." class="tooltip-text tool_tip numeric">  -->
-                <input type="text" name="country_code" value="+91" readonly="" class="country_code" placeholder="+91">
-                <input type="text" name="mobile_no" id="mobile_no" maxlength="10" class="number numeric"
+                <input type="text" name="country_code" value="+91" readonly="" class="country_code input-height" placeholder="+91">
+                <input type="text" name="mobile_no" id="mobile_no" maxlength="10" class="number numeric input-height"
                   placeholder="eg.9897221234" value="<?php echo $form_data['mobile_no']; ?>"
-                  onkeyup="get_patient_detail_by_mobile();" style="width: 245px;" />
+                  onkeyup="get_patient_detail_by_mobile();" style="width: 446px !important;height: 45px !important;" />
                 <?php if (!empty($field_list)) {
                   if ($field_list[0]['mandatory_field_id'] == '5' && $field_list[0]['mandatory_branch_id'] == $users_data['parent_id']) {
                     if (!empty($form_error)) {
@@ -324,7 +338,7 @@ $field_list = mandatory_section_field_list(2);
             <div class="grp">
               <label>Purpose <span class="star">*</span></label>
               <div class="box-right">
-                <input type="text" name="purpose" id="purpose" class="purpose" maxlength="255"
+                <input type="text" name="purpose" id="purpose" class="purpose input-height" maxlength="255"
                   value="<?php echo $form_data['purpose']; ?>" />
                 <?php
                 if (!empty($form_error)) {
@@ -338,7 +352,7 @@ $field_list = mandatory_section_field_list(2);
                 </label>
 
                 <div class="box-right">
-                  <select name="emp_id" id="attended_doctor" class="m_input_default">
+                  <select name="emp_id" id="emp_id" class="m_input_default">
                     <option value="">Select employee</option>
                     <?php
                     if (!empty($employee_list)) {
@@ -417,7 +431,95 @@ $field_list = mandatory_section_field_list(2);
 
 
           </div>
-
+          
+          <div class="pat-col" style="gap: 1rem; padding: 5px; max-width: 200px; float:left; margin-left:100px; border: 1px groove #aaa; background: #f9f9f9;
+    box-shadow: inset 0 0 3px #d3d3d3;">
+            <div class="pat-col-right-box"
+              style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+              <!--Editing by Nitin Sharma 04/02/2024-->
+              <strong>
+                <center>Visitor Face/Pic Capture</center>
+              </strong>
+              <!--Editing by Nitin Sharma 04/02/2024-->
+              <div class="photo">
+                <?php
+                $img_path = base_url('assets/images/photo.png');
+                if (!empty($form_data['data_id']) && !empty($form_data['old_img'])) {
+                  $img_path = ROOT_UPLOADS_PATH . 'visitor/' . $form_data['old_img'];
+                }
+                ?>
+                <img id="pimg" src="<?php echo $img_path; ?>" class="img-responsive">
+              </div>
+              <!--Added By Nitin Sharma 04/02/2024-->
+              <!-- <div class="photo fingerprint"  onclick="captureFP()">
+                  <?php
+                  $img_path = base_url('assets/images/finger_sacan.png');
+                  if (!empty($form_data['data_id']) && !empty($form_data['fingerprint_photo'])) {
+                    $img_path = $form_data['fingerprint_photo'];
+                  }
+                  ?>
+                  <img id="FPImage1" src="<?php echo $img_path; ?>" class="img-responsive" >
+                  <input type="hidden" id="capture_finger" name="capture_finger" value="" />
+                  <input type="hidden" id="fingerprint_photo" name="fingerprint_photo" value="" />
+                </div> -->
+              <!--Added By Nitin Sharma 04/02/2024-->
+            </div>
+            <div class="pat-col-right-box2" style=" 
+                                                  display: flex;
+                                                  flex-direction: column;
+                                                  align-items: center;
+                                                  gap: 1rem
+                                              ">
+              <strong style="margin: 0;">Select Image</strong>
+              <input type="hidden" name="old_img" value="<?php echo $form_data['old_img']; ?>" />
+              <input type="hidden" id="capture_img" name="capture_img" value="" />
+              <div style="float: left;width: 100%; font-weight: bold;text-align: center;">
+                <a href="javascript:void(0);" onclick="return start_cam()"><img
+                    src="<?php echo ROOT_IMAGES_PATH . 'camera.png'; ?>"></a>
+              </div>
+              <div style="float: left;width: 100%; font-weight: bold;text-align: center;">
+                OR
+              </div>
+              <input type="file" id="img-input" style="margin:0;" accept="image/*" name="photo">
+              <?php
+              if (isset($photo_error) && !empty($photo_error)) {
+                echo '<div class="text-danger">' . $photo_error . '</div>';
+              }
+              ?>
+            </div>
+            <?php
+            if (!empty($form_data['data_id']) && $form_data['data_id'] > 0) {
+            ?>
+              <!-- <div class="pat-col-right-box2">
+            <strong>Username</strong>
+            <input type="text" id="username" class="alpha_numeric_space" readonly="" name="username" value="<?php echo $form_data['username']; ?>" />
+          </div>
+          <div class="pat-col-right-box2">
+            <strong>Password</strong>
+            <div class='pwdwidgetdiv' id='thepwddiv' style="float:left;"></div>
+            <script  type="text/javascript" >
+            $(document).ready(function(){
+                 var pwdwidget = new PasswordWidget('thepwddiv','password');
+                 pwdwidget.MakePWDWidget();
+            });
+            </script>
+             <div class="brn_cover"> 
+                   <div class="brn_1" id="brn_1">
+                        <div class="brn_arrow"></div>
+                        <div class="brn_txt">Password strength:</div>
+                        <div id="mark_bar" class="brn_mark"></div>
+                        <div class="brn_validation">
+                             Password length should be 6-20 character only.
+                        </div>
+                   </div>
+              </div>   -->
+              <?php if (!empty($form_error)) {
+                echo form_error('password');
+              } ?>
+          </div>
+          <?php
+            }
+        ?>
 
         </div> <!-- // -->
 
@@ -939,5 +1041,17 @@ $field_list = mandatory_section_field_list(2);
 <!--new css-->
 <link href="<?php echo ROOT_CSS_PATH; ?>jquery-ui.css" rel="stylesheet">
 <script src="<?php echo ROOT_JS_PATH; ?>jquery-ui.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+  $("#visitor_type_id").select2();
+  $("#emp_id").select2();
+  $("#visitor_type_id").select2({
+    width: '500px' // Set your desired width
+});
+  $("#emp_id").select2({
+    width: '500px' // Set your desired width
+});
+</script>
 
 <!--new css-->

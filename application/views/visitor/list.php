@@ -346,6 +346,31 @@
 
       <div class="userlist-box">
         <form name="search_form_list" id="search_form_list">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="row m-b-5">
+                <div class="col-xs-5"><label>Patient/Visitor</label></div>
+                <div class="col-xs-7">
+                  <div class="col-md-12">
+                    <div class="grp">
+                      <span class="new_patient">
+                        <input type="radio" name="new_patient" id="patient_radio"
+                          onClick="window.location='<?php echo base_url('patient'); ?>';">
+                        <label>Patient</label>
+                      </span>
+    
+                      <span class="new_patient">
+                        <input type="radio" name="new_patient" id="visitor_radio"
+                          onClick="window.location='<?php echo base_url('visitor'); ?>';">
+                        <label>Visitor</label>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
 
           <div class="row">
             <div class="col-sm-4">
@@ -363,26 +388,7 @@
                     onkeyup="return form_submit();" class="numeric m_input_default" maxlength="10" value="" type="text">
                 </div>
               </div>
-              <div class="row m-b-5">
-                <div class="col-xs-5"><label>Patient/Visitor</label></div>
-                <div class="col-xs-7">
-                  <div class="col-md-12">
-                    <div class="grp">
-                      <span class="new_patient">
-                        <input type="radio" name="new_patient" id="patient_radio"
-                          onClick="window.location='<?php echo base_url('patient'); ?>';">
-                        <label>Patient</label>
-                      </span>
 
-                      <span class="new_patient">
-                        <input type="radio" name="new_patient" id="visitor_radio"
-                          onClick="window.location='<?php echo base_url('visitor'); ?>';">
-                        <label>Visitor</label>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
 
             </div> <!-- 4 -->
@@ -407,7 +413,7 @@
 
             </div> <!-- 4 -->
 
-            <div class="col-sm-4 text-right">
+            <div class="col-sm-4  d-flex justify-content-center" style="margin-left: 133px;margin-top: 0px;">
               <!--Added By Nitin Sharma 04/02/2024-->
               <!-- <a class="btn-custom" id="scan_finger" onclick="captureFP()">Scan Finger</a> -->
               <!--Added By Nitin Sharma 04/02/2024-->
