@@ -1,5 +1,5 @@
 <html><head>
-
+<title>Patient Report</title>
 <?php
 if($print_status==1)
 {
@@ -38,7 +38,7 @@ td,th
     <div class="header-title"><?php echo $mainHeader; ?></div>
 <table width="100%" cellpadding="0" cellspacing="0" border="1px">
  <tr> 
-    <th style="text-align: left;"><?php echo "Visitor Type"?></th>
+    <th style="text-align: left;"Visitor Type</th>
     <th style="text-align: left;">From</th>
     <th style="text-align: left;">Visitor Name</th>
     <th style="text-align: left;">Mobile No.</th>
