@@ -92,6 +92,43 @@ class General extends CI_Controller {
         echo $data;
     }
 
+    public function doctor_specilization_list_selection($specilization_id="",$branch_id='', $selected_doctor_id = null)
+    {
+        //$referral_doctor_id = $this->session->userdata('referral_doctor_id');
+        $data = '<option value="">Select Consultant</option>';
+        if(!empty($specilization_id))
+        {
+            $this->session->set_userdata('specilization_id',$specilization_id);
+            $doctors_list = $this->general->doctor_specilization_list_selection($specilization_id,$branch_id); 
+            if(!empty($doctors_list))
+            {
+                foreach($doctors_list as $doctors)
+                {
+                    //if($doctors->id!==$referral_doctor_id){
+                        $selected = ($doctors->selected == 1) ? ' selected' : '';
+                        $data .= '<option value="'.$doctors->id.'"' . $selected . '>'.ucfirst(strtolower($doctors->doctor_name)).'</option>';
+                    //}
+                }
+            }
+        }
+        else
+        {
+            $doctors_list = $this->general->doctor_specilization_list_selection();
+            if(!empty($doctors_list))
+            {
+                foreach($doctors_list as $doctors)
+                {
+                    if($doctors->id!==$referral_doctor_id){
+                        $selected = ($doctors->selected == 1) ? ' selected' : '';
+                        $data .= '<option value="'.$doctors->id.'"' . $selected . '>'.ucfirst(strtolower($doctors->doctor_name)).'</option>';
+                    }
+                }
+            }
+        }
+        
+        echo $data;
+    }
+
 
     public function particulars_list($particulars_id="")
     {

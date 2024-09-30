@@ -181,6 +181,9 @@ $user_role = $users_data['users_role'];
           <table class="table table-bordered table-striped table-hover">
             <tbody>
               <?php
+              // echo "<pre>";
+              // print_r($checkbox_list);
+              // die;
               $unchecked_column = [];
               foreach ($checkbox_list as $checkbox_list_data) {
                 ?>
@@ -382,12 +385,12 @@ $user_role = $users_data['users_role'];
               </div> <!-- 4 -->
 
               <div class="col-sm-4">
-                <input value="Reset" class="btn-custom" onclick="clear_form_elements(this.form)" type="button">
+                <input value="Reset" class="col-sm-4 d-flex justify-content-center" style="margin-left: 133px;margin-top: 30px;" onclick="clear_form_elements(this.form)" type="button">
                 <!--<a class="btn-custom" id="reset_date" onclick="clear_form_elements(this.form);"><i class="fa fa-refresh"></i> Reset</a>-->
-                <a href="javascript:void(0)" class="btn-a-search" id="opd_adv_search">
+                <!-- <a href="javascript:void(0)" class="btn-a-search" id="opd_adv_search">
                   <i class="fa fa-cubes" aria-hidden="true"></i>
                   Advance Search
-                </a>
+                </a> -->
 
               </div> <!-- 4 -->
             </div> <!-- row -->
@@ -477,9 +480,9 @@ $user_role = $users_data['users_role'];
               <i class="fa fa-file-excel-o"></i> Excel
             </a>
 
-            <a href="<?php echo base_url('opd/opd_csv'); ?>" class="btn-anchor m-b-2">
+            <!-- <a href="<?php echo base_url('opd/opd_csv'); ?>" class="btn-anchor m-b-2">
               <i class="fa fa-file-word-o"></i> CSV
-            </a>
+            </a> -->
 
             <a href="<?php echo base_url('opd/opd_pdf'); ?>" class="btn-anchor m-b-2">
               <i class="fa fa-file-pdf-o"></i> PDF
@@ -487,16 +490,16 @@ $user_role = $users_data['users_role'];
 
             <?php if (in_array('2058', $users_data['permission']['action'])) {
               ?>
-              <a href="<?php echo base_url('opd/sample_import_opd_excel'); ?>" class="btn-anchor m-b-2">
-                <i class="fa fa-file-excel-o"></i> Sample(.xls)
+              <!-- <a href="<?php echo base_url('opd/sample_import_opd_excel'); ?>" class="btn-anchor m-b-2">
+                <i class="fa fa-file-excel-o"></i> Sample(.xls) -->
               </a>
             <?php } ?>
 
             <?php if (in_array('2059', $users_data['permission']['action'])) {
               ?>
-              <a id="open_model" href="javascript:void(0)" class="btn-anchor m-b-2">
+              <!-- <a id="open_model" href="javascript:void(0)" class="btn-anchor m-b-2">
                 <i class="fa fa-file-excel-o"></i> Import(.xls)
-              </a>
+              </a> -->
             <?php } ?>
 
             <!-- <a href="javascript:void(0)" class="btn-anchor m-b-2"  onClick="return openPrintWindow('< ?php echo base_url("opd/opd_print"); ?>', 'windowTitle', 'width=820,height=600');">

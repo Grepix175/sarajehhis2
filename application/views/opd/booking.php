@@ -343,7 +343,7 @@ $field_list = mandatory_section_field_list(3);
               </div>
             </div> <!-- row -->
 
-            
+
 
             <div class="row m-b-5">
               <div class="col-md-12">
@@ -399,7 +399,9 @@ $field_list = mandatory_section_field_list(3);
                   <div class="row">
                     <div class="col-md-4"><b>DOB</b></div>
                     <div class="col-md-8">
-                    <input type="text" class="datepicker" readonly="" name="dob" id="dob" value="<?php echo $form_data['dob']; ?>"  onchange="showAge(this.value);"/>  <!-- onchange="showAge(this.value);"-->
+                      <input type="text" class="datepicker" readonly="" name="dob" id="dob"
+                        value="<?php echo $form_data['dob']; ?>" onchange="showAge(this.value);" />
+                      <!-- onchange="showAge(this.value);"-->
                     </div>
                   </div>
                 </div>
@@ -466,7 +468,7 @@ $field_list = mandatory_section_field_list(3);
                     </div>
                   </div>
                 </div>
-              </div> 
+              </div>
 
               <div class="row m-b-4">
                 <div class="col-md-12">
@@ -534,18 +536,18 @@ $field_list = mandatory_section_field_list(3);
               </div>
 
               <div class="row m-b-4">
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-4"><b>Token No.</b></div>
-                  <div class="col-md-8">
-                    <input type="text" id="token_no" readonly class="m_input_default" name="token_no"
-                      value="<?php echo $form_data['token_no']; ?>" />
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-4"><b>Token No.</b></div>
+                    <div class="col-md-8">
+                      <input type="text" id="token_no" readonly class="m_input_default" name="token_no"
+                        value="<?php echo $form_data['token_no']; ?>" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div> <!-- row -->
+              </div> <!-- row -->
 
-              
+
 
 
               <!-- <div class="row m-b-5">
@@ -574,7 +576,7 @@ $field_list = mandatory_section_field_list(3);
               </div> row -->
 
 
-              
+
 
 
               <!-- <div class="row m-b-5">
@@ -1286,6 +1288,11 @@ $field_list = mandatory_section_field_list(3);
                     }
                     ?></b>
                   </div>
+                  <?php
+                  // echo "<pre>";
+                  // print_r($specialization_list);
+                  // die;
+                  ?>
                   <div class="col-md-7" id="specilizationid">
                     <select name="specialization" class="m_select_btn" id="specilization_id"
                       onChange="return get_doctor_specilization(this.value);">
@@ -1293,10 +1300,16 @@ $field_list = mandatory_section_field_list(3);
                       <?php
                       if (!empty($specialization_list)) {
                         foreach ($specialization_list as $specializationlist) {
+                          // Automatically select 'Eye (Default)' or the value from form data if available
+                          $selected = '';
+                          if (!empty($form_data['specialization_id']) && $form_data['specialization_id'] == $specializationlist->id) {
+                            $selected = 'selected="selected"';
+                          } elseif (strpos($specializationlist->specialization, 'Eye (Default)') !== false) {
+                            // Check if the specialization name contains 'Eye (Default)'
+                            $selected = 'selected="selected"';
+                          }
                           ?>
-                          <option <?php if ($form_data['specialization_id'] == $specializationlist->id) {
-                            echo 'selected="selected"';
-                          } ?> value="<?php echo $specializationlist->id; ?>">
+                          <option <?php echo $selected; ?> value="<?php echo $specializationlist->id; ?>">
                             <?php echo $specializationlist->specialization; ?>
                           </option>
                           <?php
@@ -1336,6 +1349,11 @@ $field_list = mandatory_section_field_list(3);
                     <sup class="info"><a href="javascript:void(null)" class="small info"> ?<span>This is a doctor type
                           which have two forms one is attended other is referral it may be both. </span></a></sup>
                   </div>
+                  <?php
+                  // echo "<pre>";
+                  // print_r($opd_last_record);
+                  // die;
+                  ?>
                   <div class="col-md-7">
                     <select name="attended_doctor" class="m_select_btn" id="attended_doctor"
                       onchange="consultant_charge(this.value);  generate_token(this.value);  <?php if (!empty($form_data['patient_id']) && $form_data['data_id'] == '') { ?> get_validity_date_in_between(this.value); change_validity_date(this.value);<?php } ?>">
@@ -1344,7 +1362,8 @@ $field_list = mandatory_section_field_list(3);
                       //$referral_doctor_id = $this->session->userdata('referral_doctor_id');
                       if (!empty($form_data['specialization_id'])) {
                         $doctor_list = doctor_specilization_list($form_data['specialization_id'], $form_data['branch_id']);
-
+                  //       echo "<pre>";
+                  // print_r($doctor_list);
 
                         if (!empty($doctor_list)) {
                           foreach ($doctor_list as $doctor) {  //if($doctor->id!==$referral_doctor_id){
@@ -1460,7 +1479,7 @@ $field_list = mandatory_section_field_list(3);
             <!-- row -->
 
 
-            
+
 
             <!-- row -->
 
@@ -1991,32 +2010,32 @@ $field_list = mandatory_section_field_list(3);
       }
 
       function getAsDate() {
-      var day = parseInt($("#age_d").val());
-      if (isNaN(day)) {
-        var day = 0;
-      }
-      var month = parseInt($("#age_m").val() - 1);
-      if (isNaN(month)) {
-        var month = 0;
-      }
-      var year = parseInt($("#age_y").val());
-      if (isNaN(year)) {
-        var year = 0;
-      }
-      $.ajax({
-        url: "<?php echo base_url(); ?>patient/getAge/",
-
-        type: 'POST',
-        data: {
-          day: day,
-          month: month,
-          year: year
-        },
-        success: function(result) {
-          $('#dob').val(result);
+        var day = parseInt($("#age_d").val());
+        if (isNaN(day)) {
+          var day = 0;
         }
-      });
-    }
+        var month = parseInt($("#age_m").val() - 1);
+        if (isNaN(month)) {
+          var month = 0;
+        }
+        var year = parseInt($("#age_y").val());
+        if (isNaN(year)) {
+          var year = 0;
+        }
+        $.ajax({
+          url: "<?php echo base_url(); ?>patient/getAge/",
+
+          type: 'POST',
+          data: {
+            day: day,
+            month: month,
+            year: year
+          },
+          success: function (result) {
+            $('#dob').val(result);
+          }
+        });
+      }
 
       function handlePaymentMode() {
         var patientCategoryElement = document.getElementById("patient_category");
@@ -2331,6 +2350,13 @@ $field_list = mandatory_section_field_list(3);
         });
 
       });
+      // Add autometacaly call this function
+      $(document).ready(function () {
+        var specializationId = $('#specilization_id').val();
+        if (specializationId) {
+          get_doctor_specilization(specializationId);
+        }
+      });
 
       function payment_function(value, error_field) {
         $('#updated_payment_detail').html('');
@@ -2365,11 +2391,11 @@ $field_list = mandatory_section_field_list(3);
       }
 
       function get_doctor_specilization(specilization_id, branch_id) {
-
         if (typeof branch_id === "undefined" || branch_id === null) {
           $.ajax({
-            url: "<?php echo base_url(); ?>general/doctor_specilization_list/" + specilization_id,
+            url: "<?php echo base_url(); ?>general/doctor_specilization_list_selection/" + specilization_id,
             success: function (result) {
+              console.log(result,'bahsvas')
               $('#attended_doctor').html(result);
             }
           });
@@ -2379,6 +2405,7 @@ $field_list = mandatory_section_field_list(3);
           $.ajax({
             url: "<?php echo base_url(); ?>general/doctor_specilization_list/" + specilization_id + "/" + branch_id,
             success: function (result) {
+              console.log(result,'====')
               $('#attended_doctor').html(result);
             }
           });

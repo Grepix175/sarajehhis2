@@ -277,7 +277,12 @@ $users_data = $this->session->userdata('auth_users');
                   class="datepicker datepicker_to end_datepicker2 m_input_default"
                   value="<?php echo $form_data['end_date']; ?>" type="text"></td>
               <td>
-                <input value="Reset" class="btn-custom" onclick="clear_form_elements(this.form)" type="button">
+                <div style="
+    margin-left: 161px;
+">
+
+                  <input value="Reset" class="btn-custom" onclick="clear_form_elements(this.form)" type="button">
+                </div>
 
                 <!--<a class="btn-custom" id="adv_search"><i class="fa fa-cubes"></i> Advance Search</a>-->
 

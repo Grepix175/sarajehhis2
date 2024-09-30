@@ -168,9 +168,8 @@ $user_role = $users_data['users_role'];
 
             <!-- ///////////////// -->
 
-            <div class="col-sm-4">
-              <input value="Reset" class="btn-custom" onclick="reset_search(this.form)" type="button"
-                style="float: right;">
+            <div class="col-sm-4 d-flex justify-content-center" style="margin-left: 133px;margin-top: 0px;">
+              <input value="Reset" class="btn-custom" onclick="reset_search(this.form)" type="button">
 
 
 

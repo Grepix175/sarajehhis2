@@ -1995,8 +1995,114 @@ class General_model extends CI_Model {
             return $specialization_name; 
       
     }
+
+    public function opd_last_record($specialization,$branch_id)
+	{
+        
+        
+		$user_data = $this->session->userdata('auth_users');
+		$this->db->select('hms_opd_booking.id,hms_opd_booking.branch_id,hms_opd_booking.parent_id,hms_opd_booking.specialization_id,hms_opd_booking.attended_doctor,hms_opd_booking.created_date, 
+		hms_opd_booking.policy_no as polocy_no, 
+		hms_opd_booking.insurance_type_id as insurance_type');
+
+		$this->db->from('hms_opd_booking');
+		//$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id');
+		//$this->db->join('hms_patient_category', 'hms_patient_category.id = hms_opd_booking.patient_category');
+
+		// Filter by branch ID (parent_id)
+		$this->db->where('hms_opd_booking.branch_id', $user_data['parent_id']);
+
+		// If specialization is provided, add a condition
+		if (!empty($specialization)) {
+              
+            
+            // echo $specialization;
+
+            // die();
+            
+			$this->db->where('hms_opd_booking.specialization_id', $specialization);
+		}
+        
+		// Ensure the record is not deleted
+		$this->db->where('hms_opd_booking.is_deleted', '0');
+
+		// Order by ID in descending order to get the last inserted record
+		$this->db->order_by('hms_opd_booking.id', 'DESC');
+
+		// Limit the result to 1 record
+		$this->db->limit(1);
+
+		// Execute the query
+		$query = $this->db->get();
+
+        // echo $this->db->last_query(); 
+		// Return the last record as an array
+		return $query->row_array();
+
+	}
     
 
+    public function doctor_specilization_list_selection($specilization_id="",$branch_id="")
+    {
+        // echo $specilization_id;
+        $opd_last_record = $this->opd_last_record($specilization_id,$branch_id );
+        $last_attended_doctor_id = !empty($opd_last_record) ? $opd_last_record['attended_doctor'] : null;
+        // print_r($last_attended_doctor_id);
+        // die;
+        $users_data = $this->session->userdata('auth_users');
+        $this->db->select('*'); 
+        if(!empty($specilization_id))
+        {
+            $this->db->where('specilization_id',$specilization_id); 
+        }
+        if(isset($branch_id) && !empty($branch_id))
+        {
+            $this->db->where('branch_id',$branch_id);
+        }
+        else
+        {
+            $this->db->where('branch_id',$users_data['parent_id']);    
+        }
+        
+        $this->db->where('status','1'); 
+        $this->db->where('(doctor_type=1 OR doctor_type=2)');
+        $this->db->order_by('doctor_name','ASC'); 
+        $this->db->where('is_deleted',0);
+        $query = $this->db->get('hms_doctors');
+        $result = $query->result(); 
+        //return $result;
+        
+        $next_doctor = null;
+        $doctor_found = false;
+        
+        foreach ($result as $index => $doctor) {
+            if ($doctor->id == $last_attended_doctor_id) {
+                $doctor_found = true;
+            } elseif ($doctor_found) {
+                $next_doctor = $doctor;
+                break;
+            }
+        }
+        
+        if (!$next_doctor && !empty($result)) {
+            $next_doctor = $result[0];
+        }
+
+        foreach ($result as $doctor) {
+            $doctor->selected = ($doctor->id == $next_doctor->id) ? 1 : 0;
+        }
+
+        // Return the selected next doctor
+        // return $next_doctor;
+        
+       
+        // echo "<pre>";
+        // print_r($result);
+        // print_r($next_doctor);
+        // die('end loop');
+        return $result;
+        // echo $this->db->last_query(); 
+    }
     public function doctor_specilization_list($specilization_id="",$branch_id="")
     {
         
@@ -2021,7 +2127,7 @@ class General_model extends CI_Model {
         $this->db->where('is_deleted',0);
         $query = $this->db->get('hms_doctors');
         $result = $query->result(); 
-        //echo $this->db->last_query(); 
+        // echo $this->db->last_query(); 
         return $result;
     }
 
