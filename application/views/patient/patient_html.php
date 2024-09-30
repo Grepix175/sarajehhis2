@@ -39,11 +39,10 @@ td,th
 <table width="100%" cellpadding="0" cellspacing="0" border="1px">
  <tr> 
     <th style="text-align: left;"><?php echo $data= get_setting_value('PATIENT_REG_NO');?></th>
+    <th style="text-align: left;">Patient Category</th>
     <th style="text-align: left;">Patient Name</th>
     <th style="text-align: left;">Mobile No.</th>
     <th style="text-align: left;">Gender</th>
-    <th style="text-align: left;">Age</th>
-    <th style="text-align: left;">Address</th>
     <th style="text-align: left;">Created Date</th>
  </tr>
  <?php
@@ -90,12 +89,10 @@ td,th
    	   ?>
    	    <tr> 
       		 	<td><?php echo $patients->patient_code; ?></td>
+      		 	<td><?php echo $patients->patient_catgory; ?></td>
       		 	<td><?php echo $patients->patient_name; ?></td>
             <td><?php echo $patients->mobile_no; ?></td>
               <td><?php echo $gender; ?></td> 
-      		 	<td><?php echo $patient_age; ?></td>
-      		 
-      		 	<td><?php echo $patients->address; ?></td>
             <td><?php echo date('d-m-Y h:i A', strtotime($patients->created_date)); ?></td>
       		 
       	

@@ -292,7 +292,7 @@
 
       <!-- //////////////////////[ Left side bar ]////////////////////// -->
       <?php if ($users_data['emp_id'] == 0) { ?>
-        <!--<div class="toggleBtn" style="display:block"><i class="fa fa-angle-right"></i></div>-->
+        <!-- <div class="toggleBtn" style="display:block"><i class="fa fa-angle-right"></i></div> -->
         <div class="toggleBox">
           <a>Exit <i class="fa fa-sign-out"></i></a>
           <form id="checkbox_data_form">
@@ -363,7 +363,7 @@
                           onClick="window.location='<?php echo base_url('patient'); ?>';">
                         <label>Patient</label>
                       </span>
-    
+
                       <span class="new_patient">
                         <input type="radio" name="new_patient" id="visitor_radio"
                           onClick="window.location='<?php echo base_url('visitor'); ?>';">
@@ -489,7 +489,7 @@
                     onkeyup="return form_submit();" class="alpha_space m_input_default" value="" type="text">
                 </div>
               </div>
-              <div class="row m-b-5">
+              <!-- <div class="row m-b-5">
                 <div class="col-xs-5"><label>Address</label></div>
                 <div class="col-xs-7">
                   <input style=" margin-top: 5px;
@@ -497,7 +497,7 @@
                     onkeyup="return form_submit();" class="alpha_space m_input_default"
                     value="<?php echo $form_data['address']; ?>" type="text">
                 </div>
-              </div>
+              </div> -->
 
 
             </div> <!-- 4 -->
@@ -611,16 +611,16 @@
 
             <?php
             if (in_array('627', $users_data['permission']['action'])) { ?>
-              <a data-toggle="tooltip" title="Sample export in excel"
+              <!-- <a data-toggle="tooltip" title="Sample export in excel"
                 href="<?php echo base_url('patient/sample_import_patient_excel'); ?>" class="btn-anchor m-b-2">
                 <i class="fa fa-file-excel-o"></i> Sample(.xls)
-              </a>
+              </a> -->
             <?php }
             if (in_array('628', $users_data['permission']['action'])) { ?>
-              <a data-toggle="tooltip" title="Import patient list" id="open_model" href="javascript:void(0)"
+              <!-- <a data-toggle="tooltip" title="Import patient list" id="open_model" href="javascript:void(0)"
                 class="btn-anchor m-b-2">
                 <i class="fa fa-file-excel-o"></i> Import(.xls)
-              </a>
+              </a> -->
             <?php }
 
             ?>

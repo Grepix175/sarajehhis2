@@ -22,7 +22,7 @@ class Opd extends CI_Controller
     $this->session->unset_userdata('opd_particular_billing');
     $this->session->unset_userdata('opd_particular_payment');
 
-    $data['page_title'] = 'OPD Booking List';
+    $data['page_title'] = 'Billing List';
     // Default Search Setting
     $this->load->model('default_search_setting/default_search_setting_model');
     $default_search_data = $this->default_search_setting_model->get_default_setting();
@@ -926,7 +926,7 @@ class Opd extends CI_Controller
 
       $data['specialization_list'] = $this->general_model->specialization_list();
       $data['attended_doctor_list'] = $this->opd->attended_doctor_list();
-
+      
       $opd_specialization = $lead_data['specialization_id'];
       $opd_attended_doctor = $lead_data['attended_doctor'];
       $doctor_data = $this->general_model->doctors_list($lead_data['attended_doctor']);
@@ -1052,10 +1052,9 @@ class Opd extends CI_Controller
     $data['corporate_list'] = $this->opd->corporate_list();
     $data['subsidy_list'] = $this->opd->subsidy_list();
     $data['department_list'] = $this->opd->department_list();
+   
     // echo "<pre>";
-    // print_r($data['corporate_list']);
-    // print_r($data['subsidy_list']);
-    // print_r($data['department_list']);
+    // print_r($data['opd_last_record']);
     // die;
     $data['gardian_relation_list'] = $this->general_model->gardian_relation_list();
     $data['doctor_available_time'] = $this->general_model->doctor_time($attended_doctor);
