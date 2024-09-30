@@ -174,6 +174,8 @@ $user_role = $users_data['users_role'];
     $module_id = $checkbox_list[0]->module;
     ?>
 
+    
+
     <!-- //////////////////////[ Left side bar ]////////////////////// -->
 
     <?php if ($users_data['emp_id'] == 0) { ?>
