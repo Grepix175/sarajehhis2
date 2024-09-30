@@ -50,6 +50,8 @@ class Opd extends CI_Controller
     $users_data = $this->session->userdata('auth_users');
 
     $list = $this->opd->get_datatables();
+    // echo "<pre>";
+    // print_r($list); die;
     $data = array();
     $no = $_POST['start'];
     $i = 1;
@@ -63,13 +65,13 @@ class Opd extends CI_Controller
       if ($i == $total_num) {
 
       }
-      if ($test->booking_status == 0) {
-        $booking_status = '<font color="red">Pending</font>';
-      } elseif ($test->booking_status == 1) {
-        $booking_status = '<font color="green">Confirm</font>';
-      } elseif ($test->booking_status == 2) {
-        $booking_status = '<font color="blue">Attended</font>';
-      }
+      // if ($test->booking_status == 0) {
+      //   $booking_status = '<font color="red">Pending</font>';
+      // } elseif ($test->booking_status == 1) {
+      //   $booking_status = '<font color="green">Confirm</font>';
+      // } elseif ($test->booking_status == 2) {
+      //   $booking_status = '<font color="blue">Attended</font>';
+      // }
 
 
 
@@ -112,58 +114,58 @@ class Opd extends CI_Controller
       }
       $row[] = $test->patient_reg_no;
       $row[] = $test->booking_code;
-
       $row[] = $test->patient_name;
+      $row[] = $test->gender;
+      $row[] = date('d-m-Y', strtotime($test->dob));
+      $row[] = $test->mobile_no;
 
-      if ($test->appointment_date == '0000-00-00') {
-        $row[] = '';
-      } else {
-        $row[] = date('d-m-Y', strtotime($test->appointment_date));
-      }
-      $row[] = "Dr. " . $test->doctor_name;
-      $row[] = date('d-m-Y', strtotime($test->booking_date));
+      // if ($test->appointment_date == '0000-00-00') {
+      //   $row[] = '';
+      // } else {
+      //   $row[] = date('d-m-Y', strtotime($test->appointment_date));
+      // }
+      // $row[] = "Dr. " . $test->doctor_name;
+      // $row[] = date('d-m-Y', strtotime($test->booking_date));
+      $row[] = date('d-m-Y h:i A', strtotime($test->booking_date . ' ' . $test->booking_time));
+
       //$row[] = $test->total_amount;
       //$row[] = $booking_status;
 
       if ($test->booking_type == 1) {
         $row[] = $app_type;
-      } else {
-        $row[] = $booking_status;
-      }
+      } 
 
 
-      $row[] = $test->mobile_no;
-      $row[] = $test->gender;
-      $row[] = $test->address;
-      $row[] = $test->father_husband_simulation . " " . $test->father_husband;
+      // $row[] = $test->address;
+      // $row[] = $test->father_husband_simulation . " " . $test->father_husband;
       $row[] = $test->patient_email;
-      $row[] = $test->insurance_type;
-      $row[] = $test->insurance_company;
-      $row[] = $test->patient_source;
-      $row[] = $test->disease;
-      $row[] = $test->doctor_hospital_name;
-      $row[] = $test->specialization;
+      // $row[] = $test->insurance_type;
+      // $row[] = $test->insurance_company;
+      // $row[] = $test->patient_source;
+      // $row[] = $test->disease;
+      // $row[] = $test->doctor_hospital_name;
+      // $row[] = $test->specialization;
       $row[] = "Dr. " . $test->doctor_name;
-      if ($test->booking_time != '00:00:00') {
-        $row[] = date('h:i A', strtotime($test->booking_time));
-      } else {
-        $row[] = '';
-      }
-      if (strtotime($test->validity_date) > 0)
-        $row[] = date('d-m-Y', strtotime($test->validity_date));
-      else
-        $row[] = "";
-      $row[] = $pat_status;
-      if (strtotime($test->next_app_date) > 0)
-        $row[] = date('d-m-Y', strtotime($test->next_app_date));
-      else
-        $row[] = "";
+      // if ($test->booking_time != '00:00:00') {
+      //   $row[] = date('h:i A', strtotime($test->booking_time));
+      // } else {
+      //   $row[] = '';
+      // }
+      // if (strtotime($test->validity_date) > 0)
+      //   $row[] = date('d-m-Y', strtotime($test->validity_date));
+      // else
+      //   $row[] = "";
+      // $row[] = $pat_status;
+      // if (strtotime($test->next_app_date) > 0)
+      //   $row[] = date('d-m-Y', strtotime($test->next_app_date));
+      // else
+      //   $row[] = "";
 
       $row[] = number_format($test->total_amount, 2);
       $row[] = number_format($test->net_amount, 2);
       $row[] = number_format($test->paid_amount1, 2);
       $row[] = number_format($test->discount, 2);
-      $row[] = $test->policy_no;
+      // $row[] = $test->policy_no;
       //Action button /////
       $btn_confirm = "";
       $btn_edit = "";

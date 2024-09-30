@@ -168,22 +168,22 @@ $user_role = $users_data['users_role'];
 
     <?php
     $checkbox_list = get_checkbox_coloumns('1');
+    // echo "<pre>";
+    // print_r($checkbox_list);
+    // die;
     $module_id = $checkbox_list[0]->module;
     ?>
 
     <!-- //////////////////////[ Left side bar ]////////////////////// -->
 
     <?php if ($users_data['emp_id'] == 0) { ?>
-      <div class="toggleBtn"><i class="fa fa-angle-right"></i></div>
+      <!-- <div class="toggleBtn"><i class="fa fa-angle-right"></i></div>
       <div class="toggleBox">
         <a>Exit <i class="fa fa-sign-out"></i></a>
         <form id="checkbox_data_form">
           <table class="table table-bordered table-striped table-hover">
             <tbody>
               <?php
-              // echo "<pre>";
-              // print_r($checkbox_list);
-              // die;
               $unchecked_column = [];
               foreach ($checkbox_list as $checkbox_list_data) {
                 ?>
@@ -211,18 +211,18 @@ $user_role = $users_data['users_role'];
           </table>
         </form>
 
-      </div>
+      </div> -->
     <?php } else {
 
-      $unchecked_column = [];
-      foreach ($checkbox_list as $checkbox_list_data) {
+      // $unchecked_column = [];
+      // foreach ($checkbox_list as $checkbox_list_data) {
 
-        if ($checkbox_list_data->selected_status > 0 && is_numeric($checkbox_list_data->selected_status)) {
+      //   if ($checkbox_list_data->selected_status > 0 && is_numeric($checkbox_list_data->selected_status)) {
 
-        } else {
-          $unchecked_column[] = $checkbox_list_data->coloum_id;
-        }
-      }
+      //   } else {
+      //     $unchecked_column[] = $checkbox_list_data->coloum_id;
+      //   }
+      // }
 
     } ?>
     <!-- //////////////////////[ End Left side bar ]////////////////////// -->
@@ -411,43 +411,42 @@ $user_role = $users_data['users_role'];
                   <tr>
                     <th width="40" align="center"> <input type="checkbox" name="selectall" class="" id="selectAll"
                         value=""> </th>
-                    <?php $data = get_setting_value('PATIENT_REG_NO');
-                    if (!empty($data) && isset($data)) { ?>
-                      <th><?php echo $data; ?></th>
-                    <?php } else { ?>
+                    
+                    
                       <th>Patient Reg No.</th>
-                    <?php } ?>
+                    
                     <th> OPD No. </th>
                     <th> Patient Name </th>
+                    <th>Gender</th>
+                    <th>DOB</th>
+                    <th>Mobile No.</th>
 
-                    <th> Appointment Date </th>
-                    <th> Doctor Name </th>
+                    <!-- <th> Appointment Date </th> -->
+                    <!-- <th> Doctor Name </th> -->
                     <th> Booking Date </th>
-                    <th> Booking Status </th>
+                    <!-- <th> Patient/Booking Status </th> -->
                     <!-- added on 11-Feb-2018 -->
 
-                    <th>Mobile No.</th>
-                    <th>Gender</th>
-                    <th>Address</th>
-                    <th>Father Name</th>
+                    <!-- <th>Address</th> -->
+                    <!-- <th>Father Name</th> -->
                     <th>Patient Email</th>
-                    <th>Insurance Type</th>
-                    <th>Insurance Company Name</th>
+                    <!-- <th>Insurance Type</th> -->
+                    <!-- <th>Insurance Company Name</th> -->
 
-                    <th>Source From</th>
+                    <!-- <th>Source From</th>
                     <th>Disease</th>
                     <th>Referred Doctor/Hospital</th>
-                    <th>Specialization</th>
+                    <th>Specialization</th> -->
                     <th>Consultant</th>
-                    <th>Booking Time</th>
-                    <th>Validity Date</th>
-                    <th>Patient Status</th>
-                    <th>Next Appointment</th>
+                    <!-- <th>Booking Time</th> -->
+                    <!-- <th>Validity Date</th> -->
+                    <!-- <th>Patient Status</th>
+                    <th>Next Appointment</th> -->
                     <th>Total Amount</th>
                     <th>Net Amount</th>
                     <th>Paid Amount</th>
                     <th>Discount</th>
-                    <th> Policy No. </th> <!-- added on 11-Feb-2018 -->
+                    <!-- <th> Policy No. </th>  -->
                     <th> Action </th>
                   </tr>
                 </thead>
@@ -497,9 +496,9 @@ $user_role = $users_data['users_role'];
 
             <?php if (in_array('2059', $users_data['permission']['action'])) {
               ?>
-              <!-- <a id="open_model" href="javascript:void(0)" class="btn-anchor m-b-2">
+              <a id="open_model" href="javascript:void(0)" class="btn-anchor m-b-2">
                 <i class="fa fa-file-excel-o"></i> Import(.xls)
-              </a> -->
+              </a>
             <?php } ?>
 
             <!-- <a href="javascript:void(0)" class="btn-anchor m-b-2"  onClick="return openPrintWindow('< ?php echo base_url("opd/opd_print"); ?>', 'windowTitle', 'width=820,height=600');">

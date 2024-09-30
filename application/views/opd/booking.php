@@ -394,18 +394,18 @@ $field_list = mandatory_section_field_list(3);
 
             <div class="more_content" id="patient_info" style="display: block;">
 
-              <div class="row m-b-5" id="pedic_spec">
+              <!-- <div class="row m-b-5" id="pedic_spec">
                 <div class="col-md-12">
                   <div class="row">
                     <div class="col-md-4"><b>DOB</b></div>
                     <div class="col-md-8">
                       <input type="text" class="datepicker" readonly="" name="dob" id="dob"
                         value="<?php echo $form_data['dob']; ?>" onchange="showAge(this.value);" />
-                      <!-- onchange="showAge(this.value);"-->
+                      onchange="showAge(this.value);"
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
 
               <div class="row m-b-5">
@@ -523,7 +523,7 @@ $field_list = mandatory_section_field_list(3);
                 </div>
               </div> <!-- row -->
 
-              <div class="row m-b-4">
+              <!-- <div class="row m-b-4">
                 <div class="col-md-12">
                   <div class="row">
                     <div class="col-md-4"><b>PIN Code</b></div>
@@ -533,9 +533,9 @@ $field_list = mandatory_section_field_list(3);
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
-              <div class="row m-b-4">
+              <!-- <div class="row m-b-4">
                 <div class="col-md-12">
                   <div class="row">
                     <div class="col-md-4"><b>Token No.</b></div>
@@ -545,7 +545,7 @@ $field_list = mandatory_section_field_list(3);
                     </div>
                   </div>
                 </div>
-              </div> <!-- row -->
+              </div> row -->
 
 
 
@@ -1362,9 +1362,9 @@ $field_list = mandatory_section_field_list(3);
                       //$referral_doctor_id = $this->session->userdata('referral_doctor_id');
                       if (!empty($form_data['specialization_id'])) {
                         $doctor_list = doctor_specilization_list($form_data['specialization_id'], $form_data['branch_id']);
-                  //       echo "<pre>";
-                  // print_r($doctor_list);
-
+                        //       echo "<pre>";
+                        // print_r($doctor_list);
+                      
                         if (!empty($doctor_list)) {
                           foreach ($doctor_list as $doctor) {  //if($doctor->id!==$referral_doctor_id){
                             ?>
@@ -1398,6 +1398,19 @@ $field_list = mandatory_section_field_list(3);
                 </div>
               </div>
             </div> <!-- row -->
+
+            <div class="row m-b-5">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-5"><b>Token No.</b></div>
+                  <div class="col-md-7">
+                    <input type="text" id="token_no" readonly class="m_input_default" name="token_no"
+                      value="<?php echo $form_data['token_no']; ?>" />
+                  </div>
+                </div>
+              </div>
+            </div> <!-- row -->
+
 
 
             <!-- row -->
@@ -2395,7 +2408,7 @@ $field_list = mandatory_section_field_list(3);
           $.ajax({
             url: "<?php echo base_url(); ?>general/doctor_specilization_list_selection/" + specilization_id,
             success: function (result) {
-              console.log(result,'bahsvas')
+              console.log(result, 'bahsvas')
               $('#attended_doctor').html(result);
             }
           });
@@ -2405,7 +2418,7 @@ $field_list = mandatory_section_field_list(3);
           $.ajax({
             url: "<?php echo base_url(); ?>general/doctor_specilization_list/" + specilization_id + "/" + branch_id,
             success: function (result) {
-              console.log(result,'====')
+              console.log(result, '====')
               $('#attended_doctor').html(result);
             }
           });
