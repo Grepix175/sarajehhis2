@@ -244,7 +244,7 @@ class Token_no extends CI_Controller
 
         // Fetching the table data
         $list = $this->token_no->search_patient_data();
-        "<pre>";print_r($list); die;
+        // "<pre>";print_r($list); die;
         $rowData = array();
         $data = array();
         if (!empty($list)) {
