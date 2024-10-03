@@ -257,7 +257,7 @@ class Token_no extends CI_Controller
                     $relation_name = $token->patient_relation . " " . $token->relation_name;
                 }
                 $status = $token->status == 1 ? 'Pending' : 'Completed';
-                array_push($rowData, $token->token_no, $token->patient_code, $token->patient_name, $status, $created_date);
+                array_push($rowData, $token->token_no, $token->patient_code, $token->patient_name,$token->mobile_no, $status, $created_date);
                 $count = count($rowData);
                 for ($j = 0; $j < $count; $j++) {
                     $data[$i][$fields[$j]] = $rowData[$j];
