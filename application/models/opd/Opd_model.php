@@ -17,11 +17,12 @@ class Opd_model extends CI_Model
 	{
 		$user_data = $this->session->userdata('auth_users');
 		$this->db->select("hms_opd_booking.*,hms_patient.patient_name,hms_patient.mobile_no, 
-			hms_patient.patient_code as patient_reg_no, hms_patient.mobile_no, (CASE WHEN hms_patient.gender=1 THEN  'Male' ELSE 'Female' END ) as gender, concat_ws(' ',hms_patient.address, hms_patient.address2, hms_patient.address3) as address, hms_patient.father_husband,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h,hms_patient.pincode,hms_patient.adhar_no,,hms_patient.address2, sim.simulation as father_husband_simulation,hms_patient.patient_email,hms_patient_category.patient_category as patient_category_name, ins_type.insurance_type, ins_cmpy.insurance_company, src.source as patient_source, ds.disease , (CASE WHEN hms_opd_booking.referred_by =1 THEN concat(hms_hospital.hospital_name,' (Hospital)')  ELSE concat('Dr. ',hms_doctors.doctor_name) END) as doctor_hospital_name, spcl.specialization, docs.doctor_name , pkg.title,hms_patient.dob,(select sum(payment.credit) as paid_amount1 from hms_payment as payment where payment.parent_id = hms_opd_booking.id AND payment.section_id =2) as paid_amount1,
+			hms_patient.patient_code as patient_reg_no, hms_patient.mobile_no, (CASE WHEN hms_patient.gender=1 THEN  'Male' ELSE 'Female' END ) as gender, concat_ws(' ',hms_patient.address, hms_patient.address2, hms_patient.address3) as address, hms_patient.father_husband,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h,hms_patient.pincode,hms_patient.adhar_no,,hms_patient.address2, sim.simulation as father_husband_simulation,hms_patient.patient_email,hms_patient_category.patient_category as patient_category_name,hms_payment_mode.payment_mode as payment_mode_name, ins_type.insurance_type, ins_cmpy.insurance_company, src.source as patient_source, ds.disease , (CASE WHEN hms_opd_booking.referred_by =1 THEN concat(hms_hospital.hospital_name,' (Hospital)')  ELSE concat('Dr. ',hms_doctors.doctor_name) END) as doctor_hospital_name, spcl.specialization, docs.doctor_name , pkg.title,hms_patient.dob,(select sum(payment.credit) as paid_amount1 from hms_payment as payment where payment.parent_id = hms_opd_booking.id AND payment.section_id =2) as paid_amount1,
 (select sum(credit)-sum(debit) as balance from hms_payment as  payment where payment.parent_id = hms_opd_booking.id AND payment.section_id=2 AND payment.branch_id = " . $user_data['parent_id'] . ") as balance1");
 
 		$this->db->join('hms_patient', 'hms_patient.id=hms_opd_booking.patient_id');
 		$this->db->join('hms_patient_category', 'hms_patient_category.id = hms_opd_booking.patient_category');
+		$this->db->join('hms_payment_mode', 'hms_payment_mode.id = hms_opd_booking.payment_mode');
 		$this->db->where('hms_opd_booking.is_deleted', '0');
 		$this->db->where('hms_opd_booking.type =2');
 		$this->db->join('hms_disease', 'hms_disease.id= hms_opd_booking.diseases', 'left');
@@ -1017,6 +1018,10 @@ class Opd_model extends CI_Model
 		$data_testr = array_merge($data_test, $data_pay_test);
 		//update booking
 		if (!empty($post['data_id']) && $post['data_id'] > 0) {
+			$booking_id = $post['data_id'];
+			// echo "<pre>";
+			// print_r($booking_id);
+			// die;
 			$created_by = $this->get_by_id($post['data_id']);
 			$this->db->set('modified_by', $user_data['id']);
 			$this->db->set('modified_date', date('Y-m-d H:i:s'));
@@ -1359,6 +1364,14 @@ class Opd_model extends CI_Model
 				$patient_id = $post['patient_id'];
 				$this->db->where('id', $post['patient_id']);
 				$this->db->update('hms_patient', $data_patient);
+				
+				
+				$this->db->set('status', 2);
+				$this->db->where('patient_id', $post['patient_id']);
+				$this->db->where('DATE(created_date)', date('Y-m-d')); 
+				$this->db->update('hms_token');
+
+
 			} else {
 
 				$patient_code = generate_unique_id(4);
@@ -4133,7 +4146,7 @@ class Opd_model extends CI_Model
 	{
 		$result_opd = array();
 		$user_data = $this->session->userdata('auth_users');
-		$this->db->select("hms_opd_booking.*,hms_patient.*,hms_users.*,(CASE WHEN hms_users.emp_id>0 THEN hms_employees.name ELSE hms_branch.branch_name END) as user_name,hms_packages.title as package_name,hms_opd_booking.consultants_charge as consultant_charge,hms_payment_mode.payment_mode,hms_branch_hospital_no.	reciept_prefix,hms_branch_hospital_no.reciept_suffix,(CASE WHEN hms_opd_booking.referred_by=1 THEN ref_hospital.hospital_name ELSE ref_doctor.doctor_name END) as referral_doctor_name, hms_patient_source.source as source_name, hms_countries.country as country_name, hms_state.state as state_name, hms_cities.city as city_name, hms_disease.disease as disease_name, concat_ws(' ',hms_patient.address, hms_patient.address2, hms_patient.address3) as address, (CASE WHEN hms_patient.marital_status=1 THEN 'Married' ELSE 'Single' END ) as marital_status , hms_religion.religion as religion_name, hms_simulation.simulation as f_simulation, hms_relation.relation, (CASE WHEN hms_patient.insurance_type=1 THEN 'TPA' ELSE 'Normal' END ) as insurance_type_name, hms_insurance_type.insurance_type as insurance_name, hms_insurance_company.insurance_company,hms_gardian_relation.relation,hms_doctors.header_content,hms_doctors.seprate_header,hms_doctors.opd_header,hms_doctors.billing_header,hms_doctors.doc_reg_no,hms_patient.address as address1,hms_patient_category.patient_category as patient_category_name,hms_corporate.corporate_name,hms_subsidy.subsidy_name,hms_authorize_person.authorize_person as authorize_person_name");
+		$this->db->select("hms_opd_booking.*,hms_patient.*,hms_users.*,(CASE WHEN hms_users.emp_id>0 THEN hms_employees.name ELSE hms_branch.branch_name END) as user_name,hms_packages.title as package_name,hms_opd_booking.consultants_charge as consultant_charge,hms_payment_mode.payment_mode,hms_branch_hospital_no.	reciept_prefix,hms_branch_hospital_no.reciept_suffix,(CASE WHEN hms_opd_booking.referred_by=1 THEN ref_hospital.hospital_name ELSE ref_doctor.doctor_name END) as referral_doctor_name, hms_patient_source.source as source_name, hms_countries.country as country_name, hms_state.state as state_name, hms_cities.city as city_name, hms_disease.disease as disease_name, concat_ws(' ',hms_patient.address, hms_patient.address2, hms_patient.address3) as address, (CASE WHEN hms_patient.marital_status=1 THEN 'Married' ELSE 'Single' END ) as marital_status , hms_religion.religion as religion_name, hms_simulation.simulation as f_simulation, hms_relation.relation, (CASE WHEN hms_patient.insurance_type=1 THEN 'TPA' ELSE 'Normal' END ) as insurance_type_name, hms_insurance_type.insurance_type as insurance_name, hms_insurance_company.insurance_company,hms_gardian_relation.relation,hms_doctors.header_content,hms_doctors.seprate_header,hms_doctors.opd_header,hms_doctors.billing_header,hms_doctors.doc_reg_no,hms_patient.address as address1,hms_patient_category.patient_category as patient_category_name,hms_corporate.corporate_name,hms_department_master.department_name,hms_subsidy.subsidy_name,hms_authorize_person.authorize_person as authorize_person_name");
 
 		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left');
 		$this->db->join('hms_gardian_relation', 'hms_gardian_relation.id=hms_patient.relation_type', 'left');
@@ -4144,6 +4157,7 @@ class Opd_model extends CI_Model
 		$this->db->join('hms_payment_mode', 'hms_payment_mode.id = hms_opd_booking.payment_mode', 'left');
 		$this->db->join('hms_patient_category', 'hms_patient_category.id = hms_opd_booking.patient_category', 'left');
 		$this->db->join('hms_corporate', 'hms_corporate.corporate_id = hms_opd_booking.corporate_id', 'left');
+		$this->db->join('hms_department_master', 'hms_department_master.department_id = hms_opd_booking.department_id', 'left');
 		$this->db->join('hms_subsidy', 'hms_subsidy.subsidy_id = hms_opd_booking.subsidy_id', 'left');
 		$this->db->join('hms_authorize_person', 'hms_authorize_person.id = hms_opd_booking.authorize_person', 'left');
 

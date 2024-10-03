@@ -292,7 +292,7 @@
 
       <!-- //////////////////////[ Left side bar ]////////////////////// -->
       <?php if ($users_data['emp_id'] == 0) { ?>
-        <div class="toggleBtn" style="display:block"><i class="fa fa-angle-right"></i></div>
+        <!-- <div class="toggleBtn" style="display:block"><i class="fa fa-angle-right"></i></div> -->
         <div class="toggleBox">
           <a>Exit <i class="fa fa-sign-out"></i></a>
           <form id="checkbox_data_form">
