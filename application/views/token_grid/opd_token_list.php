@@ -72,6 +72,15 @@ $user_role = $users_data['users_role'];
 
             },
           ],
+          "createdRow": function (row, data, dataIndex) {
+            console.log(row,'=========row')
+            console.log(data,'=========data')
+            console.log(dataIndex,'=========dataIndex')
+          // Assuming "Completed" is indicated by status = '2'
+          // if (data[3] === 'Completed') { // data[3] is the status column
+          //   $('td', row).eq(4).html(''); // Hide action column
+          // }
+        },
 
         });
         $('.tog-col').on('click', function (e) {
@@ -184,6 +193,7 @@ $user_role = $users_data['users_role'];
               <thead class="bg-theme">
                 <tr>
                   <th width="20%">Token No.</th>
+                  <th>Patient Reg. No. </th>
                   <th>Patient Name</th>
                   <?php //if ($branch_type == 2) { ?>
                   <!-- <th>Specialization Name</th> -->

@@ -42,7 +42,7 @@ class Tokenno_model extends CI_Model
     }
    public function _get_datatables_query()
 {
-    $this->db->select("hms_token.token_no, hms_token.status, hms_token.patient_id, hms_patient.patient_name, hms_token.created_date");
+    $this->db->select("hms_token.token_no, hms_token.status, hms_token.patient_id, hms_patient.patient_name,hms_patient.patient_code, hms_token.created_date");
     $this->db->from("hms_token");
     $this->db->join('hms_patient', 'hms_patient.id = hms_token.patient_id', 'left');
 

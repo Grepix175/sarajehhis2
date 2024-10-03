@@ -260,12 +260,37 @@ if ($template_data->printer_id == 2) {
     $insurance_company = $all_detail['opd_list'][0]->insurance_company;
     $template_data->template = str_replace("{insurance_company}", $insurance_company, $template_data->template);
 
+    // Corporate Details
     $corporate_name = $all_detail['opd_list'][0]->corporate_name;
     $template_data->template = str_replace("{corporate_name}", $corporate_name, $template_data->template);
 
+    $auth_no = $all_detail['opd_list'][0]->auth_no;
+    $template_data->template = str_replace("{auth_no}", $auth_no, $template_data->template);
+
+    $employee_no = $all_detail['opd_list'][0]->employee_no;
+    $template_data->template = str_replace("{employee_no}", $employee_no, $template_data->template);
+    
+    $auth_issue_date = $all_detail['opd_list'][0]->auth_issue_date;
+    $template_data->template = str_replace("{auth_issue_date}", $auth_issue_date, $template_data->template);
+    
+    $department_name = $all_detail['opd_list'][0]->department_name;
+    $template_data->template = str_replace("{department_name}", $department_name, $template_data->template);
+    
+    $cost = $all_detail['opd_list'][0]->cost;
+    $template_data->template = str_replace("{cost}", $cost, $template_data->template);
+    // Corporate Details
+
+    // Subsidy Details
     $subsidy_name = $all_detail['opd_list'][0]->subsidy_name;
     $template_data->template = str_replace("{subsidy_name}", $subsidy_name, $template_data->template);
-    // insurance_company name
+
+    $subsidy_created = $all_detail['opd_list'][0]->subsidy_created;
+    $template_data->template = str_replace("{subsidy_created}", $subsidy_created, $template_data->template);
+    
+    $subsidy_amount = $all_detail['opd_list'][0]->subsidy_amount;
+    $template_data->template = str_replace("{subsidy_amount}", $subsidy_amount, $template_data->template);
+
+    // Subsidy Details
 
     // policy number
     $polocy_no = $all_detail['opd_list'][0]->polocy_no;
@@ -706,12 +731,37 @@ if ($template_data->printer_id == 3) {
     $insurance_company = $all_detail['opd_list'][0]->insurance_company;
     $template_data->template = str_replace("{insurance_company}", $insurance_company, $template_data->template);
 
+    // Corporate Details
     $corporate_name = $all_detail['opd_list'][0]->corporate_name;
     $template_data->template = str_replace("{corporate_name}", $corporate_name, $template_data->template);
 
+    $auth_no = $all_detail['opd_list'][0]->auth_no;
+    $template_data->template = str_replace("{auth_no}", $auth_no, $template_data->template);
+
+    $employee_no = $all_detail['opd_list'][0]->employee_no;
+    $template_data->template = str_replace("{employee_no}", $employee_no, $template_data->template);
+    
+    $auth_issue_date = $all_detail['opd_list'][0]->auth_issue_date;
+    $template_data->template = str_replace("{auth_issue_date}", date('d-m-Y', strtotime($auth_issue_date)), $template_data->template);
+    
+    $department_name = $all_detail['opd_list'][0]->department_name;
+    $template_data->template = str_replace("{department_name}", $department_name, $template_data->template);
+    
+    $cost = $all_detail['opd_list'][0]->cost;
+    $template_data->template = str_replace("{cost}", $cost, $template_data->template);
+    // Corporate Details
+
+    // Subsidy Details
     $subsidy_name = $all_detail['opd_list'][0]->subsidy_name;
     $template_data->template = str_replace("{subsidy_name}", $subsidy_name, $template_data->template);
-    // insurance_company name
+
+    $subsidy_created = $all_detail['opd_list'][0]->subsidy_created;
+    $template_data->template = str_replace("{subsidy_created}", date('d-m-Y', strtotime($subsidy_created)), $template_data->template);
+    
+    $subsidy_amount = $all_detail['opd_list'][0]->subsidy_amount;
+    $template_data->template = str_replace("{subsidy_amount}", $subsidy_amount, $template_data->template);
+
+    // Subsidy Details
 
     // policy number
     $polocy_no = $all_detail['opd_list'][0]->polocy_no;
@@ -1145,11 +1195,37 @@ if ($template_data->printer_id == 1) {
     $insurance_company = $all_detail['opd_list'][0]->insurance_company;
     $template_data->template = str_replace("{insurance_company}", $insurance_company, $template_data->template);
 
-    $corporate_name = $all_detail['opd_list'][0]->corporate_name;
-    $template_data->template = str_replace("{corporate_name}", $corporate_name, $template_data->template);
-
-    $subsidy_name = $all_detail['opd_list'][0]->subsidy_name;
-    $template_data->template = str_replace("{subsidy_name}", $subsidy_name, $template_data->template);
+     // Corporate Details
+     $corporate_name = $all_detail['opd_list'][0]->corporate_name;
+     $template_data->template = str_replace("{corporate_name}", $corporate_name, $template_data->template);
+ 
+     $auth_no = $all_detail['opd_list'][0]->auth_no;
+     $template_data->template = str_replace("{auth_no}", $auth_no, $template_data->template);
+ 
+     $employee_no = $all_detail['opd_list'][0]->employee_no;
+     $template_data->template = str_replace("{employee_no}", $employee_no, $template_data->template);
+     
+     $auth_issue_date = $all_detail['opd_list'][0]->auth_issue_date;
+     $template_data->template = str_replace("{auth_issue_date}", date('d-m-Y', strtotime($auth_issue_date)), $template_data->template);
+     
+     $department_name = $all_detail['opd_list'][0]->department_name;
+     $template_data->template = str_replace("{department_name}", $department_name, $template_data->template);
+     
+     $cost = $all_detail['opd_list'][0]->cost;
+     $template_data->template = str_replace("{cost}", $cost, $template_data->template);
+     // Corporate Details
+ 
+     // Subsidy Details
+     $subsidy_name = $all_detail['opd_list'][0]->subsidy_name;
+     $template_data->template = str_replace("{subsidy_name}", $subsidy_name, $template_data->template);
+ 
+     $subsidy_created = $all_detail['opd_list'][0]->subsidy_created;
+     $template_data->template = str_replace("{subsidy_created}", date('d-m-Y', strtotime($subsidy_created)), $template_data->template);
+     
+     $subsidy_amount = $all_detail['opd_list'][0]->subsidy_amount;
+     $template_data->template = str_replace("{subsidy_amount}", $subsidy_amount, $template_data->template);
+ 
+     // Subsidy Details
     // insurance_company name
 
     // policy number

@@ -174,7 +174,7 @@ $user_role = $users_data['users_role'];
     $module_id = $checkbox_list[0]->module;
     ?>
 
-    
+
 
     <!-- //////////////////////[ Left side bar ]////////////////////// -->
 
@@ -216,17 +216,17 @@ $user_role = $users_data['users_role'];
       </div> -->
     <?php } else {
 
-      // $unchecked_column = [];
-      // foreach ($checkbox_list as $checkbox_list_data) {
-
-      //   if ($checkbox_list_data->selected_status > 0 && is_numeric($checkbox_list_data->selected_status)) {
-
-      //   } else {
-      //     $unchecked_column[] = $checkbox_list_data->coloum_id;
-      //   }
-      // }
-
-    } ?>
+    // $unchecked_column = [];
+    // foreach ($checkbox_list as $checkbox_list_data) {
+  
+    //   if ($checkbox_list_data->selected_status > 0 && is_numeric($checkbox_list_data->selected_status)) {
+  
+    //   } else {
+    //     $unchecked_column[] = $checkbox_list_data->coloum_id;
+    //   }
+    // }
+  
+  } ?>
     <!-- //////////////////////[ End Left side bar ]////////////////////// -->
 
 
@@ -234,7 +234,7 @@ $user_role = $users_data['users_role'];
       <div class="userlist-box">
 
         <?php if (isset($user_role) && $user_role != 4 && $user_role != 3) { ?>
-         
+
           <form name="search_form" id="search_form">
 
             <div class="row">
@@ -273,7 +273,8 @@ $user_role = $users_data['users_role'];
                           <option <?php if ($form_data['specialization_id'] == $specializationlist->id) {
                             echo 'selected="selected"';
                           } ?> value="<?php echo $specializationlist->id; ?>">
-                            <?php echo $specializationlist->specialization; ?></option>
+                            <?php echo $specializationlist->specialization; ?>
+                          </option>
                           <?php
                         }
                       }
@@ -349,9 +350,10 @@ $user_role = $users_data['users_role'];
                           foreach ($sub_branch_details as $key => $value) {
                             ?>
                             <option value="<?php echo $sub_branch_details[$i]['id']; ?>" <?php if (isset($_POST['branch_id']) && $_POST['branch_id'] == $sub_branch_details[$i]['id']) {
-                                echo 'selected="selected"';
-                              } ?>>
-                              <?php echo $sub_branch_details[$i]['branch_name']; ?> </option>
+                                 echo 'selected="selected"';
+                               } ?>>
+                              <?php echo $sub_branch_details[$i]['branch_name']; ?>
+                            </option>
                             <?php
                             $i = $i + 1;
                           }
@@ -379,7 +381,7 @@ $user_role = $users_data['users_role'];
                     <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="4"
                       type="radio" <?php if ($form_data['emergency_booking'] == '4') {
                         echo 'checked';
-                      } ?>> Emergency
+                      } ?>> FastTrack
                   </div>
                 </div>
 
@@ -387,7 +389,8 @@ $user_role = $users_data['users_role'];
               </div> <!-- 4 -->
 
               <div class="col-sm-4">
-                <input value="Reset" class="col-sm-4 d-flex justify-content-center" style="margin-left: 133px;margin-top: 30px;" onclick="clear_form_elements(this.form)" type="button">
+                <input value="Reset" class="col-sm-4 d-flex justify-content-center"
+                  style="margin-left: 133px;margin-top: 30px;" onclick="clear_form_elements(this.form)" type="button">
                 <!--<a class="btn-custom" id="reset_date" onclick="clear_form_elements(this.form);"><i class="fa fa-refresh"></i> Reset</a>-->
                 <!-- <a href="javascript:void(0)" class="btn-a-search" id="opd_adv_search">
                   <i class="fa fa-cubes" aria-hidden="true"></i>
@@ -413,14 +416,16 @@ $user_role = $users_data['users_role'];
                   <tr>
                     <th width="40" align="center"> <input type="checkbox" name="selectall" class="" id="selectAll"
                         value=""> </th>
-                    
-                    
-                      <th>Patient Reg No.</th>
-                    
+
+
+                    <th> OPD Type </th>
+                    <th>Patient Reg No.</th>
+
                     <th> OPD No. </th>
                     <th> Patient Name </th>
+                    <th> Patient Category </th>
                     <th>Gender</th>
-                    <th>DOB</th>
+                    <th>Age</th>
                     <th>Mobile No.</th>
 
                     <!-- <th> Appointment Date </th> -->
@@ -440,6 +445,7 @@ $user_role = $users_data['users_role'];
                     <th>Referred Doctor/Hospital</th>
                     <th>Specialization</th> -->
                     <th>Consultant</th>
+                    <th>Payment Mode</th>
                     <!-- <th>Booking Time</th> -->
                     <!-- <th>Validity Date</th> -->
                     <!-- <th>Patient Status</th>
@@ -471,9 +477,9 @@ $user_role = $users_data['users_role'];
           <div class="btns opd_booking_list_right_btns">
             <?php if (in_array('523', $users_data['permission']['action'])) {
               ?>
-              <button class="btn-update" onclick="window.location.href='<?php echo base_url('opd/booking'); ?>'">
+              <!-- <button class="btn-update" onclick="window.location.href='<?php echo base_url('opd/booking'); ?>'">
                 <i class="fa fa-plus"></i> New
-              </button>
+              </button> -->
             <?php } ?>
 
 
@@ -539,8 +545,6 @@ $user_role = $users_data['users_role'];
       <!-- right -->
 
       <!-- cbranch-rslt close -->
-
-
 
 
 
@@ -762,41 +766,38 @@ $user_role = $users_data['users_role'];
     </script>
     <!-- Confirmation Box -->
     <div id="confirm_print" class="modal fade dlt-modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header bg-theme">
-            <h4>Are You Sure?</h4>
-          </div>
-          <!-- <div class="modal-body"></div> -->
-          <div class="modal-footer">
-            <?php
-            if ($users_data['parent_id'] == '60') {
-              $opd_booking_id = $this->session->userdata('opd_booking_id');
-              ?>
-              <a data-dismiss="modal" class="btn-anchor"
-                onClick="return print_window_page('<?php echo base_url("prescription/print_blank_prescriptions/" . $opd_booking_id . "/" . $users_data['parent_id']); ?>');">Print</a>
-              <?php
-            } elseif ($users_data['parent_id'] == '64') {
-              $opd_booking_id = $this->session->userdata('opd_booking_id');
-              ?>
-              <a data-dismiss="modal" class="btn-anchor"
-                onClick="return print_window_page('<?php echo base_url("prescription/print_blank_prescriptions/" . $opd_booking_id . "/" . $users_data['parent_id']); ?>');">Print</a>
-            <?php
-            } else {
-              ?>
-              <a data-dismiss="modal" class="btn-anchor"
-                onClick="return print_window_page('<?php echo base_url("opd/print_booking_report"); ?>');">Print</a>
-            <?php
-            }
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-theme">
+        <h4>Are You Sure?</h4>
+      </div>
+      <div class="modal-footer">
+        <?php
+        $opd_booking_id = $this->session->userdata('opd_booking_id');
+        
+        if ($users_data['parent_id'] == '60') {
+          ?>
+          <a data-dismiss="modal" class="btn-anchor"
+             onClick="return handlePrintAndRedirect('<?php echo base_url("prescription/print_blank_prescriptions/" . $opd_booking_id . "/" . $users_data['parent_id']); ?>');">Print</a>
+          <?php
+        } elseif ($users_data['parent_id'] == '64') {
+          ?>
+          <a data-dismiss="modal" class="btn-anchor"
+             onClick="return handlePrintAndRedirect('<?php echo base_url("prescription/print_blank_prescriptions/" . $opd_booking_id . "/" . $users_data['parent_id']); ?>');">Print</a>
+          <?php
+        } else {
+          ?>
+          <a data-dismiss="modal" class="btn-anchor"
+             onClick="return handlePrintAndRedirect('<?php echo base_url("opd/print_booking_report"); ?>');">Print</a>
+          <?php
+        }
+        ?>
 
-            ?>
-
-
-            <button type="button" data-dismiss="modal" class="btn-cancel" id="cancel">Close</button>
-          </div>
-        </div>
+        <button type="button" data-dismiss="modal" class="btn-cancel" id="cancel" onClick="removeStatusFromUrl();">Close</button>
       </div>
     </div>
+  </div>
+</div>
 
     <div id="confirm_billing_print" class="modal fade dlt-modal">
       <div class="modal-dialog">
@@ -819,12 +820,12 @@ $user_role = $users_data['users_role'];
               ?>
               <a data-dismiss="modal" class="btn-anchor"
                 onClick="return print_window_page('<?php echo base_url("prescription/print_blank_prescriptions/" . $opd_booking_id . "/" . $users_data['parent_id']); ?>');">Print</a>
-            <?php
+              <?php
             } else {
               ?>
               <a data-dismiss="modal" class="btn-anchor"
                 onClick="return print_window_page('<?php echo base_url("opd/print_booking_report"); ?>');">Print</a>
-            <?php
+              <?php
             }
 
             ?>
@@ -876,7 +877,35 @@ $user_role = $users_data['users_role'];
   </div><!-- container-fluid -->
 
 
+  <script>
+    // Function to handle the print and redirect logic
+    function handlePrintAndRedirect(printUrl) {
+      // Open the print window
+      print_window_page(printUrl);
 
+      // After printing, remove ?status=print from the URL
+      removeStatusFromUrl();
+
+      return false; // Prevent default behavior
+    }
+
+    // Function to remove the ?status=print from the URL
+    function removeStatusFromUrl() {
+      const currentUrl = window.location.href;
+
+      // Check if ?status=print exists in the URL
+      if (currentUrl.includes("?status=print")) {
+        // Use history.replaceState to modify the URL without reloading the page
+        const newUrl = currentUrl.split("?status=print")[0];
+        window.history.replaceState({}, '', newUrl);
+      }
+    }
+
+    // Optional: Remove the URL parameter when the modal is hidden
+    $('#confirm_print').on('hidden.bs.modal', function () {
+      removeStatusFromUrl();
+    });
+  </script>
   <script type="text/javascript">
 
     $("#checkbox_data_form").on("submit", function (event) {
@@ -920,7 +949,7 @@ $user_role = $users_data['users_role'];
         table.columns([<?php echo $implode_checked_column; ?>]).visible(false);
       });
     </script>
-  <?php
+    <?php
   }
   ?>
 

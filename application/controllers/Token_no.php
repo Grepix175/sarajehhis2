@@ -29,47 +29,59 @@ class Token_no extends CI_Controller
         }
 
         $data['page_title'] = 'Token List';
-        $data['form_data'] = array('token_no' => '', 'patient_id' => '', 'status' => '', 'from_date' => '', 'to_date' => '');
+        $data['form_data'] = array('token_no' => '', 'patient_code' => '', 'patient_id' => '', 'status' => '', 'from_date' => '', 'to_date' => '');
         $this->load->view('token_grid/opd_token_list', $data);
     }
 
     // AJAX method to fetch the token list for display
     public function ajax_list()
     {
-
         $users_data = $this->session->userdata('auth_users');
         $opd_search = $this->session->userdata('token_search'); // Get filter criteria from session
-
+    
         // Check if search criteria are set and adjust the query accordingly
-        $this->token_no->set_filter_criteria($opd_search); // Pass the filter criteria to the model
-
+        if (!empty($opd_search)) {
+            $this->token_no->set_filter_criteria($opd_search); // Pass the filter criteria to the model
+        }
+    
         $list = $this->token_no->get_datatables();  // Fetch token list with filter criteria
         $data = array();
         $no = $_POST['start'];
         $i = 1;
-
+    
         foreach ($list as $test) {
             $no++;
             $row = array();
             $row[] = $test->token_no;
             $row[] = $test->patient_name;
-            $row[] = $test->status == 1 ? 'Pending' : 'Complete';
-            $action_url = base_url("opd/booking/" . $test->patient_id);
-            $row[] = '<a href="' . $action_url . '" class="btn-custom" style="23" title="Edit">Book Now</a>';
-
+            $row[] = $test->patient_code;
+    
+            // Display status
+            $status = ($test->status == 1) ? 'Pending' : 'Complete';
+            $row[] = $status;
+    
+            // Generate action button (hide if status is 'Complete')
+            if ($test->status == 1) {  // Show button only if status is 'Pending'
+                $action_url = base_url("opd/booking/" . $test->patient_id);
+                $row[] = '<a href="' . $action_url . '" class="btn-custom" title="Edit">Book Now</a>';
+            } else {
+                $row[] = '';  // Leave action column empty for 'Complete' status
+            }
+    
             $data[] = $row;
             $i++;
         }
-
+    
         $output = array(
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->token_no->count_all(),  // Correct reference to model
             "recordsFiltered" => $this->token_no->count_filtered(),  // Correct reference to model
             "data" => $data,
         );
-
+    
         echo json_encode($output);
     }
+    
     // Method to handle search filters
     public function advance_search()
     {

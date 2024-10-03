@@ -37,7 +37,7 @@ class Opd extends CI_Controller
     // print_r($reg_no);die;
     $name = $this->input->get('name');
     // End Defaul Search
-    $data['form_data'] = array('booking_code' => !empty($reg_no) ? $reg_no : '','patient_name' => !empty($name) ? $name : '', 'mobile_no' => '',  'mobile_no' => '', 'specialization_id' => '', 'start_date' => $start_date, 'end_date' => $end_date, 'emergency_booking' => '');
+    $data['form_data'] = array('booking_code' => !empty($reg_no) ? $reg_no : '', 'patient_name' => !empty($name) ? $name : '', 'mobile_no' => '', 'mobile_no' => '', 'specialization_id' => '', 'start_date' => $start_date, 'end_date' => $end_date, 'emergency_booking' => '');
     $this->load->model('general/general_model');
     $data['specialization_list'] = $this->general_model->specialization_list();
     //echo "<pre>";print_r($data['specialization_list']); exit;
@@ -112,11 +112,47 @@ class Opd extends CI_Controller
       } else {
         $row[] = '';
       }
+      $row[] = $test->opd_type == 0 ? 'Normal' : 'FastTrack';
       $row[] = $test->patient_reg_no;
       $row[] = $test->booking_code;
       $row[] = $test->patient_name;
+      $row[] = $test->patient_category_name;
       $row[] = $test->gender;
-      $row[] = date('d-m-Y', strtotime($test->dob));
+      // $row[] = date('d-m-Y', strtotime($test->dob));
+      ///////////// Age calculation //////////
+      $age_y = $test->age_y;
+      $age_m = $test->age_m;
+      $age_d = $test->age_d;
+      $age_h = $test->age_h;
+      $age = "";
+      if ($age_y > 0) {
+        $year = 'Years';
+        if ($age_y == 1) {
+          $year = 'Year';
+        }
+        $age .= $age_y . " " . $year;
+      }
+      if ($age_m > 0) {
+        $month = 'Months';
+        if ($age_m == 1) {
+          $month = 'Month';
+        }
+        $age .= ", " . $age_m . " " . $month;
+      }
+      if ($age_d > 0) {
+        $day = 'Days';
+        if ($age_d == 1) {
+          $day = 'Day';
+        }
+        $age .= ", " . $age_d . " " . $day;
+      }
+      if ($age_h > 0) {
+        $hours = 'Hours';
+
+        $age .= " " . $age_h . " " . $hours;
+      }
+      ///////////////////////////////////////
+      $row[] = $age;
       $row[] = $test->mobile_no;
 
       // if ($test->appointment_date == '0000-00-00') {
@@ -131,9 +167,9 @@ class Opd extends CI_Controller
       //$row[] = $test->total_amount;
       //$row[] = $booking_status;
 
-      if ($test->booking_type == 1) {
-        $row[] = $app_type;
-      } 
+      // if ($test->booking_type == 1) {
+      //   $row[] = $app_type;
+      // } 
 
 
       // $row[] = $test->address;
@@ -146,6 +182,7 @@ class Opd extends CI_Controller
       // $row[] = $test->doctor_hospital_name;
       // $row[] = $test->specialization;
       $row[] = "Dr. " . $test->doctor_name;
+      $row[] = $test->payment_mode_name;
       // if ($test->booking_time != '00:00:00') {
       //   $row[] = date('h:i A', strtotime($test->booking_time));
       // } else {
@@ -191,6 +228,7 @@ class Opd extends CI_Controller
         }
       }
       $btn_prescription = '';
+      $checking_status = '';
       if ($test->booking_type == 1)  // 0 for normal and 1 for Eye
       {
         $prescription_count_eye = $this->opd->get_prescription_count_for_eye($test->id);
@@ -307,6 +345,7 @@ class Opd extends CI_Controller
         $print_url = "'" . base_url('prescription/print_blank_prescriptions/' . $test->id . '/' . $test->branch_id) . "'";
         //$btn_prescription .= '<div class="btn-ipd">';
         if ($prescription_count < 1) {
+
           if (in_array('532', $users_data['permission']['action'])) {
             $btn_prescription .= '<li><a  href="' . base_url("opd/prescription/" . $test->id) . '" title="Add Prescription"><i class="fa fa-pencil"></i> Add Prescription</a></li>';
 
@@ -341,7 +380,7 @@ class Opd extends CI_Controller
 
       $print_barcode_url = "'" . base_url('opd/print_barcode/' . $test->id) . "'";
       $btn_print = '<a class="btn-custom" href="javascript:void(0)" onClick="return print_window_page(' . $print_pdf_url . ')"  title="Print" ><i class="fa fa-print"></i> Print  </a>';
-      
+
       $print_consolidated_url = "'" . base_url('opd/print_consolidate_dbooking_report/' . $test->id . '/' . $test->branch_id) . "'";
       $opd_consolidated_bill = '<li> <a onClick="return print_window_page(' . $print_consolidated_url . ')" style="' . $test->id . '" title="Print Consolidated Bill"><i class="fa fa-print"></i> Print Consolidated Bill</a></li>';
       $btn_print_label = ' <a onClick="return print_label(' . $test->id . ');"  href="javascript:void(0)" style="' . $test->id . '" title="Print"><i class="fa fa-print"></i> Print Label</a>';
@@ -843,6 +882,7 @@ class Opd extends CI_Controller
     $subsidy_id = '';
     $subsidy_created = '';
     $subsidy_amount = '';
+    // ECHO "<pre>";print_r($pid);die;
     if ($pid > 0) {
       $this->load->model('patient/patient_model');
       $patient_data = $this->patient_model->get_by_id($pid);
@@ -856,7 +896,7 @@ class Opd extends CI_Controller
         $patient_name = $patient_data['patient_name'];
         $mobile_no = $patient_data['mobile_no'];
         $gender = $patient_data['gender'];
-        $age_y = $patient_data['age_y'];
+        $age_y = $patient_data['age_y'] == 0 ? '' : $patient_data['age_y'];
         $age_m = $patient_data['age_m'];
         $age_d = $patient_data['age_d'];
         $patient_category = $patient_data['patient_category'];
@@ -907,7 +947,7 @@ class Opd extends CI_Controller
     if (isset($_GET['lid']) && !empty($_GET['lid']) && $_GET['lid'] > 0) {
       $lead_data = $this->opd->crm_get_by_id($_GET['lid']);
       $this->session->set_userdata('crm_patient_id', $_GET['lid']);
-      //echo '<pre>'; print_r($lead_data);die;
+      // echo '<pre>'; print_r($lead_data);die;
       $patient_name = $lead_data['name'];
       $patient_email = $lead_data['email'];
       $mobile_no = $lead_data['phone'];
@@ -928,7 +968,7 @@ class Opd extends CI_Controller
 
       $data['specialization_list'] = $this->general_model->specialization_list();
       $data['attended_doctor_list'] = $this->opd->attended_doctor_list();
-      
+
       $opd_specialization = $lead_data['specialization_id'];
       $opd_attended_doctor = $lead_data['attended_doctor'];
       $doctor_data = $this->general_model->doctors_list($lead_data['attended_doctor']);
@@ -1054,7 +1094,7 @@ class Opd extends CI_Controller
     $data['corporate_list'] = $this->opd->corporate_list();
     $data['subsidy_list'] = $this->opd->subsidy_list();
     $data['department_list'] = $this->opd->department_list();
-   
+
     // echo "<pre>";
     // print_r($data['opd_last_record']);
     // die;
@@ -1108,6 +1148,9 @@ class Opd extends CI_Controller
     } else {
       $adhar_no_new = $adhar_no;
     }
+    // echo "<pre>";
+    // print_r($age_y);
+    // die;
     $data['form_data'] = array(
       'data_id' => "",
       'patient_id' => $patient_id,
@@ -1276,7 +1319,7 @@ class Opd extends CI_Controller
 
 
         $this->session->set_flashdata('success', 'Opd booking successfully booked.');
-        //redirect(base_url('opd/booking?status=print'));
+        redirect(base_url('opd/?status=print'));
 
         $this->load->model('opd_setting/opd_print_setting_model');
         $opd_setting_data = $this->opd_print_setting_model->get_print_setting();
@@ -1289,7 +1332,7 @@ class Opd extends CI_Controller
         } else {
           redirect(base_url('opd/booking?status=print'));
         }
-        //redirect(base_url('opd/?status=print'));
+        redirect(base_url('opd/?status=print'));
       } else {
 
 
@@ -1459,6 +1502,7 @@ class Opd extends CI_Controller
 
       $this->load->model('general/general_model');
       $data['payment_mode'] = $this->general_model->payment_mode();
+      
       $get_payment_detail = $this->opd->payment_mode_detail_according_to_field($result['payment_mode'], $id);
       $total_values = array();
 
