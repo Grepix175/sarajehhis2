@@ -174,7 +174,7 @@ class Opd extends CI_Controller
 
       // $row[] = $test->address;
       // $row[] = $test->father_husband_simulation . " " . $test->father_husband;
-      $row[] = $test->patient_email;
+      $row[] = $test->token_no;
       // $row[] = $test->insurance_type;
       // $row[] = $test->insurance_company;
       // $row[] = $test->patient_source;
@@ -901,7 +901,7 @@ class Opd extends CI_Controller
         $age_d = $patient_data['age_d'];
         $patient_category = $patient_data['patient_category'];
         $patient_category_name = $patient_data['patient_category_name'];
-        $token_no = $patient_data['token_no'];
+        // $token_no = $patient_data['token_no'];
 
         $authorize_person = $patient_data['authorize_person'] ?? '';
 
@@ -1217,7 +1217,7 @@ class Opd extends CI_Controller
       'referral_hospital' => "",
       'token_type' => $token_type,
       'time_value' => '',
-      'token_no' => $token_no ?? '',
+      'token_no' =>'',
       "insurance_type" => $insurance_type,
       "insurance_type_id" => $insurance_type_id,
       "ins_company_id" => $ins_company_id,
