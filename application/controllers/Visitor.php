@@ -36,97 +36,77 @@ class Visitor extends CI_Controller
         $this->load->view('visitor/list', $data);
     }
 
-    public function ajax_list()
-    {
+    public function ajax_list() {
         unauthorise_permission(19, 113);
+        
         $users_data = $this->session->userdata('auth_users');
         $sub_branch_details = $this->session->userdata('sub_branches_data');
         $parent_branch_details = $this->session->userdata('parent_branches_data');
+        
+        // Fetch data from the model
         $list = $this->visitor->get_datatables();
         $recordsTotal = $this->visitor->count_all();
-        $recordsFiltered = $recordsTotal;  //$this->patient->count_filtered();
-        //echo "<pre>"; print_r($list);die;   
-
+        $recordsFiltered = $recordsTotal;
+    
+        // Prepare data for DataTable
         $data = array();
         $no = $_POST['start'];
-        $i = 1;
-        $total_num = count($list);
-        // echo "<pre>";
-        // print_r($list);
-        // die();
         foreach ($list as $patient) {
             $no++;
             $row = array();
-            // if ($patient->status == 1) {
-            //     $status = '<font color="green">Active</font>';
-            // } else {
-            //     $status = '<font color="red">Inactive</font>';
-            // }
-            ///// State name ////////
-            $state = "";
-            if (!empty($patient->state)) {
-                $state = " ( " . ucfirst(strtolower($patient->state)) . " )";
-            }
-            //////////////////////// 
-
-            ////////// Check  List /////////////////
-            $check_script = "";
-
-            $row[] = '<input type="checkbox" name="patient[]" class="checklist" value="' . $patient->id . '">' . $check_script;
-            $relation_name = '';
-            if (!empty($patient->relation_name)) {
-                $relation_name = $patient->patient_relation . " " . $patient->relation_name;
-            }
-            // $gender = array('0' => 'Female', '1' => 'Male', '2' => 'Others');
-            $row[] = $patient->visitor_type_name;
-            $row[] = $patient->from;
+        
+            // Checkbox for selection
+            $row[] = '<input type="checkbox" name="patient[]" class="checklist" value="' . $patient->id . '">';
+            
+            // Populate each column with data
+            $row[] = $patient->visitor_type_name; 
+            $row[] = $patient->from; 
             $row[] = $patient->visitor_name;
             $row[] = $patient->mobile_no;
             $row[] = $patient->purpose;
             $row[] = $patient->employee_name;
-            // $row[] = $relation_name;
-            // $row[] = $gender[$patient->gender];
-
-
-
-
-
             $row[] = date('d-m-Y h:i A', strtotime($patient->created_date));
-            //Action button /////
-            $btn_edit = "";
-            $btn_delete = "";
+        
+            if (is_null($patient->modified_date)) {
+                $row[] = '<a class="btn-custom outtime-btn" data-id="' . $patient->id . '" href="javascript:void(0);" title="OutTime">OutTime</a>';
+            } else {
+                $row[] = date('d-m-Y h:i A', strtotime($patient->modified_date));
+            }
+            
+        
+            // Action buttons (Edit and Delete)
+            $btn_edit = '';
+            $btn_delete = '';
+            
             if ($users_data['parent_id'] == $patient->branch_id) {
                 if (in_array('115', $users_data['permission']['action'])) {
-                    $btn_edit = ' <a class="btn-custom" href="' . base_url('visitor/edit/' . $patient->id) . '" style="' . $patient->id . '" title="Edit"><i class="fa fa-pencil"></i> Edit</a> ';
+                    $btn_edit = ' <a class="btn-custom" href="' . base_url('visitor/edit/' . $patient->id) . '" title="Edit"><i class="fa fa-pencil"></i> Edit</a>';
                 }
-            }
-            // if (in_array('117', $users_data['permission']['action'])) {
-            //     $btn_view = ' <a class="" onclick="return view_patient(' . $patient->id . ',' . $patient->branch_id . ')" href="javascript:void(0)" title="View"><i class="fa fa-info-circle"></i> View </a>';
-            // }
-
-
-            if ($users_data['parent_id'] == $patient->branch_id) {
                 if (in_array('116', $users_data['permission']['action'])) {
-                    $btn_delete = '<a class="btn-custom" onClick="return delete_patient(' . $patient->id . ')" href="javascript:void(0)" title="Delete" data-url="512"><i class="fa fa-trash"></i> Delete</a>';
+                    $btn_delete = '<a class="btn-custom" onclick="return delete_patient(' . $patient->id . ')" href="javascript:void(0)" title="Delete"><i class="fa fa-trash"></i> Delete</a>';
                 }
             }
-
-
-            $row[] = $btn_edit . $btn_delete;
+        
+            // Combine Edit and Delete buttons in the Action column
+            $row[] = $btn_edit . ' ' . $btn_delete;
+            
+            // Add the row to the data array
             $data[] = $row;
-            $i++;
         }
-
+        
+    
+        // Prepare the output for DataTable
         $output = array(
             "draw" => $_POST['draw'],
             "recordsTotal" => $recordsTotal,
             "recordsFiltered" => $recordsFiltered,
             "data" => $data,
         );
-        //output to json format
-        //echo "<pre>"; print_r($output); die; 
+    
+        // Output in JSON format
         echo json_encode($output);
     }
+    
     /* patient history ajax by mamta */
     public function patient_history($id = '', $branch_id = '')
     {
@@ -222,6 +202,29 @@ class Visitor extends CI_Controller
         $this->load->view('patient/print_certificate_data', $data);
     }
 
+    public function update_modified_date() {
+        $id = $this->input->post('id');  // Get patient ID from the request
+    
+        // Check if ID is provided
+        if (!empty($id)) {
+            // Update the modified_date to the current date and time
+            $this->db->set('modified_date', date('Y-m-d H:i:s'));
+            $this->db->where('id', $id);
+            $this->db->update('hms_visitor');  // Assuming 'visitors' is the table name
+    
+            if ($this->db->affected_rows() > 0) {
+                $response = "Outtime updated successfully.'";
+                // echo json_encode(array('status' => 'success'));
+                echo $response;
+            } else {
+                $response = "Outtime updated Failed.";
+                echo $response;
+            }
+        } else {
+            echo json_encode(array('status' => 'error', 'message' => 'Invalid ID'));
+        }
+    }
+    
 
     public function patient_history_ajax()
     {

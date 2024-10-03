@@ -40,63 +40,63 @@ class Tokenno_model extends CI_Model
         }
         //$this->session->unset_userdata('token_search');
     }
-   public function _get_datatables_query()
-{
-    $this->db->select("hms_token.token_no, hms_token.status, hms_token.patient_id, hms_patient.patient_name,hms_patient.patient_code, hms_token.created_date");
-    $this->db->from("hms_token");
-    $this->db->join('hms_patient', 'hms_patient.id = hms_token.patient_id', 'left');
+    public function _get_datatables_query()
+    {
+        $this->db->select("hms_token.token_no, hms_token.status, hms_token.patient_id, hms_patient.patient_name,hms_patient.patient_code, hms_token.created_date");
+        $this->db->from("hms_token");
+        $this->db->join('hms_patient', 'hms_patient.id = hms_token.patient_id', 'left');
 
-    // Get filter criteria from session (date range and status)
-    $opd_search = $this->session->userdata('token_search');
-    // echo "<pre>";
-    // print_r($opd_search);
-    // die;
-    // Check if any filters are applied (status or date range)
-    if (!empty($opd_search['from_date']) || !empty($opd_search['to_date'])) {
-        
-        // Apply date filter if provided
-        if (!empty($opd_search['from_date']) && !empty($opd_search['to_date'])) {
-            $this->db->where('DATE(hms_token.created_date) >=', $opd_search['from_date']);
-            $this->db->where('DATE(hms_token.created_date) <=', $opd_search['to_date']);
-        } elseif (!empty($opd_search['from_date'])) {
-            $this->db->where('DATE(hms_token.created_date) >=', $opd_search['from_date']);
-        } elseif (!empty($opd_search['to_date'])) {
-            $this->db->where('DATE(hms_token.created_date) <=', $opd_search['to_date']);
+        // Get filter criteria from session (date range and status)
+        $opd_search = $this->session->userdata('token_search');
+        // echo "<pre>";
+        // print_r($opd_search);
+        // die;
+        // Check if any filters are applied (status or date range)
+        if (!empty($opd_search['from_date']) || !empty($opd_search['to_date'])) {
+
+            // Apply date filter if provided
+            if (!empty($opd_search['from_date']) && !empty($opd_search['to_date'])) {
+                $this->db->where('DATE(hms_token.created_date) >=', $opd_search['from_date']);
+                $this->db->where('DATE(hms_token.created_date) <=', $opd_search['to_date']);
+            } elseif (!empty($opd_search['from_date'])) {
+                $this->db->where('DATE(hms_token.created_date) >=', $opd_search['from_date']);
+            } elseif (!empty($opd_search['to_date'])) {
+                $this->db->where('DATE(hms_token.created_date) <=', $opd_search['to_date']);
+            }
+
+            // Apply status filter if provided
+            if (!empty($opd_search['search_type'])) {
+                $this->db->where('hms_token.status', $opd_search['search_type']);
+            }
+
+        } else {
+            if (!empty($opd_search['search_type'])) {
+                $this->db->where('hms_token.status', $opd_search['search_type']);
+            }
+            // If no filters are applied, default to today's date and only pending records (status = 1)
+            $today_date = date('Y-m-d');
+            $this->db->where('DATE(hms_token.created_date)', $today_date);
+            $this->db->where('hms_token.status', 1);  // Pending status
         }
 
-        // Apply status filter if provided
-        if (!empty($opd_search['search_type'])) {
-            $this->db->where('hms_token.status', $opd_search['search_type']);
+        // Search functionality
+        if (!empty($_POST['search']['value'])) {
+            $search_value = $_POST['search']['value'];
+
+            // Apply search filter for token_no and patient_name
+            $this->db->group_start();  // Open parenthesis
+            $this->db->like('hms_token.token_no', $search_value);
+            $this->db->or_like('hms_patient.patient_name', $search_value);
+            $this->db->group_end();  // Close parenthesis
         }
-        
-    } else {
-        if (!empty($opd_search['search_type'])) {
-            $this->db->where('hms_token.status', $opd_search['search_type']);
+
+        // Ordering and limit for pagination
+        if (isset($_POST['order'])) {
+            $this->db->order_by($this->order_column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+        } else {
+            $this->db->order_by('hms_token.id', 'desc');
         }
-        // If no filters are applied, default to today's date and only pending records (status = 1)
-        $today_date = date('Y-m-d');
-        $this->db->where('DATE(hms_token.created_date)', $today_date);
-        $this->db->where('hms_token.status', 1);  // Pending status
     }
-
-    // Search functionality
-    if (!empty($_POST['search']['value'])) {
-        $search_value = $_POST['search']['value'];
-
-        // Apply search filter for token_no and patient_name
-        $this->db->group_start();  // Open parenthesis
-        $this->db->like('hms_token.token_no', $search_value);
-        $this->db->or_like('hms_patient.patient_name', $search_value);
-        $this->db->group_end();  // Close parenthesis
-    }
-
-    // Ordering and limit for pagination
-    if (isset($_POST['order'])) {
-        $this->db->order_by($this->order_column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-    } else {
-        $this->db->order_by('hms_token.id', 'desc');
-    }
-}
 
 
     public function set_filter_criteria($criteria)
@@ -146,6 +146,49 @@ class Tokenno_model extends CI_Model
     {
         $this->db->insert('hms_token', $data);
 
+    }
+
+    function search_patient_data()
+    {
+
+        $opd_search = $this->session->userdata('token_search');
+        $this->db->select("hms_token.token_no, hms_token.status, hms_token.patient_id, hms_patient.patient_name,hms_patient.patient_code, hms_token.created_date");
+        $this->db->from("hms_token");
+        $this->db->join('hms_patient', 'hms_patient.id = hms_token.patient_id', 'left');
+
+        if (!empty($opd_search['from_date']) || !empty($opd_search['to_date'])) {
+
+            // Apply date filter if provided
+            if (!empty($opd_search['from_date']) && !empty($opd_search['to_date'])) {
+                $this->db->where('DATE(hms_token.created_date) >=', $opd_search['from_date']);
+                $this->db->where('DATE(hms_token.created_date) <=', $opd_search['to_date']);
+            } elseif (!empty($opd_search['from_date'])) {
+                $this->db->where('DATE(hms_token.created_date) >=', $opd_search['from_date']);
+            } elseif (!empty($opd_search['to_date'])) {
+                $this->db->where('DATE(hms_token.created_date) <=', $opd_search['to_date']);
+            }
+
+            // Apply status filter if provided
+            if (!empty($opd_search['search_type'])) {
+                $this->db->where('hms_token.status', $opd_search['search_type']);
+            }
+
+        } else {
+            if (!empty($opd_search['search_type'])) {
+                $this->db->where('.status', $opd_search['search_type']);
+            }
+            // If no filters are applied, default to today's date and only pending records (status = 1)
+            $today_date = date('Y-m-d');
+            $this->db->where('DATE(hms_token.created_date)', $today_date);
+            $this->db->where('hms_token.status', 1);  // Pending status
+        }
+
+        $this->db->order_by('hms_token.id', 'desc');
+        $query = $this->db->get();
+        // echo $this->db->last_query();
+        $data = $query->result();
+
+        return $data;
     }
 
 

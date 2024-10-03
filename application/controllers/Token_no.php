@@ -53,11 +53,11 @@ class Token_no extends CI_Controller
             $no++;
             $row = array();
             $row[] = $test->token_no;
-            $row[] = $test->patient_name;
             $row[] = $test->patient_code;
+            $row[] = $test->patient_name;
     
             // Display status
-            $status = ($test->status == 1) ? 'Pending' : 'Complete';
+            $status = ($test->status == 1) ? 'Pending' : 'Completed';
             $row[] = $status;
     
             // Generate action button (hide if status is 'Complete')
@@ -176,5 +176,125 @@ class Token_no extends CI_Controller
 
         $this->load->view('token_no/opd_token_patient_display', $data);
     }
+
+    public function token_no_excel()
+    {
+
+        // Starting the PHPExcel library
+        $this->load->library('excel');
+        $this->excel->IO_factory();
+        $objPHPExcel = new PHPExcel();
+        // "<pre>";print_r('Hello'); die;
+        $objPHPExcel->getProperties()->setTitle("export")->setDescription("none");
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $from_date = $this->input->get('from_date');
+        $to_date = $this->input->get('to_date');
+        // Main header with date range if provided
+        $mainHeader = "Token No List";
+        if (!empty($from_date) && !empty($to_date)) {
+            $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
+        }
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', $mainHeader);
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true)->setSize(16);
+
+        // Blank row after the main header
+        $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20); // Set height for visibility
+        $headerRow = 2;
+        if (!empty($from_date) || !empty($to_date)) {
+            $dateRange = '';
+            if (!empty($from_date)) {
+                $dateRange .= 'From Date: ' . date('d-m-Y', strtotime($from_date)) . ' ';
+            }
+            if (!empty($to_date)) {
+                $dateRange .= 'To Date: ' . date('d-m-Y', strtotime($to_date));
+            }
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $headerRow);
+            $objPHPExcel->getActiveSheet()->getStyle('A' . $headerRow)->getFont()->setItalic(true);
+            $headerRow++;
+        }
+
+        // Field names in the next row
+        // $data = get_setting_value('PATIENT_REG_NO');
+        $fields = array('Token No.', 'Patient Reg. No.', 'Patient Name',  'Mobile No.', 'Status', 'Created Date');
+
+        $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getDefaultStyle()->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+        $col = 0;
+        foreach ($fields as $field) {
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $headerRow, $field);
+            $col++;
+        }
+
+        $headerStyle = array(
+            'font' => array(
+                'bold' => true
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $headerRow . ':F' . $headerRow)->applyFromArray($headerStyle);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+
+        // Fetching the table data
+        $list = $this->token_no->search_patient_data();
+        "<pre>";print_r($list); die;
+        $rowData = array();
+        $data = array();
+        if (!empty($list)) {
+            $i = 0;
+            foreach ($list as $token) {
+                $created_date = date('d-m-Y h:i A', strtotime($token->created_date));
+
+                $relation_name = '';
+                if (!empty($token->relation_name)) {
+                    $relation_name = $token->patient_relation . " " . $token->relation_name;
+                }
+                $status = $token->status == 1 ? 'Pending' : 'Completed';
+                array_push($rowData, $token->token_no, $token->patient_code, $token->patient_name, $status, $created_date);
+                $count = count($rowData);
+                for ($j = 0; $j < $count; $j++) {
+                    $data[$i][$fields[$j]] = $rowData[$j];
+                }
+                unset($rowData);
+                $rowData = array();
+                $i++;
+            }
+        }
+
+        $row = $headerRow + 1;
+        if (!empty($data)) {
+            foreach ($data as $patients_data) {
+                $col = 0;
+                foreach ($fields as $field) {
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $patients_data[$field]);
+                    $objPHPExcel->getActiveSheet()->getStyle($row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    $objPHPExcel->getActiveSheet()->getStyle($row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                    $col++;
+                }
+                $row++;
+            }
+            $objPHPExcel->setActiveSheetIndex(0);
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        }
+
+        // Sending headers to force the user to download the file
+        header('Content-Type: application/vnd.ms-excel charset=UTF-8');
+        header("Content-Disposition: attachment; filename=token-no_list_" . time() . ".xls");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+        if (!empty($data)) {
+            ob_end_clean();
+            $objWriter->save('php://output');
+        }
+    }
+
+    
 }
 ?>

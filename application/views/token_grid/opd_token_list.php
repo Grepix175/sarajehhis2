@@ -73,14 +73,11 @@ $user_role = $users_data['users_role'];
             },
           ],
           "createdRow": function (row, data, dataIndex) {
-            console.log(row,'=========row')
-            console.log(data,'=========data')
-            console.log(dataIndex,'=========dataIndex')
-          // Assuming "Completed" is indicated by status = '2'
-          // if (data[3] === 'Completed') { // data[3] is the status column
-          //   $('td', row).eq(4).html(''); // Hide action column
-          // }
-        },
+            // Assuming "Completed" is indicated by status = '2'
+            // if (data[3] === 'Completed') { // data[3] is the status column
+            //   $('td', row).eq(4).html(''); // Hide action column
+            // }
+          },
 
         });
         $('.tog-col').on('click', function (e) {
@@ -215,9 +212,16 @@ $user_role = $users_data['users_role'];
           <button class="btn-update" id="deleteAll" onclick="return checkboxValues();">
             <i class="fa fa-trash"></i> Delete
           </button> -->
-          <button class="btn-update" onclick="reload_table()">
+          <a data-toggle="tooltip" title="Download list in excel" href="#" id="toen_download_excel"
+            class="btn-anchor m-b-2">
+            <i class="fa fa-file-excel-o"></i> Excel
+          </a>
+          <!-- <a data-toggle="tooltip" title="Download list in pdf" href="#" id="token_download_pdf" class="btn-anchor m-b-2">
+            <i class="fa fa-file-pdf-o"></i> PDF
+          </a> -->
+          <!-- <button class="btn-update" onclick="reload_table()">
             <i class="fa fa-refresh"></i> Reload
-          </button>
+          </button> -->
           <!-- <button class="btn-update"
             onclick="window.location.href='http://localhost/sarajehhis2/patient_category/archive'">
             <i class="fa fa-archive"></i> Archive
@@ -328,6 +332,39 @@ $user_role = $users_data['users_role'];
       });
 
     });
+
+    document.getElementById('toen_download_excel').addEventListener('click', function (e) {
+      e.preventDefault();
+
+      var fromDate = document.getElementById('from_date').value;
+      var toDate = document.getElementById('to_date').value;
+
+      var url = '<?php echo base_url("token_no/token_no_excel"); ?>';
+
+      if (fromDate || toDate) {
+        url += '?';
+        if (fromDate) {
+          url += 'from_date=' + encodeURIComponent(fromDate);
+        }
+        if (toDate) {
+          url += (fromDate ? '&' : '') + 'to_date=' + encodeURIComponent(toDate);
+        }
+      }
+      window.location.href = url;
+    });
+    // document.getElementById('token_download_pdf').addEventListener('click', function (e) {
+    //   e.preventDefault();
+
+    //   var fromDate = document.getElementById('start_date').value;
+    //   var toDate = document.getElementById('to_date').value;
+
+    //   var fromDateObj = new Date(fromDate);
+    //   var toDateObj = new Date(toDate);
+
+    //   var url = '<?php echo base_url("token_no/token_no_pdf"); ?>';
+    //   url += '?from_date=' + encodeURIComponent(fromDate) + '&to_date=' + encodeURIComponent(toDate);
+    //   window.location.href = url;
+    // });
 
   </script>
 

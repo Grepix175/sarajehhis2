@@ -329,17 +329,7 @@
             </table>
           </form>
         </div>
-      <?php } else {
-        $unchecked_column = [];
-        foreach ($checkbox_list as $checkbox_list_data) {
-          if ($checkbox_list_data->selected_status > 0 && is_numeric($checkbox_list_data->selected_status)) {
-
-          } else {
-            $unchecked_column[] = $checkbox_list_data->coloum_id;
-          }
-        }
-
-      } ?>
+      <?php } ?>
 
 
 
@@ -358,7 +348,7 @@
                           onClick="window.location='<?php echo base_url('patient'); ?>';">
                         <label>Patient</label>
                       </span>
-    
+
                       <span class="new_patient">
                         <input type="radio" name="new_patient" id="visitor_radio"
                           onClick="window.location='<?php echo base_url('visitor'); ?>';">
@@ -441,7 +431,8 @@
                     <th> Mobile No. </th>
                     <th> Purpose </th>
                     <th> Meeting with Whom</th>
-                    <th> Created Date </th>
+                    <th> InTime </th>
+                    <th> OutTime </th>
                     <th> Action </th>
                   </tr>
                 </thead>
@@ -500,10 +491,10 @@
               </button>
             <?php endif; ?>
             <?php if (in_array('118', $users_data['permission']['action'])): ?>
-              <button data-toggle="tooltip" title="Archive patient list" class="btn-exit"
+              <!-- <button data-toggle="tooltip" title="Archive patient list" class="btn-exit"
                 onclick="window.location.href='<?php echo base_url('visitor/archive'); ?>'">
                 <i class="fa fa-archive"></i> Archive
-              </button>
+              </button> -->
             <?php endif; ?>
             <button data-toggle="tooltip" title="Exit from patient list" class="btn-exit"
               onclick="window.location.href='<?php echo base_url(); ?>'">
@@ -530,7 +521,6 @@
         if (vals != '1') {
           $('#overlay-loader').show();
         }
-        console.log('=============')
         $.ajax({
           url: "<?php echo base_url('visitor/advance_search/'); ?>",
           type: "post",
@@ -588,10 +578,12 @@
             });
           }
         });
+        // console.log(table,'========')
 
         // Handle column visibility toggling
         $('.tog-col').on('click', function (e) {
           var column = table.column($(this).attr('data-column'));
+          console.log(colu)
           column.visible(!column.visible());
         });
       <?php endif; ?>
@@ -699,19 +691,7 @@
   </div><!-- container-fluid -->
 
 
-  <?php
-  if (!empty($unchecked_column)) {
-    $implode_checked_column = implode(',', $unchecked_column);
 
-    ?>
-    <script type="text/javascript">
-      $(document).ready(function (e) {
-        table.columns([<?php echo $implode_checked_column; ?>]).visible(false);
-      });
-    </script>
-    <?php
-  }
-  ?>
 
 
   <script type="text/javascript">
@@ -912,31 +892,31 @@
       }
       window.location.href = url;
     });
-    document.getElementById('pa_download_pdf').addEventListener('click', function (e) {
-      e.preventDefault(); // Prevent the default anchor behavior
 
-      // Get the from_date and to_date values
-      var fromDate = document.getElementById('start_date_patient').value;
-      var toDate = document.getElementById('end_date_patient').value;
+    $(document).on('click', '.outtime-btn', function () {
+      var patientId = $(this).data('id');
 
-      // Parse the dates to JavaScript Date objects
-      // var fromDateObj = new Date(fromDate);
-      // var toDateObj = new Date(toDate);
+      // Send AJAX request to update the modified_date
+      $.ajax({
+        url: "<?php echo base_url('visitor/update_modified_date'); ?>",  // Create this controller method
+        type: "POST",
+        data: { id: patientId },
+        success: function (response) {
 
-      // // Check if fromDate or toDate is null or if the range is more than 1 month
-      // if (!fromDate || !toDate || (toDateObj > new Date(fromDateObj.setMonth(fromDateObj.getMonth() + 1)))) {
-      //   alert('Please select both "From Date" and "To Date" with a maximum range of 1 month.');
-      //   return; // Stop further execution
-      // }
-
-      // Proceed if the dates are valid
-      // Construct the URL with query parameters
-      var url = '<?php echo base_url("visitor/visitor_pdf"); ?>';
-      url += '?from_date=' + encodeURIComponent(fromDate) + '&to_date=' + encodeURIComponent(toDate);
-
-
-      // Redirect to the generated URL
-      window.location.href = url;
+          // Ensure the response is valid JSON
+          try {
+            flash_session_msg(response);
+                reload_table();
+          } catch (e) {
+            console.error('Invalid JSON response', e);
+            alert('Error in processing request.');
+          }
+        }
+        ,
+        error: function () {
+          alert('Error in processing request.');
+        }
+      });
     });
 
 

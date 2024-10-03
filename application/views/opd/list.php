@@ -436,7 +436,7 @@ $user_role = $users_data['users_role'];
 
                     <!-- <th>Address</th> -->
                     <!-- <th>Father Name</th> -->
-                    <th>Patient Email</th>
+                    <th>Token No.</th>
                     <!-- <th>Insurance Type</th> -->
                     <!-- <th>Insurance Company Name</th> -->
 
@@ -504,9 +504,9 @@ $user_role = $users_data['users_role'];
 
             <?php if (in_array('2059', $users_data['permission']['action'])) {
               ?>
-              <a id="open_model" href="javascript:void(0)" class="btn-anchor m-b-2">
+              <!-- <a id="open_model" href="javascript:void(0)" class="btn-anchor m-b-2">
                 <i class="fa fa-file-excel-o"></i> Import(.xls)
-              </a>
+              </a> -->
             <?php } ?>
 
             <!-- <a href="javascript:void(0)" class="btn-anchor m-b-2"  onClick="return openPrintWindow('< ?php echo base_url("opd/opd_print"); ?>', 'windowTitle', 'width=820,height=600');">
@@ -531,9 +531,9 @@ $user_role = $users_data['users_role'];
             <?php } ?>
             <?php if (in_array('526', $users_data['permission']['action'])) {
               ?>
-              <button class="btn-update" onclick="window.location.href='<?php echo base_url('opd/archive'); ?>'">
-                <i class="fa fa-archive"></i> Archive
-              </button>
+                <!-- <button class="btn-update" onclick="window.location.href='<?php echo base_url('opd/archive'); ?>'">
+                  <i class="fa fa-archive"></i> Archive
+                </button> -->
             <?php } ?>
 
             <button class="btn-update" onclick="window.location.href='<?php echo base_url(); ?>'">

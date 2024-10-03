@@ -617,10 +617,10 @@
               </a> -->
             <?php }
             if (in_array('628', $users_data['permission']['action'])) { ?>
-              <!-- <a data-toggle="tooltip" title="Import patient list" id="open_model" href="javascript:void(0)"
+              <a data-toggle="tooltip" title="Import patient list" id="open_model" href="javascript:void(0)"
                 class="btn-anchor m-b-2">
                 <i class="fa fa-file-excel-o"></i> Import(.xls)
-              </a> -->
+              </a>
             <?php }
 
             ?>
@@ -636,10 +636,10 @@
               </button>
             <?php endif; ?>
             <?php if (in_array('118', $users_data['permission']['action'])): ?>
-              <button data-toggle="tooltip" title="Archive patient list" class="btn-exit"
+              <!-- <button data-toggle="tooltip" title="Archive patient list" class="btn-exit"
                 onclick="window.location.href='<?php echo base_url('patient/archive'); ?>'">
                 <i class="fa fa-archive"></i> Archive
-              </button>
+              </button> -->
             <?php endif; ?>
             <button data-toggle="tooltip" title="Exit from patient list" class="btn-exit"
               onclick="window.location.href='<?php echo base_url(); ?>'">

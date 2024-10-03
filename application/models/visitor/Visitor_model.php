@@ -29,6 +29,7 @@ class Visitor_model extends CI_Model
                    hms_visitor.mobile_no, 
                    hms_visitor.purpose, 
                    hms_visitor.created_date, 
+                   hms_visitor.modified_date, 
                    hms_visitor.emp_id,
 				   hms_visitor.photo,
                    hms_visitor_type.visitor_type as visitor_type_name,

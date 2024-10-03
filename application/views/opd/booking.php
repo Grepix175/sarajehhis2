@@ -502,7 +502,7 @@ $field_list = mandatory_section_field_list(3);
                         onchange="return get_city(this.value)">
                         <option value="">Select State</option>
                         <?php
-                        if (!empty($form_data['country_id'])) {
+                        // if (!empty($form_data['country_id'])) {
                           $state_list = state_list($form_data['country_id']);
                           if (!empty($state_list)) {
                             foreach ($state_list as $state) {
@@ -515,7 +515,7 @@ $field_list = mandatory_section_field_list(3);
                               <?php
                             }
                           }
-                        }
+                        // }
                         ?>
                       </select>
                     </div>
@@ -2410,6 +2410,8 @@ $field_list = mandatory_section_field_list(3);
             success: function (result) {
               console.log(result, 'bahsvas')
               $('#attended_doctor').html(result);
+              consultant_charge($('#attended_doctor').val())
+              generate_token($('#attended_doctor').val())
             }
           });
         }
