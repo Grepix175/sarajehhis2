@@ -200,7 +200,7 @@ class Opd extends CI_Controller
 
       $row[] = number_format($test->total_amount, 2);
       $row[] = number_format($test->net_amount, 2);
-      $row[] = number_format($test->paid_amount1, 2);
+      $row[] = number_format($test->paid_amount, 2);
       $row[] = number_format($test->discount, 2);
       // $row[] = $test->policy_no;
       //Action button /////
