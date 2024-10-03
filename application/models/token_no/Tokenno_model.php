@@ -152,7 +152,7 @@ class Tokenno_model extends CI_Model
     {
 
         $opd_search = $this->session->userdata('token_search');
-        $this->db->select("hms_token.token_no, hms_token.status, hms_token.patient_id, hms_patient.patient_name,hms_patient.patient_code, hms_token.created_date");
+        $this->db->select("hms_token.token_no, hms_token.status, hms_token.patient_id, hms_patient.patient_name,hms_patient.patient_code,hms_patient.mobile_no, hms_token.created_date");
         $this->db->from("hms_token");
         $this->db->join('hms_patient', 'hms_patient.id = hms_token.patient_id', 'left');
 
