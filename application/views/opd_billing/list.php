@@ -382,7 +382,7 @@ $users_data = $this->session->userdata('auth_users');
                     <th> Token No. </th>
                     <!-- <th>Address</th> -->
                     <!-- <th>Father Name</th> -->
-                    <th>Patient Email</th>
+                    <th>Village/Town</th>
                     <!-- <th>Source From</th> -->
                     <!-- <th>Disease</th> -->
                     <!-- <th>Referred Doctor/Hospital</th> -->
@@ -390,9 +390,9 @@ $users_data = $this->session->userdata('auth_users');
                     <!-- <th>Consultant</th> -->
                     <!-- <th>Medical Kit</th> -->
                     <!-- <th>Next Appointment</th> -->
+                    <th>Referred By </th>
                     <th>Mode of Payment</th>
                     <!-- <th>Kit Amount</th> -->
-                    <th>Particular Charge </th>
                     <th>Total Amount</th>
                     <th>Net Amount</th>
                     <th>Paid Amount</th>

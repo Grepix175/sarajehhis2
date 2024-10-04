@@ -33,7 +33,7 @@ class Opd_billing extends CI_Controller
     }
     // End Defaul Search
     $data['form_data'] = array('patient_name' => '', 'reciept_code' => '', 'mobile_no' => '', 'start_date' => $start_date, 'end_date' => $end_date);
-    $data['page_title'] = 'OPD Billing List';
+    $data['page_title'] = 'OPD Procedure List';
     $this->load->view('opd_billing/list', $data);
   }
 
@@ -91,7 +91,7 @@ class Opd_billing extends CI_Controller
       //   $row[] = '';
       // }
 
-      $row[] = $test->patient_email;
+      $row[] = $test->address;
       // $row[] = $test->patient_source;
       // $row[] = $test->disease;
       // $row[] = $test->doctor_hospital_name;
@@ -105,9 +105,9 @@ class Opd_billing extends CI_Controller
       //   $row[] = date('d-m-Y', strtotime($test->next_app_date));
       // else
       //   $row[] = "";
+      $row[] = $test->referred_by == 0 ? 'Doctor' : 'Hospital';
       $row[] = $test->payment_mode;
       // $row[] = number_format($test->kit_amount, 2);
-      $row[] = number_format($test->particulars_charges, 2);
       $row[] = number_format($test->total_amount, 2);
       $row[] = number_format($test->net_amount, 2);
       $row[] = number_format($test->paid_amount, 2);
@@ -360,7 +360,7 @@ class Opd_billing extends CI_Controller
     $data['gardian_relation_list'] = $this->general_model->gardian_relation_list();
     $data['patient_category_list'] = $this->general_model->patient_category_list();
     $data['authrize_person_list'] = $this->general_model->authrize_person_list();
-    $data['page_title'] = "OPD Billings";
+    $data['page_title'] = "OPD Procedure";
     $post = $this->input->post();
     if (empty($pid)) {
       $patient_code = generate_unique_id(4);
@@ -1895,7 +1895,8 @@ class Opd_billing extends CI_Controller
 
     $this->load->model('general/general_model');
     $transaction_id = $this->general_model->get_transaction_id($booking_id, 4, 8);   //4 section id and 8 type
-    $data['transaction_id'] = $transaction_id[0]->field_value;
+    // $data['transaction_id'] = $transaction_id[0]->field_value;
+    $data['transaction_id'] = !empty($transaction_id) && isset($transaction_id[0]->field_value) ? $transaction_id[0]->field_value : '';
 
     $this->load->view('opd_billing/print_template_opd', $data);
   }
@@ -2048,14 +2049,42 @@ class Opd_billing extends CI_Controller
 
   public function opd_billing_excel()
   {
+    
     // Starting the PHPExcel library
     $this->load->library('excel');
     $this->excel->IO_factory();
     $objPHPExcel = new PHPExcel();
     $objPHPExcel->getProperties()->setTitle("export")->setDescription("none");
     $objPHPExcel->setActiveSheetIndex(0);
+    $from_date = $this->input->get('start_date');
+    $to_date = $this->input->get('end_date');
+    // Main header with date range if provided
+    $mainHeader = "Opd Producer List";
+    if (!empty($from_date) && !empty($to_date)) {
+      $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
+    }
+    $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
+    $objPHPExcel->getActiveSheet()->setCellValue('A1', $mainHeader);
+    $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true)->setSize(16);
+
+    // Blank row after the main header
+    $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20); // Set height for visibility
+    $headerRow = 2;
+    if (!empty($from_date) || !empty($to_date)) {
+      $dateRange = '';
+      if (!empty($from_date)) {
+        $dateRange .= 'From Date: ' . date('d-m-Y', strtotime($from_date)) . ' ';
+      }
+      if (!empty($to_date)) {
+        $dateRange .= 'To Date: ' . date('d-m-Y', strtotime($to_date));
+      }
+      $objPHPExcel->getActiveSheet()->setCellValue('A' . $headerRow);
+      $objPHPExcel->getActiveSheet()->getStyle('A' . $headerRow)->getFont()->setItalic(true);
+      $headerRow++;
+    }
     // Field names in the first row
-    $fields = array('Receipt No', 'Patient Name', 'Mobile No.', 'Doctor Name', 'Billing Date');
+    $fields = array('Patient Reg. No.', 'Receipt No', 'Patient Name', 'Gender', 'Mobile No.', 'Billing Date', 'Token No', 'Village/Town', 'Referred By', 'Mode of Payment', 'Total Amount', 'Net Amount', 'Paid Amount', 'Discount');
     $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
     $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::VERTICAL_CENTER);
     $col = 0;
@@ -2067,12 +2096,24 @@ class Opd_billing extends CI_Controller
       $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
       $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
       $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
       $objPHPExcel->getActiveSheet()->getStyle($row_heading)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
       $objPHPExcel->getActiveSheet()->getStyle($row_heading)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
       $col++;
       $row_heading++;
     }
     $list = $this->opd_billing->search_opd_data();
+    // echo "<pre>";
+    // print_r($list);
+    // die;
     $rowData = array();
     $data = array();
     if (!empty($list)) {
@@ -2084,7 +2125,7 @@ class Opd_billing extends CI_Controller
         $specialization_id = get_specilization_name($opds->specialization_id);
         $booking_code = $opds->booking_code;
         $patient_name = $opds->patient_name;
-        $booking_date = date('d-m-Y', strtotime($opds->booking_date));
+        // $booking_date = date('d-m-Y', strtotime($opds->booking_date));
         $genders = array('0' => 'Female', '1' => 'Male', '2' => 'Others');
         $gender = $genders[$opds->gender];
         $age_y = $opds->age_y;
@@ -2113,7 +2154,9 @@ class Opd_billing extends CI_Controller
           $age .= ", " . $age_d . " " . $day;
         }
         $patient_age = $age;
-        array_push($rowData, $opds->reciept_code, $opds->patient_name, $opds->mobile_no, $attended_doctor_name, $booking_date);
+        $bookingDate = date('d-m-Y h:i A', strtotime($opds->booking_date . ' ' . $opds->booking_time));
+        $referredBy = $row[] = $opds->referred_by == 0 ? 'Doctor' : 'Hospital';
+        array_push($rowData, $opds->patient_code,$opds->reciept_code, $opds->patient_name,  $gender ,$opds->mobile_no, $bookingDate,$opds->token_no, $referredBy,$opds->payment_mode,$opds->total_amount,$opds->net_amount,$opds->paid_amount,$opds->discount);
         $count = count($rowData);
         for ($j = 0; $j < $count; $j++) {
 
@@ -2148,7 +2191,7 @@ class Opd_billing extends CI_Controller
 
     // Sending headers to force the user to download the file
     header('Content-Type: application/octet-stream charset=UTF-8');
-    header("Content-Disposition: attachment; filename=billing_list_" . time() . ".xls");
+    header("Content-Disposition: attachment; filename=opd_procedure_list_" . time() . ".xls");
     header("Pragma: no-cache");
     header("Expires: 0");
     if (!empty($data)) {
@@ -2258,8 +2301,19 @@ class Opd_billing extends CI_Controller
 
   public function opd_billing_pdf()
   {
+    ini_set('memory_limit', '2048M');
+    ini_set('max_execution_time', 300);
     $data['print_status'] = "";
+    $from_date = $this->input->get('start_date');
+    $to_date = $this->input->get('end_date');
+
     $data['data_list'] = $this->opd_billing->search_opd_data();
+    $mainHeader = "Opd Procedure List";
+    if (!empty($from_date) && !empty($to_date)) {
+        $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
+    }
+    $data['mainHeader'] = $mainHeader;
+    
     $this->load->view('opd_billing/opd_billing_html', $data);
     $html = $this->output->get_output();
     // Load library
@@ -2267,7 +2321,7 @@ class Opd_billing extends CI_Controller
     // Convert to PDF
     $this->pdf->load_html($html);
     $this->pdf->render();
-    $this->pdf->stream("opd_billing_list_" . time() . ".pdf");
+    $this->pdf->stream("opd_procedure_list_" . time() . ".pdf", array("Attachment" => 1));
   }
 
   public function opd_billing_print()
