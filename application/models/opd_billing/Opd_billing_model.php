@@ -52,7 +52,7 @@ class Opd_billing_model extends CI_Model
 
 
 		$search = $this->session->userdata('opd_billing_search');
-		
+		// print_r($search) ;
 		if($user_data['users_role']==4)
 		{
 			$this->db->where('hms_opd_booking.patient_id = "'.$user_data['parent_id'].'"');
@@ -148,10 +148,10 @@ class Opd_billing_model extends CI_Model
 			}
 
  
-			if($search['insurance_type']!='')
-			{
-				$this->db->where('hms_patient.insurance_type',$search['insurance_type']);
-			}
+			// if($search['insurance_type']!='')
+			// {
+			// 	$this->db->where('hms_patient.insurance_type',$search['insurance_type']);
+			// }
 
 			if(!empty($search['insurance_type_id']))
 			{
@@ -442,18 +442,18 @@ class Opd_billing_model extends CI_Model
     	$user_data = $this->session->userdata('auth_users');
     	$post = $this->input->post(); 
     	$dental_opd_particular_billing = $this->session->userdata('dental_opd_particular_billing');
-		//echo "<pre>";print_r($post); exit;
         //$reciept_code = generate_unique_id(21);
-
+		
     	if(!empty($post['branch_id']))
     	{
-    		$branch_id = $post['branch_id'];
-
+			$branch_id = $post['branch_id'];
+			
     	}
     	else
     	{
-    		$branch_id = $user_data['parent_id'];
+			$branch_id = $user_data['parent_id'];
     	}
+		// echo "<pre>";print_r($user_data); exit;
 
     	$insurance_type='';
    		if(isset($post['insurance_type']))
@@ -508,10 +508,10 @@ class Opd_billing_model extends CI_Model
     		'patient_email'=>$post['patient_email'], 
     		'address'=>$post['address'],
     		'address2'=>$post['address_second'],
-    		'address3'=>$post['address_third'],
-    		'city_id'=>$post['city_id'],
+    		// 'address3'=>$post['address_third'],
+    		// 'city_id'=>$post['city_id'],
     		'state_id'=>$post['state_id'],
-    		'country_id'=>$post['country_id'],
+    		// 'country_id'=>$post['country_id'],
     		'status'=>1,
     		'ip_address'=>$_SERVER['REMOTE_ADDR'],
     		'created_by'=>$user_data['id'],
@@ -519,11 +519,11 @@ class Opd_billing_model extends CI_Model
 			"insurance_type"=>$pannel_type,
 			"insurance_type_id"=>$insurance_type_id,
 			"ins_company_id"=>$ins_company_id,
-			"polocy_no"=>$post['polocy_no'],
-			"tpa_id"=>$post['tpa_id'],
-			"ins_amount"=>$post['ins_amount'],
-			"ins_authorization_no"=>$post['ins_authorization_no'],
-			'patient_category'=>$post['patient_category'],
+			// "polocy_no"=>$post['polocy_no'],
+			// "tpa_id"=>$post['tpa_id'],
+			// "ins_amount"=>$post['ins_amount'],
+			// "ins_authorization_no"=>$post['ins_authorization_no'],
+			// 'patient_category'=>$post['patient_category'],
 
     		);
     	$specialization='';
@@ -538,9 +538,9 @@ class Opd_billing_model extends CI_Model
 
     	$data_test = array(
 			'branch_id'=>$branch_id,
-    		'diseases'=>$post['diseases'],	    
+    		// 'diseases'=>$post['diseases'],	    
 			'type'=>3,
-    		'attended_doctor'=>$post['attended_doctor'],
+    		// 'attended_doctor'=>$post['attended_doctor'],
     		'referral_doctor'=>$post['referral_doctor'],
     		'ref_by_other'=>$post['ref_by_other'],
     		'booking_date'=>date('Y-m-d',strtotime($post['booking_date'])),
@@ -563,13 +563,13 @@ class Opd_billing_model extends CI_Model
     		'referral_hospital'=>$post['referral_hospital'],
 			'insurance_type_id'=>$insurance_type_id,
 			'ins_company_id'=>$ins_company_id,
-			'policy_no'=>$post['polocy_no'],
-			'tpa_id'=>$post['tpa_id'],
-			'ins_amount'=>$post['ins_amount'],
-			'ins_authorization_no'=>$post['ins_authorization_no'],
-			'pannel_type'=>$post['pannel_type'],
+			// 'policy_no'=>$post['polocy_no'],
+			// 'tpa_id'=>$post['tpa_id'],
+			// 'ins_amount'=>$post['ins_amount'],
+			// 'ins_authorization_no'=>$post['ins_authorization_no'],
+			// 'pannel_type'=>$post['pannel_type'],
 			'token_no'=>$post['token_no'],
-			'patient_category'=>$post['patient_category'],
+			// 'patient_category'=>$post['patient_category'],
             'authorize_person'=>$post['authorize_person'],
 
     		);
@@ -915,7 +915,7 @@ class Opd_billing_model extends CI_Model
 		    $data_token=array(
 				           'branch_id'=>$user_data['parent_id'],
 							'patient_id'=>$patient_id,
-							'doctor_id'=>$post['attended_doctor'],
+							'doctor_id'=>$post['attended_doctor'] ?? 0,
 							'booking_date'=>date("Y-m-d", strtotime($post['booking_date']) ),
 							'token_no'=>$post['token_no'],
 							 'type'=>$post['token_type'],
