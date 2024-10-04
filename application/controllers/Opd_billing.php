@@ -9,6 +9,7 @@ class Opd_billing extends CI_Controller
     parent::__construct();
     auth_users();
     $this->load->model('opd_billing/opd_billing_model', 'opd_billing');
+    $this->load->model('patient/patient_model');
     $this->load->library('form_validation');
   }
 
