@@ -2228,7 +2228,7 @@ $this->db->join('hms_disease','hms_disease.id=hms_opd_booking.diseases','left');
 
 	public function get_token_setting()
     {
-    	//echo "hi";die;
+    	echo "hi";die;
        $user_data = $this->session->userdata('auth_users');
        $this->db->select("hms_billing_token_setting.*"); 
 	   $this->db->from('hms_billing_token_setting');

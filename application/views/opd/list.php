@@ -34,6 +34,42 @@ $user_role = $users_data['users_role'];
 
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>moment-with-locales.js"></script>
   <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datetimepicker.css">
+  <style>
+    /* Wrapper for the search input and the clear button */
+    .clearable {
+      position: relative;
+      display: inline-block;
+    }
+
+    .clearable input {
+      padding-right: 30px;
+      /* Add space for the clear button */
+    }
+
+    .clearable .clear-icon {
+      position: absolute;
+      right: 10px;
+      /* Position the button inside the input */
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 16px;
+      /* Adjust the size of the icon */
+      color: #999;
+      display: none;
+      /* Hide the clear icon initially */
+    }
+
+    .clearable input:not(:placeholder-shown)+.clear-icon {
+      display: block;
+      /* Show the clear icon when there is text */
+    }
+
+    .clearable .clear-icon:hover {
+      color: #333;
+      /* Change color on hover */
+    }
+  </style>
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datetimepicker.js"></script>
   <script type="text/javascript">
     $(document).ready(function () {
@@ -531,7 +567,7 @@ $user_role = $users_data['users_role'];
             <?php } ?>
             <?php if (in_array('526', $users_data['permission']['action'])) {
               ?>
-                <!-- <button class="btn-update" onclick="window.location.href='<?php echo base_url('opd/archive'); ?>'">
+              <!-- <button class="btn-update" onclick="window.location.href='<?php echo base_url('opd/archive'); ?>'">
                   <i class="fa fa-archive"></i> Archive
                 </button> -->
             <?php } ?>
@@ -685,6 +721,30 @@ $user_role = $users_data['users_role'];
 
               },
             ],
+            // Adjust the search input
+            "initComplete": function () {
+              // Wrap the search input with a clearable div
+              var searchInput = $('.dataTables_filter input');
+              searchInput.wrap('<div class="clearable"></div>');
+              searchInput.attr('type', 'text'); // Ensure it's type=text
+
+              // Append the custom clear button (cross icon)
+              searchInput.after('<span class="clear-icon">&#10006;</span>'); // Cross icon as X
+
+              // Show/hide the clear icon based on input value
+              searchInput.on('input', function () {
+                var input = $(this);
+                input.siblings('.clear-icon').toggle(input.val().length > 0);
+              });
+
+              // Handle clear icon click
+              $('.clear-icon').on('click', function () {
+                var input = $(this).siblings('input');
+                input.val(''); // Clear input value
+                input.trigger('input'); // Trigger input change to hide icon
+                table.search('').draw(); // Reset DataTable search
+              });
+            }
 
           });
           $('.tog-col').on('click', function (e) {
@@ -766,38 +826,39 @@ $user_role = $users_data['users_role'];
     </script>
     <!-- Confirmation Box -->
     <div id="confirm_print" class="modal fade dlt-modal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header bg-theme">
-        <h4>Are You Sure?</h4>
-      </div>
-      <div class="modal-footer">
-        <?php
-        $opd_booking_id = $this->session->userdata('opd_booking_id');
-        
-        if ($users_data['parent_id'] == '60') {
-          ?>
-          <a data-dismiss="modal" class="btn-anchor"
-             onClick="return handlePrintAndRedirect('<?php echo base_url("prescription/print_blank_prescriptions/" . $opd_booking_id . "/" . $users_data['parent_id']); ?>');">Print</a>
-          <?php
-        } elseif ($users_data['parent_id'] == '64') {
-          ?>
-          <a data-dismiss="modal" class="btn-anchor"
-             onClick="return handlePrintAndRedirect('<?php echo base_url("prescription/print_blank_prescriptions/" . $opd_booking_id . "/" . $users_data['parent_id']); ?>');">Print</a>
-          <?php
-        } else {
-          ?>
-          <a data-dismiss="modal" class="btn-anchor"
-             onClick="return handlePrintAndRedirect('<?php echo base_url("opd/print_booking_report"); ?>');">Print</a>
-          <?php
-        }
-        ?>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-theme">
+            <h4>Are You Sure?</h4>
+          </div>
+          <div class="modal-footer">
+            <?php
+            $opd_booking_id = $this->session->userdata('opd_booking_id');
 
-        <button type="button" data-dismiss="modal" class="btn-cancel" id="cancel" onClick="removeStatusFromUrl();">Close</button>
+            if ($users_data['parent_id'] == '60') {
+              ?>
+              <a data-dismiss="modal" class="btn-anchor"
+                onClick="return handlePrintAndRedirect('<?php echo base_url("prescription/print_blank_prescriptions/" . $opd_booking_id . "/" . $users_data['parent_id']); ?>');">Print</a>
+              <?php
+            } elseif ($users_data['parent_id'] == '64') {
+              ?>
+              <a data-dismiss="modal" class="btn-anchor"
+                onClick="return handlePrintAndRedirect('<?php echo base_url("prescription/print_blank_prescriptions/" . $opd_booking_id . "/" . $users_data['parent_id']); ?>');">Print</a>
+              <?php
+            } else {
+              ?>
+              <a data-dismiss="modal" class="btn-anchor"
+                onClick="return handlePrintAndRedirect('<?php echo base_url("opd/print_booking_report"); ?>');">Print</a>
+              <?php
+            }
+            ?>
+
+            <button type="button" data-dismiss="modal" class="btn-cancel" id="cancel"
+              onClick="removeStatusFromUrl();">Close</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
     <div id="confirm_billing_print" class="modal fade dlt-modal">
       <div class="modal-dialog">
