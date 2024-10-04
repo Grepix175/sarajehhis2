@@ -1976,9 +1976,10 @@ class Opd_billing_model extends CI_Model
     function search_opd_data()
     {
     	$user_data = $this->session->userdata('auth_users');
-		$this->db->select("hms_opd_booking.*,hms_patient.patient_name,hms_patient.mobile_no,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d,hms_patient.gender,hms_patient.patient_code");
+		$this->db->select("hms_opd_booking.*,hms_patient.patient_name,hms_patient.mobile_no,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d,hms_patient.gender,hms_patient.patient_code,hms_patient.address,hms_patient.address,hms_payment_mode.payment_mode");
 		$this->db->join('hms_patient','hms_patient.id=hms_opd_booking.patient_id','inner');
 $this->db->join('hms_disease','hms_disease.id=hms_opd_booking.diseases','left');
+$this->db->join('hms_payment_mode','hms_payment_mode.id=hms_opd_booking.payment_mode', 'left');
 		$this->db->where('hms_opd_booking.is_deleted','0'); 
 		
 		$this->db->where('hms_opd_booking.type','3'); 
@@ -2053,10 +2054,10 @@ $this->db->join('hms_disease','hms_disease.id=hms_opd_booking.diseases','left');
 				$this->db->where('hms_patient.patient_name LIKE "'.$search['patient_name'].'%"');
 			}
 
-			if($search['insurance_type']!='')
-			{
-				$this->db->where('hms_opd_booking.pannel_type',$search['insurance_type']);
-			}
+			// if($search['insurance_type']!='')
+			// {
+			// 	$this->db->where('hms_opd_booking.pannel_type',$search['insurance_type']);
+			// }
 
 			if(!empty($search['insurance_type_id']))
 			{

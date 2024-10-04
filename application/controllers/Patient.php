@@ -217,7 +217,7 @@ class Patient extends CI_Controller
             }
 
             if (in_array('523', $users_data['permission']['action'])) {
-                $btn_booking = '<li><a href="' . base_url('opd/booking/' . $patient->id) . '" style="' . $patient->id . '" title="Opd Booking"><i class="fa fa-plus"></i> Opd Booking</a></li>';
+                $btn_booking = '<li><a href="' . base_url('opd/booking/' . $patient->id) . '" style="' . $patient->id . '" title="Opd Booking"><i class="fa fa-plus"></i> Billing</a></li>';
             }
             if (in_array('319', $users_data['permission']['section'])) {
                 $btn_camp_booking = '<li><a href="' . base_url('camp/booking/' . $patient->id) . '" style="' . $patient->id . '" title="Camp Booking"><i class="fa fa-plus"></i> Camp Booking</a></li>';
@@ -226,7 +226,7 @@ class Patient extends CI_Controller
                 $btn_day_care = '<li><a href="' . base_url('day_care/booking/' . $patient->id) . '" style="' . $patient->id . '" title="Day Care Booking"><i class="fa fa-plus"></i> Day Care Booking</a></li>';
             }
             if (in_array('915', $users_data['permission']['action'])) {
-                $btn_billing = '<li> <a  href="' . base_url('opd_billing/add/' . $patient->id) . '" style="' . $patient->id . '" title="Opd Billing"><i class="fa fa-plus"></i> Opd Billing</a></li>';
+                $btn_billing = '<li> <a  href="' . base_url('opd_billing/add/' . $patient->id) . '" style="' . $patient->id . '" title="Opd Billing"><i class="fa fa-plus"></i> Opd Procedure</a></li>';
             }
             if (in_array('400', $users_data['permission']['action'])) {
                 $btn_sales_medicine = ' <li><a  href="' . base_url('sales_medicine/add/?reg=' . $patient->id) . '" style="' . $patient->id . '" title="Sale Medicine"><i class="fa fa-plus"></i> Sale Medicine</a></li>';

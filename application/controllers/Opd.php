@@ -1112,7 +1112,7 @@ class Opd extends CI_Controller
 
     $validate_date = date('Y-m-d', strtotime(' + ' . $validity . ' days'));
     $validatedate = date('d-m-Y', strtotime($validate_date));
-    $data['page_title'] = "OPD Booking";
+    $data['page_title'] = "Billing";
 
 
 
