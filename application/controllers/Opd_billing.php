@@ -2156,7 +2156,7 @@ class Opd_billing extends CI_Controller
         $patient_age = $age;
         $bookingDate = date('d-m-Y h:i A', strtotime($opds->booking_date . ' ' . $opds->booking_time));
         $referredBy = $row[] = $opds->referred_by == 0 ? 'Doctor' : 'Hospital';
-        array_push($rowData, $opds->patient_code,$opds->reciept_code, $opds->patient_name,  $gender ,$opds->mobile_no, $bookingDate,$opds->token_no, $referredBy,$opds->payment_mode,$opds->total_amount,$opds->net_amount,$opds->paid_amount,$opds->discount);
+        array_push($rowData, $opds->patient_code,$opds->reciept_code, $opds->patient_name,  $gender ,$opds->mobile_no, $bookingDate,$opds->token_no,$opds->address, $referredBy,$opds->payment_mode,$opds->total_amount,$opds->net_amount,$opds->paid_amount,$opds->discount);
         $count = count($rowData);
         for ($j = 0; $j < $count; $j++) {
 
