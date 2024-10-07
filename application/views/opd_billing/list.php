@@ -235,7 +235,7 @@ $users_data = $this->session->userdata('auth_users');
               <div class="row m-b-5">
                 <div class="col-xs-5"><label>From Date</label></div>
                 <div class="col-xs-7">
-                  <input id="start_date_patient" name="start_date" class="datepicker start_datepicker m_input_default"
+                  <input id="start_date_billing" name="start_date" class="datepicker start_datepicker m_input_default"
                     type="text" value="<?php echo $form_data['start_date'] ?>">
                 </div>
               </div>
@@ -259,7 +259,7 @@ $users_data = $this->session->userdata('auth_users');
               <div class="row m-b-5">
                 <div class="col-xs-5"><label>To Date</label></div>
                 <div class="col-xs-7">
-                  <input name="end_date" id="end_date_patient"
+                  <input name="end_date" id="end_date_billing"
                     class="datepicker datepicker_to end_datepicker m_input_default"
                     value="<?php echo $form_data['end_date'] ?>" type="text">
                 </div>
@@ -426,7 +426,11 @@ $users_data = $this->session->userdata('auth_users');
               </button> -->
             <?php } ?>
 
-            <a href="<?php echo base_url('opd_billing/opd_billing_excel'); ?>" class="btn-anchor m-b-2">
+            <!--<a href="<?php echo base_url('opd_billing/opd_billing_excel'); ?>" class="btn-anchor m-b-2">-->
+            <!--  <i class="fa fa-file-excel-o"></i> Excel-->
+            <!--</a>-->
+            <a data-toggle="tooltip" title="Download list in excel" href="#" id="opd_billing_download_excel"
+              class="btn-anchor m-b-2">
               <i class="fa fa-file-excel-o"></i> Excel
             </a>
 
@@ -434,7 +438,11 @@ $users_data = $this->session->userdata('auth_users');
               <i class="fa fa-file-word-o"></i> CSV
             </a> -->
 
-            <a href="<?php echo base_url('opd_billing/opd_billing_pdf'); ?>" class="btn-anchor m-b-2">
+            <!--<a href="<?php echo base_url('opd_billing/opd_billing_pdf'); ?>" class="btn-anchor m-b-2">-->
+            <!--  <i class="fa fa-file-pdf-o"></i> PDF-->
+            <!--</a>-->
+            <a data-toggle="tooltip" title="Download list in pdf" href="#" id="opd_billing_download_pdf"
+              class="btn-anchor m-b-2">
               <i class="fa fa-file-pdf-o"></i> PDF
             </a>
             <a href="javascript:void(0)" class="btn-anchor m-b-2"
@@ -480,8 +488,8 @@ $users_data = $this->session->userdata('auth_users');
 
     <script>
       function form_submit(vals) {
-        var start_date = $('#start_date_patient').val();
-        var end_date = $('#end_date_patient').val();
+        var start_date = $('#start_date_billing').val();
+        var end_date = $('#end_date_billing').val();
         var branch_id = $('#branch_id').val();
         var reciept_code = $('#reciept_code').val();
         var patient_name = $('#patient_name').val();
@@ -489,7 +497,7 @@ $users_data = $this->session->userdata('auth_users');
         $.ajax({
           url: "<?php echo base_url('opd_billing/advance_search/'); ?>",
           type: 'POST',
-          data: { start_date: start_date, end_date: end_date, branch_id: branch_id,reciept_code:reciept_code,patient_name:patient_name,mobile_no:mobile_no },
+          data: { start_date: start_date, end_date: end_date, branch_id: branch_id, reciept_code: reciept_code, patient_name: patient_name, mobile_no: mobile_no },
           success: function (result) {
             if (vals != "1") {
               reload_table();
@@ -775,6 +783,52 @@ $users_data = $this->session->userdata('auth_users');
           });
         });
     }
+
+    document.getElementById('opd_billing_download_excel').addEventListener('click', function (e) {
+      e.preventDefault();
+
+
+      var fromDate = document.getElementById('start_date_billing').value;
+      var toDate = document.getElementById('end_date_billing').value;
+
+
+      var url = '<?php echo base_url("opd_billing/opd_billing_excel"); ?>';
+
+
+      if (fromDate || toDate) {
+        url += '?';
+        if (fromDate) {
+          url += 'start_date=' + encodeURIComponent(fromDate);
+        }
+        if (toDate) {
+          url += (fromDate ? '&' : '') + 'end_date=' + encodeURIComponent(toDate);
+        }
+      }
+      window.location.href = url;
+    });
+    document.getElementById('opd_billing_download_pdf').addEventListener('click', function (e) {
+      e.preventDefault();
+
+
+      var fromDate = document.getElementById('start_date_billing').value;
+      var toDate = document.getElementById('end_date_billing').value;
+
+
+      var fromDateObj = new Date(fromDate);
+      var toDateObj = new Date(toDate);
+
+
+      //   if (!fromDate || !toDate || (toDateObj > new Date(fromDateObj.setMonth(fromDateObj.getMonth() + 1)))) {
+      //     alert('Please select both "From Date" and "To Date" with a maximum range of 1 month.');
+      //     return;
+      //   }
+
+
+      var url = '<?php echo base_url("opd_billing/opd_billing_pdf"); ?>';
+      url += '?start_date=' + encodeURIComponent(fromDate) + '&end_date=' + encodeURIComponent(toDate);
+
+      window.location.href = url;
+    });
   </script>
 </body>
 
