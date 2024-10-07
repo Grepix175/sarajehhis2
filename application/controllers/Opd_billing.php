@@ -792,7 +792,7 @@ class Opd_billing extends CI_Controller
         $chequedates = "";
       }
 
-      $data['page_title'] = "Update OPD Billing";
+      $data['page_title'] = "Update OPD Procedure";
       $post = $this->input->post();
       $data['form_error'] = '';
       $data['particular_list_data'] = '';
