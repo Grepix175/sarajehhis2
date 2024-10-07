@@ -2048,160 +2048,92 @@ class Opd_billing extends CI_Controller
 
 
   public function opd_billing_excel()
-  {
-    
+{
     // Starting the PHPExcel library
     $this->load->library('excel');
     $this->excel->IO_factory();
     $objPHPExcel = new PHPExcel();
     $objPHPExcel->getProperties()->setTitle("export")->setDescription("none");
     $objPHPExcel->setActiveSheetIndex(0);
+    
     $from_date = $this->input->get('start_date');
     $to_date = $this->input->get('end_date');
+
     // Main header with date range if provided
     $mainHeader = "Opd Producer List";
     if (!empty($from_date) && !empty($to_date)) {
-      $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
+        $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
     }
+
+    // Set the main header in row 1
     $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
     $objPHPExcel->getActiveSheet()->setCellValue('A1', $mainHeader);
     $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
     $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true)->setSize(16);
 
-    // Blank row after the main header
-    $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20); // Set height for visibility
-    $headerRow = 2;
-    if (!empty($from_date) || !empty($to_date)) {
-      $dateRange = '';
-      if (!empty($from_date)) {
-        $dateRange .= 'From Date: ' . date('d-m-Y', strtotime($from_date)) . ' ';
-      }
-      if (!empty($to_date)) {
-        $dateRange .= 'To Date: ' . date('d-m-Y', strtotime($to_date));
-      }
-      $objPHPExcel->getActiveSheet()->setCellValue('A' . $headerRow);
-      $objPHPExcel->getActiveSheet()->getStyle('A' . $headerRow)->getFont()->setItalic(true);
-      $headerRow++;
-    }
-    // Field names in the first row
+    // Leave row 2 blank (you can set row height if needed)
+    $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
+
+    // Field names (header row) should start in row 3
     $fields = array('Patient Reg. No.', 'Receipt No', 'Patient Name', 'Gender', 'Mobile No.', 'Billing Date', 'Token No', 'Village/Town', 'Referred By', 'Mode of Payment', 'Total Amount', 'Net Amount', 'Paid Amount', 'Discount');
-    $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-    $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-    $col = 0;
-    $row_heading = 1;
+    
+    $col = 0; // Initialize the column index
     foreach ($fields as $field) {
-      $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 1, $field);
-      $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
-      $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-      $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
-      $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
-      $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
-      $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
-      $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
-      $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
-      $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
-      $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
-      $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
-      $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
-      $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
-      $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
-      $objPHPExcel->getActiveSheet()->getStyle($row_heading)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-      $objPHPExcel->getActiveSheet()->getStyle($row_heading)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-      $col++;
-      $row_heading++;
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 3, $field); // Row 3 for headers
+        $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn($col)->setAutoSize(true); // Auto-size columns
+        $col++;
     }
+    
+    // Style for header row (Row 3)
+    $objPHPExcel->getActiveSheet()->getStyle('A3:N3')->getFont()->setBold(true);
+    $objPHPExcel->getActiveSheet()->getStyle('A3:N3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('A3:N3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+    // Fetching the OPD data (assuming you have the data in $list)
     $list = $this->opd_billing->search_opd_data();
-    // echo "<pre>";
-    // print_r($list);
-    // die;
-    $rowData = array();
-    $data = array();
+
+    // Populate the data starting from row 4
+    $row = 4; // Start at row 4 for data
     if (!empty($list)) {
+        foreach ($list as $opds) {
+            $col = 0;
+            $referredBy = $opds->referred_by == 0 ? 'Doctor' : 'Hospital';
+            $data = array(
+                $opds->patient_code, 
+                $opds->reciept_code, 
+                $opds->patient_name, 
+                $opds->gender == 1 ? 'Male' : 'Female', 
+                $opds->mobile_no, 
+                date('d-m-Y h:i A', strtotime($opds->booking_date . ' ' . $opds->booking_time)),
+                $opds->token_no,
+                $opds->address,
+                $referredBy,
+                $opds->payment_mode,
+                $opds->total_amount,
+                $opds->net_amount,
+                $opds->paid_amount,
+                $opds->discount
+            );
 
-      $i = 0;
-      foreach ($list as $opds) {
-        $attended_doctor_name = "";
-        $attended_doctor_name = get_doctor_name($opds->attended_doctor);
-        $specialization_id = get_specilization_name($opds->specialization_id);
-        $booking_code = $opds->booking_code;
-        $patient_name = $opds->patient_name;
-        // $booking_date = date('d-m-Y', strtotime($opds->booking_date));
-        $genders = array('0' => 'Female', '1' => 'Male', '2' => 'Others');
-        $gender = $genders[$opds->gender];
-        $age_y = $opds->age_y;
-        $age_m = $opds->age_m;
-        $age_d = $opds->age_d;
-        $age = "";
-        if ($age_y > 0) {
-          $year = 'Years';
-          if ($age_y == 1) {
-            $year = 'Year';
-          }
-          $age .= $age_y . " " . $year;
+            foreach ($data as $cellValue) {
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $cellValue);
+                $col++;
+            }
+            $row++;
         }
-        if ($age_m > 0) {
-          $month = 'Months';
-          if ($age_m == 1) {
-            $month = 'Month';
-          }
-          $age .= ", " . $age_m . " " . $month;
-        }
-        if ($age_d > 0) {
-          $day = 'Days';
-          if ($age_d == 1) {
-            $day = 'Day';
-          }
-          $age .= ", " . $age_d . " " . $day;
-        }
-        $patient_age = $age;
-        $bookingDate = date('d-m-Y h:i A', strtotime($opds->booking_date . ' ' . $opds->booking_time));
-        $referredBy = $row[] = $opds->referred_by == 0 ? 'Doctor' : 'Hospital';
-        array_push($rowData, $opds->patient_code,$opds->reciept_code, $opds->patient_name,  $gender ,$opds->mobile_no, $bookingDate,$opds->token_no,$opds->address, $referredBy,$opds->payment_mode,$opds->total_amount,$opds->net_amount,$opds->paid_amount,$opds->discount);
-        $count = count($rowData);
-        for ($j = 0; $j < $count; $j++) {
-
-          $data[$i][$fields[$j]] = $rowData[$j];
-        }
-        unset($rowData);
-        $rowData = array();
-        $i++;
-      }
-
     }
 
-    // Fetching the table data
-    $row = 2;
-    if (!empty($data)) {
-      foreach ($data as $boking_data) {
-        $col = 0;
-        $row_val = 1;
-        foreach ($fields as $field) {
-          $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $boking_data[$field]);
-          $objPHPExcel->getActiveSheet()->getStyle($row_val)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-          $objPHPExcel->getActiveSheet()->getStyle($row_val)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+    // Send headers to force download of the file
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="opd_procedure_list_' . time() . '.xls"');
+    header('Cache-Control: max-age=0');
 
-          $col++;
-          $row_val++;
-        }
-        $row++;
-      }
-      $objPHPExcel->setActiveSheetIndex(0);
-      $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-    }
+    // Write the Excel file
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+    ob_end_clean();
+    $objWriter->save('php://output');
+}
 
-    // Sending headers to force the user to download the file
-    header('Content-Type: application/octet-stream charset=UTF-8');
-    header("Content-Disposition: attachment; filename=opd_procedure_list_" . time() . ".xls");
-    header("Pragma: no-cache");
-    header("Expires: 0");
-    if (!empty($data)) {
-      ob_end_clean();
-      $objWriter->save('php://output');
-    }
-
-
-
-  }
 
   public function opd_billing_csv()
   {
@@ -2300,29 +2232,38 @@ class Opd_billing extends CI_Controller
   }
 
   public function opd_billing_pdf()
-  {
+{
+    // Increase memory limit and execution time for PDF generation
     ini_set('memory_limit', '2048M');
     ini_set('max_execution_time', 300);
+
+    // Prepare data for the PDF
     $data['print_status'] = "";
     $from_date = $this->input->get('start_date');
     $to_date = $this->input->get('end_date');
 
+    // Fetch OPD data
     $data['data_list'] = $this->opd_billing->search_opd_data();
-    $mainHeader = "Opd Procedure List";
+
+    // Create main header
+    $data['mainHeader'] = "Opd Procedure List";
     if (!empty($from_date) && !empty($to_date)) {
-        $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
+        $data['mainHeader'] .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
     }
-    $data['mainHeader'] = $mainHeader;
-    
+
+    // Load the view and capture the HTML output
     $this->load->view('opd_billing/opd_billing_html', $data);
     $html = $this->output->get_output();
-    // Load library
+
+    // Load PDF library and convert HTML to PDF
     $this->load->library('pdf');
-    // Convert to PDF
     $this->pdf->load_html($html);
     $this->pdf->render();
+
+    // Stream the generated PDF to the browser
     $this->pdf->stream("opd_procedure_list_" . time() . ".pdf", array("Attachment" => 1));
-  }
+}
+
 
   public function opd_billing_print()
   {
