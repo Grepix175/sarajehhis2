@@ -453,7 +453,7 @@ $user_role = $users_data['users_role'];
                     <th width="40" align="center"> <input type="checkbox" name="selectall" class="" id="selectAll"
                         value=""> </th>
 
-
+                    <th>Token No.</th>
                     <th> OPD Type </th>
                     <th>Patient Reg No.</th>
 
@@ -472,7 +472,7 @@ $user_role = $users_data['users_role'];
 
                     <!-- <th>Address</th> -->
                     <!-- <th>Father Name</th> -->
-                    <th>Token No.</th>
+                   
                     <!-- <th>Insurance Type</th> -->
                     <!-- <th>Insurance Company Name</th> -->
 
@@ -489,7 +489,7 @@ $user_role = $users_data['users_role'];
                     <th>Total Amount</th>
                     <th>Net Amount</th>
                     <th>Paid Amount</th>
-                    <th>Discount</th>
+                    <!-- <th>Discount</th> -->
                     <!-- <th> Policy No. </th>  -->
                     <th> Action </th>
                   </tr>
