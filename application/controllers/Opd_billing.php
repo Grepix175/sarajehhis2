@@ -48,6 +48,7 @@ class Opd_billing extends CI_Controller
     $no = $_POST['start'];
     $i = 1;
     $total_num = count($list);
+    // echo "<pre>";print_r($list);die;
     foreach ($list as $test) {
       //print_r($test);die;
       $no++;
@@ -75,14 +76,16 @@ class Opd_billing extends CI_Controller
       } else {
         $row[] = '';
       }
+      $row[] = $test->token_no;
       $row[] = $test->patient_reg_no;
       $row[] = $test->reciept_code;
       $row[] = $test->patient_name;
+      $row[] = $test->patient_category_name;
 
       $row[] = $test->gender;
       $row[] = $test->mobile_no;
       $row[] = date('d-m-Y h:i A', strtotime($test->booking_date . ' ' . $test->booking_time));
-      $row[] = $test->token_no;
+     
       // $row[] = $test->address;
       //$row[] = $test->father_husband_simulation." ".$test->father_husband;
       // if (!empty($test->relation_name)) {
@@ -111,7 +114,7 @@ class Opd_billing extends CI_Controller
       $row[] = number_format($test->total_amount, 2);
       $row[] = number_format($test->net_amount, 2);
       $row[] = number_format($test->paid_amount, 2);
-      $row[] = number_format($test->discount, 2);
+      // $row[] = number_format($test->discount, 2);
       // $row[] = "Dr. " . $test->doctor_name;
       //// old /////
       //Action button /////
@@ -180,9 +183,9 @@ class Opd_billing extends CI_Controller
 
     //print_r($data['teeth_number_list']);
     $post = $this->input->post();
-    //print_r($post);
-    //print_r($data['specialization_list']);
-    //die;
+    // echo "<pre>";
+    // print_r($post);
+    // die;
     $patient_id = "";
     $patient_code = "";
     $simulation_id = "";
@@ -193,6 +196,7 @@ class Opd_billing extends CI_Controller
     $age_m = "";
     $age_d = "";
     $address = "";
+    $address2 = "";
     $address_second = "";
     $address_third = "";
     $patient_email = "";
@@ -228,12 +232,25 @@ class Opd_billing extends CI_Controller
     $ins_authorization_no = '';
     $dob = '';
     $patient_category = '';
+    $patient_category_name = '';
     $authorize_person = '';
+    $corporate_id = '';
+    $auth_no = '';
+    $employee_no = '';
+    $auth_issue_date = '';
+    $department_id = '';
+    $cost = '';
+    $subsidy_id = '';
+    $subsidy_created = '';
+    $subsidy_amount = '';
     if ($pid > 0) {
 
       $this->load->model('patient/patient_model');
+      $this->load->model('opd/opd_model', 'opd'); 
       $patient_data = $this->patient_model->get_by_id($pid);
-
+      // echo "<pre>";
+      // print_r($patient_data);
+      // die;
       /* present age*/
       /*if($patient_data['dob']=='1970-01-01' || $patient_data['dob']=="0000-00-00")
        {
@@ -267,6 +284,7 @@ class Opd_billing extends CI_Controller
         $age_m = $patient_data['age_m'];
         $age_d = $patient_data['age_d'];
         $patient_category = $patient_data['patient_category'];
+        $patient_category_name = $patient_data['patient_category_name'];
 
         if ($patient_data['dob'] == '1970-01-01' || $patient_data['dob'] == "0000-00-00") {
           $dob = '';
@@ -313,7 +331,7 @@ class Opd_billing extends CI_Controller
     if (isset($_GET['lid']) && !empty($_GET['lid']) && $_GET['lid'] > 0) {
       $lead_data = $this->opd_billing->crm_get_by_id($_GET['lid']);
       $this->session->set_userdata('crm_patient_id', $_GET['lid']);
-      //echo '<pre>'; print_r($lead_data);die;
+      // echo '<pre>'; print_r($lead_data);die;
       $patient_name = $lead_data['name'];
       $patient_email = $lead_data['email'];
       $mobile_no = $lead_data['phone'];
@@ -359,9 +377,19 @@ class Opd_billing extends CI_Controller
     $data['referal_hospital_list'] = $this->opd_billing->referal_hospital_list();
     $data['gardian_relation_list'] = $this->general_model->gardian_relation_list();
     $data['patient_category_list'] = $this->general_model->patient_category_list();
+    
+    $data['corporate_list'] = $this->opd->corporate_list();
+    $data['subsidy_list'] = $this->opd->subsidy_list();
+    $data['department_list'] = $this->opd->department_list();
+    //  echo "<pre>";
+    // print_r($data['patient_category_list']);
+    // die;
     $data['authrize_person_list'] = $this->general_model->authrize_person_list();
     $data['page_title'] = "OPD Procedure";
     $post = $this->input->post();
+      // echo "<pre>";
+    // print_r($post);
+    // die;
     if (empty($pid)) {
       $patient_code = generate_unique_id(4);
     }
@@ -387,7 +415,8 @@ class Opd_billing extends CI_Controller
       'dept_id' => "",
       'attended_doctor' => $attended_doctor,
       'address' => $address,
-      'address_second' => $address_second,
+      // 'address_second' => $address_second,
+      'address_second' => $address2,
       'address_third' => $address_third,
       'adhar_no' => $adhar_no,
       'city_id' => $city_id,
@@ -432,10 +461,22 @@ class Opd_billing extends CI_Controller
       'token_type' => $token_type,
       'token_no' => '',
       'patient_category' => $patient_category,
+      'patient_category_name' => $patient_category_name,
       'authorize_person' => '',
+      "corporate_id" => '',
+      "auth_no" => '',
+      "employee_no" => '',
+      "auth_issue_date" => '',
+      "department_id" => '',
+      "cost" => '',
+      "subsidy_id" => '',
+      "subsidy_created" => '',
+      "subsidy_amount" => '',
 
     );
-
+    // echo "<pre>";
+    //  print_r($data['form_data']);
+    //     die;
     if (isset($post) && !empty($post)) {
       //print"<pre>";print_r($data['form_data']); 
       $data['form_data'] = $this->_validatebilling();
@@ -750,6 +791,7 @@ class Opd_billing extends CI_Controller
       //$data['specialization_list'] = $this->general_model->specialization_list();
       $token_type = $this->opd_billing->get_token_setting();
       $token_type = $token_type['type'];
+      $this->load->model('opd/opd_model', 'opd');
       $this->load->model('general/general_model');
       $post = $this->input->post();
       $result = $this->opd_billing->get_by_id($id);
@@ -774,6 +816,9 @@ class Opd_billing extends CI_Controller
       $data['teeth_number_list'] = $this->general_model->teeth_number_list();
       $data['authrize_person_list'] = $this->general_model->authrize_person_list();
       $data['patient_category_list'] = $this->general_model->patient_category_list();
+      $data['corporate_list'] = $this->opd->corporate_list();
+      $data['subsidy_list'] = $this->opd->subsidy_list();
+      $data['department_list'] = $this->opd->department_list();
       //print_r($dental_booking_list);
       //print_r($dental_billed_list);
       // && empty($result['specialization_id'])
@@ -868,7 +913,7 @@ class Opd_billing extends CI_Controller
         'specialization_id' => $result['specialization_id'],
         'package_id' => $result['package_id'],
         'booking_date' => date('d-m-Y', strtotime($result['booking_date'])),
-        'next_app_date' => $next_app_date,
+        'next_app_date' => $next_app_date ?? '',
         'total_amount' => $result['total_amount'],
         'net_amount' => $result['net_amount'],
         'paid_amount' => $result['paid_amount'],
@@ -907,10 +952,20 @@ class Opd_billing extends CI_Controller
         'token_type' => $token_type,
         'token_no' => $result['token_no'],
         'patient_category' => $result['patient_category'],
+        'patient_category_name' => $result['patient_category_name'],
         'authorize_person' => $result['authorize_person'],
         'charges' => $result['charges'] ?? '',
         'quantity' => $result['quantity'] ?? 1,
         'amount' => $result['amount'] ?? '',
+        "corporate_id" => $result['corporate_id'],
+        "auth_no" => $result['auth_no'],
+        "employee_no" => $result['employee_no'],
+        "auth_issue_date" => $result['auth_issue_date'],
+        "department_id" => $result['department_id'],
+        "cost" => $result['cost'],
+        "subsidy_id" => $result['subsidy_id'],
+        "subsidy_created" => $result['subsidy_created'],
+        "subsidy_amount" => $result['subsidy_amount'],  
       );
 
 
@@ -931,7 +986,7 @@ class Opd_billing extends CI_Controller
 
           $booking_id = $this->opd_billing->save_booking();
           $this->session->set_userdata('opd_booking_id', $booking_id);
-          $this->session->set_flashdata('success', 'Billing updated successfully.');
+          $this->session->set_flashdata('success', 'Procedure updated successfully.');
           redirect(base_url('opd_billing/?status=print'));
 
         } else {
@@ -1046,9 +1101,9 @@ class Opd_billing extends CI_Controller
         'referral_hospital' => $post['referral_hospital'],
         'referred_by' => $post['referred_by'],
         'adhar_no' => $post['adhar_no'],
-        "insurance_type" => $insurance_type,
-        "insurance_type_id" => $insurance_type_id,
-        "ins_company_id" => $ins_company_id,
+        "insurance_type" => $post['insurance_type'],
+        "insurance_type_id" => $post['insurance_type_id'],
+        "ins_company_id" => $post['ins_company_id'],
         "polocy_no" => $post['polocy_no'],
         "tpa_id" => $post['tpa_id'],
         "ins_amount" => $post['ins_amount'],
@@ -1220,6 +1275,7 @@ class Opd_billing extends CI_Controller
         'quantity' => $post['quantity'],
         'amount' => $post['amount'],
         'patient_category' => $post['patient_category'],
+        'patient_category_name' => $post['patient_category_name'],
         'authorize_person' => $post['authorize_person'],
 
       );
@@ -1354,7 +1410,7 @@ class Opd_billing extends CI_Controller
         // 'diseases' => $post['diseases'],
         'particulars' => $post['particulars'],
         //'cheque_date'=>$post['cheque_date'],
-        'next_app_date' => $post['next_app_date'],
+        'next_app_date' => $post['next_app_date'] ?? '',
         'kit_amount' => $post['kit_amount'],
         'particulars_charges' => $post['particulars_charges'],
         'package_id' => $post['package_id'],

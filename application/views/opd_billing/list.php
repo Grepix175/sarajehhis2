@@ -367,19 +367,20 @@ $users_data = $this->session->userdata('auth_users');
                   <tr>
                     <th width="40" align="center"> <input type="checkbox" name="selectall" class="" id="selectAll_pr"
                         value=""> </th>
+                        <th> Token No. </th>
                     <?php $data = get_setting_value('PATIENT_REG_NO');
                     if (!empty($data) && isset($data)) { ?>
                       <th><?php echo $data; ?></th>
                     <?php } else { ?>
                       <th>Patient Reg. No.</th>
                     <?php } ?>
-                    <th> Receipt No. </th>
+                    <th> Procedure No. </th>
                     <th> Patient Name </th>
+                    <th> Patient Category Name </th>
 
                     <th>Gender</th>
                     <th>Mobile No.</th>
                     <th> Billing Date </th>
-                    <th> Token No. </th>
                     <!-- <th>Address</th> -->
                     <!-- <th>Father Name</th> -->
                     <th>Village/Town</th>
@@ -396,7 +397,7 @@ $users_data = $this->session->userdata('auth_users');
                     <th>Total Amount</th>
                     <th>Net Amount</th>
                     <th>Paid Amount</th>
-                    <th>Discount</th>
+                    <!-- <th>Discount</th> -->
                     <!-- <th> Doctor Name </th> -->
                     <th>Action </th>
                   </tr>

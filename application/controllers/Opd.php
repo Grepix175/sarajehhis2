@@ -22,7 +22,7 @@ class Opd extends CI_Controller
     $this->session->unset_userdata('opd_particular_billing');
     $this->session->unset_userdata('opd_particular_payment');
 
-    $data['page_title'] = 'Billing List';
+    $data['page_title'] = 'OPD Billing List';
     // Default Search Setting
     $this->load->model('default_search_setting/default_search_setting_model');
     $default_search_data = $this->default_search_setting_model->get_default_setting();
@@ -112,6 +112,7 @@ class Opd extends CI_Controller
       } else {
         $row[] = '';
       }
+      $row[] = $test->token_no;
       $row[] = $test->opd_type == 0 ? 'Normal' : 'FastTrack';
       $row[] = $test->patient_reg_no;
       $row[] = $test->booking_code;
@@ -174,7 +175,7 @@ class Opd extends CI_Controller
 
       // $row[] = $test->address;
       // $row[] = $test->father_husband_simulation . " " . $test->father_husband;
-      $row[] = $test->token_no;
+      
       // $row[] = $test->insurance_type;
       // $row[] = $test->insurance_company;
       // $row[] = $test->patient_source;
@@ -201,7 +202,7 @@ class Opd extends CI_Controller
       $row[] = number_format($test->total_amount, 2);
       $row[] = number_format($test->net_amount, 2);
       $row[] = number_format($test->paid_amount, 2);
-      $row[] = number_format($test->discount, 2);
+      // $row[] = number_format($test->discount, 2);
       // $row[] = $test->policy_no;
       //Action button /////
       $btn_confirm = "";
@@ -220,6 +221,7 @@ class Opd extends CI_Controller
 
         if (in_array('524', $users_data['permission']['action'])) {
           $btn_edit = ' <a class="btn-custom" href="' . base_url("opd/edit_booking/" . $test->id) . '" title="Edit Booking"><i class="fa fa-pencil"></i> Edit</a>';
+          $btn_edit = ' <a class="btn-custom" href="' . base_url("opd/edit_booking/" . $test->id) . '" title="Edit Booking"><i class="fa fa-pencil"></i> Edit</a>';
         }
 
 
@@ -237,7 +239,8 @@ class Opd extends CI_Controller
           if (in_array('1418', $users_data['permission']['action'])) {
             $print_url_eye = "'" . base_url('prescription/print_blank_prescriptions/' . $test->id . '/' . $test->branch_id) . "'";
             //$btn_prescription .= '<div class="btn-ipd">';
-            $btn_prescription .= '<li><a  href="' . base_url("eye/add_prescription/" . $test->id) . '" title="Add Prescription"><i class="fa fa-eye"></i> Add Eye Prescription</a></li>';
+            // $btn_prescription .= '<li><a  href="' . base_url("eye/add_prescription/" . $test->id) . '" title="Add Prescription"><i class="fa fa-eye"></i> Add Eye Prescription</a></li>';
+            $btn_prescription .= '';
             //$btn_prescription .='</div>';                
           }
         }
@@ -382,7 +385,8 @@ class Opd extends CI_Controller
       $btn_print = '<a class="btn-custom" href="javascript:void(0)" onClick="return print_window_page(' . $print_pdf_url . ')"  title="Print" ><i class="fa fa-print"></i> Print  </a>';
 
       $print_consolidated_url = "'" . base_url('opd/print_consolidate_dbooking_report/' . $test->id . '/' . $test->branch_id) . "'";
-      $opd_consolidated_bill = '<li> <a onClick="return print_window_page(' . $print_consolidated_url . ')" style="' . $test->id . '" title="Print Consolidated Bill"><i class="fa fa-print"></i> Print Consolidated Bill</a></li>';
+      // $opd_consolidated_bill = '<li> <a onClick="return print_window_page(' . $print_consolidated_url . ')" style="' . $test->id . '" title="Print Consolidated Bill"><i class="fa fa-print"></i> Print Consolidated Bill</a></li>';
+      $opd_consolidated_bill = '';
       $btn_print_label = ' <a onClick="return print_label(' . $test->id . ');"  href="javascript:void(0)" style="' . $test->id . '" title="Print"><i class="fa fa-print"></i> Print Label</a>';
       $print_mlc = '';
       if (!empty($test->mlc)) {
@@ -399,7 +403,8 @@ class Opd extends CI_Controller
         $flag_id = $get_pres->flag_id;
         $pres_id = $get_pres->pres_id;
       }
-      $btn_barcode = '<li><a  href="javascript:void(0)" onClick="return print_window_page(' . $print_barcode_url . ')"  title="Print Barcode" ><i class="fa fa-barcode"></i> Print Barcode </a></li>';
+      // $btn_barcode = '<li><a  href="javascript:void(0)" onClick="return print_window_page(' . $print_barcode_url . ')"  title="Print Barcode" ><i class="fa fa-barcode"></i> Print Barcode </a></li>';
+      $btn_barcode = '';
 
 
 
@@ -1112,7 +1117,7 @@ class Opd extends CI_Controller
 
     $validate_date = date('Y-m-d', strtotime(' + ' . $validity . ' days'));
     $validatedate = date('d-m-Y', strtotime($validate_date));
-    $data['page_title'] = "Billing";
+    $data['page_title'] = "OPD Billing";
 
 
 
@@ -1475,7 +1480,7 @@ class Opd extends CI_Controller
       $data['corporate_list'] = $this->opd->corporate_list();
       $data['subsidy_list'] = $this->opd->subsidy_list();
       $data['department_list'] = $this->opd->department_list();
-      $data['page_title'] = "Update OPD Booking";
+      $data['page_title'] = "Update OPD Billing";
       $post = $this->input->post();
       $data['form_error'] = '';
       $token_type = $this->opd->get_token_setting();
@@ -1800,8 +1805,8 @@ class Opd extends CI_Controller
         "relation_type" => $post['relation_type'],
         "relation_simulation_id" => $post['relation_simulation_id'],
         'token_no' => $post['token_no'],
-        'mlc_status' => $result['mlc_status'],
-        'mlc' => $result['mlc'],
+        'mlc_status' => $post['mlc_status'],
+        'mlc' => $post['mlc'],
         'patient_category' => $post['patient_category'],
         'authorize_person' => $post['authorize_person'],
       );
@@ -2966,7 +2971,7 @@ class Opd extends CI_Controller
     $data['template_data'] = $template_format;
     //print_r($data['template_data']);
     $data['all_detail'] = $get_by_id_data;
-    $data['page_type'] = 'Booking';
+    $data['page_type'] = 'OPD Billing';
     // print_r($data['all_detail']);die;
     $this->load->model('general/general_model');
     $transaction_id = $this->general_model->get_transaction_id($booking_id, 2, 7);   //2 section id and 7 type

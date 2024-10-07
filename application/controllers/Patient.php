@@ -192,7 +192,8 @@ class Patient extends CI_Controller
                 }
             }
             if (in_array('117', $users_data['permission']['action'])) {
-                $btn_view = ' <a class="" onclick="return view_patient(' . $patient->id . ',' . $patient->branch_id . ')" href="javascript:void(0)" title="View"><i class="fa fa-info-circle"></i> View </a>';
+                // $btn_view = ' <a class="" onclick="return view_patient(' . $patient->id . ',' . $patient->branch_id . ')" href="javascript:void(0)" title="View"><i class="fa fa-info-circle"></i> View </a>';
+                $btn_view = '';
             }
 
             if (in_array('358', $users_data['permission']['section'])) {
@@ -205,7 +206,8 @@ class Patient extends CI_Controller
 
 
             $barcode_url = "'" . base_url('patient/print_barcode/' . $patient->id) . "'";
-            $btn_barcode = '<li><a onClick="return print_barcode_page(' . $barcode_url . ')" href="javascript:void(0)" title="Print Barcode" data-url=""><i class="fa fa-barcode"></i>Print Barcode</a></li>';
+            // $btn_barcode = '<li><a onClick="return print_barcode_page(' . $barcode_url . ')" href="javascript:void(0)" title="Print Barcode" data-url=""><i class="fa fa-barcode"></i>Print Barcode</a></li>';
+            $btn_barcode = '';
 
             if ($users_data['parent_id'] == $patient->branch_id) {
                 if (in_array('116', $users_data['permission']['action'])) {
@@ -213,11 +215,13 @@ class Patient extends CI_Controller
                 }
             }
             if (in_array('588', $users_data['permission']['action'])) {
-                $btn_appointment = '<li><a href="' . base_url('appointment/add/' . $patient->id) . '" style="' . $patient->id . '" title="Opd Booking"><i class="fa fa-plus"></i> Appointment</a></li>';
+                // $btn_appointment = '<li><a href="' . base_url('appointment/add/' . $patient->id) . '" style="' . $patient->id . '" title="Opd Booking"><i class="fa fa-plus"></i> Appointment</a></li>';
+                $btn_appointment = '';
             }
 
             if (in_array('523', $users_data['permission']['action'])) {
-                $btn_booking = '<li><a href="' . base_url('opd/booking/' . $patient->id) . '" style="' . $patient->id . '" title="Opd Booking"><i class="fa fa-plus"></i> Billing</a></li>';
+                // $btn_booking = '<li><a href="' . base_url('opd/booking/' . $patient->id) . '" style="' . $patient->id . '" title="Opd Booking"><i class="fa fa-plus"></i>OPD Billing</a></li>';
+                $btn_booking = '';
             }
             if (in_array('319', $users_data['permission']['section'])) {
                 $btn_camp_booking = '<li><a href="' . base_url('camp/booking/' . $patient->id) . '" style="' . $patient->id . '" title="Camp Booking"><i class="fa fa-plus"></i> Camp Booking</a></li>';
