@@ -2131,7 +2131,7 @@ class Opd_billing extends CI_Controller
     $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
 
     // Field names (header row) should start in row 3
-    $fields = array('Patient Reg. No.', 'Receipt No', 'Patient Name', 'Gender', 'Mobile No.', 'Billing Date', 'Token No', 'Village/Town', 'Referred By', 'Mode of Payment', 'Total Amount', 'Net Amount', 'Paid Amount', 'Discount');
+    $fields = array('Patient Reg. No.', 'Receipt No', 'Patient Name', 'Gender', 'Mobile No.', 'Billing Date', 'Token No', 'Village/Town', 'Referred By', 'Mode of Payment', 'Total Amount', 'Net Amount', 'Paid Amount');
     
     $col = 0; // Initialize the column index
     foreach ($fields as $field) {
@@ -2141,9 +2141,9 @@ class Opd_billing extends CI_Controller
     }
     
     // Style for header row (Row 3)
-    $objPHPExcel->getActiveSheet()->getStyle('A3:N3')->getFont()->setBold(true);
-    $objPHPExcel->getActiveSheet()->getStyle('A3:N3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-    $objPHPExcel->getActiveSheet()->getStyle('A3:N3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('A3:M3')->getFont()->setBold(true);
+    $objPHPExcel->getActiveSheet()->getStyle('A3:M3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('A3:M3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
     // Fetching the OPD data (assuming you have the data in $list)
     $list = $this->opd_billing->search_opd_data();
@@ -2168,7 +2168,7 @@ class Opd_billing extends CI_Controller
                 $opds->total_amount,
                 $opds->net_amount,
                 $opds->paid_amount,
-                $opds->discount
+                // $opds->discount
             );
 
             foreach ($data as $cellValue) {

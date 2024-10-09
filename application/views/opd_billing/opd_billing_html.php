@@ -50,7 +50,6 @@ td
       <th>Total Amount</th>
       <th>Net Amount</th>
       <th>Paid Amount</th>
-      <th>Discount</th>
 
  </tr>
  <?php
@@ -79,7 +78,6 @@ td
           <td><?php echo $opds->total_amount; ?></td>
           <td><?php echo $opds->net_amount; ?></td>
           <td><?php echo $opds->paid_amount; ?></td>
-          <td><?php echo $opds->discount; ?></td>
      </tr>
    	   <?php
    	   $i++;	

@@ -597,7 +597,7 @@ class Patient_model extends CI_Model
 
 			$data_id = $post['data_id'];
 			$data = array(
-				"email" => $post['patient_email'],
+				"email" => $post['patient_email'] ?? '',
 			);
 			$this->db->where('parent_id', $data_id);
 			$this->db->where('users_role', '4');
