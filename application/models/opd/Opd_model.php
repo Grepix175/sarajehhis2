@@ -1649,7 +1649,7 @@ class Opd_model extends CI_Model
 				'parent_id' => $booking_id,
 				'branch_id' => $branch_id,
 				'section_id' => '2',
-				'hospital_id' => $post['referral_hospital'],
+				'hospital_id' => $post['referral_hospital'] ?? '',
 				'doctor_id' => $doctors_id,
 				'patient_id' => $patient_id,
 				'total_amount' => $post['total_amount'],
