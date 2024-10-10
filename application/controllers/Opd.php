@@ -248,6 +248,9 @@ class Opd extends CI_Controller
 
         if (in_array('2413', $users_data['permission']['action'])) {
 
+          $flag = 'eye_history'; 
+          $btn_history .= '<li><a href="' . base_url("eye/add_eye_prescription/test/" . $test->id . "?flag=" . $flag) . '" title="Add Prescription"><i class="fa fa-history"></i> History</a></li>';
+
           $btn_prescription .= '<li><a  href="' . base_url("eye/add_eye_prescription/test/" . $test->id) . '" title="Add Prescription"><i class="fa fa-eye"></i> Add Adv. Eye Prescription</a></li>';
 
           $btn_prescription .= '<li> <a onClick="return update_patient_arrival(' . $test->id . ')" href="javascript:void(0)" title="Patient Status" data-url="512"><i class="fa fa-pencil"></i> Patient Status</a></li>';
@@ -470,7 +473,7 @@ class Opd extends CI_Controller
       $btn_a = '<div class="slidedown">
         <button disabled class="btn-custom">More <span class="caret"></span></button>
         <ul class="slidedown-content">
-          ' . $btn_barcode . $opd_consolidated_bill . $btn_prescription . $btn_download_prescription . $checking_status . $btn_download_image . $btn_upload_pre . $btn_view_upload_pre . $btn_view_test . $ipd_booking . $btn_print_label . '
+          ' . $btn_barcode . $opd_consolidated_bill . $btn_history . $btn_prescription . $btn_download_prescription . $checking_status . $btn_download_image . $btn_upload_pre . $btn_view_upload_pre . $btn_view_test . $ipd_booking . $btn_print_label . '
         </ul>
       </div> ';
       // Added By Nitin Sharma Ipd Booking Button  06/02/2024

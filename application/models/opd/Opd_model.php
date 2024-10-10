@@ -465,6 +465,24 @@ class Opd_model extends CI_Model
 		$query = $this->db->get();
 		return $query->row_array();
 	}
+	
+	public function get_opd_details($id)
+	{
+	   // echo "<pre>";
+	   // print_r($id);
+	   // die;
+		$user_data = $this->session->userdata('auth_users');
+		$this->db->select('hms_opd_booking.*');
+
+		$this->db->from('hms_opd_booking');
+		$this->db->where('hms_opd_booking.branch_id', $user_data['parent_id']);
+		$this->db->where('hms_opd_booking.id', $id);
+		$this->db->where('hms_opd_booking.is_deleted', '0');
+		$query = $this->db->get();
+		return $query->row_array();
+	}
+	
+	
 
 	
 

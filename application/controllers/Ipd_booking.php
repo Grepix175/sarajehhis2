@@ -775,7 +775,7 @@ if(in_array('1507',$users_data['permission']['action']))
       $objPHPExcel->getProperties()->setTitle("export")->setDescription("none");
       $objPHPExcel->setActiveSheetIndex(0);
       
-      $fields = array('IPD No.','Patient Reg. No.','Patient Name','Gender/Age','Mobile No.','Insurance Type','Insurance Company','Admission Date','Doctor Name','Room Type','Room No.','Bed No.','Address','Remarks', 'Discharge Date', 'Diagnosis');
+      $fields = array('Id','Token No.','IPD No.',get_setting_value('PATIENT_REG_NO'), 'Patient Name','Category','Village/Town','Gender','Age','Mobile No.','Admission Date','Surgeon Name','Operation Name','Package Name','Eye Details','Surgery Type','Operation Room Type','Advance Amount');
       $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
       $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::VERTICAL_CENTER);
       $col = 0;
@@ -870,7 +870,7 @@ if(in_array('1507',$users_data['permission']['action']))
                $createdate = date('d-M-Y h:i A',strtotime($reports->discharge_date));
              }
              
-             array_push($rowData,$reports->ipd_no,$reports->patient_code,$reports->patient_name,$age_gender,$reports->mobile_no,$reports->insurance_type,$reports->insurance_company,date('d-M-Y',strtotime($reports->admission_date)),$reports->doctor_name,$reports->room_category,$reports->room_no,$reports->bad_name,$reports->address,$reports->remarks,$createdat, $reports->diagnosis);
+             array_push($rowData,$i,$reports->token,$reports->ipd_no,$reports->patient_code,$reports->patient_name,$reports->patient_category_name,$reports->address,$genders[$reports->gender],$age,$reports->mobile_no,date('d-M-Y',strtotime($reports->admission_date)),$reports->surgeon_name,$reports->operation_name,$reports->package_name,$reports->eye_details,$reports->surgery_type,$reports->room_type,$reports->advance_payment);
              $count = count($rowData);
              for($j=0;$j<$count;$j++)
              {
