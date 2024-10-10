@@ -229,7 +229,8 @@ class Ipd_booking extends CI_Controller {
   {  
     unauthorise_permission(121,733);
     $list = $this->ipd_booking->get_datatables();  
-    
+    // print_r($list);
+    // die();
     $data = array();
     $no = $_POST['start'];
     $i = 1;
@@ -253,7 +254,7 @@ class Ipd_booking extends CI_Controller {
       $row[] = $ipd_booking->ipd_no;
       $row[] = $ipd_booking->patient_code;
       $row[] = $ipd_booking->patient_name;
-      $row[] = $ipd_booking->patient_category; 
+      $row[] = $ipd_booking->patient_category_name; 
       $row[] = $ipd_booking->address;
       //$row[] = $purchase->total_amount;
       $time = "";
@@ -321,7 +322,7 @@ class Ipd_booking extends CI_Controller {
             // $row[] = $ipd_booking->createdate;
             // $row[] = $ipd_booking->insurance_type;
             $row[] = $ipd_booking->surgeon_name;
-            $row[] = $ipd_booking->operation_name;
+            $row[] = $ipd_booking->operation_nm;
             $row[] = $ipd_booking->package_name;
             $row[] = $ipd_booking->eye_details;
             $row[] = $ipd_booking->surgery_type;
