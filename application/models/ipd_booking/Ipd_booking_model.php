@@ -61,6 +61,8 @@ class Ipd_booking_model extends CI_Model
             hms_ipd_booking.token,
             (CASE WHEN hms_patient.gender = 1 THEN 'Male' ELSE 'Female' END) as gender,
             hms_doctors.doctor_name as surgeon_name,
+            hms_patient_category.patient_category as patient_category_name,
+            hms_ot_management.name as operation_nm,
             hms_ipd_booking.*, 
         ");
 
@@ -77,6 +79,10 @@ class Ipd_booking_model extends CI_Model
         $this->db->join('hms_doctors as doc', 'doc.id = hms_ipd_booking.referral_doctor', 'left');
         $this->db->join('hms_hospital', 'hms_hospital.id = hms_ipd_booking.referral_hospital', 'left');
         $this->db->join('hms_ipd_patient_to_charge', 'hms_ipd_patient_to_charge.ipd_id = hms_ipd_booking.id AND hms_ipd_patient_to_charge.type = 1', 'left');
+        $this->db->join('hms_patient_category', 'hms_patient_category.id = hms_ipd_booking.patient_category', 'left');
+        $this->db->join('hms_ot_management', 'hms_ot_management.id = hms_ipd_booking.operation_name', 'left');
+
+
 
         // Filter out deleted records
         $this->db->where('hms_ipd_booking.is_deleted', '0');
@@ -316,7 +322,7 @@ class Ipd_booking_model extends CI_Model
     {
         $search = $this->session->userdata('ipd_booking_search');
         $user_data = $this->session->userdata('auth_users');
-        $this->db->select("hms_ipd_booking.*,hms_patient.*,hms_users.*,hms_ipd_packages.name as package_name,hms_ipd_panel_company.panel_company,hms_ipd_panel_type.panel_type,hms_doctors.doctor_name,hms_ipd_rooms.room_no,hms_ipd_room_to_bad.bad_no,hms_ipd_room_to_bad.bad_name,hms_ipd_room_category.room_category,hms_ipd_booking.created_date as createdate, concat_ws(' ',hms_patient.address, hms_patient.address2, hms_patient.address3) as address,hms_patient.age,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d,ins_type.insurance_type, ins_cmpy.insurance_company"); 
+        $this->db->select("hms_ipd_booking.*,hms_patient.*,hms_users.*,hms_ipd_packages.name as package_name,hms_ipd_panel_company.panel_company,hms_ipd_panel_type.panel_type,hms_doctors.doctor_name,hms_ipd_rooms.room_no,hms_ipd_room_to_bad.bad_no,hms_ipd_room_to_bad.bad_name,hms_ipd_room_category.room_category,hms_ipd_booking.created_date as createdate, concat_ws(' ',hms_patient.address, hms_patient.address2, hms_patient.address3) as address,hms_patient.age,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d,ins_type.insurance_type, ins_cmpy.insurance_company,hms_patient_category.patient_category as patient_category_name"); 
         $this->db->join('hms_patient','hms_patient.id = hms_ipd_booking.patient_id','left');
         
         $this->db->join('hms_insurance_type as ins_type','ins_type.id=hms_ipd_booking.panel_type', 'left');
