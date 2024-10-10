@@ -234,9 +234,10 @@ class Ipd_booking extends CI_Controller {
     $no = $_POST['start'];
     $i = 1;
     $total_num = count($list);
-        //$row='';
+    //$row='';
     foreach ($list as $ipd_booking) 
     { 
+      // echo "<pre>";print_r($ipd_booking);die;
 
       $no++;
       $row = array();
@@ -248,25 +249,27 @@ class Ipd_booking extends CI_Controller {
         
       }          
       $row[] = '<input type="checkbox" name="ipd_booking[]" class="checklist" value="'.$ipd_booking->id.'">';  
+      $row[] = $ipd_booking->token;
       $row[] = $ipd_booking->ipd_no;
       $row[] = $ipd_booking->patient_code;
       $row[] = $ipd_booking->patient_name;
-            //$row[] = $purchase->total_amount;
-      $row[] = $ipd_booking->mobile_no;
+      $row[] = $ipd_booking->patient_category; 
+      $row[] = $ipd_booking->address;
+      //$row[] = $purchase->total_amount;
       $time = "";
       if(date('h:i:s',strtotime($ipd_booking->admission_date. $ipd_booking->admission_time))!='12:00:00')
       {
         $time = date('h:i A',strtotime($ipd_booking->admission_date. $ipd_booking->admission_time));
       }
-            $row[] = date('d-m-Y',strtotime($ipd_booking->admission_date. $ipd_booking->admission_time)).' '.$time; //$ipd_booking->admission_date;
-            $row[] = "Dr. ".$ipd_booking->doctor_name;
-            $row[] = $ipd_booking->room_no;
-            $row[] = $ipd_booking->bad_name;
-            $row[] = $ipd_booking->address;
-            $row[] = $ipd_booking->remarks;
+      // $row[] = date('d-m-Y',strtotime($ipd_booking->admission_date. $ipd_booking->admission_time)).' '.$time; //$ipd_booking->admission_date;
+      // $row[] = "Dr. ".$ipd_booking->doctor_name;
+      // $row[] = $ipd_booking->room_no;
+      // $row[] = $ipd_booking->bad_name;
+      // $row[] = $ipd_booking->remarks;
+
             
 
-            $row[] = $ipd_booking->father_husband_simulation." ".$ipd_booking->father_husband;
+            // $row[] = $ipd_booking->father_husband_simulation." ".$ipd_booking->father_husband;
             
             $age_y = isset($ipd_booking->age_y) ? $ipd_booking->age_y : null;
             $age_m = isset($ipd_booking->age_m) ? $ipd_booking->age_m : null;
@@ -311,30 +314,20 @@ class Ipd_booking extends CI_Controller {
             
             
             
-            $row[] = $ipd_booking->gender.'/'.$age;
-            $row[] = $ipd_booking->patient_email;
-            $row[] = $ipd_booking->insurance_type;
-            $row[] = $ipd_booking->insurance_company;
-            
-            $row[] = $ipd_booking->mlc;
+            $row[] = $ipd_booking->gender;
+            $row[] = $age;
+            $row[] = $ipd_booking->mobile_no;
+            $row[] = $ipd_booking->admission_date;
+            // $row[] = $ipd_booking->createdate;
+            // $row[] = $ipd_booking->insurance_type;
+            $row[] = $ipd_booking->surgeon_name;
+            $row[] = $ipd_booking->operation_name;
             $row[] = $ipd_booking->package_name;
+            $row[] = $ipd_booking->eye_details;
+            $row[] = $ipd_booking->surgery_type;
             $row[] = $ipd_booking->room_type;
-            $row[] = $ipd_booking->doctor_hospital_name;
             $row[] = $ipd_booking->advance_payment;
-            $row[] = $ipd_booking->reg_charge;
-            $row[] = $ipd_booking->panel_polocy_no;
-            $row[] = str_replace(';','; ',$ipd_booking->diagnosis);
-            
-            if($ipd_booking->discharge_date =='0000-00-00 00:00:00' || empty($ipd_booking->discharge_date))
-            {
-            	$row[] ='';	
-            }
-            else
-            {
-            	$row[] = date('d-M-Y h:i A',strtotime($ipd_booking->discharge_date));
-            }
-            
-            
+
             $users_data = $this->session->userdata('auth_users');
             $btnedit='';
             $btndelete='';
@@ -566,72 +559,72 @@ class Ipd_booking extends CI_Controller {
     //  {
       $btn_new_born =  '<a  href="javascript:void(0);" onclick="new_born_baby('.$ipd_booking->id.')" title="New Born"><i class="fa fa-child"></i> New Born</a>';
       
-  //   }
-  //   else
-  //   {
-  //    $btn_new_born =  '';
-  //  }
-   
-   /*$btn_b = '<div class="slidedown">
-   <button  class="btn-custom">More <span class="caret"></span></button>
-   <ul class="slidedown-content">
-   '.$btnprint.$btn_admission_print.$btn_barcode.$btn_admission_consent_print.$btnadvdischarge_summary.$btndischarge_summary.$btndischarge_bill.$btn_print_discharge.$btn_final_receipt.$ipd_summarized_bill.$btn_print_letterhead_discharge.$ipd_discharge_bill_according_group.$ipd_consolidated_bill.$btndisprogress_report.$btn_print_progress.$btn_readmit.$btngipsadischarge_bill.$ipd_gipsa_summarized_bill.$ipd_gipsa_discharge_bill_according_group.$btngipsadischarge_summary.$btn_new_born.$btn_sales_vaccination.$btn_recipient_booking.$btnprintmlc.$btn_print_label.$btn_print_label_16.'
-   </ul>
-   </div> ';*/
-   
-   $btn_nabh = '';
-   if(in_array('2074',$users_data['permission']['action']))
-   {
-    $btn_nabh = ' <a  onClick="return nabh_print_ipd_booking('.$ipd_booking->id.')" href="javascript:void(0)" title="Print NABH" data-url="512"><i class="fa fa-print"></i> Print NABH</a> ';
-  }
-  
-   
-   $btn_b = '<div class="slidedown">
-   <button  class="btn-custom">More <span class="caret"></span></button>
-   <ul class="slidedown-content">
-   '.$btnprint.$btn_admission_print.$btn_barcode.$btn_admission_consent_print.$btn_final_receipt.$btndischarge_bill.$btngipsadischarge_bill.$btn_readmit.$btnadvdischarge_summary.$btndischarge_summary.$btn_print_discharge.$btn_print_letterhead_discharge.$ipd_discharge_bill_according_group.$ipd_gipsa_discharge_bill_according_group.$ipd_summarized_bill.$ipd_gipsa_summarized_bill.$ipd_consolidated_bill.$btn_new_born.$btnprintmlc.$btn_print_label.$btn_print_label_16.$btn_print_label_24.$btn_print_label_36.$btn_nabh.'
-   </ul>
-   </div> ';
-   
-   
-   
+    //   }
+    //   else
+        //   {
+        //    $btn_new_born =  '';
+        //  }
+      
+      /*$btn_b = '<div class="slidedown">
+      <button  class="btn-custom">More <span class="caret"></span></button>
+      <ul class="slidedown-content">
+      '.$btnprint.$btn_admission_print.$btn_barcode.$btn_admission_consent_print.$btnadvdischarge_summary.$btndischarge_summary.$btndischarge_bill.$btn_print_discharge.$btn_final_receipt.$ipd_summarized_bill.$btn_print_letterhead_discharge.$ipd_discharge_bill_according_group.$ipd_consolidated_bill.$btndisprogress_report.$btn_print_progress.$btn_readmit.$btngipsadischarge_bill.$ipd_gipsa_summarized_bill.$ipd_gipsa_discharge_bill_according_group.$btngipsadischarge_summary.$btn_new_born.$btn_sales_vaccination.$btn_recipient_booking.$btnprintmlc.$btn_print_label.$btn_print_label_16.'
+      </ul>
+      </div> ';*/
+      
+      $btn_nabh = '';
+      if(in_array('2074',$users_data['permission']['action']))
+      {
+        $btn_nabh = ' <a  onClick="return nabh_print_ipd_booking('.$ipd_booking->id.')" href="javascript:void(0)" title="Print NABH" data-url="512"><i class="fa fa-print"></i> Print NABH</a> ';
+      }
+      
+      
+      $btn_b = '<div class="slidedown">
+      <button  class="btn-custom">More <span class="caret"></span></button>
+      <ul class="slidedown-content">
+      '.$btnprint.$btn_admission_print.$btn_barcode.$btn_admission_consent_print.$btn_final_receipt.$btndischarge_bill.$btngipsadischarge_bill.$btn_readmit.$btnadvdischarge_summary.$btndischarge_summary.$btn_print_discharge.$btn_print_letterhead_discharge.$ipd_discharge_bill_according_group.$ipd_gipsa_discharge_bill_according_group.$ipd_summarized_bill.$ipd_gipsa_summarized_bill.$ipd_consolidated_bill.$btn_new_born.$btnprintmlc.$btn_print_label.$btn_print_label_16.$btn_print_label_24.$btn_print_label_36.$btn_nabh.'
+      </ul>
+      </div> ';
+      
+      
+      
 
-  $row[] = $btnedit.$btnview.$btndelete.$btn_b;
-}
-else
-{
- if(in_array('785',$users_data['permission']['action']))
- {
-               //$btndischarge_bill = '<li><a  href="javascript:void(0)" onclick="confirmation_box('.$ipd_booking->id.','.$ipd_booking->patient_id.');"  title="Discharge Bill" data-url="512"> <i class="fa fa-database" aria-hidden="true"></i> Discharge Bill</a></li>';
-  
-  $btndischarge_bill =  '<a href="javascript:void(0)" onclick="generate_discharge_bill('.$ipd_booking->id.','.$ipd_booking->patient_id.',1)" title="Discharge Bill"><i class="fa fa-database" aria-hidden="true"></i> Discharge Bill</a>';
+      $row[] = $btnedit.$btnview.$btndelete.$btn_b;
+    }
+    else
+    {
+    if(in_array('785',$users_data['permission']['action']))
+    {
+                  //$btndischarge_bill = '<li><a  href="javascript:void(0)" onclick="confirmation_box('.$ipd_booking->id.','.$ipd_booking->patient_id.');"  title="Discharge Bill" data-url="512"> <i class="fa fa-database" aria-hidden="true"></i> Discharge Bill</a></li>';
+      
+      $btndischarge_bill =  '<a href="javascript:void(0)" onclick="generate_discharge_bill('.$ipd_booking->id.','.$ipd_booking->patient_id.',1)" title="Discharge Bill"><i class="fa fa-database" aria-hidden="true"></i> Discharge Bill</a>';
 
-}
+    }
 
-if(in_array('785',$users_data['permission']['action']))
-{
-               //$btndischarge_bill = '<li><a   onclick="confirmation_box('.$ipd_booking->id.','.$ipd_booking->patient_id.');"  title="Discharge Bill" data-url="512"> <i class="fa fa-database" aria-hidden="true"></i> Discharge Bill</a></li>';
-  
-  $btngipsadischarge_bill =  '<a  onclick="generate_gipsa_discharge_bill('.$ipd_booking->id.','.$ipd_booking->patient_id.',1)" title="Discharge Bill"><i class="fa fa-database" aria-hidden="true"></i> Gipsa Discharge Bill</a>';
+    if(in_array('785',$users_data['permission']['action']))
+    {
+                  //$btndischarge_bill = '<li><a   onclick="confirmation_box('.$ipd_booking->id.','.$ipd_booking->patient_id.');"  title="Discharge Bill" data-url="512"> <i class="fa fa-database" aria-hidden="true"></i> Discharge Bill</a></li>';
+      
+      $btngipsadischarge_bill =  '<a  onclick="generate_gipsa_discharge_bill('.$ipd_booking->id.','.$ipd_booking->patient_id.',1)" title="Discharge Bill"><i class="fa fa-database" aria-hidden="true"></i> Gipsa Discharge Bill</a>';
 
-}
+    }
 
-$btn_recipient_booking='';
-if(in_array('1507',$users_data['permission']['action'])) 
-{
+    $btn_recipient_booking='';
+    if(in_array('1507',$users_data['permission']['action'])) 
+    {
 
- $btn_recipient_booking = '<li><a href="'.base_url('blood_bank/recipient/add/ipd_'.$ipd_booking->id).'" style="'.$ipd_booking->id.'" title="Blood Recipient"><i class="fa fa-plus"></i> Blood Recipient</a></li>';
-}
+    $btn_recipient_booking = '<li><a href="'.base_url('blood_bank/recipient/add/ipd_'.$ipd_booking->id).'" style="'.$ipd_booking->id.'" title="Blood Recipient"><i class="fa fa-plus"></i> Blood Recipient</a></li>';
+    }
 
-// if($ipd_booking->gender=='Female')
-// {
-  $btn_new_born =  '<a  href="javascript:void(0);" onclick="new_born_baby('.$ipd_booking->id.')" title="New Born"><i class="fa fa-child"></i> New Born</a>';
-  
-// }
-// else
-// {
-//  $btn_new_born =  '';
-// }
+    // if($ipd_booking->gender=='Female')
+    // {
+      $btn_new_born =  '<a  href="javascript:void(0);" onclick="new_born_baby('.$ipd_booking->id.')" title="New Born"><i class="fa fa-child"></i> New Born</a>';
+      
+    // }
+    // else
+    // {
+    //  $btn_new_born =  '';
+    // }
 
 
              /*$print_label_url = "'".base_url('ipd_booking/print_template/').$ipd_booking->id;
@@ -665,6 +658,30 @@ if(in_array('1507',$users_data['permission']['action']))
             
             $row[] = $btnedit.$btnview.$btndelete.$btn_a;
     }
+
+            $row[] = $ipd_booking->patient_email;
+            $row[] = $ipd_booking->insurance_type;
+            $row[] = $ipd_booking->insurance_company;
+            
+            $row[] = $ipd_booking->mlc;
+            $row[] = $ipd_booking->package_name;
+            $row[] = $ipd_booking->doctor_hospital_name;
+            $row[] = $ipd_booking->advance_payment;
+            $row[] = $ipd_booking->reg_charge;
+            $row[] = $ipd_booking->panel_polocy_no;
+            $row[] = str_replace(';','; ',$ipd_booking->diagnosis);
+            
+            if($ipd_booking->discharge_date =='0000-00-00 00:00:00' || empty($ipd_booking->discharge_date))
+            {
+            	$row[] ='';	
+            }
+            else
+            {
+            	$row[] = date('d-M-Y h:i A',strtotime($ipd_booking->discharge_date));
+            }
+            
+            
+            
           
           $data[] = $row;
           $i++;
@@ -678,10 +695,11 @@ if(in_array('1507',$users_data['permission']['action']))
                         "recordsFiltered" => $recordsFiltered, //$this->ipd_booking->count_filtered(),
                         "data" => $data,
                       );
-        //print_r($output);
+        // print_r($output);die;
         //output to json format
         echo json_encode($output);
-      }
+  }
+
       function save_new_born()
       {
         $post= $this->input->post();
@@ -770,6 +788,8 @@ if(in_array('1507',$users_data['permission']['action']))
 
     public function ipd_booking_excel()
     {
+      $list = $this->ipd_booking->search_report_data();
+      // echo "<pre>";print_r($list);die;
       
       $this->load->library('excel');
       $this->excel->IO_factory();
@@ -1079,6 +1099,7 @@ if(in_array('1507',$users_data['permission']['action']))
     {    
       $data['print_status']="";
       $data['data_list'] = $this->ipd_booking->search_report_data();
+      // echo "<pre>";print_r($data);die;
       $this->load->view('ipd_booking/ipd_booking_html',$data);
       $html = $this->output->get_output();
       $this->load->library('pdf');
@@ -1162,6 +1183,7 @@ if(in_array('1507',$users_data['permission']['action']))
       $vendor_code = "";
       $name = "";
       $patient_name = "";
+      $state_id = "";
       $mobile_no = "";
       $country_id = "99";
       $email = "";
@@ -1170,6 +1192,17 @@ if(in_array('1507',$users_data['permission']['action']))
       $simulation_id="";
       $referral_doctor="";
       $corporate_id = '';
+      $operation_name='';
+      $anaesthesia='';
+      $surgery_type='';
+      $iol_power='';
+      $iol_type='';
+      // $iol_le='';
+      $brand='';
+      $operator='';
+      $balance='';
+      $corporate_full_facility='';
+      $total_amount='';
       $relation_type="";
       $relation_name="";
       $relation_simulation_id="";
@@ -1182,10 +1215,10 @@ if(in_array('1507',$users_data['permission']['action']))
 
       //   $eye_detail=$post['eye_details'];
       // }
-      // echo "<pre>";print_r($pid);die;
       if($pid>0)
       {
-       $patient = $this->ipd_booking->get_patient_by_id($pid);
+        $patient = $this->ipd_booking->get_patient_by_id($pid);
+        // echo "<pre>";print_r($patient);die;
 
           
        
@@ -1216,6 +1249,8 @@ if(in_array('1507',$users_data['permission']['action']))
               $address_second = $patient['address2'];
               $address_third = $patient['address3'];
               $mobile_no = $patient['mobile_no'];
+              $state_id = $patient['state_id'];
+              $patient_category = $patient['patient_category'];
               $email = $patient['patient_email'];
               $relation_type=$patient['relation_type'];
               $relation_name=$patient['relation_name'];
@@ -1236,7 +1271,8 @@ if(in_array('1507',$users_data['permission']['action']))
             // $mobile_no = $lead_data['phone'];
             $age_m=$lead_data['age_m'];
             $age_d=$lead_data['age_d'];
-            $age_y=$lead_data['age_y']; 
+            $age_y=$lead_data['age_y'];
+            $operation_name =  $lead_data['ot_id'];  
             $country_id = $lead_data['country_id'];
             $address = $lead_data['address'];
             $address_second = $lead_data['address2'];
@@ -1263,8 +1299,19 @@ if(in_array('1507',$users_data['permission']['action']))
          $data['room_type_list']=$this->general_model->room_type_list();
          $data['referal_hospital_list'] = $this->general_model->referal_hospital_list(); 
          $data['corporate_list'] = $this->ipd_booking->corporate_list();
+         $data['operation_list']= $this->ipd_booking->operation_list();
          $data['department_list'] = $this->ipd_booking->department_list();
          $data['subsidy_list'] = $this->ipd_booking->subsidy_list();
+         $data['brand_list'] = $this->ipd_booking->brand_list();
+         $data['iol_data']=$this->ipd_booking->get_iol_section_list();
+         $today_entry_count = $this->ipd_booking->get_today_entry_count();
+
+        // Generate token based on the count
+        $token_number = $today_entry_count + 1; // Starts at 1 if there are no entries
+
+        // Pass the token to the view
+        $data['token'] = $token_number;
+
 
          if (!empty($post['branch_id'])) {
           $data['insurance_type_list'] = $this->general_model->insurance_type_list($post['branch_id']);
@@ -1296,6 +1343,7 @@ if(in_array('1507',$users_data['permission']['action']))
           "gender"=>$gender,
           "age_y"=>$age_y,
           'adhar_no'=>$adhar_no,
+          'state_id'=>$state_id,
           "address"=>$address,
           "address_second"=>$address_second,
           "address_third"=>$address_third,
@@ -1308,6 +1356,17 @@ if(in_array('1507',$users_data['permission']['action']))
           "attended_doctor"=>'',
           "assigned_docotor_list"=>'',
           "authorization_amount"=>"0.00",
+          'op_type'=>1,
+          "operation_name"=>$operation_name,
+          "anaesthesia"=>$anaesthesia,
+          "surgery_type"=>$surgery_type,
+          "iol_power"=>$iol_power,
+          "iol_type"=>$iol_type,
+          // "iol_le"=>$iol_le,
+          "brand"=>$brand,
+          "balance"=>$balance,
+          "operator"=>$operator,
+          "corporate_full_facility"=>$corporate_full_facility,
           "id_number"=>"",
           "room_id"=>"",
           "room_no_id"=>"",
@@ -1324,7 +1383,7 @@ if(in_array('1507',$users_data['permission']['action']))
           "company_name"=>"",
           "admission_time"=>date('H:i:s'),
           "admission_date"=>date('d-m-Y'),
-          'total_amount'=>"0.00",
+          'total_amount'=>"$total_amount",
           'discount_amount'=>"0.00",
           'payment_mode'=>"",
           'net_amount'=>"",
@@ -1342,6 +1401,7 @@ if(in_array('1507',$users_data['permission']['action']))
           'authorize_person'=>$authorize_person,
           'diagnosis' => ''
         );
+
         if(isset($post) && !empty($post))
         {   
           // echo "<pre>";
@@ -1409,7 +1469,8 @@ if(in_array('1507',$users_data['permission']['action']))
           }    
 
         }
-        // echo "<pre>";print_r($data['bed_no']);die;
+        // echo "<pre>";print_r($data['form_data']['package_id']);die;
+
 
         $data['btn_name'] = 'Save';
         $data['patient_category'] = $this->general_model->patient_category_list();
@@ -1426,6 +1487,7 @@ if(in_array('1507',$users_data['permission']['action']))
           $this->load->model('general/general_model');  
           $post = $this->input->post();
           $result = $this->ipd_booking->get_by_id($id); 
+          // echo "<pre>";print_r($result);die;
           $admission_time='';
 
 
@@ -1448,6 +1510,10 @@ if(in_array('1507',$users_data['permission']['action']))
           $data['authrize_person_list'] = $this->general_model->authrize_person_list();
           $data['room_no'] = $this->ipd_booking->get_room_no();
           $data['bed_no'] = $this->ipd_booking->get_bed_no();
+          $data['operation_list']= $this->ipd_booking->operation_list();
+          $data['brand_list'] = $this->ipd_booking->brand_list();
+          $data['iol_data']=$this->ipd_booking->get_iol_section_list();
+
           if (!empty($post['branch_id'])) {
             $data['patient_category'] = $this->general_model->patient_category_list($post['branch_id']);
           } else {
@@ -1503,95 +1569,104 @@ if(in_array('1507',$users_data['permission']['action']))
         $data['button_value'] = "Update";
         $data['form_error'] = ''; 
         
-        if($result_patient['dob']=='1970-01-01' || $result_patient['dob']=="0000-00-00")
-        {
-          $present_age = get_patient_present_age('',$result_patient);
+        if (empty($result_patient['dob']) || $result_patient['dob'] == '1970-01-01' || $result_patient['dob'] == '0000-00-00') {
+            $present_age = get_patient_present_age('', $result_patient);
+        } else {
+            $dob = date('d-m-Y', strtotime($result_patient['dob']));
+            $present_age = get_patient_present_age($dob, $result_patient);
         }
-        else
-        {
-          $dob=date('d-m-Y',strtotime($result_patient['dob']));
-          $present_age = get_patient_present_age($dob,$result_patient);
-        }
-        
+      
         $age_y = $present_age['age_y'];
         $age_m = $present_age['age_m'];
         $age_d = $present_age['age_d'];
-        // echo "<pre>";print_r($result);die;
 
         
         $data['form_data'] = array( 
-          "patient_id"=>$result['patient_id'],
-          "data_id"=>$result['id'],
-          "patient_reg_code"=>$result_patient['patient_code'],
-          "name"=>$result_patient['patient_name'],
-          'ipd_no'=>$result['ipd_no'],
-          
-          'referral_doctor'=>$result['referral_doctor'],
-          'simulation_id'=>$result_patient['simulation_id'],
-          "relation_type"=>$result_patient['relation_type'],
-          "relation_name"=>$result_patient['relation_name'],
-          "relation_simulation_id"=>$result_patient['relation_simulation_id'],
-          "mobile"=>$result_patient['mobile_no'],
-          "age_m"=>$age_m,
-          "age_d"=>$age_d,
-          "gender"=>$result_patient['gender'],
-          "age_y"=>$age_y,
-          "adhar_no"=>$adhar_no,
-          "address"=>$result_patient['address'],
-          "address_second"=>$result_patient['address2'],
-          // "address_third"=>$result_patient['address3'],
-          "attended_doctor"=>$result['attend_doctor_id'],
-                                      //"assigned_docotor_list"=>$result['age_m'],
-          "authorization_amount"=>$result['authrization_amount'],
+          "patient_id" => $result['patient_id'],
+          "data_id" => $result['id'],
+          "patient_reg_code" => $result_patient['patient_code'],
+          "name" => $result_patient['patient_name'],
+          "ipd_no" => $result['ipd_no'],
+          "referral_doctor" => $result['referral_doctor'],
+          "simulation_id" => $result_patient['simulation_id'],
+          "relation_type" => $result_patient['relation_type'],
+          "relation_name" => $result_patient['relation_name'],
+          "relation_simulation_id" => $result_patient['relation_simulation_id'],
+          "mobile" => $result_patient['mobile_no'],
+          "age_m" => $age_m,
+          "age_d" => $age_d,
+          "gender" => $result_patient['gender'],
+          "age_y" => $age_y,
+          "adhar_no" => $adhar_no,
+          "address" => $result_patient['address'],
+          "address_second" => $result_patient['address2'],
+          // "address_third" => $result_patient['address3'],
+          "attended_doctor" => $result['attend_doctor_id'],
+          //"assigned_docotor_list" => $result['age_m'],
+          "authorization_amount" => $result['authrization_amount'],
           "corporate_id" => $result['corporate_id'] ?? '',
-          "id_number"=>$result['panel_id_no'],
-          "eye_details"=>$result['eye_details'],
-          "vision_right"=>$result['vision_right'],
-          "cataract_type_right"=>$result['cataract_type_right'],
-          "vision_left"=>$result['vision_left'],
-          "cataract_type_left"=>$result['cataract_type_left'],
-          "ins_authorization_no"=>$result['ins_authorization_no'],
-          "employee_no"=>$result['employee_no'],
-          "auth_issue_date"=>$result['auth_issue_date'],
-          "department_id"=>$result['department_id'],
-          "cost"=>$result['cost'],
-          "subsidy_id"=>$result['subsidy_id'],
-          "subsidy_created"=>$result['subsidy_created'],
-          "subsidy_amount"=>$result['subsidy_amount'],
-          "insurance_type_id"=>$result['insurance_type_id'],
-          "policy_no"=>$result['policy_no'],
-          "state_id"=>$result['state_id'],
-          "room_id"=>$result['room_type_id'],
-          "patient_email1"=>$result['patient_email1'],
-          "room_no_id"=>$result['room_id'],
-                                      //"time_unit"=>$result_patient['age_m'],
-          "bed_no_id"=>$result['bad_id'],
-          "patient_type"=>$result['patient_type'],
-          "package_id"=>$result['package_id'],
-          "package"=>$result['package_type'],
-          "remarks"=>$result['remarks'],
-          "advance_deposite"=>$result['advance_payment'],
-          "panel_type"=>$result['panel_type'],
-          "policy_number"=>$result['panel_polocy_no'],
-          "company_name"=>$result['panel_name'],
-          "admission_time"=>$admission_time,
-          "admission_date"=>date('d-m-Y',strtotime($result['admission_date'])),
-          'payment_mode'=>$result['payment_mode'],
-          'field_name'=>$total_values,
-          "country_code"=>"+91",
-          'mlc'=>$result['mlc'],
-          'mlc_status'=>$result['mlc_status'],
-          'referred_by'=>$result['referred_by'],
-          'referral_hospital'=>$result['referral_hospital'],
-          'discharge_date'=>$discharge_date,
-          'mlc'=>$result['mlc'],
-          'mlc_status'=>$result['mlc_status'],
-          'reg_charge'=>$result['reg_charge'],
-          'patient_category'=>$result['patient_category'],
-            'authorize_person'=>$result['authorize_person'],
-            'diagnosis' => $result['diagnosis']
+          "id_number" => $result['panel_id_no'],
+          "eye_details" => $result['eye_details'],
+          "vision_right" => $result['vision_right'],
+          "cataract_type_right" => $result['cataract_type_right'],
+          "vision_left" => $result['vision_left'],
+          "cataract_type_left" => $result['cataract_type_left'],
+          "ins_authorization_no" => $result['ins_authorization_no'],
+          "employee_no" => $result['employee_no'],
+          "auth_issue_date" => $result['auth_issue_date'],
+          "department_id" => $result['department_id'],
+          "cost" => $result['cost'],
+          "subsidy_id" => $result['subsidy_id'],
+          "subsidy_created" => $result['subsidy_created'],
+          "subsidy_amount" => $result['subsidy_amount'],
+          "insurance_type_id" => $result['insurance_type_id'],
+          "policy_no" => $result['policy_no'],
+          "state_id" => $result['state_id'],
+          "room_id" => $result['room_type_id'],
+          "patient_email1" => $result['patient_email1'],
+          "room_no_id" => $result['room_id'],
+          //"time_unit" => $result_patient['age_m'],
+          "bed_no_id" => $result['bad_id'],
+          "patient_type" => $result['patient_type'],
+          "package_id" => $result['package_id'],
+          "package" => $result['package_type'],
+          "remarks" => $result['remarks'],
+          "advance_deposite" => $result['advance_payment'],
+          "panel_type" => $result['panel_type'],
+          "policy_number" => $result['panel_polocy_no'],
+          "company_name" => $result['panel_name'],
+          "admission_time" => $admission_time,
+          "admission_date" => date('d-m-Y', strtotime($result['admission_date'])),
+          'payment_mode' => $result['payment_mode'],
+          'field_name' => $total_values,
+          "country_code" => "+91",
+          "country_id" => "99",
+          'mlc' => $result['mlc'],
+          'mlc_status' => $result['mlc_status'],
+          'referred_by' => $result['referred_by'],
+          'referral_hospital' => $result['referral_hospital'],
+          'discharge_date' => $discharge_date,
+          'mlc' => $result['mlc'],
+          'mlc_status' => $result['mlc_status'],
+          'reg_charge' => $result['reg_charge'],
+          'patient_category' => $result['patient_category'],
+          'authorize_person' => $result['authorize_person'],
+          'diagnosis' => $result['diagnosis'],
           
-        );  
+          // New fields added here
+          'operation_name' => isset($result['operation_name']) ? $result['operation_name'] : '',
+          'anaesthesia' => isset($result['anaesthesia']) ? $result['anaesthesia'] : '',
+          'surgery_type' => isset($result['surgery_type']) ? $result['surgery_type'] : '',
+          'iol_power' => isset($result['iol_power']) ? $result['iol_power'] : '',
+          'iol_type' => isset($result['iol_type']) ? json_encode($result['iol_type']) : '', // Assuming iol_re is an array
+          // 'iol_le' => isset($result['iol_le']) ? json_encode($result['iol_le']) : '', // Assuming iol_le is an array
+          'brand' => isset($result['brand']) ? $result['brand'] : 0,
+          'corporate_full_facility' => isset($result['corporate_full_facility']) ? $result['corporate_full_facility'] : 'no',
+          'operator' => isset($result['operator']) ? $result['operator'] : '',
+          'total_amount' => isset($result['total_amount']) ? (float)$result['total_amount'] : 0.00,
+          'balance' => isset($result['balance']) ? (float)$result['balance'] : 0.00,
+      );
+      
         
         if(isset($post) && !empty($post))
         {   
@@ -1621,7 +1696,6 @@ if(in_array('1507',$users_data['permission']['action']))
           }     
         }
 
-          // echo "<pre>";print_r($data['form_data']);die;
 
         $data['btn_name'] = 'Save';
         $this->load->view('ipd_booking/add',$data);  
@@ -1649,6 +1723,7 @@ if(in_array('1507',$users_data['permission']['action']))
     } 
     
     $get_by_id_data = $this->ipd_booking->get_all_detail_print($ipd_booking_id);
+    // echo "<pre>";print_r($get_by_id_data);die;
     
     $branch_id='';
     $users_data = $this->session->userdata('auth_users'); 
@@ -1664,14 +1739,15 @@ if(in_array('1507',$users_data['permission']['action']))
       //print_r($template_format); exit;
       //Package
     
-    $package_id = $get_by_id_data['ipd_list'][0]->package_id;
+    $package_id = isset($get_by_id_data['ipd_list'][0]->package_id)?$get_by_id_data['ipd_list'][0]->package_id:'';
       /*$this->load->model('packages/packages_model','package');
       $selected_medicine_result = $this->package->selected_medicine($package_id);*/
-      $data['payment_mode'] = $get_by_id_data['ipd_list'][0]->payment_mode;
+      $data['payment_mode'] = isset($get_by_id_data['ipd_list'][0]->payment_mode)?$get_by_id_data['ipd_list'][0]->payment_mode:'';
       //$data['medicine_ids']=$medicine_arr;
       $data['template_data']=$template_format;
       //print_r($data['template_data']);
       $data['all_detail']= $get_by_id_data;
+      // echo "<pre>";print_r($data['all_detail']);die;
       $data['page_type'] = 'Booking';
        $this->load->model('time_print_setting/time_print_setting_model','time_setting');
       $data['time_setting'] = $this->time_setting->get_master_unique();
@@ -1725,7 +1801,23 @@ if(in_array('1507',$users_data['permission']['action']))
       $this->load->view('ipd_booking/print_ipd_admission_template',$data);
     }
 
+    public function diagnosis_list(){
+      $term = $this->input->get();
+      $data = [];
     
+      // $this->db->select("diagnosis as text,id");
+      if(!empty($term['term'])){
+          $this->db->like('diagnosis', $term['term']);
+          $this->db->limit(10);
+          $data = $this->db->get('hms_opd_diagnosis')->result_array();
+      } 
+      else {
+          $this->db->limit(10);
+          $data = $this->db->get('hms_opd_diagnosis')->result_array();
+      }
+      // print_r($data);die;
+      echo json_encode($data);
+  }
 
 
     private function _validate()
@@ -1885,7 +1977,7 @@ if(in_array('1507',$users_data['permission']['action']))
       //  "patient_type"=>$post['patient_type'],
        "package_id"=>$package_id,
        "package"=>$post['package'],
-      //  "advance_deposite"=>$post['advance_deposite'],
+       "advance_deposite"=>$post['advance_deposite'],
        "panel_type"=>$panel_type,
        "policy_number"=>$policy_number,
        "company_name"=>$company_name,
@@ -1899,7 +1991,7 @@ if(in_array('1507',$users_data['permission']['action']))
        "relation_type"=>$post['relation_type'],
        "relation_name"=>$post['relation_name'],
        "relation_simulation_id"=>$post['relation_simulation_id'],
-       'referred_by'=>$post['referred_by'],
+       'referred_by'=>isset($post['referred_by'])?$post['referred_by']:'',
        'referral_hospital'=>$post['referral_hospital'],
        'discharge_date'=>$post['discharge_date'],
        "mlc"=>$post['mlc'],

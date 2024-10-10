@@ -364,29 +364,29 @@ function allbranch_delete(allVals)
       </div>
       <div class="col-xs-7">
         <select class="mr m_mr" name="relation_simulation_id" id="relation_simulation_id">
-          <option value="">Select</option>
-          <?php
-            if(!empty($simulation_list))
-            {
-              foreach($simulation_list as $simulation)
-              {
-                $selected_simulation = '';
-               if(in_array($simulation->simulation,$simulations_array)){
+            <option value="">Select</option>
+            <?php
+            if (!empty($simulation_list)) {
+                foreach ($simulation_list as $simulation) {
+                    // Default to empty for non-selected option
+                    $selected_simulation = '';
 
-                              $selected_simulation = 'selected="selected"';
-                              
-                         }
-                         else{
-                              if($simulation->id==$form_data['relation_simulation_id'])
-                              {
-                                   $selected_simulation = 'selected="selected"';
-                              }
-                         }
-                echo '<option value="'.$simulation->id.'" '.$selected_simulation.'>'.$simulation->simulation.'</option>';
-              }
+                    // Check if simulation exists in the $simulations_array
+                    if (!empty($simulations_array) && in_array($simulation->simulation, $simulations_array)) {
+                        $selected_simulation = 'selected="selected"';
+                    } 
+                    // Check if current simulation is the one in $form_data
+                    else if (!empty($form_data['relation_simulation_id']) && $simulation->id == $form_data['relation_simulation_id']) {
+                        $selected_simulation = 'selected="selected"';
+                    }
+
+                    // Output the <option> element
+                    echo '<option value="' . $simulation->id . '" ' . $selected_simulation . '>' . $simulation->simulation . '</option>';
+                }
             }
-            ?> 
-        </select> 
+            ?>
+        </select>
+
         <input type="text" value="<?php if(isset($form_data['relation_name'])){ echo $form_data['relation_name'];}?>" name="relation_name" id="relation_name" class="mr-name m_name"/>
       </div>
     </div> <!-- row -->

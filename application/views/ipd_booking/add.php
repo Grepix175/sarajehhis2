@@ -151,6 +151,7 @@ $('document').ready(function(){
                 $checked_reg="";
                 $checked_nor='';
                 $checked_ipd='checked';
+                $set_payment_hide=1;
                 }
                 elseif(isset($form_data['data_id']) && $form_data['data_id']!='') 
                 {
@@ -163,16 +164,18 @@ $('document').ready(function(){
                     $checked_reg=''; 
                     $checked_ipd='';
                     $checked_nor='checked';  
+                    $set_payment_hide=0;
+
                 }
 
                 ?>
                
-        <div class="row m-b-5">
-            <!-- <div class="col-sm-5"><label><input type="radio" name="" <?php echo $checked_nor; ?> onClick="window.location='<?php echo base_url('ipd_booking/');?>add/';"> New Patient</label></div> -->
+        <!-- <div class="row m-b-5">
+             <div class="col-sm-5"><label><input type="radio" name="" <?php //echo $checked_nor; ?> onClick="window.location='<?php// echo base_url('ipd_booking/');?>add/';"> New Patient</label></div> 
             <div class="col-sm-7">
-                <label><input type="radio" name="" <?php echo $checked_ipd; ?> onClick="window.location='<?php echo base_url('patient');?>';"> <span>Registered</span></label>
+                <label><input type="radio" name="" <?php //echo $checked_ipd; ?> onClick="window.location='<?php //echo base_url('patient');?>';"> <span>Registered</span></label>
             </div>
-        </div>
+        </div> -->
 
         <div class="row m-b-2">
             <div class="col-sm-5"><label>MLC</label>
@@ -309,6 +312,7 @@ $('document').ready(function(){
             <?php if(!empty($form_error)){ echo form_error('gender'); } ?>
          </div>
         </div>
+        <?php //echo "<pre>";print_r($form_data);die; ?>
                 
         <div class="row m-b-5">
             <div class="col-sm-5"><label>Age <?php if(!empty($field_list)){
@@ -342,7 +346,7 @@ $('document').ready(function(){
           ?></label></div>
             <div class="col-sm-7">
                  <input type="text" name="" readonly="readonly" value="<?php echo $form_data['country_code'];?>" class="country_code m_c_code" placeholder="+91" style="width:59px;"> 
-                <input type="text" name="mobile" class="number m_number" id="mobile_no" maxlength="10" value="<?php echo $form_data['mobile'];?>" onKeyPress="return isNumberKey(event);">
+                <input type="text" name="mobile" class="number m_number" id="mobile_no" maxlength="10" value="<?php echo $form_data['mobile'];?>" onKeyPress="return isNumberKey(event);" required>
                     <div class="">
                     <?php if(!empty($field_list)){
                          if($field_list[0]['mandatory_field_id']=='30' && $field_list[0]['mandatory_branch_id']==$users_data['parent_id']){
@@ -403,17 +407,21 @@ $('document').ready(function(){
                 <label>Email</label>
             </div>
             <div class="col-xs-7">
-                <input type="text" name="patient_email1" value="<?php echo htmlspecialchars($form_data['patient_email1'] ?? ''); ?>"/>
+                <input type="text" name="patient_email1" required 
+                    value="<?php echo isset($form_data['patient_email']) ? $form_data['patient_email'] : (isset($form_data['patient_email1']) ? $form_data['patient_email1'] : ''); ?>"
+                    oninput="validateEmail(this)" />
+                <br><span id="email_error" style="color: red;width:200px;"></span> <!-- Error message span -->
                 <?php if(!empty($form_error)){ echo form_error('patient_email1'); } ?>
             </div>
         </div>
-
           <div class="row m-b-3">
               <div class="col-xs-5">
                   <label>Aadhaar No.</label>
               </div>
               <div class="col-xs-7">
-                  <input type="text" name="adhar_no" value="<?php echo $form_data['adhar_no'];?>"/>
+              <input type="text" name="adhar_no" 
+                    value="<?php echo isset($form_data['adhar_no']) ? $form_data['adhar_no'] : ''; ?>"
+                    oninput="validateAadhaar(this)" maxlength="12"/>
                   <?php if(!empty($form_error)){ echo form_error('adhar_no'); } ?>
               </div>
           </div>
@@ -444,26 +452,331 @@ $('document').ready(function(){
                   <label>State</label>
               </div>
               <div class="col-xs-7">
-                  <select name="state_id" id="state_id" onChange="return get_city(this.value)">
-                      <option value="">Select State</option>
-                      <?php //echo "<pre>";print_r($form_data['country_id']);die;
-                      if (!empty($form_data['country_id'])) {
-                          $state_list = state_list($form_data['country_id']);
-                          if (!empty($state_list)) {
-                              foreach ($state_list as $state) {
-                                  ?>   
-                                  <option value="<?php echo $state->id; ?>" <?php if (!empty($form_data['state_id']) && $form_data['state_id'] == $state->id) {
-                                      echo 'selected="selected"';
-                                  } ?>><?php echo $state->state; ?></option>
-                                  <?php
-                              }
+                <select name="state_id" id="state_id" onChange="return get_city(this.value)">
+                  <option value="">Select State</option>
+                  <?php $form_data['country_id']='99';//echo "<pre>";print_r($form_data['country_id']);die;
+                  if (!empty($form_data['country_id'])) {
+                      // Fetch the state list based on the selected country
+                      $state_list = state_list($form_data['country_id']);
+                      
+                      if (!empty($state_list)) {
+                          foreach ($state_list as $state) { 
+                              // Removed the debug line with die and fixed the state variable
+                              ?>
+                              <?php //echo "<pre>";print_r($form_data['state_id']);die;?>
+                              <option value="<?php echo $state->id; ?>" 
+                                  <?php if (!empty($form_data['state_id']) && $form_data['state_id'] == $state->id) { 
+                                      echo 'selected="selected"'; 
+                                  } ?>
+                              >
+                                  <?php echo $state->state; ?>
+                              </option>
+                          <?php 
                           }
                       }
-                      ?>
-                  </select>
-              </div>
+                  }
+                  ?>
+              </select>
+
           </div>
-        
+          </div>
+          <?php if (in_array('411', $users_data['permission']['section'])) { ?>
+            <div class="row m-b-5">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-5"><b>Category Type</b></div>
+                        <div class="col-md-7">
+                        <select name="patient_category" id="patient_category" class="m_select_btn" onChange="handlePaymentMode();">
+                            <option value="">Select Category</option>
+                            <?php //echo "<pre>";print_r($form_data['patient_category']);die;
+                            if (!empty($patient_category)) {
+                                foreach ($patient_category as $patientcategory) {
+                            ?>
+                                <option value="<?php echo $patientcategory->id; ?>"
+                                    <?php if (!empty($form_data['patient_category']) && $form_data['patient_category'] == $patientcategory->id) {
+                                        echo 'selected="selected"';
+                                    } ?>
+                                    data-category-name="<?php echo $patientcategory->patient_category; ?>">
+                                    <?php echo $patientcategory->patient_category; ?>
+                                </option>
+                            <?php
+                                }
+                            }
+                            ?>
+                        </select>
+
+                            <?php if (in_array('2486', $users_data['permission']['action'])) {
+                            ?>
+                            <!-- <a title="Add Patient Category" class="btn-new" id="patient_category_add_modal"><i
+                                class="fa fa-plus"></i> New</a> -->
+                            <?php } ?>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php } else { ?>
+
+            <input type="hidden" name="patient_category" value="0" id="patient_category">
+            <?php }
+                ?>
+
+            <!-- Corporate Section -->
+            <div id="corporate_box" style="">
+                <div class="row m-b-5">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-5"><b>Corporate Name</b></div>
+                            <div class="col-md-7">
+                                <select name="corporate_id" id="corporate_id" class="m_select_btn">
+                                    <option value=""
+                                        <?php echo (empty($form_data['corporate_id']) || !isset($form_data['corporate_id'])) ? 'selected="selected"' : ''; ?>>
+                                        Select Corporate Name</option>
+                                    
+                                    <?php if (!empty($corporate_list)): ?>
+                                    <?php foreach ($corporate_list as $corporate): ?>
+                                    <option value="<?php echo $corporate->corporate_id; ?>"
+                                        <?php echo (isset($form_data['corporate_id']) && $corporate->corporate_id == $form_data['corporate_id']) ? 'selected="selected"' : ''; ?>>
+                                        <?php echo $corporate->corporate_name; ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!-- </div> -->
+<!-- row -->
+
+                <div class="row m-b-5">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-5"><b>Auth No.</b></div>
+                            <div class="col-md-7">
+                                <input type="text" name="auth_no" class="auth_no" id="auth_no"
+                                    value="<?php echo isset($form_data['auth_no']) ? htmlspecialchars($form_data['auth_no'], ENT_QUOTES) : ''; ?>"
+                                    placeholder="Enter Authorization Number" required pattern="^[A-Za-z0-9\-]+$"
+                                    title="Only alphanumeric characters and hyphens are allowed" />
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- row -->
+
+                <div class="row m-b-5">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-5"><b>Employee No</b></div>
+                            <div class="col-md-7">
+                                <input type="text" name="employee_no" class="employee_no" id="employee_no"
+                                    value="<?php echo isset($form_data['employee_no'])?$form_data['employee_no']:''; ?>" />
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- row -->
+
+                <div class="row m-b-5">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-5"><b>Auth Issue Date</b></div>
+                            <div class="col-md-7">
+                                <div class="input-group date">
+                                    <input type="text" name="auth_issue_date" class="w-180px datepicker m_input_default" value="<?php echo  isset($form_data['auth_issue_date'])?$form_data['auth_issue_date']:''; ?>" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- row -->
+
+                <div class="row m-b-5">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-5"><b>Department</b></div>
+                            <div class="col-md-7">
+                                <select name="department_id" id="department_id" class="m_select_btn">
+                                    <option value=""
+                                        <?php echo empty($form_data['department_id']) ? 'selected="selected"' : ''; ?>>Select
+                                        Department Name</option>
+                                    <?php if (!empty($department_list)): ?>
+                                    
+                                    <?php foreach ($department_list as $department): ?>
+                                        <?php //echo "<pre>";print_r($department);die; ?>
+                                        <option value="<?php echo $department->department_id; ?>"
+                                        <?php echo (isset($form_data['department_id']) && $department->department_id == $form_data['department_id']) ? 'selected' : ''; ?>>
+                                        <?php echo $department->department_name; ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- row -->
+
+                <div class="row m-b-5">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-5"><b>Cost</b></div>
+                            <div class="col-md-7">
+                                <input type="text" name="cost" class="alpha_numeric" id="cost"
+                                    value="<?php echo isset($form_data['cost']) ? $form_data['cost'] : ''; ?>" />
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- row -->
+            </div>
+
+            <!-- Subsidy Section -->
+            <div id="subsidy_box" style="">
+                <div class="row m-b-5">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-5"><b>Subsidy Authority Name</b></div>
+                            <div class="col-md-7">
+                                <select name="subsidy_id" id="subsidy_id" class="m_select_btn">
+                                    <option value=""
+                                        <?php echo empty($form_data['subsidy_id']) ? 'selected="selected"' : ''; ?>>Select
+                                        Subsidy Authority</option>
+                                    <?php if (!empty($subsidy_list)): ?>
+                                    <?php foreach ($subsidy_list as $subsidy): ?>
+                                    <option value="<?php echo $subsidy->subsidy_id; ?>"
+                                    <?php echo (isset($form_data['subsidy_id']) && $subsidy->subsidy_id == $form_data['subsidy_id']) ? 'selected="selected"' : ''; ?> >
+                                        <?php echo $subsidy->subsidy_name; ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- row -->
+
+                <div class="row m-b-5">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-5"><b>Subsidy Created</b></div>
+                            <div class="col-md-7">
+                            <input type="text" name="subsidy_created" class="w-180px datepicker m_input_default" value="<?php echo  isset($form_data['subsidy_created'])?$form_data['subsidy_created']:''; ?>" >
+
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- row -->
+
+                <div class="row m-b-5">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-5"><b>Subsidy Amount</b></div>
+                            <div class="col-md-7">
+                                <input type="text" name="subsidy_amount" class="alpha_numeric" id="subsidy_amount"
+                                    value="<?php echo isset($form_data['subsidy_amount'])?$form_data['subsidy_amount']:''; ?>" />
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- row -->
+            </div>
+
+            <!-- Panel Type -->
+            <div id="panel_box" style="">
+                <div class="row m-b-5">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-5"><b>Type</b></div>
+                            <div class="col-md-7">
+                                <select name="insurance_type_id" id="insurance_type_id" class="w-200px m_select_btn">
+                                    <option value="">Select Insurance Type</option>
+                                    <?php if (!empty($insurance_type_list)): ?>
+                                    <?php foreach ($insurance_type_list as $insurance_type): ?>
+                                    <option value="<?php echo $insurance_type->id; ?>"
+                                    <?php echo (isset($form_data['insurance_type_id']) && $insurance_type->id == $form_data['insurance_type_id']) ? 'selected="selected"' : ''; ?>>
+                                        <?php echo $insurance_type->insurance_type; ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row m-b-5">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-5"><b>Name</b></div>
+                            <div class="col-md-7">
+                                <select name="ins_company_id" id="ins_company_id" class="w-200px m_select_btn"
+                                    onchange="update_doctor_panel_charges();">
+                                    <option value="">Select Insurance Company</option>
+                                    <?php if (!empty($insurance_company_list)): ?>
+                                    <?php foreach ($insurance_company_list as $insurance_company): ?>
+                                    <option value="<?php echo $insurance_company->id; ?>"
+                                    <?php echo (isset($form_data['department_id']) && $department->department_id == $form_data['department_id']) ? 'selected' : ''; ?>>
+                                        <?php echo $insurance_company->insurance_company; ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row m-b-5">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-5"><b>Policy No.</b></div>
+                            <div class="col-md-7">
+                                <input type="text" name="polocy_no" class="alpha_numeric" id="polocy_no"
+                                    value="<?php echo isset($form_data['polocy_no'])?$form_data['polocy_no']:''; ?>"
+                                    maxlength="20" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row m-b-5">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-5"><b>Validity From</b></div>
+                            <div class="col-md-7">
+                            <input type="text" name="validity_from" class="w-180px datepicker m_input_default" value="<?php echo isset($form_data['validity_from'])?$form_data['validity_from']:''; ?>" >
+
+                                <!-- <input type="text" name="validity_from" class="validity_date m_input_default"
+                                    value="<?php echo isset($form_data['validity_from'])?$form_data['validity_from']:''; ?>"
+                                    id="validity_date" readonly="true" /> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row m-b-5">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-5"><b>Validity To</b></div>
+                            <div class="col-md-7">
+                            <input type="text" name="validity_to" class="w-180px datepicker m_input_default" value="<?php echo isset($form_data['validity_to'])?$form_data['validity_to']:''; ?>" >
+
+                                <!-- <input type="text" name="validity_to" class="validity_date m_input_default"
+                                    value="<?php echo isset($form_data['validity_to'])?$form_data['validity_to']:''; ?>"
+                                    id="validity_date" readonly="true" /> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row m-b-5">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-5"><b>Amount</b></div>
+                            <div class="col-md-7">
+                                <input type="text" name="amount" class="alpha_numeric" id="amount"
+                                    value="<?php echo isset($form_data['amount'])?$form_data['amount']:''; ?>" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
     </div> <!-- 4 -->
 
@@ -483,25 +796,39 @@ $('document').ready(function(){
             </div>
         </div>
 
-         <div class="row m-b-5">
-            <div class="col-sm-5"><label>Package Name <span class="star">*</span></label></div>
+        <div class="row m-b-5" id="package_id1">
+            <div class="col-sm-5">
+                <label>Package Name <span class="star">*</span></label>
+            </div>
             <div class="col-sm-7">
-                <select name="package_id" class="m_input_default" id="package_id">
+                <select name="package_id" class="m_input_default" id="package_id" onchange="updateAmount();">
                     <option value="">-Select-</option>
-                    <?php foreach($package_list as $ipd_pacakge){?>
-                    <option value="<?php echo $ipd_pacakge->id; ?>" <?php if($form_data['package_id']==$ipd_pacakge->id){ echo 'selected';}?>><?php echo $ipd_pacakge->name; ?></option>
-
+                    <?php foreach ($package_list as $ipd_package) { ?>
+                        <option value="<?php echo htmlspecialchars($ipd_package->id); ?>" 
+                                data-amount="<?php echo htmlspecialchars($ipd_package->amount); ?>" 
+                                <?php echo (isset($form_data['package_id']) && $form_data['package_id'] == $ipd_package->id) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($ipd_package->name); ?>
+                        </option>
                     <?php } ?>
                 </select>
 
-                <?php if(!empty($form_error)){ echo form_error('package_id'); } ?>
+                <?php if (!empty($form_error)) { echo form_error('package_id'); } ?>
             </div>
         </div>
         <?php } else{  ?>
         <input type="hidden" name="package_id" value="0">
          <input type="hidden" name="package" value="0">
         <?php } ?>
-        <div class="row m-b-5">
+        <div class="row m-b-5" id="amount_section1">
+            <div class="col-sm-5">
+                <label>Package Amount</label>
+            </div>
+            <div class="col-sm-7">
+                <input type="text" name="amount" id="package_amount" class="m_input_default" 
+                    value="<?php echo isset($form_data['amount']) ? htmlspecialchars($form_data['amount']) : ''; ?>" readonly>
+            </div>
+        </div>
+        <div class="row m-b-5" id="room_id1">
             <div class="col-sm-5"><label>Room Type <span class="star">*</span></label></div>
             <div class="col-sm-7">
                 <select name="room_id" class="m_input_default" value="room_id" onchange="room_no_select(this.value);" id="room_id">
@@ -510,21 +837,21 @@ $('document').ready(function(){
                     <option value="<?php echo $room_type->id; ?>" <?php if($form_data['room_id']==$room_type->id){ echo 'selected';}?>><?php echo $room_type->room_category; ?></option>
                     <?php }?>
                 </select>
-                 <?php if(!empty($form_error)){ echo form_error('room_id'); } ?>
+                 <?php //if(!empty($form_error)){ echo form_error('room_id'); } ?>
             </div>
         </div>
         
-        <div class="row m-b-5" >
+        <div class="row m-b-5" id="room_no_id1">
             <div class="col-sm-5"><label>Room No. <span class="star">*</span></label></div>
             <div class="col-sm-7">
                 <select name="room_no_id" class="m_input_default" id="room_no_id" onchange="select_no_bed(this.value);">
                     <option value="">-Select-</option>
                 </select>
-                 <?php if(!empty($form_error)){ echo form_error('room_no_id'); } ?>
+                 <?php //if(!empty($form_error)){ echo form_error('room_no_id'); } ?>
             </div>
         </div>
         
-        <div class="row m-b-5">
+        <div class="row m-b-5" id="bed_no_id1">
             <div class="col-sm-5">
                 <label>Bed No. <span class="star">*</span></label>
             </div>
@@ -771,12 +1098,18 @@ $('document').ready(function(){
             </div>
         </div>
         <!-- Addded remarks and diagnosis from left side -->
+        
         <div class="row m-b-5">
-            <div class="col-sm-5"><label>Remarks</label></div>
-            <div class="col-sm-7">
-                <textarea type="text" class="m_input_default" name="remarks"><?php echo $form_data['remarks'];?></textarea>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-5"><b>Token:</b></div>
+                    <div class="col-md-7">
+                        <input type="text" name="token" id="token" value="<?php echo isset($token) ? htmlspecialchars($token) : '1'; ?>" readonly class="m_input_default">
+                    </div>
+                </div>
             </div>
         </div>
+
         <div class="row m-b-5">
             <div class="col-sm-5"><label>Diagnosis</label></div>
             <div class="col-sm-7" >
@@ -828,8 +1161,8 @@ $('document').ready(function(){
                   <label for="vision_right">Right</label>
               </div>
               <div class="col-xs-5" style="display:flex;">
-                  <input type="text" id="vision_right" name="vision_right" class="" style="width:50%;" value="<?php echo isset($form_data['vision_right']) ? $form_data['vision_right'] : ''; ?>" placeholder="Auto populate">
-                  <input type="text" id="cataract_type_right" name="cataract_type_right" class="" style="width:50%;" value="<?php echo isset($form_data['cataract_type_right']) ? $form_data['cataract_type_right'] : ''; ?>" placeholder="Auto populate">
+                  <input type="text" id="vision_right" name="vision_right" class="" style="width:50%;" value="<?php echo isset($form_data['vision_right']) ? $form_data['vision_right'] : ''; ?>" placeholder="">
+                  <input type="text" id="cataract_type_right" name="cataract_type_right" class="" style="width:50%;" value="<?php echo isset($form_data['cataract_type_right']) ? $form_data['cataract_type_right'] : ''; ?>" placeholder="">
               </div>
               <!-- <div class="col-xs-3">
               </div> -->
@@ -840,8 +1173,8 @@ $('document').ready(function(){
                   <label for="vision_left">Left</label>
               </div>
               <div class="col-xs-5" style="display:flex;">
-                  <input type="text" id="vision_left" name="vision_left" class="form-control" style="width:50%;" value="<?php echo isset($form_data['vision_left']) ? $form_data['vision_left'] : ''; ?>" placeholder="Auto populate">
-                  <input type="text" id="cataract_type_left" name="cataract_type_left" class="form-control" style="width:50%;" value="<?php echo isset($form_data['cataract_type_left']) ? $form_data['cataract_type_left'] : ''; ?>" placeholder="Auto populate">
+                  <input type="text" id="vision_left" name="vision_left" class="form-control" style="width:50%;" value="<?php echo isset($form_data['vision_left']) ? $form_data['vision_left'] : ''; ?>" placeholder="">
+                  <input type="text" id="cataract_type_left" name="cataract_type_left" class="form-control" style="width:50%;" value="<?php echo isset($form_data['cataract_type_left']) ? $form_data['cataract_type_left'] : ''; ?>" placeholder="">
               </div>
               <!-- <div class="col-xs-3">
               </div> -->
@@ -849,20 +1182,8 @@ $('document').ready(function(){
 
 
         <!-- hidden fields of advanced deposit -->
-         <!-- <?php if(in_array('774',$permission_action)){ ?> 
-          <div class="row m-b-5">
-              <div class="col-sm-5"><label>Advance Deposit</label></div>
-              <div class="col-sm-7">
-                  <input type="text" <?php if(!empty($form_data['advance_deposite'])){ echo "readonly"; } ?> name="advance_deposite" class="price_float m_input_default" value="<?php echo $form_data['advance_deposite'];?>">
-              </div>
-              <?php if(!empty($form_error)){ echo form_error('advance_deposite'); } ?>
-          </div>
-          <?php }else{   
-              ?>  
-              <input type="hidden" name="advance_deposite" class="m_input_default" value="0.00">
-              <?php 
-              } ?>
-            <?php $data= get_setting_value('REG_CHARGE_IPD_BOOK'); 
+         
+            <!-- <?php $data= get_setting_value('REG_CHARGE_IPD_BOOK'); 
             
                 
                 if(!empty($form_data['data_id']))
@@ -977,307 +1298,13 @@ $('document').ready(function(){
             </div>
         </div>
 
-    <?php if (in_array('411', $users_data['permission']['section'])) { ?>
-    <div class="row m-b-5">
-        <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-5"><b>Category Type</b></div>
-                <div class="col-md-7">
-                    <select name="patient_category" id="patient_category" class="m_select_btn"
-                        onChange="handlePaymentMode();">
-                        <option value="">Select Category</option>
-                        <?php 
-                        if (!empty($patient_category)) {
-                        foreach ($patient_category as $patientcategory) {
-                          ?>
-                        <option <?php if ($form_data['patient_category'] == $patientcategory->id) {
-                            echo 'selected="selected"';
-                          } ?> value="<?php echo $patientcategory->id; ?>"
-                            data-category-name="<?php echo $patientcategory->patient_category; ?>">
-                            <?php echo $patientcategory->patient_category; ?>
-                        </option>
-                        <?php
-                        }
-                      }
-                      ?>
-                    </select>
-                    <?php if (in_array('2486', $users_data['permission']['action'])) {
-                      ?>
-                    <!-- <a title="Add Patient Category" class="btn-new" id="patient_category_add_modal"><i
-                          class="fa fa-plus"></i> New</a> -->
-                    <?php } ?>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php } else { ?>
-
-    <input type="hidden" name="patient_category" value="0" id="patient_category">
-    <?php }
-          ?>
-
-    <!-- Corporate Section -->
-    <div id="corporate_box" style="">
-        <div class="row m-b-5">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-5"><b>Corporate Name</b></div>
-                    <div class="col-md-7">
-                        <select name="corporate_id" id="corporate_id" class="m_select_btn">
-                          <!-- <?php //echo "<pre>";print_r($corporate_list);die; ?> -->
-                            <option value=""
-                                <?php 
-                                echo empty($form_data['corporate_id']) ? 'selected="selected"' : ''; ?>>Select
-                                Corporate Name</option>
-                            <?php if (!empty($corporate_list)): ?>
-                            <?php foreach ($corporate_list as $corporate): ?>
-                            <option value="<?php echo $corporate->corporate_id; ?>"
-                                <?php echo ($corporate->corporate_id == $form_data['corporate_id']) ? 'selected="selected"' : ''; ?>>
-                                <?php echo $corporate->corporate_name; ?>
-                            </option>
-                            <?php endforeach; ?>
-                            <?php endif; ?>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div> <!-- row -->
-
-        <div class="row m-b-5">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-5"><b>Auth No.</b></div>
-                    <div class="col-md-7">
-                        <input type="text" name="auth_no" class="auth_no" id="auth_no"
-                            value="<?php echo isset($form_data['auth_no']) ? htmlspecialchars($form_data['auth_no'], ENT_QUOTES) : ''; ?>"
-                            placeholder="Enter Authorization Number" required pattern="^[A-Za-z0-9\-]+$"
-                            title="Only alphanumeric characters and hyphens are allowed" />
-                    </div>
-                </div>
-            </div>
-        </div> <!-- row -->
-
-        <div class="row m-b-5">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-5"><b>Employee No</b></div>
-                    <div class="col-md-7">
-                        <input type="text" name="employee_no" class="employee_no" id="employee_no"
-                            value="<?php echo isset($form_data['employee_no'])?$form_data['employee_no']:''; ?>" />
-                    </div>
-                </div>
-            </div>
-        </div> <!-- row -->
-
-        <div class="row m-b-5">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-5"><b>Auth Issue Date</b></div>
-                    <div class="col-md-7">
-                        <div class="input-group date">
-                            <input type="text" name="auth_issue_date" class="w-180px datepicker m_input_default" value="<?php echo  isset($form_data['auth_issue_date'])?$form_data['auth_issue_date']:''; ?>" >
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> <!-- row -->
-
-        <div class="row m-b-5">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-5"><b>Department</b></div>
-                    <div class="col-md-7">
-                        <select name="department_id" id="department_id" class="m_select_btn">
-                            <option value=""
-                                <?php echo empty($form_data['department_id']) ? 'selected="selected"' : ''; ?>>Select
-                                Department Name</option>
-                            <?php if (!empty($department_list)): ?>
-                              
-                              <?php foreach ($department_list as $department): ?>
-                                <?php //echo "<pre>";print_r($department);die; ?>
-                                <option value="<?php echo $department->department_id; ?>"
-                                <?php echo (isset($form_data['department_id']) && $department->department_id == $form_data['department_id']) ? 'selected' : ''; ?>>
-                                <?php echo $department->department_name; ?>
-                            </option>
-                            <?php endforeach; ?>
-                            <?php endif; ?>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div> <!-- row -->
-
-        <div class="row m-b-5">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-5"><b>Cost</b></div>
-                    <div class="col-md-7">
-                        <input type="text" name="cost" class="alpha_numeric" id="cost"
-                            value="<?php echo isset($form_data['cost'])?$form_data['cost']:''; ?>" />
-                    </div>
-                </div>
-            </div>
-        </div> <!-- row -->
-    </div>
-
-    <!-- Subsidy Section -->
-    <div id="subsidy_box" style="">
-        <div class="row m-b-5">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-5"><b>Subsidy Authority Name</b></div>
-                    <div class="col-md-7">
-                        <select name="subsidy_id" id="subsidy_id" class="m_select_btn">
-                            <option value=""
-                                <?php echo empty($form_data['subsidy_id']) ? 'selected="selected"' : ''; ?>>Select
-                                Subsidy Authority</option>
-                            <?php if (!empty($subsidy_list)): ?>
-                            <?php foreach ($subsidy_list as $subsidy): ?>
-                            <option value="<?php echo $subsidy->subsidy_id; ?>"
-                            <?php echo (isset($form_data['subsidy_id']) && $subsidy->subsidy_id == $form_data['subsidy_id']) ? 'selected="selected"' : ''; ?> >
-                                <?php echo $subsidy->subsidy_name; ?>
-                            </option>
-                            <?php endforeach; ?>
-                            <?php endif; ?>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div> <!-- row -->
-
-        <div class="row m-b-5">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-5"><b>Subsidy Created</b></div>
-                    <div class="col-md-7">
-                    <input type="text" name="subsidy_created" class="w-180px datepicker m_input_default" value="<?php echo  isset($form_data['subsidy_created'])?$form_data['subsidy_created']:''; ?>" >
-
-                      </div>
-                </div>
-            </div>
-        </div> <!-- row -->
-
-        <div class="row m-b-5">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-5"><b>Subsidy Amount</b></div>
-                    <div class="col-md-7">
-                        <input type="text" name="subsidy_amount" class="alpha_numeric" id="subsidy_amount"
-                            value="<?php echo isset($form_data['subsidy_amount'])?$form_data['subsidy_amount']:''; ?>" />
-                    </div>
-                </div>
-            </div>
-        </div> <!-- row -->
-    </div>
-
-    <!-- Panel Type -->
-    <div id="panel_box" style="">
-        <div class="row m-b-5">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-5"><b>Type</b></div>
-                    <div class="col-md-7">
-                        <select name="insurance_type_id" id="insurance_type_id" class="w-150px m_select_btn">
-                            <option value="">Select Insurance Type</option>
-                            <?php if (!empty($insurance_type_list)): ?>
-                            <?php foreach ($insurance_type_list as $insurance_type): ?>
-                            <option value="<?php echo $insurance_type->id; ?>"
-                            <?php echo (isset($form_data['insurance_type_id']) && $insurance_type->id == $form_data['insurance_type_id']) ? 'selected="selected"' : ''; ?>>
-                                <?php echo $insurance_type->insurance_type; ?>
-                            </option>
-                            <?php endforeach; ?>
-                            <?php endif; ?>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row m-b-5">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-5"><b>Name</b></div>
-                    <div class="col-md-7">
-                        <select name="ins_company_id" id="ins_company_id" class="w-150px m_select_btn"
-                            onchange="update_doctor_panel_charges();">
-                            <option value="">Select Insurance Company</option>
-                            <?php if (!empty($insurance_company_list)): ?>
-                            <?php foreach ($insurance_company_list as $insurance_company): ?>
-                            <option value="<?php echo $insurance_company->id; ?>"
-                            <?php echo (isset($form_data['department_id']) && $department->department_id == $form_data['department_id']) ? 'selected' : ''; ?>>
-                                <?php echo $insurance_company->insurance_company; ?>
-                            </option>
-                            <?php endforeach; ?>
-                            <?php endif; ?>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row m-b-5">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-5"><b>Policy No.</b></div>
-                    <div class="col-md-7">
-                        <input type="text" name="polocy_no" class="alpha_numeric" id="polocy_no"
-                            value="<?php echo isset($form_data['polocy_no'])?$form_data['polocy_no']:''; ?>"
-                            maxlength="20" />
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row m-b-5">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-5"><b>Validity From</b></div>
-                    <div class="col-md-7">
-                    <input type="text" name="validity_from" class="w-180px datepicker m_input_default" value="<?php echo isset($form_data['validity_from'])?$form_data['validity_from']:''; ?>" >
-
-                        <!-- <input type="text" name="validity_from" class="validity_date m_input_default"
-                            value="<?php echo isset($form_data['validity_from'])?$form_data['validity_from']:''; ?>"
-                            id="validity_date" readonly="true" /> -->
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row m-b-5">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-5"><b>Validity To</b></div>
-                    <div class="col-md-7">
-                    <input type="text" name="validity_to" class="w-180px datepicker m_input_default" value="<?php echo isset($form_data['validity_to'])?$form_data['validity_to']:''; ?>" >
-
-                        <!-- <input type="text" name="validity_to" class="validity_date m_input_default"
-                            value="<?php echo isset($form_data['validity_to'])?$form_data['validity_to']:''; ?>"
-                            id="validity_date" readonly="true" /> -->
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row m-b-5">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-5"><b>Amount</b></div>
-                    <div class="col-md-7">
-                        <input type="text" name="amount" class="alpha_numeric" id="amount"
-                            value="<?php echo isset($form_data['amount'])?$form_data['amount']:''; ?>" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    
 
     <!-- Hidden authorize person and mode of payment -->
     <!-- <div class="row m-b-5">
             <div class="col-sm-5"><b>Authorize Person</b></div>
             <div class="col-sm-7">
-              <select name="authorize_person" id="authorize_person" class="w-150px m_select_btn">
+              <select name="authorize_person" id="authorize_person" class="w-200px m_select_btn">
                   <option value="">Select Authorize Person</option>
                   <?php
                   if(!empty($authrize_person_list))
@@ -1298,22 +1325,515 @@ $('document').ready(function(){
             </div>
           </div> -->
 
-        <div class="row m-b-5">
-            <div class="col-sm-5"><b>Mode of Payment <span class="star">*</span> </b></div>
-            <div class="col-sm-7">
-               <select  name="payment_mode" class="m_input_default" onChange="payment_function(this.value,'');">
-                       <?php foreach($payment_mode as $payment_mode) 
-                       {?>
-                        <option value="<?php echo $payment_mode->id;?>" <?php if($form_data['payment_mode']== $payment_mode->id){ echo 'selected';}?>><?php echo $payment_mode->payment_mode;?></option>
-                        <?php }?>
-                         
+          <?php if(in_array('774', $permission_action)) { ?> 
+                <div class="row m-b-5">
+                    <div class="col-sm-5"><label>Advance Deposit</label></div>
+                    <div class="col-sm-7">
+                        <input type="text" <?php if(!empty($form_data['advance_deposite'])) { echo "readonly"; } ?> 
+                            name="advance_deposite" id="advance_deposit" class="price_float m_input_default" 
+                            value="<?php echo $form_data['advance_deposite']; ?>">
+                    </div>
+                    <?php if(!empty($form_error)) { echo form_error('advance_deposite'); } ?>
+                </div>
+            <?php } else { ?>  
+                <input type="hidden" name="advance_deposite" class="m_input_default" value="0.00">
+            <?php } ?>
+
+            <div class="col-md-12">
+              <div class="row m-b-5 opd_m_left">
+                <div class="col-md-5"><b>Mode of Payment</b></div>
+                <div class="col-md-7 opd_p_left">
+                  <select name="payment_mode" id="payment_mode" class="m_input_default"
+                    onChange="payment_function(this.value, '');">
+                    <?php
+                    foreach ($payment_mode as $mode) {
+                      // Check if the current form's payment_mode matches OR if patient_category_name is Corporate, Subsidy, or Panel
+                      $is_selected = $form_data['payment_mode'] == $mode->id
+                        || in_array($form_data['patient_category_name'], ['Corporate', 'Subsidy', 'Panel']) && strtolower($mode->payment_mode) == 'billed';
+                      ?>
+                      <option value="<?php echo $mode->id; ?>" <?php if ($is_selected)
+                           echo 'selected'; ?>>
+                        <?php echo $mode->payment_mode; ?>
+                      </option>
+                    <?php } ?>
+                  </select>
+
+                </div>
+              </div>
+            </div>
+
+            <div id="updated_payment_detail">
+              <?php if (!empty($form_data['field_name'])) {
+                foreach ($form_data['field_name'] as $field_names) {
+                  $tot_values = explode('_', $field_names);
+
+                  ?>
+
+                  <div class="row m-b-5">
+                    <div class="col-md-12">
+                      <div class="row">
+                        <div class="col-md-5"><b><?php echo $tot_values[1]; ?><span class="star">*</span></b></div>
+                        <div class="col-md-7">
+                          <input type="text" name="field_name[]" value="<?php echo $tot_values[0]; ?>" /><input
+                            type="hidden" value="<?php echo $tot_values[2]; ?>" name="field_id[]" />
+                          <?php
+                          if (empty($tot_values[0])) {
+                            if (!empty($form_error)) {
+                              echo '<div class="text-danger">The ' . strtolower($tot_values[1]) . ' field is required.</div>';
+                            }
+                          }
+                          ?>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+
+                <?php }
+              } ?>
+
+            </div>
+
+            <div id="payment_detail">
+
+
+            </div>
+
+            <div class="row m-b-5" id="op_name">
+                <div class="col-sm-5"><b>Operation Name</b></div>
+                <div class="col-sm-7 ">
+                    <select name="operation_name" id="operation_name" class="m_input_default" >
+                        <option value="">Select Operation</option>
+                        <?php foreach ($operation_list as $op_list) { ?>
+                            <option value="<?php echo $op_list->id; ?>" 
+                                <?php if (isset($form_data['operation_name']) && $form_data['operation_name'] == $op_list->id) { echo 'selected'; } ?>>
+                                <?php echo htmlspecialchars($op_list->name); ?>
+                            </option>
+                        <?php } ?>
                     </select>
+                </div>
+            </div>
+
+
+
+          <div class="row m-b-5" id="doctor_div" >
+              
+              <div class="col-sm-5">
+                  <label>Surgeon Name
+                      
+                  </label>
+              </div>
+
+              <div class="col-sm-7">
+                  <select name="referral_doctor" class="m_input_default" id="refered_id">
+                      <option value="">Select Doctor</option>
+                      <?php if (!empty($referal_doctor_list)) {
+                          foreach ($referal_doctor_list as $referal_doctor) { ?>
+                              <option value="<?php echo $referal_doctor->id; ?>" 
+                                  <?php echo ($form_data['referral_doctor'] == $referal_doctor->id) ? 'selected="selected"' : ''; ?>>
+                                  <?php echo $referal_doctor->doctor_name; ?>
+                              </option>
+                          <?php } 
+                      } ?>
+                  </select>
+
+                  <?php if (!empty($field_list)) {
+                      if ($field_list[2]['mandatory_field_id'] == '32' && $field_list[2]['mandatory_branch_id'] == $users_data['parent_id']) {
+                          if (!empty($form_error)) {
+                              echo form_error('referral_doctor');
+                          }
+                      }
+                  } ?>
+              </div>
+          </div>
+
+
+          <div class="row m-b-5">
+              <div class="col-sm-5"><b>Anaesthesia </b></div>
+              <div class="col-sm-7">
+                  <select name="anaesthesia" class="m_input_default" onChange="anaesthesia_function(this.value);">
+                      <option value="">Select Anaesthesia Type</option>
+                      <option value="Topical" <?php if(isset($form_data['anaesthesia']) && $form_data['anaesthesia'] == 'Topical'){ echo 'selected'; } ?>>Topical</option>
+                      <option value="Regional Block" <?php if(isset($form_data['anaesthesia']) && $form_data['anaesthesia'] == 'Regional Block'){ echo 'selected'; } ?>>Regional Block</option>
+                      <option value="Parental Sedation" <?php if(isset($form_data['anaesthesia']) && $form_data['anaesthesia'] == 'Parental Sedation'){ echo 'selected'; } ?>>Parental Sedation</option>
+                      <option value="GA" <?php if(isset($form_data['anaesthesia']) && $form_data['anaesthesia'] == 'GA'){ echo 'selected'; } ?>>General Anaesthesia (GA)</option>
+                  </select>
+              </div>
+          </div>
+
+          <div class="row m-b-5">
+              <div class="col-sm-5">
+                  <b>Type of Surgery/Group </b>
+              </div>
+              <div class="col-sm-7">
+                  <select name="surgery_type" class="m_input_default" onChange="surgery_type_function(this.value);">
+                      <option value="">Select Type of Surgery</option>
+                      <option value="Super Major" <?php if (isset($form_data['surgery_type']) && $form_data['surgery_type'] == 'Super Major') { echo 'selected'; } ?>>Super Major</option>
+                      <option value="Major" <?php if (isset($form_data['surgery_type']) && $form_data['surgery_type'] == 'Major') { echo 'selected'; } ?>>Major</option>
+                      <option value="Minor" <?php if (isset($form_data['surgery_type']) && $form_data['surgery_type'] == 'Minor') { echo 'selected'; } ?>>Minor</option>
+                  </select>
+              </div>
+          </div>
+
+          <div class="row m-b-5">
+            <div class="col-sm-5"><b>IOL Power</b></div>
+            <div class="col-sm-7">
+              <select name="iol_power" id="iol_power" class="m_input_default" onchange="filterIOLData(this.value);">
+                <option value="">Select</option>
+                <?php if (isset($iol_data) && $iol_data != "empty") {
+                  foreach ($iol_data as $iol) { ?>
+                    <option value="<?php echo htmlspecialchars($iol->iol_section); ?>" <?php if ($form_data['iol_power'] == $iol->iol_section) { echo 'selected'; } ?>>
+                      <?php echo htmlspecialchars($iol->iol_section); ?>
+                    </option>
+                <?php } } ?>
+              </select>
+            </div>
+          </div>
+
+          <div class="row m-b-5" id="iol_data_row" style="display: none;">
+            <div class="col-sm-5"><b>IOL Type</b></div>
+            <div class="col-sm-7">
+                <!-- <div class="grid-box" style="width: 200px; height: auto; border: 1px solid #aaa; padding: 5px;"> -->
+                    <!-- <div class="grid-body" style="width: 150px;"> -->
+                        <?php if (isset($iol_data) && $iol_data != "empty") { ?>
+                            <?php foreach ($iol_data as $iol) { ?>
+                                <!-- <div class="form-group"> -->
+                                    <!-- <label><?php echo htmlspecialchars($iol->iol_section); ?></label> -->
+                                    <input type="text" style="width: 200px;" name="iol_data[<?php echo $iol->id; ?>]" class="form-control" placeholder="Enter data for <?php echo htmlspecialchars($iol->iol_section); ?>">
+                                <!-- </div> -->
+                            <?php } ?>
+                        <?php } else { ?>
+                            <p>No  available.</p>
+                        <?php } ?>
+                    <!-- </div> -->
+                <!-- </div> -->
             </div>
         </div>
 
+          <div class="row m-b-5">
+              <div class="col-sm-5"><b>Brand</b></div>
+              <div class="col-sm-7">
+                  <select name="brand" id="brand">
+                    <option value="">Select</option>
+                        <?php //echo "<pre>";print_r($form_data['brand']);die;
+                        // Ensure $brand_list is not empty and is an array
+                        if (!empty($brand_list) && is_array($brand_list)) {
+                            foreach ($brand_list as $brand) {
+                                // Safely retrieve brand properties
+                                $brandId = isset($brand->id) ? $brand->id : null;
+                                $companyName = isset($brand->brand_name) ? $brand->brand_name : 'Unknown Company';
+                                
+                                // Pre-select the brand if it matches the form data
+                                $selected = (isset($form_data['brand']) && $form_data['brand'] == $brandId) ? 'selected="selected"' : '';
+                                
+                                // Render the option element
+                                echo "<option value='{$brandId}' {$selected}>{$companyName}</option>";
+                            }
+                        } else {
+                            echo '<option value="">No brands available</option>';
+                        }
+                        ?>
+
+                    </select>
+
+              </div>
+          </div>
+
+
+          <div class="row m-b-5" id="corporate_full_facility1">
+            <div class="col-sm-5"><b>Corporate Full Facility</b></div>
+            <div class="col-sm-7">
+              <select name="corporate_full_facility" id="corporate_full_facility" onchange="handleCorporateFacilityChange();">
+                <option value="">Select</option>
+                <option value="yes" <?php if (isset($form_data['corporate_full_facility']) && $form_data['corporate_full_facility'] == 'yes') { echo 'selected'; } ?>>Yes</option>
+                <option value="no" <?php if (isset($form_data['corporate_full_facility']) && $form_data['corporate_full_facility'] == 'no') { echo 'selected'; } ?>>No</option>
+              </select>
+            </div>
+          </div>
+
+          <?php if(isset($form_data['corporate_full_facility']) && $form_data['corporate_full_facility'] == 'no'){ ?>
+            <div id="additional-fields" style="display: block;">
+          <?php }else{?>
+            <div id="additional-fields" style="display: none;">
+          <?php } ?>
+            <div class="row m-b-5">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-5"><b>Total Amount</b></div>
+                        <div class="col-md-7">
+                            <input type="text" readonly name="total_amount" id="total_amount" class="price_float m_input_default" 
+                                  value="<?php echo isset($form_data['total_amount']) ? number_format(floatval($form_data['total_amount']), 2, '.', '') : htmlspecialchars($ipd_package->amount); ?>">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-b-5">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-5"><b>Corporate Amount</b></div>
+                        <div class="col-md-7">
+                            <input type="text" id="corporate_amount" class="price_float m_input_default"
+                                value="<?php echo isset($form_data['cost']) ? number_format(floatval($form_data['cost']), 2, '.', '') : '0.00'; ?>" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-b-5">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-5"><b>Difference Amount</b></div>
+                        <div class="col-md-7">
+                            <input type="text" id="difference_amount" class="price_float m_input_default"
+                                value="0.00" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-b-5">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-5"><b>Previous Advance</b></div>
+                        <div class="col-md-7">
+                            <input type="text" id="previous_advance" class="price_float m_input_default"
+                                value="<?php echo isset($form_data['advance_deposite']) ? number_format(floatval($form_data['advance_deposite']), 2, '.', '') : '0.00'; ?>" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            <div class="row m-b-5">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-5"><b>Balance</b></div>
+                        <div class="col-md-7">
+                            <input type="text" name="balance" id="balance" class="price_float m_input_default"
+                                value="0.00" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+
+            <div class="row m-b-5 hidden" >
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-5"><b>Operator</b></div>
+                        <div class="col-md-7">
+                          <?php //echo "<pre>" ; print_r($this->session->userdata());die;
+                             $operator_name  = $this->session->userdata("auth_users"); ?>
+                            <input type="text" name="operator" id="operator"  value="<?php echo isset($operator_name['username']) ? htmlspecialchars($operator_name['username']) : 'hehe'; ?>" readonly class="m_input_default">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+
+            $(document).ready(function() {
+                // Function to calculate the difference and balance
+                function calculateAmounts() {
+                    var totalAmount = parseFloat($('#package_amount').val()) || 0.00;
+                    var corporateAmount = parseFloat($('#corporate_amount').val()) || 0.00;
+                    var previousAmount = parseFloat($('#previous_advance').val()) || 0.00;
+
+                    // Calculate the difference: Total - Corporate
+                    var difference = totalAmount - corporateAmount;
+
+                    // If the difference is less than 0, set it to 0
+                    if (difference < 0) {
+                        difference = 0;
+                    }
+                    $('#difference_amount').val(difference.toFixed(2));
+
+                    // Calculate the balance: Previous Amount - Difference
+                    var balance = previousAmount - difference;
+                    $('#balance').val(balance.toFixed(2));
+                }
+
+                // Initial calculation on page load
+                calculateAmounts();
+
+                // Listen for manual input changes in the "Total Amount", "Corporate Amount", and "Cost" fields
+                $('#package_amount, #corporate_amount, #cost').on('input', function() {
+                    // If the "Cost" field is changed, update the "Corporate Amount" field
+                    if ($(this).attr('id') === 'cost') {
+                        var newCost = parseFloat($(this).val()) || 0.00;
+                        $('#corporate_amount').val(newCost.toFixed(2));
+                    }
+
+                    // Recalculate the difference and balance whenever total or corporate amount changes
+                    calculateAmounts();
+                });
+
+                // Listen for input changes in the "Advance Deposit" field
+                $('#advance_deposit').on('input', function() {
+                    var newAdvance = parseFloat($(this).val()) || 0.00;
+
+                    // Update the "Previous Advance" field with the new advance amount
+                    $('#previous_advance').val(newAdvance.toFixed(2));
+
+                    // Recalculate the balance after updating the advance deposit
+                    calculateAmounts();
+                });
+            });
+
+            function payment_function(value, error_field) {
+                $('#updated_payment_detail').html('');
+                $.ajax({
+                type: "POST",
+                url: "<?php echo base_url('ipd_booking/get_payment_mode_data') ?>",
+                data: { 'payment_mode_id': value, 'error_field': error_field },
+                success: function (msg) {
+                    $('#payment_detail').html(msg);
+                }
+                });
 
 
 
+            }
+
+            function handleCorporateFacilityChange() {
+                var facilitySelect = document.getElementById('corporate_full_facility');
+                var additionalFields = document.getElementById('additional-fields');
+                
+                if (facilitySelect.value === 'no') {
+                    additionalFields.style.display = 'block'; // Show the fields
+                } else {
+                    additionalFields.style.display = 'none';  // Hide the fields
+                }
+            }
+            function filterIOLData(selectedValue) {
+                const rows = document.querySelectorAll('.iol-row');  // Select all rows with class 'iol-row'
+                const iolDataRow = document.getElementById('iol_data_row');  // Select the container for IOL data
+
+                if (selectedValue === "") {
+                    // Hide the IOL Data section if no option is selected
+                    iolDataRow.style.display = 'none';
+                    return;
+                } else {
+                    iolDataRow.style.display = 'block'; // Show the IOL Data section
+                }
+
+                // Show/Hide rows based on the selection value
+                rows.forEach(row => {
+                    const section = row.getAttribute('data-iol-section');  // Get the data attribute from each row
+                    if (section === selectedValue) {
+                        row.style.display = ''; // Show the row if it matches the selected value
+                    } else {
+                        row.style.display = 'none'; // Hide the row if it doesn't match
+                    }
+                });
+            }
+
+            function validateAadhaar(input) {
+                var aadhaarPattern = /^[0-9]{12}$/;
+                var aadhaarError = document.getElementById("aadhaar_error");
+
+                // Allow only numbers
+                input.value = input.value.replace(/[^0-9]/g, '');
+
+                if (aadhaarPattern.test(input.value)) {
+                    aadhaarError.textContent = ""; // Clear error message
+                } else {
+                    aadhaarError.textContent = "Invalid Aadhaar number! Must be 12 digits.";
+                }
+            }
+
+
+            function updateAmount() {
+                var packageSelect = document.getElementById("package_id");
+                var selectedOption = packageSelect.options[packageSelect.selectedIndex];
+                var amountInput = document.getElementById("package_amount");
+                var tInput = document.getElementById("total_amount");
+                
+
+                // Get the amount from the selected option's data attribute
+                var amount = selectedOption.getAttribute("data-amount");
+                
+                // Update the amount input field with the selected package's amount
+                amountInput.value = amount ? amount : ''; // Set it to the amount or clear it if no selection
+                tInput.value = amount ? amount : ''; // Set it to the amount or clear it if no selection
+            }
+
+        // Initial call to set the amount field when the page loads
+        document.addEventListener("DOMContentLoaded", function() {
+            updateAmount(); // Set the initial value based on the selected package
+        });
+
+
+            <?php
+                if(isset($_GET['lid']) && !empty($_GET['lid']) && $_GET['lid']>0 && !empty($lead_ot_id))
+            {
+                ?>
+                $(document).ready(function(){
+                get_operation_prices('<?php echo $lead_ot_id; ?>');
+                });
+                <?php
+            }
+                ?>
+                function get_operation_prices(val)
+                {
+                // alert('PLPL');
+                $.ajax({
+                            type: "POST",
+                            dataType: "json",
+                            url: "<?php echo base_url('ot_booking/get_amount_details_operation_management');?>",
+                            data: {op_mgmt_id:val  },
+                            success: function(result) 
+                            {
+                            
+                                $("#total_amount").val(result.amount);
+                                // calculateAmounts();
+                                var totalAmount = parseFloat($('#package_amount').val()) || 0.00;
+                                var corporateAmount = parseFloat($('#corporate_amount').val()) || 0.00;
+                                var previousAmount = parseFloat($('#previous_advance').val()) || 0.00;
+
+                                // Calculate the difference: Total - Corporate
+                                var difference = totalAmount - corporateAmount;
+
+                                // If the difference is less than 0, set it to 0
+                                if (difference < 0) {
+                                    difference = 0;
+                                }
+
+                                $('#difference_amount').val(difference.toFixed(2));
+
+                                // Calculate the balance: Previous Amount - Difference
+                                var balance = previousAmount - difference;
+                                $('#balance').val(balance.toFixed(2));
+                            }
+
+                        });
+                }
+
+
+            function validateEmail(input) {
+                const emailError = document.getElementById('email_error');
+                const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/; // Regex for @gmail.com
+
+                if (!emailPattern.test(input.value)) {
+                    emailError.textContent = "Please enter a valid email ending with @gmail.com";
+                    input.setCustomValidity("Invalid email"); // Set custom validity message
+                } else {
+                    emailError.textContent = ""; // Clear error message
+                    input.setCustomValidity(""); // Reset custom validity
+                }
+            }
+
+            </script>
+
+        <div class="row m-b-5">
+            <div class="col-sm-5"><label>Remarks</label></div>
+            <div class="col-sm-7">
+                <textarea type="text" class="m_input_default" name="remarks"><?php echo $form_data['remarks'];?></textarea>
+            </div>
+        </div>
 
     <div id="updated_payment_detail">
         <?php if(!empty($form_data['field_name']))
@@ -1357,6 +1877,9 @@ $('document').ready(function(){
             <a href="<?php echo base_url('ipd_booking'); ?>" class="btn-anchor"><i class="fa fa-sign-out"></i> Exit</a>
         </div>
     </div>
+
+    
+
 
 
 </div> <!-- 4 -->
@@ -1569,11 +2092,19 @@ function select_payment_mode(value_s){
  {
     if(value_p==1)
     { 
-        $('#package_id').attr("disabled", true); 
+        $('#package_id1').slideUp();
+        $('#room_id1').slideUp();
+        $('#room_no_id1').slideUp();
+        $('#bed_no_id1').slideUp();
+        $('#amount_section1').slideUp();
     }
     else
     {
-        $('#package_id').attr("disabled", false); 
+        $('#package_id1').slideDown(); 
+        $('#room_id1').slideDown(); 
+        $('#room_no_id1').slideDown(); 
+        $('#bed_no_id1').slideDown(); 
+        $('#amount_section1').slideDown(); 
     }
 
 }
@@ -1724,18 +2255,22 @@ function handlePaymentMode() {
           // alert(selectedCategory);
 
           if (selectedCategory === 'corporate') {
+            $('#corporate_full_facility1').slideDown();
             $('#corporate_box').slideDown();
             $('#subsidy_box').slideUp();
             $('#panel_box').slideUp();
           } else if (selectedCategory === 'subsidy') {
+            $('#corporate_full_facility1').slideUp();
             $('#corporate_box').slideUp();
             $('#subsidy_box').slideDown();
             $('#panel_box').slideUp();
           } else if (selectedCategory === 'panel') {
+            $('#corporate_full_facility1').slideUp();
             $('#corporate_box').slideUp();
             $('#subsidy_box').slideUp();
             $('#panel_box').slideDown();
           } else {
+            $('#corporate_full_facility1').slideUp();
             $('#corporate_box').slideUp();
             $('#subsidy_box').slideUp();
             $('#panel_box').slideUp();
@@ -1832,11 +2367,11 @@ $(document).ready(function() {
           ?> <p><i class="fa fa-star" aria-hidden="true"></i><span class="text1">Simulation is required.</span></p><?php } ?>
           <?php if(empty($package_list)) {
           ?> <p><i class="fa fa-star" aria-hidden="true"></i><span class="text1">Package Name is required.</span></p><?php } ?>
-          <?php if(empty($room_type_list)) { ?>
+          <!-- <?php if(empty($room_type_list)) { ?>
            <p><i class="fa fa-star" aria-hidden="true"></i><span class="text1">Room Type is required.</span></p>
           <?php } ?>
              <?php if(empty($room_no)) { ?>
-           <p><i class="fa fa-star" aria-hidden="true"></i><span class="text1">Room No. is required.</span></p>
+           <p><i class="fa fa-star" aria-hidden="true"></i><span class="text1">Room No. is required.</span></p> -->
           <?php } ?>
              <!--  -->
               <?php if(empty($referal_doctor_list)) { ?>

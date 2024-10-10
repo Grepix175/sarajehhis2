@@ -1,6 +1,6 @@
 <?php 
     $user_detail = $this->session->userdata('auth_users');
-    $users_data = $this->session->userdata('auth_users');
+    $users_data = $this->session->userdata('auth_users');die;
     //address print
     if(empty($address_setting_list))
     {

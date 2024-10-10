@@ -1324,6 +1324,8 @@ class Visitor extends CI_Controller
 
     public function visitor_excel()
     {
+        $list = $this->visitor->search_patient_data();
+        // echo "<pre>";print_r($list); die;
 
         // Starting the PHPExcel library
         $this->load->library('excel');
