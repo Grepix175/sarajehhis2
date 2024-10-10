@@ -249,58 +249,6 @@ function allbranch_delete(allVals)
 ?>
 
 <!-- //////////////////////[ Left side bar ]////////////////////// -->
-<?php if($users_data['emp_id']==0){  ?>
-<div class="toggleBtn"><i class="fa fa-angle-right"></i></div>
-<div class="toggleBox">
-  <a>Exit <i class="fa fa-sign-out"></i></a>
-  <form id="checkbox_data_form">
-      <table class="table table-bordered table-striped table-hover">
-        <tbody>
-            <?php  
-                $unchecked_column = [];
-                foreach ($checkbox_list as $checkbox_list_data ) 
-                {
-                ?>
-                    <tr>
-                        <td><input type="checkbox" class="tog-col" <?php if($checkbox_list_data->selected_status > 0 && is_numeric($checkbox_list_data->selected_status)) 
-      {  ?> checked="checked" <?php }else { $unchecked_column[] = $checkbox_list_data->coloum_id; } ?> value="<?php echo $checkbox_list_data->coloum_id; ?>" data-column="<?php echo $checkbox_list_data->coloum_id; ?>"></td>
-
-                        <td><?php echo $checkbox_list_data->coloum_name; ?></td>
-                    </tr>
-                <?php
-                }
-
-                ?>
-          <tr>
-            <td colspan="2">
-              <button type="submit" class="btn-save m-t-5"><i class="fa fa-floppy-o"></i> Save</button>
-              <button onclick="reset_coloumn_record();" type="button" class="btn-save m-t-5"><i class="fa fa-refresh"></i> Reload</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-       </form>
-</div>
-<?php } else { 
-
-  $unchecked_column = [];
-  foreach ($checkbox_list as $checkbox_list_data ) 
-  {
-
-   // if($checkbox_list_data->checked_status==0) 
-      //{ $unchecked_column[] = $checkbox_list_data->coloum_id; }
-      if($checkbox_list_data->selected_status > 0 && is_numeric($checkbox_list_data->selected_status)) 
-      { 
-      
-      } 
-      else
-      {
-        $unchecked_column[] = $checkbox_list_data->coloum_id;
-      }
-  }
-
- } ?>
-
 
 
     <div class="userlist-box">
@@ -343,15 +291,7 @@ function allbranch_delete(allVals)
             </div>
           </div>
       </div>
-      <div class="col-md-4">
-        
-               <!-- <input value="Reset" class="btn-custom" onclick="reset_ipd_search(this.form)" type="button">-->
-                <!--<a class="btn-custom" id="reset_date" onclick="reset_ipd_search(this.form);"><i class="fa fa-refresh"></i> Reset</a>-->
-                <input value="Reset" class="btn-custom" onclick="reset_ipd_search(this.form)" type="button">
-                <a href="javascript:void(0)" class="btn-a-search" id="adv_search_ipd_booking"><i class="fa fa-cubes" aria-hidden="true"></i> Advance Search</a>
-              
-           
-      </div>
+      
     </div> <!-- inner row -->
 
 
@@ -377,13 +317,13 @@ function allbranch_delete(allVals)
           </div>
       </div>
       <div class="col-md-4">
-        <div class="row">
-            <div class="col-md-5">
-              <!--<a href="javascript:void(0)" class="btn-custom" id="reset_date" onclick="reset_search();"><i class="fa fa-refresh"></i> Reset</a>-->
+        
+               <!-- <input value="Reset" class="btn-custom" onclick="reset_ipd_search(this.form)" type="button">-->
+                <!--<a class="btn-custom" id="reset_date" onclick="reset_ipd_search(this.form);"><i class="fa fa-refresh"></i> Reset</a>-->
+                <input value="Reset" class="btn-custom" onclick="reset_ipd_search(this.form)" type="button">
+                <a href="javascript:void(0)" class="btn-a-search hidden" id="adv_search_ipd_booking"><i class="fa fa-cubes" aria-hidden="true"></i> Advance Search</a>
               
-            </div>
-            <div class="col-md-7"></div>
-          </div>
+           
       </div>
     </div> <!-- inner row -->
 
@@ -436,34 +376,24 @@ function allbranch_delete(allVals)
 
                 <tr>
                     <th align="center" width="40"> <input onclick="selectall();" type="checkbox" name="selectall" class="" id="selectAll" value=""> </th> 
-                        <th>IPD No.</th> 
-                        <th><?php echo $data= get_setting_value('PATIENT_REG_NO');?></th> 
-                        <th>Patient Name </th> 
-                        <th>Mobile No.</th> 
-                        <th>Admission Date</th>
-                        <th>Doctor Name</th> 
-                        <th>Room No.</th> 
-                        <th>Bed No.</th> 
-                        <th>Address</th> 
-                        <th>Remarks</th> 
-                       
-
-                        <th>Father Name</th>
-                        <th>Gender/Age</th>
-                        <th>Patient Email</th>
-                        <th>Insurance Type</th>
-                        <th>Insurance Company</th>
+                      <th>Token No.</th>
+                      <th>IPD No.</th> 
+                      <th><?php echo $data= get_setting_value('PATIENT_REG_NO');?></th>  
+                      <th>Patient Name </th> 
+                      <th>Category</th>
+                      <th>Village/Town</th>
+                      <th>Gender</th>
+                      <th>Age</th>
+                      <th>Mobile No.</th> 
+                      <th>Admission Date</th>
+                      <th>Surgeon Name</th>
+                      <th>Operation Name</th>
+                      <th>Package Name</th>
+                      <th>Eye Details</th>
+                      <th>Surgery Type</th>
+                      <th>Operation Room Type</th>
+                      <th>Advance Amount</th>
                         
-                        <th>MLC</th>
-                        <th>Package Name</th>
-                        <th>Room Type</th>
-                        <th>Referred By</th>
-                        
-                        <th>Advance Deposit</th>
-                        <th>Registration Charge</th>
-                        <th>Policy No.</th>
-                        <th>Diagnosis</th>
-                        <th>Discharge Date </th>
                         
                         <th>Action </th>
                 </tr>
@@ -484,9 +414,9 @@ function allbranch_delete(allVals)
 
                <?php if(in_array('734',$users_data['permission']['action'])) {
                ?>
-  			     <button class="btn-update" onclick="window.location.href='<?php echo base_url('ipd_booking/add'); ?>'">
+  			     <!-- <button class="btn-update" onclick="window.location.href='<?php echo base_url('ipd_booking/add'); ?>'">
   				    <i class="fa fa-plus"></i> New
-  			     </button>
+  			     </button> -->
                <?php } ?>
                <?php if(in_array('733',$users_data['permission']['action'])) {
                ?>
@@ -495,7 +425,7 @@ function allbranch_delete(allVals)
                 <i class="fa fa-file-excel-o"></i> Excel
                 </a>
 
-                <a href="<?php echo base_url('ipd_booking/ipd_booking_csv'); ?>" class="btn-anchor m-b-2">
+                <a href="<?php echo base_url('ipd_booking/ipd_booking_csv'); ?>" class="btn-anchor m-b-2 hidden">
                 <i class="fa fa-file-word-o"></i> CSV
                 </a>
 
@@ -523,8 +453,8 @@ function allbranch_delete(allVals)
                
                <?php if(in_array('737',$users_data['permission']['action'])) {
                ?>
-  			     <button class="btn-update" onclick="window.location.href='<?php echo base_url('ipd_booking/archive'); ?>'">
-  				    <i class="fa fa-archive"></i> Archive
+  			     <button class="btn-update hidden" onclick="window.location.href='<?php echo base_url('ipd_booking/archive'); ?>'">
+  				    <i class="fa fa-archive "></i> Archive
   			     </button>
                <?php } ?>
                

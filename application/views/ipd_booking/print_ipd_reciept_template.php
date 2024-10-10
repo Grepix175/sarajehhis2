@@ -2,23 +2,25 @@
  $user_detail = $this->session->userdata('auth_users');
 $users_data = $this->session->userdata('auth_users');
 /* start thermal printing */
-//print '<pre>'; print_r($all_detail['ipd_list'][0]);die;
-$payment_mode=$all_detail['ipd_list'][0]->payment_mode;
+// print '<pre>'; print_r($all_detail);die;
+$payment_mode=isset($all_detail['ipd_list'][0]->payment_mode)?$all_detail['ipd_list'][0]->payment_mode:'';
 $template_data->template = str_replace("{advance_amount}",'',$template_data->template);
 $template_data->template = str_replace("Advance:",'',$template_data->template);
 
 $template_data->template = str_replace("{discount}",'',$template_data->template);
 $template_data->template = str_replace("Discount:",'',$template_data->template);
 
-$admission_time=date('H:i A' , strtotime($all_detail['ipd_list'][0]->admission_time));
+$admission_time = date('H:i A', strtotime(isset($all_detail['ipd_list'][0]->admission_time) ? $all_detail['ipd_list'][0]->admission_time : ''));
 $template_data->template = str_replace("{booking_time}", $admission_time, $template_data->template);
 $template_data->template = str_replace("{reciept_no}",'',$template_data->template);
 $template_data->template = str_replace("Receipt No. :",'',$template_data->template); 
-$template_data->template = str_replace("{transaction_no}",$all_detail['ipd_list'][0]->transaction_no,$template_data->template);
+$template_data->template = str_replace("{transaction_no}", isset($all_detail['ipd_list'][0]->transaction_no) ? $all_detail['ipd_list'][0]->transaction_no : '', $template_data->template);
+$simulation = '';
 
-$template_data->template = str_replace("{diagnosis}",$simulation.''.$all_detail['ipd_list'][0]->diagnosis,$template_data->template);
-    $admission_date=date('d-m-Y' , strtotime($all_detail['ipd_list'][0]->admission_date));
-    $admission_time=date('H:i A' , strtotime($all_detail['ipd_list'][0]->admission_time));
+$template_data->template = str_replace("{diagnosis}", isset($all_detail['ipd_list'][0]->diagnosis) ? $simulation . $all_detail['ipd_list'][0]->diagnosis : $simulation, $template_data->template);
+$admission_date = isset($all_detail['ipd_list'][0]->admission_date) ? date('d-m-Y', strtotime($all_detail['ipd_list'][0]->admission_date)) : '';
+$admission_time = isset($all_detail['ipd_list'][0]->admission_time) ? date('H:i A', strtotime($all_detail['ipd_list'][0]->admission_time)) : '';
+
 
     if(!empty($time_setting[0]->ipd) && !empty($time_setting[0]->ipd))
     {
@@ -889,43 +891,54 @@ if($template_data->printer_id==1)
             {
              $template_data->template = str_replace("{parent_relation_name}",'',$template_data->template);
             }
-    $simulation = get_simulation_name($all_detail['ipd_list'][0]->simulation_id);
-    $template_data->template = str_replace("{patient_name}",$simulation.' '.$all_detail['ipd_list'][0]->patient_name,$template_data->template);
-    $template_data->template = str_replace("{patient_reg_no}",$all_detail['ipd_list'][0]->patient_code,$template_data->template);
-    $address = $all_detail['ipd_list'][0]->address;
-    $pincode = $all_detail['ipd_list'][0]->pincode;         
+    $simulation = get_simulation_name(isset($all_detail['ipd_list'][0]->simulation_id)?$all_detail['ipd_list'][0]->simulation_id:'');
+    $template_data->template = str_replace(
+        "{patient_name}", 
+        $simulation . ' ' . (isset($all_detail['ipd_list'][0]->patient_name) ? $all_detail['ipd_list'][0]->patient_name : ''), 
+        $template_data->template
+    );
+    
+    $template_data->template = str_replace(
+        "{patient_reg_no}", 
+        isset($all_detail['ipd_list'][0]->patient_code) ? $all_detail['ipd_list'][0]->patient_code : '', 
+        $template_data->template
+    );
+    
+    $address = isset($all_detail['ipd_list'][0]->address) ? $all_detail['ipd_list'][0]->address : '';
+    $pincode = isset($all_detail['ipd_list'][0]->pincode) ? $all_detail['ipd_list'][0]->pincode : '';
+          
      
 
     // added on 08-Feb-2018
-        $country = $all_detail['ipd_list'][0]->country_name;    
-        $state = $all_detail['ipd_list'][0]->state_name;    
-        $city = $all_detail['ipd_list'][0]->city_name;    
+        $country =  isset($all_detail['ipd_list'][0]->country_name)?$all_detail['ipd_list'][0]->country_name:'';    
+        $state = isset($all_detail['ipd_list'][0]->state_name)?$all_detail['ipd_list'][0]->state_name:'';    
+        $city = isset($all_detail['ipd_list'][0]->city_name)?$all_detail['ipd_list'][0]->city_name:'';    
         $patient_address = $address.'<br/>'.$country.','.$state.'<br/>'.$city.' - '.$pincode;
         //$patient_address = $address.' - '.$pincode;
 
         // adhar no 
-        $adhar_no=$all_detail['ipd_list'][0]->adhar_no;
+        $adhar_no=isset($all_detail['ipd_list'][0]->adhar_no)?$all_detail['ipd_list'][0]->adhar_no:'';
         $template_data->template = str_replace("{adhar_no}",$adhar_no,$template_data->template);  
         // adhar no
 
         // marital status
-        $marital_status=$all_detail['ipd_list'][0]->marital_status;
+        $marital_status=isset($all_detail['ipd_list'][0]->marital_status)?$all_detail['ipd_list'][0]->marital_status:'';
         $template_data->template = str_replace("{marital_status}",$marital_status,$template_data->template);
         // marital status
 
         // Anniversary
-        $anniversary=date('Y-m-d', strtotime($all_detail['ipd_list'][0]->anniversary));
+        $anniversary=date('Y-m-d', strtotime(isset($all_detail['ipd_list'][0]->anniversary)?$all_detail['ipd_list'][0]->anniversary:''));
         $template_data->template = str_replace("{anniversary}",$anniversary,$template_data->template);
         // Anniversary
 
         // Religion Name
-        $religion_name= ucwords($all_detail['ipd_list'][0]->religion_name);
+        $religion_name= ucwords(isset($all_detail['ipd_list'][0]->religion_name)?$all_detail['ipd_list'][0]->religion_name:'');
         $template_data->template = str_replace("{religion}", $religion_name, $template_data->template);    
         // Religion Name
 
         // DOB starts here
-        if($all_detail['ipd_list'][0]->dob!='0000-00-00')
-        {
+        if (isset($all_detail['ipd_list'][0]->dob) && $all_detail['ipd_list'][0]->dob !== '0000-00-00') {
+            
             $dob=date('d-m-Y' ,strtotime($all_detail['ipd_list'][0]->dob));
             $template_data->template = str_replace("{dob}", $dob, $template_data->template);
         }
@@ -934,123 +947,120 @@ if($template_data->printer_id==1)
             $template_data->template = str_replace("{dob}",'-', $template_data->template);   
         }
         // DOB Ends Here
+        $type = ''; // Default value
 
-         // Relation Name
-            if($all_detail['ipd_list'][0]->relation_type==1)
-                $type="father/o";
-            else if($all_detail['ipd_list'][0]->relation_type==2)
-                $type="husband/o";
-            else if($all_detail['ipd_list'][0]->relation_type==3)
-                $type="baby/o";
-            else if($all_detail['ipd_list'][0]->relation_type==4)
-                $type="son/o";
-            else if($all_detail['ipd_list'][0]->relation_type==5)
-                $type="daughter/o";
-            else
+        if (!empty($all_detail['ipd_list']) && isset($all_detail['ipd_list'][0])) {
+            $relation_type = $all_detail['ipd_list'][0]->relation_type ?? null; // Use null coalescing to avoid undefined property notice
+        
+            // Define your relation types
+            $relationTypes = [
+                1 => "father/o",
+                2 => "husband/o",
+                3 => "baby/o",
+                4 => "son/o",
+                5 => "daughter/o"
+            ];
+        
+            // Check if the relation type exists in the array
+            if (isset($relationTypes[$relation_type])) {
+                $type = $relationTypes[$relation_type];
+            }
+        }
+        
                 $type="";
-        $relation_name= ucwords($all_detail['ipd_list'][0]->relation_name);
+        $relation_name= ucwords(isset($all_detail['ipd_list'][0]->relation_name)?$all_detail['ipd_list'][0]->relation_name:'');
         $template_data->template = str_replace("{relation_name}", $type." ".$relation_name, $template_data->template);    
         // Relation Name
 
         // Mother Name
-        $mother= ucwords($all_detail['ipd_list'][0]->mother);
-        $template_data->template = str_replace("{mother}", $mother, $template_data->template);     
         // Mother Name
+        $mother = isset($all_detail['ipd_list'][0]->mother) ? ucwords($all_detail['ipd_list'][0]->mother) : '';
+        $template_data->template = str_replace("{mother}", $mother, $template_data->template);
 
         // Guardian Name
-        $guardian_name= ucwords($all_detail['ipd_list'][0]->guardian_name);
-        $template_data->template = str_replace("{guardian_name}", $guardian_name, $template_data->template);     
-        // Guardian Name
+        $guardian_name = isset($all_detail['ipd_list'][0]->guardian_name) ? ucwords($all_detail['ipd_list'][0]->guardian_name) : '';
+        $template_data->template = str_replace("{guardian_name}", $guardian_name, $template_data->template);
 
-       // Guardian Email
-        $guardian_email= ucwords($all_detail['ipd_list'][0]->guardian_email);
-        $template_data->template = str_replace("{guardian_email}", $guardian_email, $template_data->template);  
-      // guardian Email 
+        // Guardian Email
+        $guardian_email = isset($all_detail['ipd_list'][0]->guardian_email) ? ucwords($all_detail['ipd_list'][0]->guardian_email) : '';
+        $template_data->template = str_replace("{guardian_email}", $guardian_email, $template_data->template);
 
         // Guardian Phone
-        $guardian_phone= ucwords($all_detail['ipd_list'][0]->guardian_phone);
-        $template_data->template = str_replace("{guardian_phone}",$guardian_phone, $template_data->template);  
-        // guardian Phone 
-
+        $guardian_phone = isset($all_detail['ipd_list'][0]->guardian_phone) ? ucwords($all_detail['ipd_list'][0]->guardian_phone) : '';
+        $template_data->template = str_replace("{guardian_phone}", $guardian_phone, $template_data->template);
 
         // Guardian Relation
-        $guardian_relation= ucwords($all_detail['ipd_list'][0]->relation);
-        $template_data->template = str_replace("{guardian_relation}",$guardian_relation, $template_data->template);  
-        // guardian Relation 
+        $guardian_relation = isset($all_detail['ipd_list'][0]->relation) ? ucwords($all_detail['ipd_list'][0]->relation) : '';
+        $template_data->template = str_replace("{guardian_relation}", $guardian_relation, $template_data->template);
 
+        // Patient Email
+        $patient_email = isset($all_detail['ipd_list'][0]->patient_email) ? ucwords($all_detail['ipd_list'][0]->patient_email) : '';
+        $template_data->template = str_replace("{patient_email}", $patient_email, $template_data->template);
 
-        // Patient email
-        $patient_email= ucwords($all_detail['ipd_list'][0]->patient_email);
-        $template_data->template = str_replace("{patient_email}", $patient_email, $template_data->template);  
         // patient Email 
 
         // Monthly Income
-        $monthly_income= number_format(ucwords($all_detail['ipd_list'][0]->monthly_income,2));
+        // Check if the monthly_income exists and is numeric
+        if (isset($all_detail['ipd_list'][0]->monthly_income) && is_numeric($all_detail['ipd_list'][0]->monthly_income)) {
+            // Convert to float and format as currency with 2 decimal places
+            $monthly_income = number_format((float)$all_detail['ipd_list'][0]->monthly_income, 2);
+        } else {
+            // Handle the case where monthly_income is not set or not numeric
+            $monthly_income = 'N/A'; // or any default value you prefer
+        }
         $template_data->template = str_replace("{monthly_income}", $monthly_income, $template_data->template);  
         // Monthly Income
 
         // occupation
-        $occupation= ucwords($all_detail['ipd_list'][0]->occupation);
-        $template_data->template = str_replace("{occupation}", $occupation, $template_data->template);      
-        // occupation
+        $occupation = isset($all_detail['ipd_list'][0]->occupation) ? ucwords($all_detail['ipd_list'][0]->occupation) : '';
+        $template_data->template = str_replace("{occupation}", $occupation, $template_data->template);
 
-        //insurance_type
-        $insurance_type= ucwords($all_detail['ipd_list'][0]->insurance_type);
-        $template_data->template = str_replace("{insurance_type}", $insurance_type, $template_data->template);  
-        //insurance_type
+        // Insurance Type
+        $insurance_type = isset($all_detail['ipd_list'][0]->insurance_type) ? ucwords($all_detail['ipd_list'][0]->insurance_type) : '';
+        $template_data->template = str_replace("{insurance_type}", $insurance_type, $template_data->template);
 
-        //insurance_type_name
-        $insurance_type_name= ucwords($all_detail['ipd_list'][0]->insurance_type_name);
-        $template_data->template = str_replace("{insurance_type_name}", $insurance_type_name, $template_data->template);  
-        //insurance_type_name
+        // Insurance Type Name
+        $insurance_type_name = isset($all_detail['ipd_list'][0]->insurance_type_name) ? ucwords($all_detail['ipd_list'][0]->insurance_type_name) : '';
+        $template_data->template = str_replace("{insurance_type_name}", $insurance_type_name, $template_data->template);
 
-        //insurance_company_name
-        $insurance_company_name= ucwords($all_detail['ipd_list'][0]->insurance_company_name);
-        $template_data->template = str_replace("{insurance_company_name}", $insurance_company_name, $template_data->template);  
-        //insurance_company_name
+        // Insurance Company Name
+        $insurance_company_name = isset($all_detail['ipd_list'][0]->insurance_company_name) ? ucwords($all_detail['ipd_list'][0]->insurance_company_name) : '';
+        $template_data->template = str_replace("{insurance_company_name}", $insurance_company_name, $template_data->template);
 
-        //insurance_policy_no
-        $insurance_policy_no= ucwords($all_detail['ipd_list'][0]->insurance_policy_no);
-        $template_data->template = str_replace("{insurance_policy_no}", $insurance_policy_no, $template_data->template);  
-        //insurance_policy_no
+        // Insurance Policy No
+        $insurance_policy_no = isset($all_detail['ipd_list'][0]->insurance_policy_no) ? ucwords($all_detail['ipd_list'][0]->insurance_policy_no) : '';
+        $template_data->template = str_replace("{insurance_policy_no}", $insurance_policy_no, $template_data->template);
 
-          //insurance_tpa_id
-        $insurance_tpa_id= ucwords($all_detail['ipd_list'][0]->tpa_id);
-        $template_data->template = str_replace("{insurance_tpa_id}", $insurance_tpa_id, $template_data->template);  
-        //insurance_tpa_id
+        // Insurance TPA ID
+        $insurance_tpa_id = isset($all_detail['ipd_list'][0]->tpa_id) ? ucwords($all_detail['ipd_list'][0]->tpa_id) : '';
+        $template_data->template = str_replace("{insurance_tpa_id}", $insurance_tpa_id, $template_data->template);
 
+        // Insurance Amount
+        $insurance_amount = isset($all_detail['ipd_list'][0]->insurance_amount) ? ucwords($all_detail['ipd_list'][0]->insurance_amount) : '';
+        $template_data->template = str_replace("{insurance_amount}", $insurance_amount, $template_data->template);
 
-        //insurance_amount
-        $insurance_amount= ucwords($all_detail['ipd_list'][0]->insurance_amount);
-        $template_data->template = str_replace("{insurance_amount}", $insurance_amount, $template_data->template);  
-        //insurance_amount
+        // Auth No
+        $auth_no = isset($all_detail['ipd_list'][0]->auth_no) ? ucwords($all_detail['ipd_list'][0]->auth_no) : '';
+        $template_data->template = str_replace("{auth_no}", $auth_no, $template_data->template);
 
-        //auth_no
-        $auth_no= ucwords($all_detail['ipd_list'][0]->auth_no);
-        $template_data->template = str_replace("{auth_no}", $auth_no, $template_data->template);  
-        //auth_no
+        // IPD booking fields starts here
 
-
-        // Ipd booking fields starts here
-        
-        // Pacakage Name
-        $package_name= ucwords($all_detail['ipd_list'][0]->package_name);
-        $template_data->template = str_replace("{package_name}", $package_name, $template_data->template);  
+        // Package Name
+        $package_name = isset($all_detail['ipd_list'][0]->package_name) ? ucwords($all_detail['ipd_list'][0]->package_name) : '';
+        $template_data->template = str_replace("{package_name}", $package_name, $template_data->template);
 
         // Referred By
-        $referrer= ucwords($all_detail['ipd_list'][0]->referrered_by);
-        $template_data->template = str_replace("{referred_by}", $referrer, $template_data->template);  
-        // Referred By
+        $referrer = isset($all_detail['ipd_list'][0]->referrered_by) ? ucwords($all_detail['ipd_list'][0]->referrered_by) : '';
+        $template_data->template = str_replace("{referred_by}", $referrer, $template_data->template);
 
-        
         // Referrer Name
-        $referrer_name= ucwords($all_detail['ipd_list'][0]->referrer_name);
-        $template_data->template = str_replace("{referrer_name}", $referrer_name, $template_data->template);  
-        // Referrer Name
-    
-        // Attented Doctors
-        $attented_doctor= ucwords($all_detail['ipd_list'][0]->attented_doctor);
-        $template_data->template = str_replace("{attented_doctors}", $attented_doctor, $template_data->template );  
+        $referrer_name = isset($all_detail['ipd_list'][0]->referrer_name) ? ucwords($all_detail['ipd_list'][0]->referrer_name) : '';
+        $template_data->template = str_replace("{referrer_name}", $referrer_name, $template_data->template);
+
+        // Attended Doctors
+        $attented_doctor = isset($all_detail['ipd_list'][0]->attented_doctor) ? ucwords($all_detail['ipd_list'][0]->attented_doctor) : '';
+        $template_data->template = str_replace("{attented_doctors}", $attented_doctor, $template_data->template);
+ 
         // Attented Doctors        
     
         // assigned doctors name
@@ -1127,6 +1137,70 @@ if($template_data->printer_id==1)
     {
          $template_data->template = str_replace("{Consultant}",'',$template_data->template);
     }
+
+    // Array of placeholder keys and their corresponding values
+    $placeholders = [
+        "{package_type}" => $all_detail['ipd_list'][0]->package_type,
+        "{package_id}" => $all_detail['ipd_list'][0]->package_id,
+        "{panel_type}" => $all_detail['ipd_list'][0]->panel_type,
+        "{panel_name}" => $all_detail['ipd_list'][0]->panel_name,
+        "{card_no}" => $all_detail['ipd_list'][0]->card_no,
+        "{bank_name}" => $all_detail['ipd_list'][0]->bank_name,
+        "{total_amount_dis_bill}" => $all_detail['ipd_list'][0]->total_amount_dis_bill,
+        "{cheque_no}" => $all_detail['ipd_list'][0]->cheque_no,
+        "{discharge_payment_mode}" => $all_detail['ipd_list'][0]->discharge_payment_mode,
+        "{discount_amount_dis_bill}" => $all_detail['ipd_list'][0]->discount_amount_dis_bill,
+        "{tds_amount_dis_bill}" => $all_detail['ipd_list'][0]->tds_amount_dis_bill,
+        "{cheque_date}" => $all_detail['ipd_list'][0]->cheque_date,
+        "{advance_payment_dis_bill}" => $all_detail['ipd_list'][0]->advance_payment_dis_bill,
+        "{transaction_no}" => $all_detail['ipd_list'][0]->transaction_no,
+        "{net_amount_dis_bill}" => $all_detail['ipd_list'][0]->net_amount_dis_bill,
+        "{panel_polocy_no}" => $all_detail['ipd_list'][0]->panel_polocy_no,
+        "{paid_amount_dis_bill}" => $all_detail['ipd_list'][0]->paid_amount_dis_bill,
+        "{panel_id_no}" => $all_detail['ipd_list'][0]->panel_id_no,
+        "{refund_amount_dis_bill}" => $all_detail['ipd_list'][0]->refund_amount_dis_bill,
+        "{authrization_amount}" => $all_detail['ipd_list'][0]->authrization_amount,
+        "{balance_amount_dis_bill}" => $all_detail['ipd_list'][0]->balance_amount_dis_bill,
+        "{admission_date}" => $all_detail['ipd_list'][0]->admission_date,
+        "{admission_time}" => $all_detail['ipd_list'][0]->admission_time,
+        "{advance_payment}" => $all_detail['ipd_list'][0]->advance_payment,
+        "{patient_category}" => $all_detail['ipd_list'][0]->patient_category,
+        "{eye_details}" => $all_detail['ipd_list'][0]->eye_details,
+        "{vision_right}" => $all_detail['ipd_list'][0]->vision_right,
+        "{cataract_type_right}" => $all_detail['ipd_list'][0]->cataract_type_right,
+        "{vision_left}" => $all_detail['ipd_list'][0]->vision_left,
+        "{cataract_type_left}" => $all_detail['ipd_list'][0]->cataract_type_left,
+        "{ins_authorization_no}" => $all_detail['ipd_list'][0]->ins_authorization_no,
+        "{employee_no}" => $all_detail['ipd_list'][0]->employee_no,
+        "{auth_issue_date}" => $all_detail['ipd_list'][0]->auth_issue_date,
+        "{department_id}" => $all_detail['ipd_list'][0]->department_id,
+        "{cost}" => $all_detail['ipd_list'][0]->cost,
+        "{subsidy_id}" => $all_detail['ipd_list'][0]->subsidy_id,
+        "{subsidy_created}" => $all_detail['ipd_list'][0]->subsidy_created,
+        "{subsidy_amount}" => $all_detail['ipd_list'][0]->subsidy_amount,
+        "{insurance_type_id}" => $all_detail['ipd_list'][0]->insurance_type_id,
+        "{policy_no}" => $all_detail['ipd_list'][0]->policy_no,
+        "{validity_date}" => $all_detail['ipd_list'][0]->validity_date,
+        "{ins_amount}" => $all_detail['ipd_list'][0]->ins_amount,
+        "{state_id}" => $all_detail['ipd_list'][0]->state_id,
+        "{corporate_id}" => $all_detail['ipd_list'][0]->corporate_id,
+        "{operation_name}" => $all_detail['ipd_list'][0]->operation_name,
+        "{anaesthesia}" => $all_detail['ipd_list'][0]->anaesthesia,
+        "{surgery_type}" => $all_detail['ipd_list'][0]->surgery_type,
+        "{iol_power}" => $all_detail['ipd_list'][0]->iol_power,
+        "{iol_type}" => $all_detail['ipd_list'][0]->iol_type,
+        "{brand}" => $all_detail['ipd_list'][0]->brand,
+        "{corporate_full_facility}" => $all_detail['ipd_list'][0]->corporate_full_facility,
+        "{operator}" => $all_detail['ipd_list'][0]->operator,
+        "{total_amount}" => $all_detail['ipd_list'][0]->total_amount,
+        "{token}" => $all_detail['ipd_list'][0]->token,
+    ];
+
+    // Replace all placeholders in the template with their corresponding values
+    foreach ($placeholders as $key => $value) {
+        $template_data->template = str_replace($key, $value, $template_data->template);
+    }
+
     
     $template_data->template = str_replace("{mobile_no}",$all_detail['ipd_list'][0]->mobile_no,$template_data->template);
 

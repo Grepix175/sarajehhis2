@@ -15,207 +15,187 @@ class Ipd_booking_model extends CI_Model
 
     private function _get_datatables_query()
     {
+        // Fetch user data and search parameters from session
         $user_data = $this->session->userdata('auth_users');
         $search = $this->session->userdata('ipd_booking_search');
-        //echo "<pre>";print_r($search); exit; 
-        $this->db->select("hms_ipd_booking.diagnosis, hms_ipd_booking.id,hms_ipd_booking.branch_id,hms_ipd_booking.ipd_no,hms_ipd_booking.patient_id,hms_ipd_booking.admission_date,hms_ipd_booking.admission_time,hms_ipd_booking.remarks,hms_ipd_booking.mlc,hms_ipd_booking.advance_payment,hms_ipd_booking.reg_charge,hms_ipd_booking.panel_polocy_no,hms_patient.patient_name,hms_patient.patient_code,concat_ws(' ',hms_patient.address, hms_patient.address2, hms_patient.address3) as address,hms_patient.age,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d, hms_doctors.doctor_name,hms_patient.mobile_no,hms_ipd_rooms.room_no,hms_ipd_room_to_bad.bad_no,hms_ipd_room_to_bad.bad_name,hms_ipd_booking.created_date as createdate,hms_ipd_booking.discharge_status,     
 
-            hms_patient.father_husband, sim.simulation as father_husband_simulation,
-            (CASE WHEN hms_patient.gender=1 THEN  'Male' ELSE 'Female' END ) as gender,
-            hms_patient.patient_email, ins_type.insurance_type, ins_cmpy.insurance_company,
-            pkg.name as package_name, rm_cat.room_category as room_type, 
-            (CASE WHEN hms_ipd_booking.referred_by =1 THEN concat(hms_hospital.hospital_name,' (Hospital)')  ELSE concat('Dr. ',doc.doctor_name) END) as doctor_hospital_name,hms_ipd_patient_to_charge.price as reg_charge,hms_ipd_booking.discharge_date"); 
+        // Select necessary fields from the database
+        $this->db->select("
+            hms_ipd_booking.diagnosis,
+            hms_ipd_booking.id,
+            hms_ipd_booking.branch_id,
+            hms_ipd_booking.ipd_no,
+            hms_ipd_booking.patient_id,
+            hms_ipd_booking.admission_date,
+            hms_ipd_booking.admission_time,
+            hms_ipd_booking.remarks,
+            hms_ipd_booking.mlc,
+            hms_ipd_booking.advance_payment,
+            hms_ipd_booking.reg_charge,
+            hms_ipd_booking.panel_polocy_no,
+            hms_patient.patient_name,
+            hms_patient.patient_code,
+            concat_ws(' ', hms_patient.address) as address,
+            hms_patient.age,
+            hms_patient.age_y,
+            hms_patient.age_m,
+            hms_patient.age_d,
+            hms_doctors.doctor_name,
+            hms_patient.mobile_no,
+            hms_ipd_rooms.room_no,
+            hms_ipd_room_to_bad.bad_no,
+            hms_ipd_room_to_bad.bad_name,
+            hms_ipd_booking.created_date as createdate,
+            hms_ipd_booking.discharge_status,
+            hms_patient.father_husband,
+            sim.simulation as father_husband_simulation,
+            (CASE WHEN hms_patient.gender=1 THEN 'Male' ELSE 'Female' END) as gender,
+            hms_patient.patient_email,
+            ins_type.insurance_type,
+            ins_cmpy.insurance_company,
+            pkg.name as package_name,
+            rm_cat.room_category as room_type,
+            (CASE WHEN hms_ipd_booking.referred_by =1 THEN concat(hms_hospital.hospital_name, ' (Hospital)') ELSE concat('Dr. ', doc.doctor_name) END) as doctor_hospital_name,
+            hms_ipd_patient_to_charge.price as reg_charge,
+            hms_ipd_booking.discharge_date,
+            hms_ipd_booking.token,
+            (CASE WHEN hms_patient.gender = 1 THEN 'Male' ELSE 'Female' END) as gender,
+            hms_doctors.doctor_name as surgeon_name,
+            hms_ipd_booking.*, 
+        ");
 
+        // Join related tables
+        $this->db->join('hms_patient', 'hms_patient.id = hms_ipd_booking.patient_id AND hms_patient.is_deleted != 2', 'left');
+        $this->db->join('hms_doctors', 'hms_doctors.id = hms_ipd_booking.attend_doctor_id', 'left');
+        $this->db->join('hms_ipd_rooms', 'hms_ipd_rooms.id = hms_ipd_booking.room_id', 'left');
+        $this->db->join('hms_ipd_room_to_bad', 'hms_ipd_room_to_bad.id = hms_ipd_booking.bad_id', 'left');
+        $this->db->join('hms_simulation as sim', 'sim.id = hms_patient.f_h_simulation', 'left');
+        $this->db->join('hms_insurance_type as ins_type', 'ins_type.id = hms_ipd_booking.panel_type', 'left');
+        $this->db->join('hms_insurance_company as ins_cmpy', 'ins_cmpy.id = hms_ipd_booking.panel_name', 'left');
+        $this->db->join('hms_ipd_packages as pkg', 'pkg.id = hms_ipd_booking.package_id', 'left');
+        $this->db->join('hms_ipd_room_category as rm_cat', 'rm_cat.id = hms_ipd_booking.room_type_id', 'left');
+        $this->db->join('hms_doctors as doc', 'doc.id = hms_ipd_booking.referral_doctor', 'left');
+        $this->db->join('hms_hospital', 'hms_hospital.id = hms_ipd_booking.referral_hospital', 'left');
+        $this->db->join('hms_ipd_patient_to_charge', 'hms_ipd_patient_to_charge.ipd_id = hms_ipd_booking.id AND hms_ipd_patient_to_charge.type = 1', 'left');
 
-        $this->db->join('hms_patient','hms_patient.id = hms_ipd_booking.patient_id AND hms_patient.is_deleted!=2','left'); 
-        $this->db->join('hms_doctors','hms_doctors.id = hms_ipd_booking.attend_doctor_id','left'); 
-        $this->db->join('hms_ipd_rooms','hms_ipd_rooms.id=hms_ipd_booking.room_id','left');
-        $this->db->join('hms_ipd_room_to_bad','hms_ipd_room_to_bad.id=hms_ipd_booking.bad_id','left');
-
-        $this->db->join('hms_simulation as sim','sim.id=hms_patient.f_h_simulation', 'left');
-        $this->db->join('hms_insurance_type as ins_type','ins_type.id=hms_ipd_booking.panel_type', 'left');
-        $this->db->join('hms_insurance_company as ins_cmpy','ins_cmpy.id=hms_ipd_booking.panel_name', 'left');
-
-        $this->db->join('hms_ipd_packages as pkg','pkg.id = hms_ipd_booking.package_id','left');
-        $this->db->join('hms_ipd_room_category as rm_cat','rm_cat.id = hms_ipd_booking.room_type_id','left');
-        $this->db->join('hms_doctors as doc','doc.id = hms_ipd_booking.referral_doctor','left');
-        $this->db->join('hms_hospital','hms_hospital.id = hms_ipd_booking.referral_hospital','left');
-
-        $this->db->join('hms_ipd_patient_to_charge', 'hms_ipd_patient_to_charge.ipd_id=hms_ipd_booking.id and hms_ipd_patient_to_charge.type=1','left');
-
-        $this->db->where('hms_ipd_booking.is_deleted','0'); 
+        // Filter out deleted records
+        $this->db->where('hms_ipd_booking.is_deleted', '0');
         $this->db->group_by('hms_ipd_booking.id');
 
-        if($user_data['users_role']==4)
-        {
-        $this->db->where('hms_ipd_booking.patient_id = "'.$user_data['parent_id'].'"'); 
+        // Apply user-specific filters based on role
+        if ($user_data['users_role'] == 4) {
+            $this->db->where('hms_ipd_booking.patient_id', $user_data['parent_id']);
+        } elseif ($user_data['users_role'] == 3) {
+            $this->db->where('hms_ipd_booking.referral_doctor', $user_data['parent_id']);
+        } else {
+            $this->db->where('hms_ipd_booking.branch_id', $user_data['parent_id']);
         }
-        elseif($user_data['users_role']==3)
-        {
-            $this->db->where('hms_ipd_booking.referral_doctor = "'.$user_data['parent_id'].'"'); 
-        }
-        else
-        {
-        $this->db->where('hms_ipd_booking.branch_id = "'.$user_data['parent_id'].'"'); 
-        
-        }
-        $this->db->from($this->table); 
 
-        
-        /////// Search query start //////////////
-        if($user_data['users_role']==3)
-        {
-        }
-        else
-        {
-                if(isset($search['running']) && !empty($search['running']))
-                {
-                    if($search['running']=='1')
-                    {
-                        $this->db->where('hms_ipd_booking.discharge_status = "'.$search['running'].'"');  
-                    }
-                    
+        // Set the base table for the query
+        $this->db->from($this->table);
+
+        // Search filter logic
+        if ($user_data['users_role'] != 3) {
+            if (isset($search['running']) && !empty($search['running'])) {
+                if ($search['running'] == '1') {
+                    $this->db->where('hms_ipd_booking.discharge_status', $search['running']);
                 }
-                else
-                {
-                    $this->db->where('hms_ipd_booking.discharge_status =0');
-                }
-        }
-        
-        if(isset($search) && !empty($search))
-        {
-            
-             if((isset($search['mlc']) && $search['mlc'] == "0") || $search['mlc'] == "1")
-            {
-                $mlc = $search['mlc'];
-                $this->db->where('hms_ipd_booking.mlc_status = "'.$mlc.'"');
-            }
-
-            if(isset($search['start_date']) && !empty($search['start_date']))
-            {
-                $start_date = date('Y-m-d',strtotime($search['start_date'])).' 00:00:00';
-                $this->db->where('hms_ipd_booking.created_date >= "'.$start_date.'"');
-            }
-
-            if(isset($search['end_date']) && !empty($search['end_date']))
-            {
-                $end_date = date('Y-m-d',strtotime($search['end_date'])).' 23:59:59';
-                $this->db->where('hms_ipd_booking.created_date <= "'.$end_date.'"');
-            }
-
-                        if(isset($search['room_no']) && !empty($search['room_no']))
-			{
-				$this->db->where('hms_ipd_rooms.room_no',$search['room_no']);
-			}
-
-
-            if(isset($search['attended_doctor']) && !empty($search['attended_doctor']))
-            {
-
-                $this->db->where('hms_ipd_booking.attend_doctor_id',$search['attended_doctor']);
-            }
-                if(isset($search['ipd_no']) && !empty($search['ipd_no']))
-            {
-
-                $this->db->where('hms_ipd_booking.ipd_no',$search['ipd_no']);
-            }
-
-            if(isset($search['patient_name']) && !empty($search['patient_name']))
-            {
-
-               // $this->db->where('hms_patient.patient_name',$search['patient_name']);
-               $this->db->where('hms_patient.patient_name LIKE "'.$search['patient_name'].'%"');
-            }
-
-            if(isset($search['patient_code']) && !empty($search['patient_code']))
-
-            {
-                
-              $this->db->where('hms_patient.patient_code LIKE "'.$search['patient_code'].'%"');
-            }
-
-            if(isset($search['mobile_no']) && !empty($search['mobile_no']))
-            {
-               $this->db->where('hms_patient.mobile_no LIKE "'.$search['mobile_no'].'%"');
-            }
-            if(isset($search['adhar_no']) && !empty($search['adhar_no']))
-
-            {
-                
-              $this->db->where('hms_patient.adhar_no LIKE "'.$search['adhar_no'].'%"');
-            }
-
-            if($search['insurance_type']!='')
-              {
-                $this->db->where('hms_ipd_booking.patient_type',$search['insurance_type']);
-              }
-
-              if(!empty($search['insurance_type_id']))
-              {
-                $this->db->where('hms_ipd_booking.panel_type',$search['insurance_type_id']);
-              }
-
-              if(!empty($search['ins_company_id']))
-              {
-                $this->db->where('hms_ipd_booking.panel_name',$search['ins_company_id']);
-              }
-
-        }
-
-        $emp_ids='';
-        if($user_data['emp_id']>0)
-        {
-            if($user_data['record_access']=='1')
-            {
-                $emp_ids= $user_data['id'];
+            } else {
+                $this->db->where('hms_ipd_booking.discharge_status', 0);
             }
         }
-        elseif(!empty($get["employee"]) && is_numeric($get['employee']))
-        {
-            $emp_ids=  $get["employee"];
+
+        // Apply additional search conditions
+        if (!empty($search)) {
+            if (isset($search['mlc']) && in_array($search['mlc'], ["0", "1"])) {
+                $this->db->where('hms_ipd_booking.mlc_status', $search['mlc']);
+            }
+
+            if (!empty($search['start_date'])) {
+                $start_date = date('Y-m-d', strtotime($search['start_date'])) . ' 00:00:00';
+                $this->db->where('hms_ipd_booking.created_date >=', $start_date);
+            }
+
+            if (!empty($search['end_date'])) {
+                $end_date = date('Y-m-d', strtotime($search['end_date'])) . ' 23:59:59';
+                $this->db->where('hms_ipd_booking.created_date <=', $end_date);
+            }
+
+            if (!empty($search['room_no'])) {
+                $this->db->where('hms_ipd_rooms.room_no', $search['room_no']);
+            }
+
+            if (!empty($search['attended_doctor'])) {
+                $this->db->where('hms_ipd_booking.attend_doctor_id', $search['attended_doctor']);
+            }
+
+            if (!empty($search['ipd_no'])) {
+                $this->db->where('hms_ipd_booking.ipd_no', $search['ipd_no']);
+            }
+
+            if (!empty($search['patient_name'])) {
+                $this->db->like('hms_patient.patient_name', $search['patient_name'] . '%');
+            }
+
+            if (!empty($search['patient_code'])) {
+                $this->db->like('hms_patient.patient_code', $search['patient_code'] . '%');
+            }
+
+            if (!empty($search['mobile_no'])) {
+                $this->db->like('hms_patient.mobile_no', $search['mobile_no'] . '%');
+            }
+
+            if (!empty($search['adhar_no'])) {
+                $this->db->like('hms_patient.adhar_no', $search['adhar_no'] . '%');
+            }
+
+            if (isset($search['insurance_type']) && $search['insurance_type'] != '') {
+                $this->db->where('hms_ipd_booking.patient_type', $search['insurance_type']);
+            }
+
+            if (!empty($search['insurance_type_id'])) {
+                $this->db->where('hms_ipd_booking.panel_type', $search['insurance_type_id']);
+            }
+
+            if (!empty($search['ins_company_id'])) {
+                $this->db->where('hms_ipd_booking.panel_name', $search['ins_company_id']);
+            }
         }
 
+        // Employee-specific filter logic
+        $emp_ids = '';
+        if ($user_data['emp_id'] > 0) {
+            if ($user_data['record_access'] == '1') {
+                $emp_ids = $user_data['id'];
+            }
+        } elseif (!empty($get["employee"]) && is_numeric($get['employee'])) {
+            $emp_ids = $get["employee"];
+        }
 
-        if(isset($emp_ids) && !empty($emp_ids))
-        { 
+        if (!empty($emp_ids)) {
             $this->db->where('hms_ipd_booking.created_by IN ('.$emp_ids.')');
         }
 
-        /////// Search query end //////////////
+        // DataTable search logic
         $i = 0;
-    
-        foreach ($this->column as $item) // loop column 
-        {
-            if($_POST['search']['value']) // if datatable send POST for search
-            {
-                
-                if($i===0) // first loop
-                {
-                    $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND. 
+        foreach ($this->column as $item) {
+            if ($_POST['search']['value']) {
+                if ($i === 0) {
+                    $this->db->group_start();
                     $this->db->like($item, $_POST['search']['value']);
-                }
-                else
-                {
+                } else {
                     $this->db->or_like($item, $_POST['search']['value']);
                 }
 
-                if(count($this->column) - 1 == $i) //last loop+
-                    $this->db->group_end(); //close bracket
+                if (count($this->column) - 1 == $i) {
+                    $this->db->group_end();
+                }
             }
-            $column[$i] = $item; // set column array variable to order processing
+            $column[$i] = $item;
             $i++;
         }
-        
-        if(isset($_POST['order'])) // here order processing
-        {
-            $this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-        } 
-        else if(isset($this->order))
-        {
-            $order = $this->order;
-            $this->db->order_by(key($order), $order[key($order)]);
-        }
     }
+
 
     function get_datatables()
     {
@@ -223,6 +203,8 @@ class Ipd_booking_model extends CI_Model
         if($_POST['length'] != -1)
         $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get(); 
+        $result = $query->result();
+        // echo "<pre>";print_r($query);die('nenen');
         // echo $this->db->last_query();die;
         return $query->result();
     }
@@ -334,7 +316,7 @@ class Ipd_booking_model extends CI_Model
     {
         $search = $this->session->userdata('ipd_booking_search');
         $user_data = $this->session->userdata('auth_users');
-        $this->db->select("hms_ipd_booking.*,hms_patient.*,hms_users.*,hms_ipd_packages.name as package_name,hms_ipd_panel_company.panel_company, hms_patient_category.patient_category as patient_category_name,hms_ipd_panel_type.panel_type,hms_doctors.doctor_name,hms_ipd_rooms.room_no,hms_ipd_room_to_bad.bad_no,hms_ipd_room_to_bad.bad_name,hms_ipd_room_category.room_category,hms_ipd_booking.created_date as createdate, concat_ws(' ',hms_patient.address, hms_patient.address2, hms_patient.address3) as address,hms_patient.age,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d,ins_type.insurance_type, ins_cmpy.insurance_company"); 
+        $this->db->select("hms_ipd_booking.*,hms_patient.*,hms_users.*,hms_ipd_packages.name as package_name,hms_ipd_panel_company.panel_company,hms_ipd_panel_type.panel_type,hms_doctors.doctor_name,hms_ipd_rooms.room_no,hms_ipd_room_to_bad.bad_no,hms_ipd_room_to_bad.bad_name,hms_ipd_room_category.room_category,hms_ipd_booking.created_date as createdate, concat_ws(' ',hms_patient.address, hms_patient.address2, hms_patient.address3) as address,hms_patient.age,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d,ins_type.insurance_type, ins_cmpy.insurance_company"); 
         $this->db->join('hms_patient','hms_patient.id = hms_ipd_booking.patient_id','left');
         
         $this->db->join('hms_insurance_type as ins_type','ins_type.id=hms_ipd_booking.panel_type', 'left');
@@ -425,12 +407,11 @@ class Ipd_booking_model extends CI_Model
                 $end_date = date('Y-m-d',strtotime($search['end_date'])).' 23:59:59';
                 $this->db->where('hms_ipd_booking.created_date <= "'.$end_date.'"');
             }
-            if(isset($search['mlc']) || $search['mlc'] == "0" || $search['mlc'] == "1")
-            {
+            if (array_key_exists('mlc', $search) && ($search['mlc'] == "0" || $search['mlc'] == "1")) {
                 $mlc = $search['mlc'];
                 $this->db->where('hms_ipd_booking.mlc_status = "'.$mlc.'"');
             }
-
+            
             if(isset($search['patient_name']) && !empty($search['patient_name']))
             {
 
@@ -464,21 +445,18 @@ class Ipd_booking_model extends CI_Model
 
            
 
-            if($search['insurance_type']!="")
-              {
-                $this->db->where('hms_ipd_booking.patient_type',$search['insurance_type']);
-              }
-
-              if(!empty($search['insurance_type_id']))
-              {
-                $this->db->where('hms_ipd_booking.panel_type',$search['insurance_type_id']);
-              }
-
-              if(!empty($search['ins_company_id']))
-              {
-                $this->db->where('hms_ipd_booking.panel_name',$search['ins_company_id']);
-              }
-
+            if (isset($search['insurance_type']) && $search['insurance_type'] !== "") {
+                $this->db->where('hms_ipd_booking.patient_type', $search['insurance_type']);
+            }
+            
+            if (isset($search['insurance_type_id']) && !empty($search['insurance_type_id'])) {
+                $this->db->where('hms_ipd_booking.panel_type', $search['insurance_type_id']);
+            }
+            
+            if (isset($search['ins_company_id']) && !empty($search['ins_company_id'])) {
+                $this->db->where('hms_ipd_booking.panel_name', $search['ins_company_id']);
+            }
+            
             
 
         }
@@ -679,7 +657,7 @@ class Ipd_booking_model extends CI_Model
         $type_value= get_ipd_discharge_time_setting_value();
 
         $post = $this->input->post();
-       // echo "<pre>"; print_r($post); exit;
+        // echo "<pre>";print_r($post);die;
             $panel_type = '';
             if(!empty($post['panel_type']))
             {
@@ -728,7 +706,7 @@ class Ipd_booking_model extends CI_Model
                 "adhar_no"=>$post['adhar_no'],
                 "address"=>$post['address'],
                 "address2"=>$post['address_second'],
-                "address3"=>$post['address_third'],
+                // "address3"=>$post['address_third'],
                 'mobile_no'=>$post['mobile'],
                 'insurance_type'=>$patient_type,
                 'insurance_type_id'=>$panel_type,
@@ -739,17 +717,19 @@ class Ipd_booking_model extends CI_Model
                 'patient_category'=>$post['patient_category'],
                
              );
-             $diagnosis = "";
-             if(count($post['diagnosis'])) {
-                $diagnosis_ids = $post['diagnosis'];// Array of diagnosis IDs
+            //  print_r(count($post['diagnosis']));die;
+            $diagnosis = "";
+            if (isset($post['diagnosis']) && count($post['diagnosis'])) {
+                $diagnosis_ids = $post['diagnosis']; // Array of diagnosis IDs
                 $this->db->where_in('id', $diagnosis_ids);
                 $result = $this->db->get('hms_opd_diagnosis')->result_array();
                 $d = [];
-                foreach($result as $dig) {
+                foreach ($result as $dig) {
                     $d[] = $dig['diagnosis'];
                 }
                 $diagnosis = implode(';', $d);
-             }
+            }
+            
              
         if(!empty($post['data_id']) && $post['data_id']>0)
         {
@@ -791,8 +771,9 @@ class Ipd_booking_model extends CI_Model
                     'referral_doctor'=>$post['referral_doctor'],
                     'referred_by'=>$post['referred_by'],
                     'referral_hospital'=>$post['referral_hospital'],
-                    'reg_charge'=>$post['reg_charge'],
-                    'patient_type'=>$post['patient_type'],
+                    'reg_charge'=>isset($post['reg_charge'])?$post['reg_charge']:'',
+                    'patient_email1'=>$post['patient_email1'],
+                    'patient_type'=>isset($post['patient_type'])?$post['patient_type']:'',
                     'panel_name'=>$panel_name,
                     'panel_type'=>$panel_type,
                     'panel_polocy_no'=>$policy_number,
@@ -803,10 +784,15 @@ class Ipd_booking_model extends CI_Model
                     'admission_date'=>date('Y-m-d',strtotime($post['admission_date'])),
                     'advance_payment'=>$post['advance_deposite'],
                     'patient_category'=>$post['patient_category'],
-                    'authorize_person'=>$post['authorize_person'],
+                    'authorize_person'=>isset($post['authorize_person'])?$post['authorize_person']:'',
+                    "balance"=>$post['balance'],
+                    "token"=>$post['token'],
                     'diagnosis' => $diagnosis,
+                    // 'token' => $diagnosis,
                     //'transaction_no'=>$transaction_no
                 ); 
+                // echo "<pre>"; print_r($data); exit;
+
  
                 $this->db->where('id',$post['data_id']);
                 $this->db->set('modified_by',$user_data['id']);
@@ -1082,7 +1068,7 @@ class Ipd_booking_model extends CI_Model
                 /*add sales banlk detail*/
                               //Update End
 
-/* if patient discharge then add dischrage data to */ 
+        /* if patient discharge then add dischrage data to */ 
         if(!empty($post['discharge_date']) && $post['discharge_date']!='1970-01-01' && $post['discharge_date']!='1970-01-01 00:00:00')
         {       
                    $users_data = $this->session->userdata('auth_users');
@@ -1250,16 +1236,17 @@ class Ipd_booking_model extends CI_Model
         $created_date = date('Y-m-d',strtotime($post['admission_date'])).' '.date('H:i:s', strtotime(date('d-m-Y').' '.$post['admission_time']));
             //New Booking start users_data
             //echo $post['package_id']; 
-            //print '<pre>'; print_r($_POST);
-            $patient_data= $this->get_patient_by_id($post['patient_id']);
-            if(count($patient_data)>0)
-            {
-                $this->db->set('modified_by',$user_data['id']);
-                $this->db->set('modified_date',date('Y-m-d H:i:s'));
-                $this->db->where('id',$post['patient_id']);
-                $this->db->update('hms_patient',$data_patient);
-                $patient_id= $post['patient_id'];
-            }
+            // print '<pre>'; print_r($post['patient_id']);die;
+            $patient_data = $this->get_patient_by_id($post['patient_id']);
+
+            // Ensure $pa``tient_data is an array before counting
+            if (is_array($patient_data) && count($patient_data) > 0) {
+                $this->db->set('modified_by', $user_data['id']);
+                $this->db->set('modified_date', date('Y-m-d H:i:s'));
+                $this->db->where('id', $post['patient_id']);
+                $this->db->update('hms_patient', $data_patient);
+                $patient_id = $post['patient_id'];
+            }       
             else
             {
                 $reg_no = generate_unique_id(4);
@@ -1335,48 +1322,81 @@ class Ipd_booking_model extends CI_Model
             
             $ipd_no = generate_unique_id(22);
                         $reciept_date = date('Y-m-d h:i:s',strtotime($post['admission_date']));
-            $data = array(
-                    "patient_id"=>$patient_id,
-                    'branch_id'=>$user_data['parent_id'],
-                    'ipd_no'=>$ipd_no,
-                    'attend_doctor_id'=>$post['attended_doctor'],
-                    'mlc'=>$post['mlc'],
-                    'mlc_status'=>$post['mlc_status'],
-                    'payment_mode'=>$post['payment_mode'],
-                    //'bank_name'=>$bank_name,
-                    //'card_no'=>$card_no,
-                    //'cheque_no'=>$cheque_no,
-                    //'cheque_date'=>$cheque_date,
-                    'remarks'=>$post['remarks'],
-                    'panel_id_no'=>$panel_id_no,
-                    'room_type_id'=>$post['room_id'],
-                    'room_id'=>$post['room_no_id'],
-                    'bad_id'=>$post['bed_no_id'],
-                    'attend_doctor_id'=>$post['attended_doctor'],
-                    //'referral_doctor'=>$post['referral_doctor'],
-                    'referral_doctor'=>$post['referral_doctor'],
-                    'referred_by'=>$post['referred_by'],
-                    'referral_hospital'=>$post['referral_hospital'],
-                    'patient_type'=>$post['patient_type'],
-                    'panel_name'=>$panel_name,
-                    'panel_type'=>$panel_type,
-                    "package_type"=>$post['package'],
-                    "package_id"=>$package_id,
-                    'remarks'=>$post['remarks'],
-                    'panel_polocy_no'=>$policy_number,
-                    'admission_time'=>date('H:i:s', strtotime(date('d-m-Y').' '.$post['admission_time'])),
-                    'authrization_amount'=>$authorization_amount,
-                    'admission_date'=>date('Y-m-d',strtotime($post['admission_date'])),
-                    'advance_payment'=>$post['advance_deposite'],
-                    'patient_category'=>$post['patient_category'],
-                    'authorize_person'=>$post['authorize_person'],
-                    'diagnosis' => $diagnosis,
-                    //'transaction_no'=>$transaction_no
-            ); 
-            $this->db->set('created_by',$user_data['id']);
-            $this->db->set('created_date',$created_date);
-            $this->db->insert('hms_ipd_booking',$data);
-            $ipd_booking_id= $this->db->insert_id();
+                        $data = array(
+                            "patient_id"=>$patient_id,
+                            'branch_id'=>$user_data['parent_id'],
+                            'ipd_no'=>$ipd_no,
+                            'attend_doctor_id'=>$post['attended_doctor'],
+                            'mlc'=>$post['mlc'],
+                            'mlc_status'=>$post['mlc_status'],
+                            'payment_mode'=>$post['payment_mode'],
+                            //'bank_name'=>$bank_name,
+                            //'card_no'=>$card_no,
+                            //'cheque_no'=>$cheque_no,
+                            //'cheque_date'=>$cheque_date,
+                            'remarks'=>$post['remarks'],
+                            'panel_id_no'=>$panel_id_no,
+                            'room_type_id'=>$post['room_id'],
+                            'room_id'=>$post['room_no_id'],
+                            'bad_id'=>$post['bed_no_id'],
+                            'state_id'=>$post['state_id'],
+                            'attend_doctor_id'=>$post['attended_doctor'],
+                            //'referral_doctor'=>$post['referral_doctor'],
+                            'referral_doctor'=>$post['referral_doctor'],
+                            'referred_by'=>$post['referred_by'],
+                            'patient_email1'=>$post['patient_email1'],
+                            'referral_hospital'=>$post['referral_hospital'],
+                            // 'patient_type'=>$post['patient_type'],
+                            'panel_name'=>$panel_name,
+                            'panel_type'=>$panel_type,
+                            "package_type"=>$post['package'],
+                            "package_id"=>$package_id,
+                            'remarks'=>$post['remarks'],
+                            'panel_polocy_no'=>$policy_number,
+                            'admission_time'=>date('H:i:s', strtotime(date('d-m-Y').' '.$post['admission_time'])),
+                            'authrization_amount'=>$authorization_amount,
+                            'admission_date'=>date('Y-m-d',strtotime($post['admission_date'])),
+                            'advance_payment'=>$post['advance_deposite'],
+                            'patient_category'=>$post['patient_category'],
+                            'corporate_id'=>$post['corporate_id'],
+                            "balance"=>$post['balance'],
+                            "token"=>$post['token'],
+                            // 'authorize_person'=>$post['authorize_person'],
+                            'diagnosis' => $diagnosis,
+                            'eye_details' => isset($post['eye_details']) ? $post['eye_details'] : '',
+                            'vision_right' => isset($post['vision_right']) ? $post['vision_right'] : '',
+                            'cataract_type_right' => isset($post['cataract_type_right']) ? $post['cataract_type_right'] : '',
+                            'vision_left' => isset($post['vision_left']) ? $post['vision_left'] : '',
+                            'cataract_type_left' => isset($post['cataract_type_left']) ? $post['cataract_type_left'] : '',
+                            'ins_authorization_no' => isset($post['ins_authorization_no']) ? $post['ins_authorization_no'] : '',
+                            'employee_no' => isset($post['employee_no']) ? $post['employee_no'] : '',
+                            'auth_issue_date' => isset($post['auth_issue_date']) ? date('Y-m-d',strtotime($post['auth_issue_date'])) : '',
+                            'department_id' => isset($post['department_id']) ? $post['department_id'] : '',
+                            'cost' => isset($post['cost']) ? $post['cost'] : '',
+                            'subsidy_id' => isset($post['subsidy_id']) ? $post['subsidy_id'] : '',
+                            'subsidy_created' => date('Y-m-d H:i:s'),
+                            'subsidy_amount' => isset($post['subsidy_amount']) ? $post['subsidy_amount'] : '',
+                            'insurance_type_id' => isset($post['insurance_type_id']) ? $post['insurance_type_id'] : '',
+                            'policy_no' => isset($post['policy_no']) ? $post['policy_no'] : '',
+                            'validity_date' => isset($post['validity_date']) ? date('Y-m-d',strtotime($post['validity_date'])) : '',
+                            'ins_amount' => isset($post['ins_amount']) ? $post['ins_amount'] : '',
+                            'operation_name' => isset($post['operation_name']) ? $post['operation_name'] : '',
+                            'anaesthesia' => isset($post['anaesthesia']) ? $post['anaesthesia'] : '',
+                            'surgery_type' => isset($post['surgery_type']) ? $post['surgery_type'] : '',
+                            'iol_power' => isset($post['iol_power']) ? $post['iol_power'] : '',
+                            'iol_type' => isset($post['iol_type']) ? $post['iol_type'] : '',
+                            // 'iol_le' => isset($post['iol_le'][8]) ? $post['iol_le'][8] : '',
+                            'brand' => isset($post['brand']) ? $post['brand'] : '',
+                            'corporate_full_facility' => isset($post['corporate_full_facility']) ? $post['corporate_full_facility'] : '',
+                            'operator' => isset($post['operator']) ? $post['operator'] : '',
+                            'total_amount' => isset($post['total_amount']) ? $post['total_amount'] : '',
+                            //'transaction_no'=>$transaction_no
+                        );
+                        // print_r($data);die;
+                        $this->db->set('created_by',$user_data['id']);
+                        $this->db->set('created_date',$created_date);
+                        $this->db->insert('hms_ipd_booking',$data);
+                        $ipd_booking_id= $this->db->insert_id();
 
 
         /* genereate mlc 30/07/2019 number */
@@ -1769,6 +1789,86 @@ class Ipd_booking_model extends CI_Model
         return $ipd_booking_id; 
     }
 
+    public function operation_list()
+    {
+        $users_data = $this->session->userdata("auth_users");
+        $this->db->select("hms_ot_management.*");
+        $this->db->where("status", 1);
+        $this->db->where("is_deleted", 0);
+        $this->db->where("branch_id  IN (" . $users_data["parent_id"] . ")");
+        $this->db->from("hms_ot_management");
+        $this->db->order_by("name", "asc");
+        $query = $this->db->get()->result();
+        //print_r($query);exit;
+        return $query;
+    }
+
+    public function get_today_entry_count()
+    {
+        // Get the start and end of the current day
+        $start_date = date('Y-m-d 00:00:00');
+        $end_date = date('Y-m-d 23:59:59');
+
+        // Query to count entries within today's date range
+        $this->db->where('created_date >=', $start_date);
+        $this->db->where('created_date <=', $end_date);
+
+        // Perform the count operation and store the result
+        $result = $this->db->count_all_results('hms_ipd_booking');
+        // print_r($start_date);die;
+        
+        // Return the count result
+        return $result;
+    }
+
+
+
+    public function brand_list()
+    {
+        $users_data = $this->session->userdata("auth_users");
+
+        // Ensure that we are selecting all required columns from the table
+        $this->db->select('hms_ipd_brands.*');
+        
+        // Condition to get only non-deleted companies
+        $this->db->where('hms_ipd_brands.brand_status', 1);
+        $this->db->where('hms_ipd_brands.is_deleted', '0');
+
+        
+        // Filter by branch id of the logged-in user
+        // $this->db->where('hms_ipd_brands.branch_id', $users_data['parent_id']);
+
+        // Execute the query and return the result
+        $query = $this->db->get('hms_ipd_brands')->result();
+
+        return $query;
+    }
+
+
+    public function get_iol_section_list()
+    {
+        $users_data = $this->session->userdata('auth_users');
+        $branch_id = $users_data['parent_id'];
+        // echo "<pre>";print_r($branch_id);die;
+        // Prepare the query
+        $this->db->select('id, iol_section');
+        $this->db->from('hms_eye_iol_section');
+        $this->db->where('is_deleted !=', 2);
+        $this->db->where('status', 1);
+        // $this->db->where('branch_id', $branch_id);
+
+        // Execute the query
+        $res = $this->db->get();
+
+        // Check if there are results and return data accordingly
+        if ($res->num_rows() > 0) {
+            return $res->result(); // Return the result set as an array of objects
+        } else {
+            return []; // Return an empty array instead of "empty"
+        }
+    }
+
+
     public function send_email_sms_to_assign_doctor($assigned_doctor_list,$booking_id)
     {
         /* Start Send Sms/Email */
@@ -1826,6 +1926,13 @@ class Ipd_booking_model extends CI_Model
         }  
 
         /* End Send Sms/Email  */
+    }
+
+    function get_amount_details_operation_management()
+    {
+        $this->load->model('ot_management/ot_management_model','mgmt_model');
+        $data=$this->mgmt_model->get_by_id($this->input->post('op_mgmt_id'));
+        echo json_encode($data);
     }
 
 
@@ -2820,6 +2927,42 @@ class Ipd_booking_model extends CI_Model
     
     }
 
+    public function subsidy_list()
+	{
+		$users_data = $this->session->userdata('auth_users');
+		$this->db->select('subsidy_id,subsidy_name');
+		$this->db->where('is_deleted', 0);
+		$this->db->order_by('subsidy_id', 'Desc');
+		$query = $this->db->get('hms_subsidy');
+		$result = $query->result();
+		//echo $this->db->last_query(); 
+		return $result;
+	}
+
+    public function corporate_list()
+	{
+		$users_data = $this->session->userdata('auth_users');
+		$this->db->select('corporate_id,corporate_name');
+		$this->db->where('is_deleted', 0);
+		$this->db->order_by('corporate_id', 'Asc');
+		$query = $this->db->get('hms_corporate');
+		$result = $query->result();
+		//echo $this->db->last_query(); 
+		return $result;
+	}
+
+    public function department_list()
+	{
+		$users_data = $this->session->userdata('auth_users');
+		$this->db->select('department_id,department_name');
+		$this->db->where('is_deleted', 0);
+		$this->db->order_by('department_id', 'Desc');
+		$query = $this->db->get('hms_department_master');
+		$result = $query->result();
+		//echo $this->db->last_query(); 
+		return $result;
+	}
+
     public function save_medication_chart()
     {
         // echo "<pre>";print_r($_POST); exit;
@@ -2891,7 +3034,7 @@ class Ipd_booking_model extends CI_Model
     {
         $post = $this->input->post();
         $user_data = $this->session->userdata('auth_users');
-        echo "save born data::<pre>";print_r($post); die;
+        // echo "save born data::<pre>";print_r($post); die;
 
                 $this->db->select('hms_born_summery.*');
                 $this->db->from('hms_born_summery'); 

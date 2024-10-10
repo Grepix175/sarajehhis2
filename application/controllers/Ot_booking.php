@@ -593,6 +593,7 @@ class Ot_booking extends CI_Controller {
         }
         else if(isset($_GET['lid']) && !empty($_GET['lid']) && $_GET['lid']>0)
         {
+          // die;
           $this->load->model('opd/opd_model');
           $lead_data = $this->opd_model->crm_get_by_id($_GET['lid']);
           //echo '<pre>'; print_r($lead_data);die;
