@@ -118,8 +118,18 @@ class Add_eye_prescription extends CI_Controller
      $post= $this->input->post();
       //unauthorise_permission('351','2108');
      $this->load->model('plan_management/Plan_management_model','plan_mgmt');
+     $this->load->model('opd/opd_model', 'opd');
+     $this->load->model('general/general_model');
      $plan_list=$this->plan_mgmt->get_plan_list();
+     $data['vitals_list'] = $this->general_model->vitals_list();
      $result=$this->add_prescript->get_new_data_by_id($booking_id);
+     $token_no = $this->opd->get_opd_details($booking_id);
+    //  echo "<pre>";
+    //  print_r($token_no['token_no']);
+    //  die;
+     $data['flag'] = $this->input->get('flag') ?? '';
+    
+     
      $data['plan_list']=$plan_list;
      $data['datas']=$result;
      $data['medicine_sets']=$this->add_prescript->get_medicine_sets($result['branch_id']);
@@ -132,7 +142,7 @@ class Add_eye_prescription extends CI_Controller
     }
      
      
-     $data['form_data']=array('history_flag'=>1, 'contactlens_flag'=>1, 'glassesprescriptions_flag'=>1,'intermediate_glasses_prescriptions_flag'=>1, 'examination_flag'=>1, 'diagnosis_flag'=>1,'investigations_flag'=>1,'advice_flag'=>1);
+     $data['form_data']=array('history_flag'=>1, 'contactlens_flag'=>1, 'glassesprescriptions_flag'=>1,'intermediate_glasses_prescriptions_flag'=>1, 'examination_flag'=>1, 'diagnosis_flag'=>1,'investigations_flag'=>1,'advice_flag'=>1,'token_no'=>$token_no['token_no'] ?? '','symptom_fever'=> '','symptom_cough'=> '','symptom_smell_taste','symptom_loose_stools' => '', 'symptom_local_zone' => '', 'symptom_travel'=>'','symptom_contact' =>'');
       /* Investigation Tab data */
       $data['eye_region'] = $this->general_model->eye_region();
       $data['lab_investigations'] = $this->general_model->lab_test_list();
@@ -266,7 +276,6 @@ class Add_eye_prescription extends CI_Controller
       $data['provisional_date']=$diagno_result['created_date'];
 
       /* diagnosis */
-//echo "<pre>"; print_r($result_edit['chief_complaints']); exit;
 
       $history_radios_data=json_decode($result_edit['history_radios']); 
       $data['history_radios_data']=(array)$history_radios_data;
@@ -276,12 +285,22 @@ class Add_eye_prescription extends CI_Controller
       $data['ophthalmic']=(array)$ophthalmic;
       $systemic=json_decode($result_edit['systemic']);
       $data['systemic']=(array)$systemic;
+      $family_history=json_decode($result_edit['family_history']);
+      $data['family_history']=(array)$family_history;
+      // echo "<pre>"; print_r($result_edit['family_history']); exit;
       $drug_allergies=json_decode($result_edit['drug_allergies']);
       $data['drug_allergies']=(array)$drug_allergies;
       $contact_allergies=json_decode($result_edit['contact_allergies']);
       $data['contact_allergies']=(array)$contact_allergies;
       $food_allergies=json_decode($result_edit['food_allergies']);
       $data['food_allergies']=(array)$food_allergies;
+      $data['symptom_fever']=$result_edit['symptom_fever'];
+      $data['symptom_cough']=$result_edit['symptom_cough'];
+      $data['symptom_smell_taste']=$result_edit['symptom_smell_taste'];
+      $data['symptom_loose_stools']=$result_edit['symptom_loose_stools'];
+      $data['symptom_local_zone']=$result_edit['symptom_local_zone'];
+      $data['symptom_travel']=$result_edit['symptom_travel'];
+      $data['symptom_contact']=$result_edit['symptom_contact'];
       //$data['pres_id']=$result_edit['id'];
       $data['pres_id']=$pres_id;
       // Refraction
@@ -372,6 +391,9 @@ class Add_eye_prescription extends CI_Controller
                         'weight'=>$result_edit['weight'],
                         'bmi'=>$result_edit['bmi'],
                         'comment'=>$result_edit['comment']);
+    //                     echo "<pre>";
+    // print_r($data);
+    // die;
      }
      else
      { 
@@ -562,7 +584,53 @@ class Add_eye_prescription extends CI_Controller
         'history_chief_sen_burn_dur' => '',
         'history_chief_sen_burn_unit' => '',
         'history_chief_sen_burn_comm' => '',
-        'history_chief_comm' => '');
+        'history_chief_comm' => '',
+        'ptosis_sx' =>'',
+        'history_chief_ptosis_side' => '',
+        'history_chief_ptosis_dur'=> '',
+        'history_chief_ptosis_unit' => '',
+        'history_chief_ptosis_comm' => '',
+        'lid_sx' =>'',
+        'history_chief_lid_sx_side' => '',
+        'history_chief_lid_sx_dur' => '',
+        'history_chief_lid_sx_unit' => '',
+        'history_chief_lid_sx_comm' => '',
+        'corneal_sx' =>'',
+        'history_chief_corneal_sx_side' => '',
+        'history_chief_corneal_sx_dur' => '',
+        'history_chief_corneal_sx_unit' => '',
+        'history_chief_corneal_sx_comm' => '',
+        'cataract_sx' =>'',
+        'history_chief_cataract_sx_side'=> '',
+        'history_chief_cataract_sx_due'=> '',
+        'history_chief_cataract_sx_unit'=> '',
+        'history_chief_cataract_sx_comm'=> '',
+        'squint_sx' =>'',
+        'history_chief_squint_sx_side'=> '',
+        'history_chief_squint_sx_due'=> '',
+        'history_chief_squint_sx_unit'=> '',
+        'history_chief_squint_sx_comm'=> '',
+        'pterygium_sx' =>'',
+        'history_chief_pterygium_sx_side'=> '',
+        'history_chief_pterygium_sx_due'=> '',
+        'history_chief_pterygium_sx_unit'=> '',
+        'history_chief_pterygium_sx_comm'=> '',
+        'dcr' =>'',
+        'history_chief_dcr_sx_side'=> '',
+        'history_chief_dcr_sx_due'=> '',
+        'history_chief_dcr_sx_unit'=> '',
+        'history_chief_dcr_sx_comm'=> '',
+        'dct_sx' =>'',
+        'history_chief_dct_sx_side'=> '',
+        'history_chief_dct_sx_due'=> '',
+        'history_chief_dct_sx_unit'=> '',
+        'history_chief_dct_sx_comm'=> '',
+        'patching_therapy' =>'',
+        'history_chief_patching_therapy_side'=> '',
+        'history_chief_patching_therapy_due'=> '',
+        'history_chief_patching_therapy_unit'=> '',
+        'history_chief_patching_therapy_comm'=> '',
+        );
 
       $data['ophthalmic']=array(
       'gla_m' => '',
@@ -607,7 +675,33 @@ class Add_eye_prescription extends CI_Controller
       'history_ophthalmic_renti_l_r_dur' => '',
       'history_ophthalmic_renti_l_r_unit' => '',
       'history_ophthalmic_renti_l_comm' => '',
-      'history_ophthalmic_comm' => '');
+      'contact_lens_m' => '',
+      'history_ophthalmic_contact_lens_l_l_dur' =>'', 
+      'history_ophthalmic_contact_lens_l_l_unit' =>'', 
+      'history_ophthalmic_contact_lens_l_r_dur' => '',
+      'history_ophthalmic_contact_lens_l_r_unit' => '',
+      'history_ophthalmic_contact_lens_l_comm' => '',
+      'vision_therapy_m' => '',
+      'history_ophthalmic_vision_therapy_l_l_dur' =>'', 
+      'history_ophthalmic_vision_therapy_l_l_unit' =>'', 
+      'history_ophthalmic_vision_therapy_l_r_dur' => '',
+      'history_ophthalmic_vision_therapy_l_r_unit' => '',
+      'history_ophthalmic_vision_therapy_l_comm' => '',
+      'low_vision_m' => '',
+      'history_ophthalmic_low_vision_l_l_dur' =>'', 
+      'history_ophthalmic_low_vision_l_l_unit' =>'', 
+      'history_ophthalmic_low_vision_l_r_dur' => '',
+      'history_ophthalmic_low_vision_l_r_unit' => '',
+      'history_ophthalmic_low_vision_l_comm' => '',
+      'aid_m' => '',
+      'history_ophthalmic_aid_l_l_dur' =>'', 
+      'history_ophthalmic_aid_l_l_unit' =>'', 
+      'history_ophthalmic_aid_l_r_dur' => '',
+      'history_ophthalmic_aid_l_r_unit' => '',
+      'history_ophthalmic_aid_l_comm' => '',
+      'history_ophthalmic_comm' => '',
+      );
+      
 
       $data['systemic']=array(
         'dia_m' => '',
@@ -698,7 +792,65 @@ class Add_eye_prescription extends CI_Controller
         'oasp_m' => '',
         'acon_m' => '',
         'thd_m' => '',
-        'chewt_m' => '');
+        'chewt_m' => '',
+        'chronic_kidney_disease_m' => '',
+        'history_systemic_chronic_kidney_dur' => '',
+        'history_systemic_chronic_kidney_unit' => '',
+        'history_systemic_chronic_kidney_comm' => '',
+        'can_m' => '',
+        'history_systemic_can_dur' => '',
+        'history_systemic_can_unit' => '',
+        'history_systemic_can_comm' => '',
+        'rheumatoid_artheritis_m' => '',
+        'history_systemic_rheumatoid_artheritis_dur' => '',
+        'history_systemic_rheumatoid_artheritis_unit' => '',
+        'history_systemic_rheumatoid_artheritis_comm' => '',
+        'benign_ruostatic_hyperplasia_m' => '',
+        'history_systemic_benign_ruostatic_dur' => '',
+        'history_systemic_benign_ruostatic_unit' => '',
+        'history_systemic_benign_ruostatic_comm' => '',
+        'drug_medication_history_m' => '',
+        'history_systemic_drug_medication_dur' => '',
+        'history_systemic_drug_medication_unit' => '',
+        'history_systemic_drug_medication_comm' => '',
+        'bph_m' => '',
+        'history_systemic_bph_dur' => '',
+        'history_systemic_bph_unit' => '',
+        'history_systemic_bph_comm' => '',
+        'thyroid_m' => '',
+        'history_systemic_thyroid_dur' => '',
+        'history_systemic_thyroid_unit' => '',
+        'history_systemic_thyroid_comm' => '',
+        
+        );
+      
+      $data['family_history']=array(
+        'consanguinity_m' => '',
+        'family_history_consanguinity_dur' => '',
+        'family_history_consanguinity_unit' => '',
+        'family_history_consanguinity_comm' => '', 
+        'glaucoma_m' => '',
+        'family_history_glaucoma_dur' => '',
+        'family_history_glaucoma_unit' => '',
+        'family_history_glaucoma_comm' => '',
+        'diabetes_m' => '',
+        'family_history_diabetes_dur' => '',
+        'family_history_diabetes_unit' => '',
+        'family_history_diabetes_comm' => '',
+        'squint_m' => '',
+        'family_history_squint_dur' => '',
+        'family_history_squint_unit' => '',
+        'family_history_squint_comm' => '',
+        'retinitis_pigmentosa_m' => '',
+        'family_history_retinitis_pigmentosa_dur' => '',
+        'family_history_retinitis_pigmentosa_unit' => '',
+        'family_history_retinitis_pigmentosa_comm' => '',
+        'congenital_cataract_m' => '',
+        'family_history_congenital_cataract_dur' => '',
+        'family_history_congenital_cataract_unit' => '',
+        'family_history_congenital_cataract_comm' => '',
+        'history_family_comm' => ''
+        );
 
       $drugs=array(
             'antimi_agen_m' => '',
@@ -967,7 +1119,9 @@ class Add_eye_prescription extends CI_Controller
      $data['booking_id']=$result['id'];
      $data['doctor_list']=$this->add_prescript->get_doctor_list_both($result['branch_id']);
 
-
+    // echo "<pre>";
+    // print_r($post);
+    // die;
       // unauthorise_permission('351','2108');
        if(!empty($post))
        {

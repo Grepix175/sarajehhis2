@@ -179,6 +179,7 @@ class Opd_billing extends CI_Controller {
          $data['teeth_number_list'] = $this->general_model->teeth_number_list(); 
 
         $token_type=$this->opd_billing->get_token_setting();
+       
         $token_type=$token_type['type'];
 
        //print_r($data['teeth_number_list']);

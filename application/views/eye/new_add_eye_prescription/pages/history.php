@@ -12,9 +12,164 @@
 		</div>
 		<div class="col-xs-3 text-right">
 			<input type="text" name="visit_comm" value="<?php echo $history['visit_comm']; ?>" placeholder="free text...">
-		</div>    
+		</div>
+		
 	</div>
+   </section>
+	
+	<section>
+    <div class="row">
+        <!-- Left Section (Health Screening Questionnaire) -->
+        <div class="col-md-6">
+            <!--<div class="row">-->
+            <!--    <div class="col-xs-12">-->
+            <!--        <h4>Health Screening Questionnaire</h4>-->
+            <!--    </div>-->
+            <!--</div>-->
+            <div class="questionnaire">
+                <div class="col-xs-12 question-item">
+                    <div class="question-text">Any H/O Fever or following symptoms in the last 15 days</div>
+                    <div class="radio-buttons">
+                        <label class="btn-defaults">
+                            <input type="radio" name="symptom_fever" value="1" <?php echo (isset($symptom_fever) && $symptom_fever == 1) ? 'checked' : ''; ?>> Yes
+                        </label>
+                        <label class="btn-defaults">
+                            <input type="radio" name="symptom_fever" value="0" <?php echo (isset($symptom_fever) && $symptom_fever == 0) ? 'checked' : ''; ?>> No
+                        </label>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <div class="question-text">Any H/O Cough/ Cold Sore Throat/ Breathing difficulty</div>
+                    <div class="radio-buttons">
+                        <label class="btn-defaults">
+                            <input type="radio" name="symptom_cough" value="1" <?php echo (isset($symptom_cough) && $symptom_cough == 1) ? 'checked' : ''; ?>> Yes
+                        </label>
+                        <label class="btn-defaults">
+                            <input type="radio" name="symptom_cough" value="0" <?php echo (isset($symptom_cough) && $symptom_cough == 0) ? 'checked' : ''; ?>> No
+                        </label>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <div class="question-text">Any Recent H/O Loss of Smell/Taste?</div>
+                    <div class="radio-buttons">
+                        <label class="btn-defaults">
+                            <input type="radio" name="symptom_smell_taste" value="1" <?php echo (isset($symptom_smell_taste) && $symptom_smell_taste == 1) ? 'checked' : ''; ?>> Yes
+                        </label>
+                        <label class="btn-defaults">
+                            <input type="radio" name="symptom_smell_taste" value="0" <?php echo (isset($symptom_smell_taste) && $symptom_smell_taste == 0) ? 'checked' : ''; ?>> No
+                        </label>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <div class="question-text">Any H/O Loose Stools/ Myalgia/ Body Aches/ Headache/ Fatigue/ Weakness
+                    </div>
+                    <div class="radio-buttons">
+                        <label class="btn-defaults">
+                            <input type="radio" name="symptom_loose_stools" value="1" <?php echo (isset($symptom_loose_stools) && $symptom_loose_stools == 1) ? 'checked' : ''; ?>> Yes
+                        </label>
+                        <label class="btn-defaults">
+                            <input type="radio" name="symptom_loose_stools" value="0" <?php echo (isset($symptom_loose_stools) && $symptom_loose_stools == 0) ? 'checked' : ''; ?>> No
+                        </label>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <div class="question-text">Any H/O Recent Visit to a Local Containment Zone</div>
+                    <div class="radio-buttons">
+                        <label class="btn-defaults">
+                            <input type="radio" name="symptom_local_zone" value="1" <?php echo (isset($symptom_local_zone) && $symptom_local_zone == 1) ? 'checked' : ''; ?>> Yes
+                        </label>
+                        <label class="btn-defaults">
+                            <input type="radio" name="symptom_local_zone" value="0" <?php echo (isset($symptom_local_zone) && $symptom_local_zone == 0) ? 'checked' : ''; ?>> No
+                        </label>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <div class="question-text">Any H/O Recent Travel to Outside City/State</div>
+                    <div class="radio-buttons">
+                        <label class="btn-defaults">
+                            <input type="radio" name="symptom_travel" value="1" <?php echo (isset($symptom_travel) && $symptom_travel == 1) ? 'checked' : ''; ?>> Yes
+                        </label>
+                        <label class="btn-defaults">
+                            <input type="radio" name="symptom_travel" value="0" <?php echo (isset($symptom_travel) && $symptom_travel == 0) ? 'checked' : ''; ?>> No
+                        </label>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <div class="question-text">Any H/O Contact with Suspected/Confirmed Cases of COVID-19</div>
+                    <div class="radio-buttons">
+                        <label class="btn-defaults">
+                            <input type="radio" name="symptom_contact" value="1" <?php echo (isset($symptom_contact) && $symptom_contact == 1) ? 'checked' : ''; ?>> Yes
+                        </label>
+                        <label class="btn-defaults">
+                            <input type="radio" name="symptom_contact" value="0" <?php echo (isset($symptom_contact) && $symptom_contact == 0) ? 'checked' : ''; ?>> No
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+        <!-- Right Section (Vitals) -->
+        <div class="col-md-6">
+            <?php
+            $enable_setting = get_setting_value('ENABLE_VITALS');
+            if ($enable_setting == 1) {
+                ?>
+                <div class="row m-t-5">
+                    <div class="col-md-12">
+                        <h4>Vitals</h4> <!-- Title for the Vitals section -->
+                        <div class="grp_box">
+                            <?php
+                            if (!empty($vitals_list)) {
+                                $i = 0;
+                                foreach ($vitals_list as $vitals) {
+                                    $vital_val = get_vitals_value($vitals->id, $booking_id, 1);
+                                    ?>
+                                    <div class="grp">
+                                        <label><?php echo $vitals->vitals_name; ?> <br>
+                                            <input name="data[<?php echo $vitals->id; ?>][name]" value="<?php echo $vital_val; ?>"
+                                                type="text" class="w-50px m_tiny">
+                                            <br> <?php echo $vitals->vitals_unit; ?>
+                                        </label>
+                                    </div>
+                                    <?php
+                                    $i++;
+                                    if ($i == 5) {
+                                        $i = 0;
+                                        ?>
+                                    </div>
+                                    <div class="grp_box">
+                                        <?php
+                                    }
+                                }
+                            }
+                            ?>
+                            <!-- Additional vital inputs -->
+                            <div class="grp">
+                                <label>BP <br>
+                                    <input type="text" name="patient_bp" value="<?php echo $form_data['patient_bp']; ?>"
+                                        class="numeric_slash w-70px m_tiny"> <br>
+                                    mm/Hg
+                                </label>
+                            </div>
+                            <div class="grp">
+                                <label>Temp <br>
+                                    <input type="text" name="patient_temp" value="<?php echo $form_data['patient_temp']; ?>"
+                                        class="price_float input-tiny m_tiny"> <br>
+                                    &deg;F
+                                </label>
+                            </div>
+                            <!-- Add more vitals as needed -->
+                        </div>
+                    </div>
+                </div>
+                <?php
+            }
+            ?>
+        </div>
+    </div>
 </section>
+
+	
 
  <section>
  <h4>Chief Complaints</h4> 
@@ -36,6 +191,15 @@
    <label class="btn-custom" style="text-transform:unset!important;"><input type="checkbox" <?php if($chief_complaints['doe_m']==1){echo 'checked';}?> name="doe_m" value="1" id="doe_m"> Discoloration of Eye</label>
    <label class="btn-custom"><input type="checkbox" <?php if($chief_complaints['swel_m']==1){echo 'checked';}?> name="swel_m" value="1" id="swel_m"> Swelling</label>
    <label class="btn-custom"><input type="checkbox" <?php if($chief_complaints['burns_m']==1){echo 'checked';}?> name="burns_m" value="1" id="burns_m"> Burning Sensation</label>
+   <label class="btn-custom"><input type="checkbox" <?php if($chief_complaints['ptosis_sx']==1){echo 'checked';}?> name="ptosis_sx" value="1" id="ptosis_sx"> Ptosis Sx</label>
+   <label class="btn-custom"><input type="checkbox" <?php if($chief_complaints['lid_sx']==1){echo 'checked';}?> name="lid_sx" value="1" id="lid_sx"> Lid Sx</label>
+   <label class="btn-custom"><input type="checkbox" <?php if($chief_complaints['corneal_sx']==1){echo 'checked';}?> name="corneal_sx" value="1" id="corneal_sx"> Corneal Sx</label>
+   <label class="btn-custom"><input type="checkbox" <?php if($chief_complaints['cataract_sx']==1){echo 'checked';}?> name="cataract_sx" value="1" id="cataract_sx"> Cataract Sx</label>
+   <label class="btn-custom"><input type="checkbox" <?php if($chief_complaints['squint_sx']==1){echo 'checked';}?> name="squint_sx" value="1" id="squint_sx"> Squint Sx</label>
+   <label class="btn-custom"><input type="checkbox" <?php if($chief_complaints['pterygium_sx']==1){echo 'checked';}?> name="pterygium_sx" value="1" id="pterygium_sx"> Pterygium Sx</label>
+   <label class="btn-custom"><input type="checkbox" <?php if($chief_complaints['dcr']==1){echo 'checked';}?> name="dcr" value="1" id="dcr_sx"> DCR</label>
+   <label class="btn-custom"><input type="checkbox" <?php if($chief_complaints['dct_sx']==1){echo 'checked';}?> name="dct_sx" value="1" id="dct_sx"> DCT Sx</label>
+   <label class="btn-custom"><input type="checkbox" <?php if($chief_complaints['patching_therapy']==1){echo 'checked';}?> name="patching_therapy" value="1" id="patching_therapy">Patching Therapy</label>
  </div>     
 
   <div class="panel">
@@ -639,39 +803,347 @@
                    <input type="text" placeholder="Comment..." value="<?php echo $chief_complaints['history_chief_swell_comm']; ?>" name="history_chief_swell_comm">
                  </div></div>
 
-        <div class="row" id="sen_burn">
-                 <div class="col-md-2  m-b-5">
-                   <label>Sensation Burning</label>
-                 </div>
-                     <div class="col-md-1  m-b-5">
-                   <select class="form-control" name="history_chief_sen_burn_side">
-                     <option value="">Please Select</option>
-                     <option <?php if($chief_complaints['history_chief_sen_burn_side']=='Left'){ echo 'selected';}?> value="Left">L</option>
-                     <option <?php if($chief_complaints['history_chief_sen_burn_side']=='Right'){ echo 'selected';}?> value="Right">R</option>
-                     <option <?php if($chief_complaints['history_chief_sen_burn_side']=='Both'){ echo 'selected';}?> value="Both">B/E</option>
-                   </select>  
-                 </div>
-                 <div class="col-md-1 m-b-5">
-                   <select class="form-control" name="history_chief_sen_burn_dur">
-                      <option value="">Please Select</option>
-                      <?php for($i=1; $i<=40;$i++) { ?>
-                        <option <?php if($chief_complaints['history_chief_sen_burn_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
-                     <?php } ?>
-                      
-                   </select>
-                 </div>
-                 <div class="col-md-1  m-b-5">
-                   <select class="form-control" name="history_chief_sen_burn_unit">
-                     <option value="">Please Select</option>
-                     <option <?php if($chief_complaints['history_chief_sen_burn_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
-                     <option <?php if($chief_complaints['history_chief_sen_burn_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
-                     <option <?php if($chief_complaints['history_chief_sen_burn_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
-                     <option <?php if($chief_complaints['history_chief_sen_burn_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
-                   </select>
-                 </div>
-                 <div class="col-md-3  m-b-5">
-                   <input type="text" placeholder="Comment..." value="<?php echo $chief_complaints['history_chief_sen_burn_comm']; ?>" name="history_chief_sen_burn_comm">
-                 </div></div>
+                <div class="row" id="sen_burn">
+                    <div class="col-md-2  m-b-5">
+                        <label>Sensation Burning</label>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_sen_burn_side">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_sen_burn_side']=='Left'){ echo 'selected';}?> value="Left">L</option>
+                         <option <?php if($chief_complaints['history_chief_sen_burn_side']=='Right'){ echo 'selected';}?> value="Right">R</option>
+                         <option <?php if($chief_complaints['history_chief_sen_burn_side']=='Both'){ echo 'selected';}?> value="Both">B/E</option>
+                       </select>  
+                    </div>
+                    <div class="col-md-1 m-b-5">
+                       <select class="form-control" name="history_chief_sen_burn_dur">
+                          <option value="">Please Select</option>
+                          <?php for($i=1; $i<=40;$i++) { ?>
+                            <option <?php if($chief_complaints['history_chief_sen_burn_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+                         <?php } ?>
+                          
+                       </select>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_sen_burn_unit">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_sen_burn_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+                         <option <?php if($chief_complaints['history_chief_sen_burn_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+                         <option <?php if($chief_complaints['history_chief_sen_burn_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+                         <option <?php if($chief_complaints['history_chief_sen_burn_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+                       </select>
+                    </div>
+                    <div class="col-md-3  m-b-5">
+                       <input type="text" placeholder="Comment..." value="<?php echo $chief_complaints['history_chief_sen_burn_comm']; ?>" name="history_chief_sen_burn_comm">
+                    </div>
+                </div>
+                <div class="row" id="sx_ptosis">
+                    <div class="col-md-2  m-b-5">
+                        <label>Ptosis Sx</label>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_ptosis_side">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_ptosis_side']=='Left'){ echo 'selected';}?> value="Left">L</option>
+                         <option <?php if($chief_complaints['history_chief_ptosis_side']=='Right'){ echo 'selected';}?> value="Right">R</option>
+                         <option <?php if($chief_complaints['history_chief_ptosis_side']=='Both'){ echo 'selected';}?> value="Both">B/E</option>
+                       </select>  
+                    </div>
+                    <div class="col-md-1 m-b-5">
+                       <select class="form-control" name="history_chief_ptosis_dur">
+                          <option value="">Please Select</option>
+                          <?php for($i=1; $i<=40;$i++) { ?>
+                            <option <?php if($chief_complaints['history_chief_ptosis_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+                         <?php } ?>
+                          
+                       </select>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_ptosis_unit">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_ptosis_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+                         <option <?php if($chief_complaints['history_chief_ptosis_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+                         <option <?php if($chief_complaints['history_chief_ptosis_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+                         <option <?php if($chief_complaints['history_chief_ptosis_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+                       </select>
+                    </div>
+                    <div class="col-md-3  m-b-5">
+                       <input type="text" placeholder="Comment..." value="<?php echo $chief_complaints['history_chief_ptosis_comm']; ?>" name="history_chief_ptosis_comm">
+                    </div>
+                </div>
+                <div class="row" id="sx_lid">
+                    <div class="col-md-2  m-b-5">
+                        <label>Lid Sx</label>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_lid_sx_side">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_lid_sx_side']=='Left'){ echo 'selected';}?> value="Left">L</option>
+                         <option <?php if($chief_complaints['history_chief_lid_sx_side']=='Right'){ echo 'selected';}?> value="Right">R</option>
+                         <option <?php if($chief_complaints['history_chief_lid_sx_side']=='Both'){ echo 'selected';}?> value="Both">B/E</option>
+                       </select>  
+                    </div>
+                    <div class="col-md-1 m-b-5">
+                       <select class="form-control" name="history_chief_lid_sx_dur">
+                          <option value="">Please Select</option>
+                          <?php for($i=1; $i<=40;$i++) { ?>
+                            <option <?php if($chief_complaints['history_chief_lid_sx_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+                         <?php } ?>
+                          
+                       </select>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_lid_sx_unit">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_lid_sx_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+                         <option <?php if($chief_complaints['history_chief_lid_sx_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+                         <option <?php if($chief_complaints['history_chief_lid_sx_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+                         <option <?php if($chief_complaints['history_chieflid_sx_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+                       </select>
+                    </div>
+                    <div class="col-md-3  m-b-5">
+                       <input type="text" placeholder="Comment..." value="<?php echo $chief_complaints['history_chief_lid_sx_comm']; ?>" name="history_chieflid_sx_comm">
+                    </div>
+                </div>
+                <div class="row" id="sx_corneal">
+                    <div class="col-md-2  m-b-5">
+                        <label>Corneal Sx</label>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_corneal_sx_side">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_corneal_sx_side']=='Left'){ echo 'selected';}?> value="Left">L</option>
+                         <option <?php if($chief_complaints['history_chief_corneal_sx_side']=='Right'){ echo 'selected';}?> value="Right">R</option>
+                         <option <?php if($chief_complaints['history_chief_corneal_sx_side']=='Both'){ echo 'selected';}?> value="Both">B/E</option>
+                       </select>  
+                    </div>
+                    <div class="col-md-1 m-b-5">
+                       <select class="form-control" name="history_chief_corneal_sx_dur">
+                          <option value="">Please Select</option>
+                          <?php for($i=1; $i<=40;$i++) { ?>
+                            <option <?php if($chief_complaints['history_chief_corneal_sx_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+                         <?php } ?>
+                          
+                       </select>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_sen_cornel_sx_unit">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_sen_corneal_sx_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+                         <option <?php if($chief_complaints['history_chief_sen_corneal_sx_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+                         <option <?php if($chief_complaints['history_chief_sen_corneal_sx_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+                         <option <?php if($chief_complaints['history_chief_sen_corneal_sx_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+                       </select>
+                    </div>
+                    <div class="col-md-3  m-b-5">
+                       <input type="text" placeholder="Comment..." value="<?php echo $chief_complaints['history_chief_corneal_sx_comm']; ?>" name="history_chief_corneal_sx_comm">
+                    </div>
+                </div>
+                
+                <div class="row" id="sx_cataract">
+                    <div class="col-md-2  m-b-5">
+                        <label>Cataract Sx</label>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_cataract_sx_side">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_cataract_sx_side']=='Left'){ echo 'selected';}?> value="Left">L</option>
+                         <option <?php if($chief_complaints['history_chief_cataract_sx_side']=='Right'){ echo 'selected';}?> value="Right">R</option>
+                         <option <?php if($chief_complaints['history_chief_cataract_sx_side']=='Both'){ echo 'selected';}?> value="Both">B/E</option>
+                       </select>  
+                    </div>
+                    <div class="col-md-1 m-b-5">
+                       <select class="form-control" name="history_chief_cataract_sx_dur">
+                          <option value="">Please Select</option>
+                          <?php for($i=1; $i<=40;$i++) { ?>
+                            <option <?php if($chief_complaints['history_chief_cataract_sx_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+                         <?php } ?>
+                          
+                       </select>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_cataract_sx_unit">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_cataract_sx_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+                         <option <?php if($chief_complaints['history_chief_cataract_sx_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+                         <option <?php if($chief_complaints['history_chief_cataract_sx_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+                         <option <?php if($chief_complaints['history_chief_cataract_sx_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+                       </select>
+                    </div>
+                    <div class="col-md-3  m-b-5">
+                       <input type="text" placeholder="Comment..." value="<?php echo $chief_complaints['history_chief_cataract_sx_comm']; ?>" name="history_chief_cataract_sx_comm">
+                    </div>
+                </div>
+                <div class="row" id="sx_squint">
+                    <div class="col-md-2  m-b-5">
+                        <label>Squnit Sx</label>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_squint_sx_side">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_squint_sx_side']=='Left'){ echo 'selected';}?> value="Left">L</option>
+                         <option <?php if($chief_complaints['history_chief_squint_sx_side']=='Right'){ echo 'selected';}?> value="Right">R</option>
+                         <option <?php if($chief_complaints['history_chief_squint_sx_side']=='Both'){ echo 'selected';}?> value="Both">B/E</option>
+                       </select>  
+                    </div>
+                    <div class="col-md-1 m-b-5">
+                       <select class="form-control" name="history_chief_squint_sx_dur">
+                          <option value="">Please Select</option>
+                          <?php for($i=1; $i<=40;$i++) { ?>
+                            <option <?php if($chief_complaints['history_chief_squint_sx_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+                         <?php } ?>
+                          
+                       </select>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_squint_sx_unit">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_squint_sx_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+                         <option <?php if($chief_complaints['history_chief_squint_sx_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+                         <option <?php if($chief_complaints['history_chief_squint_sx_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+                         <option <?php if($chief_complaints['history_chief_squint_sx_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+                       </select>
+                    </div>
+                    <div class="col-md-3  m-b-5">
+                       <input type="text" placeholder="Comment..." value="<?php echo $chief_complaints['history_chief_squint_sx_comm']; ?>" name="history_chief_squint_sx_comm">
+                    </div>
+                </div>
+                <div class="row" id="sx_pterygium">
+                    <div class="col-md-2  m-b-5">
+                        <label>Pterygium Sx</label>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_pterygium_sx_side">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_pterygium_sx_side']=='Left'){ echo 'selected';}?> value="Left">L</option>
+                         <option <?php if($chief_complaints['history_chief_pterygium_sx_side']=='Right'){ echo 'selected';}?> value="Right">R</option>
+                         <option <?php if($chief_complaints['history_chief_pterygium_sx_side']=='Both'){ echo 'selected';}?> value="Both">B/E</option>
+                       </select>  
+                    </div>
+                    <div class="col-md-1 m-b-5">
+                       <select class="form-control" name="history_chief_squint_sx_dur">
+                          <option value="">Please Select</option>
+                          <?php for($i=1; $i<=40;$i++) { ?>
+                            <option <?php if($chief_complaints['history_chief_pterygium_sx_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+                         <?php } ?>
+                          
+                       </select>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_pterygium_sx_unit">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_pterygium_sx_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+                         <option <?php if($chief_complaints['history_chief_pterygium_sx_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+                         <option <?php if($chief_complaints['history_chief_pterygium_sx_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+                         <option <?php if($chief_complaints['history_chief_pterygium_sx_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+                       </select>
+                    </div>
+                    <div class="col-md-3  m-b-5">
+                       <input type="text" placeholder="Comment..." value="<?php echo $chief_complaints['history_chief_pterygium_sx_comm']; ?>" name="history_chief_pterygium_sx_comm">
+                    </div>
+                </div>
+                <div class="row" id="sx_dcr">
+                    <div class="col-md-2  m-b-5">
+                        <label>DCR</label>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_dcr_sx_side">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_dcr_sx_side']=='Left'){ echo 'selected';}?> value="Left">L</option>
+                         <option <?php if($chief_complaints['history_chief_dcr_sx_side']=='Right'){ echo 'selected';}?> value="Right">R</option>
+                         <option <?php if($chief_complaints['history_chief_dcr_sx_side']=='Both'){ echo 'selected';}?> value="Both">B/E</option>
+                       </select>  
+                    </div>
+                    <div class="col-md-1 m-b-5">
+                       <select class="form-control" name="history_chief_dcr_sx_dur">
+                          <option value="">Please Select</option>
+                          <?php for($i=1; $i<=40;$i++) { ?>
+                            <option <?php if($chief_complaints['history_chief_dcr_sx_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+                         <?php } ?>
+                          
+                       </select>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_dcr_sx_unit">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_dcr_sx_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+                         <option <?php if($chief_complaints['history_chief_dcr_sx_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+                         <option <?php if($chief_complaints['history_chief_dcr_sx_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+                         <option <?php if($chief_complaints['history_chief_dcr_sx_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+                       </select>
+                    </div>
+                    <div class="col-md-3  m-b-5">
+                       <input type="text" placeholder="Comment..." value="<?php echo $chief_complaints['history_chief_dcr_sx_comm']; ?>" name="history_chief_dcr_sx_comm">
+                    </div>
+                </div>
+                <div class="row" id="sx_dct">
+                    <div class="col-md-2  m-b-5">
+                        <label>DCT Sx</label>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_dct_sx_side">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_dct_sx_side']=='Left'){ echo 'selected';}?> value="Left">L</option>
+                         <option <?php if($chief_complaints['history_chief_dct_sx_side']=='Right'){ echo 'selected';}?> value="Right">R</option>
+                         <option <?php if($chief_complaints['history_chief_dct_sx_side']=='Both'){ echo 'selected';}?> value="Both">B/E</option>
+                       </select>  
+                    </div>
+                    <div class="col-md-1 m-b-5">
+                       <select class="form-control" name="history_chief_dct_sx_dur">
+                          <option value="">Please Select</option>
+                          <?php for($i=1; $i<=40;$i++) { ?>
+                            <option <?php if($chief_complaints['history_chief_dct_sx_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+                         <?php } ?>
+                          
+                       </select>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_dcy_sx_unit">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_dct_sx_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+                         <option <?php if($chief_complaints['history_chief_dct_sx_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+                         <option <?php if($chief_complaints['history_chief_dct_sx_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+                         <option <?php if($chief_complaints['history_chief_dct_sx_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+                       </select>
+                    </div>
+                    <div class="col-md-3  m-b-5">
+                       <input type="text" placeholder="Comment..." value="<?php echo $chief_complaints['history_chief_dct_sx_comm']; ?>" name="history_chief_dct_sx_comm">
+                    </div>
+                </div>
+                <div class="row" id="sx_patching_therapy">
+                    <div class="col-md-2  m-b-5">
+                        <label>Patching Therapy</label>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_patching_therapy_sx_side">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_patching_therapy_sx_side']=='Left'){ echo 'selected';}?> value="Left">L</option>
+                         <option <?php if($chief_complaints['history_chief_patching_therapy_sx_side']=='Right'){ echo 'selected';}?> value="Right">R</option>
+                         <option <?php if($chief_complaints['history_chief_patching_therapy_sx_side']=='Both'){ echo 'selected';}?> value="Both">B/E</option>
+                       </select>  
+                    </div>
+                    <div class="col-md-1 m-b-5">
+                       <select class="form-control" name="history_chief_patching_therapy_sx_dur">
+                          <option value="">Please Select</option>
+                          <?php for($i=1; $i<=40;$i++) { ?>
+                            <option <?php if($chief_complaints['history_chief_patching_therapy_sx_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+                         <?php } ?>
+                          
+                       </select>
+                    </div>
+                    <div class="col-md-1  m-b-5">
+                       <select class="form-control" name="history_chief_dcy_sx_unit">
+                         <option value="">Please Select</option>
+                         <option <?php if($chief_complaints['history_chief_patching_therapy_sx_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+                         <option <?php if($chief_complaints['history_chief_patching_therapy_sx_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+                         <option <?php if($chief_complaints['history_chief_patching_therapy_sx_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+                         <option <?php if($chief_complaints['history_chief_patching_therapy_sx_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+                       </select>
+                    </div>
+                    <div class="col-md-3  m-b-5">
+                       <input type="text" placeholder="Comment..." value="<?php echo $chief_complaints['history_chief_patching_therapy_sx_comm']; ?>" name="history_chief_patching_therapy_sx_comm">
+                    </div>
+                </div>
       </section>
 
       <section>
@@ -698,6 +1170,10 @@
    <label class="btn-custom"><input type="checkbox" <?php if($ophthalmic['eyesu_m']==1){ echo 'checked'; }?> name="eyesu_m" value="1" id="eyesu_m">Eye Surgery</label>
    <label class="btn-custom"><input type="checkbox" <?php if($ophthalmic['uve_m']==1){ echo 'checked'; }?> name="uve_m" value="1" id="uve_m">Uveitis</label>  
    <label class="btn-custom"><input type="checkbox" <?php if($ophthalmic['retil_m']==1){ echo 'checked'; }?> name="retil_m" value="1" id="retil_m">Retinal Laser</label>   
+   <label class="btn-custom"><input type="checkbox" <?php if($ophthalmic['contact_lens_m']==1){ echo 'checked'; }?> name="contact_lens_m" value="1" id="contact_lens_m">Contact Lens</label>   
+   <label class="btn-custom"><input type="checkbox" <?php if($ophthalmic['vision_therapy_m']==1){ echo 'checked'; }?> name="vision_therapy_m" value="1" id="vision_therapy_m">Vision Therapy</label>   
+   <label class="btn-custom"><input type="checkbox" <?php if($ophthalmic['low_vision_m']==1){ echo 'checked'; }?> name="low_vision_m" value="1" id="low_vision_m">Low Vision</label>   
+   <label class="btn-custom"><input type="checkbox" <?php if($ophthalmic['aid_m']==1){ echo 'checked'; }?> name="aid_m" value="1" id="aid_m">Aid</label>   
  </div>     
 
 
@@ -1060,6 +1536,193 @@
            <input type="" placeholder="Comment..." value="<?php echo $ophthalmic['history_ophthalmic_renti_l_comm']; ?>" name="history_ophthalmic_renti_l_comm">
          </div>          
        </div>
+       <div class="row" id="contact_lens_l">
+         <div class="col-md-1  m-b-5">
+           <label>Contact Lens</label>
+         </div>
+         <div class="col-md-2  m-b-5">
+           <select class="form-control" name="history_ophthalmic_contact_lens_l_l_dur" id="history_ophthalmic_contact_lens_l_l_dur">
+              <option value="">Please Select</option>
+              <?php for($i=1; $i<=40;$i++) { ?>
+                <option <?php if($ophthalmic['history_ophthalmic_contact_lens_l_l_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+             <?php } ?>
+           </select>  
+         </div>
+         <div class="col-md-2 m-b-5">
+           <select class="form-control" name="history_ophthalmic_contact_lens_l_l_unit" id="history_ophthalmic_contact_lens_l_l_unit">
+             <option value="">Please Select</option>
+             <option <?php if($ophthalmic['history_ophthalmic_contact_lens_l_l_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+             <option <?php if($ophthalmic['history_ophthalmic_contact_lens_l_l_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+             <option <?php if($ophthalmic['history_ophthalmic_contact_lens_l_l_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+             <option <?php if($ophthalmic['history_ophthalmic_contact_lens_l_l_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+           </select>
+         </div>
+         <div class="col-md-1  m-b-5">
+           <button type="button" onclick="contact_lens()" class="btn-custom"><i class="fa fa-arrow-right"></i></button>
+         </div> 
+         <div class="col-md-2  m-b-5">
+             <select class="form-control" name="history_ophthalmic_contact_lens_l_r_dur" id="history_ophthalmic_contact_lens_l_r_dur">
+              <option value="">Please Select</option>
+              <?php for($i=1; $i<=40;$i++) { ?>
+                <option <?php if($ophthalmic['history_ophthalmic_contact_lens_l_r_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+             <?php } ?>
+              
+           </select>
+         </div>
+         <div class="col-md-2  m-b-5">
+           <select class="form-control" name="history_ophthalmic_contact_lens_l_r_unit" id="history_ophthalmic_contact_lens_l_r_unit">
+             <option value="">Please Select</option>
+             <option <?php if($ophthalmic['history_ophthalmic_contact_lens_l_r_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+             <option <?php if($ophthalmic['history_ophthalmic_contact_lens_l_r_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+             <option <?php if($ophthalmic['history_ophthalmic_contact_lens_l_r_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+             <option <?php if($ophthalmic['history_ophthalmic_contact_lens_l_r_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+           </select>
+         </div>
+         <div class="col-md-2  m-b-5">
+           <input type="" placeholder="Comment..." value="<?php echo $ophthalmic['history_ophthalmic_contact_lens_l_comm']; ?>" name="history_ophthalmic_contact_lens_l_comm">
+         </div>          
+       </div>
+       
+       <div class="row" id="vision_therapy_l">
+         <div class="col-md-1  m-b-5">
+           <label>Vision Therapy</label>
+         </div>
+         <div class="col-md-2  m-b-5">
+           <select class="form-control" name="history_ophthalmic_vision_therapy_l_l_dur" id="history_ophthalmic_vision_therapy_l_l_dur">
+              <option value="">Please Select</option>
+              <?php for($i=1; $i<=40;$i++) { ?>
+                <option <?php if($ophthalmic['history_ophthalmic_vision_therapy_l_l_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+             <?php } ?>
+           </select>  
+         </div>
+         <div class="col-md-2 m-b-5">
+           <select class="form-control" name="history_ophthalmic_vision_therapy_l_l_unit" id="history_ophthalmic_vision_therapy_l_l_unit">
+             <option value="">Please Select</option>
+             <option <?php if($ophthalmic['history_ophthalmic_vision_therapy_l_l_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+             <option <?php if($ophthalmic['history_ophthalmic_vision_therapy_l_l_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+             <option <?php if($ophthalmic['history_ophthalmic_vision_therapy_l_l_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+             <option <?php if($ophthalmic['history_ophthalmic_vision_therapy_l_l_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+           </select>
+         </div>
+         <div class="col-md-1  m-b-5">
+           <button type="button" onclick="vision_therapy()" class="btn-custom"><i class="fa fa-arrow-right"></i></button>
+         </div> 
+         <div class="col-md-2  m-b-5">
+             <select class="form-control" name="history_ophthalmic_vision_therapy_l_r_dur" id="history_ophthalmic_vision_therapy_l_r_dur">
+              <option value="">Please Select</option>
+              <?php for($i=1; $i<=40;$i++) { ?>
+                <option <?php if($ophthalmic['history_ophthalmic_vision_therapy_l_r_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+             <?php } ?>
+              
+           </select>
+         </div>
+         <div class="col-md-2  m-b-5">
+           <select class="form-control" name="history_ophthalmic_vision_therapy_l_r_unit" id="history_ophthalmic_vision_therapy_l_r_unit">
+             <option value="">Please Select</option>
+             <option <?php if($ophthalmic['history_ophthalmic_vision_therapy_l_r_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+             <option <?php if($ophthalmic['history_ophthalmic_vision_therapy_l_r_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+             <option <?php if($ophthalmic['history_ophthalmic_vision_therapy_l_r_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+             <option <?php if($ophthalmic['history_ophthalmic_vision_therapy_l_r_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+           </select>
+         </div>
+         <div class="col-md-2  m-b-5">
+           <input type="" placeholder="Comment..." value="<?php echo $ophthalmic['history_ophthalmic_vision_therapy_l_comm']; ?>" name="history_ophthalmic_vision_therapy_l_comm">
+         </div>          
+       </div>
+       
+       <div class="row" id="low_vision_l">
+         <div class="col-md-1  m-b-5">
+           <label>Low Vision</label>
+         </div>
+         <div class="col-md-2  m-b-5">
+           <select class="form-control" name="history_ophthalmic_low_vision_l_l_dur" id="history_ophthalmic_low_vision_l_l_dur">
+              <option value="">Please Select</option>
+              <?php for($i=1; $i<=40;$i++) { ?>
+                <option <?php if($ophthalmic['history_ophthalmic_low_vision_l_l_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+             <?php } ?>
+           </select>  
+         </div>
+         <div class="col-md-2 m-b-5">
+           <select class="form-control" name="history_ophthalmic_low_vision_l_l_unit" id="history_ophthalmic_low_vision_l_l_unit">
+             <option value="">Please Select</option>
+             <option <?php if($ophthalmic['history_ophthalmic_low_vision_l_l_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+             <option <?php if($ophthalmic['history_ophthalmic_low_vision_l_l_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+             <option <?php if($ophthalmic['history_ophthalmic_low_vision_l_l_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+             <option <?php if($ophthalmic['history_ophthalmic_low_vision_l_l_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+           </select>
+         </div>
+         <div class="col-md-1  m-b-5">
+           <button type="button" onclick="low_vision()" class="btn-custom"><i class="fa fa-arrow-right"></i></button>
+         </div> 
+         <div class="col-md-2  m-b-5">
+             <select class="form-control" name="history_ophthalmic_low_vision_l_r_dur" id="history_ophthalmic_low_vision_l_r_dur">
+              <option value="">Please Select</option>
+              <?php for($i=1; $i<=40;$i++) { ?>
+                <option <?php if($ophthalmic['history_ophthalmic_low_vision_l_r_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+             <?php } ?>
+              
+           </select>
+         </div>
+         <div class="col-md-2  m-b-5">
+           <select class="form-control" name="history_ophthalmic_low_vision_l_r_unit" id="history_ophthalmic_low_vision_l_r_unit">
+             <option value="">Please Select</option>
+             <option <?php if($ophthalmic['history_ophthalmic_low_vision_l_r_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+             <option <?php if($ophthalmic['history_ophthalmic_low_vision_l_r_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+             <option <?php if($ophthalmic['history_ophthalmic_low_vision_l_r_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+             <option <?php if($ophthalmic['history_ophthalmic_low_vision_l_r_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+           </select>
+         </div>
+         <div class="col-md-2  m-b-5">
+           <input type="" placeholder="Comment..." value="<?php echo $ophthalmic['history_ophthalmic_low_vision_l_comm']; ?>" name="history_ophthalmic_low_vision_l_comm">
+         </div>          
+       </div>
+       
+       <div class="row" id="aid_l">
+         <div class="col-md-1  m-b-5">
+           <label>Aid</label>
+         </div>
+         <div class="col-md-2  m-b-5">
+           <select class="form-control" name="history_ophthalmic_aid_l_l_dur" id="history_ophthalmic_aid_l_l_dur">
+              <option value="">Please Select</option>
+              <?php for($i=1; $i<=40;$i++) { ?>
+                <option <?php if($ophthalmic['history_ophthalmic_aid_l_l_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+             <?php } ?>
+           </select>  
+         </div>
+         <div class="col-md-2 m-b-5">
+           <select class="form-control" name="history_ophthalmic_aid_l_l_unit" id="history_ophthalmic_aid_l_l_unit">
+             <option value="">Please Select</option>
+             <option <?php if($ophthalmic['history_ophthalmic_aid_l_l_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+             <option <?php if($ophthalmic['history_ophthalmic_aid_l_l_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+             <option <?php if($ophthalmic['history_ophthalmic_aid_l_l_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+             <option <?php if($ophthalmic['history_ophthalmic_aid_l_l_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+           </select>
+         </div>
+         <div class="col-md-1  m-b-5">
+           <button type="button" onclick="aid()" class="btn-custom"><i class="fa fa-arrow-right"></i></button>
+         </div> 
+         <div class="col-md-2  m-b-5">
+             <select class="form-control" name="history_ophthalmic_aid_l_r_dur" id="history_ophthalmic_aid_l_r_dur">
+              <option value="">Please Select</option>
+              <?php for($i=1; $i<=40;$i++) { ?>
+                <option <?php if($ophthalmic['history_ophthalmic_aid_l_r_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+             <?php } ?>
+              
+           </select>
+         </div>
+         <div class="col-md-2  m-b-5">
+           <select class="form-control" name="history_ophthalmic_aid_l_r_unit" id="history_ophthalmic_aid_l_r_unit">
+             <option value="">Please Select</option>
+             <option <?php if($ophthalmic['history_ophthalmic_aid_l_r_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+             <option <?php if($ophthalmic['history_ophthalmic_aid_l_r_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+             <option <?php if($ophthalmic['history_ophthalmic_aid_l_r_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+             <option <?php if($ophthalmic['history_ophthalmic_aid_l_r_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+           </select>
+         </div>
+         <div class="col-md-2  m-b-5">
+           <input type="" placeholder="Comment..." value="<?php echo $ophthalmic['history_ophthalmic_aid_l_comm']; ?>" name="history_ophthalmic_aid_l_comm">
+         </div>          
+       </div>
 
       </section>
 
@@ -1093,16 +1756,25 @@
    <label class="btn-custom"><input type="checkbox" <?php if($systemic['tuber_m']==1){ echo 'checked'; }?> name="tuber_m" value="1" id="tuber_m">Tuberculosis</label>
    <label class="btn-custom"><input type="checkbox" <?php if($systemic['asth_m']==1){ echo 'checked'; }?> name="asth_m" value="1" id="asth_m">Asthma</label>
    <label class="btn-custom"><input type="checkbox" <?php if($systemic['cnsds_m']==1){ echo 'checked'; }?> name="cnsds_m" value="1" id="cnsds_m">Cns Disorder Stroke</label>
-   <label class="btn-custom"><input type="checkbox" <?php if($systemic['hypo_m']==1){ echo 'checked'; }?> name="hypo_m" value="1" id="hypo_m">Hypothyroidism</label>
-   <label class="btn-custom"><input type="checkbox" <?php if($systemic['hyperth_m']==1){ echo 'checked'; }?> name="hyperth_m" value="1" id="hyperth_m">Hyperthyroidism</label>
+   <!--<label class="btn-custom"><input type="checkbox" <?php if($systemic['hypo_m']==1){ echo 'checked'; }?> name="hypo_m" value="1" id="hypo_m">Hypothyroidism</label>-->
+   <!--<label class="btn-custom"><input type="checkbox" <?php if($systemic['hyperth_m']==1){ echo 'checked'; }?> name="hyperth_m" value="1" id="hyperth_m">Hyperthyroidism</label>-->
    <label class="btn-custom"><input type="checkbox" <?php if($systemic['hepac_m']==1){ echo 'checked'; }?> name="hepac_m" value="1" id="hepac_m">Hepatitis Cirrhosis</label>
    <label class="btn-custom"><input type="checkbox" <?php if($systemic['renald_m']==1){ echo 'checked'; }?> name="renald_m" value="1" id="renald_m">Renal Disorder</label>    
    <label class="btn-custom"><input type="checkbox" <?php if($systemic['acid_m']==1){ echo 'checked'; }?> name="acid_m" value="1" id="acid_m">Acidity</label>
    <label class="btn-custom"><input type="checkbox" <?php if($systemic['oins_m']==1){ echo 'checked'; }?> name="oins_m" value="1" id="oins_m">On insulin</label>
    <label class="btn-custom"><input type="checkbox" <?php if($systemic['oasp_m']==1){ echo 'checked'; }?> name="oasp_m" value="1" id="oasp_m">On Aspirin Blood Thinners</label>
-   <label class="btn-custom"><input type="checkbox" <?php if($systemic['acon_m']==1){ echo 'checked'; }?> name="acon_m" value="1" id="acon_m">Consanguinity</label>
+   <!--<label class="btn-custom"><input type="checkbox" <?php if($systemic['acon_m']==1){ echo 'checked'; }?> name="acon_m" value="1" id="acon_m">Consanguinity</label>-->
    <label class="btn-custom"><input type="checkbox" <?php if($systemic['thd_m']==1){ echo 'checked'; }?> name="thd_m" value="1" id="thd_m">Thyroid Disorder</label>
    <label class="btn-custom"><input type="checkbox" <?php if($systemic['chewt_m']==1){ echo 'checked'; }?> name="chewt_m" value="1" id="chewt_m">Chewing Tobacco</label>      
+   
+   
+   <label class="btn-custom"><input type="checkbox" <?php if($systemic['chronic_kidney_disease_m']==1){ echo 'checked'; }?> name="chronic_kidney_disease_m" value="1" id="chronic_kidney_disease_m">Chronic Kidney Disease</label>      
+   <label class="btn-custom"><input type="checkbox" <?php if($systemic['can_m']==1){ echo 'checked'; }?> name="can_m" value="1" id="can_m">CAN</label>      
+   <label class="btn-custom"><input type="checkbox" <?php if($systemic['rheumatoid_artheritis_m']==1){ echo 'checked'; }?> name="rheumatoid_artheritis_m" value="1" id="rheumatoid_artheritis_m">Rheumatoid Artheritis</label>      
+   <label class="btn-custom"><input type="checkbox" <?php if($systemic['benign_ruostatic_hyperplasia_m']==1){ echo 'checked'; }?> name="benign_ruostatic_hyperplasia_m" value="1" id="benign_ruostatic_hyperplasia_m">Benign Ruostatic Hyperplasia</label>      
+   <label class="btn-custom"><input type="checkbox" <?php if($systemic['drug_medication_history_m']==1){ echo 'checked'; }?> name="drug_medication_history_m" value="1" id="drug_medication_history_m">Drug Medication History</label>      
+   <label class="btn-custom"><input type="checkbox" <?php if($systemic['bph_m']==1){ echo 'checked'; }?> name="bph_m" value="1" id="bph_m">BPH</label>      
+   <label class="btn-custom"><input type="checkbox" <?php if($systemic['thyroid_m']==1){ echo 'checked'; }?> name="thyroid_m" value="1" id="thyroid_m">Thyroid</label>      
  </div>     
 
 
@@ -1445,58 +2117,58 @@
        </div>
 
         
-       <div class="row" id="hypo">
-         <div class="col-md-2  m-b-5">
-           <label>Hypothyroidism</label>
-         </div>
-         <div class="col-md-2  m-b-5">
-            <select class="form-control" name="history_systemic_hypo_dur">
-              <option value="">Please Select</option>
-              <?php for($i=1; $i<=40;$i++) { ?>
-                <option <?php if($systemic['history_systemic_hypo_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
-             <?php } ?>               
-           </select>
-         </div>
-         <div class="col-md-2 m-b-5">
-           <select class="form-control" name="history_systemic_hypo_unit">
-             <option value="">Please Select</option>
-             <option <?php if($systemic['history_systemic_hypo_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
-             <option <?php if($systemic['history_systemic_hypo_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
-             <option <?php if($systemic['history_systemic_hypo_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
-             <option <?php if($systemic['history_systemic_hypo_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
-           </select>
-         </div> 
-         <div class="col-md-2  m-b-5">
-           <input type="" placeholder="Comment..." value="<?php echo $systemic['history_systemic_hypo_comm']; ?>" name="history_systemic_hypo_comm">
-         </div>          
-       </div>
+       <!--<div class="row" id="hypo">-->
+       <!--  <div class="col-md-2  m-b-5">-->
+       <!--    <label>Hypothyroidism</label>-->
+       <!--  </div>-->
+       <!--  <div class="col-md-2  m-b-5">-->
+       <!--     <select class="form-control" name="history_systemic_hypo_dur">-->
+       <!--       <option value="">Please Select</option>-->
+       <!--       <?php for($i=1; $i<=40;$i++) { ?>-->
+       <!--         <option <?php if($systemic['history_systemic_hypo_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>-->
+       <!--      <?php } ?>               -->
+       <!--    </select>-->
+       <!--  </div>-->
+       <!--  <div class="col-md-2 m-b-5">-->
+       <!--    <select class="form-control" name="history_systemic_hypo_unit">-->
+       <!--      <option value="">Please Select</option>-->
+       <!--      <option <?php if($systemic['history_systemic_hypo_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>-->
+       <!--      <option <?php if($systemic['history_systemic_hypo_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>-->
+       <!--      <option <?php if($systemic['history_systemic_hypo_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>-->
+       <!--      <option <?php if($systemic['history_systemic_hypo_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>-->
+       <!--    </select>-->
+       <!--  </div> -->
+       <!--  <div class="col-md-2  m-b-5">-->
+       <!--    <input type="" placeholder="Comment..." value="<?php echo $systemic['history_systemic_hypo_comm']; ?>" name="history_systemic_hypo_comm">-->
+       <!--  </div>          -->
+       <!--</div>-->
 
         
-       <div class="row" id="hyperth">
-         <div class="col-md-2  m-b-5">
-           <label>Hyperthyroidism</label>
-         </div>
-         <div class="col-md-2  m-b-5">
-            <select class="form-control" name="history_systemic_hyperth_dur">
-              <option value="">Please Select</option>
-              <?php for($i=1; $i<=40;$i++) { ?>
-                <option <?php if($systemic['history_systemic_hyperth_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
-             <?php } ?>               
-           </select>
-         </div>
-         <div class="col-md-2 m-b-5">
-           <select class="form-control" name="history_systemic_hyperth_unit">
-             <option value="">Please Select</option>
-             <option <?php if($systemic['history_systemic_hyperth_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
-             <option <?php if($systemic['history_systemic_hyperth_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
-             <option <?php if($systemic['history_systemic_hyperth_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
-             <option <?php if($systemic['history_systemic_hyperth_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
-           </select>
-         </div> 
-         <div class="col-md-2  m-b-5">
-           <input type="" placeholder="Comment..." value="<?php echo $systemic['history_systemic_hyperth_comm']; ?>" name="history_systemic_hyperth_comm">
-         </div>          
-       </div>
+       <!--<div class="row" id="hyperth">-->
+       <!--  <div class="col-md-2  m-b-5">-->
+       <!--    <label>Hyperthyroidism</label>-->
+       <!--  </div>-->
+       <!--  <div class="col-md-2  m-b-5">-->
+       <!--     <select class="form-control" name="history_systemic_hyperth_dur">-->
+       <!--       <option value="">Please Select</option>-->
+       <!--       <?php for($i=1; $i<=40;$i++) { ?>-->
+       <!--         <option <?php if($systemic['history_systemic_hyperth_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>-->
+       <!--      <?php } ?>               -->
+       <!--    </select>-->
+       <!--  </div>-->
+       <!--  <div class="col-md-2 m-b-5">-->
+       <!--    <select class="form-control" name="history_systemic_hyperth_unit">-->
+       <!--      <option value="">Please Select</option>-->
+       <!--      <option <?php if($systemic['history_systemic_hyperth_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>-->
+       <!--      <option <?php if($systemic['history_systemic_hyperth_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>-->
+       <!--      <option <?php if($systemic['history_systemic_hyperth_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>-->
+       <!--      <option <?php if($systemic['history_systemic_hyperth_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>-->
+       <!--    </select>-->
+       <!--  </div> -->
+       <!--  <div class="col-md-2  m-b-5">-->
+       <!--    <input type="" placeholder="Comment..." value="<?php echo $systemic['history_systemic_hyperth_comm']; ?>" name="history_systemic_hyperth_comm">-->
+       <!--  </div>          -->
+       <!--</div>-->
 
        <div class="row" id="heptc">
          <div class="col-md-2  m-b-5">
@@ -1631,31 +2303,31 @@
        </div>
 
         
-       <div class="row" id="consan">
-         <div class="col-md-2  m-b-5">
-           <label>Consanguinity</label>
-         </div>
-         <div class="col-md-2  m-b-5">
-            <select class="form-control" name="history_systemic_consan_dur">
-              <option value="">Please Select</option>
-              <?php for($i=1; $i<=40;$i++) { ?>
-                <option <?php if($systemic['history_systemic_consan_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
-             <?php } ?>               
-           </select>
-         </div>
-         <div class="col-md-2 m-b-5">
-           <select class="form-control" name="history_systemic_consan_unit">
-             <option value="">Please Select</option>
-             <option <?php if($systemic['history_systemic_consan_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
-             <option <?php if($systemic['history_systemic_consan_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
-             <option <?php if($systemic['history_systemic_consan_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
-             <option <?php if($systemic['history_systemic_consan_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
-           </select>
-         </div> 
-         <div class="col-md-2  m-b-5">
-           <input type="" placeholder="Comment..." value="<?php echo $systemic['history_systemic_consan_comm']; ?>" name="history_systemic_consan_comm">
-         </div>          
-       </div>
+       <!--<div class="row" id="consan">-->
+       <!--  <div class="col-md-2  m-b-5">-->
+       <!--    <label>Consanguinity</label>-->
+       <!--  </div>-->
+       <!--  <div class="col-md-2  m-b-5">-->
+       <!--     <select class="form-control" name="history_systemic_consan_dur">-->
+       <!--       <option value="">Please Select</option>-->
+       <!--       <?php for($i=1; $i<=40;$i++) { ?>-->
+       <!--         <option <?php if($systemic['history_systemic_consan_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>-->
+       <!--      <?php } ?>               -->
+       <!--    </select>-->
+       <!--  </div>-->
+       <!--  <div class="col-md-2 m-b-5">-->
+       <!--    <select class="form-control" name="history_systemic_consan_unit">-->
+       <!--      <option value="">Please Select</option>-->
+       <!--      <option <?php if($systemic['history_systemic_consan_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>-->
+       <!--      <option <?php if($systemic['history_systemic_consan_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>-->
+       <!--      <option <?php if($systemic['history_systemic_consan_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>-->
+       <!--      <option <?php if($systemic['history_systemic_consan_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>-->
+       <!--    </select>-->
+       <!--  </div> -->
+       <!--  <div class="col-md-2  m-b-5">-->
+       <!--    <input type="" placeholder="Comment..." value="<?php echo $systemic['history_systemic_consan_comm']; ?>" name="history_systemic_consan_comm">-->
+       <!--  </div>          -->
+       <!--</div>-->
 
        <div class="row" id="thyrd">
          <div class="col-md-2  m-b-5">
@@ -1708,6 +2380,188 @@
            <input type="" placeholder="Comment..." value="<?php echo $systemic['history_systemic_chewt_comm']; ?>" name="history_systemic_chewt_comm">
          </div>          
        </div>
+       
+       <div class="row" id="chronic_kidney_disease">
+         <div class="col-md-2  m-b-5">
+           <label>Chronic Kidney Disease</label>
+         </div>
+         <div class="col-md-2  m-b-5">
+            <select class="form-control" name="history_systemic_chronic_kidney_dur">
+              <option value="">Please Select</option>
+              <?php for($i=1; $i<=40;$i++) { ?>
+                <option <?php if($systemic['history_systemic_chronic_kidney_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+             <?php } ?>               
+           </select>
+         </div>
+         <div class="col-md-2 m-b-5">
+           <select class="form-control" name="history_systemic_chronic_kidney_unit">
+             <option value="">Please Select</option>
+             <option <?php if($systemic['history_systemic_chronic_kidney_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+             <option <?php if($systemic['history_systemic_chronic_kidney_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+             <option <?php if($systemic['history_systemic_chronic_kidney_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+             <option <?php if($systemic['history_systemic_chronic_kidney_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+           </select>
+         </div> 
+         <div class="col-md-2  m-b-5">
+           <input type="" placeholder="Comment..." value="<?php echo $systemic['history_systemic_chronic_kidney_comm']; ?>" name="history_systemic_chronic_kidney_comm">
+         </div>          
+       </div>
+       
+       <div class="row" id="can">
+         <div class="col-md-2  m-b-5">
+           <label>Can</label>
+         </div>
+         <div class="col-md-2  m-b-5">
+            <select class="form-control" name="history_systemic_can_dur">
+              <option value="">Please Select</option>
+              <?php for($i=1; $i<=40;$i++) { ?>
+                <option <?php if($systemic['history_systemic_can_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+             <?php } ?>               
+           </select>
+         </div>
+         <div class="col-md-2 m-b-5">
+           <select class="form-control" name="history_systemic_can_unit">
+             <option value="">Please Select</option>
+             <option <?php if($systemic['history_systemic_can_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+             <option <?php if($systemic['history_systemic_can_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+             <option <?php if($systemic['history_systemic_can_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+             <option <?php if($systemic['history_systemic_can_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+           </select>
+         </div> 
+         <div class="col-md-2  m-b-5">
+           <input type="" placeholder="Comment..." value="<?php echo $systemic['history_systemic_can_comm']; ?>" name="history_systemic_can_comm">
+         </div>          
+       </div>
+       
+       <div class="row" id="rheumatoid_artheritis">
+         <div class="col-md-2  m-b-5">
+           <label>Rheumatoid Artheritis</label>
+         </div>
+         <div class="col-md-2  m-b-5">
+            <select class="form-control" name="history_systemic_rheumatoid_artheritis_dur">
+              <option value="">Please Select</option>
+              <?php for($i=1; $i<=40;$i++) { ?>
+                <option <?php if($systemic['history_systemic_rheumatoid_artheritis_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+             <?php } ?>               
+           </select>
+         </div>
+         <div class="col-md-2 m-b-5">
+           <select class="form-control" name="history_systemic_rheumatoid_artheritis_unit">
+             <option value="">Please Select</option>
+             <option <?php if($systemic['history_systemic_rheumatoid_artheritis_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+             <option <?php if($systemic['history_systemic_rheumatoid_artheritis_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+             <option <?php if($systemic['history_systemic_rheumatoid_artheritis_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+             <option <?php if($systemic['history_systemic_rheumatoid_artheritis_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+           </select>
+         </div> 
+         <div class="col-md-2  m-b-5">
+           <input type="" placeholder="Comment..." value="<?php echo $systemic['history_systemic_rheumatoid_artheritis_comm']; ?>" name="history_systemic_rheumatoid_artheritis_comm">
+         </div>          
+       </div>
+       
+       <div class="row" id="benign_ruostatic_hyperplasia">
+         <div class="col-md-2  m-b-5">
+           <label>Benign Ruostatic Hyperplasia</label>
+         </div>
+         <div class="col-md-2  m-b-5">
+            <select class="form-control" name="history_systemic_benign_ruostatic_dur">
+              <option value="">Please Select</option>
+              <?php for($i=1; $i<=40;$i++) { ?>
+                <option <?php if($systemic['history_systemic_benign_ruostatic_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+             <?php } ?>               
+           </select>
+         </div>
+         <div class="col-md-2 m-b-5">
+           <select class="form-control" name="history_systemic_benign_ruostatic_unit">
+             <option value="">Please Select</option>
+             <option <?php if($systemic['history_systemic_benign_ruostatic_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+             <option <?php if($systemic['history_systemic_benign_ruostatic_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+             <option <?php if($systemic['history_systemic_benign_ruostatic_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+             <option <?php if($systemic['history_systemic_benign_ruostatic_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+           </select>
+         </div> 
+         <div class="col-md-2  m-b-5">
+           <input type="" placeholder="Comment..." value="<?php echo $systemic['history_systemic_benign_ruostatic_comm']; ?>" name="history_systemic_benign_ruostatic_comm">
+         </div>          
+       </div>
+       
+       <div class="row" id="drug_medication_history">
+         <div class="col-md-2  m-b-5">
+           <label>Drug Medication History</label>
+         </div>
+         <div class="col-md-2  m-b-5">
+            <select class="form-control" name="history_systemic_drug_medication_dur">
+              <option value="">Please Select</option>
+              <?php for($i=1; $i<=40;$i++) { ?>
+                <option <?php if($systemic['history_systemic_drug_medication_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+             <?php } ?>               
+           </select>
+         </div>
+         <div class="col-md-2 m-b-5">
+           <select class="form-control" name="history_systemic_drug_medication_unit">
+             <option value="">Please Select</option>
+             <option <?php if($systemic['history_systemic_drug_medication_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+             <option <?php if($systemic['history_systemic_drug_medication_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+             <option <?php if($systemic['history_systemic_drug_medication_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+             <option <?php if($systemic['history_systemic_drug_medication_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+           </select>
+         </div> 
+         <div class="col-md-2  m-b-5">
+           <input type="" placeholder="Comment..." value="<?php echo $systemic['history_systemic_drug_medication_comm']; ?>" name="history_systemic_drug_medication_comm">
+         </div>          
+       </div>
+       
+       <div class="row" id="bph">
+         <div class="col-md-2  m-b-5">
+           <label>BPH</label>
+         </div>
+         <div class="col-md-2  m-b-5">
+            <select class="form-control" name="history_systemic_bph_dur">
+              <option value="">Please Select</option>
+              <?php for($i=1; $i<=40;$i++) { ?>
+                <option <?php if($systemic['history_systemic_bph_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+             <?php } ?>               
+           </select>
+         </div>
+         <div class="col-md-2 m-b-5">
+           <select class="form-control" name="history_systemic_bph_unit">
+             <option value="">Please Select</option>
+             <option <?php if($systemic['history_systemic_bph_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+             <option <?php if($systemic['history_systemic_bph_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+             <option <?php if($systemic['history_systemic_bph_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+             <option <?php if($systemic['history_systemic_bph_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+           </select>
+         </div> 
+         <div class="col-md-2  m-b-5">
+           <input type="" placeholder="Comment..." value="<?php echo $systemic['history_systemic_bph_comm']; ?>" name="history_systemic_bph_comm">
+         </div>          
+       </div>
+       
+       <div class="row" id="thyroid">
+         <div class="col-md-2  m-b-5">
+           <label>Thyroid</label>
+         </div>
+         <!--<div class="col-md-2  m-b-5">-->
+         <!--   <select class="form-control" name="history_systemic_thyroid_dur">-->
+         <!--     <option value="">Please Select</option>-->
+         <!--     <?php for($i=1; $i<=40;$i++) { ?>-->
+         <!--       <option <?php if($systemic['history_systemic_thyroid_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>-->
+         <!--    <?php } ?>               -->
+         <!--  </select>-->
+         <!--</div>-->
+         <!--<div class="col-md-2 m-b-5">-->
+         <!--  <select class="form-control" name="history_systemic_thyroid_unit">-->
+         <!--    <option value="">Please Select</option>-->
+         <!--    <option <?php if($systemic['history_systemic_thyroid_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>-->
+         <!--    <option <?php if($systemic['history_systemic_thyroid_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>-->
+         <!--    <option <?php if($systemic['history_systemic_thyroid_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>-->
+         <!--    <option <?php if($systemic['history_systemic_thyroid_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>-->
+         <!--  </select>-->
+         <!--</div> -->
+         <div class="col-md-2  m-b-5">
+           <input type="" placeholder="Comment..." value="<?php echo $systemic['history_systemic_thyroid_comm']; ?>" name="history_systemic_thyroid_comm">
+         </div>          
+       </div>
 
         <div class="row">
           <div class="col-md-2">
@@ -1722,17 +2576,229 @@
     </div>
     </div>
    </section>
+   <?php
+    // echo "<pre>";
+    // print_r($family_history);
+    // die;
+   ?>
+   <section>
+    <h4>Family History</h4> 
+    <div class="btn-group">
+    <label class="btn-custom"><input type="checkbox" <?php if($family_history['consanguinity_m']==1){ echo 'checked'; }?> name="consanguinity_m" value="1" id="consanguinity_m">Consanguinity</label>    
+    <label class="btn-custom"><input type="checkbox" <?php if($family_history['glaucoma_m']==1){ echo 'checked'; }?> name="glaucoma_m" value="1" id="glaucoma_m">Glaucoma</label>
+    <label class="btn-custom"><input type="checkbox" <?php if($family_history['diabetes_m']==1){ echo 'checked'; }?> name="diabetes_m" value="1" id="diabetes_m">Diabetes</label>
+    <label class="btn-custom"><input type="checkbox" <?php if($family_history['squint_m']==1){ echo 'checked'; }?> name="squint_m" value="1" id="squint_m">Squint</label>
+    <label class="btn-custom"><input type="checkbox" <?php if($family_history['retinitis_pigmentosa_m']==1){ echo 'checked'; }?> name="retinitis_pigmentosa_m" value="1" id="retinitis_pigmentosa_m">Retinitis Pigmentosa</label>
+    <label class="btn-custom"><input type="checkbox" <?php if($family_history['congenital_cataract_m']==1){ echo 'checked'; }?> name="congenital_cataract_m" value="1" id="congenital_cataract_m">Congenital Cataract</label>    
+    </div>     
+
+
+    <div class="panel">
+        <div class="panel-body">
+        <section>
+            <div class="row">
+            <div class="col-md-2  m-b-5">
+                <label>Name</label>
+            </div>
+            <div class="col-md-2  m-b-5">
+                <label>Duration</label>
+            </div>
+            <div class="col-md-2  m-b-5">
+                <label>Duration Unit</label>
+            </div>
+            <div class="col-md-2  m-b-5">
+                <label>Comments</label>
+            </div>           
+            </div>
+        </section>
+
+        <section>
+        
+            <div class="row" id="consanguinity">
+            <div class="col-md-2  m-b-5">
+                <label>Consanguinity</label>
+            </div>
+            <div class="col-md-2  m-b-5">
+                <select class="form-control" name="family_history_consanguinity_dur">
+                <option value="">Please Select</option>
+                <?php for($i=1; $i<=40;$i++) { ?>
+                    <option <?php if($family_history['family_history_consanguinity_dur']==$i){ echo 'selected';}?> value="<?php echo $i;?>"><?php echo $i;?></option>
+                <?php } ?>               
+            </select>
+            </div>
+            <div class="col-md-2 m-b-5">
+                <select class="form-control" name="family_history_consanguinity_unit">
+                <option value="">Please Select</option>
+                <option <?php if($family_history['family_history_consanguinity_unit']=='Days'){ echo 'selected';}?> value="Days">Days</option>
+                <option <?php if($family_history['family_history_consanguinity_unit']=='Weeks'){ echo 'selected';}?> value="Weeks">Weeks</option>
+                <option <?php if($family_history['family_history_consanguinity_unit']=='Months'){ echo 'selected';}?> value="Months">Months</option>
+                <option <?php if($family_history['family_history_consanguinity_unit']=='Years'){ echo 'selected';}?> value="Years">Years</option>
+            </select>
+            </div> 
+            <div class="col-md-2  m-b-5">
+                <input type="" placeholder="Comment..." value="<?php echo $family_history['family_history_consanguinity_comm']; ?>" name="family_history_consanguinity_comm">
+            </div>           
+            </div>
+
+            
+            <div class="row" id="glaucoma">
+                <div class="col-md-2  m-b-5">
+                <label>Glaucoma</label>
+                </div>
+                <div class="col-md-2  m-b-5">
+                    <select class="form-control" name="family_history_glaucoma_dur">
+                    <option value="">Please Select</option>
+                    <?php for($i=1; $i<=40;$i++) { ?>
+                        <option <?php if($family_history['family_history_glaucoma_dur']==$i){ echo 'selected';}?>  value="<?php echo $i;?>"><?php echo $i;?></option>
+                    <?php } ?>               
+                </select>
+                </div>
+                <div class="col-md-2 m-b-5">
+                <select class="form-control" name="family_history_glaucoma_unit">
+                    <option value="">Please Select</option>
+                    <option <?php if($family_history['family_history_glaucoma_unit']=='Days'){ echo 'selected';}?>  value="Days">Days</option>
+                    <option <?php if($family_history['family_history_glaucoma_unit']=='Weeks'){ echo 'selected';}?>  value="Weeks">Weeks</option>
+                    <option <?php if($family_history['family_history_glaucoma_unit']=='Months'){ echo 'selected';}?>  value="Months">Months</option>
+                    <option <?php if($family_history['family_history_glaucoma_unit']=='Years'){ echo 'selected';}?>  value="Years">Years</option>
+                </select>
+                </div> 
+                <div class="col-md-2  m-b-5">
+                <input type="" placeholder="Comment..." value="<?php echo $family_history['family_history_glaucoma_comm']; ?>" name="family_history_glaucoma_comm">
+                </div>          
+            </div>
+
+            <div class="row" id="diabetes">
+                <div class="col-md-2  m-b-5">
+                <label>Diabetes</label>
+                </div>
+                <div class="col-md-2  m-b-5">
+                    <select class="form-control" name="family_history_diabetes_dur">
+                    <option value="">Please Select</option>
+                    <?php for($i=1; $i<=40;$i++) { ?>
+                        <option <?php if($family_history['family_history_diabetes_dur']==$i){ echo 'selected';}?>  value="<?php echo $i;?>"><?php echo $i;?></option>
+                    <?php } ?>               
+                </select>
+                </div>
+                <div class="col-md-2 m-b-5">
+                <select class="form-control" name="family_history_diabetes_unit">
+                    <option value="">Please Select</option>
+                    <option <?php if($family_history['family_history_diabetes_unit']=='Days'){ echo 'selected';}?>  value="Days">Days</option>
+                    <option <?php if($family_history['family_history_diabetes_unit']=='Weeks'){ echo 'selected';}?>  value="Weeks">Weeks</option>
+                    <option <?php if($family_history['family_history_diabetes_unit']=='Months'){ echo 'selected';}?>  value="Months">Months</option>
+                    <option <?php if($family_history['family_history_diabetes_unit']=='Years'){ echo 'selected';}?>  value="Years">Years</option>
+                </select>
+                </div> 
+                <div class="col-md-2  m-b-5">
+                <input type="" placeholder="Comment..." value="<?php echo $family_history['family_history_diabetes_comm']; ?>" name="family_history_diabetes_comm">
+                </div>          
+            </div>
+
+                
+            <div class="row" id="squint">
+                <div class="col-md-2  m-b-5">
+                <label>Squint</label>
+                </div>
+                <div class="col-md-2  m-b-5">
+                    <select class="form-control" name="family_history_squint_dur">
+                    <option value="">Please Select</option>
+                    <?php for($i=1; $i<=40;$i++) { ?>
+                        <option <?php if($family_history['family_history_squint_dur']==$i){ echo 'selected';}?>  value="<?php echo $i;?>"><?php echo $i;?></option>
+                    <?php } ?>               
+                </select>
+                </div>
+                <div class="col-md-2 m-b-5">
+                <select class="form-control" name="family_history_squint_unit">
+                    <option value="">Please Select</option>
+                    <option <?php if($family_history['family_history_squint_unit']=='Days'){ echo 'selected';}?>  value="Days">Days</option>
+                    <option <?php if($family_history['family_history_squint_unit']=='Weeks'){ echo 'selected';}?>  value="Weeks">Weeks</option>
+                    <option <?php if($family_history['family_history_squint_unit']=='Months'){ echo 'selected';}?>  value="Months">Months</option>
+                    <option <?php if($family_history['family_history_squint_unit']=='Years'){ echo 'selected';}?>  value="Years">Years</option>
+                </select>
+                </div> 
+                <div class="col-md-2  m-b-5">
+                <input type="" placeholder="Comment..." value="<?php echo $family_history['family_history_squint_comm']; ?>" name="family_history_squint_comm">
+                </div>          
+            </div>
+
+            <div class="row" id="retinitis_pigmentosa">
+                <div class="col-md-2  m-b-5">
+                <label>Retinitis Pigmentosa</label>
+                </div>
+                <div class="col-md-2  m-b-5">
+                    <select class="form-control" name="family_history_retinitis_pigmentosa_dur">
+                    <option value="">Please Select</option>
+                    <?php for($i=1; $i<=40;$i++) { ?>
+                        <option <?php if($family_history['family_history_retinitis_pigmentosa_dur']==$i){ echo 'selected';}?>  value="<?php echo $i;?>"><?php echo $i;?></option>
+                    <?php } ?>               
+                </select>
+                </div>
+                <div class="col-md-2 m-b-5">
+                <select class="form-control" name="family_history_retinitis_pigmentosa_unit">
+                    <option value="">Please Select</option>
+                    <option <?php if($family_history['family_history_retinitis_pigmentosa_unit']=='Days'){ echo 'selected';}?>  value="Days">Days</option>
+                    <option <?php if($family_history['family_history_retinitis_pigmentosa_unit']=='Weeks'){ echo 'selected';}?>  value="Weeks">Weeks</option>
+                    <option <?php if($family_history['family_history_retinitis_pigmentosa_unit']=='Months'){ echo 'selected';}?>  value="Months">Months</option>
+                    <option <?php if($family_history['family_history_retinitis_pigmentosa_unit']=='Years'){ echo 'selected';}?>  value="Years">Years</option>
+                </select>
+                </div> 
+                <div class="col-md-2  m-b-5">
+                <input type="" placeholder="Comment..." value="<?php echo $family_history['family_history_retinitis_pigmentosa_comm']; ?>" name="family_history_retinitis_pigmentosa_comm">
+                </div>          
+            </div>
+
+            <div class="row" id="congenital_catarac">
+                <div class="col-md-2  m-b-5">
+                <label>Congenital Cataract</label>
+                </div>
+                <div class="col-md-2  m-b-5">
+                    <select class="form-control" name="family_history_congenital_cataract_dur">
+                    <option value="">Please Select</option>
+                    <?php for($i=1; $i<=40;$i++) { ?>
+                        <option <?php if($family_history['family_history_congenital_cataract_dur']==$i){ echo 'selected';}?>  value="<?php echo $i;?>"><?php echo $i;?></option>
+                    <?php } ?>               
+                </select>
+                </div>
+                <div class="col-md-2 m-b-5">
+                <select class="form-control" name="family_history_congenital_cataract_unit">
+                    <option value="">Please Select</option>
+                    <option <?php if($family_history['family_history_congenital_cataract_unit']=='Days'){ echo 'selected';}?>  value="Days">Days</option>
+                    <option <?php if($family_history['family_history_congenital_cataract_unit']=='Weeks'){ echo 'selected';}?>  value="Weeks">Weeks</option>
+                    <option <?php if($family_history['family_history_congenital_cataract_unit']=='Months'){ echo 'selected';}?>  value="Months">Months</option>
+                    <option <?php if($family_history['family_history_congenital_cataract_unit']=='Years'){ echo 'selected';}?>  value="Years">Years</option>
+                </select>
+                </div> 
+                <div class="col-md-2  m-b-5">
+                <input type="" placeholder="Comment..." value="<?php echo $family_history['family_history_congenital_cataract_comm']; ?>" name="family_history_congenital_cataract_comm">
+                </div>          
+            </div>
+
+            
+        
+
+            <div class="row">
+            <div class="col-md-2">
+                Comments
+            </div>
+            <div class="col-md-10">
+                <textarea class="form-control w-100" name="history_family_comm"> <?php echo $family_history['history_family_comm']; ?> </textarea>
+            </div>
+
+            </div>
+        </section>
+        </div>
+    </div>
+</section>
 
   <section>
  <div class="row m-b-5">
-   <div class="col-md-2  mb-5">
-     <label>Family History</label>
-   </div>
-   <div class="col-md-3  mb-5">
-     <input type="text" placeholder="Family History" value="<?php echo $history['family'];?>" name="family_history"> 
-   </div>
+   <!--<div class="col-md-2  mb-5">-->
+   <!--  <label>Family History</label>-->
+   <!--</div>-->
+   <!--<div class="col-md-3  mb-5">-->
+   <!--  <input type="text" placeholder="Family History" value="<?php echo $history['family'];?>" name="family_history"> -->
+   <!--</div>-->
    <div class="col-md-2 mb-5">
-     <label>Medical History</label>
+     <label>Medical History: </label>
    </div>           
 
    <div class="col-md-3 mb-5">
@@ -3767,7 +4833,7 @@ $(document).ready(function(){
     }); 
   }
 
-  $('#pains, #blurr, #rednes, #injuries, #waterings, #discharges,#dryness, #itchings, #fbsensation, #dev_squint, #head_strain, #size_shape, #ovs, #sdiv, #doe, #swell, #sen_burn, #glau, #renti_d, #glas, #eye_d, #eye_s, #uvei, #renti_l, #diab, #hyper, #smokt, #alcoh, #cardd, #steri, #drug, #hiva, #cantu, #tuberc, #asthm, #cncds, #hypo, #hyperth, #heptc, #rend, #acid, #onins, #oasbth, #consan, #thyrd, #chewt, #antimi_agen, #antif_agen, #ant_agen, #nsaids, #eye_drops, #ampici, #amoxi, #ceftr, #ciprof, #clarith, #cotri, #ethamb, #isoni, #metron, #penic, #rifam, #strept, #ketoco, #flucon, #itrac,  #acyclo, #efavir, #enfuv, #nelfin, #nevira, #zidov, #aspirin, #paracet, #ibupro, #diclo, #aceclo, #napro, #alcohol, #latex, #betad, #adhes, #tegad, #transp,  #seaf, #corn, #egg, #milk_p, #pean, #shell, #soy, #lact, #mush, #tropicp, #tropica, #timol, #homide, #brimon, #latan, #travo, #tobra, #moxif, #homat, #piloca, #cyclop, #atropi, #phenyl, #tropicac, #paracain, #ciplox').css('display','none');
+  $('#pains, #blurr, #rednes, #injuries, #waterings, #discharges,#dryness, #itchings, #fbsensation, #dev_squint, #head_strain, #size_shape, #ovs, #sdiv, #doe, #swell, #sen_burn, #glau, #renti_d, #glas, #eye_d, #eye_s, #uvei, #renti_l,#contact_lens_l,#vision_therapy_l,#low_vision_l,#aid_m, #diab, #hyper, #smokt, #alcoh, #cardd, #steri, #drug, #hiva, #cantu, #tuberc, #asthm, #cncds, #hypo, #hyperth, #heptc, #rend, #acid, #onins, #oasbth, #consan, #thyrd, #chewt,#chronic_kidney_disease,#can,#rheumatoid_artheritis,#benign_ruostatic_hyperplasia,#drug_medication_history,#bph,#thyroid, #antimi_agen, #antif_agen, #ant_agen, #nsaids, #eye_drops, #ampici, #amoxi, #ceftr, #ciprof, #clarith, #cotri, #ethamb, #isoni, #metron, #penic, #rifam, #strept, #ketoco, #flucon, #itrac,  #acyclo, #efavir, #enfuv, #nelfin, #nevira, #zidov, #aspirin, #paracet, #ibupro, #diclo, #aceclo, #napro, #alcohol, #latex, #betad, #adhes, #tegad, #transp,  #seaf, #corn, #egg, #milk_p, #pean, #shell, #soy, #lact, #mush, #tropicp, #tropica, #timol, #homide, #brimon, #latan, #travo, #tobra, #moxif, #homat, #piloca, #cyclop, #atropi, #phenyl, #tropicac, #paracain, #ciplox, #sx_ptosis, #sx_lid, #sx_corneal, #sx_cataract, #sx_squint,#sx_pterygium, #sx_dcr,#sx_dct,#sx_patching_therapy,#consanguinity,#glaucoma,#diabetes,#squint,#retinitis_pigmentosa,#congenital_catarac').css('display','none');
   //
     $("#pain_m").click(function(){
        $(this).parent().toggleClass('bg-theme');
@@ -3853,6 +4919,43 @@ $(document).ready(function(){
       $(this).parent().toggleClass('bg-theme');
        $("#sen_burn").toggle();
     });
+    $("#ptosis_sx").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#sx_ptosis").toggle();
+    });
+    $("#lid_sx").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#sx_lid").toggle();
+    });
+    $("#corneal_sx").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#sx_corneal").toggle();
+    });
+    $("#cataract_sx").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#sx_cataract").toggle();
+    });
+    $("#squint_sx").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#sx_squint").toggle();
+    });
+    $("#pterygium_sx").click(function(){
+        
+      $(this).parent().toggleClass('bg-theme');
+       $("#sx_pterygium").toggle();
+    });
+    $("#dcr_sx").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#sx_dcr").toggle();
+    });
+    $("#dct_sx").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#sx_dct").toggle();
+    });
+    $("#patching_therapy").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#sx_patching_therapy").toggle();
+    });
     //
     $("#gla_m").click(function(){
       $(this).parent().toggleClass('bg-theme');
@@ -3887,6 +4990,22 @@ $(document).ready(function(){
     $("#retil_m").click(function(){
       $(this).parent().toggleClass('bg-theme');
        $("#renti_l").toggle();
+    });
+    $("#contact_lens_m").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#contact_lens_l").toggle();
+    });
+    $("#vision_therapy_m").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#vision_therapy_l").toggle();
+    });
+    $("#low_vision_m").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#low_vision_l").toggle();
+    });
+    $("#aid_m").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#aid_l").toggle();
     });
     //
     $("#dia_m").click(function(){
@@ -3998,6 +5117,34 @@ $(document).ready(function(){
     $("#chewt_m").click(function(){
       $(this).parent().toggleClass('bg-theme');
        $("#chewt").toggle();
+    });
+    $("#chronic_kidney_disease_m").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#chronic_kidney_disease").toggle();
+    });
+    $("#can_m").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#can").toggle();
+    });
+    $("#rheumatoid_artheritis_m").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#rheumatoid_artheritis").toggle();
+    });
+    $("#benign_ruostatic_hyperplasia_m").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#benign_ruostatic_hyperplasia").toggle();
+    });
+    $("#drug_medication_history_m").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#drug_medication_history").toggle();
+    });
+    $("#bph_m").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#bph").toggle();
+    });
+    $("#thyroid_m").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#thyroid").toggle();
     });
 
       //
@@ -4387,6 +5534,36 @@ $(document).ready(function(){
     $("#history_chief_dev_ps").click(function(){
       $(this).parent().toggleClass('bg-theme');
     });
+     $("#consanguinity_m").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#consanguinity").toggle();
+    });
+    //
+    $("#glaucoma_m").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#glaucoma").toggle();
+    });
+    //
+    $("#diabetes_m").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#diabetes").toggle();
+    });
+    //
+    $("#squint_m").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+      $("#squint").toggle();
+    });
+    //
+    $("#retinitis_pigmentosa_m").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#retinitis_pigmentosa").toggle();
+    });
+    //
+    //
+    $("#congenital_cataract_m").click(function(){
+      $(this).parent().toggleClass('bg-theme');
+       $("#congenital_catarac").toggle();
+    });
     //
     $('.ht_btn').click(function(){
       $('.ht_btn').removeClass('btn-save');
@@ -4412,6 +5589,16 @@ var sdv_m ='<?php echo $chief_complaints['sdv_m'];?>';
 var doe_m ='<?php echo $chief_complaints['doe_m'];?>';
 var swel_m ='<?php echo $chief_complaints['swel_m'];?>'; 
 var burns_m ='<?php echo $chief_complaints['burns_m'];?>'; 
+var ptosis_sx ='<?php echo $chief_complaints['ptosis_sx'];?>'; 
+var lid_sx ='<?php echo $chief_complaints['lid_sx'];?>'; 
+var corneal_sx ='<?php echo $chief_complaints['corneal_sx'];?>'; 
+var cataract_sx ='<?php echo $chief_complaints['cataract_sx'];?>'; 
+var squint_sx ='<?php echo $chief_complaints['squint_sx'];?>'; 
+var pterygium_sx ='<?php echo $chief_complaints['pterygium_sx'];?>'; 
+console.log(pterygium_sx,'==========');
+var dcr_sx ='<?php echo $chief_complaints['dcr'];?>'; 
+var dct_sx ='<?php echo $chief_complaints['dct_sx'];?>'; 
+var patching_therapy ='<?php echo $chief_complaints['patching_therapy'];?>'; 
 var history_chief_blurr_dist ='<?php echo $chief_complaints['history_chief_blurr_dist'];?>';
 var history_chief_blurr_near ='<?php echo $chief_complaints['history_chief_blurr_near'];?>';
 var history_chief_blurr_pain ='<?php echo $chief_complaints['history_chief_blurr_pain'];?>';
@@ -4434,6 +5621,10 @@ var eyedi_m = '<?php echo $ophthalmic['eyedi_m'];?>';
 var eyesu_m = '<?php echo $ophthalmic['eyesu_m'];?>';
 var uve_m = '<?php echo $ophthalmic['uve_m'];?>';
 var retil_m = '<?php echo $ophthalmic['retil_m'];?>';
+var contact_lens_m = '<?php echo $ophthalmic['contact_lens_m'];?>';
+var vision_therapy_m = '<?php echo $ophthalmic['vision_therapy_m'];?>';
+var low_vision_m = '<?php echo $ophthalmic['low_vision_m'];?>';
+var aid_m = '<?php echo $ophthalmic['aid_m'];?>';
 var dia_m ='<?php echo $systemic['dia_m'];?>';
 var hyper_m ='<?php echo $systemic['hyper_m'];?>';
 var alcoh_m ='<?php echo $systemic['alcoh_m'];?>';
@@ -4456,6 +5647,13 @@ var oasp_m ='<?php echo $systemic['oasp_m'];?>';
 var acon_m ='<?php echo $systemic['acon_m'];?>';
 var thd_m ='<?php echo $systemic['thd_m'];?>';
 var chewt_m ='<?php echo $systemic['chewt_m'];?>';
+var chronic_kidney_disease_m ='<?php echo $systemic['chronic_kidney_disease_m'];?>';
+var can_m ='<?php echo $systemic['can_m'];?>';
+var rheumatoid_artheritis_m ='<?php echo $systemic['rheumatoid_artheritis_m'];?>';
+var benign_ruostatic_hyperplasia_m ='<?php echo $systemic['benign_ruostatic_hyperplasia_m'];?>';
+var drug_medication_history_m ='<?php echo $systemic['drug_medication_history_m'];?>';
+var bph_m ='<?php echo $systemic['bph_m'];?>';
+var thyroid_m ='<?php echo $systemic['thyroid_m'];?>';
 var antimi_agen_m ='<?php echo $drug_allergies['antimi_agen_m'];?>';
 var antif_agen_m ='<?php echo $drug_allergies['antif_agen_m'];?>';
 var ant_agen_m ='<?php echo $drug_allergies['ant_agen_m'];?>';
@@ -4520,6 +5718,12 @@ var shell_m='<?php echo $food_allergies['shell_m'];?>';
 var soy_m='<?php echo $food_allergies['soy_m']; ?>'; 
 var lact_m='<?php echo $food_allergies['lact_m']; ?>';
 var mush_m='<?php echo $food_allergies['mush_m']; ?>';
+var consanguinity_m='<?php echo $family_history['consanguinity_m']; ?>';
+var glaucoma_m='<?php echo $family_history['glaucoma_m']; ?>';
+var diabetes_m='<?php echo $family_history['diabetes_m'];?>';
+var squint_m='<?php echo $family_history['squint_m']; ?>'; 
+var retinitis_pigmentosa_m='<?php echo $family_history['retinitis_pigmentosa_m']; ?>';
+var congenital_cataract_m='<?php echo $family_history['congenital_cataract_m']; ?>';
 var special_status='<?php echo $history_radios_data['special_status']; ?>';
 var general_checkup='<?php echo $history_radios_data['general_checkup']; ?>';
 
@@ -4607,6 +5811,42 @@ var general_checkup='<?php echo $history_radios_data['general_checkup']; ?>';
       $('#burns_m').parent().toggleClass('bg-theme');
        $("#sen_burn").toggle();
     }
+    if(ptosis_sx==1){
+      $('#ptosis_sx').parent().toggleClass('bg-theme');
+       $("#sx_ptosis").toggle();
+    }
+    if(lid_sx==1){
+      $('#lid_sx').parent().toggleClass('bg-theme');
+       $("#sx_lid").toggle();
+    }
+    if(corneal_sx==1){
+      $('#corneal_sx').parent().toggleClass('bg-theme');
+       $("#sx_corneal").toggle();
+    }
+    if(cataract_sx==1){
+      $('#cataract_sx').parent().toggleClass('bg-theme');
+       $("#sx_cataract").toggle();
+    }
+    if(squint_sx==1){
+      $('#squint_sx').parent().toggleClass('bg-theme');
+       $("#sx_squint").toggle();
+    }
+    if(pterygium_sx==1){
+      $('#spterygium_sx').parent().toggleClass('bg-theme');
+       $("#sx_pterygium").toggle();
+    }
+    if(dcr_sx==1){
+      $('#dcr_sx').parent().toggleClass('bg-theme');
+       $("#sx_dcr").toggle();
+    }
+    if(dct_sx==1){
+      $('#dct_sx').parent().toggleClass('bg-theme');
+      $("#sx_dct").toggle();
+    }
+    if(patching_therapy==1){
+      $('#patching_therapy_sx').parent().toggleClass('bg-theme');
+      $("#sx_patching_therapy").toggle();
+    }
     //
     if(gla_m==1){
       $('#gla_m').parent().toggleClass('bg-theme');
@@ -4642,6 +5882,22 @@ var general_checkup='<?php echo $history_radios_data['general_checkup']; ?>';
       $('#retil_m').parent().toggleClass('bg-theme');
        $("#renti_l").toggle();
     }
+    if(contact_lens_m==1){
+      $('#contact_lens_m').parent().toggleClass('bg-theme');
+       $("#contact_lens_l").toggle();
+    }
+    if(vision_therapy_m==1){
+      $('#vision_therapy_m').parent().toggleClass('bg-theme');
+       $("#vision_therapy_l").toggle();
+    }
+    if(low_vision_m==1){
+      $('#low_vision_m').parent().toggleClass('bg-theme');
+       $("#low_vision_m_l").toggle();
+    }
+    if(aid_m==1){
+      $('#aid_m').parent().toggleClass('bg-theme');
+       $("#aid_l").toggle();
+    }
     //
     if(dia_m==1){
       $('#dia_m').parent().toggleClass('bg-theme');
@@ -4671,6 +5927,37 @@ var general_checkup='<?php echo $history_radios_data['general_checkup']; ?>';
     if(steri_m==1){
       $('#steri_m').parent().toggleClass('bg-theme');
        $("#steri").toggle();
+    }
+    
+    //
+    if(consanguinity_m==1){
+      $('#consanguinity_m').parent().toggleClass('bg-theme');
+       $("#consanguinity").toggle();
+    }
+    //
+    if(glaucoma_m==1){
+      $('#glaucoma_m').parent().toggleClass('bg-theme');
+       $("#glaucoma").toggle();
+    }
+    //
+    if(diabetes_m==1){
+      $('#diabetes_m').parent().toggleClass('bg-theme');
+      $("#diabetes").toggle();
+    }
+    //
+    if(squint_m==1){
+      $('#squint_m').parent().toggleClass('bg-theme');
+       $("#squint").toggle();
+    }
+    //
+    if(retinitis_pigmentosa_m==1){
+      $('#retinitis_pigmentosa_m').parent().toggleClass('bg-theme');
+       $("#retinitis_pigmentosa").toggle();
+    }
+    //
+    if(congenital_cataract_m==1){
+      $('#congenital_cataract_m').parent().toggleClass('bg-theme');
+       $("#congenital_cataract").toggle();
     }
 
     //
@@ -4752,6 +6039,34 @@ var general_checkup='<?php echo $history_radios_data['general_checkup']; ?>';
     if(chewt_m==1){
       $('#chewt_m').parent().toggleClass('bg-theme');
        $("#chewt").toggle();
+    }
+    if(chronic_kidney_disease_m ==1){
+      $('#chronic_kidney_disease_m').parent().toggleClass('bg-theme');
+       $("#chronic_kidney_disease").toggle();
+    }
+    if(can_m ==1){
+      $('#can_m').parent().toggleClass('bg-theme');
+       $("#can").toggle();
+    }
+    if(rheumatoid_artheritis_m ==1){
+      $('#rheumatoid_artheritis_m').parent().toggleClass('bg-theme');
+       $("#rheumatoid_artheritis").toggle();
+    }
+    if(benign_ruostatic_hyperplasia_m ==1){
+      $('#benign_ruostatic_hyperplasia_m').parent().toggleClass('bg-theme');
+       $("#benign_ruostatic_hyperplasia").toggle();
+    }
+    if(drug_medication_history_m ==1){
+      $('#drug_medication_history_m').parent().toggleClass('bg-theme');
+       $("#drug_medication_history").toggle();
+    }
+    if(bph_m ==1){
+      $('#bph_m').parent().toggleClass('bg-theme');
+       $("#bph").toggle();
+    }
+    if(thyroid_m ==1){
+      $('#thyroid_m').parent().toggleClass('bg-theme');
+       $("#thyroid").toggle();
     }
 
       //
@@ -5240,6 +6555,26 @@ var general_checkup='<?php echo $history_radios_data['general_checkup']; ?>';
   {
     $('#history_ophthalmic_renti_l_r_dur').val($('#history_ophthalmic_renti_l_l_dur').val());
     $('#history_ophthalmic_renti_l_r_unit').val($('#history_ophthalmic_renti_l_l_unit').val());
+  }
+   function contact_lens()
+  {
+    $('#history_ophthalmic_contact_lens_l_r_dur').val($('#history_ophthalmic_contact_lens_l_l_dur').val());
+    $('#history_ophthalmic_contact_lens_l_r_unit').val($('#history_ophthalmic_contact_lens_l_l_unit').val());
+  }
+   function vision_therapy()
+  {
+    $('#history_ophthalmic_vision_therapy_l_r_dur').val($('#history_ophthalmic_vision_therapy_l_l_dur').val());
+    $('#history_ophthalmic_vision_therapy_l_r_unit').val($('#history_ophthalmic_vision_therapy_l_l_unit').val());
+  }
+   function low_vision()
+  {
+    $('#history_ophthalmic_low_vision_l_r_dur').val($('#history_ophthalmic_vision_therapy_l_l_dur').val());
+    $('#history_ophthalmic_low_vision_l_r_unit').val($('#history_ophthalmic_low_vision_l_l_unit').val());
+  }
+   function aid()
+  {
+    $('#history_ophthalmic_aid_l_r_dur').val($('#history_ophthalmic_aid_l_l_dur').val());
+    $('#history_ophthalmic_aid_l_r_unit').val($('#history_ophthalmic_aid_l_l_unit').val());
   }
 </script>
 

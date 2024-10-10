@@ -1,5 +1,6 @@
 <?php
 $users_data = $this->session->userdata('auth_users'); 
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -26,6 +27,62 @@ $users_data = $this->session->userdata('auth_users');
 <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datepicker.js"></script>
 
 <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datetimepicker.css">
+<style>
+  body {
+            font-family: Arial, sans-serif; /* Font style for the body */
+            background-color: #f4f4f4; /* Background color */
+            margin: 0; /* Remove default margin */
+            padding: 20px; /* Padding around the page */
+        }
+
+        .questionnaire {
+            width: 100%; /* Full width */
+            max-width: 600px; /* Max width for the questionnaire */
+            /*margin: auto;*/
+            margin-top:10px;
+        }
+
+        .question-item {
+            display: flex; /* Use flexbox for layout */
+            justify-content: space-between; /* Space between question text and radio buttons */
+            align-items: center; /* Center vertically */
+            background: #fff; /* Background color */
+            padding: 10px; /* Padding around the item */
+            border-radius: 5px; /* Rounded corners */
+            margin-bottom: 10px; /* Space between items */
+            box-shadow: none; /* Remove any shadow */
+        }
+
+        .question-text {
+            flex: 1; /* Take remaining space */
+            color: #333; /* Text color */
+        }
+
+        .radio-buttons {
+            display: flex; /* Align buttons in a row */
+            justify-content: flex-end; /* Align buttons to the right */
+        }
+
+        .btn-defaults {
+            padding: 10px 15px; /* Padding for button appearance */
+            cursor: pointer !important; /* Pointer cursor on hover */
+            color: #333; /* Text color */
+            margin-left: 5px; /* Space between buttons */
+        }
+
+        /* Change background color when selected */
+        input[type="radio"]:checked + .btn-defaults {
+            background-color: #007bff; /* Blue background when selected */
+            color: white; /* White text when selected */
+            border-color: #007bff; /* Matching border color when selected */
+        }
+
+label.btn input[type=radio] {
+    position: absolute;
+    left: 0;
+    top: 9px !important;
+}
+</style>
 <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datetimepicker.js"></script>
 <!-- datatable js -->
 <!--<script src="<?php echo ROOT_JS_PATH; ?>jquery.dataTables.min.js"></script>
@@ -62,7 +119,7 @@ $users_data = $this->session->userdata('auth_users');
   <input type="hidden" name="refered_id" value="<?php echo $datas['referral_doctor'];?>">
   <input type="hidden" name="prescrption_id" value="<?php if(!empty($pres_id)){ echo $pres_id;}?>">
   <input type="hidden" name="sale_id" value="<?php echo $sale_id;?>">
-
+    
    <div class="row">
     <div class="col-md-2">
       <label class="col-md-12 col-sm-12" for="printsummary-labels"><strong>Print only:</strong></label>
@@ -118,6 +175,10 @@ $users_data = $this->session->userdata('auth_users');
       </div>       
       <div>      
       </div>
+    </div>
+    
+    <div class="col-md-2">
+      <label class="col-md-12 col-sm-12" for="printsummary-labels"><strong>Token No: </strong> <?php echo $form_data['token_no'];?></label>
     </div>
   </div>
 <hr>

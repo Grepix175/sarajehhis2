@@ -319,6 +319,7 @@ class Ipd_booking_model extends CI_Model
         $this->db->from('hms_ipd_booking'); 
         $this->db->join('hms_patient','hms_patient.id = hms_ipd_booking.patient_id'); 
         
+        
         $this->db->join('hms_ipd_room_to_bad','hms_ipd_room_to_bad.id = hms_ipd_booking.bad_id','left');
         $this->db->join('hms_ipd_rooms','hms_ipd_rooms.id = hms_ipd_booking.room_id','left');
         $this->db->join('hms_ipd_room_category','hms_ipd_room_category.id = hms_ipd_booking.room_type_id','left');
@@ -334,7 +335,7 @@ class Ipd_booking_model extends CI_Model
     {
         $search = $this->session->userdata('ipd_booking_search');
         $user_data = $this->session->userdata('auth_users');
-        $this->db->select("hms_ipd_booking.*,hms_patient.*,hms_users.*,hms_ipd_packages.name as package_name,hms_ipd_panel_company.panel_company,hms_ipd_panel_type.panel_type,hms_doctors.doctor_name,hms_ipd_rooms.room_no,hms_ipd_room_to_bad.bad_no,hms_ipd_room_to_bad.bad_name,hms_ipd_room_category.room_category,hms_ipd_booking.created_date as createdate, concat_ws(' ',hms_patient.address, hms_patient.address2, hms_patient.address3) as address,hms_patient.age,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d,ins_type.insurance_type, ins_cmpy.insurance_company"); 
+        $this->db->select("hms_ipd_booking.*,hms_patient.*,hms_users.*,hms_ipd_packages.name as package_name,hms_ipd_panel_company.panel_company, hms_patient_category.patient_category as patient_category_name,hms_ipd_panel_type.panel_type,hms_doctors.doctor_name,hms_ipd_rooms.room_no,hms_ipd_room_to_bad.bad_no,hms_ipd_room_to_bad.bad_name,hms_ipd_room_category.room_category,hms_ipd_booking.created_date as createdate, concat_ws(' ',hms_patient.address, hms_patient.address2, hms_patient.address3) as address,hms_patient.age,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d,ins_type.insurance_type, ins_cmpy.insurance_company"); 
         $this->db->join('hms_patient','hms_patient.id = hms_ipd_booking.patient_id','left');
         
         $this->db->join('hms_insurance_type as ins_type','ins_type.id=hms_ipd_booking.panel_type', 'left');
@@ -344,6 +345,7 @@ class Ipd_booking_model extends CI_Model
         $this->db->join('hms_ipd_panel_company','hms_ipd_panel_company.id = hms_ipd_booking.panel_name','left');
         $this->db->join('hms_ipd_panel_type','hms_ipd_panel_type.id = hms_ipd_booking.panel_type','left');
         $this->db->join('hms_ipd_room_to_bad','hms_ipd_room_to_bad.id = hms_ipd_booking.bad_id','left');
+        $this->db->join('hms_patient_category', 'hms_patient_category.id = hms_ipd_booking.patient_category', 'left');
         
         $this->db->join('hms_doctors','hms_doctors.id = hms_ipd_booking.attend_doctor_id','left');
         $this->db->join('hms_ipd_rooms','hms_ipd_rooms.id = hms_ipd_booking.room_id','left');
