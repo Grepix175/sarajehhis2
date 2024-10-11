@@ -152,7 +152,9 @@ class Help_desk extends CI_Controller
 
       if ($users_data['parent_id'] == $prescription->branch_id) {
         if (in_array('2413', $users_data['permission']['action'])) {
-          $btn_edit = ' <a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Edit History"><i class="fa fa-pencil"></i> Edit History</a>';
+          $flag = 'eye_history';
+          $btn_edit = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title="Edit History"><i class="fa fa-pencil"></i> Edit History</a>';
+
         }
         $btn_delete = '';
         // if (in_array('2413', $users_data['permission']['action'])) {

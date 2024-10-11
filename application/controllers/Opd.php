@@ -155,6 +155,7 @@ class Opd extends CI_Controller
       ///////////////////////////////////////
       $row[] = $age;
       $row[] = $test->mobile_no;
+      $row[] = $test->status == 0 ? 'Pending' : 'Completed';
 
       // if ($test->appointment_date == '0000-00-00') {
       //   $row[] = '';

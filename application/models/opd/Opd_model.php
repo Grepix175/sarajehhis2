@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Opd_model extends CI_Model
 {
 	var $table = 'hms_opd_booking';
-	var $column = array('hms_opd_booking.id', 'hms_opd_booking.booking_code', 'hms_patient.patient_name', 'docs.doctor_name', 'hms_opd_booking.appointment_date', 'hms_opd_booking.booking_date', 'hms_opd_booking.booking_status', 'hms_patient.patient_code', 'hms_patient.mobile_no', 'hms_patient.gender', 'hms_patient.address', 'hms_patient.father_husband', 'hms_patient.patient_email', 'ins_type.insurance_type', 'ins_cmpy.insurance_company', 'src.source', 'ds.disease', 'hms_hospital.hospital_name', 'spcl.specialization', 'docs.doctor_name', 'hms_opd_booking.booking_time', 'hms_opd_booking.validity_date', 'pkg.title', 'hms_opd_booking.next_app_date', 'hms_opd_booking.total_amount', 'hms_opd_booking.net_amount', 'hms_opd_booking.paid_amount', 'hms_opd_booking.discount', 'hms_opd_booking.policy_no');
+	var $column = array('hms_opd_booking.id', 'hms_opd_booking.booking_code', 'hms_patient.patient_name', 'docs.doctor_name', 'hms_opd_booking.appointment_date', 'hms_opd_booking.booking_date', 'hms_opd_booking.booking_status','hms_opd_booking.status', 'hms_patient.patient_code', 'hms_patient.mobile_no', 'hms_patient.gender', 'hms_patient.address', 'hms_patient.father_husband', 'hms_patient.patient_email', 'ins_type.insurance_type', 'ins_cmpy.insurance_company', 'src.source', 'ds.disease', 'hms_hospital.hospital_name', 'spcl.specialization', 'docs.doctor_name', 'hms_opd_booking.booking_time', 'hms_opd_booking.validity_date', 'pkg.title', 'hms_opd_booking.next_app_date', 'hms_opd_booking.total_amount', 'hms_opd_booking.net_amount', 'hms_opd_booking.paid_amount', 'hms_opd_booking.discount', 'hms_opd_booking.policy_no');
 
 	var $order = array('id' => 'desc');
 
@@ -44,7 +44,7 @@ class Opd_model extends CI_Model
 
 
 		$search = $this->session->userdata('opd_search');
-		//echo "<pre>";print_r($search); exit;
+		// echo "<pre>";print_r($search); exit;
 		/*if(isset($search) && !empty($search['branch_id']))
 								{
 									$this->db->where('hms_opd_booking.branch_id = "'.$search['branch_id'].'"');
@@ -6275,6 +6275,16 @@ class Opd_model extends CI_Model
 		$this->db->set('hms_opd_booking.dilate_status', 2);
 		$this->db->where('hms_opd_booking.id', $id);
 		$query = $this->db->update('hms_opd_booking');
+		return $query;
+	}
+	public function opd_status_update($id = '')
+	{
+		$this->db->set('hms_opd_booking.status', 1);
+		$this->db->where('hms_opd_booking.id', $id);
+		$query = $this->db->update('hms_opd_booking');
+		// echo "<pre>";
+		// print_r($query);
+		// die;
 		return $query;
 	}
 
