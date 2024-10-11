@@ -245,7 +245,7 @@ class Opd extends CI_Controller
           }
         }
 
-
+        $btn_history='';
         if (in_array('2413', $users_data['permission']['action'])) {
 
           $flag = 'eye_history'; 
