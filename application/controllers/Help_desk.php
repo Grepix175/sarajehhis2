@@ -154,9 +154,10 @@ class Help_desk extends CI_Controller
         if (in_array('2413', $users_data['permission']['action'])) {
           $btn_edit = ' <a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Edit History"><i class="fa fa-pencil"></i> Edit History</a>';
         }
-        if (in_array('2413', $users_data['permission']['action'])) {
-          $btn_delete = ' <a class="btn-custom" onClick="return delete_eye_prescription(' . $prescription->id . ')" href="javascript:void(0)" title="Delete" data-url="512"><i class="fa fa-trash"></i> Delete</a>';
-        }
+        $btn_delete = '';
+        // if (in_array('2413', $users_data['permission']['action'])) {
+        //   $btn_delete = ' <a class="btn-custom" onClick="return delete_eye_prescription(' . $prescription->id . ')" href="javascript:void(0)" title="Delete" data-url="512"><i class="fa fa-trash"></i> Delete</a>';
+        // }
       }
 
       /* if(in_array('2413',$users_data['permission']['action'])) 
