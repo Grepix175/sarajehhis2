@@ -1121,7 +1121,7 @@ class Add_eye_prescription extends CI_Controller
     if (!empty($post)) {
       $this->add_prescript->save();
       $this->session->set_flashdata('success', 'Prescription successfully added.');
-      redirect(base_url('eyes_prescription'));
+      redirect(base_url('help_desk'));
     }
 
     if (!empty($pres_id)) {
