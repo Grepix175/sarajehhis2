@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class ipd_brands_model extends CI_Model
+class Ipd_brands_model extends CI_Model
 {
 
 	var $table = 'hms_ipd_brands';
