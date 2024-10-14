@@ -581,16 +581,16 @@ $('documnet').ready(function(){
   <?php }?>
 
 <?php if(isset($_GET['admission_form']) && $_GET['admission_form']=='print_admission'){?>
-  $('#confirm_admission_print').modal({
-      backdrop: 'static',
-      keyboard: false
-        })
+  // $('#confirm_admission_print').modal({
+  //     backdrop: 'static',
+  //     keyboard: false
+  //       })
   
-  .one('click', '#cancel', function(e)
-    { 
-        window.location.href='<?php echo base_url('ipd_booking');?>'; 
-        //print_window_page('<?php echo base_url("ipd_booking"); ?>')
-    }) ;
+  // .one('click', '#cancel', function(e)
+  //   { 
+  //       window.location.href='<?php echo base_url('ipd_booking');?>'; 
+  //       //print_window_page('<?php echo base_url("ipd_booking"); ?>')
+  //   }) ;
    
        
   <?php }?>

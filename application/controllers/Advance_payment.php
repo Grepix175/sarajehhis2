@@ -161,6 +161,8 @@ class Advance_payment extends CI_Controller {
         $data['patient_details']= $this->general_model->get_patient_according_to_ipd($ipd_id,$patient_id);
         $data['page_title']="Advance Payment";
         $data['form_error'] = []; 
+        $users_data = $this->session->userdata('auth_users');
+
         $post= $this->input->post();
         $data['payment_mode']=$this->general_model->payment_mode();
         $data['form_data'] = array(
@@ -174,7 +176,7 @@ class Advance_payment extends CI_Controller {
                                   //'card_no'=>'',
                                   'cheque_date'=>date('d-m-Y'),
                                   'cheque_no'=>'',
-                                  'field_name'=>'',
+                                  'field_name'=>'1',
                                   'transaction_no'=>'',
                                   "payment_date"=>date('d-m-Y')
                                   );    
@@ -195,7 +197,7 @@ class Advance_payment extends CI_Controller {
                   $get_by_id_data = $this->ipd_booking->get_by_id($ipd_id);
                   $patient_name = $get_by_id_data['patient_name'];
                   $booking_code = $get_by_id_data['ipd_no'];
-                  $paid_amount = $get_by_id_data['advance_deposite'];
+                  $paid_amount = isset($get_by_id_data['advance_deposite'])?$get_by_id_data['advance_deposite']:'';
                   $mobile_no = $get_by_id_data['mobile_no'];
                   $room_no = $get_by_id_data['room_no'];
                   $patient_email = $get_by_id_data['patient_email'];
@@ -259,6 +261,7 @@ class Advance_payment extends CI_Controller {
         $total_values[]= $get_payment_detail[$i]->field_value.'_'.$get_payment_detail[$i]->field_name.'_'.$get_payment_detail[$i]->field_id;
 
         }
+        // echo "<pre>";print_r($total_values);die;
         $data['form_data'] = array(
                                   'data_id'=>$result['id'], 
                                   'ipd_id'=>$result['ipd_id'],

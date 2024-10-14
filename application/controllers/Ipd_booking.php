@@ -1190,6 +1190,7 @@ class Ipd_booking extends CI_Controller {
       $email = "";
       $eye_detail = "";
       $address = "";
+      $diagnosis = "";
       $simulation_id="";
       $referral_doctor="";
       $corporate_id = '';
@@ -1306,12 +1307,15 @@ class Ipd_booking extends CI_Controller {
          $data['brand_list'] = $this->ipd_booking->brand_list();
          $data['iol_data']=$this->ipd_booking->get_iol_section_list();
          $today_entry_count = $this->ipd_booking->get_today_entry_count();
+         $data['all_diagnoses'] = $this->opd->diagnosis_list();  
+
 
         // Generate token based on the count
         $token_number = $today_entry_count + 1; // Starts at 1 if there are no entries
 
         // Pass the token to the view
         $data['token'] = $token_number;
+        // print_r($data['token']);die;
 
 
          if (!empty($post['branch_id'])) {
@@ -1461,7 +1465,7 @@ class Ipd_booking extends CI_Controller {
             $this->session->set_flashdata('success','IPD booking has been successfully added.');
                 //redirect(base_url('ipd_booking/?status=print&mlc_status='.$_POST['mlc'].''));
              // redirect(base_url('ipd_booking/?status=print&admission_form=print_admission&mlc_status='.$_POST['mlc_status'].''));
-            redirect(base_url('ipd_booking/add?status=print&admission_form=print_admission&mlc_status='.$_POST['mlc_status'].''));
+            redirect(base_url('ipd_booking?status=print&admission_form=print_admission&mlc_status='.$_POST['mlc_status'].''));
           }
           else
           {
@@ -1480,7 +1484,8 @@ class Ipd_booking extends CI_Controller {
       }
 
       public function edit($id="")
-        {
+      {
+          // echo "ko";die;
         unauthorise_permission(121,735);
         $users_data = $this->session->userdata('auth_users');
         if(isset($id) && !empty($id) && is_numeric($id))
@@ -1514,6 +1519,8 @@ class Ipd_booking extends CI_Controller {
           $data['operation_list']= $this->ipd_booking->operation_list();
           $data['brand_list'] = $this->ipd_booking->brand_list();
           $data['iol_data']=$this->ipd_booking->get_iol_section_list();
+          $data['all_diagnoses'] = $this->opd->diagnosis_list();  
+
 
           if (!empty($post['branch_id'])) {
             $data['patient_category'] = $this->general_model->patient_category_list($post['branch_id']);
@@ -1661,13 +1668,16 @@ class Ipd_booking extends CI_Controller {
           'iol_power' => isset($result['iol_power']) ? $result['iol_power'] : '',
           'iol_type' => isset($result['iol_type']) ? json_encode($result['iol_type']) : '', // Assuming iol_re is an array
           // 'iol_le' => isset($result['iol_le']) ? json_encode($result['iol_le']) : '', // Assuming iol_le is an array
-          'brand' => isset($result['brand']) ? $result['brand'] : 0,
+          'brand' => $result['brand'],
           'corporate_full_facility' => isset($result['corporate_full_facility']) ? $result['corporate_full_facility'] : 'no',
           'operator' => isset($result['operator']) ? $result['operator'] : '',
           'total_amount' => isset($result['total_amount']) ? (float)$result['total_amount'] : 0.00,
           'balance' => isset($result['balance']) ? (float)$result['balance'] : 0.00,
-      );
-      
+          'token' => isset($result['token']) ? $result['token'] : 0,
+        );
+
+        // echo "<pre>";print_r($data);die;
+
         
         if(isset($post) && !empty($post))
         {   
@@ -1685,6 +1695,7 @@ class Ipd_booking extends CI_Controller {
             }
             
             $ipd_booking_id =  $this->ipd_booking->save();
+            // die;
 
             $this->session->set_userdata('ipd_booking_id',$ipd_booking_id);
             $this->session->set_flashdata('success','IPD booking has been successfully updated.');

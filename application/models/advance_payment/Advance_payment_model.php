@@ -303,319 +303,165 @@ class Advance_payment_model extends CI_Model {
 	public function save()
 	{
 		$user_data = $this->session->userdata('auth_users');
-		$post = $this->input->post();  
-		//print '<pre>'; print_r($post);die;
-		$data = array( 
-					'branch_id'=>$user_data['parent_id'],
-					'patient_id'=>$post['patient_id'],
-					'ipd_id'=>$post['ipd_id'],
-					'type'=>2,
-					'particular'=>$post['particular'],//'Advance Payment',
-					'payment_date'=>date('Y-m-d',strtotime($post['payment_date'])),
-					'start_date'=>date('Y-m-d',strtotime($post['payment_date'])),
-					'quantity'=>1,
-					'price'=>$post['amount'],
-					'panel_price'=>$post['amount'],
-					'net_price'=>$post['amount'],
-					'payment_mode'=>$post['payment_mode']
-					//'bank_name'=>$bank_name,
-					//'card_no'=>$transaction_no,
-					//'cheque_no'=>$cheque_no,
-					//'cheque_date'=>$cheque_date,
-					//'transaction_no'=>$transaction_no
-				 );
+		$post = $this->input->post();
 		
-		if(!empty($post['data_id']) && $post['data_id']>0)
-		{    
+		// Prepare common data for the operation
+		$data = array(
+			'branch_id' => $user_data['parent_id'],
+			'patient_id' => $post['patient_id'],
+			'ipd_id' => $post['ipd_id'],
+			'type' => 2,
+			'particular' => $post['particular'], // 'Advance Payment'
+			'payment_date' => date('Y-m-d', strtotime($post['payment_date'])),
+			'start_date' => date('Y-m-d', strtotime($post['payment_date'])),
+			'quantity' => 1,
+			'price' => $post['amount'],
+			'panel_price' => $post['amount'],
+			'net_price' => $post['amount'],
+			'payment_mode' => $post['payment_mode']
+		);
 
-			$this->db->where(array('id'=>$post['data_id']));
-			$this->db->delete('hms_operation_to_doctors');
-            $this->db->set('modified_by',$user_data['id']);
-			$this->db->set('modified_date',date('Y-m-d H:i:s'));
-            $this->db->where('id',$post['data_id']);
-			$this->db->update('hms_ipd_patient_to_charge',$data);  
-			$advance_payment_id=$post['data_id'];
+		// If data_id exists, update existing record
+		if (!empty($post['data_id']) && $post['data_id'] > 0) {
+			$this->db->where('id', $post['data_id'])->delete('hms_operation_to_doctors');
 
+			$this->db->set('modified_by', $user_data['id']);
+			$this->db->set('modified_date', date('Y-m-d H:i:s'));
+			$this->db->where('id', $post['data_id'])->update('hms_ipd_patient_to_charge', $data);
 
+			$advance_payment_id = $post['data_id'];
 
-			   /*add sales banlk detail*/
-				$this->db->where(array('branch_id'=>$user_data['parent_id'],'parent_id'=>$post['data_id'],'type'=>10));
-				$this->db->delete('hms_payment_mode_field_value_acc_section');
-				if(!empty($post['field_name']))
-				{
-				$post_field_value_name= $post['field_name'];
-				$counter_name= count($post_field_value_name); 
-				for($i=0;$i<$counter_name;$i++) 
-				{
-				$data_field_value= array(
-				'field_value'=>$post['field_name'][$i],
-				'field_id'=>$post['field_id'][$i],
-				'type'=>10,
-				'section_id'=>3,
-				'p_mode_id'=>$post['payment_mode'],
-				'branch_id'=>$user_data['parent_id'],
-				'parent_id'=>$post['data_id'],
-				'ip_address'=>$_SERVER['REMOTE_ADDR']
-				);
-				$this->db->set('created_by',$user_data['id']);
-				$this->db->set('created_date',date('Y-m-d H:i:s'));
-				$this->db->insert('hms_payment_mode_field_value_acc_section',$data_field_value);
+			// Update payment mode details
+			$this->db->where(array('branch_id' => $user_data['parent_id'], 'parent_id' => $post['data_id'], 'type' => 10))
+				->delete('hms_payment_mode_field_value_acc_section');
 
+			if (!empty($post['field_name'])) {
+				foreach ($post['field_name'] as $i => $field_value) {
+					$data_field_value = array(
+						'field_value' => $field_value,
+						'field_id' => $post['field_id'][$i],
+						'type' => 10,
+						'section_id' => 3,
+						'p_mode_id' => $post['payment_mode'],
+						'branch_id' => $user_data['parent_id'],
+						'parent_id' => $post['data_id'],
+						'ip_address' => $_SERVER['REMOTE_ADDR'],
+						'created_by' => $user_data['id'],
+						'created_date' => date('Y-m-d H:i:s')
+					);
+					$this->db->insert('hms_payment_mode_field_value_acc_section', $data_field_value);
 				}
-				}
+			}
 
-			/*add sales banlk detail*/
-            $this->db->where('advance_payment_id',$post['data_id']);
-            $this->db->where('parent_id',$post['ipd_id']);
-			//$this->db->where('parent_id',$post['data_id']);
-            $this->db->where('section_id','5');
-            //$this->db->where('balance>0');
-            $this->db->where('patient_id',$post['patient_id']);
-            $query_d_pay = $this->db->get('hms_payment');
-            $row_d_pay = $query_d_pay->result();
-            //  echo $this->db->last_query();die;
-	
-			/*$this->db->where('parent_id',$post['ipd_id']);
-			$this->db->where('advance_payment_id',$post['data_id']);
-			$this->db->where('section_id','5');
-			$this->db->where('patient_id',$post['patient_id']);
-			$this->db->delete('hms_payment'); 
-			*/
-			$comission_arr = get_doc_hos_comission($row_d_pay[0]->doctor_id,$row_d_pay[0]->hospital_id,$post['amount'],5);
-            //print_r($row_d_pay);die;
-            $doctor_comission = 0;
-            $hospital_comission=0;
-            $comission_type='';
-            $total_comission=0;
-            if(!empty($comission_arr))
-            {
-                $doctor_comission = $comission_arr['doctor_comission'];
-                $hospital_comission= $comission_arr['hospital_comission'];
-                $comission_type= $comission_arr['comission_type'];
-                $total_comission= $comission_arr['total_comission'];
-            }
+			// Fetch payment record
+			$this->db->where(array('advance_payment_id' => $post['data_id'], 'parent_id' => $post['ipd_id'], 'section_id' => 5, 'patient_id' => $post['patient_id']));
+			$row_d_pay = $this->db->get('hms_payment')->result();
+
+			// Get commission details
+			$comission_arr = get_doc_hos_comission($row_d_pay[0]->doctor_id, $row_d_pay[0]->hospital_id, $post['amount'], 5);
+
+			// Prepare payment data
 			$payment_data = array(
-								'parent_id'=>$post['ipd_id'],
-								'branch_id'=>$user_data['parent_id'],
-								'section_id'=>'5',  //'section_id'=>'3',
-								'patient_id'=>$post['patient_id'], 
-								'credit'=>'',
-								'debit'=>$post['amount'],
-								'type'=>4,
-								'pay_mode'=>$post['payment_mode'],
-								'advance_payment_id'=>$post['data_id'],
-								'doctor_comission'=>$doctor_comission,
-								'hospital_comission'=>$hospital_comission,
-								'comission_type'=>$comission_type,
-								'total_comission'=>$total_comission,
-								//'bank_name'=>$bank_name,
-								//'card_no'=>$transaction_no,
-								//'cheque_no'=>$cheque_no,
-								//'cheque_date'=>$cheque_date,
-								//'transection_no'=>$transaction_no,
-								'created_date'=>date('Y-m-d',strtotime($post['payment_date'])), //$row_d->created_date,//date('Y-m-d H:i:s'),
-								'created_by'=>$user_data['id']
-            	             );
-
-			$this->db->where('parent_id',$post['ipd_id']);
-			$this->db->where('advance_payment_id',$post['data_id']);
-			$this->db->where('section_id','5');
-			$this->db->where('patient_id',$post['patient_id']);
-
-			$this->db->update('hms_payment',$payment_data); 
-            //$this->db->insert('hms_payment',$payment_data);	
-            /*$payment_id= $this->db->insert_id();
-			//no need to update reciept
-            if(!empty($row_d_pay))
-            {
-            	foreach($row_d_pay as $row_d)
-            	{
-            		$this->db->set('payment_id',$payment_id);
-					$this->db->where('parent_id',$post['data_id']);
-					$this->db->where('payment_id',$row_d->id);  
-					$this->db->where('section_id',7);
-					$this->db->update('hms_branch_hospital_no'); 
-            	}
-            }*/
-            /*add sales banlk detail*/
-				$this->db->where(array('branch_id'=>$user_data['parent_id'],'parent_id'=>$post['data_id'],'type'=>10,'section_id'=>4));
-				$this->db->delete('hms_payment_mode_field_value_acc_section');
-				if(!empty($post['field_name']))
-				{
-				$post_field_value_name= $post['field_name'];
-				$counter_name= count($post_field_value_name); 
-				for($i=0;$i<$counter_name;$i++) 
-				{
-				$data_field_value= array(
-				'field_value'=>$post['field_name'][$i],
-				'field_id'=>$post['field_id'][$i],
-				'type'=>10,
-				'section_id'=>4,
-				'p_mode_id'=>$post['payment_mode'],
-				'branch_id'=>$user_data['parent_id'],
-				'parent_id'=>$post['data_id'],
-				'ip_address'=>$_SERVER['REMOTE_ADDR']
-				);
-				$this->db->set('created_by',$user_data['id']);
-				$this->db->set('created_date',date('Y-m-d H:i:s'));
-				$this->db->insert('hms_payment_mode_field_value_acc_section',$data_field_value);
-
-				}
-				}
-
-			/*add sales banlk detail*/	
-
-		}
-		else
-		{    
-			$this->db->set('created_by',$user_data['id']);
-			$this->db->set('created_date',date('Y-m-d H:i:s',strtotime($post['payment_date'])));
-			$this->db->insert('hms_ipd_patient_to_charge',$data); 
-			$last_id= $this->db->insert_id();
-			$advance_payment_id=$last_id;
-
-
-        
-
-		 if(!empty($post['field_name']))
-			{  
-			$counter_name= count($post_field_value_name);
-		   $i = 0;
-		 /* if(!empty($post['field_name']))
-		  {
-
-		  } */	
-		  $f_i = 0;
-          foreach($post['field_name'] as $fieldname) 
-			{
-			$data_field_value= array(
-			'field_value'=>$fieldname,
-			'field_id'=>$post['field_id'][$f_i],
-			'type'=>10,
-			'section_id'=>3,
-			'p_mode_id'=>$post['payment_mode'],
-			'branch_id'=>$user_data['parent_id'],
-			'parent_id'=>$last_id,
+				'parent_id' => $post['ipd_id'],
+				'branch_id' => $user_data['parent_id'],
+				'section_id' => 5,
+				'patient_id' => $post['patient_id'],
+				'credit' => '',
+				'debit' => $post['amount'],
+				'type' => 4,
+				'pay_mode' => $post['payment_mode'],
+				'advance_payment_id' => $post['data_id'],
+				'doctor_comission' => $comission_arr['doctor_comission'] ?? 0,
+				'hospital_comission' => $comission_arr['hospital_comission'] ?? 0,
+				'comission_type' => $comission_arr['comission_type'] ?? '',
+				'total_comission' => $comission_arr['total_comission'] ?? 0,
+				'created_date' => date('Y-m-d', strtotime($post['payment_date'])),
+				'created_by' => $user_data['id']
+			);
 			
-			'ip_address'=>$_SERVER['REMOTE_ADDR']
+			// Update payment table
+			$this->db->where(array(
+				'parent_id' => $post['ipd_id'],
+				'advance_payment_id' => $post['data_id'],
+				'section_id' => 5,
+				'patient_id' => $post['patient_id']
+				))->update('hms_payment', $payment_data);
+				
+			$ress = array(
+				'advance_payment' => $post['amount']
+			);
+			
+			$this->db
+				->where('id', $post['ipd_id'])  // Make sure ipd_id in hms_ipd_booking matches
+				->update('hms_ipd_booking',$ress);
+			
+			// print_r($ress);die;
+			// echo "ok11";die;
+		} 
+		else {
+
+			// Insert new record
+			$this->db->set('created_by', $user_data['id']);
+			$this->db->set('created_date', date('Y-m-d H:i:s', strtotime($post['payment_date'])));
+			$this->db->insert('hms_ipd_patient_to_charge', $data);
+
+			$ress = array(
+				'advance_payment' => $post['amount']
+			);
+			
+			$this->db
+				->where('id', $post['ipd_id'])  // Make sure ipd_id in hms_ipd_booking matches
+				->update('hms_ipd_booking',$ress);
+
+			$last_id = $this->db->insert_id();
+			$advance_payment_id = $last_id;
+
+			// Add payment mode field details for a new record
+			if (!empty($post['field_name'])) {
+				foreach ($post['field_name'] as $i => $field_value) {
+					$data_field_value = array(
+						'field_value' => $field_value,
+						'field_id' => $post['field_id'][$i],
+						'type' => 10,
+						'section_id' => 3,
+						'p_mode_id' => $post['payment_mode'],
+						'branch_id' => $user_data['parent_id'],
+						'parent_id' => $last_id,
+						'ip_address' => $_SERVER['REMOTE_ADDR'],
+						'created_by' => $user_data['id'],
+						'created_date' => date('Y-m-d H:i:s', strtotime($post['payment_date']))
+					);
+					$this->db->insert('hms_payment_mode_field_value_acc_section', $data_field_value);
+				}
+			}
+
+			// Fetch doctor and hospital commissions
+			$comission_arr = get_doc_hos_comission($post['amount'], 5);
+
+			// Prepare payment data
+			$payment_data = array(
+				'parent_id' => $post['ipd_id'],
+				'branch_id' => $user_data['parent_id'],
+				'section_id' => 5,
+				'patient_id' => $post['patient_id'],
+				'credit' => '',
+				'debit' => $post['amount'],
+				'type' => 4,
+				'pay_mode' => $post['payment_mode'],
+				'advance_payment_id' => $advance_payment_id,
+				'doctor_comission' => $comission_arr['doctor_comission'] ?? 0,
+				'hospital_comission' => $comission_arr['hospital_comission'] ?? 0,
+				'comission_type' => $comission_arr['comission_type'] ?? '',
+				'total_comission' => $comission_arr['total_comission'] ?? 0,
+				'created_date' => date('Y-m-d H:i:s', strtotime($post['payment_date'])),
+				'created_by' => $user_data['id']
 			);
 
-			
-			$this->db->set('created_by',$user_data['id']);
-			$this->db->set('created_date',date('Y-m-d H:i:s',strtotime($post['payment_date'])));
-			$this->db->insert('hms_payment_mode_field_value_acc_section',$data_field_value);
-	        }
-
-	        }
-			
-		    //if(isset($post['transaction_no'])){ $transaction_no=$post['transaction_no']; }else{ $transaction_no=''; }  
-            $this->db->where('parent_id',$post['ipd_id']);
-			//$this->db->where('parent_id',$post['data_id']);
-            $this->db->where('section_id','5');
-            //$this->db->where('balance>0');
-            $this->db->where('patient_id',$post['patient_id']);
-            $this->db->where('(doctor_id>0 OR hospital_id>0)');
-            $query_d_pay = $this->db->get('hms_payment');
-            $row_d_pay = $query_d_pay->row_array();
-
-	
-			/*$this->db->where('parent_id',$post['ipd_id']);
-			$this->db->where('advance_payment_id',$post['data_id']);
-			$this->db->where('section_id','5');
-			$this->db->where('patient_id',$post['patient_id']);
-			$this->db->delete('hms_payment'); 
-			*/
-			$comission_arr = get_doc_hos_comission($row_d_pay['doctor_id'],$row_d_pay['hospital_id'],$post['amount'],5);
-            //print_r($comission_arr);die;
-            $doctor_comission = 0;
-            $hospital_comission=0;
-            $comission_type='';
-            $total_comission=0;
-            if(!empty($comission_arr))
-            {
-                $doctor_comission = $comission_arr['doctor_comission'];
-                $hospital_comission= $comission_arr['hospital_comission'];
-                $comission_type= $comission_arr['comission_type'];
-                $total_comission= $comission_arr['total_comission'];
-            }
-            
-			$payment_data = array(
-								'parent_id'=>$post['ipd_id'],
-								'branch_id'=>$user_data['parent_id'],
-								'section_id'=>'5',  //'section_id'=>'3',
-								'patient_id'=>$post['patient_id'],
-								'hospital_id'=>$row_d_pay['hospital_id'],
-								'doctor_id'=>$row_d_pay['doctor_id'],
-								'credit'=>'',
-								'debit'=>$post['amount'],
-								'type'=>4,
-								'pay_mode'=>$post['payment_mode'],
-								'advance_payment_id'=>$advance_payment_id,
-								'doctor_comission'=>$doctor_comission,
-								'hospital_comission'=>$hospital_comission,
-								'comission_type'=>$comission_type,
-								'total_comission'=>$total_comission,
-								//'bank_name'=>$bank_name,
-								//'card_no'=>$transaction_no,
-								//'cheque_no'=>$cheque_no,
-								//'cheque_date'=>$cheque_date,
-								//'transection_no'=>$transaction_no,
-								'created_date'=>date('Y-m-d H:i:s',strtotime($post['payment_date'])),
-								'created_by'=>$user_data['id']
-            	             );
-
-			   $this->db->insert('hms_payment',$payment_data);
-			   $payment_id = $this->db->insert_id();
-			   if(in_array('218',$user_data['permission']['section']))
-				{
-		                      if($post['amount']>0)
-		                       {
-		           	 $hospital_receipt_no= check_hospital_receipt_no();
-		           	 $data_receipt_data= array('branch_id'=>$user_data['parent_id'],
-											'section_id'=>7,
-											'parent_id'=>$post['ipd_id'],
-											'payment_id'=>$payment_id,
-											'reciept_prefix'=>$hospital_receipt_no['prefix'],
-											'reciept_suffix'=>$hospital_receipt_no['suffix'],
-											'created_by'=>$user_data['id'],
-											'created_date'=>date('Y-m-d H:i:s',strtotime($post['payment_date']))
-											);
-			        $this->db->insert('hms_branch_hospital_no',$data_receipt_data);
-		           }
-		       	}
-
-
-			   if(!empty($post['field_name']))
-				{
-				$post_field_value_name= $post['field_name'];
-				$counter_name= count($post_field_value_name); 
-				$f_i = 0;
-				foreach($post['field_name'] as $fieldname) 
-				{
-				$data_field_value= array(
-				'field_value'=>$fieldname,
-				'field_id'=>$post['field_id'][$f_i],
-				'type'=>10,
-				'section_id'=>4,
-				'p_mode_id'=>$post['payment_mode'],
-				'branch_id'=>$user_data['parent_id'],
-				'parent_id'=>$last_id,
-				'ip_address'=>$_SERVER['REMOTE_ADDR']
-				);
-				$this->db->set('created_by',$user_data['id']);
-				$this->db->set('created_date',date('Y-m-d H:i:s',strtotime($post['payment_date'])));
-				$this->db->insert('hms_payment_mode_field_value_acc_section',$data_field_value);
-
-				}
-				}
-
-				$f_i++;
-			     
+			// Insert into payment table
+			$this->db->insert('hms_payment', $payment_data);
 		}
+	}
 
-
-	return $advance_payment_id;	
-   }
 
     public function delete($id="")
     {
@@ -762,18 +608,18 @@ class Advance_payment_model extends CI_Model {
 
     function payment_mode_detail_according_to_field($p_mode_id="",$parent_id="")
 	{
-		//echo $p_mode_id;
+		// echo $parent_id;die;
 		$users_data = $this->session->userdata('auth_users'); 
 		$this->db->select('hms_payment_mode_field_value_acc_section.*,hms_payment_mode_to_field.field_name');
 		$this->db->join('hms_payment_mode_to_field','hms_payment_mode_to_field.id=hms_payment_mode_field_value_acc_section.field_id');
 
 		$this->db->where('hms_payment_mode_field_value_acc_section.p_mode_id',$p_mode_id);
 		$this->db->where('hms_payment_mode_field_value_acc_section.branch_id',$users_data['parent_id']);
-		$this->db->where('hms_payment_mode_field_value_acc_section.type',10);
+		// $this->db->where('hms_payment_mode_field_value_acc_section.type',10);
 		$this->db->where('hms_payment_mode_field_value_acc_section.parent_id',$parent_id);
-		$this->db->where('hms_payment_mode_field_value_acc_section.section_id',3);
+		// $this->db->where('hms_payment_mode_field_value_acc_section.section_id',3);
 		$query= $this->db->get('hms_payment_mode_field_value_acc_section')->result();
-       // echo $this->db->last_query(); 
+    //    echo $this->db->last_query(); 
 		return $query;
 	}
 	
