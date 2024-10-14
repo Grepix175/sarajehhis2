@@ -421,31 +421,31 @@ $user_role = $users_data['users_role'];
                   </div>
                 </div>
                 <div class="row m-b-5">
-                <div class="col-xs-5"><label>Status</label></div>
-                <div class="col-xs-7">
-                  <!-- Pending (Default) -->
-                  <label class="radio-label">
-                    <input type="radio" name="search_type" value="0" id="search_type_default"
-                      onclick="return form_submit();" checked="checked">
-                    <span style="margin-top: 5px;">Pending</span>
-                  </label>
+                  <div class="col-xs-5"><label>Status</label></div>
+                  <div class="col-xs-7">
+                    <!-- Pending (Default) -->
+                    <label class="radio-label">
+                      <input type="radio" name="search_type" value="0" id="search_type_default"
+                        onclick="return form_submit();" checked="checked">
+                      <span style="margin-top: 5px;">Pending</span>
+                    </label>
 
-                  <!-- Completed -->
-                  <label class="radio-label">
-                    <input type="radio" name="search_type" value="1" id="search_type_waiting"
-                      onclick="return form_submit();">
-                    <span style="margin-top: 5px;">Completed</span>
-                  </label>
+                    <!-- Completed -->
+                    <label class="radio-label">
+                      <input type="radio" name="search_type" value="1" id="search_type_waiting"
+                        onclick="return form_submit();">
+                      <span style="margin-top: 5px;">Completed</span>
+                    </label>
 
-                  <!-- All -->
-                  <label class="radio-label">
-                    <input type="radio" name="search_type" value="" id="search_type_process"
-                      onclick="return form_submit();">
-                    <span style="margin-top: 5px;">All</span>
-                  </label>
+                    <!-- All -->
+                    <label class="radio-label">
+                      <input type="radio" name="search_type" value="" id="search_type_process"
+                        onclick="return form_submit();">
+                      <span style="margin-top: 5px;">All</span>
+                    </label>
+                  </div>
+
                 </div>
-
-              </div>
 
 
               </div> <!-- 4 -->
@@ -499,7 +499,7 @@ $user_role = $users_data['users_role'];
 
                     <!-- <th>Address</th> -->
                     <!-- <th>Father Name</th> -->
-                   
+
                     <!-- <th>Insurance Type</th> -->
                     <!-- <th>Insurance Company Name</th> -->
 
@@ -716,7 +716,7 @@ $user_role = $users_data['users_role'];
         $.ajax({
           url: "<?php echo base_url('opd/advance_search/'); ?>",
           type: 'POST',
-          data: { start_date: start_date, end_date: end_date, branch_id: branch_id, emergency_booking: emergency_booking, specialization_id: specialization_id, mobile_no: mobile_no, booking_code: booking_code, patient_name: patient_name,status:status },
+          data: { start_date: start_date, end_date: end_date, branch_id: branch_id, emergency_booking: emergency_booking, specialization_id: specialization_id, mobile_no: mobile_no, booking_code: booking_code, patient_name: patient_name, status: status },
           success: function (result) {
             if (vals != "1") {
               reload_table();

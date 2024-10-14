@@ -2606,7 +2606,8 @@ $field_list = mandatory_section_field_list(3);
               $('#net_amount').val(result.net_amount);
               $('#discount').val(result.discount);
               //$('#discount').val('0.00'); 
-              $('#paid_amount').val(result.paid_amount);
+              // $('#paid_amount').val(result.paid_amount);
+              $('#paid_amount').val('0.00');
               $('#balance').val(result.balance);
 
             }

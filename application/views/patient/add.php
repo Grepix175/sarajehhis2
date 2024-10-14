@@ -935,6 +935,7 @@ $field_list = mandatory_section_field_list(2);
           type: 'POST',
           async: false,
           success: function (datas) {
+            console.log(datas,'======pait')
             var data = $.parseJSON(datas);
             if (data.st == 1) {
               // Add response in Modal body

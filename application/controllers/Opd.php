@@ -248,10 +248,11 @@ class Opd extends CI_Controller
         }
 
         $btn_history='';
-        if (in_array('2413', $users_data['permission']['action'])) {
-
-          $flag = 'eye_history'; 
-          $btn_history .= '<li><a href="' . base_url("eye/add_eye_prescription/test/" . $test->id . "?flag=" . $flag) . '" title="Add Prescription"><i class="fa fa-history"></i> History</a></li>';
+        if (in_array('2413', $users_data['permission']['action']) ) {
+          if($test->status == 0){
+            $flag = 'eye_history'; 
+            $btn_history .= '<li><a href="' . base_url("eye/add_eye_prescription/test/" . $test->id . "?flag=" . $flag) . '" title="Add Prescription"><i class="fa fa-history"></i> History</a></li>';
+          }
 
           $btn_prescription .= '<li><a  href="' . base_url("eye/add_eye_prescription/test/" . $test->id) . '" title="Add Prescription"><i class="fa fa-eye"></i> Add Adv. Eye Prescription</a></li>';
 
@@ -4116,6 +4117,28 @@ class Opd extends CI_Controller
     }
 
   }
+  function get_visitor_detail_no_mobile($mobile)
+  {
+    $this->load->model('test/test_model', 'test');
+    $visitor_data = $this->test->get_by_visitor_mobile_no($mobile);
+    // echo "<pre>"; print_r($visitor_data); die;
+    $html = "";
+    if (!empty($visitor_data)) {
+      //$html .='<select name="patient_id" id="patient_id" class="form-control" onchange="get_patient_id()">';
+      foreach ($visitor_data as $visitor_list) {
+        $html .= '<input type="radio" value="' . $visitor_list->id . '" class="term" name="patient_id"> ' . $visitor_list->visitor_name . '<br>';
+      }
+      $data = array('st' => 1, 'visitor_list' => $html);
+      echo json_encode($data);
+      return false;
+
+    } else {
+      $data = array('st' => 0);
+      echo json_encode($data);
+      return false;
+    }
+
+  }
 
   function get_patient_detail_byid($patient_id)
   {
@@ -4124,6 +4147,22 @@ class Opd extends CI_Controller
     //print_r($patient_data);die;
     if (!empty($patient_data)) {
       $data = array('st' => 1, 'patient_detail' => $patient_data);
+      echo json_encode($data);
+      return false;
+    } else {
+      $data = array('st' => 0);
+      echo json_encode($data);
+      return false;
+    }
+
+  }
+  function get_visitor_detail_byid($patient_id)
+  {
+    $this->load->model('test/test_model', 'test');
+    $visitor_data = $this->test->get_visitor_byid($patient_id);
+    //print_r($visitor_data);die;
+    if (!empty($visitor_data)) {
+      $data = array('st' => 1, 'visitor_detail' => $visitor_data);
       echo json_encode($data);
       return false;
     } else {

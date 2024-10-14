@@ -55,6 +55,7 @@ class Opd_billing_model extends CI_Model
 
 		$search = $this->session->userdata('opd_billing_search');
 		// print_r($search) ;
+		// die;
 		if ($user_data['users_role'] == 4) {
 			$this->db->where('hms_opd_booking.patient_id = "' . $user_data['parent_id'] . '"');
 

@@ -2157,7 +2157,8 @@ $field_list = mandatory_section_field_list(4);
               $('#kit_amount').val(result.kit_amount);
               $('#particulars_charges').val(result.particulars_charges);
               $('#discount').val(result.discount);
-              $('#paid_amount').val(result.net_amount);
+              // $('#paid_amount').val(result.net_amount);
+              $('#paid_amount').val('0.00');
               $('#balance').val(0);
 
               $('#charges').val('');

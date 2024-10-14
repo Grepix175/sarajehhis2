@@ -322,7 +322,7 @@ $field_list = mandatory_section_field_list(2);
                 <input type="text" name="country_code" value="+91" readonly="" class="country_code input-height" placeholder="+91">
                 <input type="text" name="mobile_no" id="mobile_no" maxlength="10" class="number numeric input-height"
                   placeholder="eg.9897221234" value="<?php echo $form_data['mobile_no']; ?>"
-                  onkeyup="get_patient_detail_by_mobile();" style="width: 446px !important;height: 45px !important;" />
+                  onkeyup="get_visitor_detail_by_mobile();" style="width: 446px !important;height: 45px !important;" />
                 <?php if (!empty($field_list)) {
                   if ($field_list[0]['mandatory_field_id'] == '5' && $field_list[0]['mandatory_branch_id'] == $users_data['parent_id']) {
                     if (!empty($form_error)) {
@@ -557,19 +557,19 @@ $field_list = mandatory_section_field_list(2);
 
   </script>
   <script>
-    function get_patient_detail_by_mobile() {
+    function get_visitor_detail_by_mobile() {
       var val = $('#mobile_no').val();
       if (val.length == 10) {
 
         $.ajax({
-          url: "<?php echo site_url('opd/get_patient_detail_no_mobile'); ?>/" + val,
+          url: "<?php echo site_url('opd/get_visitor_detail_no_mobile'); ?>/" + val,
           type: 'POST',
           async: false,
           success: function (datas) {
             var data = $.parseJSON(datas);
             if (data.st == 1) {
               // Add response in Modal body
-              $('.modal-body').html(data.patient_list);
+              $('.modal-body').html(data.visitor_list);
 
               // Display Modal
               $('#patient_proceed').modal('show');
@@ -593,7 +593,7 @@ $field_list = mandatory_section_field_list(2);
           var action_url = '<?php echo site_url('patient/add/'); ?>'
           var radioValue = $("input[name='patient_id']:checked").val();
           $.ajax({
-            url: "<?php echo site_url('opd/get_patient_detail_byid'); ?>/" + radioValue,
+            url: "<?php echo site_url('opd/get_visitor_detail_byid'); ?>/" + radioValue,
             type: 'POST',
             async: false,
             success: function (datas) {
@@ -601,25 +601,25 @@ $field_list = mandatory_section_field_list(2);
               console.log(data)
               if (data.st == 1) {
 
-                $('#patient_id').val(data.patient_detail.id);
-                $("#registered").attr('checked', true);
-                $('#new').attr('checked', false);
-                $('#patient_code').val(data.patient_detail.patient_code);
-                $('#patient_code_auto').val(data.patient_detail.patient_code_auto);
-                $('#patient_name').val(data.patient_detail.patient_name);
-                $('#relation_name').val(data.patient_detail.relation_name);
-                $('#mobile_no').val(data.patient_detail.mobile_no);
-                $('#gender_' + data.patient_detail.gender).attr('checked', 'checked');
-                $('#age_y').val(data.patient_detail.age_y);
-                $('#age_m').val(data.patient_detail.age_m);
-                $('#age_d').val(data.patient_detail.age_d);
-                $('#age_h').val(data.patient_detail.age_h);
-                $('#opd_form').attr('action', action_url + data.patient_detail.id);
+                // $('#patient_id').val(data.patient_detail.id);
+                // $("#registered").attr('checked', true);
+                // $('#new').attr('checked', false);
+                // $('#patient_code').val(data.patient_detail.patient_code);
+                // $('#patient_code_auto').val(data.patient_detail.patient_code_auto);
+                $('#visitor_name').val(data.visitor_detail.visitor_name);
+                // $('#relation_name').val(data.patient_detail.relation_name);
+                // $('#mobile_no').val(data.patient_detail.mobile_no);
+                // $('#gender_' + data.patient_detail.gender).attr('checked', 'checked');
+                // $('#age_y').val(data.patient_detail.age_y);
+                // $('#age_m').val(data.patient_detail.age_m);
+                // $('#age_d').val(data.patient_detail.age_d);
+                // $('#age_h').val(data.patient_detail.age_h);
+                // $('#opd_form').attr('action', action_url + data.patient_detail.id);
 
-                $("#simulation_id option[value=" + data.patient_detail.simulation_id + "]").attr('selected', 'selected');
-                $("#relation_simulation_id option[value=" + data.patient_detail.relation_simulation_id + "]").attr('selected', 'selected');
-                $("#relation_type_id option[value=" + data.patient_detail.relation_type + "]").attr('selected', 'selected');
-                find_gender(data.patient_detail.simulation_id);
+                // $("#simulation_id option[value=" + data.patient_detail.simulation_id + "]").attr('selected', 'selected');
+                // $("#relation_simulation_id option[value=" + data.patient_detail.relation_simulation_id + "]").attr('selected', 'selected');
+                // $("#relation_type_id option[value=" + data.patient_detail.relation_type + "]").attr('selected', 'selected');
+                find_gender(data.visitor_detail.simulation_id);
               }
             }
 
@@ -938,7 +938,7 @@ $field_list = mandatory_section_field_list(2);
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header bg-theme">
-          <h4>Patient Already Registered!. Do You Want to procced?</h4>
+          <h4>Visitor Already Registered!. Do You Want to procced?</h4>
         </div>
         <div class="modal-body"></div>
         <div class="modal-footer">

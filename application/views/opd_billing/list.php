@@ -271,6 +271,29 @@ $users_data = $this->session->userdata('auth_users');
                     onkeyup="return form_submit();" class="alpha_space m_input_default" value="" type="text">
                 </div>
               </div>
+              <div class="row m-b-5">
+                  <div class="col-xs-5"><label>Status</label></div>
+                  <div class="col-xs-7">
+                    <label class="radio-label">
+                      <input type="radio" name="search_type" value="0" id="search_type_default"
+                        onclick="return form_submit();" checked="checked">
+                      <span style="margin-top: 5px;">Pending</span>
+                    </label>
+
+                    <label class="radio-label">
+                      <input type="radio" name="search_type" value="1" id="search_type_waiting"
+                        onclick="return form_submit();">
+                      <span style="margin-top: 5px;">Completed</span>
+                    </label>
+
+                    <label class="radio-label">
+                      <input type="radio" name="search_type" value="" id="search_type_process"
+                        onclick="return form_submit();">
+                      <span style="margin-top: 5px;">All</span>
+                    </label>
+                  </div>
+
+                </div>
               <?php
               $users_data = $this->session->userdata('auth_users');
 
@@ -381,6 +404,7 @@ $users_data = $this->session->userdata('auth_users');
                     <th>Gender</th>
                     <th>Mobile No.</th>
                     <th> Billing Date </th>
+                    <th> Status </th>
                     <!-- <th>Address</th> -->
                     <!-- <th>Father Name</th> -->
                     <th>Village/Town</th>
@@ -495,10 +519,11 @@ $users_data = $this->session->userdata('auth_users');
         var reciept_code = $('#reciept_code').val();
         var patient_name = $('#patient_name').val();
         var mobile_no = $('#mobile_no').val();
+        var status = $('input[name="search_type"]:checked').val();
         $.ajax({
           url: "<?php echo base_url('opd_billing/advance_search/'); ?>",
           type: 'POST',
-          data: { start_date: start_date, end_date: end_date, branch_id: branch_id, reciept_code: reciept_code, patient_name: patient_name, mobile_no: mobile_no },
+          data: { start_date: start_date, end_date: end_date, branch_id: branch_id, reciept_code: reciept_code, patient_name: patient_name, mobile_no: mobile_no,status:status },
           success: function (result) {
             if (vals != "1") {
               reload_table();
@@ -818,11 +843,6 @@ $users_data = $this->session->userdata('auth_users');
       var fromDateObj = new Date(fromDate);
       var toDateObj = new Date(toDate);
 
-
-      //   if (!fromDate || !toDate || (toDateObj > new Date(fromDateObj.setMonth(fromDateObj.getMonth() + 1)))) {
-      //     alert('Please select both "From Date" and "To Date" with a maximum range of 1 month.');
-      //     return;
-      //   }
 
 
       var url = '<?php echo base_url("opd_billing/opd_billing_pdf"); ?>';
