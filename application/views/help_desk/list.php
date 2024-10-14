@@ -311,14 +311,15 @@ function allbranch_delete(allVals)
             <thead>
                 <tr>
                     <th width="40" align="center"> <input type="checkbox" name="selectall" class="" id="selectAll" value=""> </th> 
+                    <th> Token No. </th> 
                     <th> OPD No. </th> 
                     <th> <?php echo $data= get_setting_value('PATIENT_REG_NO');?> </th>  
                     <th> Name </th> 
                     <th> Mobile </th> 
                     <th> DOB </th> 
-                    <th> Dilate Status </th> 
+                    <!-- <th> Dilate Status </th>  -->
                     <th> Status </th> 
-                    <th> Booking Status </th> 
+                    <!-- <th> Booking Status </th>  -->
                     <th> Patient Status </th> 
                     <th> Created Date </th> 
                     <th> Action </th>

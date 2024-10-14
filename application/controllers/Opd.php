@@ -72,7 +72,7 @@ class Opd extends CI_Controller
       // } elseif ($test->booking_status == 2) {
       //   $booking_status = '<font color="blue">Attended</font>';
       // }
-
+      
 
 
       if ($test->app_type == 0) {
@@ -155,7 +155,8 @@ class Opd extends CI_Controller
       ///////////////////////////////////////
       $row[] = $age;
       $row[] = $test->mobile_no;
-      $row[] = $test->status == 0 ? 'Pending' : 'Completed';
+      
+      $row[] = $test->status == 0 ? '<font color="green">Pending</font>' : '<font color="red">Completed</font>';
 
       // if ($test->appointment_date == '0000-00-00') {
       //   $row[] = '';
