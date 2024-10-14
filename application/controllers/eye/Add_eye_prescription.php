@@ -115,6 +115,7 @@ class Add_eye_prescription extends CI_Controller
     $data['vitals_list'] = $this->general_model->vitals_list();
     $result = $this->add_prescript->get_new_data_by_id($booking_id);
     $token_no = $this->opd->get_opd_details($booking_id);
+    $this->opd->opd_status_update($booking_id);
     //  echo "<pre>";
     //  print_r($token_no['token_no']);
     //  die;

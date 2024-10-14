@@ -482,7 +482,7 @@ $users_data = $this->session->userdata('auth_users');
               <div class="btns">
                 <button class="btn-save" type="submit" id="form_submit">Save</button>
                 <button type="button" onclick="window.location.href='<?php if (!empty($pres_id)) {
-                  echo base_url() . 'eyes_prescription';
+                  echo base_url() . 'help_desk';
                 } else {
                   echo base_url() . 'opd';
                 } ?>'" class="btn-update">Exit</button>

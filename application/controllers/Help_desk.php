@@ -39,7 +39,9 @@ class Help_desk extends CI_Controller
     $users_data = $this->session->userdata('auth_users');
     $this->load->model('opd/opd_model', 'opd');
     $list = $this->prescription->get_datatables();
-
+    // echo "<pre>";
+    // print_r($list);
+    // die;
     $data = array();
     $no = $_POST['start'];
     $i = 1;
@@ -130,14 +132,15 @@ class Help_desk extends CI_Controller
 
 
       $row[] = '<input type="checkbox" name="prescription[]" class="checklist" value="' . $prescription->id . '">' . $check_script;
+      $row[] = $prescription->token_no;
       $row[] = $prescription->booking_code;
       $row[] = $prescription->patient_code;
       $row[] = $prescription->patient_name;
       $row[] = $prescription->mobile_no;
       $row[] = $age;
-      $row[] = $d_status;
+      // $row[] = $d_status;
       $row[] = $status;
-      $row[] = $app_type;
+      // $row[] = $app_type;
       $row[] = $pat_status;
       $row[] = date('d-M-Y', strtotime($prescription->created_date));
 
@@ -152,7 +155,9 @@ class Help_desk extends CI_Controller
 
       if ($users_data['parent_id'] == $prescription->branch_id) {
         if (in_array('2413', $users_data['permission']['action'])) {
-          $btn_edit = ' <a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Edit History"><i class="fa fa-pencil"></i> Edit History</a>';
+          $flag = 'eye_history';
+          $btn_edit = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title="Edit History"><i class="fa fa-pencil"></i> Edit History</a>';
+
         }
         $btn_delete = '';
         // if (in_array('2413', $users_data['permission']['action'])) {

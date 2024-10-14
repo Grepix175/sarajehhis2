@@ -17,7 +17,7 @@ class Help_desk_model extends CI_Model
 		$user_data = $this->session->userdata('auth_users');
 		$search = $this->session->userdata('prescription_search');
 
-		$this->db->select("hms_std_eye_prescription.*,hms_patient.simulation_id,hms_patient.patient_name,hms_patient.patient_code,hms_patient.mobile_no,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d,hms_opd_booking.dilate_status,hms_opd_booking.app_type"); 
+		$this->db->select("hms_std_eye_prescription.*,hms_patient.simulation_id,hms_patient.patient_name,hms_patient.patient_code,hms_patient.mobile_no,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d,hms_opd_booking.dilate_status,hms_opd_booking.app_type,,hms_opd_booking.token_no"); 
 		$this->db->join('hms_opd_booking','hms_opd_booking.id=hms_std_eye_prescription.booking_id');
 		$this->db->join('hms_patient','hms_patient.id=hms_std_eye_prescription.patient_id','left');
        
@@ -235,7 +235,7 @@ class Help_desk_model extends CI_Model
 
      public function get_by_ids($id)
 	{
-		$this->db->select("hms_std_eye_prescription.*,hms_opd_booking.booking_code,hms_opd_booking.booking_time,hms_opd_booking.booking_date,hms_opd_booking.specialization_id,hms_opd_booking.referral_doctor,hms_opd_booking.attended_doctor,hms_opd_booking.booking_date,hms_opd_booking.created_date,hms_patient.relation_type,hms_patient.relation_name,hms_patient.relation_simulation_id,hms_gardian_relation.relation,hms_patient.patient_name,hms_patient.mobile_no,hms_patient.patient_code,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d,hms_patient.gender,hms_doctors.doctor_name as ref_doctor_name, hms_doctors.mobile_no as ref_mobile_no, hms_doctors.address, hms_doctors.address2, hms_doctors.address3,hms_patient.address as paddress,hms_patient.address2 as paddress1,hms_patient.address3 as paddress2");
+		$this->db->select("hms_std_eye_prescription.*,hms_opd_booking.booking_code,hms_opd_booking.booking_time,hms_opd_booking.booking_date,hms_opd_booking.specialization_id,hms_opd_booking.referral_doctor,hms_opd_booking.attended_doctor,hms_opd_booking.booking_date,hms_opd_booking.created_date,hms_patient.relation_type,hms_patient.relation_name,hms_patient.relation_simulation_id,hms_patient.simulation_id,hms_gardian_relation.relation,hms_patient.patient_name,hms_patient.mobile_no,hms_patient.patient_code,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d,hms_patient.gender,hms_doctors.doctor_name as ref_doctor_name, hms_doctors.mobile_no as ref_mobile_no, hms_doctors.address, hms_doctors.address2, hms_doctors.address3,hms_patient.address as paddress,hms_patient.address2 as paddress1,hms_patient.address3 as paddress2");
 		$this->db->from('hms_std_eye_prescription'); 
 		$this->db->join('hms_opd_booking','hms_opd_booking.id=hms_std_eye_prescription.booking_id','left');
 		$this->db->join('hms_doctors','hms_doctors.id=hms_opd_booking.referral_doctor','left');

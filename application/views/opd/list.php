@@ -420,6 +420,32 @@ $user_role = $users_data['users_role'];
                       } ?>> FastTrack
                   </div>
                 </div>
+                <div class="row m-b-5">
+                <div class="col-xs-5"><label>Status</label></div>
+                <div class="col-xs-7">
+                  <!-- Pending (Default) -->
+                  <label class="radio-label">
+                    <input type="radio" name="search_type" value="0" id="search_type_default"
+                      onclick="return form_submit();" checked="checked">
+                    <span style="margin-top: 5px;">Pending</span>
+                  </label>
+
+                  <!-- Completed -->
+                  <label class="radio-label">
+                    <input type="radio" name="search_type" value="1" id="search_type_waiting"
+                      onclick="return form_submit();">
+                    <span style="margin-top: 5px;">Completed</span>
+                  </label>
+
+                  <!-- All -->
+                  <label class="radio-label">
+                    <input type="radio" name="search_type" value="" id="search_type_process"
+                      onclick="return form_submit();">
+                    <span style="margin-top: 5px;">All</span>
+                  </label>
+                </div>
+
+              </div>
 
 
               </div> <!-- 4 -->
@@ -463,6 +489,7 @@ $user_role = $users_data['users_role'];
                     <th>Gender</th>
                     <th>Age</th>
                     <th>Mobile No.</th>
+                    <th>Status</th>
 
                     <!-- <th> Appointment Date </th> -->
                     <!-- <th> Doctor Name </th> -->
@@ -683,12 +710,13 @@ $user_role = $users_data['users_role'];
         var mobile_no = $('#mobile_no').val();
         var booking_code = $('#booking_code').val();
         var patient_name = $('#patient_name').val();
+        var status = $('input[name="search_type"]:checked').val();
         var emergency_booking = $("input[name='emergency_booking']:checked").val();
 
         $.ajax({
           url: "<?php echo base_url('opd/advance_search/'); ?>",
           type: 'POST',
-          data: { start_date: start_date, end_date: end_date, branch_id: branch_id, emergency_booking: emergency_booking, specialization_id: specialization_id, mobile_no: mobile_no, booking_code: booking_code, patient_name: patient_name },
+          data: { start_date: start_date, end_date: end_date, branch_id: branch_id, emergency_booking: emergency_booking, specialization_id: specialization_id, mobile_no: mobile_no, booking_code: booking_code, patient_name: patient_name,status:status },
           success: function (result) {
             if (vals != "1") {
               reload_table();
