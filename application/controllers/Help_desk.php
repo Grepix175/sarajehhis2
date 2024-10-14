@@ -9,6 +9,7 @@ class Help_desk extends CI_Controller
     parent::__construct();
     auth_users();
     $this->load->model('help_desk/help_desk_model', 'prescription');
+    $this->load->model('opd/opd_model', 'opd');
   }
 
 
@@ -139,7 +140,7 @@ class Help_desk extends CI_Controller
       $row[] = $prescription->mobile_no;
       $row[] = $age;
       // $row[] = $d_status;
-      $row[] = $status;
+      // $row[] = $status;
       // $row[] = $app_type;
       $row[] = $pat_status;
       $row[] = date('d-M-Y', strtotime($prescription->created_date));
@@ -173,12 +174,17 @@ class Help_desk extends CI_Controller
         $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . "'";
         $btn_print_pre = ' <a class="btn-custom" onClick="return print_window_page(' . $print_url . ')" href="javascript:void(0)" title="Print History"  data-url="512"><i class="fa fa-print"></i> Print History</a>';
       }
+      if (in_array('2413', $users_data['permission']['action'])) {
+        $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . "'";
+        // onClick="return print_window_page(' . $print_url . ')"
+        $send_to_vission = ' <a class="btn-custom"  href="javascript:void(0)" title="Send To Vission"  data-url="512">Send To Vission</a>';
+      }
 
       // $print_chasma_url = "'" . base_url('eye/add_eye_prescription/print_chasma_details/' . $prescription->id . '/' . $prescription->booking_id) . "'";
       // $btn_print_chasma_pre = ' <a class="btn-custom" onClick="return print_window_page(' . $print_chasma_url . ')" href="javascript:void(0)" title="Print Chasma Detail"  data-url="512"><i class="fa fa-print"></i> Print Chasma Detail</a>';
 
       // . $btn_print_chasma_pre
-      $row[] = $btn_print_pre  . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete;
+      $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $send_to_vission;
 
       $data[] = $row;
       $i++;
@@ -223,6 +229,167 @@ class Help_desk extends CI_Controller
   public function reset_search()
   {
     $this->session->unset_userdata('prescription_search');
+  }
+
+  public function help_desk_excel()
+  {
+    
+    // Starting the PHPExcel library
+    $this->load->library('excel');
+    $this->excel->IO_factory();
+    $objPHPExcel = new PHPExcel();
+    $objPHPExcel->getProperties()->setTitle("export")->setDescription("none");
+    $objPHPExcel->setActiveSheetIndex(0);
+
+    $from_date = $this->input->get('start_date');
+    $to_date = $this->input->get('end_date');
+
+    // Main header with date range if provided
+    $mainHeader = "Help Desk List";
+    if (!empty($from_date) && !empty($to_date)) {
+      $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
+    }
+
+    // Set the main header in row 1
+    $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
+    $objPHPExcel->getActiveSheet()->setCellValue('A1', $mainHeader);
+    $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true)->setSize(16);
+
+    // Leave row 2 blank (you can set row height if needed)
+    $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
+
+    // Field names (header row) should start in row 3
+    $fields = array('Token No.','OPD. No.','Patient Reg. No.', 'Patient Name', 'Mobile No.', 'Age','Status');
+
+    $col = 0; // Initialize the column index
+    foreach ($fields as $field) {
+      $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 3, $field); // Row 3 for headers
+      $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn($col)->setAutoSize(true); // Auto-size columns
+      $col++;
+    }
+
+    // Style for header row (Row 3)
+    $objPHPExcel->getActiveSheet()->getStyle('A3:I3')->getFont()->setBold(true);
+    $objPHPExcel->getActiveSheet()->getStyle('A3:I3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('A3:I3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+    // Fetching the OPD data (assuming you have the data in $list)
+    
+    $list = $this->prescription->search_help_desk_data();
+    // echo "<pre>";
+    // print_r($list);
+    // die;
+    // Populate the data starting from row 4
+    $row = 4; // Start at row 4 for data
+    if (!empty($list)) {
+      foreach ($list as $opds) {
+        $col = 0;
+        $referredBy = $opds->referred_by == 0 ? 'Doctor' : 'Hospital';
+        $age_y = $opds->age_y;
+        $age_m = $opds->age_m;
+        $age_d = $opds->age_d;
+  
+        $age = "";
+        if ($age_y > 0) {
+          $year = 'Years';
+          if ($age_y == 1) {
+            $year = 'Year';
+          }
+          $age .= $age_y . " " . $year;
+        }
+        if ($age_m > 0) {
+          $month = 'Months';
+          if ($age_m == 1) {
+            $month = 'Month';
+          }
+          $age .= ", " . $age_m . " " . $month;
+        }
+        if ($age_d > 0) {
+          $day = 'Days';
+          if ($age_d == 1) {
+            $day = 'Day';
+          }
+          $age .= ", " . $age_d . " " . $day;
+        }
+        $pat_status = '';
+        $patient_status = $this->opd->get_by_id_patient_details($opds->booking_id);
+
+        if ($patient_status['completed'] == '1') {
+          $pat_status = 'Completed';
+        } else if ($patient_status['doctor'] == '1') {
+          $pat_status = 'Doctor';
+        } else if ($patient_status['optimetrist'] == '1') {
+          $pat_status = 'Opt.Optom';
+        } else if ($patient_status['reception'] == '1') {
+          $pat_status = 'Reception';
+        } else if ($patient_status['arrive'] == '1') {
+          $pat_status = 'Arrived';
+        } else {
+          $pat_status = 'Not Arrived';
+        }
+        $data = array(
+          $opds->token_no,
+          $opds->booking_code,
+          $opds->patient_code,
+          $opds->patient_name,
+          $opds->mobile_no,
+          $age,
+          $pat_status,
+        );
+
+        foreach ($data as $cellValue) {
+          $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $cellValue);
+          $col++;
+        }
+        $row++;
+      }
+    }
+
+    // Send headers to force download of the file
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="help_desk_list_' . time() . '.xls"');
+    header('Cache-Control: max-age=0');
+
+    // Write the Excel file
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+    ob_end_clean();
+    $objWriter->save('php://output');
+  }
+
+  public function help_desk_pdf()
+  {
+    // Increase memory limit and execution time for PDF generation
+    ini_set('memory_limit', '2048M');
+    ini_set('max_execution_time', 300);
+
+    // Prepare data for the PDF
+    $data['print_status'] = "";
+    $from_date = $this->input->get('start_date');
+    $to_date = $this->input->get('end_date');
+
+    // Fetch OPD data
+    $data['data_list'] = $this->prescription->search_help_desk_data();
+    // echo "<pre>";
+    // print_r($data);
+    // die;
+    // Create main header
+    $data['mainHeader'] = "Help Desk List";
+    if (!empty($from_date) && !empty($to_date)) {
+      $data['mainHeader'] .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
+    }
+
+    // Load the view and capture the HTML output
+    $this->load->view('help_desk/help_Desk_html', $data);
+    $html = $this->output->get_output();
+
+    // Load PDF library and convert HTML to PDF
+    $this->load->library('pdf');
+    $this->pdf->load_html($html);
+    $this->pdf->render();
+
+    // Stream the generated PDF to the browser
+    $this->pdf->stream("help_desk_list_" . time() . ".pdf", array("Attachment" => 1));
   }
 
 }

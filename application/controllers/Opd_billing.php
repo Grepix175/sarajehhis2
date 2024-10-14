@@ -85,7 +85,8 @@ class Opd_billing extends CI_Controller
       $row[] = $test->gender;
       $row[] = $test->mobile_no;
       $row[] = date('d-m-Y h:i A', strtotime($test->booking_date . ' ' . $test->booking_time));
-     
+      $row[] = $test->status == 0 ? '<font color="green">Pending</font>' : '<font color="red">Completed</font>';
+
       // $row[] = $test->address;
       //$row[] = $test->father_husband_simulation." ".$test->father_husband;
       // if (!empty($test->relation_name)) {
@@ -142,14 +143,14 @@ class Opd_billing extends CI_Controller
       $btn_print = ' <a class="btn-custom" href="javascript:void(0)" onclick = "return print_window_page(' . $print_url . ')" title="Print" ><i class="fa fa-print"></i> Print  </a>';
 
 
-      $print_consolidated_url = "'" . base_url('opd_billing/print_consolidate_billing_report/' . $test->id . '/' . $test->branch_id) . "'";
-      $billing_consolidated_bill = '  <a    class="btn-custom" onClick="return print_window_page(' . $print_consolidated_url . ')" style="' . $test->id . '" title="Print Consolidated Bill"><i class="fa fa-print"></i> Print Consolidated Bill</a>';
+      // $print_consolidated_url = "'" . base_url('opd_billing/print_consolidate_billing_report/' . $test->id . '/' . $test->branch_id) . "'";
+      // $billing_consolidated_bill = '  <a    class="btn-custom" onClick="return print_window_page(' . $print_consolidated_url . ')" style="' . $test->id . '" title="Print Consolidated Bill"><i class="fa fa-print"></i> Print Consolidated Bill</a>';
 
-      $print_barcode_url = "'" . base_url('opd_billing/print_barcode/' . $test->id) . "'";
-      $btn_barcode = '<a  class="btn-custom" href="javascript:void(0)" onClick="return print_window_page(' . $print_barcode_url . ')"  title="Print Barcode" ><i class="fa fa-barcode"></i> Print Barcode </a>';
+      // $print_barcode_url = "'" . base_url('opd_billing/print_barcode/' . $test->id) . "'";
+      // $btn_barcode = '<a  class="btn-custom" href="javascript:void(0)" onClick="return print_window_page(' . $print_barcode_url . ')"  title="Print Barcode" ><i class="fa fa-barcode"></i> Print Barcode </a>';
       // End Action Button //
 
-      $row[] = $btn_confirm . $btn_edit . $btn_delete . $btn_print . $billing_consolidated_bill . $btn_barcode;
+      $row[] = $btn_confirm . $btn_edit . $btn_delete . $btn_print;//. $billing_consolidated_bill . $btn_barcode;
       $data[] = $row;
       $i++;
     }
@@ -246,7 +247,7 @@ class Opd_billing extends CI_Controller
     if ($pid > 0) {
 
       $this->load->model('patient/patient_model');
-      $this->load->model('opd/opd_model', 'opd'); 
+      $this->load->model('opd/opd_model', 'opd');
       $patient_data = $this->patient_model->get_by_id($pid);
       // echo "<pre>";
       // print_r($patient_data);
@@ -377,7 +378,7 @@ class Opd_billing extends CI_Controller
     $data['referal_hospital_list'] = $this->opd_billing->referal_hospital_list();
     $data['gardian_relation_list'] = $this->general_model->gardian_relation_list();
     $data['patient_category_list'] = $this->general_model->patient_category_list();
-    
+
     $data['corporate_list'] = $this->opd->corporate_list();
     $data['subsidy_list'] = $this->opd->subsidy_list();
     $data['department_list'] = $this->opd->department_list();
@@ -387,7 +388,7 @@ class Opd_billing extends CI_Controller
     $data['authrize_person_list'] = $this->general_model->authrize_person_list();
     $data['page_title'] = "OPD Procedure";
     $post = $this->input->post();
-      // echo "<pre>";
+    // echo "<pre>";
     // print_r($post);
     // die;
     if (empty($pid)) {
@@ -965,7 +966,7 @@ class Opd_billing extends CI_Controller
         "cost" => $result['cost'],
         "subsidy_id" => $result['subsidy_id'],
         "subsidy_created" => $result['subsidy_created'],
-        "subsidy_amount" => $result['subsidy_amount'],  
+        "subsidy_amount" => $result['subsidy_amount'],
       );
 
 
@@ -2104,21 +2105,21 @@ class Opd_billing extends CI_Controller
 
 
   public function opd_billing_excel()
-{
+  {
     // Starting the PHPExcel library
     $this->load->library('excel');
     $this->excel->IO_factory();
     $objPHPExcel = new PHPExcel();
     $objPHPExcel->getProperties()->setTitle("export")->setDescription("none");
     $objPHPExcel->setActiveSheetIndex(0);
-    
+
     $from_date = $this->input->get('start_date');
     $to_date = $this->input->get('end_date');
 
     // Main header with date range if provided
     $mainHeader = "Opd Producer List";
     if (!empty($from_date) && !empty($to_date)) {
-        $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
+      $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
     }
 
     // Set the main header in row 1
@@ -2132,14 +2133,14 @@ class Opd_billing extends CI_Controller
 
     // Field names (header row) should start in row 3
     $fields = array('Patient Reg. No.', 'Receipt No', 'Patient Name', 'Gender', 'Mobile No.', 'Billing Date', 'Token No', 'Village/Town', 'Referred By', 'Mode of Payment', 'Total Amount', 'Net Amount', 'Paid Amount');
-    
+
     $col = 0; // Initialize the column index
     foreach ($fields as $field) {
-        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 3, $field); // Row 3 for headers
-        $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn($col)->setAutoSize(true); // Auto-size columns
-        $col++;
+      $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 3, $field); // Row 3 for headers
+      $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn($col)->setAutoSize(true); // Auto-size columns
+      $col++;
     }
-    
+
     // Style for header row (Row 3)
     $objPHPExcel->getActiveSheet()->getStyle('A3:M3')->getFont()->setBold(true);
     $objPHPExcel->getActiveSheet()->getStyle('A3:M3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -2151,32 +2152,32 @@ class Opd_billing extends CI_Controller
     // Populate the data starting from row 4
     $row = 4; // Start at row 4 for data
     if (!empty($list)) {
-        foreach ($list as $opds) {
-            $col = 0;
-            $referredBy = $opds->referred_by == 0 ? 'Doctor' : 'Hospital';
-            $data = array(
-                $opds->patient_code, 
-                $opds->reciept_code, 
-                $opds->patient_name, 
-                $opds->gender == 1 ? 'Male' : 'Female', 
-                $opds->mobile_no, 
-                date('d-m-Y h:i A', strtotime($opds->booking_date . ' ' . $opds->booking_time)),
-                $opds->token_no,
-                $opds->address,
-                $referredBy,
-                $opds->payment_mode,
-                $opds->total_amount,
-                $opds->net_amount,
-                $opds->paid_amount,
-                // $opds->discount
-            );
+      foreach ($list as $opds) {
+        $col = 0;
+        $referredBy = $opds->referred_by == 0 ? 'Doctor' : 'Hospital';
+        $data = array(
+          $opds->patient_code,
+          $opds->reciept_code,
+          $opds->patient_name,
+          $opds->gender == 1 ? 'Male' : 'Female',
+          $opds->mobile_no,
+          date('d-m-Y h:i A', strtotime($opds->booking_date . ' ' . $opds->booking_time)),
+          $opds->token_no,
+          $opds->address,
+          $referredBy,
+          $opds->payment_mode,
+          $opds->total_amount,
+          $opds->net_amount,
+          $opds->paid_amount,
+          // $opds->discount
+        );
 
-            foreach ($data as $cellValue) {
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $cellValue);
-                $col++;
-            }
-            $row++;
+        foreach ($data as $cellValue) {
+          $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $cellValue);
+          $col++;
         }
+        $row++;
+      }
     }
 
     // Send headers to force download of the file
@@ -2188,7 +2189,7 @@ class Opd_billing extends CI_Controller
     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
     ob_end_clean();
     $objWriter->save('php://output');
-}
+  }
 
 
   public function opd_billing_csv()
@@ -2288,7 +2289,7 @@ class Opd_billing extends CI_Controller
   }
 
   public function opd_billing_pdf()
-{
+  {
     // Increase memory limit and execution time for PDF generation
     ini_set('memory_limit', '2048M');
     ini_set('max_execution_time', 300);
@@ -2304,7 +2305,7 @@ class Opd_billing extends CI_Controller
     // Create main header
     $data['mainHeader'] = "Opd Procedure List";
     if (!empty($from_date) && !empty($to_date)) {
-        $data['mainHeader'] .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
+      $data['mainHeader'] .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
     }
 
     // Load the view and capture the HTML output
@@ -2318,7 +2319,7 @@ class Opd_billing extends CI_Controller
 
     // Stream the generated PDF to the browser
     $this->pdf->stream("opd_procedure_list_" . time() . ".pdf", array("Attachment" => 1));
-}
+  }
 
 
   public function opd_billing_print()

@@ -229,14 +229,14 @@ $users_data = $this->session->userdata('auth_users');
               </div>
             </div>
 
-            <div class="col-md-2">
-              <label class="col-md-12 col-sm-12" for="printsummary-labels"><strong>Token No: </strong>
-                <?php echo $form_data['token_no']; ?></label>
-            </div>
           </div>
           <?php
         }
         ?>
+        <div class="col-md-2">
+          <label class="col-md-12 col-sm-12" for="printsummary-labels"><strong>Token No: </strong>
+            <?php echo $form_data['token_no']; ?></label>
+        </div>
         <hr>
 
 
@@ -270,7 +270,7 @@ $users_data = $this->session->userdata('auth_users');
           $classtab7 = 'fade in active';
         } ?>
 
-        
+
 
         <div class="row">
           <div class="col-md-11">
@@ -282,7 +282,7 @@ $users_data = $this->session->userdata('auth_users');
                     <?php if (in_array('2416', $users_data['permission']['action'])) { ?>
                       <li <?php echo $class1; ?>><a data-toggle="tab" href="#history">History</a></li>
                     <?php } ?>
-                  
+
                   <?php } else { ?>
                     <?php if (in_array('2416', $users_data['permission']['action'])) { ?>
                       <li <?php echo $class1; ?>><a data-toggle="tab" href="#history">History</a></li>
@@ -320,7 +320,7 @@ $users_data = $this->session->userdata('auth_users');
                       <li <?php echo $class7; ?>><a data-toggle="tab" href="#biometry">Biometry</a></li>
                     <?php } ?>
                   <?php } ?>
-                  
+
                 </ul>
 
               </div>

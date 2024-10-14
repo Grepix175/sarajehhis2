@@ -155,6 +155,7 @@ class Add_eye_prescription extends CI_Controller
 
 
     if (!empty($pres_id)) {
+      // echo "<pre>"; print_r($pres_id); die;
       $pres_result = $this->add_prescript->get_prescription_by_id($booking_id, $pres_id);
       $result_edit = $this->add_prescript->get_prescription_new_by_id($booking_id, $pres_id);
       $result_refraction = $this->add_prescript->get_prescription_refraction_new_by_id($booking_id, $pres_id);
@@ -163,7 +164,7 @@ class Add_eye_prescription extends CI_Controller
 
       $result_biometry = $this->add_prescript->get_prescription_biometry_id($booking_id, $pres_id);
 
-      //echo "<pre>"; print_r($result_biometry); exit;
+      // echo "<pre>"; print_r($result_edit); exit;
 
       //biometry start
 
@@ -1663,6 +1664,8 @@ class Add_eye_prescription extends CI_Controller
   /* view eye prescription*/
   public function view_prescription($pres_id, $booking_id = '')
   {
+    ini_set('display_errors', '0');
+    error_reporting(E_ALL & ~E_WARNING);
     $this->load->model('help_desk/help_desk_model', 'prescription');
 
     $this->load->library('m_pdf');
@@ -1999,7 +2002,7 @@ class Add_eye_prescription extends CI_Controller
     
     $stylesheet = file_get_contents(ROOT_CSS_PATH.'report_pdf.css'); 
     $this->m_pdf->pdf->WriteHTML($stylesheet,1); */
-    $middle_replace = $this->load->view('eye_prescription/view', $data, true);
+    $middle_replace = $this->load->view('help_desk/view', $data, true);
 
     $middle_replace_part = str_replace("{prescription_data}", $middle_replace, $middle_replace_part);
     //echo $middle_replace_part;die;

@@ -1644,7 +1644,8 @@ class Add_new_prescription_model extends CI_Model
 	{
 		$user_data = $this->session->userdata('auth_users');
 		$post = $this->input->post();
-		//echo "<pre>"; print_r($post); die;
+		// 	echo "sagar";
+// 	echo "<pre>"; print_r($post); die;
 		$history_flag = isset($post['print_history_flag']) ? '1' : '0';
 		$contactlens_flag = isset($post['print_contactlens_flag']) ? '1' : '0';
 		$glassesprescriptions_flag = isset($post['print_glassesprescriptions_flag']) ? '1' : '0';
@@ -1716,17 +1717,24 @@ class Add_new_prescription_model extends CI_Model
 			$this->update_medicine_freqdata($medicine['med_id'], $post['branch_id'], $post['patient_id'], $post['booking_id'], $prescriptionid);
 
 			//  $per_pic_amount= number_format($data_expi->mrp/$data_expi->conversion,2,'.','');
-			//  $tot_qty_with_rate= $per_pic_amount*$medicine['mqty']; 
-			$per_pic_amount = 0;
-			$tot_qty_with_rate = 0;
+			//              $tot_qty_with_rate= $per_pic_amount*$medicine['mqty'];
 
-			if (!empty($data_expi->conversion) && is_numeric($data_expi->conversion)) {
+			if (is_numeric($data_expi->mrp) && is_numeric($data_expi->conversion) && $data_expi->conversion != 0) {
 				$per_pic_amount = number_format($data_expi->mrp / $data_expi->conversion, 2, '.', '');
+			} else {
+
+				$per_pic_amount = 0;
 			}
 
-			if (!empty($medicine['mqty']) && is_numeric($medicine['mqty'])) {
-				$tot_qty_with_rate = $per_pic_amount * $medicine['mqty'];
-			}
+
+			$medicine_qty = is_numeric($medicine['mqty']) ? $medicine['mqty'] : 0;
+
+
+			$tot_qty_with_rate = is_numeric($per_pic_amount) && is_numeric($medicine_qty) ? $per_pic_amount * $medicine_qty : 0;
+
+			// Optional: Log or debug the values if necessary
+			// error_log("MRP: " . $data_expi->mrp . ", Conversion: " . $data_expi->conversion . ", Per Pic Amount: " . $per_pic_amount . ", Medicine Qty: " . $medicine_qty . ", Total Qty with Rate: " . $tot_qty_with_rate);
+
 			$total_new_other_amount = $tot_qty_with_rate - ($tot_qty_with_rate / 100) * $data_expi->discount;
 			$medi_total_amount += $total_new_other_amount;
 			$total_amt_igst += ($total_new_other_amount / 100) * $data_expi->igst;
@@ -2565,6 +2573,42 @@ class Add_new_prescription_model extends CI_Model
 			$burns_m = $post['burns_m'];
 		else
 			$burns_m = 0;
+		if (isset($post['ptosis_sx']))
+			$ptosis_sx = $post['ptosis_sx'];
+		else
+			$ptosis_sx = 0;
+		if (isset($post['lid_sx']))
+			$lid_sx = $post['lid_sx'];
+		else
+			$lid_sx = 0;
+		if (isset($post['corneal_sx']))
+			$corneal_sx = $post['corneal_sx'];
+		else
+			$corneal_sx = 0;
+		if (isset($post['cataract_sx']))
+			$cataract_sx = $post['cataract_sx'];
+		else
+			$cataract_sx = 0;
+		if (isset($post['squint_sx']))
+			$squint_sx = $post['squint_sx'];
+		else
+			$squint_sx = 0;
+		if (isset($post['pterygium_sx']))
+			$pterygium_sx = $post['pterygium_sx'];
+		else
+			$pterygium_sx = 0;
+		if (isset($post['dcr']))
+			$dcr = $post['dcr'];
+		else
+			$dcr = 0;
+		if (isset($post['dct_sx']))
+			$dct_sx = $post['dct_sx'];
+		else
+			$dct_sx = 0;
+		if (isset($post['patching_therapy']))
+			$patching_therapy = $post['patching_therapy'];
+		else
+			$patching_therapy = 0;
 
 
 		if (isset($post['gla_m']))
@@ -2595,6 +2639,22 @@ class Add_new_prescription_model extends CI_Model
 			$retil_m = $post['retil_m'];
 		else
 			$retil_m = 0;
+		if (isset($post['contact_lens_m']))
+			$contact_lens_m = $post['contact_lens_m'];
+		else
+			$contact_lens_m = 0;
+		if (isset($post['vision_therapy_m']))
+			$vision_therapy_m = $post['vision_therapy_m'];
+		else
+			$vision_therapy_m = 0;
+		if (isset($post['low_vision_m']))
+			$low_vision_m = $post['low_vision_m'];
+		else
+			$low_vision_m = 0;
+		if (isset($post['aid_m']))
+			$aid_m = $post['aid_m'];
+		else
+			$aid_m = 0;
 
 
 		if (isset($post['dia_m']))
@@ -2685,6 +2745,59 @@ class Add_new_prescription_model extends CI_Model
 			$chewt_m = $post['chewt_m'];
 		else
 			$chewt_m = 0;
+
+		if (isset($post['chronic_kidney_disease_m']))
+			$chronic_kidney_disease_m = $post['chronic_kidney_disease_m'];
+		else
+			$chronic_kidney_disease_m = 0;
+		if (isset($post['can_m']))
+			$can_m = $post['can_m'];
+		else
+			$can_m = 0;
+		if (isset($post['rheumatoid_artheritis_m']))
+			$rheumatoid_artheritis_m = $post['rheumatoid_artheritis_m'];
+		else
+			$rheumatoid_artheritis_m = 0;
+		if (isset($post['benign_ruostatic_hyperplasia_m']))
+			$benign_ruostatic_hyperplasia_m = $post['benign_ruostatic_hyperplasia_m'];
+		else
+			$benign_ruostatic_hyperplasia_m = 0;
+		if (isset($post['drug_medication_history_m']))
+			$drug_medication_history_m = $post['drug_medication_history_m'];
+		else
+			$drug_medication_history_m = 0;
+		if (isset($post['bph_m']))
+			$bph_m = $post['bph_m'];
+		else
+			$bph_m = 0;
+		if (isset($post['thyroid_m']))
+			$thyroid_m = $post['thyroid_m'];
+		else
+			$thyroid_m = 0;
+		if (isset($post['consanguinity_m']))
+			$consanguinity_m = $post['consanguinity_m'];
+		else
+			$consanguinity_m = 0;
+		if (isset($post['glaucoma_m']))
+			$glaucoma_m = $post['glaucoma_m'];
+		else
+			$glaucoma_m = 0;
+		if (isset($post['diabetes_m']))
+			$diabetes_m = $post['diabetes_m'];
+		else
+			$diabetes_m = 0;
+		if (isset($post['squint_m']))
+			$squint_m = $post['squint_m'];
+		else
+			$squint_m = 0;
+		if (isset($post['retinitis_pigmentosa_m']))
+			$retinitis_pigmentosa_m = $post['retinitis_pigmentosa_m'];
+		else
+			$retinitis_pigmentosa_m = 0;
+		if (isset($post['congenital_cataract_m']))
+			$congenital_cataract_m = $post['congenital_cataract_m'];
+		else
+			$congenital_cataract_m = 0;
 
 		if (isset($post['antimi_agen_m']))
 			$antimi_agen_m = $post['antimi_agen_m'];
@@ -3064,6 +3177,51 @@ class Add_new_prescription_model extends CI_Model
 			'history_chief_sen_burn_dur' => $post['history_chief_sen_burn_dur'],
 			'history_chief_sen_burn_unit' => $post['history_chief_sen_burn_unit'],
 			'history_chief_sen_burn_comm' => $post['history_chief_sen_burn_comm'],
+			'ptosis_sx' => $ptosis_sx,
+			'history_chief_ptosis_side' => $post['history_chief_ptosis_side'],
+			'history_chief_ptosis_dur' => $post['history_chief_ptosis_dur'],
+			'history_chief_ptosis_unit' => $post['history_chief_ptosis_unit'],
+			'history_chief_ptosis_comm' => $post['history_chief_ptosis_comm'],
+			'lid_sx' => $lid_sx,
+			'history_chief_lid_sx_side' => $post['history_chief_lid_sx_side'],
+			'history_chief_lid_sx_dur' => $post['history_chief_lid_sx_dur'],
+			'history_chief_lid_sx_unit' => $post['history_chief_lid_sx_unit'],
+			'history_chief_lid_sx_comm' => $post['history_chief_lid_sx_comm'],
+			'corneal_sx' => $corneal_sx,
+			'history_chief_corneal_sx_side' => $post['history_chief_corneal_sx_side'],
+			'history_chief_corneal_sx_dur' => $post['history_chief_corneal_sx_dur'],
+			'history_chief_corneal_sx_unit' => $post['history_chief_corneal_sx_unit'],
+			'history_chief_corneal_sx_comm' => $post['history_chief_corneal_sx_comm'],
+			'cataract_sx' => $cataract_sx,
+			'history_chief_cataract_sx_side' => $post['history_chief_cataract_sx_side'],
+			'history_chief_cataract_sx_due' => $post['history_chief_cataract_sx_due'],
+			'history_chief_cataract_sx_unit' => $post['history_chief_cataract_sx_unit'],
+			'history_chief_cataract_sx_comm' => $post['history_chief_cataract_sx_comm'],
+			'squint_sx' => $squint_sx,
+			'history_chief_squint_sx_side' => $post['history_chief_squint_sx_side'],
+			'history_chief_squint_sx_due' => $post['history_chief_squint_sx_due'],
+			'history_chief_squint_sx_unit' => $post['history_chief_squint_sx_unit'],
+			'history_chief_squint_sx_comm' => $post['history_chief_squint_sx_comm'],
+			'pterygium_sx' => $pterygium_sx,
+			'history_chief_pterygium_sx_side' => $post['history_chief_pterygium_sx_side'],
+			'history_chief_pterygium_sx_due' => $post['history_chief_pterygium_sx_due'],
+			'history_chief_pterygium_sx_unit' => $post['history_chief_pterygium_sx_unit'],
+			'history_chief_pterygium_sx_comm' => $post['history_chief_pterygium_sx_comm'],
+			'dcr' => $dcr,
+			'history_chief_dcr_sx_side' => $post['history_chief_dcr_sx_side'],
+			'history_chief_dcr_sx_due' => $post['history_chief_dcr_sx_due'],
+			'history_chief_dcr_sx_unit' => $post['history_chief_dcr_sx_unit'],
+			'history_chief_dcr_sx_comm' => $post['history_chief_dcr_sx_comm'],
+			'dct_sx' => $dct_sx,
+			'history_chief_dct_sx_side' => $post['history_chief_dct_sx_side'],
+			'history_chief_dct_sx_due' => $post['history_chief_dct_sx_due'],
+			'history_chief_dct_sx_unit' => $post['history_chief_dct_sx_unit'],
+			'history_chief_dct_sx_comm' => $post['history_chief_dct_sx_comm'],
+			'patching_therapy' => $patching_therapy,
+			'history_chief_patching_therapy_side' => $post['history_chief_patching_therapy_side'],
+			'history_chief_patching_therapy_due' => $post['history_chief_patching_therapy_due'],
+			'history_chief_patching_therapy_unit' => $post['history_chief_patching_therapy_unit'],
+			'history_chief_patching_therapy_comm' => $post['history_chief_patching_therapy_comm'],
 			'history_chief_comm' => $post['history_chief_comm']
 		);
 
@@ -3111,7 +3269,31 @@ class Add_new_prescription_model extends CI_Model
 			'history_ophthalmic_renti_l_r_dur' => $post['history_ophthalmic_renti_l_r_dur'],
 			'history_ophthalmic_renti_l_r_unit' => $post['history_ophthalmic_renti_l_r_unit'],
 			'history_ophthalmic_renti_l_comm' => $post['history_ophthalmic_renti_l_comm'],
-			'history_ophthalmic_comm' => $post['history_ophthalmic_comm'],
+			'contact_lens_m' => $contact_lens_m,
+			'history_ophthalmic_contact_lens_l_l_dur' => $post['history_ophthalmic_contact_lens_l_l_dur'],
+			'history_ophthalmic_contact_lens_l_l_unit' => $post['history_ophthalmic_contact_lens_l_l_unit'],
+			'history_ophthalmic_contact_lens_l_r_dur' => $post['history_ophthalmic_contact_lens_l_r_dur'],
+			'history_ophthalmic_contact_lens_l_r_unit' => $post['history_ophthalmic_contact_lens_l_r_unit'],
+			'history_ophthalmic_contact_lens_l_comm' => $post['history_ophthalmic_contact_lens_l_comm'],
+			'vision_therapy_m' => $vision_therapy_m,
+			'history_ophthalmic_vision_therapy_l_l_dur' => $post['history_ophthalmic_vision_therapy_l_l_dur'],
+			'history_ophthalmic_vision_therapy_l_l_unit' => $post['history_ophthalmic_vision_therapy_l_l_unit'],
+			'history_ophthalmic_vision_therapy_l_r_dur' => $post['history_ophthalmic_vision_therapy_l_r_dur'],
+			'history_ophthalmic_vision_therapy_l_r_unit' => $post['history_ophthalmic_vision_therapy_l_r_unit'],
+			'history_ophthalmic_vision_therapy_l_comm' => $post['history_ophthalmic_vision_therapy_l_comm'],
+			'low_vision_m' => $low_vision_m,
+			'history_ophthalmic_low_vision_l_l_dur' => $post['history_ophthalmic_low_vision_l_l_dur'],
+			'history_ophthalmic_low_vision_l_l_unit' => $post['history_ophthalmic_low_vision_l_l_unit'],
+			'history_ophthalmic_low_vision_l_r_dur' => $post['history_ophthalmic_low_vision_l_r_dur'],
+			'history_ophthalmic_low_vision_l_r_unit' => $post['history_ophthalmic_low_vision_l_r_unit'],
+			'history_ophthalmic_low_vision_l_comm' => $post['history_ophthalmic_low_vision_l_comm'],
+			'aid_m' => $aid_m,
+			'history_ophthalmic_aid_l_l_dur' => $post['history_ophthalmic_aid_l_l_dur'],
+			'history_ophthalmic_aid_l_l_unit' => $post['history_ophthalmic_aid_l_l_unit'],
+			'history_ophthalmic_aid_l_r_dur' => $post['history_ophthalmic_aid_l_r_dur'],
+			'history_ophthalmic_aid_l_r_unit' => $post['history_ophthalmic_aid_l_r_unit'],
+			'history_ophthalmic_aid_l_comm' => $post['history_ophthalmic_aid_l_comm'],
+			'history_ophthalmic_comm' => $post['history_ophthalmic_comm']
 		);
 
 		$systematic_history = array(
@@ -3203,7 +3385,62 @@ class Add_new_prescription_model extends CI_Model
 			'history_systemic_chewt_dur' => $post['history_systemic_chewt_dur'],
 			'history_systemic_chewt_unit' => $post['history_systemic_chewt_unit'],
 			'history_systemic_chewt_comm' => $post['history_systemic_chewt_comm'],
+			'chronic_kidney_disease_m' => $chronic_kidney_disease_m,
+			'history_systemic_chronic_kidney_dur' => $post['history_systemic_chronic_kidney_dur'],
+			'history_systemic_chronic_kidney_unit' => $post['history_systemic_chronic_kidney_unit'],
+			'history_systemic_chronic_kidney_comm' => $post['history_systemic_chronic_kidney_comm'],
+			'can_m' => $can_m,
+			'history_systemic_can_dur' => $post['history_systemic_can_dur'],
+			'history_systemic_can_unit' => $post['history_systemic_can_unit'],
+			'history_systemic_can_comm' => $post['history_systemic_can_comm'],
+			'rheumatoid_artheritis_m' => $rheumatoid_artheritis_m,
+			'history_systemic_rheumatoid_artheritis_dur' => $post['history_systemic_rheumatoid_artheritis_dur'],
+			'history_systemic_rheumatoid_artheritis_unit' => $post['history_systemic_rheumatoid_artheritis_unit'],
+			'history_systemic_rheumatoid_artheritis_comm' => $post['history_systemic_rheumatoid_artheritis_comm'],
+			'benign_ruostatic_hyperplasia_m' => $benign_ruostatic_hyperplasia_m,
+			'history_systemic_benign_ruostatic_dur' => $post['history_systemic_benign_ruostatic_dur'],
+			'history_systemic_benign_ruostatic_unit' => $post['history_systemic_benign_ruostatic_unit'],
+			'history_systemic_benign_ruostatic_comm' => $post['history_systemic_benign_ruostatic_comm'],
+			'drug_medication_history_m' => $drug_medication_history_m,
+			'history_systemic_drug_medication_dur' => $post['history_systemic_drug_medication_dur'],
+			'history_systemic_drug_medication_unit' => $post['history_systemic_drug_medication_unit'],
+			'history_systemic_drug_medication_comm' => $post['history_systemic_drug_medication_comm'],
+			'bph_m' => $bph_m,
+			'history_systemic_bph_dur' => $post['history_systemic_bph_dur'],
+			'history_systemic_bph_unit' => $post['history_systemic_bph_unit'],
+			'history_systemic_bph_comm' => $post['history_systemic_bph_comm'],
+			'thyroid_m' => $thyroid_m,
+			'history_systemic_thyroid_dur' => $post['history_systemic_thyroid_dur'],
+			'history_systemic_thyroid_unit' => $post['history_systemic_thyroid_unit'],
+			'history_systemic_thyroid_comm' => $post['history_systemic_thyroid_comm'],
 			'history_systemic_comm' => $post['history_systemic_comm']
+		);
+		$family_history_new = array(
+			'consanguinity_m' => $consanguinity_m,
+			'family_history_consanguinity_dur' => $post['family_history_consanguinity_dur'],
+			'family_history_consanguinity_unit' => $post['family_history_consanguinity_unit'],
+			'family_history_consanguinity_comm' => $post['family_history_consanguinity_comm'],
+			'glaucoma_m' => $glaucoma_m,
+			'family_history_glaucoma_dur' => $post['family_history_glaucoma_dur'],
+			'family_history_glaucoma_unit' => $post['family_history_glaucoma_unit'],
+			'family_history_glaucoma_comm' => $post['family_history_glaucoma_comm'],
+			'diabetes_m' => $diabetes_m,
+			'family_history_diabetes_dur' => $post['family_history_diabetes_dur'],
+			'family_history_diabetes_unit' => $post['family_history_diabetes_unit'],
+			'family_history_diabetes_comm' => $post['family_history_diabetes_comm'],
+			'squint_m' => $squint_m,
+			'family_history_squint_dur' => $post['family_history_squint_dur'],
+			'family_history_squint_unit' => $post['family_history_squint_unit'],
+			'family_history_squint_comm' => $post['family_history_squint_comm'],
+			'retinitis_pigmentosa_m' => $retinitis_pigmentosa_m,
+			'family_history_retinitis_pigmentosa_dur' => $post['family_history_retinitis_pigmentosa_dur'],
+			'history_systemic_cardd_unit' => $post['family_history_retinitis_pigmentosa_unit'],
+			'family_history_retinitis_pigmentosa_comm' => $post['family_history_retinitis_pigmentosa_comm'],
+			'congenital_cataract_m' => $congenital_cataract_m,
+			'family_history_congenital_cataract_dur' => $post['family_history_congenital_cataract_dur'],
+			'family_history_congenital_cataract_unit' => $post['family_history_congenital_cataract_unit'],
+			'family_history_congenital_cataract_comm' => $post['family_history_congenital_cataract_comm'],
+			'history_family_comm' => $post['history_family_comm']
 		);
 
 		$drugs_antimi_agent = array(
@@ -3490,7 +3727,48 @@ class Add_new_prescription_model extends CI_Model
 
 		$radios = array('general_checkup' => $general_checkup, 'special_status' => $special_status);
 
-		$his_data = array('branch_id' => $post['branch_id'], 'pres_id' => $prescriptionid, 'booking_code' => $post['booking_code'], 'patient_id' => $post['patient_id'], 'booking_id' => $post['booking_id'], 'history_radios' => json_encode($radios), 'free_test' => $post['visit_comm'], 'family' => $family_history, 'medical' => $post['medical_history'], 'chief_complaints' => json_encode($chief_complaints), 'ophthalmic' => json_encode($ophthalmic), 'systemic' => json_encode($systematic_history), 'drug_allergies' => json_encode($drug), 'contact_allergies' => json_encode($contact_allergies), 'food_allergies' => json_encode($food_allergies), 'temperature' => $history_vital_temp, 'pulse' => $history_vital_pulse, 'blood_pressure' => $history_vital_bp, 'rr' => $history_vital_rr, 'height' => $history_anthropometry_height, 'weight' => $history_anthropometry_weight, 'bmi' => $history_anthropometry_bmi, 'comment' => $history_anthropometry_comm, 'status' => 1, 'ip_address' => $_SERVER['REMOTE_ADDR'], 'created_by' => $user_data['id'], 'created_date' => date('Y-m-d H:i:s'));
+		// echo "<pre>";
+		// print_r($family_history);
+		// print_r($chief_complaints);
+		// print_r($ophthalmic);
+		// print_r($systematic_history);
+		// print_r($family_history);
+		$his_data = array(
+			'branch_id' => $post['branch_id'],
+			'pres_id' => $prescriptionid,
+			'booking_code' => $post['booking_code'],
+			'patient_id' => $post['patient_id'],
+			'booking_id' => $post['booking_id'],
+			'symptom_fever' => $post['symptom_fever'],
+			'symptom_cough' => $post['symptom_cough'],
+			'symptom_smell_taste' => $post['symptom_smell_taste'],
+			'symptom_loose_stools' => $post['symptom_loose_stools'],
+			'symptom_local_zone' => $post['symptom_local_zone'],
+			'symptom_travel' => $post['symptom_travel'],
+			'symptom_contact' => $post['symptom_contact'],
+			'free_test' => $post['visit_comm']
+			,
+			'medical' => $post['medical_history'],
+			'chief_complaints' => json_encode($chief_complaints),
+			'ophthalmic' => json_encode($ophthalmic),
+			'systemic' => json_encode($systematic_history),
+			'family_history' => json_encode($family_history_new),
+			'drug_allergies' => json_encode($drug),
+			'contact_allergies' => json_encode($contact_allergies),
+			'food_allergies' => json_encode($food_allergies),
+			'temperature' => $history_vital_temp,
+			'pulse' => $history_vital_pulse,
+			'blood_pressure' => $history_vital_bp,
+			'rr' => $history_vital_rr,
+			'height' => $history_anthropometry_height,
+			'weight' => $history_anthropometry_weight,
+			'bmi' => $history_anthropometry_bmi,
+			'comment' => $history_anthropometry_comm,
+			'status' => 1,
+			'ip_address' => $_SERVER['REMOTE_ADDR'],
+			'created_by' => $user_data['id'],
+			'created_date' => date('Y-m-d H:i:s')
+		);
 
 		//Diagnosis
 		$diagnosis_set = $post['diagnosis']['icd_data'];
@@ -3502,6 +3780,33 @@ class Add_new_prescription_model extends CI_Model
 		//Diagnosis
 
 		if (!empty($post['prescrption_id']) || $post['prescrption_id'] != '') {
+			//   print_r($his_data);
+			//echo "<pre>";
+			//   print_r($post);
+			//   print_r('prescrption_id IF');
+			//          die;
+			$this->db->where(array('branch_id' => $post['branch_id'], 'booking_id' => $post['booking_id'], 'type' => 1));
+			$this->db->delete('hms_branch_vitals');
+			//         echo "<pre>";
+			//   print_r($post);
+			//          die;
+			if (!empty($post['data'])) {
+				$current_date = date('Y-m-d H:i:s');
+				foreach ($post['data'] as $key => $val) {
+
+					$data = array(
+						"branch_id" => $post['branch_id'],
+						"type" => 1,
+						"booking_id" => $post['booking_id'],
+						"vitals_id" => $key,
+						"vitals_value" => $val['name'],
+
+					);
+
+					$this->db->insert('hms_branch_vitals', $data);
+					$id = $this->db->insert_id();
+				}
+			}
 			$this->db->where('pres_id', $post['prescrption_id']);
 			$this->db->where('booking_id', $post['booking_id']);
 			$this->db->where('branch_id', $post['branch_id']);
@@ -3537,6 +3842,29 @@ class Add_new_prescription_model extends CI_Model
 			$this->db->where('branch_id', $post['branch_id']);
 			$this->db->update('hms_std_eye_prescription_advice', $data_advice);
 		} else {
+
+			if (!empty($post['data'])) {
+				$current_date = date('Y-m-d H:i:s');
+				foreach ($post['data'] as $key => $val) {
+
+					$data = array(
+						"branch_id" => $post['branch_id'],
+						"type" => 1,
+						"booking_id" => $post['booking_id'],
+						"vitals_id" => $key,
+						"vitals_value" => $val['name'],
+
+					);
+					//  echo "<pre>";
+					//  print_r($data);
+					//  die;
+
+					$this->db->insert('hms_branch_vitals', $data);
+					$id = $this->db->insert_id();
+				}
+			}
+
+
 			$this->db->insert('hms_std_eye_prescription_history', $his_data);
 			$this->db->insert('hms_std_eye_prescription_refraction', $ref_data);
 			$this->db->insert('hms_std_eye_prescription_examination', $data_exam);
@@ -3545,7 +3873,9 @@ class Add_new_prescription_model extends CI_Model
 			$this->db->insert('hms_std_eye_prescription_diagnosis_hierarchy', $data_diagnosis);
 			$this->db->insert('hms_std_eye_prescription_advice', $data_advice);
 		}
-
+		//   print_r($his_data);
+		//   print_r('else out');
+		//          die;
 
 		// Set drawing $prescriptionid
 		$this->db->where('pres_id', $prescriptionid);
