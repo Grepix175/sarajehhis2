@@ -251,7 +251,7 @@ class Help_desk extends CI_Controller
     }
 
     // Set the main header in row 1
-    $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
+    $objPHPExcel->getActiveSheet()->mergeCells('A1:G1');
     $objPHPExcel->getActiveSheet()->setCellValue('A1', $mainHeader);
     $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
     $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true)->setSize(16);
@@ -260,7 +260,7 @@ class Help_desk extends CI_Controller
     $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
 
     // Field names (header row) should start in row 3
-    $fields = array('Token No.','OPD. No.','Patient Reg. No.', 'Patient Name', 'Mobile No.', 'Age','Status');
+    $fields = array('Token No.','OPD. No.','Patient Reg. No.', 'Patient Name', 'Mobile No.', 'Age','Patient Status');
 
     $col = 0; // Initialize the column index
     foreach ($fields as $field) {
@@ -270,9 +270,9 @@ class Help_desk extends CI_Controller
     }
 
     // Style for header row (Row 3)
-    $objPHPExcel->getActiveSheet()->getStyle('A3:I3')->getFont()->setBold(true);
-    $objPHPExcel->getActiveSheet()->getStyle('A3:I3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-    $objPHPExcel->getActiveSheet()->getStyle('A3:I3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('A3:G3')->getFont()->setBold(true);
+    $objPHPExcel->getActiveSheet()->getStyle('A3:G3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('A3:G3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
     // Fetching the OPD data (assuming you have the data in $list)
     
@@ -380,7 +380,7 @@ class Help_desk extends CI_Controller
     }
 
     // Load the view and capture the HTML output
-    $this->load->view('help_desk/help_Desk_html', $data);
+    $this->load->view('help_desk/help_desk_html', $data);
     $html = $this->output->get_output();
 
     // Load PDF library and convert HTML to PDF
