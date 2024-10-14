@@ -407,7 +407,7 @@ $('document').ready(function(){
                 <label>Email</label>
             </div>
             <div class="col-xs-7">
-                <input type="text" name="patient_email1" required 
+                <input type="text" name="patient_email1"  
                     value="<?php echo isset($form_data['patient_email']) ? $form_data['patient_email'] : (isset($form_data['patient_email1']) ? $form_data['patient_email1'] : ''); ?>"
                     oninput="validateEmail(this)" />
                 <br><span id="email_error" style="color: red;width:200px;"></span> <!-- Error message span -->
@@ -555,8 +555,8 @@ $('document').ready(function(){
                             <div class="col-md-5"><b>Auth No.</b></div>
                             <div class="col-md-7">
                                 <input type="text" name="auth_no" class="auth_no" id="auth_no"
-                                    value="<?php echo isset($form_data['auth_no']) ? htmlspecialchars($form_data['auth_no'], ENT_QUOTES) : ''; ?>"
-                                    placeholder="Enter Authorization Number" required pattern="^[A-Za-z0-9\-]+$"
+                                    value="<?php echo isset($form_data['ins_authorization_no']) ? htmlspecialchars($form_data['ins_authorization_no'], ENT_QUOTES) : ''; ?>"
+                                    placeholder="Enter Authorization Number"  pattern="^[A-Za-z0-9\-]+$"
                                     title="Only alphanumeric characters and hyphens are allowed" />
                             </div>
                         </div>
@@ -619,7 +619,7 @@ $('document').ready(function(){
                             <div class="col-md-5"><b>Cost</b></div>
                             <div class="col-md-7">
                                 <input type="text" name="cost" class="alpha_numeric" id="cost"
-                                    value="<?php echo isset($form_data['cost']) ? $form_data['cost'] : ''; ?>" />
+                                    value="<?php echo isset($form_data['cost']) ? $form_data['cost'] : '0'; ?>" />
                             </div>
                         </div>
                     </div>
@@ -1104,7 +1104,8 @@ $('document').ready(function(){
                 <div class="row">
                     <div class="col-md-5"><b>Token:</b></div>
                     <div class="col-md-7">
-                        <input type="text" name="token" id="token" value="<?php echo isset($token) ? htmlspecialchars($token) : '1'; ?>" readonly class="m_input_default">
+                        <?php $form_data['token']=isset($form_data['token'])?$form_data['token']:''; ?>
+                        <input type="text" name="token" id="token" value="<?php echo isset($token) ? htmlspecialchars($token) : $form_data['token']; ?>" readonly class="m_input_default">
                     </div>
                 </div>
             </div>
@@ -1112,16 +1113,29 @@ $('document').ready(function(){
 
         <div class="row m-b-5">
             <div class="col-sm-5"><label>Diagnosis</label></div>
-            <div class="col-sm-7" >
+            <div class="col-sm-7">
                 <select name="diagnosis[]" class="diagnosis_list form-control" id="" multiple style="width: 200px;">
-                    <?php if(isset($form_data['diagnosis'])): ?>
-                        <?php foreach($form_data['diagnosis'] as $diagnosis): ?>
-                            <option value="<?php echo $diagnosis; ?>" selected><?php echo $diagnosis; ?></option>
+                    <?php if (isset($all_diagnoses)): // Ensure diagnoses are available ?>
+                        <?php 
+                        // Check if $form_data['diagnosis'] is a string and convert it to an array if necessary
+                        if (isset($form_data['diagnosis']) && is_string($form_data['diagnosis'])) {
+                            $form_data['diagnosis'] = explode(',', $form_data['diagnosis']);
+                        }
+                        ?>
+                        
+                        <?php foreach ($all_diagnoses as $diagnosis): ?>
+                            <option value="<?php echo $diagnosis->id; ?>" 
+                                <?php echo (isset($form_data['diagnosis']) && is_array($form_data['diagnosis']) && in_array($diagnosis->id, $form_data['diagnosis'])) ? 'selected' : ''; ?>>
+                                <?php echo $diagnosis->name; ?> <!-- Change 'name' to the appropriate property -->
+                            </option>
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </select>
             </div>
         </div>
+
+
+
 
         <div class="row m-b-2">
               <div class="col-sm-5">
@@ -1326,7 +1340,7 @@ $('document').ready(function(){
           </div> -->
 
           <?php if(in_array('774', $permission_action)) { ?> 
-                <div class="row m-b-5">
+                <div class="row m-b-5 hidden">
                     <div class="col-sm-5"><label>Advance Deposit</label></div>
                     <div class="col-sm-7">
                         <input type="text" <?php if(!empty($form_data['advance_deposite'])) { echo "readonly"; } ?> 
@@ -1339,7 +1353,7 @@ $('document').ready(function(){
                 <input type="hidden" name="advance_deposite" class="m_input_default" value="0.00">
             <?php } ?>
 
-            <div class="col-md-12">
+            <div class="col-md-12 hidden">
               <div class="row m-b-5 opd_m_left">
                 <div class="col-md-5"><b>Mode of Payment</b></div>
                 <div class="col-md-7 opd_p_left">
@@ -1636,6 +1650,9 @@ $('document').ready(function(){
             <script>
 
             $(document).ready(function() {
+                // Initially hide the difference amount field
+                $('#difference_amount').closest('.form-group').hide();
+
                 // Function to calculate the difference and balance
                 function calculateAmounts() {
                     var totalAmount = parseFloat($('#package_amount').val()) || 0.00;
@@ -1646,17 +1663,23 @@ $('document').ready(function(){
                     var difference = totalAmount - corporateAmount;
 
                     // If the difference is less than 0, set it to 0
-                    if (difference < 0) {
-                        difference = 0;
-                    }
+                    // if (difference < 0) {
+                    //     difference = 0;
+                    // }
+
+                    // Show the difference amount field if there is a difference
+                    // if (totalAmount > 0 || corporateAmount > 0) {
+                    //     $('#difference_amount').closest('.form-group').show();
+                    // }
+
                     $('#difference_amount').val(difference.toFixed(2));
 
                     // Calculate the balance: Previous Amount - Difference
-                    var balance = previousAmount - difference;
+                    var balance = difference - previousAmount;
                     $('#balance').val(balance.toFixed(2));
                 }
 
-                // Initial calculation on page load
+                // Initial calculation on page load (but don't show difference amount yet)
                 calculateAmounts();
 
                 // Listen for manual input changes in the "Total Amount", "Corporate Amount", and "Cost" fields
@@ -1682,6 +1705,7 @@ $('document').ready(function(){
                     calculateAmounts();
                 });
             });
+
 
             function payment_function(value, error_field) {
                 $('#updated_payment_detail').html('');
@@ -1758,7 +1782,7 @@ $('document').ready(function(){
                 
                 // Update the amount input field with the selected package's amount
                 amountInput.value = amount ? amount : ''; // Set it to the amount or clear it if no selection
-                tInput.value = amount ? amount : ''; // Set it to the amount or clear it if no selection
+                tInput.value = amount ? amount : '0'; // Set it to the amount or clear it if no selection
             }
 
         // Initial call to set the amount field when the page loads
@@ -1797,10 +1821,10 @@ $('document').ready(function(){
                                 // Calculate the difference: Total - Corporate
                                 var difference = totalAmount - corporateAmount;
 
-                                // If the difference is less than 0, set it to 0
-                                if (difference < 0) {
-                                    difference = 0;
-                                }
+                                // // If the difference is less than 0, set it to 0
+                                // if (difference < 0) {
+                                //     difference = 0;
+                                // }
 
                                 $('#difference_amount').val(difference.toFixed(2));
 
@@ -2416,18 +2440,7 @@ $(document).ready(function() {
         </div>
       </div>  
     </div>
-    <div id="confirm_admission_print" class="modal fade dlt-modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-theme"><h4>Are You Sure?</h4></div>
-          
-          <div class="modal-footer">
-            <a type="button" data-dismiss="modal" class="btn-anchor"  onClick="return print_window_page('<?php echo base_url("ipd_booking/print_ipd_adminssion_card"); ?>');" >Print</a>
-            <button type="button" data-dismiss="modal" class="btn-cancel" id="cancel">Close</button>
-          </div>
-        </div>
-      </div>  
-    </div>
+    <!--  -->
 
     <div id="confirm_discharge" class="modal fade dlt-modal">
       <div class="modal-dialog">

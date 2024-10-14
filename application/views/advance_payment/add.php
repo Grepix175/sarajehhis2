@@ -231,30 +231,44 @@ function allbranch_delete(allVals)
                       </div>
                       </div>
 
-                       <div id="updated_payment_detail">
-                 <?php if(!empty($form_data['field_name']))
-                 { foreach ($form_data['field_name'] as $field_names) {
-                     $tot_values= explode('_',$field_names);
+                      <div id="updated_payment_detail">
+                        <?php
+                        // Check if field_name exists and is an array
+                        if (isset($form_data['field_name']) && is_array($form_data['field_name']) && !empty($form_data['field_name'])) {
+                            foreach ($form_data['field_name'] as $field_names) {
+                                $tot_values = explode('_', $field_names);
 
-                    ?>
+                                // Ensure that $tot_values has enough elements before accessing
+                                if (count($tot_values) >= 3) {
+                                    ?>
+                                    <div class="row m-b-5" id="branch"> 
+                                        <div class="col-md-5">
+                                            <strong><?php echo htmlspecialchars($tot_values[1]); ?><span class="star">*</span></strong>
+                                        </div>
+                                        <div class="col-md-7"> 
+                                            <input type="text" name="field_name[]" value="<?php echo htmlspecialchars($tot_values[0]); ?>" />
+                                            <input type="hidden" value="<?php echo htmlspecialchars($tot_values[2]); ?>" name="field_id[]" />
+                                            <?php 
+                                            // Check if the value for this field is empty and show an error if necessary
+                                            if (empty($tot_values[0]) && !empty($form_error)) {
+                                                echo '<div class="text-danger">The ' . strtolower(htmlspecialchars($tot_values[1])) . ' field is required.</div>'; 
+                                            }
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } else {
+                                    // Handle case where $tot_values doesn't have enough elements
+                                    echo '<div class="text-danger">Invalid field format.</div>';
+                                }
+                            }
+                        } else {
+                            // Handle case where field_name is not set or is not an array
+                            // echo '<div class="text-danger">No fields available.</div>';
+                        }
+                        ?>
+                    </div>
 
-                  <div class="row m-b-5" id="branch"> 
-                  <div class="col-md-5">
-                  <strong><?php echo $tot_values[1];?><span class="star">*</span></strong>
-                  </div>
-                  <div class="col-md-7"> 
-                  <input type="text" name="field_name[]" value="<?php echo $tot_values[0];?>" /><input type="hidden" value="<?php echo $tot_values[2];?>" name="field_id[]" />
-                   <?php 
-                      if(empty($tot_values[0]))
-                      {
-                      if(!empty($form_error)){ echo '<div class="text-danger">The '.strtolower($tot_values[1]).' field is required.</div>'; } 
-                      }
-                      ?>
-                  </div>
-                  </div>
-               <?php } }?>
-                     
-                   </div>
                   
                 <div id="payment_detail">
                     
