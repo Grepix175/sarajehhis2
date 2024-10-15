@@ -177,7 +177,7 @@ class Help_desk extends CI_Controller
       if (in_array('2413', $users_data['permission']['action'])) {
         $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . "'";
         // onClick="return print_window_page(' . $print_url . ')"
-        $send_to_vission = ' <a class="btn-custom"  href="javascript:void(0)" title="Send To Vission"  data-url="512">Send To Vission</a>';
+        $send_to_vission = ' <a class="btn-custom"  href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Send To Vision"  data-url="512">Send To Vision</a>';
       }
 
       // $print_chasma_url = "'" . base_url('eye/add_eye_prescription/print_chasma_details/' . $prescription->id . '/' . $prescription->booking_id) . "'";
