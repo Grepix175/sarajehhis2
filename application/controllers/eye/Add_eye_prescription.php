@@ -1700,6 +1700,7 @@ class Add_eye_prescription extends CI_Controller
     $data['advice_adv'] = (array) $advice_advice;
     $advice_comm = json_decode($result_advice['comments']);
     $data['advice_comm'] = (array) $advice_comm;
+    $data['vitals_list'] = $this->general_model->vitals_list();
     /* advice end */
     /* Investigation */
     $result_investigation = $this->add_prescript->get_investigation_by_id($booking_id, $pres_id);
@@ -1741,12 +1742,24 @@ class Add_eye_prescription extends CI_Controller
     $data['ophthalmic'] = (array) $ophthalmic;
     $systemic = json_decode($result_edit['systemic']);
     $data['systemic'] = (array) $systemic;
+    $family_history = json_decode($result_edit['family_history']);
+    $data['family_history'] = (array) $family_history;
     $drug_allergies = json_decode($result_edit['drug_allergies']);
     $data['drug_allergies'] = (array) $drug_allergies;
     $contact_allergies = json_decode($result_edit['contact_allergies']);
     $data['contact_allergies'] = (array) $contact_allergies;
     $food_allergies = json_decode($result_edit['food_allergies']);
     $data['food_allergies'] = (array) $food_allergies;
+    $data['symptom_fever'] = $result_edit['symptom_fever'];
+    $data['symptom_cough'] = $result_edit['symptom_cough'];
+    $data['symptom_smell_taste'] = $result_edit['symptom_smell_taste'];
+    $data['symptom_loose_stools'] = $result_edit['symptom_loose_stools'];
+    $data['symptom_local_zone'] = $result_edit['symptom_local_zone'];
+    $data['symptom_travel'] = $result_edit['symptom_travel'];
+    $data['symptom_contact'] = $result_edit['symptom_contact'];
+    // echo "<pre>";
+    // print_r($data);
+    // die;
     //$data['pres_id']=$result_edit['id'];
     $data['pres_id'] = $pres_id;
     // Refraction

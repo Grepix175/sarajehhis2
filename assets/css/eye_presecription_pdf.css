@@ -98,3 +98,33 @@ body {
 	  font-weight:bold;
 	}
 	strong {font-size:5px;}
+
+    .container {
+        overflow: hidden; /* To clear floats */
+    }
+    
+    .box {
+        float: left;
+        width: 48%; /* Adjust as needed */
+        margin: 1%; /* To add space between divs */
+        box-sizing: border-box; /* Include p
+        adding/border in the element's total width */
+    }
+    
+    .grp_box table {
+        width: 100%; /* Make the table full width */
+        border-collapse: collapse; /* Remove spacing between cells */
+    }
+    
+    .grp_box td {
+        padding: 10px; /* Space around the inputs */
+        vertical-align: top; /* Aligns the inputs to the top */
+    }
+    
+
+    .color-green{
+        color: green !important;
+    }
+    .color-red{
+        color: red !important;
+    }

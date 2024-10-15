@@ -231,6 +231,14 @@ $users_data = $this->session->userdata('auth_users');
 
           </div>
           <?php
+        } else {
+          ?>
+          <input type="checkbox" name="print_history_flag" <?php if ($form_data['history_flag'] == 1) {
+            echo 'checked';
+          } ?>
+            id="checkboxhistory" value="1" hidden>
+
+          <?php
         }
         ?>
         <div class="col-md-2">

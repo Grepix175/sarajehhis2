@@ -404,7 +404,7 @@ class Opd_billing_model extends CI_Model
 		} else {
 			$branch_id = $user_data['parent_id'];
 		}
-		// echo "<pre>";print_r($user_data); exit;
+		// echo "<pre>";print_r($post); exit;
 
 		$insurance_type = '';
 		if (isset($post['insurance_type'])) {
@@ -530,6 +530,9 @@ class Opd_billing_model extends CI_Model
 			$created_by_id = $this->get_by_id($post['data_id']);
 
 			$booking_id = $post['data_id'];
+			if ($data_testr['paid_amount'] > 0) {
+				$this->db->set('status', 1);
+			}
 			$this->db->set('modified_by', $user_data['id']);
 			$this->db->set('modified_date', date('Y-m-d H:i:s'));
 			$this->db->where('id', $post['data_id']);

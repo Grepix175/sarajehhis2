@@ -1,4 +1,4 @@
-<html lang="en">
+<!DOCTYPE html>
 
 <head>
 	<meta charset="euc-kr">
@@ -44,9 +44,164 @@
 				}
 			}
 			if ($hist == 1) { ?>
-				<strong style="font-size:11px">HISTORY</strong>
+				<table style="width: 100%; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: left; width: 50%;">
+							<strong style="font-size: 11px">HISTORY</strong>
+						</td>
+						<td style="text-align: left; width: 50%;">
+							<h4 style="margin: 0;">Vitals</h4>
+						</td>
+					</tr>
+				</table>
 				<hr style="margin: 2px !important;">
 			<?php } ?>
+			<?php
+			// echo "<pre>";
+			// echo (isset($symptom_fever) && $symptom_fever == 0) ? 'checked' : '';
+			// print_r($symptom_fever);
+			// print_r($symptom_cough);
+			// print_r($symptom_smell_taste);
+			// print_r($symptom_loose_stools);
+			// print_r($symptom_local_zone);
+			// print_r($symptom_travel);
+			// print_r($symptom_contact);
+			// die;
+			?>
+
+			<div class="container">
+			<div class="box">
+				<div class="questionnaire">
+					<div class="col-xs-12 question-item">
+						<div class="question-text">Any H/O Fever or following symptoms in the last 15 days</div>
+						<div class="radio-buttons">
+						<label class="btn-defaults">
+							<input type="radio" name="symptom_fever" value="1" <?php echo (isset($symptom_fever) && $symptom_fever == 1) ? 'checked="checked"' : ''; ?>>
+							Yes
+						</label>
+						<label class="btn-defaults">
+							<input type="radio" name="symptom_fever" value="0" <?php echo (isset($symptom_fever) && $symptom_fever == 0) ? 'checked="checked"' : ''; ?>>
+							No
+						</label>
+						</div>
+					</div>
+					<div class="question-item">
+						<div class="question-text">Any H/O Cough/ Cold Sore Throat/ Breathing difficulty</div>
+						<div class="radio-buttons">
+							<label class="btn-defaults">
+								<input type="radio" name="symptom_cough" value="1" <?php echo (isset($symptom_cough) && $symptom_cough == 1) ? 'checked="checked"' : ''; ?>> Yes
+							</label>
+							<label class="btn-defaults">
+								<input type="radio" name="symptom_cough" value="0" <?php echo (isset($symptom_cough) && $symptom_cough == 0) ? 'checked="checked"' : ''; ?>> No
+							</label>
+						</div>
+					</div>
+					<div class="question-item">
+						<div class="question-text">Any Recent H/O Loss of Smell/Taste?</div>
+						<div class="radio-buttons">
+							<label class="btn-defaults">
+								<input type="radio" name="symptom_smell_taste" value="1" <?php echo (isset($symptom_smell_taste) && $symptom_smell_taste == 1) ? 'checked="checked"' : ''; ?>> Yes
+							</label>
+							<label class="btn-defaults">
+								<input type="radio" name="symptom_smell_taste" value="0" <?php echo (isset($symptom_smell_taste) && $symptom_smell_taste == 0) ? 'checked="checked"' : ''; ?>> No
+							</label>
+						</div>
+					</div>
+					<div class="question-item">
+						<div class="question-text">Any H/O Loose Stools/ Myalgia/ Body Aches/ Headache/ Fatigue/ Weakness
+						</div>
+						<div class="radio-buttons">
+							<label class="btn-defaults">
+								<input type="radio" name="symptom_loose_stools" value="1" <?php echo (isset($symptom_loose_stools) && $symptom_loose_stools == 1) ? 'checked="checked"' : ''; ?>> Yes
+							</label>
+							<label class="btn-defaults">
+								<input type="radio" name="symptom_loose_stools" value="0" <?php echo (isset($symptom_loose_stools) && $symptom_loose_stools == 0) ? 'checked="checked"' : ''; ?>> No
+							</label>
+						</div>
+					</div>
+					<div class="question-item">
+						<div class="question-text">Any H/O Recent Visit to a Local Containment Zone</div>
+						<div class="radio-buttons">
+							<label class="btn-defaults">
+								<input type="radio" name="symptom_local_zone" value="1" <?php echo (isset($symptom_local_zone) && $symptom_local_zone == 1) ? 'checked="checked"' : ''; ?>> Yes
+							</label>
+							<label class="btn-defaults">
+								<input type="radio" name="symptom_local_zone" value="0" <?php echo (isset($symptom_local_zone) && $symptom_local_zone == 0) ? 'checked="checked"' : ''; ?>> No
+							</label>
+						</div>
+					</div>
+					<div class="question-item">
+						<div class="question-text">Any H/O Recent Travel to Outside City/State</div>
+						<div class="radio-buttons">
+							<label class="btn-defaults">
+								<input type="radio" name="symptom_travel" value="1" <?php echo (isset($symptom_travel) && $symptom_travel == 1) ? 'checked="checked"' : ''; ?>> Yes
+							</label>
+							<label class="btn-defaults">
+								<input type="radio" name="symptom_travel" value="0" <?php echo (isset($symptom_travel) && $symptom_travel == 0) ? 'checked="checked"' : ''; ?>> No
+							</label>
+						</div>
+					</div>
+					<div class="question-item">
+						<div class="question-text">Any H/O Contact with Suspected/Confirmed Cases of COVID-19</div>
+						<div class="radio-buttons">
+							<label class="btn-defaults">
+								<input type="radio" name="symptom_contact" value="1" <?php echo (isset($symptom_contact) && $symptom_contact == 1) ? 'checked="checked"' : ''; ?>> Yes
+							</label>
+							<label class="btn-defaults">
+								<input type="radio" name="symptom_contact" value="0" <?php echo (isset($symptom_contact) && $symptom_contact == 0) ? 'checked="checked"' : ''; ?>> No
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+			<!-- Right Section (Vitals) -->
+			<div class="box">
+				<?php
+				$enable_setting = get_setting_value('ENABLE_VITALS');
+				if ($enable_setting == 1) {
+					?>
+					<div class="row m-t-5">
+						<div class="col-md-12">
+						
+							<div class="grp_box">
+								<table>
+									<tr>
+										<?php
+										if (!empty($vitals_list)) {
+											$i = 0; // Counter for the vitals
+											foreach ($vitals_list as $vitals) {
+												$vital_val = get_vitals_value($vitals->id, $booking_id, 1);
+												?>
+												<td>
+													<label><?php echo $vitals->vitals_name; ?> <br>
+														<input name="data[<?php echo $vitals->id; ?>][name]" value="<?php echo $vital_val; ?>"
+															type="text" class="w-50px m_tiny">
+														<br> <?php echo $vitals->vitals_unit; ?>
+													</label>
+												</td>
+												<?php
+												$i++;
+												// Close the row after every 3 inputs
+												if ($i % 3 === 0) {
+													echo '</tr><tr>'; // Close current row and start a new row
+												}
+											}
+										}
+										?>
+									</tr>
+									
+
+								</table>
+							</div>
+						</div>
+					</div>
+					<?php
+				}
+				?>
+			</div>
+		</div>
+			
 			<ul style="list-style:none;margin:5px 0 0px;padding:0px;font-size:11px;">
 				<?php if ($history_radios_data['general_checkup'] > 0) { ?>
 					<li style=""> <strong style="font-size: 10px;">Visit:</strong>
@@ -105,7 +260,8 @@
 							if (!empty($chief_complaints['history_chief_pains_comm'])) {
 								echo ' - ' . $chief_complaints['history_chief_pains_comm'] . ', ';
 							} ?>
-						</strong></li>
+						</strong>
+					</li>
 				<?php }
 				if ($chief_complaints['redness_m'] == 1) { ?>
 					<li style=""> Redness in <strong style="font-size: 10px;">
@@ -122,7 +278,8 @@
 							if (!empty($chief_complaints['history_chief_rednes_comm'])) {
 								echo ' - ' . $chief_complaints['history_chief_rednes_comm'] . ', ';
 							} ?>
-						</strong> </li>
+						</strong>
+					</li>
 				<?php }
 				if ($chief_complaints['injury_m'] == 1) { ?>
 					<li style=""> Injury in <strong style="font-size: 10px;">
@@ -139,7 +296,8 @@
 							if (!empty($chief_complaints['history_chief_injuries_comm'])) {
 								echo ' - ' . $chief_complaints['history_chief_injuries_comm'] . ', ';
 							} ?>
-						</strong> </li>
+						</strong>
+					</li>
 				<?php }
 				if ($chief_complaints['water_m'] == 1) { ?>
 					<li style=""> Watering in <strong style="font-size: 10px;">
@@ -156,7 +314,8 @@
 							if (!empty($chief_complaints['history_chief_waterings_comm'])) {
 								echo ' - ' . $chief_complaints['history_chief_waterings_comm'] . ', ';
 							} ?>
-						</strong> </li>
+						</strong>
+					</li>
 				<?php }
 				if ($chief_complaints['discharge_m'] == 1) { ?>
 					<li style=""> Discharge in <strong style="font-size: 10px;">
@@ -174,7 +333,8 @@
 								echo ' - ' . $chief_complaints['history_chief_discharges_comm'] . ', ';
 							} ?>
 
-						</strong> </li>
+						</strong>
+					</li>
 				<?php }
 				if ($chief_complaints['dryness_m'] == 1) { ?>
 					<li style=""> Dryness in <strong style="font-size: 10px;">
@@ -191,7 +351,8 @@
 							if (!empty($chief_complaints['history_chief_dryness_comm'])) {
 								echo ' - ' . $chief_complaints['history_chief_dryness_comm'] . ', ';
 							} ?>
-						</strong> </li>
+						</strong>
+					</li>
 				<?php }
 				if ($chief_complaints['itch_m'] == 1) { ?>
 					<li style=""> Itching in <strong style="font-size: 10px;">
@@ -208,7 +369,8 @@
 							if (!empty($chief_complaints['history_chief_itchings_comm'])) {
 								echo ' - ' . $chief_complaints['history_chief_itchings_comm'] . ', ';
 							} ?>
-						</strong> </li>
+						</strong>
+					</li>
 				<?php }
 				if ($chief_complaints['fbd_m'] == 1) { ?>
 					<li style=""> Fbsensation in <strong style="font-size: 10px;">
@@ -225,7 +387,8 @@
 							if (!empty($chief_complaints['history_chief_fbsensation_comm'])) {
 								echo ' - ' . $chief_complaints['history_chief_fbsensation_comm'] . ', ';
 							} ?>
-						</strong> </li>
+						</strong>
+					</li>
 				<?php }
 				if ($chief_complaints['devs_m'] == 1) { ?>
 					<li style=""> Deviation Squint in <strong style="font-size: 10px;">
@@ -268,7 +431,8 @@
 							if (!empty($chief_complaints['history_chief_head_strain_comm'])) {
 								echo ' - ' . $chief_complaints['history_chief_head_strain_comm'] . ', ';
 							} ?>
-						</strong> </li>
+						</strong>
+					</li>
 				<?php }
 				if ($chief_complaints['canss_m'] == 1) { ?>
 					<li style=""> Change In Size Shape in <strong style="font-size: 10px;">
@@ -285,7 +449,8 @@
 							if (!empty($chief_complaints['history_chief_size_shape_comm'])) {
 								echo ' - ' . $chief_complaints['history_chief_size_shape_comm'] . ', ';
 							} ?>
-						</strong> </li>
+						</strong>
+					</li>
 				<?php }
 				if ($chief_complaints['ovs_m'] == 1) { ?>
 					<li style=""> Other Visual Symptoms in <strong style="font-size: 10px;">
@@ -343,7 +508,8 @@
 							if (!empty($chief_complaints['history_chief_sdiv_comm'])) {
 								echo ' - ' . $chief_complaints['history_chief_sdiv_comm'] . ', ';
 							} ?>
-						</strong> </li>
+						</strong>
+					</li>
 				<?php }
 				if ($chief_complaints['doe_m'] == 1) { ?>
 					<li style=""> Discoloration Of Eye in <strong style="font-size: 10px;">
@@ -361,7 +527,8 @@
 								echo ' - ' . $chief_complaints['history_chief_doe_comm'] . ', ';
 							} ?>
 
-						</strong> </li>
+						</strong>
+					</li>
 				<?php }
 				if ($chief_complaints['swel_m'] == 1) { ?>
 					<li style=""> Swelling in <strong style="font-size: 10px;">
@@ -378,7 +545,8 @@
 							if (!empty($chief_complaints['history_chief_swell_comm'])) {
 								echo ' - ' . $chief_complaints['history_chief_swell_comm'] . ', ';
 							} ?>
-						</strong> </li>
+						</strong>
+					</li>
 				<?php }
 				if ($chief_complaints['burns_m'] == 1) { ?>
 					<li style=""> Sensation Burning in <strong style="font-size: 10px;">
@@ -395,7 +563,170 @@
 							if (!empty($chief_complaints['history_chief_sen_burn_comm'])) {
 								echo ' - ' . $chief_complaints['history_chief_sen_burn_comm'] . ', ';
 							} ?>
-						</strong> </li>
+						</strong>
+					</li>
+				<?php }
+				if ($chief_complaints['ptosis_sx'] == 1) { ?>
+					<li style=""> Ptosis Sx <strong style="font-size: 10px;">
+							<?php if (!empty($chief_complaints['history_chief_ptosis_side'])) {
+								echo $chief_complaints['history_chief_ptosis_side'];
+							} ?></strong>
+						<strong style="font-size: 10px;">
+							<?php if (!empty($chief_complaints['history_chief_ptosis_dur'])) {
+								echo 'since ' . $chief_complaints['history_chief_ptosis_dur'] . ' ';
+							}
+							if (!empty($chief_complaints['history_chief_ptosis_unit'])) {
+								echo $chief_complaints['history_chief_ptosis_unit'];
+							}
+							if (!empty($chief_complaints['history_chief_ptosis_comm'])) {
+								echo ' - ' . $chief_complaints['history_chief_ptosis_comm'] . ', ';
+							} ?>
+						</strong>
+					</li>
+				<?php }
+				if ($chief_complaints['lid_sx'] == 1) { ?>
+					<li style=""> Lid Sx <strong style="font-size: 10px;">
+							<?php if (!empty($chief_complaints['history_chief_lid_sx_side'])) {
+								echo $chief_complaints['history_chief_lid_sx_side'] . ' Eye ';
+							} ?></strong>
+						<strong style="font-size: 10px;">
+							<?php if (!empty($chief_complaints['history_chief_lid_sx_dur'])) {
+								echo 'since ' . $chief_complaints['history_chief_lid_sx_dur'] . ' ';
+							}
+							if (!empty($chief_complaints['history_chief_lid_sx_unit'])) {
+								echo $chief_complaints['history_chief_lid_sx_unit'];
+							}
+							if (!empty($chief_complaints['history_chief_lid_sx_comm'])) {
+								echo ' - ' . $chief_complaints['history_chief_lid_sx_comm'] . ', ';
+							} ?>
+						</strong>
+					</li>
+				<?php }
+				if ($chief_complaints['corneal_sx'] == 1) { ?>
+					<li style=""> Corneal Sx <strong style="font-size: 10px;">
+							<?php if (!empty($chief_complaints['history_chief_corneal_sx_side'])) {
+								echo $chief_complaints['history_chief_corneal_sx_side'] . ' Eye ';
+							} ?></strong>
+						<strong style="font-size: 10px;">
+							<?php if (!empty($chief_complaints['history_chief_corneal_sx_dur'])) {
+								echo 'since ' . $chief_complaints['history_chief_corneal_sx_dur'] . ' ';
+							}
+							if (!empty($chief_complaints['history_chief_corneal_sx_unit'])) {
+								echo $chief_complaints['history_chief_corneal_sx_unit'];
+							}
+							if (!empty($chief_complaints['history_chief_corneal_sx_comm'])) {
+								echo ' - ' . $chief_complaints['history_chief_corneal_sx_comm'] . ', ';
+							} ?>
+						</strong>
+					</li>
+				<?php }
+				if ($chief_complaints['cataract_sx'] == 1) { ?>
+					<li style=""> Cataract Sx <strong style="font-size: 10px;">
+							<?php if (!empty($chief_complaints['history_chief_cataract_sx_side'])) {
+								echo $chief_complaints['history_chief_cataract_sx_side'] . ' Eye ';
+							} ?></strong>
+						<strong style="font-size: 10px;">
+							<?php if (!empty($chief_complaints['history_chief_cataract_sx_due'])) {
+								echo 'since ' . $chief_complaints['history_chief_cataract_sx_due'] . ' ';
+							}
+							if (!empty($chief_complaints['history_chief_cataract_sx_unit'])) {
+								echo $chief_complaints['history_chief_cataract_sx_unit'];
+							}
+							if (!empty($chief_complaints['history_chief_cataract_sx_comm'])) {
+								echo ' - ' . $chief_complaints['history_chief_cataract_sx_comm'] . ', ';
+							} ?>
+						</strong>
+					</li>
+				<?php }
+				if ($chief_complaints['squint_sx'] == 1) { ?>
+					<li style=""> Squint Sx <strong style="font-size: 10px;">
+							<?php if (!empty($chief_complaints['history_chief_squint_sx_side'])) {
+								echo $chief_complaints['history_chief_squint_sx_side'] . ' Eye ';
+							} ?></strong>
+						<strong style="font-size: 10px;">
+							<?php if (!empty($chief_complaints['history_chief_squint_sx_due'])) {
+								echo 'since ' . $chief_complaints['history_chief_squint_sx_due'] . ' ';
+							}
+							if (!empty($chief_complaints['history_chief_squint_sx_unit'])) {
+								echo $chief_complaints['history_chief_squint_sx_unit'];
+							}
+							if (!empty($chief_complaints['history_chief_squint_sx_comm'])) {
+								echo ' - ' . $chief_complaints['history_chief_squint_sx_comm'] . ', ';
+							} ?>
+						</strong>
+					</li>
+				<?php }
+				if ($chief_complaints['pterygium_sx'] == 1) { ?>
+					<li style=""> Pterygium Sx <strong style="font-size: 10px;">
+							<?php if (!empty($chief_complaints['history_chief_pterygium_sx_side'])) {
+								echo $chief_complaints['history_chief_pterygium_sx_side'] . ' Eye ';
+							} ?></strong>
+						<strong style="font-size: 10px;">
+							<?php if (!empty($chief_complaints['history_chief_pterygium_sx_due'])) {
+								echo 'since ' . $chief_complaints['history_chief_pterygium_sx_due'] . ' ';
+							}
+							if (!empty($chief_complaints['history_chief_pterygium_sx_unit'])) {
+								echo $chief_complaints['history_chief_pterygium_sx_unit'];
+							}
+							if (!empty($chief_complaints['history_chief_pterygium_sx_comm'])) {
+								echo ' - ' . $chief_complaints['history_chief_pterygium_sx_comm'] . ', ';
+							} ?>
+						</strong>
+					</li>
+				<?php }
+				if ($chief_complaints['dcr'] == 1) { ?>
+					<li style=""> DCR <strong style="font-size: 10px;">
+							<?php if (!empty($chief_complaints['history_chief_dcr_sx_side'])) {
+								echo $chief_complaints['history_chief_dcr_sx_side'] . ' Eye ';
+							} ?></strong>
+						<strong style="font-size: 10px;">
+							<?php if (!empty($chief_complaints['history_chief_dcr_sx_due'])) {
+								echo 'since ' . $chief_complaints['history_chief_dcr_sx_due'] . ' ';
+							}
+							if (!empty($chief_complaints['history_chief_dcr_sx_unit'])) {
+								echo $chief_complaints['history_chief_dcr_sx_unit'];
+							}
+							if (!empty($chief_complaints['history_chief_dcr_sx_comm'])) {
+								echo ' - ' . $chief_complaints['history_chief_dcr_sx_comm'] . ', ';
+							} ?>
+						</strong>
+					</li>
+				<?php }
+				if ($chief_complaints['dct_sx'] == 1) { ?>
+					<li style=""> DCT Sx <strong style="font-size: 10px;">
+							<?php if (!empty($chief_complaints['history_chief_dct_sx_side'])) {
+								echo $chief_complaints['history_chief_dct_sx_side'] . ' Eye ';
+							} ?></strong>
+						<strong style="font-size: 10px;">
+							<?php if (!empty($chief_complaints['history_chief_dct_sx_due'])) {
+								echo 'since ' . $chief_complaints['history_chief_dct_sx_due'] . ' ';
+							}
+							if (!empty($chief_complaints['history_chief_dct_sx_unit'])) {
+								echo $chief_complaints['history_chief_dct_sx_unit'];
+							}
+							if (!empty($chief_complaints['history_chief_dct_sx_comm'])) {
+								echo ' - ' . $chief_complaints['history_chief_dct_sx_comm'] . ', ';
+							} ?>
+						</strong>
+					</li>
+				<?php }
+				if ($chief_complaints['patching_therapy'] == 1) { ?>
+					<li style=""> Patching Therapy <strong style="font-size: 10px;">
+							<?php if (!empty($chief_complaints['history_chief_patching_therapy_side'])) {
+								echo $chief_complaints['history_chief_patching_therapy_side'] . ' Eye ';
+							} ?></strong>
+						<strong style="font-size: 10px;">
+							<?php if (!empty($chief_complaints['history_chief_patching_therapy_due'])) {
+								echo 'since ' . $chief_complaints['history_chief_patching_therapy_due'] . ' ';
+							}
+							if (!empty($chief_complaints['history_chief_patching_therapy_unit'])) {
+								echo $chief_complaints['history_chief_patching_therapy_unit'];
+							}
+							if (!empty($chief_complaints['history_chief_patching_therapy_comm'])) {
+								echo ' - ' . $chief_complaints['history_chief_patching_therapy_comm'] . ', ';
+							} ?>
+						</strong>
+					</li>
 				<?php }
 				if ($chief_complaints['history_chief_comm'] != '') { ?>
 					<li style="margin-top:8px;"> <strong style="font-size: 10px;">
@@ -414,7 +745,8 @@
 							if (!empty($ophthalmic['history_ophthalmic_glau_comm'])) {
 								echo ' - ' . $ophthalmic['history_ophthalmic_glau_comm'] . ', ';
 							} ?>
-						</strong></li>
+						</strong>
+					</li>
 				<?php }
 				if ($ophthalmic['reti_m'] == 1) { ?>
 					<li style=""> Retinal Detachment <strong style="font-size: 10px;">
@@ -441,7 +773,8 @@
 							if (!empty($ophthalmic['history_ophthalmic_glas_comm'])) {
 								echo ' - ' . $ophthalmic['history_ophthalmic_glas_comm'] . ', ';
 							} ?>
-						</strong></li>
+						</strong>
+					</li>
 				<?php }
 				if ($ophthalmic['eyedi_m'] == 1) { ?>
 					<li style=""> Eye Disease <strong style="font-size: 10px;">
@@ -455,7 +788,8 @@
 							if (!empty($ophthalmic['history_ophthalmic_eye_d_comm'])) {
 								echo ' - ' . $ophthalmic['history_ophthalmic_eye_d_comm'] . ', ';
 							} ?>
-						</strong></li>
+						</strong>
+					</li>
 				<?php }
 				if ($ophthalmic['eyesu_m'] == 1) { ?>
 					<li style=""> Eye Surgery <strong style="font-size: 10px;">
@@ -469,7 +803,8 @@
 							if (!empty($ophthalmic['history_ophthalmic_eye_s_comm'])) {
 								echo ' - ' . $ophthalmic['history_ophthalmic_eye_s_comm'] . ', ';
 							} ?>
-						</strong></li>
+						</strong>
+					</li>
 				<?php }
 				if ($ophthalmic['uve_m'] == 1) { ?>
 					<li style=""> Uveitis <strong style="font-size: 10px;">
@@ -483,7 +818,8 @@
 							if (!empty($ophthalmic['history_ophthalmic_uvei_comm'])) {
 								echo ' - ' . $ophthalmic['history_ophthalmic_uvei_comm'] . ', ';
 							} ?>
-						</strong></li>
+						</strong>
+					</li>
 				<?php }
 				if ($ophthalmic['retil_m'] == 1) { ?>
 					<li style=""> Retinal Laser <strong style="font-size: 10px;">
@@ -497,7 +833,68 @@
 							if (!empty($ophthalmic['history_ophthalmic_renti_l_comm'])) {
 								echo ' - ' . $ophthalmic['history_ophthalmic_renti_l_comm'] . ', ';
 							} ?>
-						</strong></li>
+						</strong>
+					</li>
+				<?php }
+				if ($ophthalmic['contact_lens_m'] == 1) { ?>
+					<li style=""> Contact Lens <strong style="font-size: 10px;">
+							<?php if (!empty($ophthalmic['history_ophthalmic_contact_lens_l_l_dur'])) {
+								echo 'Left Eye since ' . $ophthalmic['history_ophthalmic_contact_lens_l_l_dur'] . ' ' . $ophthalmic['history_ophthalmic_contact_lens_l_l_unit'];
+							} ?></strong>
+						<strong style="font-size: 10px;">
+							<?php if (!empty($ophthalmic['history_ophthalmic_contact_lens_l_r_dur'])) {
+								echo ' & Right Eye since ' . $ophthalmic['history_ophthalmic_contact_lens_l_r_dur'] . ' ' . $ophthalmic['history_ophthalmic_contact_lens_l_r_unit'];
+							}
+							if (!empty($ophthalmic['history_ophthalmic_contact_lens_l_comm'])) {
+								echo ' - ' . $ophthalmic['history_ophthalmic_contact_lens_l_comm'] . ', ';
+							} ?>
+						</strong>
+					</li>
+				<?php }
+				if ($ophthalmic['vision_therapy_m'] == 1) { ?>
+					<li style=""> Vision Therapy <strong style="font-size: 10px;">
+							<?php if (!empty($ophthalmic['history_ophthalmic_vision_therapy_l_l_dur'])) {
+								echo 'Left Eye since ' . $ophthalmic['history_ophthalmic_vision_therapy_l_l_dur'] . ' ' . $ophthalmic['history_ophthalmic_vision_therapy_l_l_unit'];
+							} ?></strong>
+						<strong style="font-size: 10px;">
+							<?php if (!empty($ophthalmic['history_ophthalmic_vision_therapy_l_r_dur'])) {
+								echo ' & Right Eye since ' . $ophthalmic['history_ophthalmic_vision_therapy_l_r_dur'] . ' ' . $ophthalmic['history_ophthalmic_vision_therapy_l_r_unit'];
+							}
+							if (!empty($ophthalmic['history_ophthalmic_vision_therapy_l_comm'])) {
+								echo ' - ' . $ophthalmic['history_ophthalmic_vision_therapy_l_comm'] . ', ';
+							} ?>
+						</strong>
+					</li>
+				<?php }
+				if ($ophthalmic['low_vision_m'] == 1) { ?>
+					<li style=""> Low Vision <strong style="font-size: 10px;">
+							<?php if (!empty($ophthalmic['history_ophthalmic_low_vision_l_l_dur'])) {
+								echo 'Left Eye since ' . $ophthalmic['history_ophthalmic_low_vision_l_l_dur'] . ' ' . $ophthalmic['history_ophthalmic_low_vision_l_r_unit'];
+							} ?></strong>
+						<strong style="font-size: 10px;">
+							<?php if (!empty($ophthalmic['history_ophthalmic_low_vision_l_r_dur'])) {
+								echo ' & Right Eye since ' . $ophthalmic['history_ophthalmic_low_vision_l_r_dur'] . ' ' . $ophthalmic['history_ophthalmic_vision_therapy_l_r_unit'];
+							}
+							if (!empty($ophthalmic['history_ophthalmic_low_vision_l_comm'])) {
+								echo ' - ' . $ophthalmic['history_ophthalmic_low_vision_l_comm'] . ', ';
+							} ?>
+						</strong>
+					</li>
+				<?php }
+				if ($ophthalmic['aid_m'] == 1) { ?>
+					<li style=""> Aid <strong style="font-size: 10px;">
+							<?php if (!empty($ophthalmic['history_ophthalmic_aid_l_l_dur'])) {
+								echo 'Left Eye since ' . $ophthalmic['history_ophthalmic_aid_l_l_dur'] . ' ' . $ophthalmic['history_ophthalmic_aid_l_l_unit'];
+							} ?></strong>
+						<strong style="font-size: 10px;">
+							<?php if (!empty($ophthalmic['history_ophthalmic_aid_l_r_dur'])) {
+								echo ' & Right Eye since ' . $ophthalmic['history_ophthalmic_aid_l_r_dur'] . ' ' . $ophthalmic['history_ophthalmic_aid_l_r_unit'];
+							}
+							if (!empty($ophthalmic['history_ophthalmic_aid_l_comm'])) {
+								echo ' - ' . $ophthalmic['history_ophthalmic_aid_l_comm'] . ', ';
+							} ?>
+						</strong>
+					</li>
 				<?php }
 				if ($ophthalmic['history_ophthalmic_comm'] != '') { ?>
 					<li style="margin-top:8px;"> <strong style="font-size: 10px;">
@@ -536,13 +933,12 @@
 						</strong></li>
 				<?php }
 				if ($systemic['smok_m'] == 1) { ?>
-					<li style=""> Smoking Tobacco <strong
-							style="font-size: 10px;"><?php if (!empty($systemic['history_systemic_smokt_dur'])) {
-								echo 'since ' . $systemic['history_systemic_smokt_dur'] . ' ' . $systemic['history_systemic_smokt_unit'];
-							}
-							if (!empty($systemic['history_systemic_smokt_comm'])) {
-								echo ' - ' . $systemic['history_systemic_smokt_comm'] . ', ';
-							} ?>
+					<li style=""> Smoking Tobacco <strong style="font-size: 10px;"><?php if (!empty($systemic['history_systemic_smokt_dur'])) {
+						echo 'since ' . $systemic['history_systemic_smokt_dur'] . ' ' . $systemic['history_systemic_smokt_unit'];
+					}
+					if (!empty($systemic['history_systemic_smokt_comm'])) {
+						echo ' - ' . $systemic['history_systemic_smokt_comm'] . ', ';
+					} ?>
 
 						</strong></li>
 				<?php }
@@ -739,10 +1135,159 @@
 
 						</strong></li>
 				<?php }
+				if ($systemic['chronic_kidney_disease_m'] == 1) { ?>
+					<li style=""> Chronic Kidney Disease <strong style="font-size: 10px;">
+							<?php if (!empty($systemic['history_systemic_chronic_kidney_dur'])) {
+								echo 'since ' . $systemic['history_systemic_chronic_kidney_dur'] . ' ' . $systemic['history_systemic_chronic_kidney_unit'];
+							}
+							if (!empty($systemic['history_systemic_chronic_kidney_comm'])) {
+								echo ' - ' . $systemic['history_systemic_chronic_kidney_comm'] . ', ';
+							} ?>
+
+						</strong></li>
+				<?php }
+				if ($systemic['can_m'] == 1) { ?>
+					<li style=""> CAN <strong style="font-size: 10px;">
+							<?php if (!empty($systemic['history_systemic_can_dur'])) {
+								echo 'since ' . $systemic['history_systemic_can_dur'] . ' ' . $systemic['history_systemic_can_unit'];
+							}
+							if (!empty($systemic['history_systemic_can_comm'])) {
+								echo ' - ' . $systemic['history_systemic_can_comm'] . ', ';
+							} ?>
+
+						</strong></li>
+				<?php }
+				if ($systemic['rheumatoid_artheritis_m'] == 1) { ?>
+					<li style=""> Rheumatoid Artheritis <strong style="font-size: 10px;">
+							<?php if (!empty($systemic['history_systemic_rheumatoid_artheritis_dur'])) {
+								echo 'since ' . $systemic['history_systemic_rheumatoid_artheritis_dur'] . ' ' . $systemic['history_systemic_rheumatoid_artheritis_unit'];
+							}
+							if (!empty($systemic['history_systemic_rheumatoid_artheritis_comm'])) {
+								echo ' - ' . $systemic['history_systemic_rheumatoid_artheritis_comm'] . ', ';
+							} ?>
+
+						</strong></li>
+				<?php }
+				if ($systemic['benign_ruostatic_hyperplasia_m'] == 1) { ?>
+					<li style=""> Benign Ruostatic Hyperplasia <strong style="font-size: 10px;">
+							<?php if (!empty($systemic['history_systemic_benign_ruostatic_dur'])) {
+								echo 'since ' . $systemic['history_systemic_benign_ruostatic_dur'] . ' ' . $systemic['history_systemic_benign_ruostatic_unit'];
+							}
+							if (!empty($systemic['history_systemic_benign_ruostatic_comm'])) {
+								echo ' - ' . $systemic['history_systemic_benign_ruostatic_comm'] . ', ';
+							} ?>
+
+						</strong></li>
+				<?php }
+				if ($systemic['drug_medication_history_m'] == 1) { ?>
+					<li style=""> Drug Medication History<strong style="font-size: 10px;">
+							<?php if (!empty($systemic['history_systemic_drug_medication_dur'])) {
+								echo 'since ' . $systemic['history_systemic_drug_medication_dur'] . ' ' . $systemic['history_systemic_drug_medication_unit'];
+							}
+							if (!empty($systemic['history_systemic_drug_medication_comm'])) {
+								echo ' - ' . $systemic['history_systemic_drug_medication_comm'] . ', ';
+							} ?>
+
+						</strong></li>
+				<?php }
+				if ($systemic['bph_m'] == 1) { ?>
+					<li style=""> BPH<strong style="font-size: 10px;">
+							<?php if (!empty($systemic['history_systemic_bph_dur'])) {
+								echo 'since ' . $systemic['history_systemic_bph_dur'] . ' ' . $systemic['history_systemic_bph_unit'];
+							}
+							if (!empty($systemic['history_systemic_bph_comm'])) {
+								echo ' - ' . $systemic['history_systemic_bph_comm'] . ', ';
+							} ?>
+
+						</strong></li>
+				<?php }
+				if ($systemic['thyroid_m'] == 1) { ?>
+					<li style=""> Thyroid<strong style="font-size: 10px;">
+							<?php if (!empty($systemic['history_systemic_thyroid_dur'])) {
+								echo 'since ' . $systemic['history_systemic_thyroid_dur'] . ' ' . $systemic['history_systemic_thyroid_unit'];
+							}
+							if (!empty($systemic['history_systemic_thyroid_comm'])) {
+								echo ' - ' . $systemic['history_systemic_thyroid_comm'] . ', ';
+							} ?>
+
+						</strong></li>
+				<?php }
 				if ($systemic['history_systemic_comm'] != '') { ?>
 
 					<li style="margin-top:8px;"> <strong style="font-size: 10px;">
 							<?php echo $systemic['history_systemic_comm']; ?> </strong> </li>
+				<?php } ?>
+
+				<?php if ($family_history['consanguinity_m'] == 1) { ?>
+					<li style=""> Consanguinity<strong style="font-size: 10px;">
+							<?php if (!empty($family_history['family_history_consanguinity_dur'])) {
+								echo 'since ' . $family_history['family_history_consanguinity_dur'] . ' ' . $family_history['family_history_consanguinity_unit'];
+							}
+							if (!empty($family_history['family_history_consanguinity_comm'])) {
+								echo ' - ' . $family_history['family_history_consanguinity_comm'] . ', ';
+							} ?>
+
+						</strong></li>
+				<?php }
+				if ($family_history['glaucoma_m'] == 1) { ?>
+					<li style=""> Glaucoma<strong style="font-size: 10px;">
+							<?php if (!empty($family_history['family_history_glaucoma_dur'])) {
+								echo 'since ' . $family_history['family_history_glaucoma_dur'] . ' ' . $family_history['family_history_glaucoma_unit'];
+							}
+							if (!empty($family_history['family_history_glaucoma_comm'])) {
+								echo ' - ' . $family_history['family_history_glaucoma_comm'] . ', ';
+							} ?>
+
+						</strong></li>
+				<?php }
+				if ($family_history['diabetes_m'] == 1) { ?>
+					<li style=""> Diabetes<strong style="font-size: 10px;">
+							<?php if (!empty($family_history['family_history_diabetes_dur'])) {
+								echo 'since ' . $family_history['family_history_diabetes_dur'] . ' ' . $family_history['family_history_diabetes_unit'];
+							}
+							if (!empty($family_history['family_history_diabetes_comm'])) {
+								echo ' - ' . $family_history['family_history_diabetes_comm'] . ', ';
+							} ?>
+
+						</strong></li>
+				<?php }
+				if ($family_history['squint_m'] == 1) { ?>
+					<li style=""> Squint<strong style="font-size: 10px;">
+							<?php if (!empty($family_history['family_history_squint_dur'])) {
+								echo 'since ' . $family_history['family_history_squint_dur'] . ' ' . $family_history['family_history_squint_unit'];
+							}
+							if (!empty($family_history['family_history_squint_comm'])) {
+								echo ' - ' . $family_history['family_history_squint_comm'] . ', ';
+							} ?>
+
+						</strong></li>
+				<?php }
+				if ($family_history['retinitis_pigmentosa_m'] == 1) { ?>
+					<li style=""> Retinitis Pigmentosa<strong style="font-size: 10px;">
+							<?php if (!empty($family_history['family_history_retinitis_pigmentosa_dur'])) {
+								echo 'since ' . $family_history['family_history_retinitis_pigmentosa_dur'] . ' ' . $family_history['family_history_retinitis_pigmentosa_unit'];
+							}
+							if (!empty($family_history['family_history_retinitis_pigmentosa_comm'])) {
+								echo ' - ' . $family_history['family_history_retinitis_pigmentosa_comm'] . ', ';
+							} ?>
+
+						</strong></li>
+				<?php }
+				if ($family_history['congenital_cataract_m'] == 1) { ?>
+					<li style=""> Congenital Cataract<strong style="font-size: 10px;">
+							<?php if (!empty($family_history['family_history_congenital_cataract_dur'])) {
+								echo 'since ' . $family_history['family_history_congenital_cataract_dur'] . ' ' . $family_history['family_history_congenital_cataract_unit'];
+							}
+							if (!empty($family_history['family_history_congenital_cataract_comm'])) {
+								echo ' - ' . $family_history['family_history_congenital_cataract_comm'] . ', ';
+							} ?>
+
+						</strong></li>
+				<?php }
+				if ($family_history['history_family_comm'] != '') { ?>
+
+					<li style="margin-top:8px;"> <strong style="font-size: 10px;">
+							<?php echo $family_history['history_family_comm']; ?> </strong> </li>
 				<?php } ?>
 
 				<?php if ($history['family'] != '') { ?>
@@ -1438,7 +1983,7 @@
 					<tr>
 						<?php if ($history['temperature'] != '0') { ?>
 							<td>Temperature : <strong style="color: <?php echo $food_allergies['history_vital_temp_update']; ?>">
-									<?php echo $history['temperature'] . ' °C'; ?></strong></td>
+									<?php echo $history['temperature'] . ' 째C'; ?></strong></td>
 						<?php }
 						if ($history['pulse'] != '0') { ?>
 							<td>Pulse : <strong style="color: <?php echo $food_allergies['history_vital_pulse_update']; ?>">
@@ -1563,10 +2108,9 @@
 									</td>
 								<?php }
 								if (!empty($refrtsn_cntct_lns['refraction_clp_l_rv_date'])) { ?>
-									<td style="padding:3px;" valign="top">Revisit Date : <strong
-											style="font-size: 10px;"><?php if (!empty($refrtsn_cntct_lns['refraction_clp_l_rv_date'])) {
-												echo date('d/m/Y', strtotime($refrtsn_cntct_lns['refraction_clp_l_rv_date']));
-											} ?></strong>
+									<td style="padding:3px;" valign="top">Revisit Date : <strong style="font-size: 10px;"><?php if (!empty($refrtsn_cntct_lns['refraction_clp_l_rv_date'])) {
+										echo date('d/m/Y', strtotime($refrtsn_cntct_lns['refraction_clp_l_rv_date']));
+									} ?></strong>
 									</td>
 								<?php } ?>
 							</tr>
@@ -1650,10 +2194,9 @@
 									</td>
 								<?php }
 								if (!empty($refrtsn_cntct_lns['refraction_clp_r_rv_date'])) { ?>
-									<td style="padding:3px;" valign="top">Revisit Date : <strong
-											style="font-size: 10px;"><?php if (!empty($refrtsn_cntct_lns['refraction_clp_r_rv_date'])) {
-												echo date('d/m/Y', strtotime($refrtsn_cntct_lns['refraction_clp_r_rv_date']));
-											} ?></strong>
+									<td style="padding:3px;" valign="top">Revisit Date : <strong style="font-size: 10px;"><?php if (!empty($refrtsn_cntct_lns['refraction_clp_r_rv_date'])) {
+										echo date('d/m/Y', strtotime($refrtsn_cntct_lns['refraction_clp_r_rv_date']));
+									} ?></strong>
 									</td>
 								<?php } ?>
 							</tr>
@@ -2378,10 +2921,9 @@
 							echo '(' . $refrtsn_vl_act['refraction_va_gls_r_2_txt'] . ')';
 						} ?>
 
-						<strong
-							style="font-size: 10px;"><?php if (!empty($refrtsn_vl_act['refraction_va_r_comm'])) {
-								echo '(' . $refrtsn_vl_act['refraction_va_r_comm'] . ')';
-							} ?>
+						<strong style="font-size: 10px;"><?php if (!empty($refrtsn_vl_act['refraction_va_r_comm'])) {
+							echo '(' . $refrtsn_vl_act['refraction_va_r_comm'] . ')';
+						} ?>
 							<?php if (!empty($refrtsn_vl_act['refraction_va_ua_r_pr_s']) || !empty($refrtsn_vl_act['refraction_va_ua_r_pr_i']) || !empty($refrtsn_vl_act['refraction_va_ua_r_pr_n']) || !empty($refrtsn_vl_act['refraction_va_ua_r_pr_t'])) { ?>
 								PR(UA):
 								<?php if (!empty($refrtsn_vl_act['refraction_va_ua_r_pr_s'])) {
@@ -2522,10 +3064,9 @@
 
 				<section style="float:left;width:100%;">
 					<div style="float:left;width:48.5%;padding:0px 5px;">
-						<strong
-							style="float:left;width:100%;font-size:10px;">PGP:<?php if (!empty($refrtsn_pgp['refraction_pgp_l_lens'])) {
-								echo 'Type of Lens- ' . $refrtsn_pgp['refraction_pgp_l_lens'];
-							} ?>
+						<strong style="float:left;width:100%;font-size:10px;">PGP:<?php if (!empty($refrtsn_pgp['refraction_pgp_l_lens'])) {
+							echo 'Type of Lens- ' . $refrtsn_pgp['refraction_pgp_l_lens'];
+						} ?>
 						</strong>
 						<table border="1" cellpadding="0" cellspacing="0" width="100%"
 							style=";font-size:11px;border-collapse:collapse;">
@@ -2601,10 +3142,9 @@
 						</table>
 					</div>
 					<div style="float:right;width:48.5%;padding:0px 5px;">
-						<strong
-							style="float:left;width:100%;font-size:10px;">PGP:<?php if (!empty($refrtsn_pgp['refraction_pgp_r_lens'])) {
-								echo 'Type of Lens- ' . $refrtsn_pgp['refraction_pgp_r_lens'];
-							} ?>
+						<strong style="float:left;width:100%;font-size:10px;">PGP:<?php if (!empty($refrtsn_pgp['refraction_pgp_r_lens'])) {
+							echo 'Type of Lens- ' . $refrtsn_pgp['refraction_pgp_r_lens'];
+						} ?>
 						</strong>
 						<table border="1" cellpadding="0" cellspacing="0" width="100%"
 							style=";font-size:11px;border-collapse:collapse;">
@@ -3291,7 +3831,8 @@
 									<td> <?php if (!empty($refrtsn_retip['refraction_rtnp_l_va'])) {
 										echo '<b>VA: </b>' . $refrtsn_retip['refraction_rtnp_l_va'];
 									} ?>
-										<b>HA:</b> <?php echo $refrtsn_retip['refraction_rtnp_l_ha']; ?> </td>
+										<b>HA:</b> <?php echo $refrtsn_retip['refraction_rtnp_l_ha']; ?>
+									</td>
 								</tr>
 								<tr>
 									<td> <?php if (!empty($refrtsn_retip['refraction_rtnp_l_at_dis'])) {
@@ -3342,7 +3883,8 @@
 									<td> <?php if (!empty($refrtsn_retip['refraction_rtnp_r_va'])) {
 										echo '<b>VA: </b>' . $refrtsn_retip['refraction_rtnp_r_va'];
 									} ?>
-										<b>HA:</b> <?php echo $refrtsn_retip['refraction_rtnp_r_ha']; ?> </td>
+										<b>HA:</b> <?php echo $refrtsn_retip['refraction_rtnp_r_ha']; ?>
+									</td>
 								</tr>
 								<tr>
 									<td> <?php if (!empty($refrtsn_retip['refraction_rtnp_r_at_dis'])) {
@@ -4097,7 +4639,8 @@
 						echo '<br>' . $exam_atrch['examnsn_ac_l_comm'];
 						?>
 					</div>
-					<div style="float:right;width:48.5%;padding:0px 5px;color:<?php echo $exam_atrch['examnsn_ac_r_update']; ?>">
+					<div
+						style="float:right;width:48.5%;padding:0px 5px;color:<?php echo $exam_atrch['examnsn_ac_r_update']; ?>">
 						<strong style="float:left;width:100%;font-size:10px;">Anterior Chamber:</strong>
 						<?php
 						if ($exam_atrch['examnsn_ac_r_defth'] != 'Normal') {
@@ -4279,7 +4822,7 @@
 									echo '<strong style="float:left;width:100%;font-size:10px;">Lens: </strong> Nature- ' . $exam_lens['examnsn_lens_l_ntr'] . ', ';
 								}
 								/*if($exam_lens['examnsn_lens_l_psn'] !='Central'){ echo 'Position- '.$exam_lens['examnsn_lens_l_psn'].', ';}else{ echo 'Central, '; }
-											if($exam_lens['examnsn_lens_l_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_l_sz'].', ';}else{ echo 'Crystalline, ';}*/
+																							if($exam_lens['examnsn_lens_l_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_l_sz'].', ';}else{ echo 'Crystalline, ';}*/
 								if ($exam_lens['examnsn_lens_l_ntr'] == 'Cataract') {
 									echo ' LOCS Grading- ';
 									if ($exam_lens['examnsn_lens_l_locsg_ns'] != '') {
@@ -4303,7 +4846,7 @@
 									echo '<strong style="float:left;width:100%;font-size:10px;">Lens: </strong> Nature- ' . $exam_lens['examnsn_lens_r_ntr'] . ', ';
 								}
 								/*if($exam_lens['examnsn_lens_r_psn'] !='Central'){ echo 'Position- '.$exam_lens['examnsn_lens_r_psn'].', ';}else{ echo 'Central, '; }
-											if($exam_lens['examnsn_lens_r_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_r_sz'].', ';}else{ echo 'Crystalline, ';}*/
+																							if($exam_lens['examnsn_lens_r_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_r_sz'].', ';}else{ echo 'Crystalline, ';}*/
 								if ($exam_lens['examnsn_lens_r_ntr'] == 'Cataract') {
 									'Lens Grading- ';
 									if ($exam_lens['examnsn_lens_r_locsg_ns'] != '') {
@@ -4826,7 +5369,8 @@
 								foreach ($diagno_lists as $key => $diagno) {
 									$di++; ?>
 									<li style="margin-top:2px;"><b><?php echo $di; ?>.</b> <?php echo $diagno->eye_side_name; ?> -
-										<b><?php echo $diagno->icd_code; ?></b></li>
+										<b><?php echo $diagno->icd_code; ?></b>
+									</li>
 									<li><?php echo $diagno->diagnosis_comment; ?></li>
 								<?php } ?>
 							</ul>
@@ -4839,7 +5383,8 @@
 							<hr style="margin: 2px !important;">
 							<ul style="list-style:none;margin:5px 0 10px;padding:0;">
 								<li style="margin-top:2px;"><b> 1.</b> <?php echo $provisional_comment . ' on: '; ?>
-									<b><?php echo date('d/m/Y h:i A', strtotime($provisional_date)); ?></b></li>
+									<b><?php echo date('d/m/Y h:i A', strtotime($provisional_date)); ?></b>
+								</li>
 							</ul>
 						</section>
 					<?php } ?>
@@ -5118,7 +5663,8 @@
 													<td style="padding:3px;font-size:10px;"> <b><?php echo $medicine->mqty; ?> </td>
 													<td style="padding:3px;font-size:10px;"> <b><?php echo $medicine->mfrq; ?> </td>
 													<td style="padding:3px;font-size:10px;">
-														<b><?php echo $medicine->mdur . ' ' . $medicine->mdurd; ?> </td>
+														<b><?php echo $medicine->mdur . ' ' . $medicine->mdurd; ?>
+													</td>
 													<td style="padding:3px;font-size:10px;"> <?php echo $medicine->eside; ?> </td>
 													<td style="padding:3px;font-size:10px;"> <?php echo $medicine->minst; ?></td>
 												</tr>
@@ -5150,17 +5696,22 @@
 																		<td style="padding:3px;font-size:10px;"><?php echo $medicine['day']; ?>
 																		</td>
 																		<td style="padding:3px;font-size:10px;">
-																			<?php echo $medicine['st_date']; ?></td>
+																			<?php echo $medicine['st_date']; ?>
+																		</td>
 																		<td style="padding:3px;font-size:10px;">
-																			<?php echo $medicine['en_date']; ?> </td>
+																			<?php echo $medicine['en_date']; ?>
+																		</td>
 																		<td style="padding:3px;font-size:10px;">
-																			<?php echo $medicine['st_time']; ?></td>
+																			<?php echo $medicine['st_time']; ?>
+																		</td>
 																		<td style="padding:3px;font-size:10px;">
-																			<?php echo $medicine['en_time']; ?></td>
+																			<?php echo $medicine['en_time']; ?>
+																		</td>
 																		<td style="padding:3px;font-size:10px;"><?php echo $medicine['freq']; ?>
 																			times a day</td>
 																		<td style="padding:3px;font-size:10px;">Every
-																			<?php echo $medicine['intvl']; ?> hours</td>
+																			<?php echo $medicine['intvl']; ?> hours
+																		</td>
 																	</tr>
 																<?php } ?>
 															</tbody>
@@ -5185,16 +5736,16 @@
 									if (!empty($advice_adv['days'])) {
 										?>
 										<span style="font-size:10px;><b>For Followup :</b> - Visit <b><?php echo 'Dr. ' . $advice_adv['doctor_name']; ?></b> <?php if (!empty($advice_adv['days'])) {
-											   echo 'after ' . $advice_adv['days'] . ' Days';
-										   } ?>  </span><br>
+												 echo 'after ' . $advice_adv['days'] . ' Days';
+											 } ?>  </span><br>
 		<?php }
 								}
 							}
 							if (!empty($advice_referral)) {
 								foreach ($advice_referral as $key => $referral) { ?>
 			<span><?php if (!empty($referral->doctor)) { ?><b>For Referral :</b> - Visit <b><?php echo 'Dr. ' . $referral->doctor; ?></b> at <b> <?php echo $referral->location . ' on '; ?></b>  <b><?php if (!empty($referral->date)) {
-						 echo date('D M d, Y', strtotime($referral->date));
-					 } ?></b>
+							 echo date('D M d, Y', strtotime($referral->date));
+						 } ?></b>
 			
 				<?php }
 					if (!empty($referral->note)) { ?> <br>
@@ -5285,11 +5836,13 @@
 													<?php if ($biometry_iol_one == 'CT LUCIA') { ?> CT LUCIA <?php } ?>
 													<?php if ($biometry_iol_one == 'CT ASPHINA') { ?> CT ASPHINA <?php } ?>
 													<?php if ($biometry_iol_one == 'ULTRASERT') { ?> ULTRASERT <?php } ?>
-													<?php if ($biometry_iol_one == 'RAYONE CFLEX') { ?> RAYONE CFLEX <?php } ?>
+													<?php if ($biometry_iol_one == 'RAYONE CFLEX') { ?> RAYONE CFLEX
+													<?php } ?>
 													<?php if ($biometry_iol_one == 'RAYONE ASPHERIC') { ?> RAYONE ASPHERIC
 													<?php } ?>
 													<?php if ($biometry_iol_one == 'RAYONE') { ?> RAYONE <?php } ?>
-													<?php if ($biometry_iol_one == 'HYDROPHOBIC') { ?> HYDROPHOBIC <?php } ?>
+													<?php if ($biometry_iol_one == 'HYDROPHOBIC') { ?> HYDROPHOBIC
+													<?php } ?>
 													<?php if ($biometry_iol_one == 'PANOPTIX') { ?> PANOPTIX <?php } ?>
 													<?php if ($biometry_iol_one == 'TORIC') { ?> TORIC <?php } ?>
 
@@ -5316,11 +5869,13 @@
 													<?php if ($biometry_iol_two == 'CT LUCIA') { ?> CT LUCIA <?php } ?>
 													<?php if ($biometry_iol_two == 'CT ASPHINA') { ?> CT ASPHINA <?php } ?>
 													<?php if ($biometry_iol_two == 'ULTRASERT') { ?> ULTRASERT <?php } ?>
-													<?php if ($biometry_iol_two == 'RAYONE CFLEX') { ?> RAYONE CFLEX <?php } ?>
+													<?php if ($biometry_iol_two == 'RAYONE CFLEX') { ?> RAYONE CFLEX
+													<?php } ?>
 													<?php if ($biometry_iol_two == 'RAYONE ASPHERIC') { ?> RAYONE ASPHERIC
 													<?php } ?>
 													<?php if ($biometry_iol_two == 'RAYONE') { ?> RAYONE <?php } ?>
-													<?php if ($biometry_iol_two == 'HYDROPHOBIC') { ?> HYDROPHOBIC <?php } ?>
+													<?php if ($biometry_iol_two == 'HYDROPHOBIC') { ?> HYDROPHOBIC
+													<?php } ?>
 													<?php if ($biometry_iol_two == 'PANOPTIX') { ?> PANOPTIX <?php } ?>
 													<?php if ($biometry_iol_two == 'TORIC') { ?> TORIC <?php } ?>
 												</td>
@@ -5344,11 +5899,13 @@
 													<?php if ($biometry_iol_thr == 'CT LUCIA') { ?> CT LUCIA <?php } ?>
 													<?php if ($biometry_iol_thr == 'CT ASPHINA') { ?> CT ASPHINA <?php } ?>
 													<?php if ($biometry_iol_thr == 'ULTRASERT') { ?> ULTRASERT <?php } ?>
-													<?php if ($biometry_iol_thr == 'RAYONE CFLEX') { ?> RAYONE CFLEX <?php } ?>
+													<?php if ($biometry_iol_thr == 'RAYONE CFLEX') { ?> RAYONE CFLEX
+													<?php } ?>
 													<?php if ($biometry_iol_thr == 'RAYONE ASPHERIC') { ?> RAYONE ASPHERIC
 													<?php } ?>
 													<?php if ($biometry_iol_thr == 'RAYONE') { ?> RAYONE <?php } ?>
-													<?php if ($biometry_iol_thr == 'HYDROPHOBIC') { ?> HYDROPHOBIC <?php } ?>
+													<?php if ($biometry_iol_thr == 'HYDROPHOBIC') { ?> HYDROPHOBIC
+													<?php } ?>
 													<?php if ($biometry_iol_thr == 'PANOPTIX') { ?> PANOPTIX <?php } ?>
 													<?php if ($biometry_iol_thr == 'TORIC') { ?> TORIC <?php } ?>
 												</td>
@@ -5372,11 +5929,13 @@
 													<?php if ($biometry_iol_four == 'CT LUCIA') { ?> CT LUCIA <?php } ?>
 													<?php if ($biometry_iol_four == 'CT ASPHINA') { ?> CT ASPHINA <?php } ?>
 													<?php if ($biometry_iol_four == 'ULTRASERT') { ?> ULTRASERT <?php } ?>
-													<?php if ($biometry_iol_four == 'RAYONE CFLEX') { ?> RAYONE CFLEX <?php } ?>
+													<?php if ($biometry_iol_four == 'RAYONE CFLEX') { ?> RAYONE CFLEX
+													<?php } ?>
 													<?php if ($biometry_iol_four == 'RAYONE ASPHERIC') { ?> RAYONE ASPHERIC
 													<?php } ?>
 													<?php if ($biometry_iol_four == 'RAYONE') { ?> RAYONE <?php } ?>
-													<?php if ($biometry_iol_four == 'HYDROPHOBIC') { ?> HYDROPHOBIC <?php } ?>
+													<?php if ($biometry_iol_four == 'HYDROPHOBIC') { ?> HYDROPHOBIC
+													<?php } ?>
 													<?php if ($biometry_iol_four == 'PANOPTIX') { ?> PANOPTIX <?php } ?>
 													<?php if ($biometry_iol_four == 'TORIC') { ?> TORIC <?php } ?>
 												</td>
@@ -5400,11 +5959,13 @@
 													<?php if ($biometry_iol_five == 'CT LUCIA') { ?> CT LUCIA <?php } ?>
 													<?php if ($biometry_iol_five == 'CT ASPHINA') { ?> CT ASPHINA <?php } ?>
 													<?php if ($biometry_iol_five == 'ULTRASERT') { ?> ULTRASERT <?php } ?>
-													<?php if ($biometry_iol_five == 'RAYONE CFLEX') { ?> RAYONE CFLEX <?php } ?>
+													<?php if ($biometry_iol_five == 'RAYONE CFLEX') { ?> RAYONE CFLEX
+													<?php } ?>
 													<?php if ($biometry_iol_five == 'RAYONE ASPHERIC') { ?> RAYONE ASPHERIC
 													<?php } ?>
 													<?php if ($biometry_iol_five == 'RAYONE') { ?> RAYONE <?php } ?>
-													<?php if ($biometry_iol_five == 'HYDROPHOBIC') { ?> HYDROPHOBIC <?php } ?>
+													<?php if ($biometry_iol_five == 'HYDROPHOBIC') { ?> HYDROPHOBIC
+													<?php } ?>
 													<?php if ($biometry_iol_five == 'PANOPTIX') { ?> PANOPTIX <?php } ?>
 													<?php if ($biometry_iol_five == 'TORIC') { ?> TORIC <?php } ?>
 												</td>

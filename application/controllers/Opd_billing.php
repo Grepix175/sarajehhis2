@@ -122,6 +122,7 @@ class Opd_billing extends CI_Controller
       $btn_confirm = "";
       $btn_edit = "";
       $btn_delete = "";
+      $pay_amt = '';
       $billing_consolidated_bill = '';
 
 
@@ -141,8 +142,12 @@ class Opd_billing extends CI_Controller
 
 
       $btn_print = ' <a class="btn-custom" href="javascript:void(0)" onclick = "return print_window_page(' . $print_url . ')" title="Print" ><i class="fa fa-print"></i> Print  </a>';
-
-
+      
+      if ($test->status == 0) {
+        $unique_flag = 'paid_amt';    
+        $pay_amt = '<a class="btn-custom" href="' . base_url("opd_billing/edit/" . $test->id . '?flag=' . $unique_flag) . '" title="Paid Amount">  <i class="fa fa-money"></i> Paid Amount</a>';
+    }
+    
       // $print_consolidated_url = "'" . base_url('opd_billing/print_consolidate_billing_report/' . $test->id . '/' . $test->branch_id) . "'";
       // $billing_consolidated_bill = '  <a    class="btn-custom" onClick="return print_window_page(' . $print_consolidated_url . ')" style="' . $test->id . '" title="Print Consolidated Bill"><i class="fa fa-print"></i> Print Consolidated Bill</a>';
 
@@ -150,7 +155,7 @@ class Opd_billing extends CI_Controller
       // $btn_barcode = '<a  class="btn-custom" href="javascript:void(0)" onClick="return print_window_page(' . $print_barcode_url . ')"  title="Print Barcode" ><i class="fa fa-barcode"></i> Print Barcode </a>';
       // End Action Button //
 
-      $row[] = $btn_confirm . $btn_edit . $btn_delete . $btn_print;//. $billing_consolidated_bill . $btn_barcode;
+      $row[] = $btn_confirm . $btn_edit . $btn_delete . $btn_print . $pay_amt;//. $billing_consolidated_bill . $btn_barcode;
       $data[] = $row;
       $i++;
     }
@@ -840,6 +845,8 @@ class Opd_billing extends CI_Controller
 
       $data['page_title'] = "Update OPD Procedure";
       $post = $this->input->post();
+      // echo "<pre>";print_r($post); exit;
+
       $data['form_error'] = '';
       $data['particular_list_data'] = '';
 
