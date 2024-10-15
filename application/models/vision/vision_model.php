@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class vision_model extends CI_Model
+class Vision_model extends CI_Model
 {
     var $table = 'hms_vision';
     var $side_effects_table = 'hms_side_effect'; // New table for side effects
@@ -136,7 +136,7 @@ class vision_model extends CI_Model
             $this->db->where('id', $post['data_id']);
             $this->db->update($this->table, $data); // Changed to use the variable
         } else {
-            
+
             $this->db->set('created_at', date('Y-m-d H:i:s'));
             $this->db->insert($this->table, $data); // Changed to use the variable
         }
