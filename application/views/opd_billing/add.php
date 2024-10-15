@@ -1765,6 +1765,16 @@ $field_list = mandatory_section_field_list(4);
               </div>
             </div> <!-- row -->
 
+            <?php
+            // Get the flag from the URL
+            $flag = $this->input->get('flag');
+            ?>
+
+            <?php
+            // Get the flag from the URL
+            $flag = $this->input->get('flag');
+            ?>
+
             <div class="row m-b-5">
               <div class="col-xs-4">
                 <strong>Paid Amount</strong>
@@ -1774,9 +1784,13 @@ $field_list = mandatory_section_field_list(4);
                   echo number_format($opd_particular_payment['paid_amount'], 2, '.', '');
                 } else {
                   echo number_format($form_data['paid_amount'], 2, '.', '');
-                } ?>" onkeyup="check_paid_amount();">
+                } ?>" onkeyup="check_paid_amount();" <?php if ($flag != 'paid_amt') {
+                   echo 'disabled';
+                 } ?>>
               </div>
-            </div> <!-- row -->
+            </div>
+
+            <!-- row -->
 
             <div class="row m-b-5" style="display: none;">
               <div class="col-xs-4">

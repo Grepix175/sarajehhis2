@@ -17,7 +17,7 @@ class Opd_billing_model extends CI_Model
 
 	private function _get_datatables_query()
 	{
-		echo "hiiiii";die;
+		
 		$user_data = $this->session->userdata('auth_users');
 		//$this->db->select("hms_opd_booking.*,hms_patient.patient_name,hms_patient.mobile_no"); payment_mode
 

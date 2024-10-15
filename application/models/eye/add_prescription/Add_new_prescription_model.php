@@ -1657,7 +1657,7 @@ class Add_new_prescription_model extends CI_Model
 		$advice_flag = isset($post['print_advice_flag']) ? '1' : '0';
 		$biometry_flag = isset($post['print_biometry_flag']) ? '1' : '0';
 		$pres_data = array('branch_id' => $post['branch_id'], 'booking_code' => $post['booking_code'], 'patient_id' => $post['patient_id'], 'booking_id' => $post['booking_id'], 'history_flag' => $history_flag, 'contactlens_flag' => $contactlens_flag, 'glassesprescriptions_flag' => $glassesprescriptions_flag, 'intermediate_glasses_prescriptions_flag' => $intermediate_glasses_prescriptions_flag, 'examination_flag' => $examination_flag, 'drawing_flag' => $drawing_flag, 'diagnosis_flag' => $diagnosis_flag, 'investigations_flag' => $investigations_flag, 'advice_flag' => $advice_flag, 'biometry_flag' => $biometry_flag, 'status' => 1, 'ip_address' => $_SERVER['REMOTE_ADDR'], 'created_by' => $post['branch_id']);
-
+		
 		if (!empty($post['prescrption_id']) || $post['prescrption_id'] != '') {
 			if (!empty($post['sale_id']) || $post['sale_id'] != 0) {
 				$sale_id = $post['sale_id'];
@@ -1666,8 +1666,9 @@ class Add_new_prescription_model extends CI_Model
 				$this->db->where(array('branch_id' => $post['branch_id'], 'parent_id' => $post['sale_id'], 'type' => 8));
 				$this->db->delete('hms_medicine_stock');
 			}
-
+			
 			$prescriptionid = $post['prescrption_id'];
+			// echo "<pre>"; print_r($pres_data); die;
 			$this->db->where('id', $post['prescrption_id']);
 			$this->db->where('booking_id', $post['booking_id']);
 			$this->db->where('branch_id', $post['branch_id']);
