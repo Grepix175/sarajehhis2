@@ -248,6 +248,7 @@ class Vision extends CI_Controller
             $data['form_error'] = '';
             $data['form_data'] = array(
                 'data_id' => $result['id'],
+                'patient_code' => $result['patient_code'],
                 'patient_name' => $result['patient_name'],
                 'booking_id' => $result['booking_id'],
                 'procedure_purpose' => $result['procedure_purpose'],

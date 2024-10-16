@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Opd_model extends CI_Model
 {
 	var $table = 'hms_opd_booking';
-	var $column = array('hms_opd_booking.id', 'hms_opd_booking.booking_code', 'hms_patient.patient_name', 'docs.doctor_name', 'hms_opd_booking.appointment_date', 'hms_opd_booking.booking_date', 'hms_opd_booking.booking_status','hms_opd_booking.status', 'hms_patient.patient_code', 'hms_patient.mobile_no', 'hms_patient.gender', 'hms_patient.address', 'hms_patient.father_husband', 'hms_patient.patient_email', 'ins_type.insurance_type', 'ins_cmpy.insurance_company', 'src.source', 'ds.disease', 'hms_hospital.hospital_name', 'spcl.specialization', 'docs.doctor_name', 'hms_opd_booking.booking_time', 'hms_opd_booking.validity_date', 'pkg.title', 'hms_opd_booking.next_app_date', 'hms_opd_booking.total_amount', 'hms_opd_booking.net_amount', 'hms_opd_booking.paid_amount', 'hms_opd_booking.discount', 'hms_opd_booking.policy_no');
+	var $column = array('hms_opd_booking.id', 'hms_opd_booking.booking_code', 'hms_patient.patient_name', 'docs.doctor_name', 'hms_opd_booking.appointment_date', 'hms_opd_booking.booking_date', 'hms_opd_booking.booking_status', 'hms_opd_booking.status', 'hms_patient.patient_code', 'hms_patient.mobile_no', 'hms_patient.gender', 'hms_patient.address', 'hms_patient.father_husband', 'hms_patient.patient_email', 'ins_type.insurance_type', 'ins_cmpy.insurance_company', 'src.source', 'ds.disease', 'hms_hospital.hospital_name', 'spcl.specialization', 'docs.doctor_name', 'hms_opd_booking.booking_time', 'hms_opd_booking.validity_date', 'pkg.title', 'hms_opd_booking.next_app_date', 'hms_opd_booking.total_amount', 'hms_opd_booking.net_amount', 'hms_opd_booking.paid_amount', 'hms_opd_booking.discount', 'hms_opd_booking.policy_no');
 
 	var $order = array('id' => 'desc');
 
@@ -46,13 +46,13 @@ class Opd_model extends CI_Model
 		$search = $this->session->userdata('opd_search');
 		// echo "<pre>";print_r($search); exit;
 		/*if(isset($search) && !empty($search['branch_id']))
-								{
-									$this->db->where('hms_opd_booking.branch_id = "'.$search['branch_id'].'"');
-								}
-								else
-								{
-									$this->db->where('hms_opd_booking.branch_id = "'.$user_data['parent_id'].'"');	
-								}*/
+											{
+												$this->db->where('hms_opd_booking.branch_id = "'.$search['branch_id'].'"');
+											}
+											else
+											{
+												$this->db->where('hms_opd_booking.branch_id = "'.$user_data['parent_id'].'"');	
+											}*/
 		if ($user_data['users_role'] == 4) {
 			$this->db->where('hms_opd_booking.patient_id = "' . $user_data['parent_id'] . '"');
 
@@ -99,16 +99,16 @@ class Opd_model extends CI_Model
 			}
 
 			/*if(!empty($search['start_time']))
-												{
-													$start_time = date('H:i:s',strtotime($search['start_time']));
-													$this->db->where('hms_opd_booking.appointment_time >= "'.$start_time.'"');
-												}
+																  {
+																	  $start_time = date('H:i:s',strtotime($search['start_time']));
+																	  $this->db->where('hms_opd_booking.appointment_time >= "'.$start_time.'"');
+																  }
 
-												if(!empty($search['end_time']))
-												{
-													$end_time = date('H:i:s',strtotime($search['end_time']));
-													$this->db->where('hms_opd_booking.appointment_time <= "'.$end_time.'"');
-												}*/
+																  if(!empty($search['end_time']))
+																  {
+																	  $end_time = date('H:i:s',strtotime($search['end_time']));
+																	  $this->db->where('hms_opd_booking.appointment_time <= "'.$end_time.'"');
+																  }*/
 
 			if (!empty($search['start_time'])) {
 				$start_time = date('H:i:s', strtotime($search['start_time']));
@@ -465,12 +465,12 @@ class Opd_model extends CI_Model
 		$query = $this->db->get();
 		return $query->row_array();
 	}
-	
+
 	public function get_opd_details($id)
 	{
-	   // echo "<pre>";
-	   // print_r($id);
-	   // die;
+		// echo "<pre>";
+		// print_r($id);
+		// die;
 		$user_data = $this->session->userdata('auth_users');
 		$this->db->select('hms_opd_booking.*');
 
@@ -481,10 +481,10 @@ class Opd_model extends CI_Model
 		$query = $this->db->get();
 		return $query->row_array();
 	}
-	
-	
 
-	
+
+
+
 
 
 
@@ -823,8 +823,8 @@ class Opd_model extends CI_Model
 
 			return $token_no;
 			/*$pay_arr = array('token_no'=>$token_no);
-									   $json = json_encode($pay_arr,true);
-									   echo $json;*/
+														 $json = json_encode($pay_arr,true);
+														 echo $json;*/
 
 		}
 	}
@@ -983,9 +983,9 @@ class Opd_model extends CI_Model
 			'net_amount' => $post['net_amount'],
 			'balance' => $post['net_amount'] - $post['paid_amount'],
 			'booking_date' => date('Y-m-d', strtotime($post['booking_date'])),
-			'validity_date' =>  (!empty($post['validity_date']) && $post['validity_date'] != null) 
-			? date('Y-m-d', strtotime($post['validity_date'])) 
-			: null,
+			'validity_date' => (!empty($post['validity_date']) && $post['validity_date'] != null)
+				? date('Y-m-d', strtotime($post['validity_date']))
+				: null,
 			'booking_time' => $opd_time,
 			'opd_type' => $post['opd_type'],
 			// 'pannel_type' => $post['pannel_type'],
@@ -1169,21 +1169,21 @@ class Opd_model extends CI_Model
 
 				);
 				/*$appointment_data = array(
-																   
-																   'branch_id'=>$branch_id,
-																   'parent_id'=>$booking_id,
-																   'appointment_type'=>1, 
-																   'appointment_code'=>$appointment_code, 
-																   'appointment_date'=>date('Y-m-d',strtotime($post['next_app_date'])),
-																   'appointment_time'=>date('H:i:s', strtotime(date('d-m-Y').' '.$post['booking_time'])), 
-																   'type'=>1,
-																   'specialization_id'=>$post['specialization'],
-																   'attended_doctor'=>$post['attended_doctor'],
-																   'referral_doctor'=>$post['referral_doctor'],
-																   'ref_by_other'=>$post['ref_by_other'],
-																   'booking_date'=>date('Y-m-d H:i:s'),
-																   'booking_status'=>0
-														   );*/
+																						   
+																						   'branch_id'=>$branch_id,
+																						   'parent_id'=>$booking_id,
+																						   'appointment_type'=>1, 
+																						   'appointment_code'=>$appointment_code, 
+																						   'appointment_date'=>date('Y-m-d',strtotime($post['next_app_date'])),
+																						   'appointment_time'=>date('H:i:s', strtotime(date('d-m-Y').' '.$post['booking_time'])), 
+																						   'type'=>1,
+																						   'specialization_id'=>$post['specialization'],
+																						   'attended_doctor'=>$post['attended_doctor'],
+																						   'referral_doctor'=>$post['referral_doctor'],
+																						   'ref_by_other'=>$post['ref_by_other'],
+																						   'booking_date'=>date('Y-m-d H:i:s'),
+																						   'booking_status'=>0
+																				   );*/
 
 				// print_r($appointment_data);
 				// die;
@@ -1204,31 +1204,31 @@ class Opd_model extends CI_Model
 			$row_d_pay = $query_d_pay->result();
 
 			/*$this->db->where('parent_id',$booking_id);
-												$this->db->where('section_id','2');
-												$this->db->where('balance>0');
-												$this->db->where('patient_id',$post['patient_id']);
-												$this->db->delete('hms_payment'); */
+																  $this->db->where('section_id','2');
+																  $this->db->where('balance>0');
+																  $this->db->where('patient_id',$post['patient_id']);
+																  $this->db->delete('hms_payment'); */
 
 			/*$payment_data = array(
-													   'parent_id'=>$booking_id,
-													   'branch_id'=>$branch_id,
-													   'section_id'=>'2',
-													   'hospital_id'=>$post['referral_hospital'],
-													   'doctor_id'=>$post['referral_doctor'],
-													   'patient_id'=>$post['patient_id'],
-													   'total_amount'=>$post['total_amount'],
-													   'discount_amount'=>$post['discount'],
-													   'net_amount'=>$post['net_amount'],
-													   'credit'=>$post['net_amount'],
-													   'debit'=>$post['paid_amount'],
-													   'balance'=>($post['net_amount']-$post['paid_amount'])+1,
-													   'pay_mode'=>$post['payment_mode'],
-													   'paid_amount'=>$post['paid_amount'],
-													   'created_by'=>$user_data['id'],
-													   'created_date'=>date('Y-m-d H:i:s',strtotime($post['booking_date'])),
-												   );
-									   $this->db->insert('hms_payment',$payment_data); 
-									   $payment_id = $this->db->insert_id();*/
+																		 'parent_id'=>$booking_id,
+																		 'branch_id'=>$branch_id,
+																		 'section_id'=>'2',
+																		 'hospital_id'=>$post['referral_hospital'],
+																		 'doctor_id'=>$post['referral_doctor'],
+																		 'patient_id'=>$post['patient_id'],
+																		 'total_amount'=>$post['total_amount'],
+																		 'discount_amount'=>$post['discount'],
+																		 'net_amount'=>$post['net_amount'],
+																		 'credit'=>$post['net_amount'],
+																		 'debit'=>$post['paid_amount'],
+																		 'balance'=>($post['net_amount']-$post['paid_amount'])+1,
+																		 'pay_mode'=>$post['payment_mode'],
+																		 'paid_amount'=>$post['paid_amount'],
+																		 'created_by'=>$user_data['id'],
+																		 'created_date'=>date('Y-m-d H:i:s',strtotime($post['booking_date'])),
+																	 );
+														 $this->db->insert('hms_payment',$payment_data); 
+														 $payment_id = $this->db->insert_id();*/
 			// echo $this->db->last_query(); exit;
 
 
@@ -1294,16 +1294,16 @@ class Opd_model extends CI_Model
 			}
 			//// Recipet no set  
 			/*if(!empty($row_d_pay))
-									   {
-										   foreach($row_d_pay as $row_d)
-										   {
-											   $this->db->set('payment_id',$payment_id);
-											   $this->db->where('parent_id',$booking_id);
-											   $this->db->where('payment_id',$row_d->id);  
-											   $this->db->where('section_id',2);
-											   $this->db->update('hms_branch_hospital_no'); 
-										   }
-									   }*/
+														 {
+															 foreach($row_d_pay as $row_d)
+															 {
+																 $this->db->set('payment_id',$payment_id);
+																 $this->db->where('parent_id',$booking_id);
+																 $this->db->where('payment_id',$row_d->id);  
+																 $this->db->where('section_id',2);
+																 $this->db->update('hms_branch_hospital_no'); 
+															 }
+														 }*/
 			////////////////////
 
 			/*add sales banlk detail*/
@@ -1384,11 +1384,11 @@ class Opd_model extends CI_Model
 				$patient_id = $post['patient_id'];
 				$this->db->where('id', $post['patient_id']);
 				$this->db->update('hms_patient', $data_patient);
-				
-				
+
+
 				$this->db->set('status', 2);
 				$this->db->where('patient_id', $post['patient_id']);
-				$this->db->where('DATE(created_date)', date('Y-m-d')); 
+				$this->db->where('DATE(created_date)', date('Y-m-d'));
 				$this->db->update('hms_token');
 
 
@@ -1417,27 +1417,27 @@ class Opd_model extends CI_Model
 				$this->db->insert('hms_users', $data);
 				$users_id = $this->db->insert_id();
 				/*$this->db->select('*');
-																   $this->db->where('users_role','4');
-																   $query = $this->db->get('hms_permission_to_role');     
-																   $permission_list = $query->result();
-																   if(!empty($permission_list))
-																   {
-																	 foreach($permission_list as $permission)
-																	 {
-																	   $data = array(
-																			   'users_role' =>4,
-																			   'users_id' => $users_id,
-																			   'master_id' => $patient_id,
-																			   'section_id' => $permission->section_id,
-																			   'action_id' => $permission->action_id, 
-																			   'permission_status' => '1',
-																			   'ip_address' => $_SERVER['REMOTE_ADDR'],
-																			   'created_by' =>$user_data['id'],
-																			   'created_date' =>date('Y-m-d H:i:s'),
-																			);
-																	   $this->db->insert('hms_permission_to_users',$data);
-																	 }
-																   }*/
+																						   $this->db->where('users_role','4');
+																						   $query = $this->db->get('hms_permission_to_role');     
+																						   $permission_list = $query->result();
+																						   if(!empty($permission_list))
+																						   {
+																							 foreach($permission_list as $permission)
+																							 {
+																							   $data = array(
+																									   'users_role' =>4,
+																									   'users_id' => $users_id,
+																									   'master_id' => $patient_id,
+																									   'section_id' => $permission->section_id,
+																									   'action_id' => $permission->action_id, 
+																									   'permission_status' => '1',
+																									   'ip_address' => $_SERVER['REMOTE_ADDR'],
+																									   'created_by' =>$user_data['id'],
+																									   'created_date' =>date('Y-m-d H:i:s'),
+																									);
+																							   $this->db->insert('hms_permission_to_users',$data);
+																							 }
+																						   }*/
 
 				////////// Send SMS /////////////////////
 				if (in_array('640', $user_data['permission']['action'])) {
@@ -1492,13 +1492,13 @@ class Opd_model extends CI_Model
 
 			//echo $this->db->last_query(); exit;
 			/* $data['type'] = $this->opd->get_token_setting();
-										  //print_r($data['type']);die;
-										   if($data['type']==1)
-										   {
+															//print_r($data['type']);die;
+															 if($data['type']==1)
+															 {
 
-											 
-										   }
-									  */
+															   
+															 }
+														*/
 
 
 			/*add sales banlk detail*/
@@ -1530,21 +1530,21 @@ class Opd_model extends CI_Model
 			if (!empty($post['next_app_date']) && $post['next_app_date'] != '00-00-0000' && $post['next_app_date'] != '01-01-1970') {
 				$appointment_code = generate_unique_id(20, $branch_id);
 				/*$appointment_data = array(
-																   
-																   'branch_id'=>$branch_id,
-																   'parent_id'=>$booking_id,
-																   'appointment_type'=>1, 
-																   'appointment_code'=>$appointment_code, 
-																   'appointment_date'=>date('Y-m-d',strtotime($post['next_app_date'])),
-																   'appointment_time'=>date('H:i:s', strtotime(date('d-m-Y').' '.$post['booking_time'])), 
-																   'type'=>1,
-																   'specialization_id'=>$post['specialization'],
-																   'attended_doctor'=>$post['attended_doctor'],
-																   'referral_doctor'=>$post['referral_doctor'],
-																   'ref_by_other'=>$post['ref_by_other'],
-																   'booking_date'=>date('Y-m-d H:i:s'),
-																   'booking_status'=>0
-														   );*/
+																						   
+																						   'branch_id'=>$branch_id,
+																						   'parent_id'=>$booking_id,
+																						   'appointment_type'=>1, 
+																						   'appointment_code'=>$appointment_code, 
+																						   'appointment_date'=>date('Y-m-d',strtotime($post['next_app_date'])),
+																						   'appointment_time'=>date('H:i:s', strtotime(date('d-m-Y').' '.$post['booking_time'])), 
+																						   'type'=>1,
+																						   'specialization_id'=>$post['specialization'],
+																						   'attended_doctor'=>$post['attended_doctor'],
+																						   'referral_doctor'=>$post['referral_doctor'],
+																						   'ref_by_other'=>$post['ref_by_other'],
+																						   'booking_date'=>date('Y-m-d H:i:s'),
+																						   'booking_status'=>0
+																				   );*/
 
 				if (!empty($post['referral_doctor'])) {
 					$referal = $post['referral_doctor'];
@@ -1626,15 +1626,15 @@ class Opd_model extends CI_Model
 			// add payment
 
 			/*$bank_name ="";
-									   if(!empty($post['bank_name']))
-									   {
-										   $bank_name = $post['bank_name'];
-									   }
-									   $transaction_no ="";
-									   if(!empty($post['transaction_no']))
-									   {
-										   $transaction_no = $post['transaction_no'];
-									   }*/
+														 if(!empty($post['bank_name']))
+														 {
+															 $bank_name = $post['bank_name'];
+														 }
+														 $transaction_no ="";
+														 if(!empty($post['transaction_no']))
+														 {
+															 $transaction_no = $post['transaction_no'];
+														 }*/
 
 			$doctor_comission = 0;
 			$hospital_comission = 0;
@@ -2088,31 +2088,31 @@ class Opd_model extends CI_Model
 			$row_d_pay = $query_d_pay->result();
 
 			/*$this->db->where('parent_id',$booking_id);
-												$this->db->where('section_id','2');
-												$this->db->where('balance>0');
-												$this->db->where('patient_id',$post['patient_id']);
-												$this->db->delete('hms_payment'); */
+																  $this->db->where('section_id','2');
+																  $this->db->where('balance>0');
+																  $this->db->where('patient_id',$post['patient_id']);
+																  $this->db->delete('hms_payment'); */
 
 			/*$payment_data = array(
-													   'parent_id'=>$booking_id,
-													   'branch_id'=>$branch_id,
-													   'section_id'=>'2',
-													   'hospital_id'=>$post['referral_hospital'],
-													   'doctor_id'=>$post['referral_doctor'],
-													   'patient_id'=>$post['patient_id'],
-													   'total_amount'=>$post['total_amount'],
-													   'discount_amount'=>$post['discount'],
-													   'net_amount'=>$post['net_amount'],
-													   'credit'=>$post['net_amount'],
-													   'debit'=>$post['paid_amount'],
-													   'balance'=>($post['net_amount']-$post['paid_amount'])+1,
-													   'pay_mode'=>$post['payment_mode'],
-													   'paid_amount'=>$post['paid_amount'],
-													   'created_by'=>$user_data['id'],
-													   'created_date'=>date('Y-m-d H:i:s',strtotime($post['booking_date'])),
-												   );
-									   $this->db->insert('hms_payment',$payment_data); 
-									   $payment_id = $this->db->insert_id();*/
+																		 'parent_id'=>$booking_id,
+																		 'branch_id'=>$branch_id,
+																		 'section_id'=>'2',
+																		 'hospital_id'=>$post['referral_hospital'],
+																		 'doctor_id'=>$post['referral_doctor'],
+																		 'patient_id'=>$post['patient_id'],
+																		 'total_amount'=>$post['total_amount'],
+																		 'discount_amount'=>$post['discount'],
+																		 'net_amount'=>$post['net_amount'],
+																		 'credit'=>$post['net_amount'],
+																		 'debit'=>$post['paid_amount'],
+																		 'balance'=>($post['net_amount']-$post['paid_amount'])+1,
+																		 'pay_mode'=>$post['payment_mode'],
+																		 'paid_amount'=>$post['paid_amount'],
+																		 'created_by'=>$user_data['id'],
+																		 'created_date'=>date('Y-m-d H:i:s',strtotime($post['booking_date'])),
+																	 );
+														 $this->db->insert('hms_payment',$payment_data); 
+														 $payment_id = $this->db->insert_id();*/
 			// echo $this->db->last_query(); exit;
 
 
@@ -2178,16 +2178,16 @@ class Opd_model extends CI_Model
 			}
 			//// Recipet no set  
 			/*if(!empty($row_d_pay))
-									   {
-										   foreach($row_d_pay as $row_d)
-										   {
-											   $this->db->set('payment_id',$payment_id);
-											   $this->db->where('parent_id',$booking_id);
-											   $this->db->where('payment_id',$row_d->id);  
-											   $this->db->where('section_id',2);
-											   $this->db->update('hms_branch_hospital_no'); 
-										   }
-									   }*/
+														 {
+															 foreach($row_d_pay as $row_d)
+															 {
+																 $this->db->set('payment_id',$payment_id);
+																 $this->db->where('parent_id',$booking_id);
+																 $this->db->where('payment_id',$row_d->id);  
+																 $this->db->where('section_id',2);
+																 $this->db->update('hms_branch_hospital_no'); 
+															 }
+														 }*/
 			////////////////////
 
 			/*add sales banlk detail*/
@@ -2293,27 +2293,27 @@ class Opd_model extends CI_Model
 				$this->db->insert('hms_users', $data);
 				$users_id = $this->db->insert_id();
 				/*$this->db->select('*');
-																   $this->db->where('users_role','4');
-																   $query = $this->db->get('hms_permission_to_role');     
-																   $permission_list = $query->result();
-																   if(!empty($permission_list))
-																   {
-																	 foreach($permission_list as $permission)
-																	 {
-																	   $data = array(
-																			   'users_role' =>4,
-																			   'users_id' => $users_id,
-																			   'master_id' => $patient_id,
-																			   'section_id' => $permission->section_id,
-																			   'action_id' => $permission->action_id, 
-																			   'permission_status' => '1',
-																			   'ip_address' => $_SERVER['REMOTE_ADDR'],
-																			   'created_by' =>$user_data['id'],
-																			   'created_date' =>date('Y-m-d H:i:s'),
-																			);
-																	   $this->db->insert('hms_permission_to_users',$data);
-																	 }
-																   }*/
+																						   $this->db->where('users_role','4');
+																						   $query = $this->db->get('hms_permission_to_role');     
+																						   $permission_list = $query->result();
+																						   if(!empty($permission_list))
+																						   {
+																							 foreach($permission_list as $permission)
+																							 {
+																							   $data = array(
+																									   'users_role' =>4,
+																									   'users_id' => $users_id,
+																									   'master_id' => $patient_id,
+																									   'section_id' => $permission->section_id,
+																									   'action_id' => $permission->action_id, 
+																									   'permission_status' => '1',
+																									   'ip_address' => $_SERVER['REMOTE_ADDR'],
+																									   'created_by' =>$user_data['id'],
+																									   'created_date' =>date('Y-m-d H:i:s'),
+																									);
+																							   $this->db->insert('hms_permission_to_users',$data);
+																							 }
+																						   }*/
 
 				////////// Send SMS /////////////////////
 				if (in_array('640', $user_data['permission']['action'])) {
@@ -2368,13 +2368,13 @@ class Opd_model extends CI_Model
 
 			//echo $this->db->last_query(); exit;
 			/* $data['type'] = $this->opd->get_token_setting();
-										  //print_r($data['type']);die;
-										   if($data['type']==1)
-										   {
+															//print_r($data['type']);die;
+															 if($data['type']==1)
+															 {
 
-											 
-										   }
-									  */
+															   
+															 }
+														*/
 
 
 			/*add sales banlk detail*/
@@ -2435,15 +2435,15 @@ class Opd_model extends CI_Model
 			// add payment
 
 			/*$bank_name ="";
-									   if(!empty($post['bank_name']))
-									   {
-										   $bank_name = $post['bank_name'];
-									   }
-									   $transaction_no ="";
-									   if(!empty($post['transaction_no']))
-									   {
-										   $transaction_no = $post['transaction_no'];
-									   }*/
+														 if(!empty($post['bank_name']))
+														 {
+															 $bank_name = $post['bank_name'];
+														 }
+														 $transaction_no ="";
+														 if(!empty($post['transaction_no']))
+														 {
+															 $transaction_no = $post['transaction_no'];
+														 }*/
 
 			$doctor_comission = 0;
 			$hospital_comission = 0;
@@ -4324,16 +4324,16 @@ class Opd_model extends CI_Model
 		if (isset($search) && !empty($search)) {
 
 			/*if(!empty($search['start_date']))
-									   {
-										   $start_date = date('Y-m-d h:i:s',strtotime($search['start_date']));
-										   $this->db->where('hms_opd_booking.booking_date >= "'.$start_date.'"');
-									   }
+														 {
+															 $start_date = date('Y-m-d h:i:s',strtotime($search['start_date']));
+															 $this->db->where('hms_opd_booking.booking_date >= "'.$start_date.'"');
+														 }
 
-									   if(!empty($search['end_date']))
-									   {
-										   $end_date = date('Y-m-d h:i:s',strtotime($search['end_date']));
-										   $this->db->where('hms_opd_booking.booking_date <= "'.$end_date.'"');
-									   }*/
+														 if(!empty($search['end_date']))
+														 {
+															 $end_date = date('Y-m-d h:i:s',strtotime($search['end_date']));
+															 $this->db->where('hms_opd_booking.booking_date <= "'.$end_date.'"');
+														 }*/
 
 			if (!empty($search['start_date'])) {
 				$booking_from_date = date('Y-m-d', strtotime($search['start_date'])) . ' 00:00:00';
@@ -4347,17 +4347,17 @@ class Opd_model extends CI_Model
 
 			/* Appointment*/
 			/*if(!empty($search['start_date']))
-												{
-													$start_date = date('Y-m-d h:i:s',strtotime($search['start_date']));
-													$this->db->where('hms_opd_booking.booking_date >= "'.$start_date.'"');
-												}
+																  {
+																	  $start_date = date('Y-m-d h:i:s',strtotime($search['start_date']));
+																	  $this->db->where('hms_opd_booking.booking_date >= "'.$start_date.'"');
+																  }
 
-												if(!empty($search['end_date']))
-												{
-													$end_date = date('Y-m-d h:i:s',strtotime($search['end_date']));
-													$this->db->where('hms_opd_booking.booking_date <= "'.$end_date.'"');
-												}
-									*/
+																  if(!empty($search['end_date']))
+																  {
+																	  $end_date = date('Y-m-d h:i:s',strtotime($search['end_date']));
+																	  $this->db->where('hms_opd_booking.booking_date <= "'.$end_date.'"');
+																  }
+													  */
 			/* Booking */
 
 			if (!empty($search['booking_from_date'])) {
@@ -4598,14 +4598,14 @@ class Opd_model extends CI_Model
 			}
 
 			/*if(!empty($result))
-										  { 
-											  foreach($result as $vals)
-											  {
-												 $response['test_id'] = $vals->id;
-												 $response['test_name'] = $vals->test_name;
-											  }
-										  }
-										  return $response; */
+															{ 
+																foreach($result as $vals)
+																{
+																   $response['test_id'] = $vals->id;
+																   $response['test_name'] = $vals->test_name;
+																}
+															}
+															return $response; */
 		}
 	}
 
@@ -5194,7 +5194,7 @@ class Opd_model extends CI_Model
 		if (!empty($res) && count($res) > 0) {
 
 			/*	if(strtotime(date('d-m-Y',strtotime($res[0]->booking_date)))<=strtotime(date('d-m-Y',strtotime($res[0]->validity_date))) && strtotime($booking_date)<=strtotime(date('d-m-Y',strtotime($res[0]->validity_date))) )
-													{*/
+																	  {*/
 			if (strtotime(date('Y-m-d', strtotime($res[0]->booking_date))) <= strtotime(date('Y-m-d', strtotime($res[0]->validity_date))) && strtotime(date('Y-m-d', strtotime($booking_date))) <= strtotime(date('Y-m-d', strtotime($res[0]->validity_date)))) {
 				echo '1';
 				exit;
@@ -6251,6 +6251,22 @@ class Opd_model extends CI_Model
 		$query = $this->db->get();
 		//echo  $this->db->last_query();die();
 		return $query->row_array();
+
+	}
+	function get_by_id_patient_status($id = '')
+	{
+		$user_data = $this->session->userdata('auth_users');
+		$this->db->select('booking_id');
+		$this->db->from('hms_vision');
+		$this->db->where('hms_vision.booking_id', $id);
+
+		$query = $this->db->get();
+
+		if ($query->num_rows() > 0) {
+			return 1; // Return 1 if a match is found
+		}
+
+		return 0; //
 
 	}
 
