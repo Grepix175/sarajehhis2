@@ -62,12 +62,8 @@ $users_data = $this->session->userdata('auth_users');
     });
 
     function edit_vision(id) {
-        // alert(id);
-      var $modal = $('#load_add_vision_popup');
-      $modal.load('<?php echo base_url() . 'vision/edit/' ?>' + id,
-        function () {
-          $modal.modal('show');
-        });
+        // Redirect to the edit page for vision with the specified ID
+        window.location.href = '<?php echo base_url('vision/edit/'); ?>' + id;
     }
 
     function view_patient_category(id) {
@@ -204,6 +200,12 @@ $users_data = $this->session->userdata('auth_users');
             });
           });
       }
+      <?php
+      $flash_success = $this->session->flashdata('success');
+      if (isset($flash_success) && !empty($flash_success)) {
+        echo 'flash_session_msg("' . $flash_success . '");';
+      }
+      ?>
 
       $(document).ready(function () {
         $('#load_add_vision_popup').on('shown.bs.modal', function (e) {

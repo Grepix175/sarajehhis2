@@ -109,6 +109,7 @@ class Vision_model extends CI_Model
         $post = $this->input->post();
         // echo "<pre>";print_r($post);die;
         $data = array(
+            'patient_code' => $post['patient_code'],
             'patient_name' => $post['patient_name'],
             'booking_id' => $post['booking_id'],
             'procedure_purpose' => $post['procedure_purpose'],
@@ -123,12 +124,12 @@ class Vision_model extends CI_Model
             'blood_sugar' => $post['blood_sugar'],
             'blood_pressure' => $post['blood_pressure'],
             'reason_ffa_not_done' => $post['reason_ffa_not_done'],
-            // 'optometrist_signature' => $post['optometrist_signature'],
-            // 'optometrist_date' => $post['optometrist_date'],
-            // 'anaesthetist_signature' => $post['anaesthetist_signature'],
-            // 'anaesthetist_date' => $post['anaesthetist_date'],
-            // 'doctor_signature' => $post['doctor_signature'],
-            // 'doctor_date' => $post['doctor_date'],
+            'optometrist_signature' => $post['optometrist_signature'],
+            'optometrist_date' => date('Y-m-d', strtotime($post['optometrist_date'])),
+            'anaesthetist_signature' => $post['anaesthetist_signature'],
+            'anaesthetist_date' => date('Y-m-d', strtotime($post['anaesthetist_date'])),
+            'doctor_signature' => $post['doctor_signature'],
+            'doctor_date' => date('Y-m-d', strtotime($post['doctor_date'])),
         );
 
         if (!empty($post['data_id']) && $post['data_id'] > 0) {
@@ -140,6 +141,9 @@ class Vision_model extends CI_Model
             $this->db->set('created_at', date('Y-m-d H:i:s'));
             $this->db->insert($this->table, $data); // Changed to use the variable
         }
+        $this->db->set('send_vision', 1);
+        $this->db->where('booking_id', $post['booking_id']); // Use $post['booking_id']
+        $this->db->update('hms_std_opd_patient_status');
     }
 
     public function delete($id = "")
@@ -170,7 +174,7 @@ class Vision_model extends CI_Model
     public function get_patient_name_by_booking_id($booking_id)
     {
         // Join hms_std_eye_prescription with hms_patient to get patient details
-        $this->db->select('hms_patient.patient_name'); // Only select patient_name
+        $this->db->select('hms_patient.patient_name,hms_patient.patient_code'); // Only select patient_name
         $this->db->from('hms_std_eye_prescription');
         $this->db->join('hms_patient', 'hms_patient.id = hms_std_eye_prescription.patient_id', 'left');
         $this->db->where('hms_std_eye_prescription.booking_id', $booking_id); // Filter by booking_id
@@ -179,7 +183,14 @@ class Vision_model extends CI_Model
         $query = $this->db->get();
 
         if ($query->num_rows() > 0) {
-            return $query->row()->patient_name; // Return the patient's name
+            $result = $query->row(); // Get the result as an object
+            $patientName = $result->patient_name; // Patient's name
+            $patientCode = $result->patient_code; // Access other column data
+            // Do something with the data...
+            return [
+                'patient_name' => $patientName,
+                'patient_code' => $patientCode,
+            ];
         }
 
         return null; // Return null if no patient is found

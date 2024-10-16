@@ -6335,7 +6335,7 @@ class Opd_model extends CI_Model
 	{
 		$user_data = $this->session->userdata('auth_users');
 		$post = $this->input->post();
-
+		// echo "<pre>";print_r($post);die;
 		if ($post['data_id'] == '' && empty($post['data_id'])) {
 			$data = array('branch_id' => $post['branch_id'], 'patient_id' => $post['patient_id'], 'booking_id' => $post['book_id']);
 			$this->db->insert('hms_std_opd_patient_status', $data);
@@ -6344,61 +6344,35 @@ class Opd_model extends CI_Model
 			$data_id = $post['data_id'];
 		}
 
-		if ($post['arrive'] == 1) {
-			$this->db->set('arrive', $post['arrive']);
-			$this->db->set('arrive_time', date('H:i:s'));
-			$this->db->where('id', $data_id);
-			$this->db->where('branch_id', $user_data['parent_id']);
-			$this->db->update('hms_std_opd_patient_status');
-		} else {
-			$this->db->set('arrive', $post['arrive']);
-			$this->db->where('id', $data_id);
-			$this->db->update('hms_std_opd_patient_status');
+		// Array of statuses and their corresponding time fields
+		$status_fields = [
+			'arrive' => 'arrive_time',
+			'reception' => 'reception_time',
+			'optimetrist' => 'optimetrist_time',
+			'doctor' => 'doctor_time',
+			'completed' => 'completed_time'
+		];
+
+		// Loop through the status fields
+		foreach ($status_fields as $status => $time_field) {
+			// Check if the corresponding post value is set and equals 1
+			if (isset($post[$status]) && $post[$status] == 1) {
+				$this->db->set($status, $post[$status]);
+				$this->db->set($time_field, date('H:i:s')); // Set the time
+			} elseif (isset($post[$status])) { // Handle cases where post[$status] is not 1
+				$this->db->set($status, $post[$status]);
+			}
+
+			// Ensure that you only update the record once for each status
+			// This prevents repeated updates within the loop for the same ID
+			if (isset($post[$status])) {
+				$this->db->where('id', $data_id);
+				$this->db->where('branch_id', $user_data['parent_id']);
+				$this->db->update('hms_std_opd_patient_status');
+			}
 		}
-		if ($post['reception'] == 1) {
-			$this->db->set('reception', $post['reception']);
-			$this->db->set('reception_time', date('H:i:s'));
-			$this->db->where('id', $data_id);
-			$this->db->where('branch_id', $user_data['parent_id']);
-			$this->db->update('hms_std_opd_patient_status');
-		} else {
-			$this->db->set('reception', $post['completed']);
-			$this->db->where('id', $data_id);
-			$this->db->update('hms_std_opd_patient_status');
-		}
-		if ($post['optimetrist'] == 1) {
-			$this->db->set('optimetrist', $post['optimetrist']);
-			$this->db->set('optimetrist_time', date('H:i:s'));
-			$this->db->where('id', $data_id);
-			$this->db->where('branch_id', $user_data['parent_id']);
-			$this->db->update('hms_std_opd_patient_status');
-		} else {
-			$this->db->set('optimetrist', $post['optimetrist']);
-			$this->db->where('id', $data_id);
-			$this->db->update('hms_std_opd_patient_status');
-		}
-		if ($post['doctor'] == 1) {
-			$this->db->set('doctor', $post['doctor']);
-			$this->db->set('doctor_time', date('H:i:s'));
-			$this->db->where('id', $data_id);
-			$this->db->where('branch_id', $user_data['parent_id']);
-			$this->db->update('hms_std_opd_patient_status');
-		} else {
-			$this->db->set('doctor', $post['doctor']);
-			$this->db->where('id', $data_id);
-			$this->db->update('hms_std_opd_patient_status');
-		}
-		if ($post['completed'] == 1) {
-			$this->db->set('completed', $post['completed']);
-			$this->db->set('completed_time', date('H:i:s'));
-			$this->db->where('id', $data_id);
-			$this->db->where('branch_id', $user_data['parent_id']);
-			$this->db->update('hms_std_opd_patient_status');
-		} else {
-			$this->db->set('completed', $post['completed']);
-			$this->db->where('id', $data_id);
-			$this->db->update('hms_std_opd_patient_status');
-		}
+
+
 	}
 
 

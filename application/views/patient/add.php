@@ -132,7 +132,7 @@ $field_list = mandatory_section_field_list(2);
       padding: 2px;
       font-size: 14px;
       width: 480px;
-      
+
     }
 
     /* Target the main Select2 container */
@@ -818,7 +818,7 @@ $field_list = mandatory_section_field_list(2);
 
           </div> <!-- // -->
 
-          <div class="pat-col" style="gap: 1rem; padding: 5px; max-width: 200px; float:left; margin-left:100px;">
+         <div class="pat-col" style="gap: 1rem; padding: 5px; max-width: 200px; float:left; margin-left:100px;">
             <div class="pat-col-right-box"
               style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
               <!--Editing by Nitin Sharma 04/02/2024-->
@@ -935,7 +935,7 @@ $field_list = mandatory_section_field_list(2);
           type: 'POST',
           async: false,
           success: function (datas) {
-            console.log(datas,'======pait')
+            console.log(datas, '======pait')
             var data = $.parseJSON(datas);
             if (data.st == 1) {
               // Add response in Modal body
@@ -1414,13 +1414,13 @@ $field_list = mandatory_section_field_list(2);
 
 
 
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
   $("#patient_category").select2();
   $("#patient_category").select2({
     width: '500px' // Set your desired width
-});
-  
+  });
+
 </script>
-  <!--new css-->
+<!--new css-->

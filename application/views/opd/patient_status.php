@@ -5,6 +5,7 @@
   <div class="modal-content"> 
   <form  id="patient_source" class="form-inline">
   <input type="hidden" name="data_id" id="opd_id" value="<?php echo $form_data['data_id']; ?>" /> 
+  <input type="hidden" name="data_id" id="opd_id" value="<?php echo isset($form_data['data_id'])?$form_data['data_id']:''; ?>" /> 
       <div class="modal-header">
           <button type="button" class="close"  data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
           <h4><?php echo $page_title; ?></h4> 
