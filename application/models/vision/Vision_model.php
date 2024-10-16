@@ -104,6 +104,20 @@ class Vision_model extends CI_Model
         $query = $this->db->get();
         return $query->row_array();
     }
+    public function get_side_effect_name($side_effect_id)
+    {
+        $this->db->select('side_effect_name');
+        $this->db->from('hms_side_effect'); // Assuming your table name is `side_effects`
+        $this->db->where('id', $side_effect_id);
+        $query = $this->db->get();
+
+        // Return the side effect name if found
+        if ($query->num_rows() > 0) {
+            return $query->row()->side_effect_name;
+        }
+
+        return null; // Return null if no side effect found
+    }
 
     public function save()
     {
