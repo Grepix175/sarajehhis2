@@ -50,7 +50,9 @@ class Vision extends CI_Controller
 
             // Add action buttons
             $row[] = '  <a onClick="return edit_vision(' . $vision->id . ');" class="btn-custom" href="javascript:void(0)" style="' . $vision->id . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
-                       <a class="btn-custom" disabled onClick="return delete_vision(' . $vision->id . ')" href="javascript:void(0)" title="Delete" data-url="550"><i class="fa fa-print"></i> Delete</a>';
+                       <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("vision/print_vision/" . $vision->id) . '\');">
+    <i class="fa fa-print"></i> Print
+</a>';
 
             $data[] = $row;
         }
@@ -78,12 +80,11 @@ class Vision extends CI_Controller
         // echo "<pre>";
         // print_r($patient_details['patient_code']);
         // die;
-        // if ($booking_id && $patient_details) {
-        //     $data['patient_name'] = $patient_details['patient_name'];
-        //     $data['patient_code'] = $patient_details['patient_code'];
-        // } else {
-        //     $data['patient_name'] = ''; // Default value if no booking_id is provided
-        // }
+        if ($booking_id && $patient_details) {
+            $data['patient_name'] = $patient_details['patient_name'];
+        } else {
+            $data['patient_name'] = ''; // Default value if no booking_id is provided
+        }
 
         // Initialize form data
         $data['form_data'] = array(
@@ -92,16 +93,16 @@ class Vision extends CI_Controller
             "patient_code" => $patient_details['patient_code'] ?? '',
             "procedure_purpose" => '',
             "side_effects" => '',
-            'informed_consent' =>'',
-            'previous_ffa' =>'',
-            'history_allergy' =>'',
-            'history_asthma' =>'',
-            'history_epilepsy' =>'',
-            'accompanied_attendant' =>'',
-            's_creatinine' =>'',
-            'blood_sugar' =>'',
-            'blood_pressure' =>'',
-            'reason_ffa_not_done' =>'',
+            'informed_consent' => '',
+            'previous_ffa' => '',
+            'history_allergy' => '',
+            'history_asthma' => '',
+            'history_epilepsy' => '',
+            'accompanied_attendant' => '',
+            's_creatinine' => '',
+            'blood_sugar' => '',
+            'blood_pressure' => '',
+            'reason_ffa_not_done' => '',
             'optometrist_signature' => '',
             'optometrist_date' => '',
             'anaesthetist_signature' => '',
@@ -120,7 +121,7 @@ class Vision extends CI_Controller
         if (isset($post) && !empty($post)) {
             // Validate the form
             $valid_response = $this->_validate();
-        
+
             // Check if validation passed
             if ($valid_response === true) {
                 // If validation passes, save the record
@@ -134,12 +135,12 @@ class Vision extends CI_Controller
                 $data['form_error'] = validation_errors(); // Get validation errors
             }
         }
-        
-      
-        
-        
+
+
+
+
         // If the form is not submitted or validation fails, load the view with the existing data
-        
+
 
         // Load the view with the data
         $this->load->view('vision/add', $data);
@@ -150,7 +151,7 @@ class Vision extends CI_Controller
     //     $data['side_effects'] = $this->vision_model->get_all_side_effects(); // Fetch side effects
     //     $data['page_title'] = 'Add Vision Record';
     //     $data['booking_id'] = isset($booking_id)?$booking_id:'';
-        
+
     //     // Fetch patient name using booking_id if it is provided
     //     if ($booking_id) {
     //         $data['patient_name'] = $this->vision_model->get_patient_name_by_booking_id($booking_id);
@@ -182,13 +183,13 @@ class Vision extends CI_Controller
         // echo "<pre>";print_r($post);die;
 
         // Assuming this function returns the necessary fields
-        $field_list = mandatory_section_field_list(2); 
+        $field_list = mandatory_section_field_list(2);
         $users_data = $this->session->userdata('auth_users');
         $data['form_data'] = [];
         $data['photo_error'] = [];
-        
+
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
-        
+
         // Validation rules for required fields
         $this->form_validation->set_rules('patient_name', 'Patient Name', 'trim|required');
         $this->form_validation->set_rules('side_effects', 'Side Effect', 'trim|required');
@@ -208,7 +209,7 @@ class Vision extends CI_Controller
                 "patient_name" => isset($post['patient_name']) ? $post['patient_name'] : '',
                 "side_effects" => isset($post['side_effects']) ? $post['side_effects'] : '',
                 "procedure_purpose" => isset($post['procedure_purpose']) ? $post['procedure_purpose'] : '',
-                
+
             );
 
             return $data; // Return the form data with errors
@@ -225,16 +226,16 @@ class Vision extends CI_Controller
         unauthorise_permission('411', '2486');
         $data['side_effects'] = $this->vision_model->get_all_side_effects(); // Fetch side effects
 
-        
+
         // Validate the ID
         if (isset($id) && !empty($id) && is_numeric($id)) {
             $data['page_title'] = 'Edit Vision Record';
             // $data['vision'] = 
-    
+
             // Retrieve the brand by ID
             $result = $this->vision_model->get_by_id($id);
             // echo "<pre>";print_r($result);die;
-            
+
             // If no result is found, you might want to handle this case
             if (!$result) {
                 // Optionally, set an error message or redirect
@@ -273,15 +274,15 @@ class Vision extends CI_Controller
                 'updated_at' => $result['updated_at'],
                 'is_deleted' => $result['is_deleted'],
             );
-            
+
 
 
             // Check if there is form submission
             if ($this->input->post()) {
-                echo "<pre>";
-        print_r('$post');
-        print_r($post);
-        die;
+                // echo "<pre>";
+                // print_r('$post');
+                // print_r($post);
+                // die;
                 // Validate the form
                 $data['form_data'] = $this->_validate();
                 if ($this->form_validation->run() == TRUE) {
@@ -308,7 +309,7 @@ class Vision extends CI_Controller
     {
         // echo "kodfs";die;
         $post = $this->input->post();
-        
+
         // Validation rules
         $this->form_validation->set_rules('patient_name', 'Patient Name', 'required');
         // Add other validation rules for your fields as needed
@@ -356,5 +357,24 @@ class Vision extends CI_Controller
             $this->vision_model->deleteall($ids);
             echo json_encode(array("status" => TRUE));
         }
+    }
+
+    public function print_vision($id)
+    {
+        $data['print_status'] = "1";
+
+        // Fetch the form data based on the ID
+        $data['form_data'] = $this->vision_model->get_by_id($id);
+
+        // Fetch the side effect name based on the side_effect ID from form data
+        if (!empty($data['form_data']['side_effects'])) {
+            $side_effect_id = $data['form_data']['side_effects'];
+            // echo $side_effect_id;
+            $data['form_data']['side_effect_name'] = $this->vision_model->get_side_effect_name($side_effect_id);
+        }
+        // echo "<pre>";print_r($data);die;
+
+        // Load the print view with the data
+        $this->load->view('vision/print_vision', $data);
     }
 }
