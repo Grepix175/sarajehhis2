@@ -91,6 +91,8 @@ class Help_desk extends CI_Controller
 
       if ($patient_status['completed'] == '1') {
         $pat_status = '<font style="background-color: #1CAF9A;color:white">Completed</font>';
+      } else if ($patient_status['send_vision'] == '1') {
+        $pat_status = '<font style="background-color: #1CAF9A;color:white">Sent to Visiom</font>';
       } else if ($patient_status['doctor'] == '1') {
         $pat_status = '<font style="background-color: #1CAF9A;color:white">Doctor</font>';
       } else if ($patient_status['optimetrist'] == '1') {
@@ -233,7 +235,7 @@ class Help_desk extends CI_Controller
 
   public function help_desk_excel()
   {
-    
+
     // Starting the PHPExcel library
     $this->load->library('excel');
     $this->excel->IO_factory();
@@ -260,7 +262,7 @@ class Help_desk extends CI_Controller
     $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
 
     // Field names (header row) should start in row 3
-    $fields = array('Token No.','OPD. No.','Patient Reg. No.', 'Patient Name', 'Mobile No.', 'Age','Patient Status');
+    $fields = array('Token No.', 'OPD. No.', 'Patient Reg. No.', 'Patient Name', 'Mobile No.', 'Age', 'Patient Status');
 
     $col = 0; // Initialize the column index
     foreach ($fields as $field) {
@@ -275,7 +277,7 @@ class Help_desk extends CI_Controller
     $objPHPExcel->getActiveSheet()->getStyle('A3:G3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
     // Fetching the OPD data (assuming you have the data in $list)
-    
+
     $list = $this->prescription->search_help_desk_data();
     // echo "<pre>";
     // print_r($list);
@@ -289,7 +291,7 @@ class Help_desk extends CI_Controller
         $age_y = $opds->age_y;
         $age_m = $opds->age_m;
         $age_d = $opds->age_d;
-  
+
         $age = "";
         if ($age_y > 0) {
           $year = 'Years';
