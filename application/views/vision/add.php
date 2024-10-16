@@ -221,6 +221,7 @@ $field_list = mandatory_section_field_list(2);
                                     <label for="sideEffects" class="font-weight-bold mb-0">Side Effects <span
                                             class="star">*</span></label>
                                 </div>
+                                
                                 <div class="col-md-6">
                                     <!-- <select name="side_effects" id="side_effects" class="m_input_default select-height">
                                         <option value="" <?php echo empty($form_data['side_effects']) ? 'selected' : ''; ?>>Select a side effect</option>
@@ -318,10 +319,10 @@ $field_list = mandatory_section_field_list(2);
                                             <td>
                                                 <div class="grp">
                                                     <label>
-                                                        <input type="radio" name="<?php echo $name; ?>" value="yes" <?php echo (isset($form_data[$name]) && $form_data[$name] == 'yes') ? 'checked' : ''; ?> required> Yes
+                                                        <input type="radio" name="<?php echo $name; ?>" value="yes" <?php echo (isset($form_data[$name]) && $form_data[$name] == 'yes') ? 'checked' : ''; ?> > Yes
                                                     </label>
                                                     <label>
-                                                        <input type="radio" name="<?php echo $name; ?>" value="no" <?php echo (isset($form_data[$name]) && $form_data[$name] == 'no') ? 'checked' : ''; ?> required> No
+                                                        <input type="radio" name="<?php echo $name; ?>" value="no" <?php echo (isset($form_data[$name]) && $form_data[$name] == 'no') ? 'checked' : ''; ?>> No
                                                     </label>
                                                 </div>
                                             </td>

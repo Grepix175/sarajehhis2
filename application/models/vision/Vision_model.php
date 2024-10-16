@@ -8,6 +8,7 @@ class Vision_model extends CI_Model
     var $column = array(
         'hms_vision.id', 
         'hms_vision.patient_name', 
+        'hms_vision.patient_code', 
         'hms_vision.booking_id', 
         'hms_vision.procedure_purpose', 
         'hms_side_effect.side_effect_name', // Change to fetch side effect name
@@ -137,9 +138,20 @@ class Vision_model extends CI_Model
             $this->db->where('id', $post['data_id']);
             $this->db->update($this->table, $data); // Changed to use the variable
         } else {
-
+            // echo "<per>";
+            // print_r('sagar');
+            // print_r($data);
+            // die;
             $this->db->set('created_at', date('Y-m-d H:i:s'));
             $this->db->insert($this->table, $data); // Changed to use the variable
+            // $this->db->insert('hms_vision', $data); // Changed to use the variable
+            // if ($this->db->affected_rows() > 0) {
+            //     echo 'Insert successful';
+            // } else {
+            //     // Insert failed, check for errors
+            //     $error = $this->db->error(); // Get the error code and message
+            //     echo 'Error: ' . $error['message']; // Display or log the error message
+            // }
         }
         $this->db->set('send_vision', 1);
         $this->db->where('booking_id', $post['booking_id']); // Use $post['booking_id']

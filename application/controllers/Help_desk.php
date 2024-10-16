@@ -86,22 +86,34 @@ class Help_desk extends CI_Controller
       } else if ($prescription->app_type == 2) {
         $app_type = '<font style="background-color: rgb(255, 51, 172);">Post OP</font>';
       }
+      // print_r($prescription->booking_id);
+      // print_r($prescription->booking_id);
       $pat_status = '';
-      $patient_status = $this->opd->get_by_id_patient_details($prescription->booking_id);
-
-      if ($patient_status['completed'] == '1') {
-        $pat_status = '<font style="background-color: #1CAF9A;color:white">Completed</font>';
-      } else if ($patient_status['send_vision'] == '1') {
-        $pat_status = '<font style="background-color: #1CAF9A;color:white">Sent to Visiom</font>';
-      } else if ($patient_status['doctor'] == '1') {
-        $pat_status = '<font style="background-color: #1CAF9A;color:white">Doctor</font>';
-      } else if ($patient_status['optimetrist'] == '1') {
-        $pat_status = '<font style="background-color: #1CAF9A;color:white">Opt.Optom</font>';
-      } else if ($patient_status['reception'] == '1') {
-        $pat_status = '<font style="background-color: #1CAF9A;color:white">Reception</font>';
-      } else if ($patient_status['arrive'] == '1') {
-        $pat_status = '<font style="background-color: #1CAF9A;color:white">Arrived</font>';
-      } else {
+      $patient_status = $this->opd->get_by_id_patient_status($prescription->booking_id);
+      // print_r($patient_status);
+      // echo "<pre>";
+      // print_r($patient_status);
+      // // die;
+      // if ($patient_status['completed'] == '1') {
+      //   $pat_status = '<font style="background-color: #1CAF9A;color:white">Completed</font>';
+      // } 
+      // else 
+      if ($patient_status == 1) {
+        $pat_status = '<font style="background-color: #228B22;color:white">Vision</font>';
+      }
+      // else if ($patient_status['doctor'] == '1') {
+      //   $pat_status = '<font style="background-color: #1CAF9A;color:white">Doctor</font>';
+      // }
+      //  else if ($patient_status['optimetrist'] == '1') {
+      //   $pat_status = '<font style="background-color: #1CAF9A;color:white">Opt.Optom</font>';
+      // } 
+      // else if ($patient_status['reception'] == '1') {
+      //   $pat_status = '<font style="background-color: #1CAF9A;color:white">Reception</font>';
+      // }
+      //  else if ($patient_status['arrive'] == '1') {
+      //   $pat_status = '<font style="background-color: #1CAF9A;color:white">Arrived</font>';
+      // } 
+      else {
         $pat_status = '<font style="background-color: #1CAF9A;color:white">Not Arrived</font>';
       }
       $age_y = $prescription->age_y;
@@ -179,7 +191,14 @@ class Help_desk extends CI_Controller
       if (in_array('2413', $users_data['permission']['action'])) {
         $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . "'";
         // onClick="return print_window_page(' . $print_url . ')"
-        $send_to_vission = ' <a class="btn-custom"  href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Send To Vision"  data-url="512">Send To Vision</a>';
+        // $send_to_vission = ' <a class="btn-custom"  href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Send To Vision"  data-url="512"> Vision</a>';
+        if ($patient_status == 1) {
+          // If patient_status is 1, disable the button
+          $send_to_vission = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Vision</a>';
+        } else {
+          // If patient_status is not 1, enable the button
+          $send_to_vission = '<a class="btn-custom" href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Send To Vision" data-url="512"> Vision</a>';
+        }
       }
 
       // $print_chasma_url = "'" . base_url('eye/add_eye_prescription/print_chasma_details/' . $prescription->id . '/' . $prescription->booking_id) . "'";
@@ -187,7 +206,7 @@ class Help_desk extends CI_Controller
 
       // . $btn_print_chasma_pre
       $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $send_to_vission;
-
+      // print_r($row);
       $data[] = $row;
       $i++;
     }
