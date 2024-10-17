@@ -51,27 +51,10 @@ $users_data = $this->session->userdata('auth_users');
       });
     <?php } ?>
 
-    $(document).ready(function () {
-      var $modal = $('#load_add_vision_popup');
-      $('#modal_add').on('click', function () {
-        $modal.load('<?php echo base_url() . 'vision/add/' ?>',
-          function () {
-            $modal.modal('show');
-          });
-      });
-    });
 
     function edit_vision(id) {
         // Redirect to the edit page for vision with the specified ID
         window.location.href = '<?php echo base_url('vision/edit/'); ?>' + id;
-    }
-
-    function view_patient_category(id) {
-      var $modal = $('#load_add_vision_popup');
-      $modal.load('<?php echo base_url() . 'vision/view/' ?>' + id,
-        function () {
-          $modal.modal('show');
-        });
     }
 
     function reload_table() {
@@ -164,14 +147,6 @@ $users_data = $this->session->userdata('auth_users');
               <i class="fa fa-plus"></i> New
             </button> -->
           <?php } ?>
-          <a data-toggle="tooltip" title="Download list in excel" href="#" id="vision_download_excel"
-            class="btn-anchor m-b-2">
-            <i class="fa fa-file-excel-o"></i> Excel
-          </a>
-          <a data-toggle="tooltip" title="Download list in pdf" href="#" id="vision_download_pdf"
-            class="btn-anchor m-b-2">
-            <i class="fa fa-file-pdf-o"></i> PDF
-          </a>
           <?php if (in_array('2488', $users_data['permission']['action'])) { ?>
             <button class="btn-update" id="deleteAll" onclick="return checkboxValues();">
               <i class="fa fa-trash"></i> Delete
@@ -214,45 +189,6 @@ $users_data = $this->session->userdata('auth_users');
         echo 'flash_session_msg("' . $flash_success . '");';
       }
       ?>
-      document.getElementById('vision_download_excel').addEventListener('click', function (e) {
-          e.preventDefault();
-
-          // var fromDate = document.getElementById('start_date_patient').value;
-          // var toDate = document.getElementById('end_date_patient').value;
-
-
-          var url = '<?php echo base_url("vision/vision_excel"); ?>';
-
-
-          // if (fromDate || toDate) {
-          //   url += '?';
-          //   if (fromDate) {
-          //     url += 'start_date=' + encodeURIComponent(fromDate);
-          //   }
-          //   if (toDate) {
-          //     url += (fromDate ? '&' : '') + 'end_date=' + encodeURIComponent(toDate);
-          //   }
-          // }
-          alert(url);
-          window.location.href = url;
-        });
-        document.getElementById('vision_download_pdf').addEventListener('click', function (e) {
-          e.preventDefault();
-
-          // var fromDate = document.getElementById('start_date_patient').value;
-          // var toDate = document.getElementById('end_date_patient').value;
-
-
-          // var fromDateObj = new Date(fromDate);
-          // var toDateObj = new Date(toDate);
-
-
-
-          var url = '<?php echo base_url("vision/vision_pdf"); ?>';
-          // url += '?start_date=' + encodeURIComponent(fromDate) + '&end_date=' + encodeURIComponent(toDate);
-
-          window.location.href = url;
-        });
 
       $(document).ready(function () {
         $('#load_add_vision_popup').on('shown.bs.modal', function (e) {

@@ -47,22 +47,22 @@ class Vision_model extends CI_Model
         $this->db->where('hms_vision.is_deleted', '0');
 
         $i = 0;
-        foreach ($this->column as $item) {
-            if ($_POST['search']['value']) {
-                if ($i === 0) {
-                    $this->db->group_start();
-                    $this->db->like($item, $_POST['search']['value']);
-                } else {
-                    $this->db->or_like($item, $_POST['search']['value']);
-                }
+        // foreach ($this->column as $item) {
+        //     if ($_POST['search']['value']) {
+        //         if ($i === 0) {
+        //             $this->db->group_start();
+        //             $this->db->like($item, $_POST['search']['value']);
+        //         } else {
+        //             $this->db->or_like($item, $_POST['search']['value']);
+        //         }
 
-                if (count($this->column) - 1 == $i) {
-                    $this->db->group_end();
-                }
-            }
-            $column[$i] = $item;
-            $i++;
-        }
+        //         if (count($this->column) - 1 == $i) {
+        //             $this->db->group_end();
+        //         }
+        //     }
+        //     $column[$i] = $item;
+        //     $i++;
+        // }
 
         if (isset($_POST['order'])) {
             $this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
@@ -75,9 +75,9 @@ class Vision_model extends CI_Model
     public function get_datatables()
     {
         $this->_get_datatables_query();
-        if ($_POST['length'] != -1) {
-            $this->db->limit($_POST['length'], $_POST['start']);
-        }
+        // if ($_POST['length'] != -1) {
+        //     $this->db->limit($_POST['length'], $_POST['start']);
+        // }
         $query = $this->db->get();
         return $query->result();
     }
@@ -122,55 +122,45 @@ class Vision_model extends CI_Model
     public function save()
     {
         $post = $this->input->post();
-        // echo "<pre>";print_r($post);die;
+        
         $data = array(
-            'patient_code' => $post['patient_code'],
-            'patient_name' => $post['patient_name'],
-            'booking_id' => $post['booking_id'],
-            'procedure_purpose' => $post['procedure_purpose'],
-            'side_effects' => $post['side_effects'], // Assuming this is the ID of the side effect
-            'informed_consent' => $post['informed_consent'],
-            'previous_ffa' => $post['previous_ffa'],
-            'history_allergy' => $post['history_allergy'],
-            'history_asthma' => $post['history_asthma'],
-            'history_epilepsy' => $post['history_epilepsy'],
-            'accompanied_attendant' => $post['accompanied_attendant'],
-            's_creatinine' => $post['s_creatinine'],
-            'blood_sugar' => $post['blood_sugar'],
-            'blood_pressure' => $post['blood_pressure'],
-            'reason_ffa_not_done' => $post['reason_ffa_not_done'],
-            'optometrist_signature' => $post['optometrist_signature'],
-            'optometrist_date' => date('Y-m-d', strtotime($post['optometrist_date'])),
-            'anaesthetist_signature' => $post['anaesthetist_signature'],
-            'anaesthetist_date' => date('Y-m-d', strtotime($post['anaesthetist_date'])),
-            'doctor_signature' => $post['doctor_signature'],
-            'doctor_date' => date('Y-m-d', strtotime($post['doctor_date'])),
+            'patient_code' => isset($post['patient_code']) ? $post['patient_code'] : '',
+            'patient_name' => isset($post['patient_name']) ? $post['patient_name'] : '',
+            'booking_id' => isset($post['booking_id']) ? $post['booking_id'] : '',
+            'procedure_purpose' => isset($post['procedure_purpose']) ? $post['procedure_purpose'] : '',
+            'side_effects' => isset($post['side_effects']) ? $post['side_effects'] : '', // Assuming this is the ID of the side effect
+            'informed_consent' => isset($post['informed_consent']) ? $post['informed_consent'] : '',
+            'previous_ffa' => isset($post['previous_ffa']) ? $post['previous_ffa'] : '',
+            'history_allergy' => isset($post['history_allergy']) ? $post['history_allergy'] : '',
+            'history_asthma' => isset($post['history_asthma']) ? $post['history_asthma'] : '',
+            'history_epilepsy' => isset($post['history_epilepsy']) ? $post['history_epilepsy'] : '',
+            'accompanied_attendant' => isset($post['accompanied_attendant']) ? $post['accompanied_attendant'] : '',
+            's_creatinine' => isset($post['s_creatinine']) ? $post['s_creatinine'] : '',
+            'blood_sugar' => isset($post['blood_sugar']) ? $post['blood_sugar'] : '',
+            'blood_pressure' => isset($post['blood_pressure']) ? $post['blood_pressure'] : '',
+            'reason_ffa_not_done' => isset($post['reason_ffa_not_done']) ? $post['reason_ffa_not_done'] : '',
+            'optometrist_signature' => isset($post['optometrist_signature']) ? $post['optometrist_signature'] : '',
+            'optometrist_date' => isset($post['optometrist_date']) ? date('Y-m-d', strtotime($post['optometrist_date'])) : null,
+            'anaesthetist_signature' => isset($post['anaesthetist_signature']) ? $post['anaesthetist_signature'] : '',
+            'anaesthetist_date' => isset($post['anaesthetist_date']) ? date('Y-m-d', strtotime($post['anaesthetist_date'])) : null,
+            'doctor_signature' => isset($post['doctor_signature']) ? $post['doctor_signature'] : '',
+            'doctor_date' => isset($post['doctor_date']) ? date('Y-m-d', strtotime($post['doctor_date'])) : null,
         );
 
         if (!empty($post['data_id']) && $post['data_id'] > 0) {
             $this->db->set('updated_at', date('Y-m-d H:i:s'));
             $this->db->where('id', $post['data_id']);
-            $this->db->update($this->table, $data); // Changed to use the variable
+            $this->db->update($this->table, $data);
         } else {
-            // echo "<per>";
-            // print_r('sagar');
-            // print_r($data);
-            // die;
             $this->db->set('created_at', date('Y-m-d H:i:s'));
-            $this->db->insert($this->table, $data); // Changed to use the variable
-            // $this->db->insert('hms_vision', $data); // Changed to use the variable
-            // if ($this->db->affected_rows() > 0) {
-            //     echo 'Insert successful';
-            // } else {
-            //     // Insert failed, check for errors
-            //     $error = $this->db->error(); // Get the error code and message
-            //     echo 'Error: ' . $error['message']; // Display or log the error message
-            // }
+            $this->db->insert($this->table, $data);
         }
+
         $this->db->set('send_vision', 1);
-        $this->db->where('booking_id', $post['booking_id']); // Use $post['booking_id']
+        $this->db->where('booking_id', $post['booking_id']);
         $this->db->update('hms_std_opd_patient_status');
     }
+
 
     public function delete($id = "")
     {
@@ -197,31 +187,33 @@ class Vision_model extends CI_Model
         }
     }
 
+    public function get_opd_billing_by_id($id)
+    {
+        $this->db->where('patient_id', $id); // Assuming 'patient_id' relates to the form ID
+        $query = $this->db->get('opd_billing');
+        return $query->row_array();
+    }
+
+
     public function get_patient_name_by_booking_id($booking_id)
     {
-        // Join hms_std_eye_prescription with hms_patient to get patient details
-        $this->db->select('hms_patient.patient_name,hms_patient.patient_code'); // Only select patient_name
+        // Join hms_std_eye_prescription with hms_patient, hms_token, and hms_patient_category to get all details
+        $this->db->select('hms_std_eye_prescription.*, hms_patient.*, hms_token.token_no, hms_patient_category.patient_category'); // Select necessary columns including category_name
         $this->db->from('hms_std_eye_prescription');
         $this->db->join('hms_patient', 'hms_patient.id = hms_std_eye_prescription.patient_id', 'left');
+        $this->db->join('hms_token', 'hms_token.patient_id = hms_patient.id', 'left'); // Join with hms_token on patient_id
+        $this->db->join('hms_patient_category', 'hms_patient_category.id = hms_patient.patient_category', 'left'); // Join with hms_patient_category on patient_category
         $this->db->where('hms_std_eye_prescription.booking_id', $booking_id); // Filter by booking_id
         $this->db->where('hms_std_eye_prescription.is_deleted', '0'); // Check if not deleted
 
         $query = $this->db->get();
 
         if ($query->num_rows() > 0) {
-            $result = $query->row(); // Get the result as an object
-            $patientName = $result->patient_name; // Patient's name
-            $patientCode = $result->patient_code; // Access other column data
-            // Do something with the data...
-            return [
-                'patient_name' => $patientName,
-                'patient_code' => $patientCode,
-            ];
+            return $query->row_array(); // Return all columns as an associative array including category_name
         }
 
         return null; // Return null if no patient is found
     }
-
 
 
     // New method to fetch all non-deleted side effects
