@@ -233,7 +233,7 @@ $users_data = $this->session->userdata('auth_users');
           //     url += (fromDate ? '&' : '') + 'end_date=' + encodeURIComponent(toDate);
           //   }
           // }
-          alert(url);
+          // alert(url);
           window.location.href = url;
         });
         document.getElementById('vision_download_pdf').addEventListener('click', function (e) {
