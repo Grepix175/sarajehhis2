@@ -189,6 +189,9 @@ class Help_desk extends CI_Controller
         $btn_print_pre = ' <a class="btn-custom" onClick="return print_window_page(' . $print_url . ')" href="javascript:void(0)" title="Print History"  data-url="512"><i class="fa fa-print"></i> Print History</a>';
       }
       if (in_array('2413', $users_data['permission']['action'])) {
+        $refraction = '<a class="btn-custom" href="' . base_url("refraction/add/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction</a>';
+      }
+      if (in_array('2413', $users_data['permission']['action'])) {
         $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . "'";
         // onClick="return print_window_page(' . $print_url . ')"
         // $send_to_vission = ' <a class="btn-custom"  href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Send To Vision"  data-url="512"> Vision</a>';
@@ -197,7 +200,7 @@ class Help_desk extends CI_Controller
           $send_to_vission = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Vision</a>';
         } else {
           // If patient_status is not 1, enable the button
-          $send_to_vission = '<a class="btn-custom" href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Send To Vision" data-url="512"> Vision</a>';
+          $send_to_vission = '<a class="btn-custom" href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Vision" data-url="512">Vision</a>';
         }
       }
 
@@ -205,7 +208,7 @@ class Help_desk extends CI_Controller
       // $btn_print_chasma_pre = ' <a class="btn-custom" onClick="return print_window_page(' . $print_chasma_url . ')" href="javascript:void(0)" title="Print Chasma Detail"  data-url="512"><i class="fa fa-print"></i> Print Chasma Detail</a>';
 
       // . $btn_print_chasma_pre
-      $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $send_to_vission;
+      $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission ;
       // print_r($row);
       $data[] = $row;
       $i++;

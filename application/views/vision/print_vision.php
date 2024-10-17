@@ -8,41 +8,49 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         @media print {
-            .modal-footer, a, button {
-                display: none !important;
-            }
-
-            table {
-                width: 100% !important;
-                border-collapse: collapse;
-            }
-
-            table, th, td {
-                border: 1px solid black;
-                padding: 8px;
-            }
-
-            .form-signatures div {
-                width: 100%;
-                text-align: left;
+            /* Setting the page size to Tabloid */
+            @page {
+                size: 11in 17in; /* Tabloid dimensions */
+                margin: 1in; /* Adjust margins as needed */
             }
 
             body {
                 margin: 0;
                 padding: 0;
+                width: 100%;
+                zoom: 1; /* Scale for better fit */
             }
 
-            * {
-                background-color: transparent !important;
-                color: black !important;
+            /* Ensure the container fits the page */
+            .container-fluid {
+                max-width: 100%;
+                width: 100%;
+                margin: 0;
+            }
+
+            table {
+                width: 100% !important;
+                border-collapse: collapse;
+                page-break-inside: avoid; /* Avoid breaking tables */
+            }
+
+            th, td {
+                border: 1px solid black;
+                padding: 8px;
+                word-wrap: break-word; /* Ensure text breaks to fit */
             }
 
             label, input, textarea, p {
-                font-size: 12pt;
+                font-size: 10pt; /* Adjust font size for printing */
             }
 
             .form-signatures, .form-section {
-                page-break-inside: avoid;
+                page-break-inside: avoid; /* Avoid breaking signatures across pages */
+            }
+
+            /* Hide buttons and links during printing */
+            .modal-footer, a, button {
+                display: none !important;
             }
         }
 
@@ -62,74 +70,102 @@
 <body>
 <div class="container-fluid">
     <section class="content">
-        <h2 class="text-center" style="margin-bottom:30px;">Informed concent for fundus fluorescein angiography</h2> <!-- Centered title -->
-        <div class="form-group">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <label class="font-weight-bold mb-0 small">Name of the patient:</label> <!-- Make label text small -->
-                    <p class="small d-inline-block" style="margin-left: 10px;">
-                        <?php echo isset($form_data['patient_name']) ? htmlspecialchars($form_data['patient_name']) : ''; ?>
-                    </p> <!-- Make paragraph text small -->
-                </div>
-                <div class="col-md-4">
-                    <label class="font-weight-bold mb-0 small">Regn No:</label> <!-- Reg No label -->
-                    <p class="small d-inline-block" style="margin-left: 10px;">
-                        <?php echo isset($form_data['patient_code']) ? htmlspecialchars($form_data['patient_code']) : ''; ?>
-                    </p> <!-- Reg No value -->
-                </div>
-            </div>
+        <p class="text-center">Sara Eye HOSPITALS</p>
+        <p class="font-weight-bold">Mobile no.: <?php echo isset($billing_data['mobile_no']) ? htmlspecialchars($billing_data['mobile_no']) : ''; ?></p>
+        
+        <div class="form-group border p-3 rounded">
+            <table class="table table-borderless">
+                <tbody>
+                    <tr>
+                        <td>
+                            <span class="font-weight-bold">Name of the patient:</span> 
+                            <?php echo isset($form_data['patient_name']) ? htmlspecialchars($form_data['patient_name']) : ''; ?>
+                        </td>
+                        <td>
+                            <span class="font-weight-bold">Regn No:</span> 
+                            <?php echo isset($form_data['patient_code']) ? htmlspecialchars($form_data['patient_code']) : ''; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="font-weight-bold">Token No:</span> <?php echo isset($billing_data['token_no']) ? htmlspecialchars($billing_data['token_no']) : ''; ?>
+                        </td>
+                        <td>
+                            <span class="font-weight-bold">Billing No:</span> <?php echo isset($billing_data['booking_code']) ? htmlspecialchars($billing_data['booking_code']) : ''; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="font-weight-bold">Age:</span> <?php echo isset($billing_data['age']) ? htmlspecialchars($billing_data['age']) : 'Not Defined'; ?>
+                        </td>
+                        <td>
+                            <span class="font-weight-bold">Patient Category:</span> <?php echo isset($billing_data['patient_category']) ? htmlspecialchars($billing_data['patient_category']) : ''; ?>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
         </div>
 
 
+        <h3 class="text-center" style="margin-bottom:30px;">Informed Consent for Fundus Fluorescein Angiography</h3>
 
-        <div class="form-group">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <label class="font-weight-bold mb-0 small">Purpose of the Procedure: </label> <!-- Make label text small -->
-                </div>
-                <div class="col-md-6 mt-3">
-                    <p class="small"><?php echo isset($form_data['procedure_purpose']) ? htmlspecialchars($form_data['procedure_purpose']) : ''; ?></p> <!-- Make paragraph text small -->
-                </div>
-            </div>
-        </div>
+        <table class="table table-borderless">
+            <tbody>
+                <tr>
+                    <td class="small">
+                        <span class="font-weight-bold">Purpose of the Procedure : </span> 
+                        <?php echo isset($form_data['procedure_purpose']) ? htmlspecialchars($form_data['procedure_purpose']) : ''; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="small">
+                        <span class="font-weight-bold">Side Effects : </span> 
+                        <?php echo isset($form_data['side_effect_name']) ? htmlspecialchars($form_data['side_effect_name']) : ''; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="small mt-3 text-left" colspan="1">
+                        I have been informed about the procedure, benefits, and risks, and hereby consent to proceed with the investigation.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-        <div class="form-group">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <label class="font-weight-bold mb-0 small">Side Effects: </label> <!-- Make label text small -->
-                </div>
-                <div class="col-md-6 mt-3">
-                    <p class="small "><?php echo isset($form_data['side_effect_name']) ? htmlspecialchars($form_data['side_effect_name']) : ''; ?></p> <!-- Make paragraph text small -->
-                </div>
-            </div>
-        </div>
-
-        <p class="mt-3 small">I have been informed about the procedure, benefits, and risks, and hereby consent to proceed with the investigation.</p> <!-- Make paragraph text small -->
 
         <div class="form-signatures">
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <div class="border-top pt-2">
-                        <span></span>
-                    </div>
-                    <p class="font-weight-bold small">Signature / LTI of patient</p> <!-- Make label text small -->
-                </div>
-                <div class="col-md-6">
-                    <div class="border-top pt-2">
-                        <span></span>
-                    </div>
-                    <p class="font-weight-bold small">Signature / LTI of relative</p> <!-- Make label text small -->
-                </div>
-            </div>
+            <table class="table table-borderless mb-4">
+                <tbody>
+                    <tr>
+                        <td class="small text-center">
+                            <div class="pt-5"> 
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <span class="font-weight-bold">Signature / LTI of patient</span>
+                        </td>
+                        <td class="small text-center">
+                            <div class="pt-5"> 
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <span class="font-weight-bold">Signature / LTI of relative</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
+
+
+
         <div class="form-section mt-5">
-            <p class="font-weight-bold text-center">Check List Prior to FFA - for the evaluating Doctor and Assistant</p> <!-- Changed to a paragraph -->
+            <p class="font-weight-bold text-center">Check List Prior to FFA - for the evaluating Doctor and Assistant</p>
             <table class="table table-bordered mt-3">
                 <thead>
                     <tr>
-                        <th>Question</th> <!-- Retaining question column header -->
-                        <td></td>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -150,45 +186,60 @@
                         <tr>
                             <th class="font-weight-bold mb-0 small"><?php echo $question; ?></th>
                             <td>
-                                <p class="font-weight-bold mb-0 small"><?php echo isset($form_data[$name]) && $form_data[$name] == 'yes' ? 'Yes' : 'No'; ?></p>
+                                <p class="font-weight-bold mb-0 small">
+                                    <?php 
+                                    if (isset($form_data[$name])) {
+                                        echo ($form_data[$name] == 'yes') ? 'Yes' : (($form_data[$name] == 'no') ? 'No' : 'null');
+                                    } else {
+                                        echo ''; // If the value is not set at all
+                                    }
+                                    ?>
+                                </p>
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                    
                 </tbody>
             </table>
-            <div class="grp-full" style="">
-                <div class="row align-items-center">
-                    <div class="col-md-6">
-                        <label class="font-weight-bold mb-0 small">FFA not done due to:</label> <!-- Label styled similarly -->
-                    </div>
-                    <div class="col-md-6 mt-3">
-                        <p class="small"><?php echo isset($form_data['reason_ffa_not_done']) ? htmlspecialchars($form_data['reason_ffa_not_done']) : ''; ?></p>
-                    </div>
-                </div>
+            <div class="grp-full">
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span class="font-weight-bold">FFA not done due to : </span> 
+                                <?php echo isset($form_data['reason_ffa_not_done']) ? htmlspecialchars($form_data['reason_ffa_not_done']) : ''; ?>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+
 
         </div>
 
         <div class="form-signatures mt-5">
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <p class="font-weight-bold small">Optometrist's Signature</p> <!-- Make label text small -->
-                    <div class="border-top pt-2">______________________</div>
-                    <p class="mt-2 small">Date: <?php echo isset($form_data['optometrist_date']) ? date('F j, Y', strtotime($form_data['optometrist_date'])) : '__________________'; ?></p> <!-- Make date text small -->
-                </div>
-                <div class="col-md-4">
-                    <p class="font-weight-bold small">Anaesthetist's Signature</p> <!-- Make label text small -->
-                    <div class="border-top pt-2">______________________</div>
-                    <p class="mt-2 small">Date: <?php echo isset($form_data['anaesthetist_date']) ? date('F j, Y', strtotime($form_data['anaesthetist_date'])) : '__________________'; ?></p> <!-- Make date text small -->
-                </div>
-                <div class="col-md-4">
-                    <p class="font-weight-bold small">Doctor's Signature</p> <!-- Make label text small -->
-                    <div class="border-top pt-2">______________________</div>
-                    <p class="mt-2 small">Date: <?php echo isset($form_data['doctor_date']) ? date('F j, Y', strtotime($form_data['doctor_date'])) : '__________________'; ?></p> <!-- Make date text small -->
-                </div>
-            </div>
+            <table class="table table-borderless mb-4">
+                <tbody>
+                    <tr>
+                        <td class="small text-center">
+                            <p class="font-weight-bold pt-4">Optometrist's Signature</p>
+                            <!-- <div class="border-top pt-4">______________________</div> Increased padding for more space -->
+                            <p class="mt-2 small">Date: <?php echo isset($form_data['optometrist_date']) ? date('F j, Y', strtotime($form_data['optometrist_date'])) : '__________________'; ?></p>
+                        </td>
+                        <td class="small text-center">
+                            <p class="font-weight-bold pt-4">Anaesthetist's Signature</p>
+                            <!-- <div class="border-top pt-4">______________________</div> Increased padding for more space -->
+                            <p class="mt-2 small">Date: <?php echo isset($form_data['anaesthetist_date']) ? date('F j, Y', strtotime($form_data['anaesthetist_date'])) : '__________________'; ?></p>
+                        </td>
+                        <td class="small text-center">
+                            <p class="font-weight-bold pt-4">Doctor's Signature</p>
+                            <!-- <div class="border-top pt-4">______________________</div> Increased padding for more space -->
+                            <p class="mt-2 small">Date: <?php echo isset($form_data['doctor_date']) ? date('F j, Y', strtotime($form_data['doctor_date'])) : '__________________'; ?></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+
 
     </section>
 </div>
