@@ -423,5 +423,16 @@ class Help_desk extends CI_Controller
     $this->pdf->stream("help_desk_list_" . time() . ".pdf", array("Attachment" => 1));
   }
 
+  function deleteall()
+    {
+        unauthorise_permission('411', '2488');
+        $post = $this->input->post();
+        if (!empty($post)) {
+            $result = $this->prescription->deleteall($post['row_id']);
+            $response = "Help Desk successfully deleted.";
+            echo $response;
+        }
+    }
+
 }
 ?>

@@ -3282,7 +3282,7 @@ class Emergency_booking extends CI_Controller
     $objPHPExcel->setActiveSheetIndex(0);
     $data_patient_reg = get_setting_value('PATIENT_REG_NO');
     // Field names in the first row
-    $fields = array('Eme. Reg. NO.', 'Patient Name', $data_patient_reg, 'Appointment Date', 'Booking Date', 'Age', 'Gender', 'Mobile', 'Doctor Name', 'Specialization', 'Source From', 'Disease', 'Total Amount', 'Net Amount','Emergency Charge');
+    $fields = array('Token. NO.','Eme. Reg. NO.', 'Patient Name', $data_patient_reg, 'Booking Date', 'Age', 'Gender', 'Mobile', 'Doctor Name', 'Specialization', 'Total Amount', 'Net Amount','Emergency Charge');
     $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
     $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::VERTICAL_CENTER);
     $col = 0;
@@ -3302,8 +3302,8 @@ class Emergency_booking extends CI_Controller
       $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(15);
       $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(15);
       $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(15);
-      $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(15);
-      $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(15);
+    //   $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(15);
+    //   $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(15);
       $objPHPExcel->getActiveSheet()->getStyle($row_heading)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
       $objPHPExcel->getActiveSheet()->getStyle($row_heading)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
       $row_heading++;
@@ -3362,7 +3362,7 @@ class Emergency_booking extends CI_Controller
           $age .= ", " . $age_d . " " . $day;
         }
         $patient_age = $age;
-        array_push($rowData, $opds->eme_booking_code, $opds->patient_name, $opds->patient_code, $appointment_date, $booking_date, $patient_age, $gender, $opds->mobile_no, $attended_doctor_name, $specialization_id, $opds->patient_source, $opds->disease, number_format($opds->total_amount, 2), number_format($opds->net_amount, 2),number_format($opds->eme_booking_charge, 2));
+        array_push($rowData, $opds->token_no,$opds->eme_booking_code, $opds->patient_name, $opds->patient_code, $booking_date, $patient_age, $gender, $opds->mobile_no, $attended_doctor_name, number_format($opds->total_amount, 2), number_format($opds->net_amount, 2),number_format($opds->eme_booking_charge, 2));
         $count = count($rowData);
         for ($j = 0; $j < $count; $j++) {
 

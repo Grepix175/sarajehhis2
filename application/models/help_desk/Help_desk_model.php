@@ -336,6 +336,26 @@ class Help_desk_model extends CI_Model
 
 		return $data;
 	}
+	public function deleteall($ids = array())
+	{
+		if (!empty($ids)) {
+
+			$id_list = [];
+			foreach ($ids as $id) {
+				if (!empty($id) && $id > 0) {
+					$id_list[] = $id;
+				}
+			}
+			$helpdesk_ids = implode(',', $id_list);
+			$user_data = $this->session->userdata('auth_users');
+			$this->db->set('is_deleted', 1);
+			$this->db->set('deleted_by', $user_data['id']);
+			$this->db->set('deleted_date', date('Y-m-d H:i:s'));
+			$this->db->where('id IN (' . $helpdesk_ids . ')');
+			$this->db->update('hms_std_eye_prescription');
+			//echo $this->db->last_query();die;
+		}
+	}
 
 }
 ?>
