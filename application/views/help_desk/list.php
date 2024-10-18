@@ -129,6 +129,7 @@ $users_data = $this->session->userdata('auth_users');
     }
 
     function allbranch_delete(allVals) {
+      console.log(allVals,'=======');
       if (allVals != "") {
         $('#confirm').modal({
           backdrop: 'static',

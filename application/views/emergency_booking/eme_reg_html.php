@@ -25,11 +25,10 @@ td
 <table width="100%" cellpadding="0" cellspacing="0" border="1px">
  <tr>
     <th>Token No.</th>
-    <th>OPD No.</th>
-    <th>OPD No.</th>
+    <th>Eme. Reg. No.</th>
     <th>Patient Name</th>
     <th><?php echo $data= get_setting_value('PATIENT_REG_NO');?></th>
-    <th>Appointment Date</th>
+    <!--<th>Appointment Date</th>-->
     <th>Booking Date</th>
     <th>Age</th>
     <th>Gender</th>
@@ -37,10 +36,11 @@ td
     <th>Doctor Name</th>
     <th>Specialization</th>
     
-    <th>Source From</th>
-    <th>Disease</th>
+    <!--<th>Source From</th>-->
+    <!--<th>Disease</th>-->
     <th>Total Amount</th>
     <th>Net Amount</th>
+    <th>Eme. Booking Charge</th>
     
     
     
@@ -120,11 +120,11 @@ td
    	   ?>
    	    <tr>
             <!--  <td align="center">< ?php echo $i; ?>.</td> -->
-            <td><?php echo $opds->toekn_no; ?></td>
+            <td><?php echo $opds->token_no; ?></td>
             <td><?php echo $opds->eme_booking_code; ?></td>
             <td><?php echo $opds->patient_name; ?></td>
             <td><?php echo $opds->patient_code; ?></td>
-            <td><?php echo $appointment_date; ?></td>
+            <!--<td><?php echo $appointment_date; ?></td>-->
             <td><?php echo $booking_date; ?></td>
             <td><?php echo $patient_age; ?></td>
             <td><?php echo $gender; ?></td>
@@ -132,8 +132,8 @@ td
             <td><?php echo $attended_doctor_name; ?></td>
             <td><?php echo $specialization_id; ?></td>
             
-            <td><?php echo $opds->patient_source; ?></td>
-            <td><?php echo $opds->disease; ?></td>
+            <!--<td><?php echo $opds->patient_source; ?></td>-->
+            <!--<td><?php echo $opds->disease; ?></td>-->
             <td><?php echo number_format($opds->total_amount,2); ?></td>
             <td><?php echo number_format($opds->net_amount,2); ?></td>
             <td><?php echo number_format($opds->eme_booking_charge,2); ?></td>
