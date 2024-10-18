@@ -6270,6 +6270,22 @@ class Opd_model extends CI_Model
 
 	}
 
+	function get_by_id_refraction($id = '')
+	{
+		$user_data = $this->session->userdata('auth_users');
+		$this->db->select('booking_id');
+		$this->db->from('hms_opd_refraction');
+		$this->db->where('hms_opd_refraction.booking_id', $id);
+
+		$query = $this->db->get();
+
+		if ($query->num_rows() > 0) {
+			return 1; // Return 1 if a match is found
+		}
+
+		return 0; //
+
+	}
 	public function dilated_start($id = '')
 	{
 		$time = strtotime(date('H:i:s'));

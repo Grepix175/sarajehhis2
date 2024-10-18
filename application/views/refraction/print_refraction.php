@@ -168,23 +168,17 @@ $field_list = mandatory_section_field_list(2);
 
 <body>
 <div class="container-fluid">
-    <?php 
-        $this->load->view('include/header');
-        $this->load->view('include/inner_header');
-    ?>
+   
     <?php //echo "<pre>";print_r($form_data);die; ?>
-    <div class="panel-body"   style="padding:20px;float:left;">
-        
-
-    <form id="refraction_form" method="post" action="<?php echo current_url(); ?>">
-        <?php //echo"<pre>";print_r($form_data);die; ?>
-        <input type="hidden" id="id" name="id" value="<?php echo isset($form_data['id']) ? $form_data['id'] : ''; ?>">
+    <p style="text-align:center;padding:10px;">Refraction List</p>
+    <div class="panel-body" style="padding:20px; float:left;">
+        <form id="refraction_form" method="post" action="<?php echo current_url(); ?>">
         <input type="hidden" id="booking_id" name="booking_id" value="<?php echo isset($form_data['booking_id']) ? $form_data['booking_id'] : ''; ?>">
         <input type="hidden" id="branch_id" name="branch_id" value="<?php echo isset($form_data['branch_id']) ? $form_data['branch_id'] : ''; ?>">
         <input type="hidden" id="booking_code" name="booking_code" value="<?php echo isset($form_data['booking_code']) ? $form_data['booking_code'] : ''; ?>">
         <input type="hidden" id="pres_id" name="pres_id" value="<?php echo isset($id) ? $id : ''; ?>">
         <input type="hidden" id="patient_id" name="patient_id" value="<?php echo isset($form_data['patient_id']) ? $form_data['patient_id'] : ''; ?>">
-        <section class="panel panel-default">
+        <section class="panel panel-default" style="width:100%;">
         <div class="row">
             <div class="col-md-12 text-right btn_edit" style="display: none;">
                 <a href="javascript:void(0)" class="btn_fill" onclick="$('.auto_ref').toggle();">Edit</a>
@@ -192,7 +186,7 @@ $field_list = mandatory_section_field_list(2);
             </div>
             <div class="col-md-2">
                 <div class="label_name">AUTO REFRACTION (ARx) <i onclick="refraction_ar_ltr();" title="Copy Left to Right" class="fa fa-arrow-right"></i></div>
-                <button type="button" class="btn_fill auto_ref d-none" title="Fill AUTO REFRACTION" onclick="return open_modals_2('refraction_ar');" style="display: inline-block;">Fill <i class="fa fa-arrow-right"></i></button>
+                <!-- <button type="button" class="btn_fill auto_ref d-none" title="Fill AUTO REFRACTION" onclick="return open_modals_2('refraction_ar');" style="display: inline-block;">Fill <i class="fa fa-arrow-right"></i></button> -->
             </div>
             <div class="col-md-4">
                 <table class="table table-bordered">
@@ -208,65 +202,31 @@ $field_list = mandatory_section_field_list(2);
                         <tr>
                             <td style="text-align:left;">DV</td>
                             <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" value="<?= isset($form_data['refraction_ar_l_dv_sph']) ? htmlspecialchars($form_data['refraction_ar_l_dv_sph']) : '' ?>" name="refraction_ar_l_dv_sph" id="refraction_ar_l_dv_sph" class="w-50px auto_ref d-none" style="display: inline-block;">
+                                <span class="auto_ref"><?= isset($form_data['refraction_ar_l_dv_sph']) ? htmlspecialchars($form_data['refraction_ar_l_dv_sph']) : '' ?></span>
                             </td>
                             <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" value="<?= isset($form_data['refraction_ar_l_dv_cyl']) ? htmlspecialchars($form_data['refraction_ar_l_dv_cyl']) : '' ?>" name="refraction_ar_l_dv_cyl" id="refraction_ar_l_dv_cyl" class="w-50px auto_ref d-none" style="display: inline-block;">
+                                <span class="auto_ref"><?= isset($form_data['refraction_ar_l_dv_cyl']) ? htmlspecialchars($form_data['refraction_ar_l_dv_cyl']) : '' ?></span>
                             </td>
                             <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" value="<?= isset($form_data['refraction_ar_l_dv_axis']) ? htmlspecialchars($form_data['refraction_ar_l_dv_axis']) : '' ?>" name="refraction_ar_l_dv_axis" id="refraction_ar_l_dv_axis" class="w-50px auto_ref d-none" style="display: inline-block;">
+                                <span class="auto_ref"><?= isset($form_data['refraction_ar_l_dv_axis']) ? htmlspecialchars($form_data['refraction_ar_l_dv_axis']) : '' ?></span>
                             </td>
                         </tr>
                         <tr>
                             <td style="text-align:left;">NV</td>
                             <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" value="<?= isset($form_data['refraction_ar_l_nv_sph']) ? htmlspecialchars($form_data['refraction_ar_l_nv_sph']) : '' ?>" name="refraction_ar_l_nv_sph" id="refraction_ar_l_nv_sph" class="w-50px auto_ref d-none" style="display: inline-block;">
+                                <span class="auto_ref"><?= isset($form_data['refraction_ar_l_nv_sph']) ? htmlspecialchars($form_data['refraction_ar_l_nv_sph']) : '' ?></span>
                             </td>
                             <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" value="<?= isset($form_data['refraction_ar_l_nv_cyl']) ? htmlspecialchars($form_data['refraction_ar_l_nv_cyl']) : '' ?>" name="refraction_ar_l_nv_cyl" id="refraction_ar_l_nv_cyl" class="w-50px auto_ref d-none" style="display: inline-block;">
+                                <span class="auto_ref"><?= isset($form_data['refraction_ar_l_nv_cyl']) ? htmlspecialchars($form_data['refraction_ar_l_nv_cyl']) : '' ?></span>
                             </td>
                             <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" value="<?= isset($form_data['refraction_ar_l_nv_axis']) ? htmlspecialchars($form_data['refraction_ar_l_nv_axis']) : '' ?>" name="refraction_ar_l_nv_axis" id="refraction_ar_l_nv_axis" class="w-50px auto_ref d-none" style="display: inline-block;">
+                                <span class="auto_ref"><?= isset($form_data['refraction_ar_l_nv_axis']) ? htmlspecialchars($form_data['refraction_ar_l_nv_axis']) : '' ?></span>
                             </td>
                         </tr>
-                        <tr>
-                            <td style="text-align:left;"></td>
-                            <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" disabled value="<?= isset($form_data['refraction_ar_l_b1_sph']) ? htmlspecialchars($form_data['refraction_ar_l_b1_sph']) : '' ?>" name="refraction_ar_l_b1_sph" id="refraction_ar_l_b1_sph" class="w-50px auto_ref d-none" style="display: inline-block;">
-                            </td>
-                            <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" disabled value="<?= isset($form_data['refraction_ar_l_b1_cyl']) ? htmlspecialchars($form_data['refraction_ar_l_b1_cyl']) : '' ?>" name="refraction_ar_l_b1_cyl" id="refraction_ar_l_b1_cyl" class="w-50px auto_ref d-none" style="display: inline-block;">
-                            </td>
-                            <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" disabled value="<?= isset($form_data['refraction_ar_l_b1_axis']) ? htmlspecialchars($form_data['refraction_ar_l_b1_axis']) : '' ?>" name="refraction_ar_l_b1_axis" id="refraction_ar_l_b1_axis" class="w-50px auto_ref d-none" style="display: inline-block;">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="text-align:left;"></td>
-                            <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" disabled value="<?= isset($form_data['refraction_ar_l_b2_sph']) ? htmlspecialchars($form_data['refraction_ar_l_b2_sph']) : '' ?>" name="refraction_ar_l_b2_sph" id="refraction_ar_l_b2_sph" class="w-50px auto_ref d-none" style="display: inline-block;">
-                            </td>
-                            <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" disabled value="<?= isset($form_data['refraction_ar_l_b2_cyl']) ? htmlspecialchars($form_data['refraction_ar_l_b2_cyl']) : '' ?>" name="refraction_ar_l_b2_cyl" id="refraction_ar_l_b2_cyl" class="w-50px auto_ref d-none" style="display: inline-block;">
-                            </td>
-                            <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" disabled value="<?= isset($form_data['refraction_ar_l_b2_axis']) ? htmlspecialchars($form_data['refraction_ar_l_b2_axis']) : '' ?>" name="refraction_ar_l_b2_axis" id="refraction_ar_l_b2_axis" class="w-50px auto_ref d-none" style="display: inline-block;">
-                            </td>
-                        </tr>
+                        
                     </tbody>
                 </table>
+
             </div>
             <div class="col-md-2">
                 <div class="label_name">AUTO REFRACTION (ARx) <i onclick="refraction_ar_rtl();" title="Copy Right to Left" class="fa fa-arrow-left"></i></div>
@@ -285,64 +245,29 @@ $field_list = mandatory_section_field_list(2);
                         <tr>
                             <td style="text-align:left;">DV</td>
                             <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" value="<?= isset($form_data['refraction_ar_r_dv_sph']) ? htmlspecialchars($form_data['refraction_ar_r_dv_sph']) : '' ?>" name="refraction_ar_r_dv_sph" id="refraction_ar_r_dv_sph" class="w-50px auto_ref d-none" style="display: inline-block;">
+                                <span class="auto_ref"><?= isset($form_data['refraction_ar_r_dv_sph']) ? htmlspecialchars($form_data['refraction_ar_r_dv_sph']) : '' ?></span>
                             </td>
                             <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" value="<?= isset($form_data['refraction_ar_r_dv_cyl']) ? htmlspecialchars($form_data['refraction_ar_r_dv_cyl']) : '' ?>" name="refraction_ar_r_dv_cyl" id="refraction_ar_r_dv_cyl" class="w-50px auto_ref d-none" style="display: inline-block;">
+                                <span class="auto_ref"><?= isset($form_data['refraction_ar_r_dv_cyl']) ? htmlspecialchars($form_data['refraction_ar_r_dv_cyl']) : '' ?></span>
                             </td>
                             <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" value="<?= isset($form_data['refraction_ar_r_dv_axis']) ? htmlspecialchars($form_data['refraction_ar_r_dv_axis']) : '' ?>" name="refraction_ar_r_dv_axis" id="refraction_ar_r_dv_axis" class="w-50px auto_ref d-none" style="display: inline-block;">
+                                <span class="auto_ref"><?= isset($form_data['refraction_ar_r_dv_axis']) ? htmlspecialchars($form_data['refraction_ar_r_dv_axis']) : '' ?></span>
                             </td>
                         </tr>
                         <tr>
                             <td style="text-align:left;">NV</td>
                             <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" value="<?= isset($form_data['refraction_ar_r_nv_sph']) ? htmlspecialchars($form_data['refraction_ar_r_nv_sph']) : '' ?>" name="refraction_ar_r_nv_sph" id="refraction_ar_r_nv_sph" class="w-50px auto_ref d-none" style="display: inline-block;">
+                                <span class="auto_ref"><?= isset($form_data['refraction_ar_r_nv_sph']) ? htmlspecialchars($form_data['refraction_ar_r_nv_sph']) : '' ?></span>
                             </td>
                             <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" value="<?= isset($form_data['refraction_ar_r_nv_cyl']) ? htmlspecialchars($form_data['refraction_ar_r_nv_cyl']) : '' ?>" name="refraction_ar_r_nv_cyl" id="refraction_ar_r_nv_cyl" class="w-50px auto_ref d-none" style="display: inline-block;">
+                                <span class="auto_ref"><?= isset($form_data['refraction_ar_r_nv_cyl']) ? htmlspecialchars($form_data['refraction_ar_r_nv_cyl']) : '' ?></span>
                             </td>
                             <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" value="<?= isset($form_data['refraction_ar_r_nv_axis']) ? htmlspecialchars($form_data['refraction_ar_r_nv_axis']) : '' ?>" name="refraction_ar_r_nv_axis" id="refraction_ar_r_nv_axis" class="w-50px auto_ref d-none" style="display: inline-block;">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="text-align:left;"></td>
-                            <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" disabled value="<?= isset($form_data['refraction_ar_r_b1_sph']) ? htmlspecialchars($form_data['refraction_ar_r_b1_sph']) : '' ?>" name="refraction_ar_r_b1_sph" id="refraction_ar_r_b1_sph" class="w-50px auto_ref d-none" style="display: inline-block;">
-                            </td>
-                            <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" disabled value="<?= isset($form_data['refraction_ar_r_b1_cyl']) ? htmlspecialchars($form_data['refraction_ar_r_b1_cyl']) : '' ?>" name="refraction_ar_r_b1_cyl" id="refraction_ar_r_b1_cyl" class="w-50px auto_ref d-none" style="display: inline-block;">
-                            </td>
-                            <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" disabled value="<?= isset($form_data['refraction_ar_r_b1_axis']) ? htmlspecialchars($form_data['refraction_ar_r_b1_axis']) : '' ?>" name="refraction_ar_r_b1_axis" id="refraction_ar_r_b1_axis" class="w-50px auto_ref d-none" style="display: inline-block;">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="text-align:left;"></td>
-                            <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" disabled value="<?= isset($form_data['refraction_ar_r_b2_sph']) ? htmlspecialchars($form_data['refraction_ar_r_b2_sph']) : '' ?>" name="refraction_ar_r_b2_sph" id="refraction_ar_r_b2_sph" class="w-50px auto_ref d-none" style="display: inline-block;">
-                            </td>
-                            <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" disabled value="<?= isset($form_data['refraction_ar_r_b2_cyl']) ? htmlspecialchars($form_data['refraction_ar_r_b2_cyl']) : '' ?>" name="refraction_ar_r_b2_cyl" id="refraction_ar_r_b2_cyl" class="w-50px auto_ref d-none" style="display: inline-block;">
-                            </td>
-                            <td>
-                                <span class="auto_ref" style="display: none;"></span>
-                                <input type="text" disabled value="<?= isset($form_data['refraction_ar_r_b2_axis']) ? htmlspecialchars($form_data['refraction_ar_r_b2_axis']) : '' ?>" name="refraction_ar_r_b2_axis" id="refraction_ar_r_b2_axis" class="w-50px auto_ref d-none" style="display: inline-block;">
+                                <span class="auto_ref"><?= isset($form_data['refraction_ar_r_nv_axis']) ? htmlspecialchars($form_data['refraction_ar_r_nv_axis']) : '' ?></span>
                             </td>
                         </tr>
                     </tbody>
+
                 </table>
             </div>
         </div>
@@ -362,12 +287,9 @@ $field_list = mandatory_section_field_list(2);
                             <label for="lens" class="font-weight-bold mb-0">Lens:</label>
                         </div>
                         <div class="col-md-6">
-                            <select id="lens" name="lens" class="form-control input-height">
-                                <option value="" disabled <?= isset($form_data['lens']) ? '' : 'selected' ?>>Select Lens Type</option> <!-- Placeholder option -->
-                                <option value="Monofocal" <?= isset($form_data['lens']) && $form_data['lens'] === 'Monofocal' ? 'selected' : '' ?>>Monofocal</option>
-                                <option value="Bifocal" <?= isset($form_data['lens']) && $form_data['lens'] === 'Bifocal' ? 'selected' : '' ?>>Bifocal</option>
-                                <option value="Progressive" <?= isset($form_data['lens']) && $form_data['lens'] === 'Progressive' ? 'selected' : '' ?>>Progressive</option>
-                            </select>
+                            <span>
+                                <?= isset($form_data['lens']) ? htmlspecialchars($form_data['lens']) : 'Select Lens Type' ?>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -379,11 +301,14 @@ $field_list = mandatory_section_field_list(2);
                             <label for="comment" class="font-weight-bold mb-0">Comments:</label>
                         </div>
                         <div class="col-md-6">
-                            <textarea id="comment" name="comment" class="form-control input-height" rows="3"><?= isset($form_data['comment']) ? htmlspecialchars($form_data['comment']) : '' ?></textarea>
+                            <span>
+                                <?= isset($form_data['comment']) ? htmlspecialchars($form_data['comment']) : '' ?>
+                            </span>
                         </div>
                     </div>
                 </div>
 
+                </div>
 
                 <div class="form-signatures mt-4">
                     <table class="table table-borderless mb-4">
@@ -412,21 +337,11 @@ $field_list = mandatory_section_field_list(2);
                             </tr>
                         </tbody>
                     </table>
-                </div>
+                
             </div> 
 
 
-            <div class="grp">
-                <label></label>
-                <div class="box-right">
-                    <button class="btn-update" id="form_submit">
-                        <i class="fa fa-save"></i> Save</button>
-                    <a href="<?php echo base_url('refraction'); ?>" class="btn-update"
-                        style="text-decoration:none!important;color:#FFF;padding:8px 2em;"><i
-                            class="fa fa-sign-out"></i>
-                        Exit</a>
-                </div>
-            </div>
+           
         </form>
     </div>
     <div id="load_add_type_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
@@ -477,6 +392,6 @@ $field_list = mandatory_section_field_list(2);
 </script>
 
 <?php
-    $this->load->view('include/footer');
+    // $this->load->view('include/footer');
     ?>
 </html>

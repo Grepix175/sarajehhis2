@@ -38,7 +38,7 @@ $users_data = $this->session->userdata('auth_users');
           "order": [],
           "pageLength": '20',
           "ajax": {
-            "url": "<?php echo base_url('vision/ajax_list') ?>",
+            "url": "<?php echo base_url('refraction/ajax_list') ?>",
             "type": "POST",
           },
           "columnDefs": [
@@ -52,9 +52,9 @@ $users_data = $this->session->userdata('auth_users');
     <?php } ?>
 
 
-    function edit_vision(id) {
+    function edit_refraction(id) {
         // Redirect to the edit page for vision with the specified ID
-        window.location.href = '<?php echo base_url('vision/edit/'); ?>' + id;
+        window.location.href = '<?php echo base_url('refraction/edit/'); ?>' + id;
     }
 
     function reload_table() {
@@ -81,7 +81,7 @@ $users_data = $this->session->userdata('auth_users');
           .one('click', '#delete', function (e) {
             $.ajax({
               type: "POST",
-              url: "<?php echo base_url('vision/deleteall'); ?>",
+              url: "<?php echo base_url('refraction/deleteall'); ?>",
               data: { row_id: allVals },
               success: function (result) {
                 flash_session_msg(result);
@@ -128,11 +128,11 @@ $users_data = $this->session->userdata('auth_users');
                 <tr>
                   <th width="40" align="center"> <input type="checkbox" name="selectall" class="" id="selectAll" value="">
                   </th>
-                  <th> Patient Name </th>
-                  <th> Vision Name </th>
-                  <th> Side Effect </th>
-                  <th> Created Date </th>
-                  <th> Action </th>
+                  <th> Booking ID </th>
+                  <th> Lens </th>
+                  <th> Comment </th>
+                  <th> Status </th>
+                  <th> Action </th> 
                 </tr>
               </thead>
             </table>
