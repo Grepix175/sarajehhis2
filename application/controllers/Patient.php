@@ -232,6 +232,9 @@ class Patient extends CI_Controller
             if (in_array('915', $users_data['permission']['action'])) {
                 $btn_billing = '<li> <a  href="' . base_url('opd_billing/add/' . $patient->id) . '" style="' . $patient->id . '" title="Opd Billing"><i class="fa fa-plus"></i> Opd Procedure</a></li>';
             }
+            // if (in_array('915', $users_data['permission']['action'])) {
+                $btn_eme_booking = '<li> <a  href="' . base_url('emergency_booking/add/' . $patient->id) . '" style="' . $patient->id . '" title="Emergency Booking"><i class="fa fa-plus"></i> Emergency Booking</a></li>';
+            // }
             if (in_array('400', $users_data['permission']['action'])) {
                 $btn_sales_medicine = ' <li><a  href="' . base_url('sales_medicine/add/?reg=' . $patient->id) . '" style="' . $patient->id . '" title="Sale Medicine"><i class="fa fa-plus"></i> Sale Medicine</a></li>';
 
@@ -336,7 +339,7 @@ class Patient extends CI_Controller
             $btn_a = '<div class="slidedown">
             <button disabled  class="btn-custom">More <span class="caret"></span></button>
             <ul class="slidedown-content">
-            ' . $btn_edit . $btn_view . $btn_barcode . $btn_delete . $btn_appointment . $btn_booking . $btn_camp_booking . $btn_day_care . $btn_recipient_booking . $btn_dialysis_booking . $btn_dialysis_appointment . $btn_billing . $btn_sales_medicine . $btn_sales_return_medicine . $btn_ipd_booking . $btn_ot_booking . $btn_pathology_booking . $btn_proforma_booking . $btn_sales_vaccine . $btn_sales_return_vaccine . $btn_ambulance_booking . $btn_amb_enquiry . $btn_sales_canteen . $btn_history . $btn_consolidate_payment . $btncertificate . $btn_upload_document . $btn_reg_card . '
+            ' . $btn_edit . $btn_view . $btn_barcode . $btn_delete . $btn_appointment . $btn_booking . $btn_camp_booking . $btn_day_care . $btn_recipient_booking . $btn_dialysis_booking . $btn_dialysis_appointment . $btn_billing . $btn_eme_booking . $btn_sales_medicine . $btn_sales_return_medicine . $btn_ipd_booking . $btn_ot_booking . $btn_pathology_booking . $btn_proforma_booking . $btn_sales_vaccine . $btn_sales_return_vaccine . $btn_ambulance_booking . $btn_amb_enquiry . $btn_sales_canteen . $btn_history . $btn_consolidate_payment . $btncertificate . $btn_upload_document . $btn_reg_card . '
             </ul>
             </div> ';
 

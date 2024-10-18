@@ -315,6 +315,31 @@ $field_list = mandatory_section_field_list(1);
                         <?php if(!empty($form_error)){ echo form_error('emergency_charge'); } ?>
                       </div>
                     </div> <!-- row -->
+                    <div class="row m-b-5">
+                      <div class="col-xs-4">
+                        <strong><?php echo $charge_name = 'Emergency change'  ?></strong>
+                      </div>
+                      <div class="col-xs-8">
+                        <select name="eme_reg_charge_id" id="eme_reg_charge_id" class="m10 eme_reg_charge_id">
+                          <option value=""> Select emergency charge </option>
+                          <?php
+                          if(!empty($emg_reg_charge_list))
+                          {
+                            foreach($emg_reg_charge_list as $emg_reg_charge)
+                            {
+                             ?>
+                               <option value="<?php echo $emg_reg_charge->id; ?>" <?php if($emg_reg_charge->id==$form_data['eme_reg_charge_id']){ echo 'selected="selected"'; } ?>><?php echo $emg_reg_charge->charge; ?></option>
+                             <?php  
+                            }
+                          }
+                          ?>
+                        </select>
+                        
+                      
+                      
+                      <?php if(!empty($form_error)){ echo form_error('eme_reg_charge_id'); } ?>
+                      </div>
+                    </div> <!-- row -->
 
       <?php } else { ?>
       <input type="hidden"  name="consultant_charge" value="0.00">
