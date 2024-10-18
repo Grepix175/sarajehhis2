@@ -34,42 +34,26 @@ td
 </style>
 </head><body>
     <div class="header-title"><?php echo $mainHeader; ?></div>
-<table width="100%" cellpadding="0" cellspacing="0" border="1px">
- <tr>
-
-    <!--<th width="40" align="center">  <input type="checkbox" name="selectall" class="" id="selectAll" value=""> 
-    </th>-->
-    <th>Patient Name</th>
-    <!-- <th>Booking ID</th> -->
-    <th>Procedure Purpose</th>
-    <th>Side Effects</th>
-    <!-- <th>Informed Consent</th> -->
-    <th>Created At</th>
-                
-
- </tr>
- <?php
-//  echo "<pre>";print_r($data_list);die;
-   if(!empty($data_list))
-   {
-   	 
-   	 $i=1;
-   	 foreach($data_list as $opds)
-   	 {
-        
-   	   ?>
-   	    <tr>
-           <td><?php echo $data['patient_name']; ?></td>
-            <!-- <td><?php //echo $data['booking_id']; ?></td> -->
-            <td><?php echo $data['procedure_purpose']; ?></td>
-            <td><?php echo $data['side_effects']; ?></td>
-            <!-- <td><?php //echo $data['informed_consent']; ?></td> -->
-            <td><?php echo $data['created_at']; ?></td>
+    <table width="100%" cellpadding="0" cellspacing="0" border="1px">
+        <tr>
+            <th>Patient Name</th>
+            <th>Procedure Purpose</th>
+            <th>Side Effects</th>
+            <th>Created At</th>
         </tr>
-   	   <?php
-   	   $i++;	
-   	 }	
-   }
- ?> 
-</table>
+        <?php
+        if (!empty($data_list)) {
+            foreach ($data_list as $opds) {
+        ?>
+                <tr>
+                    <td><?php echo $opds->patient_name; ?></td>
+                    <td><?php echo $opds->procedure_purpose; ?></td>
+                    <td><?php echo $opds->side_effect_name; ?></td>
+                    <td><?php echo $opds->created_at; ?></td>
+                </tr>
+        <?php
+            }
+        }
+        ?> 
+    </table>
 </body></html>
