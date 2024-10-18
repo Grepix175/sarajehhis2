@@ -17,34 +17,36 @@ class Help_desk_model extends CI_Model
 		$user_data = $this->session->userdata('auth_users');
 		$search = $this->session->userdata('prescription_search');
 
-		$this->db->select("hms_std_eye_prescription.*,hms_patient.simulation_id,hms_patient.patient_name,hms_patient.patient_code,hms_patient.mobile_no,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d,hms_opd_booking.dilate_status,hms_opd_booking.app_type,hms_opd_booking.token_no");
-		$this->db->join('hms_opd_booking', 'hms_opd_booking.id=hms_std_eye_prescription.booking_id');
-		$this->db->join('hms_patient', 'hms_patient.id=hms_std_eye_prescription.patient_id', 'left');
+		// Select fields with proper aliasing if needed
+		$this->db->select("hms_std_eye_prescription.*, hms_patient.simulation_id, hms_patient.patient_name, hms_patient.patient_code, hms_patient.mobile_no, hms_patient.age_y, hms_patient.age_m, hms_patient.age_d, hms_opd_booking.dilate_status, hms_opd_booking.app_type, hms_opd_booking.token_no");
+		$this->db->from('hms_std_eye_prescription');
+		$this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_std_eye_prescription.booking_id');
+		$this->db->join('hms_patient', 'hms_patient.id = hms_std_eye_prescription.patient_id', 'left');
 
 		$this->db->where('hms_std_eye_prescription.is_deleted', '0');
-		if (isset($search['branch_id']) && $search['branch_id'] != '') {
-			$this->db->where('hms_std_eye_prescription.branch_id IN (' . $search['branch_id'] . ')');
+		
+		// Handle branch_id filtering
+		if (!empty($search['branch_id'])) {
+			$this->db->where_in('hms_std_eye_prescription.branch_id', explode(',', $search['branch_id']));
 		} else {
-			$this->db->where('hms_std_eye_prescription.branch_id = "' . $user_data['parent_id'] . '"');
+			$this->db->where('hms_std_eye_prescription.branch_id', $user_data['parent_id']);
 		}
 
-		/////// Search query start //////////////
-
-		if (isset($search) && !empty($search)) {
+		// Search conditions
+		if (!empty($search)) {
 
 			if (!empty($search['start_date'])) {
-				$start_date = date('Y-m-d', strtotime($search['start_date'])) . ' 00:00:00';
-				$this->db->where('hms_std_eye_prescription.created_date >= "' . $start_date . '"');
+				$start_date = date('Y-m-d 00:00:00', strtotime($search['start_date']));
+				$this->db->where('hms_std_eye_prescription.created_date >=', $start_date);
 			}
 
 			if (!empty($search['end_date'])) {
-				$end_date = date('Y-m-d', strtotime($search['end_date'])) . ' 23:59:59';
-				$this->db->where('hms_std_eye_prescription.created_date <= "' . $end_date . '"');
+				$end_date = date('Y-m-d 23:59:59', strtotime($search['end_date']));
+				$this->db->where('hms_std_eye_prescription.created_date <=', $end_date);
 			}
 
-
 			if (!empty($search['patient_name'])) {
-				$this->db->where('hms_patient.patient_name LIKE "' . $search['patient_name'] . '%"');
+				$this->db->like('hms_patient.patient_name', $search['patient_name'], 'after');
 			}
 
 			if (!empty($search['patient_code'])) {
@@ -52,66 +54,58 @@ class Help_desk_model extends CI_Model
 			}
 
 			if (!empty($search['mobile_no'])) {
-				$this->db->where('hms_patient.mobile_no LIKE "' . $search['mobile_no'] . '%"');
+				$this->db->like('hms_patient.mobile_no', $search['mobile_no'], 'after');
 			}
 		}
-		$this->db->where('hms_std_eye_prescription.id !=1');
-		$emp_ids = '';
-		if ($user_data['emp_id'] > 0) {
-			if ($user_data['record_access'] == '1') {
-				$emp_ids = $user_data['id'];
-			}
-		} elseif (!empty($get["employee"]) && is_numeric($get['employee'])) {
-			$emp_ids = $get["employee"];
+
+		// Exclude prescription ID 1
+		$this->db->where('hms_std_eye_prescription.id !=', 1);
+
+		// Handle employee-specific data
+		$emp_ids = $user_data['emp_id'] > 0 && $user_data['record_access'] == '1' 
+				? $user_data['id'] 
+				: (!empty($get["employee"]) && is_numeric($get['employee']) ? $get["employee"] : '');
+
+		if (!empty($emp_ids)) {
+			$this->db->where_in('hms_std_eye_prescription.created_by', explode(',', $emp_ids));
 		}
 
-
-		if (isset($emp_ids) && !empty($emp_ids)) {
-			$this->db->where('hms_std_eye_prescription.created_by IN (' . $emp_ids . ')');
-		}
-		/////// Search query end //////////////
-
-		$this->db->from($this->table);
-		$i = 0;
-
-		foreach ($this->column as $item) // loop column 
-		{
-			if ($_POST['search']['value']) // if datatable send POST for search
-			{
-
-				if ($i === 0) // first loop
-				{
-					$this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND. 
+		// Add search functionality for DataTables
+		foreach ($this->column as $i => $item) {
+			if ($_POST['search']['value']) {
+				if ($i === 0) {
+					$this->db->group_start();
 					$this->db->like($item, $_POST['search']['value']);
 				} else {
 					$this->db->or_like($item, $_POST['search']['value']);
 				}
-
-				if (count($this->column) - 1 == $i) //last loop+
-					$this->db->group_end(); //close bracket
+				if ($i === count($this->column) - 1) {
+					$this->db->group_end();
+				}
 			}
-			$column[$i] = $item; // set column array variable to order processing
-			$i++;
 		}
+
+		// Group results
 		$this->db->group_by('hms_std_eye_prescription.id');
-		if (isset($_POST['order'])) // here order processing
-		{
-			$this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+
+		// Handle ordering
+		if (isset($_POST['order'])) {
+			$this->db->order_by($this->column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
 		} else if (isset($this->order)) {
-			$order = $this->order;
-			$this->db->order_by(key($order), $order[key($order)]);
+			$this->db->order_by(key($this->order), $this->order[key($this->order)]);
 		}
 	}
 
 	function get_datatables()
 	{
 		$this->_get_datatables_query();
-		if ($_POST['length'] != -1)
+		if ($_POST['length'] != -1) {
 			$this->db->limit($_POST['length'], $_POST['start']);
+		}
 		$query = $this->db->get();
-		//echo $this->db->last_query();die();
 		return $query->result();
 	}
+
 
 	function count_filtered()
 	{

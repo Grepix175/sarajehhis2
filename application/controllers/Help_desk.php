@@ -90,6 +90,7 @@ class Help_desk extends CI_Controller
       // print_r($prescription->booking_id);
       $pat_status = '';
       $patient_status = $this->opd->get_by_id_patient_status($prescription->booking_id);
+      $refraction_exists = $this->opd->get_by_id_refraction($prescription->booking_id);
       // print_r($patient_status);
       // echo "<pre>";
       // print_r($patient_status);
@@ -189,7 +190,13 @@ class Help_desk extends CI_Controller
         $btn_print_pre = ' <a class="btn-custom" onClick="return print_window_page(' . $print_url . ')" href="javascript:void(0)" title="Print History"  data-url="512"><i class="fa fa-print"></i> Print History</a>';
       }
       if (in_array('2413', $users_data['permission']['action'])) {
-        $refraction = '<a class="btn-custom" href="' . base_url("refraction/add/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction</a>';
+        if ($refraction_exists == 1) {
+
+        $refraction = '<a class="btn-custom " disabled href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction</a>';
+        }else{
+          $refraction = '<a class="btn-custom" href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction</a>';
+
+        }
       }
       if (in_array('2413', $users_data['permission']['action'])) {
         $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . "'";
