@@ -240,7 +240,8 @@ class Doctors extends CI_Controller {
 		$data['form_error'] = [];
 		$data['country_list'] = $this->general_model->country_list();
 		$data['specialization_list'] = $this->general_model->specialization_list();
-        //print_r($data['specialization_list']);die;
+		$data['emg_reg_charge_list'] = $this->general_model->emg_reg_charge_list();
+        // print_r($data['emg_reg_charge_list']);die;
         $specialization_row = count($data['specialization_list']);
 		$data['person_list'] = $this->general_model->employee_list();
         $data['rate_list'] = $this->general_model->get_rate_list();
@@ -254,6 +255,7 @@ class Doctors extends CI_Controller {
                                     "doctor_type"=>"",
                                     "doctor_name"=>"",
                                     "specilization_id"=>"",
+                                    "eme_reg_charge_id"=>"",
                                     "mobile_no"=>"",
                                     "address"=>"",
                                     "address2"=>"",
@@ -387,6 +389,7 @@ class Doctors extends CI_Controller {
         $this->load->model('general/general_model');
         $data['country_list'] = $this->general_model->country_list();
         $data['specialization_list'] = $this->general_model->specialization_list();
+        $data['emg_reg_charge_list'] = $this->general_model->emg_reg_charge_list();
         $data['person_list'] = $this->general_model->employee_list(); 
         $data['rate_list'] = $this->general_model->get_rate_list($id);
         $data['days_list'] = $this->general_model->get_days_list();
@@ -413,6 +416,7 @@ class Doctors extends CI_Controller {
                                     "doctor_name"=>$result['doctor_name'],
                                     "incentive_limit"=>$result['incentive_limit'],
                                     "specilization_id"=>$result['specilization_id'],
+                                    "eme_reg_charge_id"=>$result['eme_reg_charge_id'],
                                     "mobile_no"=>$result['mobile_no'],
                                     "address"=>$result['address'],
                                     "address2"=>$result['address2'],

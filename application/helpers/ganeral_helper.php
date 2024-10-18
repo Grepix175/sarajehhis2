@@ -293,6 +293,14 @@ function generate_unique_id($type="",$other_branch_id="")
 		$opd_type ='normal';//for normal opd in case of emergency the value will be 1
 		$total_record = $CI->general->total_booking($branch_id,$prefix);
 	}
+	else if($type==76)
+	{
+		$table_name = 'hms_emergency_booking';
+		$field_name = 'eme_booking_code';
+		// $booking_type = '2';
+		// $opd_type ='normal';//for normal opd in case of emergency the value will be 1
+		$total_record = $CI->general->total_eme_booking($branch_id,$prefix);
+	}
 	else if($type==10)
 	{
 		$table_name = 'hms_medicine_entry';
