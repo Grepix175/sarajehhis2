@@ -129,7 +129,6 @@ $users_data = $this->session->userdata('auth_users');
     }
 
     function allbranch_delete(allVals) {
-      console.log(allVals,'=======');
       if (allVals != "") {
         $('#confirm').modal({
           backdrop: 'static',
@@ -321,9 +320,6 @@ $users_data = $this->session->userdata('auth_users');
                   <th> Patient Name </th>
                   <th> Mobile </th>
                   <th> Age </th>
-                  <!-- <th> Dilate Status </th>  -->
-                  <!-- <th> Status </th> -->
-                  <!-- <th> Booking Status </th>  -->
                   <th> Patient Status </th>
                   <th> Created Date </th>
                   <th> Action </th>

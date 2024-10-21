@@ -1056,16 +1056,26 @@ class General_model extends CI_Model
         //print '<pre>'; print_r($result);die;
         return $result;
     }
+    public function get_reg_charge()
+    {
+        $users_data = $this->session->userdata('auth_users');
+        $this->db->select('id,charge');
+        $this->db->order_by('id', 'ASC');
+        $query = $this->db->get('hms_emg_reg_charge');
+        $result = $query->result();
+        //print '<pre>'; print_r($result);die;
+        return $result;
+    }
 
     public function doctors_list($doctor_id = '', $branch_id = '')
     {
         $users_data = $this->session->userdata('auth_users');
 
-        $this->db->select('hms_doctors.*, hms_emg_reg_charge.charge');
+        $this->db->select('hms_doctors.*');
         if (!empty($doctor_id)) {
             $this->db->where('hms_doctors.id', $doctor_id);
         }
-        $this->db->join('hms_emg_reg_charge', 'hms_emg_reg_charge.id = hms_doctors.eme_reg_charge_id', 'left');
+        // $this->db->join('hms_emg_reg_charge', 'hms_emg_reg_charge.id = hms_doctors.eme_reg_charge_id', 'left');
         $this->db->where('hms_doctors.status', '1');
         $this->db->where('hms_doctors.is_deleted', '0');
         $this->db->order_by('hms_doctors.doctor_name', 'ASC');

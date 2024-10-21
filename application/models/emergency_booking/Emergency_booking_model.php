@@ -466,7 +466,7 @@ class Emergency_booking_model extends CI_Model
 		return $query->row_array();
 	}
 
-	public function get_opd_details($id)
+	public function get_booking_details($id)
 	{
 		// echo "<pre>";
 		// print_r($id);
@@ -1024,6 +1024,7 @@ class Emergency_booking_model extends CI_Model
 			"nature_of_emergency" => implode(', ', $post['nature_of_emergency']) ?? '',
 			"identification_mark" => $post['identification_mark'] ?? '',
 			"eme_booking_charge" => $post['eme_booking_charge'] ?? '',
+			"eme_reg_charge" => $post['eme_reg_charge'] ?? '',
 			// eye module add
 		);
 		//for payment

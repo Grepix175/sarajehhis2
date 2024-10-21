@@ -107,18 +107,28 @@ class Add_eye_prescription extends CI_Controller
   public function test($booking_id = "", $pres_id = "")
   {
     $post = $this->input->post();
+    // echo "<pre>";
+    // print_r($post);
+    // die;
     //unauthorise_permission('351','2108');
     $this->load->model('plan_management/Plan_management_model', 'plan_mgmt');
     $this->load->model('opd/opd_model', 'opd');
+    $this->load->model('emergency_booking/emergency_booking_model', 'emergency_booking');
     $this->load->model('general/general_model');
     $plan_list = $this->plan_mgmt->get_plan_list();
     $data['vitals_list'] = $this->general_model->vitals_list();
     $result = $this->add_prescript->get_new_data_by_id($booking_id);
-    $token_no = $this->opd->get_opd_details($booking_id);
+
+    $type = $this->input->get('type') ?? '';
+    if($type == 'eme_booking'){
+      $token_no = $this->emergency_booking->get_booking_details($booking_id);
+    }else{
+      $token_no = $this->opd->get_opd_details($booking_id);
+    }
+    // echo "<pre>";
+    // print_r($token_no);
+    // die;
     $this->opd->opd_status_update($booking_id);
-    //  echo "<pre>";
-    //  print_r($token_no['token_no']);
-    //  die;
     $data['flag'] = $this->input->get('flag') ?? '';
 
 
@@ -384,10 +394,10 @@ class Add_eye_prescription extends CI_Controller
         'bmi' => $result_edit['bmi'],
         'comment' => $result_edit['comment']
       );
-      //                     echo "<pre>";
-      // print_r($data);
-      // die;
     } else {
+      // echo "<pre>";
+      // print_r($post);
+      // die;
       $pres_id = 1;
       $result_refraction = $this->add_prescript->get_blank_refraction_id($pres_id);
       $result_examination = $this->add_prescript->get_blank_examination_id($pres_id);
@@ -1121,7 +1131,11 @@ class Add_eye_prescription extends CI_Controller
     // die;
     // unauthorise_permission('351','2108');
     if (!empty($post)) {
-      $this->add_prescript->save();
+      $emeId = $test_id = $this->uri->segment(4);;
+      // echo"<pre>";
+      // print_r($emeId);
+      // die;
+      $this->add_prescript->save($emeId);
       $this->session->set_flashdata('success', 'Prescription successfully added.');
       redirect(base_url('help_desk'));
     }

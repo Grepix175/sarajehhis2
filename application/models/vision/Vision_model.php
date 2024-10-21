@@ -41,8 +41,14 @@ class Vision_model extends CI_Model
 
     private function _get_datatables_query()
     {
-        $this->db->select("hms_vision.*, hms_side_effect.side_effect_name");
+        $user_data = $this->session->userdata('auth_users');
+		$search = $this->session->userdata('prescription_search');
+        // echo "<pre>";
+        // print_r($search);
+        // die;
+        $this->db->select("hms_vision.*, hms_side_effect.side_effect_name,hms_patient.patient_code_auto");
         $this->db->from($this->table);
+        $this->db->join('hms_patient', 'hms_patient.patient_code=hms_vision.patient_code', 'left');
         $this->db->join($this->side_effects_table, 'hms_vision.side_effects = hms_side_effect.id', 'left'); // Join side effects
         $this->db->where('hms_vision.is_deleted', '0');
 
@@ -63,6 +69,26 @@ class Vision_model extends CI_Model
         //     $column[$i] = $item;
         //     $i++;
         // }
+        if (!empty($search)) {
+
+			if (!empty($search['start_date'])) {
+				$start_date = date('Y-m-d 00:00:00', strtotime($search['start_date']));
+				$this->db->where('hms_vision.created_at >=', $start_date);
+			}
+
+			if (!empty($search['end_date'])) {
+				$end_date = date('Y-m-d 23:59:59', strtotime($search['end_date']));
+				$this->db->where('hms_vision.created_at <=', $end_date);
+			}
+
+			if (!empty($search['patient_name'])) {
+				$this->db->like('hms_vision.patient_name', $search['patient_name'], 'after');
+			}
+
+			if (!empty($search['patient_code'])) {
+				$this->db->where('hms_vision.patient_code', $search['patient_code']);
+			}
+		}
 
         if (isset($_POST['order'])) {
             $this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);

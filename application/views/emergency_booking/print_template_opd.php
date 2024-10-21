@@ -6,7 +6,17 @@ $mlc = '';
 /* start thermal printing */
 //address print
 $template_data->template = str_replace("{patient_category_name}", $all_detail['opd_list'][0]->patient_category_name, $template_data->template);
+$template_data->template = str_replace("{identification_mark}", $all_detail['opd_list'][0]->identification_mark, $template_data->template);
+if (!empty($all_detail['opd_list'][0]->on_set)) {
+    $consultant_new = '<div style="width:100%;display:inline-flex;">
+        <div style="width:40%;line-height:17px;font-weight:600;">On Set :</div>
 
+        <div style="width:60%;line-height:17px;">' . $all_detail['opd_list'][0]->on_set . '</div>
+        </div>';
+    $template_data->template = str_replace("{on_set}", $consultant_new, $template_data->template);
+} else {
+    $template_data->template = str_replace("{on_set}", '', $template_data->template);
+}
 $template_data->template = str_replace("{authorize_person_name}", $all_detail['opd_list'][0]->authorize_person_name, $template_data->template);
 if (empty($address_setting_list)) {
     $address = $all_detail['opd_list'][0]->address;
@@ -437,6 +447,33 @@ if ($template_data->printer_id == 2) {
         $template_data->template = str_replace("{specialization_level}", '', $template_data->template);
         $template_data->template = str_replace("{specialization}", '', $template_data->template);
     }
+    // echo "<pre>";
+    // print_r($all_detail['opd_list'][0]->nature_of_emergency);
+    // die;
+    if (!empty($all_detail['opd_list'][0]->nature_of_emergency)) {
+        // Split the comma-separated values into an array
+        $selected_nature_of_emergency = explode(', ', $all_detail['opd_list'][0]->nature_of_emergency);
+        
+        // Generate the checkboxes with dynamic "checked" status
+        $nature_of_emergency_html = '<div style="width:100%;display:inline-flex;">
+            <div style="width:40%;line-height:17px;font-weight:600;">Nature Of Emergency :</div>
+            <div style="width:60%;line-height:17px;">';
+    
+        $nature_of_emergency_options = $selected_nature_of_emergency;
+    
+        foreach ($nature_of_emergency_options as $option) {
+            $checked = in_array($option, $selected_nature_of_emergency) ? 'checked' : '';
+            $nature_of_emergency_html .= '<label><input type="checkbox" name="nature_of_emergency[]" value="' . $option . '" ' . $checked . '> ' . $option . '</label><br>';
+        }
+    
+        $nature_of_emergency_html .= '</div></div>';
+    
+        // Replace the placeholder in the template
+        $template_data->template = str_replace("{nature_of_emergency}", $nature_of_emergency_html, $template_data->template);
+    } else {
+        $template_data->template = str_replace("{nature_of_emergency}", '', $template_data->template);
+    }
+    
 
     $genders = array('0' => 'F', '1' => 'M');
     $gender = $genders[$all_detail['opd_list'][0]->gender];
@@ -512,7 +549,7 @@ if ($template_data->printer_id == 2) {
         $tr = str_replace("{s_no}", 1, $tr);
         $tr = str_replace("{particular}", 'Consultant Charges', $tr);
         $tr = str_replace("{quantity}", "", $tr);
-        $tr = str_replace("{amount}", $all_detail['opd_list'][0]->consultant_charge, $tr);
+        $tr = str_replace("{amount}", $all_detail['opd_list'][0]->consultant_charge + $all_detail['opd_list'][0]->eme_reg_charge + $all_detail['opd_list'][0]->eme_booking_charge, $tr);
         $tr_html .= $tr;
         if (!empty($all_detail['opd_list'][0]->package_id)) {
             $tr = $row_loop;
@@ -906,6 +943,32 @@ if ($template_data->printer_id == 3) {
     } else {
         $template_data->template = str_replace("{specialization}", '', $template_data->template);
     }
+    // echo "<pre>";
+    // print_r($all_detail['opd_list'][0]->nature_of_emergency);
+    // die;
+    if (!empty($all_detail['opd_list'][0]->nature_of_emergency)) {
+        // Split the comma-separated values into an array
+        $selected_nature_of_emergency = explode(', ', $all_detail['opd_list'][0]->nature_of_emergency);
+        
+        // Generate the checkboxes with dynamic "checked" status
+        $nature_of_emergency_html = '<div style="width:100%;display:inline-flex;">
+            <div style="width:40%;line-height:17px;font-weight:600;">Nature Of Emergency :</div>
+            <div style="width:60%;line-height:17px;">';
+    
+        $nature_of_emergency_options = ['Injury', 'Foreign Body', 'RTA', 'Sudden Visual Loss', 'Acute Painful Condition', 'Referred'];
+    
+        foreach ($nature_of_emergency_options as $option) {
+            $checked = in_array($option, $selected_nature_of_emergency) ? 'checked' : '';
+            $nature_of_emergency_html .= '<label><input type="checkbox" name="nature_of_emergency[]" value="' . $option . '" ' . $checked . '> ' . $option . '</label><br>';
+        }
+    
+        $nature_of_emergency_html .= '</div></div>';
+    
+        // Replace the placeholder in the template
+        $template_data->template = str_replace("{nature_of_emergency}", $nature_of_emergency_html, $template_data->template);
+    } else {
+        $template_data->template = str_replace("{nature_of_emergency}", '', $template_data->template);
+    }
 
     $genders = array('0' => 'F', '1' => 'M');
     $gender = $genders[$all_detail['opd_list'][0]->gender];
@@ -979,7 +1042,7 @@ if ($template_data->printer_id == 3) {
         $tr = str_replace("{s_no}", 1, $tr);
         $tr = str_replace("{particular}", 'Consultant Charges', $tr);
         $tr = str_replace("{quantity}", '', $tr);
-        $tr = str_replace("{amount}", $all_detail['opd_list'][0]->consultant_charge, $tr);
+        $tr = str_replace("{amount}", $all_detail['opd_list'][0]->consultant_charge + $all_detail['opd_list'][0]->eme_reg_charge + $all_detail['opd_list'][0]->eme_booking_charge, $tr);
         $tr_html .= $tr;
         if (!empty($all_detail['opd_list'][0]->package_id)) {
             $tr = $row_loop;
@@ -1319,7 +1382,32 @@ if ($template_data->printer_id == 1) {
     } else {
         $template_data->template = str_replace("{specialization}", '', $template_data->template);
     }
-
+    if (!empty($all_detail['opd_list'][0]->nature_of_emergency)) {
+        // echo "<pre>";
+        // print_r($all_detail['opd_list'][0]->nature_of_emergency);
+        // die;
+        // Split the comma-separated values into an array
+        $selected_nature_of_emergency = explode(', ', $all_detail['opd_list'][0]->nature_of_emergency);
+        
+        // Generate the checkboxes with dynamic "checked" status
+        $nature_of_emergency_html = '<div style="width:100%;display:inline-flex;">
+            <div style="width:40%;line-height:17px;font-weight:600;">Nature Of Emergency :</div>
+            <div style="width:60%;line-height:17px;">';
+    
+        $nature_of_emergency_options = $selected_nature_of_emergency;
+    
+        foreach ($nature_of_emergency_options as $option) {
+            $checked = in_array($option, $selected_nature_of_emergency) ? 'checked' : '';
+            $nature_of_emergency_html .= '<label><input type="checkbox" name="nature_of_emergency[]" value="' . $option . '" ' . $checked . '> ' . $option . '</label><br>';
+        }
+    
+        $nature_of_emergency_html .= '</div></div>';
+    
+        // Replace the placeholder in the template
+        $template_data->template = str_replace("{nature_of_emergency}", $nature_of_emergency_html, $template_data->template);
+    } else {
+        $template_data->template = str_replace("{nature_of_emergency}", '', $template_data->template);
+    }
 
 
 
@@ -1496,7 +1584,7 @@ if ($template_data->printer_id == 1) {
         $tr = str_replace("{s_no}", 1, $tr);
         $tr = str_replace("{particular}", 'Consultant Charges', $tr);
         $tr = str_replace("{quantity}", '', $tr);
-        $tr = str_replace("{amount}", $all_detail['opd_list'][0]->consultant_charge, $tr);
+        $tr = str_replace("{amount}", $all_detail['opd_list'][0]->consultant_charge + $all_detail['opd_list'][0]->eme_reg_charge + $all_detail['opd_list'][0]->eme_booking_charge, $tr);
         $tr_html .= $tr;
         if (!empty($all_detail['opd_list'][0]->package_id)) {
             $tr = $row_loop;

@@ -226,7 +226,7 @@ class Doctors_model extends CI_Model
 							'dob'=>date('Y-m-d', strtotime($post['dob'])),
 							'anniversary'=>date('Y-m-d', strtotime($post['anniversary'])),
 							"specilization_id"=>$post['specilization_id'],
-							"eme_reg_charge_id"=>$post['eme_reg_charge_id'],
+							"eme_reg_charge"=>$post['eme_reg_charge'],
 							"mobile_no"=>$post['mobile_no'],
 							"address"=>$post['address'],
 							"city_id"=>$post['city_id'],

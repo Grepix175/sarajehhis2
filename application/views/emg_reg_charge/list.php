@@ -190,9 +190,9 @@ $users_data = $this->session->userdata('auth_users');
         <div class="btns">
           <?php if (in_array('2486', $users_data['permission']['action'])) {
             ?>
-            <button class="btn-update" id="modal_add">
+            <!-- <button class="btn-update" id="modal_add">
               <i class="fa fa-plus"></i> New
-            </button>
+            </button> -->
           <?php } ?>
           <?php if (in_array('2488', $users_data['permission']['action'])) {
             ?>
