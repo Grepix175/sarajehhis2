@@ -251,7 +251,8 @@ class Opd extends CI_Controller
         if (in_array('2413', $users_data['permission']['action']) ) {
           if($test->status == 0){
             $flag = 'eye_history'; 
-            $btn_history .= '<li><a href="' . base_url("eye/add_eye_prescription/test/" . $test->id . "?flag=" . $flag) . '" title="Add Prescription"><i class="fa fa-history"></i> History</a></li>';
+            $type = 'opd_booking'; 
+            $btn_history .= '<li><a href="' . base_url("eye/add_eye_prescription/test/" . $test->id . "?flag=" . $flag. "&type=" . $type) . '" title="Add Prescription"><i class="fa fa-history"></i> History</a></li>';
           }
 
           $btn_prescription .= '<li><a  href="' . base_url("eye/add_eye_prescription/test/" . $test->id) . '" title="Add Prescription"><i class="fa fa-eye"></i> Add Adv. Eye Prescription</a></li>';

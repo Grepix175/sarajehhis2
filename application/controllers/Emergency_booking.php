@@ -148,7 +148,7 @@ class Emergency_booking extends CI_Controller
       ///////////////////////////////////////
       $row[] = $age;
       $row[] = $test->mobile_no;
-      
+
       $row[] = $test->status == 0 ? '<font color="green">Pending</font>' : '<font color="red">Completed</font>';
 
       $row[] = date('d-m-Y h:i A', strtotime($test->booking_date . ' ' . $test->booking_time));
@@ -160,7 +160,7 @@ class Emergency_booking extends CI_Controller
       $row[] = number_format($test->eme_booking_charge, 2);
       $row[] = number_format($test->net_amount, 2);
       $row[] = number_format($test->paid_amount, 2);
-      
+
       //Action button /////
       $btn_confirm = "";
       $btn_edit = "";
@@ -202,11 +202,12 @@ class Emergency_booking extends CI_Controller
           }
         }
 
-        $btn_history='';
-        if (in_array('2413', $users_data['permission']['action']) ) {
-          if($test->status == 0){
-            $flag = 'eye_history'; 
-            $btn_history .= '<li><a href="' . base_url("eye/add_eye_prescription/test/" . $test->id . "?flag=" . $flag) . '" title="Add Prescription"><i class="fa fa-history"></i> History</a></li>';
+        $btn_history = '';
+        if (in_array('2413', $users_data['permission']['action'])) {
+          if ($test->status == 0) {
+            $flag = 'eye_history';
+            $type = 'eme_booking';
+            $btn_history .= '<li><a href="' . base_url("eye/add_eye_prescription/test/" . $test->id . "?flag=" . $flag. "&type=" . $type) . '" title="Add Prescription"><i class="fa fa-history"></i> History</a></li>';
           }
 
           $btn_prescription .= '<li><a  href="' . base_url("eye/add_eye_prescription/test/" . $test->id) . '" title="Add Prescription"><i class="fa fa-eye"></i> Add Adv. Eye Prescription</a></li>';
@@ -438,7 +439,7 @@ class Emergency_booking extends CI_Controller
       // added By Nitin Sharma 02/02/2024
       // End Action Button //
       // . $btn_a . $print_mlc
-      $row[] = $btn_confirm . $btn_edit . $btn_delete . $btn_print ;
+      $row[] = $btn_confirm . $btn_edit . $btn_delete . $btn_print. $btn_a;
       $data[] = $row;
       $i++;
     }
@@ -1185,6 +1186,7 @@ class Emergency_booking extends CI_Controller
       'kit_amount' => '0.00',
       'consultants_charge' => '0.00',
       'eme_booking_charge' => '0.00',
+      'eme_reg_charge' => '0.00',
       'next_app_date' => '',
       "field_name" => '',
       'source_from' => '',
@@ -1192,7 +1194,7 @@ class Emergency_booking extends CI_Controller
       'referral_hospital' => "",
       'token_type' => $token_type,
       'time_value' => '',
-      'token_no' =>'',
+      'token_no' => '',
       "insurance_type" => $insurance_type,
       "insurance_type_id" => $insurance_type_id,
       "ins_company_id" => $ins_company_id,
@@ -1481,7 +1483,7 @@ class Emergency_booking extends CI_Controller
 
       $this->load->model('general/general_model');
       $data['payment_mode'] = $this->general_model->payment_mode();
-      
+
       $get_payment_detail = $this->emergency_booking->payment_mode_detail_according_to_field($result['payment_mode'], $id);
       $total_values = array();
 
@@ -1582,6 +1584,7 @@ class Emergency_booking extends CI_Controller
         'kit_amount' => $result['kit_amount'],
         'consultants_charge' => $result['consultants_charge'],
         'eme_booking_charge' => $result['eme_booking_charge'],
+        'eme_reg_charge' => $result['eme_reg_charge'],
         'next_app_date' => $next_app_date,
         'source_from' => $result['source_from'],
         'remarks' => $result['remarks'],
@@ -1616,7 +1619,8 @@ class Emergency_booking extends CI_Controller
         "nature_of_emergency" => $result['nature_of_emergency'] ?? '',
         "on_set" => $result['on_set'] ?? '',
         "identification_mark" => $result['identification_mark'] ?? '',
-        "eme_booking_charge" => number_format($result['eme_booking_charge'],2) ?? '',
+        "eme_booking_charge" => number_format($result['eme_booking_charge'], 2) ?? '',
+        "eme_reg_charge" => number_format($result['eme_reg_charge'], 2) ?? '',
       );
       if (isset($post) && !empty($post)) {
         $data['form_data'] = $this->_validateform();
@@ -1765,6 +1769,7 @@ class Emergency_booking extends CI_Controller
         'kit_amount' => 0,
         'consultants_charge' => $post['consultants_charge'],
         'eme_booking_charge' => $post['eme_booking_charge'],
+        'eme_reg_charge' => $post['eme_reg_charge'],
         'package_id' => $post['package_id'],
         'source_from' => $post['source_from'],
         'remarks' => $post['remarks'],
@@ -1817,7 +1822,7 @@ class Emergency_booking extends CI_Controller
       } else {
         $doctor_data = $this->general_model->doctors_list($doctor_id, $branch_id);
         // echo "<pre>"; print_r($doctor_data); exit;
-        
+
         if ($opd_type == 1) {
 
           $consultants_charge = $doctor_data[0]->emergency_charge;
@@ -1848,7 +1853,12 @@ class Emergency_booking extends CI_Controller
       }
 
       $balance = number_format($consultants_charge + $kit_amount - $post['discount'] - $post['paid_amount'], 2, '.', '');
-      $pay_arr = array('kit_amount' => number_format($kit_amount, 2, '.', ''), 'consultants_charge' => number_format($consultants_charge, 2, '.', ''), 'total_amount' => number_format($consultants_charge + $kit_amount, 2, '.', ''), 'discount' => $discount_total, 'net_amount' => number_format($kit_amount + $consultants_charge - $post['discount'], 2, '.', ''), 'paid_amount' => number_format($kit_amount + $consultants_charge - $post['discount'], 2, '.', ''), 'balance' => $balance,'eme_reg_charge' => isset($doctor_data[0]->charge) ? number_format($doctor_data[0]->charge, 2) : '');
+      $regCharge = $this->general_model->get_reg_charge();
+      $eme_reg_charge = isset($doctor_data[0]->eme_reg_charge) ? (float) $doctor_data[0]->eme_reg_charge : 0;
+      $reg_charge = isset($regCharge[0]->charge) ? (float) $regCharge[0]->charge : 0;
+
+      $pay_arr = array('kit_amount' => number_format($kit_amount, 2, '.', ''), 'consultants_charge' => number_format($consultants_charge, 2, '.', ''), 'total_amount' => number_format($consultants_charge + $kit_amount + $eme_reg_charge + $reg_charge, 2, '.', ''), 'discount' => $discount_total, 'net_amount' => number_format($kit_amount + $consultants_charge - $post['discount'], 2, '.', ''), 'paid_amount' => number_format($kit_amount + $consultants_charge - $post['discount'], 2, '.', ''), 'balance' => $balance, 'eme_reg_charge' => number_format($eme_reg_charge, 2, '.', ''),  // Use eme_reg_charge
+    'reg_charge' => number_format($reg_charge, 2, '.', ''));
 
       $json = json_encode($pay_arr, true);
       echo $json;
@@ -2942,9 +2952,9 @@ class Emergency_booking extends CI_Controller
     }
     $get_by_id_data = $this->emergency_booking->get_all_detail_print($booking_id, $branch_id);
     // echo "<pre>";
-    // print_r($get_by_id_data);die;
-    $template_format = $this->emergency_booking->template_format(array('section_id' => 1, 'types' => 1), $branch_id);
-    //print_r($get_by_id_data); exit;
+    // print_r($branch_id);die;
+    $template_format = $this->emergency_booking->template_format(array('section_id' => 20, 'types' => 1), $branch_id);
+    // echo "<pre>";print_r($template_format); exit;
     //Package
     // $package_id = $get_by_id_data['opd_list'][0]->package_id;
     $package_id = !empty($get_by_id_data['opd_list'][0]->package_id) ? $get_by_id_data['opd_list'][0]->package_id : null;
@@ -2953,7 +2963,7 @@ class Emergency_booking extends CI_Controller
     //print_r($data['template_data']);
     $data['all_detail'] = $get_by_id_data;
     $data['page_type'] = 'Emergency Booking';
-    // print_r($data['all_detail']);die;
+    // echo "<pre>";print_r($data['all_detail']);die;
     $this->load->model('general/general_model');
     $transaction_id = $this->general_model->get_transaction_id($booking_id, 2, 7);   //2 section id and 7 type
 
@@ -3282,7 +3292,7 @@ class Emergency_booking extends CI_Controller
     $objPHPExcel->setActiveSheetIndex(0);
     $data_patient_reg = get_setting_value('PATIENT_REG_NO');
     // Field names in the first row
-    $fields = array('Token. NO.','Eme. Reg. NO.', 'Patient Name', $data_patient_reg, 'Booking Date', 'Age', 'Gender', 'Mobile', 'Doctor Name', 'Specialization', 'Total Amount', 'Net Amount','Emergency Charge');
+    $fields = array('Token. NO.', 'Eme. Reg. NO.', 'Patient Name', $data_patient_reg, 'Booking Date', 'Age', 'Gender', 'Mobile', 'Doctor Name', 'Specialization', 'Total Amount', 'Net Amount', 'Emergency Charge');
     $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
     $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::VERTICAL_CENTER);
     $col = 0;
@@ -3302,8 +3312,8 @@ class Emergency_booking extends CI_Controller
       $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(15);
       $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(15);
       $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(15);
-    //   $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(15);
-    //   $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(15);
+      //   $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(15);
+      //   $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(15);
       $objPHPExcel->getActiveSheet()->getStyle($row_heading)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
       $objPHPExcel->getActiveSheet()->getStyle($row_heading)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
       $row_heading++;
@@ -3362,7 +3372,7 @@ class Emergency_booking extends CI_Controller
           $age .= ", " . $age_d . " " . $day;
         }
         $patient_age = $age;
-        array_push($rowData, $opds->token_no,$opds->eme_booking_code, $opds->patient_name, $opds->patient_code, $booking_date, $patient_age, $gender, $opds->mobile_no, $attended_doctor_name, number_format($opds->total_amount, 2), number_format($opds->net_amount, 2),number_format($opds->eme_booking_charge, 2));
+        array_push($rowData, $opds->token_no, $opds->eme_booking_code, $opds->patient_name, $opds->patient_code, $booking_date, $patient_age, $gender, $opds->mobile_no, $attended_doctor_name, number_format($opds->total_amount, 2), number_format($opds->net_amount, 2), number_format($opds->eme_booking_charge, 2));
         $count = count($rowData);
         for ($j = 0; $j < $count; $j++) {
 

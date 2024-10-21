@@ -100,7 +100,7 @@ class Help_desk extends CI_Controller
       // } 
       // else 
       if ($patient_status == 1) {
-        $pat_status = '<font style="background-color: #228B22;color:white">Sent To Vision</font>';
+        $pat_status = '<font style="background-color: #228B22;color:white">Vision</font>';
       }
       // else if ($patient_status['doctor'] == '1') {
       //   $pat_status = '<font style="background-color: #1CAF9A;color:white">Doctor</font>';

@@ -317,6 +317,15 @@ $field_list = mandatory_section_field_list(1);
                     </div> <!-- row -->
                     <div class="row m-b-5">
                       <div class="col-xs-4">
+                        <strong><?php echo $charge_name = 'Emergency change';  ?></strong>
+                      </div>
+                      <div class="col-xs-8">
+                        <input type="text"  name="eme_reg_charge" class="price_float" id="eme_reg_charge" value="<?php echo $form_data['eme_reg_charge']; ?>">
+                        <?php if(!empty($form_error)){ echo form_error('eme_reg_charge'); } ?>
+                      </div>
+                    </div> <!-- row -->
+                    <!-- <div class="row m-b-5">
+                      <div class="col-xs-4">
                         <strong><?php echo $charge_name = 'Emergency change'  ?></strong>
                       </div>
                       <div class="col-xs-8">
@@ -339,7 +348,7 @@ $field_list = mandatory_section_field_list(1);
                       
                       <?php if(!empty($form_error)){ echo form_error('eme_reg_charge_id'); } ?>
                       </div>
-                    </div> <!-- row -->
+                    </div> -->
 
       <?php } else { ?>
       <input type="hidden"  name="consultant_charge" value="0.00">

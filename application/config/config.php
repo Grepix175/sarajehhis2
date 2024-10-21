@@ -23,8 +23,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'https://devfl4.sarasolutions.in/sarajehhis2/';
-// $config['base_url'] = 'http://localhost/sarajehhis2/';
+// $config['base_url'] = 'https://devfl4.sarasolutions.in/sarajehhis2/';
+$config['base_url'] = 'http://localhost/sarajehhis2/';
  
 /*
 2|--------------------------------------------------------------------------
@@ -554,5 +554,7 @@ define('DIR_UPLOAD_MEDICINE_BARCODE_PATH','/home2/devfl4sarasluti/public_html/sa
 
 define('BARCODE_FS_PATH', $config['base_url'].'assets/uploads/barcode/'); 
 define('MEDICINE_BARCODE_FS_PATH', $config['base_url'].'assets/uploads/medicine_barcode/');
+
+error_reporting(E_ALL & ~E_NOTICE);
 
 ////// System Constant end /////

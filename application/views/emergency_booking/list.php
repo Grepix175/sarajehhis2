@@ -541,9 +541,9 @@ $user_role = $users_data['users_role'];
           <div class="btns opd_booking_list_right_btns">
             <?php if (in_array('523', $users_data['permission']['action'])) {
               ?>
-              <!-- <button class="btn-update" onclick="window.location.href='<?php echo base_url('emergency_booking/booking'); ?>'">
+              <button class="btn-update" onclick="window.location.href='<?php echo base_url('emergency_booking/add'); ?>'">
                 <i class="fa fa-plus"></i> New
-              </button> -->
+              </button>
             <?php } ?>
 
 

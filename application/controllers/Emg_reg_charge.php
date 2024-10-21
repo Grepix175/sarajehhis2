@@ -79,9 +79,9 @@ class Emg_reg_charge extends CI_Controller
                 if (in_array('2487', $users_data['permission']['action'])) {
                     $btnedit = ' <a onClick="return edit_patient_category(' . $emg_charge->id . ');" class="btn-custom" href="javascript:void(0)" style="' . $emg_charge->id . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>';
                 }
-                if (in_array('2488', $users_data['permission']['action'])) {
-                    $btndelete = ' <a class="btn-custom" onClick="return delete_patient_category(' . $emg_charge->id . ')" href="javascript:void(0)" title="Delete" data-url="550"><i class="fa fa-trash"></i> Delete</a> ';
-                }
+                // if (in_array('2488', $users_data['permission']['action'])) {
+                //     $btndelete = ' <a class="btn-custom" onClick="return delete_patient_category(' . $emg_charge->id . ')" href="javascript:void(0)" title="Delete" data-url="550"><i class="fa fa-trash"></i> Delete</a> ';
+                // }
             }
 
 

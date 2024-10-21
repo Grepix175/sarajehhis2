@@ -132,7 +132,7 @@
       <textarea class="print_textarea"  type="text" name="short_code" cols="45" value="" readonly id="comment_data"/>{patient_reg_no}  ,     {patient_name}  ,  {hospital_receipt_no} ,  {mobile_no}  ,  {gender_age}  ,  {patient_address} ,  {booking_date}  , {date_time} ,  {booking_code}  , 
 {Consultant}  , {specialization}  ,   {next_app_date}  , {total_amount} ,  {total_discount}  , {net_amount}  ,  {paid_amount},  {balance} {Quantity_level} , {start_loop} ,  {s_no} ,  {particular}  ,  {quantity} ,  {amount}  , {end_loop}  ,  {payment_mode}  ,   {remarks}  ,  {token_no}   ,  {panel_type}  ,  {referral_by}  ,   {email_address}  ,  {source_from}  ,    {diseases}   ,    {validity_date}   ,   {remarks}   ,   {adhar_no}   ,   {marital_status}   ,   {religion_name}  ,   {father_husband}  ,   {mother} ,
  {guardian_name}   ,   {guardian_email}  ,  {guardian_phone}   ,     {relation}   ,    {monthly_income}   ,    {occupation},   {insurance_type}  ,   {insurance_name}  ,   {insurance_company}   ,   {policy_no}    ,   {tpa_id}   ,   {ins_amount}   ,   {ins_authorization_no}   ,  {parent_relation_type}  ,   {parent_relation_name} {patient_category_name} {authorize_person_name}   ,    ⁠{date_time_new} , 
- {corporate_name},{auth_no},{employee_no},{auth_issue_date},{department_name},{cost} {subsidy_name},{subsidy_created},{subsidy_amount} {opd_qr_code}</textarea>
+ {corporate_name},{auth_no},{employee_no},{auth_issue_date},{department_name},{cost} {subsidy_name},{subsidy_created},{subsidy_amount}, {opd_qr_code},{on_set},{identification_mark},{nature_of_emergency},{eme_booking_charge},{eme_reg_charge}</textarea>
       </div>
     </div> <!-- rowClose -->
     

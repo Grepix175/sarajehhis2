@@ -1640,7 +1640,7 @@ class Add_new_prescription_model extends CI_Model
 		return $result_pre;
 	}
 
-	public function save()
+	public function save($emeId = '')
 	{
 		$user_data = $this->session->userdata('auth_users');
 		$post = $this->input->post();
@@ -3642,8 +3642,6 @@ class Add_new_prescription_model extends CI_Model
 			'history_drug_eye_ciplox_comm' => $post['history_drug_eye_ciplox_comm']
 		);
 
-
-
 		$contact_allergies = array(
 			'alco_m' => $alco_m,
 			'history_contact_alcohol_dur' => $post['history_contact_alcohol_dur'],
@@ -3670,7 +3668,6 @@ class Add_new_prescription_model extends CI_Model
 			'history_contact_transp_unit' => $post['history_contact_transp_unit'],
 			'history_contact_transp_comm' => $post['history_contact_transp_comm']
 		);
-
 
 		$food_allergies = array(
 			'seaf_m' => $seaf_m,
@@ -3864,6 +3861,12 @@ class Add_new_prescription_model extends CI_Model
 					$id = $this->db->insert_id();
 				}
 			}
+			// echo "<pre>";
+			// print_r($emeId);
+			// die;
+
+			$this->update_status_eme_booking($emeId);
+
 
 
 			$this->db->insert('hms_std_eye_prescription_history', $his_data);
@@ -4464,6 +4467,19 @@ class Add_new_prescription_model extends CI_Model
 		$this->db->where('id', $booking_id);
 		$this->db->where('branch_id', $user_data['parent_id']);
 		$this->db->update('hms_opd_booking');
+		return 1;
+	}
+	public function update_status_eme_booking($emeId)
+	{
+		// echo "<pre>";
+		// 	print_r($emeId);
+		// 	die;
+
+		$user_data = $this->session->userdata('auth_users');
+		$this->db->set('status', 1);
+		$this->db->where('id', $emeId);
+		// $this->db->where('branch_id', $user_data['parent_id']);
+		$this->db->update('hms_emergency_booking');
 		return 1;
 	}
 

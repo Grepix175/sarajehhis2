@@ -470,20 +470,7 @@ $field_list = mandatory_section_field_list(3);
                   </div>
                 </div>
               </div>
-              <div class="row m-b-4">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-4"><b>Identification Mark</b></div>
-                    <div class="col-md-8">
-                      <input type="text" name="identification_mark" id="identification_mark" class="m_input_default"
-                        value="<?php echo $form_data['identification_mark']; ?>" class="numeric" />
-                      <?php if (!empty($form_error)) {
-                        echo form_error('identification_mark');
-                      } ?>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              
 
               <div class="row m-b-4">
                 <div class="col-md-12">
@@ -537,6 +524,20 @@ $field_list = mandatory_section_field_list(3);
                   </div>
                 </div>
               </div> <!-- row -->
+              <div class="row m-b-4">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-4"><b>Identification Mark</b></div>
+                    <div class="col-md-8">
+                      <input type="text" name="identification_mark" id="identification_mark" class="m_input_default"
+                        value="<?php echo $form_data['identification_mark']; ?>" class="numeric" />
+                      <?php if (!empty($form_error)) {
+                        echo form_error('identification_mark');
+                      } ?>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <!-- <div class="row m-b-4">
                 <div class="col-md-12">
@@ -1280,7 +1281,7 @@ $field_list = mandatory_section_field_list(3);
             <div class="row m-b-5">
               <div class="col-md-12">
                 <div class="row">
-                  <div class="col-md-5"><b>Emergency Booking Date</b></div>
+                  <div class="col-md-5"><b>Booking Date</b></div>
                   <div class="col-md-7">
                     <input type="text" name="booking_date" id="booking_date" class="datepicker m_input_default"
                       value="<?php echo $form_data['booking_date']; ?>"
@@ -1493,7 +1494,7 @@ $field_list = mandatory_section_field_list(3);
               <div class="row m-b-5" id="booking_time" <?php /* if(empty($form_data['booking_time']) || $form_data['booking_time']=='00:00:00'){ ?> style="display: none;" <?php  }*/ ?>>
                 <div class="col-md-12">
                   <div class="row">
-                    <div class="col-md-5"><b>Emergency Booking Time </b></div>
+                    <div class="col-md-5"><b>Booking Time </b></div>
                     <div class="col-md-7">
                       <input type="text" name="booking_time" id="bookingtime" class="datepicker3 m_input_default"
                         value="<?php echo $form_data['booking_time']; ?>" />
@@ -1825,6 +1826,18 @@ $field_list = mandatory_section_field_list(3);
                     <input type="text" name="consultants_charge" id="consultants_charge"
                       class="price_float m_input_default" onchange="update_amount(this.value);"
                       value="<?php echo number_format($form_data['consultants_charge'], 2, '.', ''); ?>">
+                  </div>
+                </div>
+              </div>
+            </div> <!-- row -->
+            <div class="row m-b-5">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-5"><b>Eme. Reg. Charge</b></div>
+                  <div class="col-md-7">
+                    <input type="text" name="eme_reg_charge" id="eme_reg_charge"
+                      class="price_float m_input_default" onchange="update_amount(this.value);"
+                      value="<?php echo number_format($form_data['eme_reg_charge'], 2, '.', ''); ?>">
                   </div>
                 </div>
               </div>
@@ -2683,6 +2696,7 @@ $field_list = mandatory_section_field_list(3);
               $('#kit_amount').val(result.kit_amount);
               $('#consultants_charge').val(result.consultants_charge);
               $('#eme_booking_charge').val(result.eme_reg_charge);
+              $('#eme_reg_charge').val(result.reg_charge);
               $('#total_amount').val(result.total_amount);
               $('#net_amount').val(result.net_amount);
               $('#discount').val(result.discount);

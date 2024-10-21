@@ -13,19 +13,47 @@ class Vision extends CI_Controller
     public function index()
     {
         $data['page_title'] = 'Vision Records';
+        $this->load->model('default_search_setting/default_search_setting_model');
+        $default_search_data = $this->default_search_setting_model->get_default_setting();
+        if (isset($default_search_data[1]) && !empty($default_search_data) && $default_search_data[1] == 1) {
+            $start_date = '';
+            $end_date = '';
+        } else {
+            $start_date = date('d-m-Y');
+            $end_date = date('d-m-Y');
+        }
+        $data['form_data'] = array('patient_name' => '', 'patient_code' => '', 'start_date' => $start_date, 'end_date' => $end_date);
         $this->load->view('vision/list', $data);
     }
 
     public function ajax_list()
     {
         $list = $this->vision_model->get_datatables();
+        // echo "<pre>";
+        // print_r($list);
+        // die;
         $data = array();
         $no = $_POST['start'];
-
+        $i = 1;
         foreach ($list as $vision) {
             $no++;
             $row = array();
-            $row[] = $vision->id;
+            ////////// Check  List /////////////////
+            $check_script = "";
+            if ($i == $total_num) {
+
+                $check_script = "<script>$('#selectAll').on('click', function () { 
+                                  if ($(this).hasClass('allChecked')) {
+                                      $('.checklist').prop('checked', false);
+                                  } else {
+                                      $('.checklist').prop('checked', true);
+                                  }
+                                  $(this).toggleClass('allChecked');
+                              })</script>";
+            }
+            // $row[] = $vision->id;
+            $row[] = '<input type="checkbox" name="prescription[]" class="checklist" value="' . $vision->id . '">' . $check_script;
+            $row[] = $vision->patient_code_auto;
             $row[] = $vision->patient_name;
             $row[] = $vision->procedure_purpose;
             $row[] = $vision->side_effect_name;
@@ -349,54 +377,54 @@ class Vision extends CI_Controller
         // Starting the PHPExcel library
         $this->load->library('excel');
         $this->excel->IO_factory();
-    
+
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->getProperties()->setTitle("export")->setDescription("none");
         $objPHPExcel->setActiveSheetIndex(0);
-    
+
         $from_date = $this->input->get('start_date');
         $to_date = $this->input->get('end_date');
-    
+
         // Main header with date range if provided
         $mainHeader = "Vision List";
         if (!empty($from_date) && !empty($to_date)) {
             $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
         }
-    
+
         // Set the main header in row 1
         $objPHPExcel->getActiveSheet()->mergeCells('A1:D1');
         $objPHPExcel->getActiveSheet()->setCellValue('A1', $mainHeader);
         $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true)->setSize(16);
-    
+
         // Leave row 2 blank
         $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
-    
+
         // Field names (header row) should start in row 3
         $fields = array('Patient Name', 'Procedure Purpose', 'Side Effects', 'Created at');
-    
+
         $col = 0; // Initialize the column index
         foreach ($fields as $field) {
             $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 3, $field); // Row 3 for headers
             $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn($col)->setAutoSize(true); // Auto-size columns
             $col++;
         }
-    
+
         // Style for header row (Row 3)
         $objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-    
+
         // Fetching the OPD data
         $list = $this->vision_model->get_datatables();
-    
+
         // Populate the data starting from row 4
         $row = 4; // Start at row 4 for data
         if (!empty($list)) {
             foreach ($list as $vision) {
                 // Reset column index for each new row
                 $col = 0;
-    
+
                 // Prepare data to be populated
                 $data = array(
                     $vision->patient_name,
@@ -404,7 +432,7 @@ class Vision extends CI_Controller
                     $vision->side_effect_name, // Make sure this is retrieved correctly
                     $vision->created_at,
                 );
-    
+
                 foreach ($data as $cellValue) {
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $cellValue);
                     $col++;
@@ -412,12 +440,12 @@ class Vision extends CI_Controller
                 $row++; // Move to the next row
             }
         }
-    
+
         // Send headers to force download of the file
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="help_desk_list_' . time() . '.xls"');
         header('Cache-Control: max-age=0');
-    
+
         // Write the Excel file
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         ob_end_clean();
@@ -441,7 +469,7 @@ class Vision extends CI_Controller
         // echo "<pre>";
         // print_r($data);
         // die;
-        $data['data_list']['side_effect_name']=$this->vision_model->get_side_effect_name($data['data_list']['side_effects']);
+        $data['data_list']['side_effect_name'] = $this->vision_model->get_side_effect_name($data['data_list']['side_effects']);
         // Create main header
         $data['mainHeader'] = "Help Desk List";
         // if (!empty($from_date) && !empty($to_date)) {
@@ -470,10 +498,15 @@ class Vision extends CI_Controller
 
     public function delete_multiple()
     {
-        $ids = $this->input->post('ids');
+        $ids = $this->input->post('row_id');
+        // echo "<pre>";
+        // print_r($ids);
+        // die;
         if (!empty($ids)) {
             $this->vision_model->deleteall($ids);
-            echo json_encode(array("status" => TRUE));
+            // echo json_encode(array("status" => TRUE));
+            $response = "Vision successfully deleted.";
+            echo $response;
         }
     }
 
@@ -491,12 +524,40 @@ class Vision extends CI_Controller
         }
 
         // Fetch the OPD billing details based on the ID
-        $booking_id = isset($data['form_data']['booking_id'])?$data['form_data']['booking_id']:'';
+        $booking_id = isset($data['form_data']['booking_id']) ? $data['form_data']['booking_id'] : '';
         $data['billing_data'] = $this->vision_model->get_patient_name_by_booking_id($booking_id);
         // echo "<pre>";print_r($data);die;
 
         // Load the print view with the data
         $this->load->view('vision/print_vision', $data);
+    }
+    public function reset_search()
+    {
+        $this->session->unset_userdata('prescription_search');
+    }
+
+    public function advance_search()
+    {
+        $this->load->model('general/general_model');
+        $data['page_title'] = "Advance Search";
+        $post = $this->input->post();
+
+        $data['form_data'] = array(
+            "start_date" => '',
+            "end_date" => '',
+            "patient_code" => "",
+            "patient_name" => "",
+        );
+        if (isset($post) && !empty($post)) {
+            $marge_post = array_merge($data['form_data'], $post);
+            $this->session->set_userdata('prescription_search', $marge_post);
+
+        }
+        $prescription_search = $this->session->userdata('prescription_search');
+        if (isset($prescription_search) && !empty($prescription_search)) {
+            $data['form_data'] = $prescription_search;
+        }
+        $this->load->view('vision/advance_search', $data);
     }
 
 }
