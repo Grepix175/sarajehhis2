@@ -33,7 +33,14 @@ class Refraction extends CI_Controller
             // Add a checkbox for selecting the record
             $row[] = '<input type="checkbox" name="refraction_ids[]" value="' . $refraction->id . '">';
 
-            $row[] = $refraction->booking_id;
+            $row[] = $refraction->token_no;
+            $row[] = $refraction->booking_code;
+            $row[] = $refraction->patient_code;
+            $row[] = $refraction->patient_name;
+            $row[] = $refraction->patient_category_name;
+            $row[] = $refraction->mobile_no;
+            $row[] = "Dr. " . $refraction->doctor_name;;
+            // $row[] = $refraction->booking_id;
             $row[] = $refraction->lens;
             $row[] = $refraction->comment;
 
@@ -400,6 +407,39 @@ class Refraction extends CI_Controller
                 log_message('error', 'JSON decode error: ' . json_last_error_msg());
                 $auto_refraction_data = []; // Default to an empty array if there's an error
             }
+        ///////////// Age calculation //////////
+        $age_y = $result->age_y;
+        $age_m = $result->age_m;
+        $age_d = $result->age_d;
+        $age_h = $result->age_h;
+        $age = "";
+        if ($age_y > 0) {
+            $year = 'Years';
+            if ($age_y == 1) {
+                $year = 'Year';
+            }
+            $age .= $age_y . " " . $year;
+        }
+        if ($age_m > 0) {
+            $month = 'Months';
+            if ($age_m == 1) {
+                $month = 'Month';
+            }
+            $age .= " " . $age_m . " " . $month;
+        }
+        if ($age_d > 0) {
+            $day = 'Days';
+            if ($age_d == 1) {
+                $day = 'Day';
+            }
+            $age .= ", " . $age_d . " " . $day;
+        }
+        if ($age_h > 0) {
+            $hours = 'Hours';
+
+            $age .= " " . $age_h . " " . $hours;
+        }
+        ///////////////////////////////////////
 
         $data['form_data'] = array(
             'data_id' => $result['id'],
@@ -408,8 +448,11 @@ class Refraction extends CI_Controller
             'booking_code' => $result['booking_code'],
             'pres_id' => $result['pres_id'],
             'patient_id' => $result['patient_id'],
+            'patient_name' => $result['patient_name'],
+            'age' => $age,
             'lens' => $result['lens'],
             'comment' => $result['comment'],
+            'date' => $result['created_date'],
             'optometrist_signature' => $result['optometrist_signature'],
             'doctor_signature' => $result['doctor_signature'],
             'status' => $result['status'],
