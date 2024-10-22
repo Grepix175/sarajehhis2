@@ -39,28 +39,32 @@ class Refraction_model extends CI_Model {
 
 	private function _get_datatables_query()
     {
-        $this->db->select("hms_opd_refraction.*");
+        $this->db->select("hms_opd_refraction.*,hms_patient.*,hms_patient_category.*,hms_patient_category.patient_category as patient_category_name,hms_opd_booking.*,hms_doctors.doctor_name");
         $this->db->from($this->table);
+        $this->db->join('hms_patient', 'hms_patient.id = hms_opd_refraction.patient_id', 'left');
+        $this->db->join('hms_patient_category', 'hms_patient_category.id=hms_patient.patient_category', 'left');
+        $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_opd_refraction.booking_id', 'left');
+        $this->db->join('hms_doctors', 'hms_doctors.id = hms_opd_booking.attended_doctor', 'left');
         // $this->db->join($this->side_effects_table, 'hms_vision.side_effects = hms_side_effect.id', 'left'); // Join side effects
         $this->db->where('hms_opd_refraction.is_deleted', '0');
 
         $i = 0;
-        // foreach ($this->column as $item) {
-        //     if ($_POST['search']['value']) {
-        //         if ($i === 0) {
-        //             $this->db->group_start();
-        //             $this->db->like($item, $_POST['search']['value']);
-        //         } else {
-        //             $this->db->or_like($item, $_POST['search']['value']);
-        //         }
+        foreach ($this->column as $item) {
+            if ($_POST['search']['value']) {
+                if ($i === 0) {
+                    $this->db->group_start();
+                    $this->db->like($item, $_POST['search']['value']);
+                } else {
+                    $this->db->or_like($item, $_POST['search']['value']);
+                }
 
-        //         if (count($this->column) - 1 == $i) {
-        //             $this->db->group_end();
-        //         }
-        //     }
-        //     $column[$i] = $item;
-        //     $i++;
-        // }
+                if (count($this->column) - 1 == $i) {
+                    $this->db->group_end();
+                }
+            }
+            $column[$i] = $item;
+            $i++;
+        }
 
         if (isset($_POST['order'])) {
             $this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
@@ -89,8 +93,10 @@ class Refraction_model extends CI_Model {
 
 	public function get_by_id($id)
     {
-        $this->db->select('hms_opd_refraction.*');
+        $this->db->select('hms_opd_refraction.*, hms_patient.*');
         $this->db->from($this->table);
+        $this->db->join('hms_patient', 'hms_patient.id = hms_opd_refraction
+        .patient_id', 'left');
         $this->db->where('hms_opd_refraction.id', $id);
         $this->db->where('hms_opd_refraction.is_deleted', '0');
         $query = $this->db->get();

@@ -53,8 +53,8 @@ $users_data = $this->session->userdata('auth_users');
 
 
     function edit_refraction(id) {
-        // Redirect to the edit page for vision with the specified ID
-        window.location.href = '<?php echo base_url('refraction/edit/'); ?>' + id;
+      // Redirect to the edit page for vision with the specified ID
+      window.location.href = '<?php echo base_url('refraction/edit/'); ?>' + id;
     }
 
     function reload_table() {
@@ -120,19 +120,161 @@ $users_data = $this->session->userdata('auth_users');
             </div>
           </div>
         </div>
+        <form name="search_form" id="search_form">
+
+<div class="row">
+  <div class="col-sm-4">
+    <div class="row m-b-5">
+      <div class="col-xs-5"><label>From Date</label></div>
+      <div class="col-xs-7">
+        <input id="start_date_patient" name="start_date" class="datepicker start_datepicker m_input_default"
+          type="text" value="<?php echo $form_data['start_date'] ?>">
+      </div>
+    </div>
+    <div class="row m-b-5">
+      <div class="col-xs-5"><label><?php echo $data = get_setting_value('PATIENT_REG_NO'); ?></label></div>
+      <div class="col-xs-7">
+        <input name="patient_code" class="m_input_default" id="patient_code" onkeyup="return form_submit();"
+          value="<?php echo $form_data['patient_code'] ?>" type="text" autofocus>
+      </div>
+    </div>
+    <div class="row m-b-5">
+      <div class="col-xs-5"><label>Mobile No.</label></div>
+      <div class="col-xs-7">
+        <input name="mobile_no" value="<?php echo $form_data['mobile_no'] ?>" id="mobile_no"
+          onkeyup="return form_submit();" class="numeric m_input_default" maxlength="10" value="" type="text">
+      </div>
+    </div>
+
+  </div> <!-- 4 -->
+
+  <div class="col-sm-4">
+    <div class="row m-b-5">
+      <div class="col-xs-5"><label>To Date</label></div>
+      <div class="col-xs-7">
+        <input name="end_date" id="end_date_patient"
+          class="datepicker datepicker_to end_datepicker m_input_default"
+          value="<?php echo $form_data['end_date'] ?>" type="text">
+      </div>
+    </div>
+    <div class="row m-b-5">
+      <div class="col-xs-5"><label>Patient Name</label></div>
+      <div class="col-xs-7">
+        <input name="patient_name" value="<?php echo $form_data['patient_name'] ?>" id="patient_name"
+          onkeyup="return form_submit();" class="alpha_space m_input_default" value="" type="text">
+      </div>
+    </div>
+
+    <?php
+    $users_data = $this->session->userdata('auth_users');
+
+    if (array_key_exists("permission", $users_data)) {
+      $permission_section = $users_data['permission']['section'];
+      $permission_action = $users_data['permission']['action'];
+    } else {
+      $permission_section = array();
+      $permission_action = array();
+    }
+    //print_r($permission_action);
+    
+    $new_branch_data = array();
+    $users_data = $this->session->userdata('auth_users');
+    $sub_branch_details = $this->session->userdata('sub_branches_data');
+    $parent_branch_details = $this->session->userdata('parent_branches_data');
+
+
+    if (!empty($users_data['parent_id'])) {
+      $new_branch_data['id'] = $users_data['parent_id'];
+
+      $users_new_data[] = $new_branch_data;
+      $merg_branch = array_merge($users_new_data, $sub_branch_details);
+
+      $ids = array_column($merg_branch, 'id');
+      $branch_id = implode(',', $ids);
+      $option = '<option value="' . $branch_id . '">All</option>';
+    }
+
+    ?>
+    <?php if (in_array('1', $permission_section)) { ?>
+      <div class="row m-b-5">
+        <div class="col-xs-5"><label>Branch</label></div>
+        <div class="col-xs-7">
+
+
+
+          <select name="branch_id" id="branch_id" onchange="return form_submit();">
+            <?php echo $option; ?>
+            <option selected="selected" <?php if (isset($_POST['branch_id']) && $_POST['branch_id'] == $users_data['parent_id']) {
+              echo 'selected="selected"';
+            } ?>
+              value="<?php echo $users_data['parent_id']; ?>">Self</option>';
+            <?php
+            if (!empty($sub_branch_details)) {
+              $i = 0;
+              foreach ($sub_branch_details as $key => $value) {
+                ?>
+                <option value="<?php echo $sub_branch_details[$i]['id']; ?>" <?php if (isset($_POST['branch_id']) && $_POST['branch_id'] == $sub_branch_details[$i]['id']) {
+                    echo 'selected="selected"';
+                  } ?>>
+                  <?php echo $sub_branch_details[$i]['branch_name']; ?> </option>
+                <?php
+                $i = $i + 1;
+              }
+
+            }
+            ?>
+          </select>
+
+
+        </div>
+      </div>
+
+    <?php } else { ?>
+      <input type="hidden" name="branch_id" id="branch_id" value="<?php echo $users_data['parent_id']; ?>">
+    <?php } ?>
+
+  </div> <!-- 4 -->
+
+  <div class="col-sm-4">
+
+    <!--<a class="btn-custom" id="reset_date" onclick="reset_search();"><i class="fa fa-refresh"></i> Reset</a>
+<br>
+  <a href="javascript:void(0)" class="btn-a-search" id="patient_adv_search">
+    <i class="fa fa-cubes" aria-hidden="true"></i> 
+    Search
+  </a>-->
+    <a class="btn-custom" id="reset_date" onclick="reset_search();"> Reset</a>
+    <!--<a href="javascript:void(0)" class="btn-custom" id="patient_adv_search">
+    <i class="fa fa-cubes" aria-hidden="true"></i> 
+    Advance Search
+  </a>-->
+  </div> <!-- 4 -->
+
+
+</div> <!-- row -->
+
+
+</form>
         <form>
           <?php if (in_array('2485', $users_data['permission']['action'])) { ?>
             <!-- bootstrap data table -->
-            <table id="table" class="table table-striped table-bordered patient_category_list" cellspacing="0" width="100%">
+            <table id="table" class="table table-striped table-bordered prescription_list_tbl" cellspacing="0"
+              width="100%">
               <thead class="bg-theme">
                 <tr>
                   <th width="40" align="center"> <input type="checkbox" name="selectall" class="" id="selectAll" value="">
                   </th>
-                  <th> Booking ID </th>
+                  <th> Token No </th>
+                  <th> OPD No. </th>
+                  <th> Patient Reg No. </th>
+                  <th> Patient Name </th>
+                  <th> Patient Category </th>
+                  <th> Mobile No </th>
+                  <th> Consultant </th>
                   <th> Lens </th>
                   <th> Comment </th>
                   <th> Status </th>
-                  <th> Action </th> 
+                  <th> Action </th>
                 </tr>
               </thead>
             </table>
@@ -147,6 +289,14 @@ $users_data = $this->session->userdata('auth_users');
               <i class="fa fa-plus"></i> New
             </button> -->
           <?php } ?>
+          <a data-toggle="tooltip" title="Download list in excel" href="#" id="help_desk_download_excel"
+              class="btn-anchor m-b-2">
+              <i class="fa fa-file-excel-o"></i> Excel
+            </a>
+            <a data-toggle="tooltip" title="Download list in pdf" href="#" id="help_desk_download_pdf"
+              class="btn-anchor m-b-2">
+              <i class="fa fa-file-pdf-o"></i> PDF
+            </a>
           <?php if (in_array('2488', $users_data['permission']['action'])) { ?>
             <button class="btn-update" id="deleteAll" onclick="return checkboxValues();">
               <i class="fa fa-trash"></i> Delete
@@ -217,7 +367,8 @@ $users_data = $this->session->userdata('auth_users');
           <div class="modal-header bg-theme">
             <h4>Are You Sure?</h4>
           </div>
-          <div class="modal-body" style="font-size:8px;">*Data that has been archived for more than 60 days will be automatically deleted.</div>
+          <div class="modal-body" style="font-size:8px;">*Data that has been archived for more than 60 days will be
+            automatically deleted.</div>
           <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn-update" id="delete">Confirm</button>
             <button type="button" data-dismiss="modal" class="btn-cancel">Cancel</button>
