@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Refraction_model extends CI_Model {
+class Refraction_model extends CI_Model
+{
 
     var $table = 'hms_opd_refraction'; // Define the table name
     var $order = array('pres_id' => 'desc'); // Define the default order
@@ -11,23 +12,26 @@ class Refraction_model extends CI_Model {
         'hms_opd_refraction.id',
         'hms_opd_refraction.branch_id', // Added new column
         'hms_opd_refraction.booking_code', // Added new column
-        'hms_opd_refraction.pres_id', 
+        'hms_opd_refraction.pres_id',
         'hms_opd_refraction.patient_id', // Added new column
-        'hms_opd_refraction.booking_id', 
+        'hms_opd_refraction.booking_id',
         'hms_opd_refraction.auto_refraction', // Added new column
         'hms_opd_refraction.lens', // Added new column
         'hms_opd_refraction.comment', // Added new column
-        'hms_opd_refraction.optometrist_signature', 
-        'hms_opd_refraction.doctor_signature', 
+        'hms_opd_refraction.optometrist_signature',
+        'hms_opd_refraction.doctor_signature',
         'hms_opd_refraction.status', // Added new column
         'hms_opd_refraction.is_deleted', // Added new column
         'hms_opd_refraction.deleted_by', // Added new column
         'hms_opd_refraction.deleted_date', // Added new column
-        'hms_opd_refraction.ip_address', 
-        'hms_opd_refraction.created_by', 
-        'hms_opd_refraction.modified_by', 
-        'hms_opd_refraction.modified_date', 
-        'hms_opd_refraction.created_date'
+        'hms_opd_refraction.ip_address',
+        'hms_opd_refraction.created_by',
+        'hms_opd_refraction.modified_by',
+        'hms_opd_refraction.modified_date',
+        'hms_opd_refraction.created_date',
+        'hms_patient.patient_name',
+        'hms_patient.mobile_no',
+        'hms_patient.patient_code'
     );
 
 
@@ -37,9 +41,10 @@ class Refraction_model extends CI_Model {
         $this->load->database();
     }
 
-	private function _get_datatables_query()
+    private function _get_datatables_query()
     {
-        $this->db->select("hms_opd_refraction.*,hms_patient.*,hms_patient_category.*,hms_patient_category.patient_category as patient_category_name,hms_opd_booking.*,hms_doctors.doctor_name");
+        $search = $this->session->userdata('prescription_search');
+        $this->db->select("hms_opd_refraction.id as refraction_id,hms_opd_refraction.*,hms_patient.*,hms_patient_category.patient_category as patient_category_name,hms_opd_booking.*,hms_doctors.doctor_name");
         $this->db->from($this->table);
         $this->db->join('hms_patient', 'hms_patient.id = hms_opd_refraction.patient_id', 'left');
         $this->db->join('hms_patient_category', 'hms_patient_category.id=hms_patient.patient_category', 'left');
@@ -65,7 +70,29 @@ class Refraction_model extends CI_Model {
             $column[$i] = $item;
             $i++;
         }
+        if (!empty($search)) {
 
+			if (!empty($search['start_date'])) {
+				$start_date = date('Y-m-d 00:00:00', strtotime($search['start_date']));
+				$this->db->where('hms_opd_refraction.created_date >=', $start_date);
+			}
+
+			if (!empty($search['end_date'])) {
+				$end_date = date('Y-m-d 23:59:59', strtotime($search['end_date']));
+				$this->db->where('hms_opd_refraction.created_date <=', $end_date);
+			}
+
+			if (!empty($search['patient_name'])) {
+				$this->db->like('hms_patient.patient_name', $search['patient_name'], 'after');
+			}
+
+			if (!empty($search['patient_code'])) {
+				$this->db->where('hms_patient.patient_code', $search['patient_code']);
+			}
+            if (!empty($search['mobile_no'])) {
+				$this->db->where('hms_patient.mobile_no', $search['mobile_no']);
+			}
+		}
         if (isset($_POST['order'])) {
             $this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
         } else if (isset($this->order)) {
@@ -84,19 +111,18 @@ class Refraction_model extends CI_Model {
         return $query->result();
     }
 
-	public function count_filtered()
+    public function count_filtered()
     {
         $this->_get_datatables_query();
         $query = $this->db->get();
         return $query->num_rows();
     }
 
-	public function get_by_id($id)
+    public function get_by_id($id)
     {
         $this->db->select('hms_opd_refraction.*, hms_patient.*');
         $this->db->from($this->table);
-        $this->db->join('hms_patient', 'hms_patient.id = hms_opd_refraction
-        .patient_id', 'left');
+        $this->db->join('hms_patient', 'hms_patient.id = hms_opd_refraction.patient_id', 'left');
         $this->db->where('hms_opd_refraction.id', $id);
         $this->db->where('hms_opd_refraction.is_deleted', '0');
         $query = $this->db->get();
@@ -105,11 +131,11 @@ class Refraction_model extends CI_Model {
 
     public function count_all()
     {
-		$this->db->from($this->table);
+        $this->db->from($this->table);
         return $this->db->count_all_results();
     }
-	
-	public function get_patient_name_by_booking_id($booking_id)
+
+    public function get_patient_name_by_booking_id($booking_id)
     {
         // Join hms_std_eye_prescription with hms_patient, hms_token, and hms_patient_category to get all details
         $this->db->select('hms_std_eye_prescription.*, hms_patient.*, hms_token.token_no, hms_patient_category.patient_category'); // Select necessary columns including category_name
@@ -121,7 +147,7 @@ class Refraction_model extends CI_Model {
         $this->db->where('hms_std_eye_prescription.is_deleted', '0'); // Check if not deleted
 
         $query = $this->db->get();
-		// echo "<pre>";print_r($query);
+        // echo "<pre>";print_r($query);
 
         if ($query->num_rows() > 0) {
             return $query->row_array(); // Return all columns as an associative array including category_name
@@ -137,7 +163,7 @@ class Refraction_model extends CI_Model {
         $this->db->from($this->table); // Use the defined table name
         $this->db->where('pres_id', $presc_id);
         $this->db->where('patient_id', $booking_id);
-        
+
         $result = $this->db->get()->row_array();
         return $result; // Return the result as an associative array
     }
@@ -155,14 +181,14 @@ class Refraction_model extends CI_Model {
     // Method to save or update a refraction record
     public function save($data)
     {
-		// echo "<pre>";print_r($data);die('dsfsdfsf');
+        // echo "<pre>";print_r($data);die('dsfsdfsf');
         // If a pres_id exists, update the record
         if (!empty($data['id'])) {
             $this->db->where('id', $data['id']);
             $this->db->update($this->table, $data);
         } else {
             // Otherwise, insert a new record
-			// echo "<pre>";print_r($data);die;
+            // echo "<pre>";print_r($data);die;
             $this->db->insert($this->table, $data);
         }
     }

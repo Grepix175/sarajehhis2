@@ -12,7 +12,19 @@ class Refraction extends CI_Controller
 
     public function index()
     {
+
         $data['page_title'] = 'Refraction Records';
+        $this->load->model('default_search_setting/default_search_setting_model');
+        $default_search_data = $this->default_search_setting_model->get_default_setting();
+        if (isset($default_search_data[1]) && !empty($default_search_data) && $default_search_data[1] == 1) {
+            $start_date = '';
+            $end_date = '';
+        } else {
+            $start_date = date('d-m-Y');
+            $end_date = date('d-m-Y');
+        }
+        $data['form_data'] = array('patient_name' => '', 'patient_code' => '','mobile_no' => '', 'start_date' => $start_date, 'end_date' => $end_date);
+        
         $this->load->view('refraction/list', $data);
     }
 
@@ -31,7 +43,7 @@ class Refraction extends CI_Controller
             $row = array();
 
             // Add a checkbox for selecting the record
-            $row[] = '<input type="checkbox" name="refraction_ids[]" value="' . $refraction->id . '">';
+            $row[] = '<input type="checkbox" name="refraction_ids[]" value="' . $refraction->refraction_id . '">';
 
             $row[] = $refraction->token_no;
             $row[] = $refraction->booking_code;
@@ -48,8 +60,8 @@ class Refraction extends CI_Controller
             $row[] = ($refraction->status == 1) ? 'Active' : 'Not Active';
 
             // Add action buttons
-            $row[] = '<a onClick="return edit_refraction(' . $refraction->id . ');" class="btn-custom" href="javascript:void(0)" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
-                    <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("refraction/print_refraction/" . $refraction->booking_id."/".$refraction->id) . '\');">
+            $row[] = '<a onClick="return edit_refraction(' . $refraction->refraction_id . ');" class="btn-custom" href="javascript:void(0)" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
+                    <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("refraction/print_refraction/" . $refraction->booking_id."/".$refraction->refraction_id) . '\');">
                         <i class="fa fa-print"></i> Print
                     </a>';
 
@@ -514,5 +526,154 @@ class Refraction extends CI_Controller
     }
 
     
+    public function refraction_excel()
+    {
+        // Starting the PHPExcel library
+        $this->load->library('excel');
+        $this->excel->IO_factory();
+
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setTitle("export")->setDescription("none");
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $from_date = $this->input->get('start_date');
+        $to_date = $this->input->get('end_date');
+
+        // Main header with date range if provided
+        $mainHeader = "Refraction List";
+        if (!empty($from_date) && !empty($to_date)) {
+            $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
+        }
+
+        // Set the main header in row 1
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:J1');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', $mainHeader);
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true)->setSize(16);
+
+        // Leave row 2 blank
+        $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
+
+        // Field names (header row) should start in row 3
+        $fields = array('Token No','OPD No','Patient Reg No.','Patient Name','Patient Category', 'Mobile No', 'Consultant', 'Lens', 'Comment','Status');
+
+        $col = 0; // Initialize the column index
+        foreach ($fields as $field) {
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 3, $field); // Row 3 for headers
+            $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn($col)->setAutoSize(true); // Auto-size columns
+            $col++;
+        }
+
+        // Style for header row (Row 3)
+        $objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+        // Fetching the OPD data
+        $list = $this->refraction->get_datatables();
+
+        // Populate the data starting from row 4
+        $row = 4; // Start at row 4 for data
+        if (!empty($list)) {
+            foreach ($list as $refraction) {
+                // Reset column index for each new row
+                $col = 0;
+
+                // Prepare data to be populated
+                $data = array(
+                    $refraction->token_no,
+                    $refraction->booking_code,
+                    $refraction->patient_code,
+                    $refraction->patient_name,
+                    $refraction->patient_category_name,
+                    $refraction->mobile_no,
+                    $refraction->doctor_name,
+                    $refraction->lens,
+                    $refraction->comment, // Make sure this is retrieved correctly
+                    $refraction->status == 1 ? 'Active' : 'Not Active',
+                );
+
+                foreach ($data as $cellValue) {
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $cellValue);
+                    $col++;
+                }
+                $row++; // Move to the next row
+            }
+        }
+
+        // Send headers to force download of the file
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="refraction_list_' . time() . '.xls"');
+        header('Cache-Control: max-age=0');
+
+        // Write the Excel file
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        ob_end_clean();
+        $objWriter->save('php://output');
+    }
+
+
+    public function refraction_pdf()
+    {
+        // Increase memory limit and execution time for PDF generation
+        ini_set('memory_limit', '2048M');
+        ini_set('max_execution_time', 300);
+
+        // Prepare data for the PDF
+        // $data['print_status'] = "";
+        // $from_date = $this->input->get('start_date');
+        // $to_date = $this->input->get('end_date');
+
+        // Fetch OPD data
+        $data['data_list'] = $this->refraction->get_datatables();
+        // echo "<pre>";
+        // print_r($data);
+        // die;
+        // $data['data_list']['side_effect_name'] = $this->vision_model->get_side_effect_name($data['data_list']['side_effects']);
+        // Create main header
+        $data['mainHeader'] = "Refraction List";
+        // if (!empty($from_date) && !empty($to_date)) {
+        // $data['mainHeader'] .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
+        // }
+
+        // Load the view and capture the HTML output
+        $this->load->view('refraction/refraction_html', $data);
+        $html = $this->output->get_output();
+
+        // Load PDF library and convert HTML to PDF
+        $this->load->library('pdf');
+        $this->pdf->load_html($html);
+        $this->pdf->render();
+
+        // Stream the generated PDF to the browser
+        $this->pdf->stream("refraction_list_" . time() . ".pdf", array("Attachment" => 1));
+    }    
+    public function reset_search()
+    {
+        $this->session->unset_userdata('prescription_search');
+    }
+    public function advance_search()
+    {
+        $this->load->model('general/general_model');
+        $data['page_title'] = "Advance Search";
+        $post = $this->input->post();
+
+        $data['form_data'] = array(
+            "start_date" => '',
+            "end_date" => '',
+            "patient_code" => "",
+            "patient_name" => "",
+        );
+        if (isset($post) && !empty($post)) {
+            $marge_post = array_merge($data['form_data'], $post);
+            $this->session->set_userdata('prescription_search', $marge_post);
+
+        }
+        $prescription_search = $this->session->userdata('prescription_search');
+        if (isset($prescription_search) && !empty($prescription_search)) {
+            $data['form_data'] = $prescription_search;
+        }
+        $this->load->view('refraction/advance_search', $data);
+    }
 
 }

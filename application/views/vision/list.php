@@ -260,9 +260,10 @@ $users_data = $this->session->userdata('auth_users');
                         foreach ($sub_branch_details as $key => $value) {
                           ?>
                           <option value="<?php echo $sub_branch_details[$i]['id']; ?>" <?php if (isset($_POST['branch_id']) && $_POST['branch_id'] == $sub_branch_details[$i]['id']) {
-                              echo 'selected="selected"';
-                            } ?>>
-                            <?php echo $sub_branch_details[$i]['branch_name']; ?> </option>
+                               echo 'selected="selected"';
+                             } ?>>
+                            <?php echo $sub_branch_details[$i]['branch_name']; ?>
+                          </option>
                           <?php
                           $i = $i + 1;
                         }
@@ -494,45 +495,45 @@ $users_data = $this->session->userdata('auth_users');
 
 
       document.getElementById('help_desk_download_excel').addEventListener('click', function (e) {
-      e.preventDefault();
+        e.preventDefault();
 
 
-      var fromDate = document.getElementById('start_date_patient').value;
-      var toDate = document.getElementById('end_date_patient').value;
+        var fromDate = document.getElementById('start_date_patient').value;
+        var toDate = document.getElementById('end_date_patient').value;
 
 
-      var url = '<?php echo base_url("vision/vision_excel"); ?>';
+        var url = '<?php echo base_url("vision/vision_excel"); ?>';
 
 
-      if (fromDate || toDate) {
-        url += '?';
-        if (fromDate) {
-          url += 'start_date=' + encodeURIComponent(fromDate);
+        if (fromDate || toDate) {
+          url += '?';
+          if (fromDate) {
+            url += 'start_date=' + encodeURIComponent(fromDate);
+          }
+          if (toDate) {
+            url += (fromDate ? '&' : '') + 'end_date=' + encodeURIComponent(toDate);
+          }
         }
-        if (toDate) {
-          url += (fromDate ? '&' : '') + 'end_date=' + encodeURIComponent(toDate);
-        }
-      }
-      window.location.href = url;
-    });
+        window.location.href = url;
+      });
 
-    document.getElementById('help_desk_download_pdf').addEventListener('click', function (e) {
-      e.preventDefault();
+      document.getElementById('help_desk_download_pdf').addEventListener('click', function (e) {
+        e.preventDefault();
 
-      var fromDate = document.getElementById('start_date_patient').value;
-      var toDate = document.getElementById('end_date_patient').value;
+        var fromDate = document.getElementById('start_date_patient').value;
+        var toDate = document.getElementById('end_date_patient').value;
 
 
-      var fromDateObj = new Date(fromDate);
-      var toDateObj = new Date(toDate);
+        var fromDateObj = new Date(fromDate);
+        var toDateObj = new Date(toDate);
 
 
 
-      var url = '<?php echo base_url("vision/vision_pdf"); ?>';
-      url += '?start_date=' + encodeURIComponent(fromDate) + '&end_date=' + encodeURIComponent(toDate);
+        var url = '<?php echo base_url("vision/vision_pdf"); ?>';
+        url += '?start_date=' + encodeURIComponent(fromDate) + '&end_date=' + encodeURIComponent(toDate);
 
-      window.location.href = url;
-    });
+        window.location.href = url;
+      });
 
     </script>
     <!-- Confirmation Box -->
