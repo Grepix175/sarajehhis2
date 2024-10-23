@@ -7,12 +7,13 @@ class Vision extends CI_Controller
     {
         parent::__construct();
         $this->load->model('vision/vision_model');
+        $this->load->model('opd/opd_model', 'opd');
         $this->load->library('form_validation');
     }
 
     public function index()
     {
-        $data['page_title'] = 'Vision Records';
+        $data['page_title'] = 'Vision List';
         $this->load->model('default_search_setting/default_search_setting_model');
         $default_search_data = $this->default_search_setting_model->get_default_setting();
         if (isset($default_search_data[1]) && !empty($default_search_data) && $default_search_data[1] == 1) {
@@ -51,12 +52,63 @@ class Vision extends CI_Controller
                                   $(this).toggleClass('allChecked');
                               })</script>";
             }
+            $pat_status = '';
+            $patient_status = $this->opd->get_by_id_patient_status($prescription->booking_id);
+            if ($patient_status == 1) {
+                $pat_status = '<font style="background-color: #228B22;color:white">Vision</font>';
+            }
+            // else if ($patient_status['doctor'] == '1') {
+            //   $pat_status = '<font style="background-color: #1CAF9A;color:white">Doctor</font>';
+            // }
+            //  else if ($patient_status['optimetrist'] == '1') {
+            //   $pat_status = '<font style="background-color: #1CAF9A;color:white">Opt.Optom</font>';
+            // } 
+            // else if ($patient_status['reception'] == '1') {
+            //   $pat_status = '<font style="background-color: #1CAF9A;color:white">Reception</font>';
+            // }
+            //  else if ($patient_status['arrive'] == '1') {
+            //   $pat_status = '<font style="background-color: #1CAF9A;color:white">Arrived</font>';
+            // } 
+            else {
+                $pat_status = '<font style="background-color: #1CAF9A;color:white">Not Arrived</font>';
+            }
+            $age_y = $vision->age_y;
+            $age_m = $vision->age_m;
+            $age_d = $vision->age_d;
+
+            $age = "";
+            if ($age_y > 0) {
+                $year = 'Years';
+                if ($age_y == 1) {
+                    $year = 'Year';
+                }
+                $age .= $age_y . " " . $year;
+            }
+            if ($age_m > 0) {
+                $month = 'Months';
+                if ($age_m == 1) {
+                    $month = 'Month';
+                }
+                $age .= ", " . $age_m . " " . $month;
+            }
+            if ($age_d > 0) {
+                $day = 'Days';
+                if ($age_d == 1) {
+                    $day = 'Day';
+                }
+                $age .= ", " . $age_d . " " . $day;
+            }
             // $row[] = $vision->id;
             $row[] = '<input type="checkbox" name="prescription[]" class="checklist" value="' . $vision->id . '">' . $check_script;
             $row[] = $vision->patient_code_auto;
+            $row[] = $vision->booking_code;
+            $row[] = $vision->patient_code;
             $row[] = $vision->patient_name;
+            $row[] = $vision->mobile_no;
+            $row[] = $age;
+            $row[] = $pat_status;
             $row[] = $vision->procedure_purpose;
-            $row[] = $vision->side_effect_name;
+            // $row[] = $vision->side_effect_name;
             // $row[] = $vision->informed_consent ? 'Yes' : 'No';
             // $row[] = $vision->previous_ffa ? 'Yes' : 'No';
             // $row[] = $vision->history_allergy ? 'Yes' : 'No';
@@ -73,7 +125,8 @@ class Vision extends CI_Controller
             // $row[] = $vision->anaesthetist_date;
             // $row[] = $vision->doctor_signature;
             // $row[] = $vision->doctor_date;
-            $row[] = $vision->created_at;
+            $row[] = date('d-M-Y', strtotime($vision->created_at));
+            // $row[] = $vision->created_at;
             // $row[] = $vision->updated_at;
 
             // Add action buttons

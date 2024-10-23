@@ -524,20 +524,7 @@ $field_list = mandatory_section_field_list(3);
                   </div>
                 </div>
               </div> <!-- row -->
-              <div class="row m-b-4">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-4"><b>Identification Mark</b></div>
-                    <div class="col-md-8">
-                      <input type="text" name="identification_mark" id="identification_mark" class="m_input_default"
-                        value="<?php echo $form_data['identification_mark']; ?>" class="numeric" />
-                      <?php if (!empty($form_error)) {
-                        echo form_error('identification_mark');
-                      } ?>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              
 
               <!-- <div class="row m-b-4">
                 <div class="col-md-12">
@@ -1818,7 +1805,7 @@ $field_list = mandatory_section_field_list(3);
             <?php //else: ?>
             <input type="hidden" name="kit_amount" id="kit_amount" value="0" />
             <?php //endif; ?>
-            <div class="row m-b-5">
+            <!-- <div class="row m-b-5">
               <div class="col-md-12">
                 <div class="row">
                   <div class="col-md-5"><b>Consultant Charge</b></div>
@@ -1829,11 +1816,11 @@ $field_list = mandatory_section_field_list(3);
                   </div>
                 </div>
               </div>
-            </div> <!-- row -->
+            </div> -->
             <div class="row m-b-5">
               <div class="col-md-12">
                 <div class="row">
-                  <div class="col-md-5"><b>Eme. Reg. Charge</b></div>
+                  <div class="col-md-5"><b>Reg. Charge</b></div>
                   <div class="col-md-7">
                     <input type="text" name="eme_reg_charge" id="eme_reg_charge"
                       class="price_float m_input_default" onchange="update_amount(this.value);"
@@ -1845,7 +1832,7 @@ $field_list = mandatory_section_field_list(3);
             <div class="row m-b-5">
               <div class="col-md-12">
                 <div class="row">
-                  <div class="col-md-5"><b>Emergency booking Charge</b></div>
+                  <div class="col-md-5"><b>Consultant Charge</b></div>
                   <div class="col-md-7">
                     <input type="text" name="eme_booking_charge" id="eme_booking_charge"
                       class="price_float m_input_default" onchange="update_amount(this.value);"
@@ -1914,6 +1901,20 @@ $field_list = mandatory_section_field_list(3);
                 </div>
               </div>
             </div> <!-- row -->
+            <div class="row m-b-4">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-5"><b>Identification Mark</b></div>
+                    <div class="col-md-7">
+                      <input type="text" name="identification_mark" id="identification_mark" class="m_input_default"
+                        value="<?php echo $form_data['identification_mark']; ?>" class="numeric" />
+                      <?php if (!empty($form_error)) {
+                        echo form_error('identification_mark');
+                      } ?>
+                    </div>
+                  </div>
+                </div>
+              </div>
             <?php
             $nature_of_emergency_array = explode(', ', $form_data['nature_of_emergency']);
             ?>

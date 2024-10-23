@@ -144,9 +144,6 @@ class Help_desk extends CI_Controller
         $age .= ", " . $age_d . " " . $day;
       }
 
-
-
-
       $row[] = '<input type="checkbox" name="prescription[]" class="checklist" value="' . $prescription->id . '">' . $check_script;
       $row[] = $prescription->token_no;
       $row[] = $prescription->booking_code;

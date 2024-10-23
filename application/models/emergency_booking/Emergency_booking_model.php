@@ -16,43 +16,41 @@ class Emergency_booking_model extends CI_Model
 	private function _get_datatables_query()
 	{
 		$user_data = $this->session->userdata('auth_users');
-		$this->db->select("hms_emergency_booking.*,hms_patient.patient_name,hms_patient.mobile_no, 
-			hms_patient.patient_code as patient_reg_no, hms_patient.mobile_no, (CASE WHEN hms_patient.gender=1 THEN  'Male' ELSE 'Female' END ) as gender, concat_ws(' ',hms_patient.address, hms_patient.address2, hms_patient.address3) as address, hms_patient.father_husband,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h,hms_patient.pincode,hms_patient.adhar_no,,hms_patient.address2, sim.simulation as father_husband_simulation,hms_patient.patient_email,hms_patient_category.patient_category as patient_category_name,hms_payment_mode.payment_mode as payment_mode_name, ins_type.insurance_type, ins_cmpy.insurance_company, src.source as patient_source, ds.disease , (CASE WHEN hms_emergency_booking.referred_by =1 THEN concat(hms_hospital.hospital_name,' (Hospital)')  ELSE concat('Dr. ',hms_doctors.doctor_name) END) as doctor_hospital_name, spcl.specialization, docs.doctor_name , pkg.title,hms_patient.dob,(select sum(payment.credit) as paid_amount1 from hms_payment as payment where payment.parent_id = hms_emergency_booking.id AND payment.section_id =2) as paid_amount1,
-(select sum(credit)-sum(debit) as balance from hms_payment as  payment where payment.parent_id = hms_emergency_booking.id AND payment.section_id=2 AND payment.branch_id = " . $user_data['parent_id'] . ") as balance1");
-
+		$this->db->select("hms_emergency_booking.*,hms_patient.id as pati_id,hms_patient.patient_name,hms_patient.patient_code,hms_patient.patient_code_auto,hms_patient_category.id as pati_cate_id,hms_patient_category.patient_category as patient_category_name,hms_patient.age,hms_patient.age_y,hms_patient.age_m,hms_patient.age_h,(CASE WHEN hms_patient.gender=1 THEN  'Male' ELSE 'Female' END ) as gender,hms_patient.mobile_no,docs.doctor_name,hms_payment_mode.payment_mode as payment_mode_name");
+		$this->db->from($this->table);
 		$this->db->join('hms_patient', 'hms_patient.id=hms_emergency_booking.patient_id');
-		$this->db->join('hms_patient_category', 'hms_patient_category.id = hms_emergency_booking.patient_category');
-		$this->db->join('hms_payment_mode', 'hms_payment_mode.id = hms_emergency_booking.payment_mode');
+		$this->db->join('hms_patient_category', 'hms_patient_category.id = hms_emergency_booking.patient_category','left');
+		$this->db->join('hms_payment_mode', 'hms_payment_mode.id = hms_emergency_booking.payment_mode','left');
 		$this->db->where('hms_emergency_booking.is_deleted', '0');
 		$this->db->where('hms_emergency_booking.type =2');
-		$this->db->join('hms_disease', 'hms_disease.id= hms_emergency_booking.diseases', 'left');
+		// $this->db->join('hms_disease', 'hms_disease.id= hms_emergency_booking.diseases', 'left');
 
-		$this->db->join('hms_simulation as sim', 'sim.id=hms_patient.f_h_simulation', 'left');
-		$this->db->join('hms_insurance_type as ins_type', 'ins_type.id=hms_emergency_booking.insurance_type_id', 'left');
-		$this->db->join('hms_insurance_company as ins_cmpy', 'ins_cmpy.id=hms_emergency_booking.ins_company_id', 'left');
+		// $this->db->join('hms_simulation as sim', 'sim.id=hms_patient.f_h_simulation', 'left');
+		// $this->db->join('hms_insurance_type as ins_type', 'ins_type.id=hms_emergency_booking.insurance_type_id', 'left');
+		// $this->db->join('hms_insurance_company as ins_cmpy', 'ins_cmpy.id=hms_emergency_booking.ins_company_id', 'left');
 
-		$this->db->join('hms_patient_source as src', 'src.id=hms_emergency_booking.source_from', 'Left');
-		$this->db->join('hms_disease as ds', 'ds.id=hms_emergency_booking.diseases', 'left');
+		// $this->db->join('hms_patient_source as src', 'src.id=hms_emergency_booking.source_from', 'Left');
+		// $this->db->join('hms_disease as ds', 'ds.id=hms_emergency_booking.diseases', 'left');
 
-		$this->db->join('hms_doctors', 'hms_doctors.id = hms_emergency_booking.referral_doctor', 'left');
-		$this->db->join('hms_hospital', 'hms_hospital.id = hms_emergency_booking.referral_hospital', 'left');
-		$this->db->join('hms_specialization as spcl', 'spcl.id = hms_emergency_booking.specialization_id', 'left');
+		// $this->db->join('hms_doctors', 'hms_doctors.id = hms_emergency_booking.referral_doctor', 'left');
+		// $this->db->join('hms_hospital', 'hms_hospital.id = hms_emergency_booking.referral_hospital', 'left');
+		// $this->db->join('hms_specialization as spcl', 'spcl.id = hms_emergency_booking.specialization_id', 'left');
 
 		$this->db->join('hms_doctors as docs', 'docs.id = hms_emergency_booking.attended_doctor', 'left');
 
-		$this->db->join('hms_packages as pkg', 'pkg.id = hms_emergency_booking.package_id', 'left');
-
+		// $this->db->join('hms_packages as pkg', 'pkg.id = hms_emergency_booking.package_id', 'left');
+		
 
 		$search = $this->session->userdata('opd_search');
 		// echo "<pre>";print_r($search); exit;
 		/*if(isset($search) && !empty($search['branch_id']))
-											{
-												$this->db->where('hms_emergency_booking.branch_id = "'.$search['branch_id'].'"');
-											}
-											else
-											{
-												$this->db->where('hms_emergency_booking.branch_id = "'.$user_data['parent_id'].'"');	
-											}*/
+												  {
+													  $this->db->where('hms_emergency_booking.branch_id = "'.$search['branch_id'].'"');
+												  }
+												  else
+												  {
+													  $this->db->where('hms_emergency_booking.branch_id = "'.$user_data['parent_id'].'"');	
+												  }*/
 		if ($user_data['users_role'] == 4) {
 			$this->db->where('hms_emergency_booking.patient_id = "' . $user_data['parent_id'] . '"');
 
@@ -86,88 +84,28 @@ class Emergency_booking_model extends CI_Model
 
 
 
-			/* Booking */
+			// if (!empty($search['amount_from'])) {
+			// 	$this->db->where('hms_emergency_booking.total_amount >= "' . $search['amount_from'] . '"');
+			// }
 
-			if (!empty($search['booking_from_date'])) {
-				$booking_from_date = date('Y-m-d', strtotime($search['booking_from_date'])) . ' 00:00:00';
-				$this->db->where('hms_emergency_booking.confirm_date >= "' . $booking_from_date . '"');
-			}
+			// if (!empty($search['amount_to'])) {
+			// 	$this->db->where('hms_emergency_booking.total_amount <= "' . $search['amount_to'] . '"');
+			// }
 
-			if (!empty($search['booking_to_date'])) {
-				$booking_to_date = date('Y-m-d', strtotime($search['booking_to_date'])) . ' 23:59:59';
-				$this->db->where('hms_emergency_booking.confirm_date <= "' . $booking_to_date . '"');
-			}
+			// if (!empty($search['paid_amount_from'])) {
+			// 	$this->db->where('hms_emergency_booking.paid_amount >= "' . $search['paid_amount_from'] . '"');
+			// }
 
-			/*if(!empty($search['start_time']))
-																  {
-																	  $start_time = date('H:i:s',strtotime($search['start_time']));
-																	  $this->db->where('hms_emergency_booking.appointment_time >= "'.$start_time.'"');
-																  }
-
-																  if(!empty($search['end_time']))
-																  {
-																	  $end_time = date('H:i:s',strtotime($search['end_time']));
-																	  $this->db->where('hms_emergency_booking.appointment_time <= "'.$end_time.'"');
-																  }*/
-
-			if (!empty($search['start_time'])) {
-				$start_time = date('H:i:s', strtotime($search['start_time']));
-				$this->db->where('hms_emergency_booking.booking_time >= "' . $start_time . '"');
-			}
-
-			if (!empty($search['end_time'])) {
-				$end_time = date('H:i:s', strtotime($search['end_time']));
-				$this->db->where('hms_emergency_booking.booking_time <= "' . $end_time . '"');
-			}
-
-
-
-			if (!empty($search['amount_from'])) {
-				$this->db->where('hms_emergency_booking.total_amount >= "' . $search['amount_from'] . '"');
-			}
-
-			if (!empty($search['amount_to'])) {
-				$this->db->where('hms_emergency_booking.total_amount <= "' . $search['amount_to'] . '"');
-			}
-
-			if (!empty($search['paid_amount_from'])) {
-				$this->db->where('hms_emergency_booking.paid_amount >= "' . $search['paid_amount_from'] . '"');
-			}
-
-			if (!empty($search['paid_amount_to'])) {
-				$this->db->where('hms_emergency_booking.paid_amount <= "' . $search['paid_amount_to'] . '"');
-			}
-
-			if (!empty($search['simulation_id'])) {
-				$this->db->where('hms_patient.simulation_id', $search['simulation_id']);
-			}
-			if (!empty($search['disease'])) {
-				$this->db->where('hms_disease.disease', $search['disease']);
-			}
-
-			if ($search['insurance_type'] != '') {
-				$this->db->where('hms_patient.insurance_type', $search['insurance_type']);
-			}
-
-			if (!empty($search['insurance_type_id'])) {
-				$this->db->where('hms_patient.insurance_type_id', $search['insurance_type_id']);
-			}
-
-			if (!empty($search['ins_company_id'])) {
-				$this->db->where('hms_patient.ins_company_id', $search['ins_company_id']);
-			}
-
-
-			if (!empty($search['disease_code'])) {
-				$this->db->where('hms_disease.disease_code', $search['disease_code']);
-			}
+			// if (!empty($search['paid_amount_to'])) {
+			// 	$this->db->where('hms_emergency_booking.paid_amount <= "' . $search['paid_amount_to'] . '"');
+			// }
 
 			if (!empty($search['patient_name'])) {
 				$this->db->where('hms_patient.patient_name LIKE "' . $search['patient_name'] . '%"');
 			}
-			if (!empty($search['adhar_no'])) {
-				$this->db->where('hms_patient.adhar_no LIKE "' . $search['adhar_no'] . '%"');
-			}
+			// if (!empty($search['adhar_no'])) {
+			// 	$this->db->where('hms_patient.adhar_no LIKE "' . $search['adhar_no'] . '%"');
+			// }
 
 			if (!empty($search['booking_code'])) {
 				$this->db->where('hms_emegency_booking.booking_code', $search['booking_code']);
@@ -176,38 +114,25 @@ class Emergency_booking_model extends CI_Model
 			if (!empty($search['patient_code'])) {
 				$this->db->where('hms_patient.patient_code', $search['patient_code']);
 			}
-			if (!empty($search['address'])) {
-				$this->db->where('hms_patient.address', $search['address']);
-			}
-			if (!empty($search['address_second'])) {
-				$this->db->where('hms_patient.address2', $search['address_second']);
-			}
-			if (!empty($search['address_third'])) {
-				$this->db->where('hms_patient.address3', $search['address_third']);
-			}
 
 
 
-			if (!empty($search['specialization_id'])) {
-				$this->db->where('hms_emergency_booking.specialization_id', $search['specialization_id']);
-			}
+			// if (!empty($search['specialization_id'])) {
+			// 	$this->db->where('hms_emergency_booking.specialization_id', $search['specialization_id']);
+			// }
 
-			if (!empty($search['attended_doctor'])) {
-				$this->db->where('hms_emergency_booking.attended_doctor', $search['attended_doctor']);
-			}
+			// if (!empty($search['attended_doctor'])) {
+			// 	$this->db->where('hms_emergency_booking.attended_doctor', $search['attended_doctor']);
+			// }
 
-			if (!empty($search['referral_doctor'])) {
-				$this->db->where('hms_emergency_booking.referral_doctor', $search['referral_doctor']);
-			}
-
-			if (!empty($search['specialization'])) {
-				$this->db->where('hms_emergency_booking.specialization', $search['specialization']);
-			}
+			// if (!empty($search['specialization'])) {
+			// 	$this->db->where('hms_emergency_booking.specialization', $search['specialization']);
+			// }
 
 
-			if (!empty($search['mobile_no'])) {
-				$this->db->where('hms_patient.mobile_no LIKE "' . $search['mobile_no'] . '%"');
-			}
+			// if (!empty($search['mobile_no'])) {
+			// 	$this->db->where('hms_patient.mobile_no LIKE "' . $search['mobile_no'] . '%"');
+			// }
 
 			if (isset($search['gender']) && $search['gender'] != "") {
 				$this->db->where('hms_patient.gender', $search['gender']);
@@ -215,32 +140,33 @@ class Emergency_booking_model extends CI_Model
 			if (isset($search['status']) && $search['status'] != "") {
 				$this->db->where('hms_emergency_booking.status', $search['status']);
 			}
-			if (isset($search['booking_status']) && $search['booking_status'] != "") {
-				$this->db->where('hms_emergency_booking.booking_status', $search['booking_status']);
-			}
+			// if (isset($search['booking_status']) && $search['booking_status'] != "") {
+			// 	$this->db->where('hms_emergency_booking.booking_status', $search['booking_status']);
+			// }
 
 
 
-			if ($search['emergency_booking'] == "4") {
-				$this->db->where('hms_emergency_booking.opd_type', 1);
-			} else if ($search['emergency_booking'] == "3") {
-				$this->db->where('hms_emergency_booking.opd_type', 0);
+			// if ($search['emergency_booking'] == "4") {
+			// 	$this->db->where('hms_emergency_booking.opd_type', 1);
+			// } else if ($search['emergency_booking'] == "3") {
+			// 	$this->db->where('hms_emergency_booking.opd_type', 0);
 
-			}
+			// }
 		}
 
-		$emp_ids = '';
-		if ($user_data['emp_id'] > 0) {
-			if ($user_data['record_access'] == '1') {
-				$emp_ids = $user_data['id'];
-			}
-		} elseif (!empty($get["employee"]) && is_numeric($get['employee'])) {
-			$emp_ids = $get["employee"];
-		}
-		if (isset($emp_ids) && !empty($emp_ids)) {
-			$this->db->where('hms_emergency_booking.created_by IN (' . $emp_ids . ')');
-		}
-		$this->db->from($this->table);
+		// $emp_ids = '';
+		// if ($user_data['emp_id'] > 0) {
+		// 	if ($user_data['record_access'] == '1') {
+		// 		$emp_ids = $user_data['id'];
+		// 	}
+		// } elseif (!empty($get["employee"]) && is_numeric($get['employee'])) {
+		// 	$emp_ids = $get["employee"];
+		// }
+		// if (isset($emp_ids) && !empty($emp_ids)) {
+		// 	$this->db->where('hms_emergency_booking.created_by IN (' . $emp_ids . ')');
+		// }
+		// $this->db->from($this->table);
+		
 		$i = 0;
 
 		foreach ($this->column as $item) // loop column 
@@ -283,7 +209,7 @@ class Emergency_booking_model extends CI_Model
 		if ($_POST['length'] != -1)
 			$this->db->limit($_POST['length'], $_POST['start']);
 		$query = $this->db->get();
-		//echo $this->db->last_query();die;
+		// echo $this->db->last_query();die;
 		return $query->result();
 	}
 
@@ -457,12 +383,14 @@ class Emergency_booking_model extends CI_Model
 		//,hms_patient.insurance_type,hms_patient.insurance_type_id,hms_patient.ins_company_id,hms_patient.polocy_no,hms_patient.tpa_id,hms_patient.ins_amount,hms_patient.ins_authorization_no
 
 		$this->db->from('hms_emergency_booking');
-		$this->db->join('hms_patient', 'hms_patient.id = hms_emergency_booking.patient_id');
-		$this->db->join('hms_patient_category', 'hms_patient_category.id = hms_emergency_booking.patient_category');
+		$this->db->join('hms_patient', 'hms_patient.id = hms_emergency_booking.patient_id','left');
+		$this->db->join('hms_patient_category', 'hms_patient_category.id = hms_emergency_booking.patient_category','left');
 		$this->db->where('hms_emergency_booking.branch_id', $user_data['parent_id']);
 		$this->db->where('hms_emergency_booking.id', $id);
 		$this->db->where('hms_emergency_booking.is_deleted', '0');
 		$query = $this->db->get();
+
+		// echo $this->db->last_query();die;
 		return $query->row_array();
 	}
 
@@ -481,13 +409,6 @@ class Emergency_booking_model extends CI_Model
 		$query = $this->db->get();
 		return $query->row_array();
 	}
-
-
-
-
-
-
-
 	public function delete_booking($id = "")
 	{
 		if (!empty($id) && $id > 0) {
@@ -823,8 +744,8 @@ class Emergency_booking_model extends CI_Model
 
 			return $token_no;
 			/*$pay_arr = array('token_no'=>$token_no);
-														 $json = json_encode($pay_arr,true);
-														 echo $json;*/
+																  $json = json_encode($pay_arr,true);
+																  echo $json;*/
 
 		}
 	}
@@ -885,9 +806,6 @@ class Emergency_booking_model extends CI_Model
 				$dob = $dob_new;
 			}
 		}
-
-
-
 
 		$data_patient = array(
 			'simulation_id' => $post['simulation_id'],
@@ -978,7 +896,7 @@ class Emergency_booking_model extends CI_Model
 			'payment_mode' => $post['payment_mode'],
 			'total_amount' => $post['total_amount'],
 			'kit_amount' => $post['kit_amount'],
-			'consultants_charge' => $post['consultants_charge'],
+			'consultants_charge' => $post['consultants_charge'] ?? 0.00,
 			// 'next_app_date' => date('Y-m-d', strtotime($post['next_app_date'])),
 			'discount' => $post['discount'],
 			'net_amount' => $post['net_amount'],
@@ -1027,6 +945,9 @@ class Emergency_booking_model extends CI_Model
 			"eme_reg_charge" => $post['eme_reg_charge'] ?? '',
 			// eye module add
 		);
+		// echo "<pre>";
+		// print_r($post);
+		// die;
 		//for payment
 		if ($post['pay_now'] == 1) {
 			$data_pay_test = array(
@@ -1035,12 +956,12 @@ class Emergency_booking_model extends CI_Model
 			);
 		} else {
 			$data_pay_test = array();
-			
+
 		}
-		
+
 		$data_testr = array_merge($data_test, $data_pay_test);
 		// echo "<pre>";
-		// print_r($post['data_id']);
+		// print_r($data_testr);
 		// die;
 		//update booking
 		if (!empty($post['data_id']) && $post['data_id'] > 0) {
@@ -1068,7 +989,7 @@ class Emergency_booking_model extends CI_Model
 			// } else {
 			// 	echo 'Update successful!';
 			// }
-			
+
 			//echo $this->db->last_query(); exit;
 			/*add sales banlk detail*/
 			$this->db->where(array('branch_id' => $user_data['parent_id'], 'parent_id' => $post['data_id'], 'type' => 7, 'section_id' => 2));
@@ -1184,21 +1105,21 @@ class Emergency_booking_model extends CI_Model
 
 				);
 				/*$appointment_data = array(
-																						   
-																						   'branch_id'=>$branch_id,
-																						   'parent_id'=>$booking_id,
-																						   'appointment_type'=>1, 
-																						   'appointment_code'=>$appointment_code, 
-																						   'appointment_date'=>date('Y-m-d',strtotime($post['next_app_date'])),
-																						   'appointment_time'=>date('H:i:s', strtotime(date('d-m-Y').' '.$post['booking_time'])), 
-																						   'type'=>1,
-																						   'specialization_id'=>$post['specialization'],
-																						   'attended_doctor'=>$post['attended_doctor'],
-																						   'referral_doctor'=>$post['referral_doctor'],
-																						   'ref_by_other'=>$post['ref_by_other'],
-																						   'booking_date'=>date('Y-m-d H:i:s'),
-																						   'booking_status'=>0
-																				   );*/
+																									   
+																									   'branch_id'=>$branch_id,
+																									   'parent_id'=>$booking_id,
+																									   'appointment_type'=>1, 
+																									   'appointment_code'=>$appointment_code, 
+																									   'appointment_date'=>date('Y-m-d',strtotime($post['next_app_date'])),
+																									   'appointment_time'=>date('H:i:s', strtotime(date('d-m-Y').' '.$post['booking_time'])), 
+																									   'type'=>1,
+																									   'specialization_id'=>$post['specialization'],
+																									   'attended_doctor'=>$post['attended_doctor'],
+																									   'referral_doctor'=>$post['referral_doctor'],
+																									   'ref_by_other'=>$post['ref_by_other'],
+																									   'booking_date'=>date('Y-m-d H:i:s'),
+																									   'booking_status'=>0
+																							   );*/
 
 				// print_r($appointment_data);
 				// die;
@@ -1218,7 +1139,7 @@ class Emergency_booking_model extends CI_Model
 			$query_d_pay = $this->db->get('hms_payment');
 			$row_d_pay = $query_d_pay->result();
 
-			
+
 
 
 			if (!empty($row_d_pay)) {
@@ -1281,7 +1202,7 @@ class Emergency_booking_model extends CI_Model
 
 				}
 			}
-			
+
 
 			/*add sales banlk detail*/
 			$this->db->where(array('branch_id' => $user_data['parent_id'], 'parent_id' => $post['data_id'], 'type' => 7, 'section_id' => 4));
@@ -1357,6 +1278,7 @@ class Emergency_booking_model extends CI_Model
 			// add new booking
 			// echo "<pre>"; print_r('$post');
 			// echo "<pre>"; print_r($post); exit;
+			
 
 			if (!empty($post['patient_id']) && $post['patient_id'] > 0) {
 				$patient_id = $post['patient_id'];
@@ -1394,7 +1316,7 @@ class Emergency_booking_model extends CI_Model
 				);
 				$this->db->insert('hms_users', $data);
 				$users_id = $this->db->insert_id();
-				
+
 
 				////////// Send SMS /////////////////////
 				if (in_array('640', $user_data['permission']['action'])) {
@@ -1405,10 +1327,10 @@ class Emergency_booking_model extends CI_Model
 				//////////////////////////////////////////
 
 				////////// SEND EMAIL ///////////////////
-				if (!empty($post['patient_email'])) {
-					$this->load->library('general_library');
-					$this->general_library->email($post['patient_email'], '', '', '', '', '', 'patient_registration', '18', array('{patient_name}' => $post['patient_name'], '{username}' => 'PAT000' . $patient_id, '{password}' => 'PASS' . $patient_id));
-				}
+				// if (!empty($post['patient_email'])) {
+				// 	$this->load->library('general_library');
+				// 	$this->general_library->email($post['patient_email'], '', '', '', '', '', 'patient_registration', '18', array('{patient_name}' => $post['patient_name'], '{username}' => 'PAT000' . $patient_id, '{password}' => 'PASS' . $patient_id));
+				// }
 			}
 
 			/*Generate Token */
@@ -1431,6 +1353,9 @@ class Emergency_booking_model extends CI_Model
 			} else {
 				$bookingcode = generate_unique_id(76);
 			}
+		// 	echo "<pre>";
+		// print_r($data_testr);
+		// die;
 			//$bookingcode = generate_unique_id(9);
 			$this->db->set('confirm_date', date('Y-m-d H:i:s'));
 
@@ -1439,6 +1364,14 @@ class Emergency_booking_model extends CI_Model
 			$this->db->set('created_by', $user_data['id']);
 			$this->db->set('created_date', date('Y-m-d H:i:s'));
 			$this->db->insert('hms_emergency_booking', $data_testr);
+			// echo $this->db->last_query();
+			// if (!$this->db->affected_rows()) {
+			// 	$error = $this->db->error(); // Get the error array
+			// 	echo "Insert Error: Code - " . $error['code'] . " Message - " . $error['message'];
+			// } else {
+			// 	echo "Record inserted successfully.";
+			// }
+			// exit;
 			$booking_id = $this->db->insert_id();
 
 
@@ -1449,13 +1382,13 @@ class Emergency_booking_model extends CI_Model
 
 			//echo $this->db->last_query(); exit;
 			/* $data['type'] = $this->opd->get_token_setting();
-															//print_r($data['type']);die;
-															 if($data['type']==1)
-															 {
+																	 //print_r($data['type']);die;
+																	  if($data['type']==1)
+																	  {
 
-															   
-															 }
-														*/
+																		
+																	  }
+																 */
 
 
 			/*add sales banlk detail*/
@@ -1486,7 +1419,7 @@ class Emergency_booking_model extends CI_Model
 			//next appointment date time
 			if (!empty($post['next_app_date']) && $post['next_app_date'] != '00-00-0000' && $post['next_app_date'] != '01-01-1970') {
 				$appointment_code = generate_unique_id(20, $branch_id);
-				
+
 
 				if (!empty($post['referral_doctor'])) {
 					$referal = $post['referral_doctor'];
@@ -1567,7 +1500,7 @@ class Emergency_booking_model extends CI_Model
 			//end of next appointment
 			// add payment
 
-			
+
 
 			$doctor_comission = 0;
 			$hospital_comission = 0;
@@ -1885,7 +1818,7 @@ class Emergency_booking_model extends CI_Model
 			'payment_mode' => $post['payment_mode'],
 			'total_amount' => $post['total_amount'],
 			'kit_amount' => $post['kit_amount'],
-			'consultants_charge' => $post['consultants_charge'],
+			'consultants_charge' => $post['consultants_charge'] ?? 0.00,
 			'next_app_date' => date('Y-m-d', strtotime($post['next_app_date'])),
 			'discount' => $post['discount'],
 			'net_amount' => $post['net_amount'],
@@ -2016,31 +1949,31 @@ class Emergency_booking_model extends CI_Model
 			$row_d_pay = $query_d_pay->result();
 
 			/*$this->db->where('parent_id',$booking_id);
-																  $this->db->where('section_id','2');
-																  $this->db->where('balance>0');
-																  $this->db->where('patient_id',$post['patient_id']);
-																  $this->db->delete('hms_payment'); */
+																		   $this->db->where('section_id','2');
+																		   $this->db->where('balance>0');
+																		   $this->db->where('patient_id',$post['patient_id']);
+																		   $this->db->delete('hms_payment'); */
 
 			/*$payment_data = array(
-																		 'parent_id'=>$booking_id,
-																		 'branch_id'=>$branch_id,
-																		 'section_id'=>'2',
-																		 'hospital_id'=>$post['referral_hospital'],
-																		 'doctor_id'=>$post['referral_doctor'],
-																		 'patient_id'=>$post['patient_id'],
-																		 'total_amount'=>$post['total_amount'],
-																		 'discount_amount'=>$post['discount'],
-																		 'net_amount'=>$post['net_amount'],
-																		 'credit'=>$post['net_amount'],
-																		 'debit'=>$post['paid_amount'],
-																		 'balance'=>($post['net_amount']-$post['paid_amount'])+1,
-																		 'pay_mode'=>$post['payment_mode'],
-																		 'paid_amount'=>$post['paid_amount'],
-																		 'created_by'=>$user_data['id'],
-																		 'created_date'=>date('Y-m-d H:i:s',strtotime($post['booking_date'])),
-																	 );
-														 $this->db->insert('hms_payment',$payment_data); 
-														 $payment_id = $this->db->insert_id();*/
+																				  'parent_id'=>$booking_id,
+																				  'branch_id'=>$branch_id,
+																				  'section_id'=>'2',
+																				  'hospital_id'=>$post['referral_hospital'],
+																				  'doctor_id'=>$post['referral_doctor'],
+																				  'patient_id'=>$post['patient_id'],
+																				  'total_amount'=>$post['total_amount'],
+																				  'discount_amount'=>$post['discount'],
+																				  'net_amount'=>$post['net_amount'],
+																				  'credit'=>$post['net_amount'],
+																				  'debit'=>$post['paid_amount'],
+																				  'balance'=>($post['net_amount']-$post['paid_amount'])+1,
+																				  'pay_mode'=>$post['payment_mode'],
+																				  'paid_amount'=>$post['paid_amount'],
+																				  'created_by'=>$user_data['id'],
+																				  'created_date'=>date('Y-m-d H:i:s',strtotime($post['booking_date'])),
+																			  );
+																  $this->db->insert('hms_payment',$payment_data); 
+																  $payment_id = $this->db->insert_id();*/
 			// echo $this->db->last_query(); exit;
 
 
@@ -2106,16 +2039,16 @@ class Emergency_booking_model extends CI_Model
 			}
 			//// Recipet no set  
 			/*if(!empty($row_d_pay))
-														 {
-															 foreach($row_d_pay as $row_d)
-															 {
-																 $this->db->set('payment_id',$payment_id);
-																 $this->db->where('parent_id',$booking_id);
-																 $this->db->where('payment_id',$row_d->id);  
-																 $this->db->where('section_id',2);
-																 $this->db->update('hms_branch_hospital_no'); 
-															 }
-														 }*/
+																  {
+																	  foreach($row_d_pay as $row_d)
+																	  {
+																		  $this->db->set('payment_id',$payment_id);
+																		  $this->db->where('parent_id',$booking_id);
+																		  $this->db->where('payment_id',$row_d->id);  
+																		  $this->db->where('section_id',2);
+																		  $this->db->update('hms_branch_hospital_no'); 
+																	  }
+																  }*/
 			////////////////////
 
 			/*add sales banlk detail*/
@@ -2221,27 +2154,27 @@ class Emergency_booking_model extends CI_Model
 				$this->db->insert('hms_users', $data);
 				$users_id = $this->db->insert_id();
 				/*$this->db->select('*');
-																						   $this->db->where('users_role','4');
-																						   $query = $this->db->get('hms_permission_to_role');     
-																						   $permission_list = $query->result();
-																						   if(!empty($permission_list))
-																						   {
-																							 foreach($permission_list as $permission)
-																							 {
-																							   $data = array(
-																									   'users_role' =>4,
-																									   'users_id' => $users_id,
-																									   'master_id' => $patient_id,
-																									   'section_id' => $permission->section_id,
-																									   'action_id' => $permission->action_id, 
-																									   'permission_status' => '1',
-																									   'ip_address' => $_SERVER['REMOTE_ADDR'],
-																									   'created_by' =>$user_data['id'],
-																									   'created_date' =>date('Y-m-d H:i:s'),
-																									);
-																							   $this->db->insert('hms_permission_to_users',$data);
-																							 }
-																						   }*/
+																									   $this->db->where('users_role','4');
+																									   $query = $this->db->get('hms_permission_to_role');     
+																									   $permission_list = $query->result();
+																									   if(!empty($permission_list))
+																									   {
+																										 foreach($permission_list as $permission)
+																										 {
+																										   $data = array(
+																												   'users_role' =>4,
+																												   'users_id' => $users_id,
+																												   'master_id' => $patient_id,
+																												   'section_id' => $permission->section_id,
+																												   'action_id' => $permission->action_id, 
+																												   'permission_status' => '1',
+																												   'ip_address' => $_SERVER['REMOTE_ADDR'],
+																												   'created_by' =>$user_data['id'],
+																												   'created_date' =>date('Y-m-d H:i:s'),
+																												);
+																										   $this->db->insert('hms_permission_to_users',$data);
+																										 }
+																									   }*/
 
 				////////// Send SMS /////////////////////
 				if (in_array('640', $user_data['permission']['action'])) {
@@ -2296,13 +2229,13 @@ class Emergency_booking_model extends CI_Model
 
 			//echo $this->db->last_query(); exit;
 			/* $data['type'] = $this->opd->get_token_setting();
-															//print_r($data['type']);die;
-															 if($data['type']==1)
-															 {
+																	 //print_r($data['type']);die;
+																	  if($data['type']==1)
+																	  {
 
-															   
-															 }
-														*/
+																		
+																	  }
+																 */
 
 
 			/*add sales banlk detail*/
@@ -2363,15 +2296,15 @@ class Emergency_booking_model extends CI_Model
 			// add payment
 
 			/*$bank_name ="";
-														 if(!empty($post['bank_name']))
-														 {
-															 $bank_name = $post['bank_name'];
-														 }
-														 $transaction_no ="";
-														 if(!empty($post['transaction_no']))
-														 {
-															 $transaction_no = $post['transaction_no'];
-														 }*/
+																  if(!empty($post['bank_name']))
+																  {
+																	  $bank_name = $post['bank_name'];
+																  }
+																  $transaction_no ="";
+																  if(!empty($post['transaction_no']))
+																  {
+																	  $transaction_no = $post['transaction_no'];
+																  }*/
 
 			$doctor_comission = 0;
 			$hospital_comission = 0;
@@ -4252,16 +4185,16 @@ class Emergency_booking_model extends CI_Model
 		if (isset($search) && !empty($search)) {
 
 			/*if(!empty($search['start_date']))
-														 {
-															 $start_date = date('Y-m-d h:i:s',strtotime($search['start_date']));
-															 $this->db->where('hms_emergency_booking.booking_date >= "'.$start_date.'"');
-														 }
+																  {
+																	  $start_date = date('Y-m-d h:i:s',strtotime($search['start_date']));
+																	  $this->db->where('hms_emergency_booking.booking_date >= "'.$start_date.'"');
+																  }
 
-														 if(!empty($search['end_date']))
-														 {
-															 $end_date = date('Y-m-d h:i:s',strtotime($search['end_date']));
-															 $this->db->where('hms_emergency_booking.booking_date <= "'.$end_date.'"');
-														 }*/
+																  if(!empty($search['end_date']))
+																  {
+																	  $end_date = date('Y-m-d h:i:s',strtotime($search['end_date']));
+																	  $this->db->where('hms_emergency_booking.booking_date <= "'.$end_date.'"');
+																  }*/
 
 			if (!empty($search['start_date'])) {
 				$booking_from_date = date('Y-m-d', strtotime($search['start_date'])) . ' 00:00:00';
@@ -4275,17 +4208,17 @@ class Emergency_booking_model extends CI_Model
 
 			/* Appointment*/
 			/*if(!empty($search['start_date']))
-																  {
-																	  $start_date = date('Y-m-d h:i:s',strtotime($search['start_date']));
-																	  $this->db->where('hms_emergency_booking.booking_date >= "'.$start_date.'"');
-																  }
+																		   {
+																			   $start_date = date('Y-m-d h:i:s',strtotime($search['start_date']));
+																			   $this->db->where('hms_emergency_booking.booking_date >= "'.$start_date.'"');
+																		   }
 
-																  if(!empty($search['end_date']))
-																  {
-																	  $end_date = date('Y-m-d h:i:s',strtotime($search['end_date']));
-																	  $this->db->where('hms_emergency_booking.booking_date <= "'.$end_date.'"');
-																  }
-													  */
+																		   if(!empty($search['end_date']))
+																		   {
+																			   $end_date = date('Y-m-d h:i:s',strtotime($search['end_date']));
+																			   $this->db->where('hms_emergency_booking.booking_date <= "'.$end_date.'"');
+																		   }
+															   */
 			/* Booking */
 
 			if (!empty($search['booking_from_date'])) {
@@ -4526,14 +4459,14 @@ class Emergency_booking_model extends CI_Model
 			}
 
 			/*if(!empty($result))
-															{ 
-																foreach($result as $vals)
-																{
-																   $response['test_id'] = $vals->id;
-																   $response['test_name'] = $vals->test_name;
-																}
-															}
-															return $response; */
+																	 { 
+																		 foreach($result as $vals)
+																		 {
+																			$response['test_id'] = $vals->id;
+																			$response['test_name'] = $vals->test_name;
+																		 }
+																	 }
+																	 return $response; */
 		}
 	}
 
@@ -5122,7 +5055,7 @@ class Emergency_booking_model extends CI_Model
 		if (!empty($res) && count($res) > 0) {
 
 			/*	if(strtotime(date('d-m-Y',strtotime($res[0]->booking_date)))<=strtotime(date('d-m-Y',strtotime($res[0]->validity_date))) && strtotime($booking_date)<=strtotime(date('d-m-Y',strtotime($res[0]->validity_date))) )
-																	  {*/
+																			   {*/
 			if (strtotime(date('Y-m-d', strtotime($res[0]->booking_date))) <= strtotime(date('Y-m-d', strtotime($res[0]->validity_date))) && strtotime(date('Y-m-d', strtotime($booking_date))) <= strtotime(date('Y-m-d', strtotime($res[0]->validity_date)))) {
 				echo '1';
 				exit;
@@ -5434,7 +5367,7 @@ class Emergency_booking_model extends CI_Model
 					'type' => 2,
 					'total_amount' => $patient_data['total_amount'],
 					'attended_doctor' => $doctor_id,
-					'consultants_charge' => $consult_charge,
+					'consultants_charge' => $consult_charge ?? 0.00,
 					'discount' => $patient_data['discount'],
 					'net_amount' => $net_amount,
 					'booking_date' => $patient_data['created_date'],
@@ -5809,7 +5742,7 @@ class Emergency_booking_model extends CI_Model
 					'type' => 2,
 					'total_amount' => $patient_data['total_amount'],
 					'attended_doctor' => $doctor_id,
-					'consultants_charge' => $consult_charge,
+					'consultants_charge' => $consult_charge ?? 0.00,
 					'discount' => $patient_data['discount'],
 					'net_amount' => $net_amount,
 					'booking_date' => $patient_data['created_date'],

@@ -87,16 +87,9 @@ $users_data = $this->session->userdata('auth_users');
 
     });
 
-    function edit_prescription(id) {
-      var $modal = $('#load_add_modal_popup');
-      $modal.load('<?php echo base_url() . 'vision/edit/' ?>' + id,
-        {
-          //'id1': '1',
-          //'id2': '2'
-        },
-        function () {
-          $modal.modal('show');
-        });
+    function edit_vision(id) {
+      // Redirect to the edit page for vision with the specified ID
+      window.location.href = '<?php echo base_url('vision/edit/'); ?>' + id;
     }
 
     function view_prescription(id) {
@@ -282,7 +275,7 @@ $users_data = $this->session->userdata('auth_users');
 
             </div> <!-- 4 -->
 
-            <div class="col-sm-4">
+            <div class="col-sm-4 d-flex justify-content-center" style="margin-left: 177px;margin-top: 30px;">
 
               <!--<a class="btn-custom" id="reset_date" onclick="reset_search();"><i class="fa fa-refresh"></i> Reset</a>
           <br>
@@ -313,9 +306,14 @@ $users_data = $this->session->userdata('auth_users');
                   <th width="40" align="center"> <input type="checkbox" name="selectall" class="" id="selectAll" value="">
                   </th>
                   <th> Token No. </th>
+                  <th> OPD No. </th>
+                  <th> Patient Reg. No. </th>
                   <th> Patient Name </th>
+                  <th> Mobile No </th>
+                  <th> Age </th>
+                  <th> Patient Status </th>
                   <th> Vision Name </th>
-                  <th> Side Effect </th>
+                  <!-- <th> Side Effect </th> -->
                   <th> Created Date </th>
                   <th> Action </th>
                 </tr>

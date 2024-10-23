@@ -147,6 +147,28 @@ $field_list = mandatory_section_field_list(2);
         #name {
             width: 100%;
         }
+
+        .dials {
+            display: flex;
+            justify-content: space-between;
+            width: 55%;
+        }
+
+        .dial {
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #000080;
+            width: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dial div {
+            font-size: 36px;
+            color: #000080;
+        }
     </style>
 
 
@@ -163,19 +185,34 @@ $field_list = mandatory_section_field_list(2);
 <body>
     <div class="container-fluid">
         <!-- Header section for Name, Date, Age -->
-        <div class="">
-            <div class="date-section">
-                <label for="date">Date:</label>
-                <input type="text" id="date" value="<?php echo date('d-m-Y H:i', strtotime($form_data['date'])); ?>">
-            </div>
-            <div class="name-age-section">
-                <div class="name-section" style="width: 37%;">
-                    <label for="age">Name:</label>
-                    <input type="text" id="name" placeholder="" value="<?php echo $form_data['patient_name']; ?>">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="date-section">
+                    <label for="date">Date:</label>
+                    <input type="text" id="date"
+                        value="<?php echo date('d-m-Y H:i', strtotime($form_data['date'])); ?>">
                 </div>
-                <div class="name-section">
-                    <label for="age">Age:</label>
-                    <input type="text" id="name" placeholder="" value="<?php echo $form_data['age']; ?>">
+                <div class="name-age-section">
+                    <div class="name-section" style="width: 37%;">
+                        <label for="age">Name:</label>
+                        <input type="text" id="name" placeholder="" value="<?php echo $form_data['patient_name']; ?>">
+                    </div>
+                    <div class="name-section">
+                        <label for="age">Age:</label>
+                        <input type="text" id="name" placeholder="" value="<?php echo $form_data['age']; ?>">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="dials">
+
+                    <div class="dial">
+                        <div>R</div>
+                    </div>
+
+                    <div class="dial">
+                        <div>L</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -340,32 +377,32 @@ $field_list = mandatory_section_field_list(2);
 
         </div>
         <div style="width:60%;">
-        <div class="grp-full">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <label for="lens" class="font-weight-bold mb-0">Lens:</label>
-                </div>
-                <div class="col-md-6">
-                    <span>
-                        <?= isset($form_data['lens']) ? htmlspecialchars($form_data['lens']) : 'Select Lens Type' ?>
-                    </span>
+            <div class="grp-full">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <label for="lens" class="font-weight-bold mb-0">Lens:</label>
+                    </div>
+                    <div class="col-md-6">
+                        <span>
+                            <?= isset($form_data['lens']) ? htmlspecialchars($form_data['lens']) : 'Select Lens Type' ?>
+                        </span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- L - Comments -->
-        <div class="grp-full" style="margin-bottom:40px;">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <label for="comment" class="font-weight-bold mb-0">Comments:</label>
-                </div>
-                <div class="col-md-6">
-                    <span>
-                        <?= isset($form_data['comment']) ? htmlspecialchars($form_data['comment']) : '' ?>
-                    </span>
+            <!-- L - Comments -->
+            <div class="grp-full" style="margin-bottom:40px;">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <label for="comment" class="font-weight-bold mb-0">Comments:</label>
+                    </div>
+                    <div class="col-md-6">
+                        <span>
+                            <?= isset($form_data['comment']) ? htmlspecialchars($form_data['comment']) : '' ?>
+                        </span>
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
         <div class="row">
             <div class="col-md-6">

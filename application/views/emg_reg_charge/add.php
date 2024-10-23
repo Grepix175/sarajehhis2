@@ -25,7 +25,7 @@
               </div> <!-- innerrow -->
             </div> <!-- 12 -->
           </div> <!-- row -->  
-          <div class="row">
+          <!-- <div class="row">
             <div class="col-md-12">
               <div class="row">
                 <div class="col-md-5">
@@ -36,9 +36,9 @@
                      <input type="radio"  class="" name="status" <?php if($form_data['status']==0){ echo 'checked="checked"'; } ?> id="login_status" value="0" /> Inactive   
                  </div>
           
-              </div> <!-- innerrow -->
-            </div> <!-- 12 -->
-          </div> <!-- row -->  
+              </div> 
+            </div> 
+          </div>    -->
       </div> <!-- modal-body --> 
 
       <div class="modal-footer"> 

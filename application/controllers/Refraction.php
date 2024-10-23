@@ -42,6 +42,33 @@ class Refraction extends CI_Controller
 
             $row = array();
 
+            $age_y = $refraction->age_y;
+            $age_m = $refraction->age_m;
+            $age_d = $refraction->age_d;
+      
+            $age = "";
+            if ($age_y > 0) {
+              $year = 'Years';
+              if ($age_y == 1) {
+                $year = 'Year';
+              }
+              $age .= $age_y . " " . $year;
+            }
+            if ($age_m > 0) {
+              $month = 'Months';
+              if ($age_m == 1) {
+                $month = 'Month';
+              }
+              $age .= ", " . $age_m . " " . $month;
+            }
+            if ($age_d > 0) {
+              $day = 'Days';
+              if ($age_d == 1) {
+                $day = 'Day';
+              }
+              $age .= ", " . $age_d . " " . $day;
+            }
+
             // Add a checkbox for selecting the record
             $row[] = '<input type="checkbox" name="refraction_ids[]" value="' . $refraction->refraction_id . '">';
 
@@ -49,15 +76,17 @@ class Refraction extends CI_Controller
             $row[] = $refraction->booking_code;
             $row[] = $refraction->patient_code;
             $row[] = $refraction->patient_name;
-            $row[] = $refraction->patient_category_name;
+            // $row[] = $refraction->patient_category_name;
             $row[] = $refraction->mobile_no;
-            $row[] = "Dr. " . $refraction->doctor_name;;
+            $row[] = $age;
+            // $row[] = "Dr. " . $refraction->doctor_name;
             // $row[] = $refraction->booking_id;
-            $row[] = $refraction->lens;
-            $row[] = $refraction->comment;
+            // $row[] = $refraction->lens;
+            // $row[] = $refraction->comment;
 
             // Check status and set active or not active
             $row[] = ($refraction->status == 1) ? 'Active' : 'Not Active';
+            $row[] = date('d-M-Y', strtotime($refraction->created_date));
 
             // Add action buttons
             $row[] = '<a onClick="return edit_refraction(' . $refraction->refraction_id . ');" class="btn-custom" href="javascript:void(0)" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
