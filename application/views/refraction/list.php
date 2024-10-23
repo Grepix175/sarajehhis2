@@ -301,12 +301,14 @@ $users_data = $this->session->userdata('auth_users');
                   <th> OPD No. </th>
                   <th> Patient Reg No. </th>
                   <th> Patient Name </th>
-                  <th> Patient Category </th>
+                  <!-- <th> Patient Category </th> -->
                   <th> Mobile No </th>
-                  <th> Consultant </th>
-                  <th> Lens </th>
-                  <th> Comment </th>
-                  <th> Status </th>
+                  <th> Age </th>
+                  <!-- <th> Consultant </th> -->
+                  <!-- <th> Lens </th> -->
+                  <!-- <th> Comment </th> -->
+                  <th> Patient Status </th>
+                  <th> Created Date </th>
                   <th> Action </th>
                 </tr>
               </thead>

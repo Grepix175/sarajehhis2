@@ -6,7 +6,16 @@ $mlc = '';
 /* start thermal printing */
 //address print
 $template_data->template = str_replace("{patient_category_name}", $all_detail['opd_list'][0]->patient_category_name, $template_data->template);
-$template_data->template = str_replace("{identification_mark}", $all_detail['opd_list'][0]->identification_mark, $template_data->template);
+if (!empty($all_detail['opd_list'][0]->identification_mark)) {
+    $consultant_new = '<div style="width:100%;display:inline-flex;">
+        <div style="width:40%;line-height:17px;font-weight:600;">Identification Mark :</div>
+
+        <div style="width:60%;line-height:17px;">' . $all_detail['opd_list'][0]->identification_mark . '</div>
+        </div>';
+    $template_data->template = str_replace("{identification_mark}", $consultant_new, $template_data->template);
+} else {
+    $template_data->template = str_replace("{identification_mark}", '', $template_data->template);
+}
 if (!empty($all_detail['opd_list'][0]->on_set)) {
     $consultant_new = '<div style="width:100%;display:inline-flex;">
         <div style="width:40%;line-height:17px;font-weight:600;">On Set :</div>
@@ -450,6 +459,16 @@ if ($template_data->printer_id == 2) {
     // echo "<pre>";
     // print_r($all_detail['opd_list'][0]->nature_of_emergency);
     // die;
+    if (!empty($all_detail['opd_list'][0]->identification_mark)) {
+        $consultant_new = '<div style="width:100%;display:inline-flex;">
+            <div style="width:40%;line-height:17px;font-weight:600;">Identification Mark :</div>
+    
+            <div style="width:60%;line-height:17px;">' . $all_detail['opd_list'][0]->identification_mark . '</div>
+            </div>';
+        $template_data->template = str_replace("{identification_mark}", $consultant_new, $template_data->template);
+    } else {
+        $template_data->template = str_replace("{identification_mark}", '', $template_data->template);
+    }
     if (!empty($all_detail['opd_list'][0]->nature_of_emergency)) {
         // Split the comma-separated values into an array
         $selected_nature_of_emergency = explode(', ', $all_detail['opd_list'][0]->nature_of_emergency);
@@ -521,51 +540,53 @@ if ($template_data->printer_id == 2) {
     $template_data->template = str_replace($rplc_row, "{row_data}", $template_data->template);
 
     //////////////////////// 
-    if (!empty($all_detail['opd_list']['particular_list'])) {
-        $i = 1;
-        $tr_html = "";
-        foreach ($all_detail['opd_list']['particular_list'] as $particular_list) {
-            $tr = $row_loop;
-            $tr = str_replace("{s_no}", $i, $tr);
-            $tr = str_replace("{particular}", $particular_list->particulars, $tr);
-            $tr = str_replace("{quantity}", $particular_list->quantity, $tr);
-            $tr = str_replace("{amount}", $particular_list->amount, $tr);
-            $tr_html .= $tr;
-            $i++;
+    // if (!empty($all_detail['opd_list']['particular_list'])) {
+    //     $i = 1;
+    //     $tr_html = "";
+    //     foreach ($all_detail['opd_list']['particular_list'] as $particular_list) {
+    //         $tr = $row_loop;
+    //         $tr = str_replace("{s_no}", $i, $tr);
+    //         $tr = str_replace("{particular}", $particular_list->particulars, $tr);
+    //         $tr = str_replace("{quantity}", $particular_list->quantity, $tr);
+    //         $tr = str_replace("{amount}", $particular_list->amount, $tr);
+    //         $tr_html .= $tr;
+    //         $i++;
 
-        }
+    //     }
 
-        if (!empty($all_detail['opd_list'][0]->package_id)) {
-            $tr = $row_loop;
-            $tr = str_replace("{s_no}", $i, $tr);
-            $tr = str_replace("{particular}", $all_detail['opd_list'][0]->package_name . " <b>(1)</b>", $tr);
-            $tr = str_replace("{quantity}", '', $tr);
-            $tr = str_replace("{amount}", $all_detail['opd_list'][0]->package_amount, $tr);
-            $tr_html .= $tr;
-        }
-    } else {
-        $tr_html = "";
-        $tr = $row_loop;
-        $tr = str_replace("{s_no}", 1, $tr);
-        $tr = str_replace("{particular}", 'Consultant Charges', $tr);
-        $tr = str_replace("{quantity}", "", $tr);
-        $tr = str_replace("{amount}", $all_detail['opd_list'][0]->consultant_charge + $all_detail['opd_list'][0]->eme_reg_charge + $all_detail['opd_list'][0]->eme_booking_charge, $tr);
-        $tr_html .= $tr;
-        if (!empty($all_detail['opd_list'][0]->package_id)) {
-            $tr = $row_loop;
-            $tr = str_replace("{s_no}", 2, $tr);
-            $tr = str_replace("{particular}", $all_detail['opd_list'][0]->package_name . " <b>(1)</b>", $tr);
-            $tr = str_replace("{quantity}", '', $tr);
-            $tr = str_replace("{amount}", $all_detail['opd_list'][0]->package_amount, $tr);
-            $tr_html .= $tr;
-        }
+    //     if (!empty($all_detail['opd_list'][0]->package_id)) {
+    //         $tr = $row_loop;
+    //         $tr = str_replace("{s_no}", $i, $tr);
+    //         $tr = str_replace("{particular}", $all_detail['opd_list'][0]->package_name . " <b>(1)</b>", $tr);
+    //         $tr = str_replace("{quantity}", '', $tr);
+    //         $tr = str_replace("{amount}", $all_detail['opd_list'][0]->package_amount, $tr);
+    //         $tr_html .= $tr;
+    //     }
+    // } else {
+    //     $tr_html = "";
+    //     $tr = $row_loop;
+    //     $tr = str_replace("{s_no}", 1, $tr);
+    //     $tr = str_replace("{particular}", 'Consultant Charges', $tr);
+    //     $tr = str_replace("{quantity}", "", $tr);
+    //     $tr = str_replace("{amount}", $all_detail['opd_list'][0]->consultant_charge + $all_detail['opd_list'][0]->eme_reg_charge + $all_detail['opd_list'][0]->eme_booking_charge, $tr);
+    //     $tr_html .= $tr;
+    //     if (!empty($all_detail['opd_list'][0]->package_id)) {
+    //         $tr = $row_loop;
+    //         $tr = str_replace("{s_no}", 2, $tr);
+    //         $tr = str_replace("{particular}", $all_detail['opd_list'][0]->package_name . " <b>(1)</b>", $tr);
+    //         $tr = str_replace("{quantity}", '', $tr);
+    //         $tr = str_replace("{amount}", $all_detail['opd_list'][0]->package_amount, $tr);
+    //         $tr_html .= $tr;
+    //     }
 
-    }
+    // }
 
     $template_data->template = str_replace("{row_data}", $tr_html, $template_data->template);
 
 
     $template_data->template = str_replace("{total_discount}", $all_detail['opd_list'][0]->discount, $template_data->template);
+    $template_data->template = str_replace("{eme_reg_charge}", $all_detail['opd_list'][0]->eme_reg_charge, $template_data->template);
+    $template_data->template = str_replace("{eme_booking_charge}", $all_detail['opd_list'][0]->eme_booking_charge, $template_data->template);
 
     $template_data->template = str_replace("{net_amount}", $all_detail['opd_list'][0]->net_amount, $template_data->template);
     $template_data->template = str_replace("{total_amount}", $all_detail['opd_list'][0]->total_amount, $template_data->template);
@@ -1014,52 +1035,56 @@ if ($template_data->printer_id == 3) {
     $rplc_row = trim(substr($template_data->template, $pos_start, $row_last_length + 12));
     $template_data->template = str_replace($rplc_row, "{row_data}", $template_data->template);
     //////////////////////// 
-    if (!empty($all_detail['opd_list']['particular_list'])) {
-        $i = 1;
-        $tr_html = "";
-        foreach ($all_detail['opd_list']['particular_list'] as $particular_list) {
-            $tr = $row_loop;
-            $tr = str_replace("{s_no}", $i, $tr);
-            $tr = str_replace("{particular}", $particular_list->particulars, $tr);
-            $tr = str_replace("{quantity}", $particular_list->quantity, $tr);
-            $tr = str_replace("{amount}", $particular_list->amount, $tr);
-            $tr_html .= $tr;
-            $i++;
+    // if (!empty($all_detail['opd_list']['particular_list'])) {
+    //     $i = 1;
+    //     $tr_html = "";
+    //     foreach ($all_detail['opd_list']['particular_list'] as $particular_list) {
+    //         $tr = $row_loop;
+    //         $tr = str_replace("{s_no}", $i, $tr);
+    //         $tr = str_replace("{particular}", $particular_list->particulars, $tr);
+    //         $tr = str_replace("{quantity}", $particular_list->quantity, $tr);
+    //         $tr = str_replace("{amount}", $particular_list->amount, $tr);
+    //         $tr_html .= $tr;
+    //         $i++;
 
-        }
-        if (!empty($all_detail['opd_list'][0]->package_id)) {
-            $tr = $row_loop;
-            $tr = str_replace("{s_no}", $i, $tr);
-            $tr = str_replace("{particular}", $all_detail['opd_list'][0]->package_name . " <b>(1)</b>", $tr);
-            $tr = str_replace("{quantity}", '', $tr);
-            $tr = str_replace("{amount}", $all_detail['opd_list'][0]->package_amount, $tr);
-            $tr_html .= $tr;
-        }
+    //     }
+    //     if (!empty($all_detail['opd_list'][0]->package_id)) {
+    //         $tr = $row_loop;
+    //         $tr = str_replace("{s_no}", $i, $tr);
+    //         $tr = str_replace("{particular}", $all_detail['opd_list'][0]->package_name . " <b>(1)</b>", $tr);
+    //         $tr = str_replace("{quantity}", '', $tr);
+    //         $tr = str_replace("{amount}", $all_detail['opd_list'][0]->package_amount, $tr);
+    //         $tr_html .= $tr;
+    //     }
 
-    } else {
-        $tr_html = "";
-        $tr = $row_loop;
-        $tr = str_replace("{s_no}", 1, $tr);
-        $tr = str_replace("{particular}", 'Consultant Charges', $tr);
-        $tr = str_replace("{quantity}", '', $tr);
-        $tr = str_replace("{amount}", $all_detail['opd_list'][0]->consultant_charge + $all_detail['opd_list'][0]->eme_reg_charge + $all_detail['opd_list'][0]->eme_booking_charge, $tr);
-        $tr_html .= $tr;
-        if (!empty($all_detail['opd_list'][0]->package_id)) {
-            $tr = $row_loop;
-            $tr = str_replace("{s_no}", 2, $tr);
-            $tr = str_replace("{particular}", $all_detail['opd_list'][0]->package_name . " <b>(1)</b>", $tr);
-            $tr = str_replace("{quantity}", '', $tr);
-            $tr = str_replace("{amount}", $all_detail['opd_list'][0]->package_amount, $tr);
-            $tr_html .= $tr;
-        }
+    // } else {
+    //     $tr_html = "";
+    //     $tr = $row_loop;
+    //     $tr = str_replace("{s_no}", 1, $tr);
+    //     $tr = str_replace("{particular}", 'Consultant Charges', $tr);
+    //     $tr = str_replace("{quantity}", '', $tr);
+    //     $tr = str_replace("{amount}", $all_detail['opd_list'][0]->consultant_charge + $all_detail['opd_list'][0]->eme_reg_charge + $all_detail['opd_list'][0]->eme_booking_charge, $tr);
+    //     $tr_html .= $tr;
+    //     if (!empty($all_detail['opd_list'][0]->package_id)) {
+    //         $tr = $row_loop;
+    //         $tr = str_replace("{s_no}", 2, $tr);
+    //         $tr = str_replace("{particular}", $all_detail['opd_list'][0]->package_name . " <b>(1)</b>", $tr);
+    //         $tr = str_replace("{quantity}", '', $tr);
+    //         $tr = str_replace("{amount}", $all_detail['opd_list'][0]->package_amount, $tr);
+    //         $tr_html .= $tr;
+    //     }
 
-    }
+    // }
 
     $template_data->template = str_replace("{row_data}", $tr_html, $template_data->template);
 
     $template_data->template = str_replace("{salesman}", ucfirst($user_detail['user_name']), $template_data->template);
 
     $template_data->template = str_replace("{total_discount}", $all_detail['opd_list'][0]->discount, $template_data->template);
+
+    $template_data->template = str_replace("{eme_reg_charge}", $all_detail['opd_list'][0]->eme_reg_charge, $template_data->template);
+    $template_data->template = str_replace("{eme_booking_charge}", $all_detail['opd_list'][0]->eme_booking_charge, $template_data->template);
+
 
     $template_data->template = str_replace("{net_amount}", $all_detail['opd_list'][0]->net_amount, $template_data->template);
     $template_data->template = str_replace("{total_amount}", $all_detail['opd_list'][0]->total_amount, $template_data->template);
@@ -1556,52 +1581,56 @@ if ($template_data->printer_id == 1) {
     $rplc_row = trim(substr($template_data->template, $pos_start, $row_last_length + 10));
     $template_data->template = str_replace($rplc_row, "{row_data}", $template_data->template);
     //////////////////////// 
-    if (!empty($all_detail['opd_list']['particular_list'])) {
-        $i = 1;
-        $tr_html = "";
-        foreach ($all_detail['opd_list']['particular_list'] as $particular_list) {
-            $tr = $row_loop;
-            $tr = str_replace("{s_no}", $i, $tr);
+    // if (!empty($all_detail['opd_list']['particular_list'])) {
+    //     $i = 1;
+    //     $tr_html = "";
+    //     foreach ($all_detail['opd_list']['particular_list'] as $particular_list) {
+    //         $tr = $row_loop;
+    //         $tr = str_replace("{s_no}", $i, $tr);
 
-            $tr = str_replace("{particular}", $particular_list->particulars, $tr);
-            $tr = str_replace("{quantity}", $particular_list->quantity, $tr);
-            $tr = str_replace("{amount}", $particular_list->amount, $tr);
-            $tr_html .= $tr;
-            $i++;
+    //         $tr = str_replace("{particular}", $particular_list->particulars, $tr);
+    //         $tr = str_replace("{quantity}", $particular_list->quantity, $tr);
+    //         $tr = str_replace("{amount}", $particular_list->amount, $tr);
+    //         $tr_html .= $tr;
+    //         $i++;
 
-        }
-        if (!empty($all_detail['opd_list'][0]->package_id)) {
-            $tr = $row_loop;
-            $tr = str_replace("{s_no}", $i, $tr);
-            $tr = str_replace("{particular}", $all_detail['opd_list'][0]->package_name . " <b>(1)</b>", $tr);
-            $tr = str_replace("{quantity}", '', $tr);
-            $tr = str_replace("{amount}", $all_detail['opd_list'][0]->package_amount, $tr);
-            $tr_html .= $tr;
-        }
-    } else {
-        $tr_html = "";
-        $tr = $row_loop;
-        $tr = str_replace("{s_no}", 1, $tr);
-        $tr = str_replace("{particular}", 'Consultant Charges', $tr);
-        $tr = str_replace("{quantity}", '', $tr);
-        $tr = str_replace("{amount}", $all_detail['opd_list'][0]->consultant_charge + $all_detail['opd_list'][0]->eme_reg_charge + $all_detail['opd_list'][0]->eme_booking_charge, $tr);
-        $tr_html .= $tr;
-        if (!empty($all_detail['opd_list'][0]->package_id)) {
-            $tr = $row_loop;
-            $tr = str_replace("{s_no}", 2, $tr);
-            $tr = str_replace("{particular}", $all_detail['opd_list'][0]->package_name . " <b>(1)</b>", $tr);
-            $tr = str_replace("{quantity}", '', $tr);
-            $tr = str_replace("{amount}", $all_detail['opd_list'][0]->package_amount, $tr);
-            $tr_html .= $tr;
-        }
+    //     }
+    //     if (!empty($all_detail['opd_list'][0]->package_id)) {
+    //         $tr = $row_loop;
+    //         $tr = str_replace("{s_no}", $i, $tr);
+    //         $tr = str_replace("{particular}", $all_detail['opd_list'][0]->package_name . " <b>(1)</b>", $tr);
+    //         $tr = str_replace("{quantity}", '', $tr);
+    //         $tr = str_replace("{amount}", $all_detail['opd_list'][0]->package_amount, $tr);
+    //         $tr_html .= $tr;
+    //     }
+    // } else {
+    //     $tr_html = "";
+    //     $tr = $row_loop;
+    //     $tr = str_replace("{s_no}", 1, $tr);
+    //     $tr = str_replace("{particular}", 'Consultant Charges', $tr);
+    //     $tr = str_replace("{quantity}", '', $tr);
+    //     $tr = str_replace("{amount}", $all_detail['opd_list'][0]->consultant_charge + $all_detail['opd_list'][0]->eme_reg_charge + $all_detail['opd_list'][0]->eme_booking_charge, $tr);
+    //     $tr_html .= $tr;
+    //     if (!empty($all_detail['opd_list'][0]->package_id)) {
+    //         $tr = $row_loop;
+    //         $tr = str_replace("{s_no}", 2, $tr);
+    //         $tr = str_replace("{particular}", $all_detail['opd_list'][0]->package_name . " <b>(1)</b>", $tr);
+    //         $tr = str_replace("{quantity}", '', $tr);
+    //         $tr = str_replace("{amount}", $all_detail['opd_list'][0]->package_amount, $tr);
+    //         $tr_html .= $tr;
+    //     }
 
-    }
+    // }
 
     $template_data->template = str_replace("{row_data}", $tr_html, $template_data->template);
 
     $template_data->template = str_replace("{sales_name}", ucfirst($all_detail['opd_list'][0]->user_name), $template_data->template);
 
     $template_data->template = str_replace("{total_discount}", $all_detail['opd_list'][0]->discount, $template_data->template);
+
+    $template_data->template = str_replace("{eme_reg_charge}", $all_detail['opd_list'][0]->eme_reg_charge, $template_data->template);
+    $template_data->template = str_replace("{eme_booking_charge}", $all_detail['opd_list'][0]->eme_booking_charge, $template_data->template);
+
 
     $template_data->template = str_replace("{net_amount}", $all_detail['opd_list'][0]->net_amount, $template_data->template);
     $template_data->template = str_replace("{total_amount}", $all_detail['opd_list'][0]->total_amount, $template_data->template);

@@ -46,29 +46,30 @@ class Vision_model extends CI_Model
         // echo "<pre>";
         // print_r($search);
         // die;
-        $this->db->select("hms_vision.*, hms_side_effect.side_effect_name,hms_patient.patient_code_auto");
+        $this->db->select("hms_vision.*, hms_patient.id as patient_id, hms_side_effect.side_effect_name, hms_patient.patient_code_auto,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h, hms_patient.mobile_no, hms_opd_booking.booking_code");
         $this->db->from($this->table);
-        $this->db->join('hms_patient', 'hms_patient.patient_code=hms_vision.patient_code', 'left');
-        $this->db->join($this->side_effects_table, 'hms_vision.side_effects = hms_side_effect.id', 'left'); // Join side effects
+        $this->db->join('hms_patient', 'hms_patient.patient_code = hms_vision.patient_code', 'left');
+        $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_vision.booking_id', 'left');
+        $this->db->join('hms_side_effect', 'hms_vision.side_effects = hms_side_effect.id', 'left'); // Replace $this->side_effects_table with table name directly
         $this->db->where('hms_vision.is_deleted', '0');
 
         $i = 0;
-        // foreach ($this->column as $item) {
-        //     if ($_POST['search']['value']) {
-        //         if ($i === 0) {
-        //             $this->db->group_start();
-        //             $this->db->like($item, $_POST['search']['value']);
-        //         } else {
-        //             $this->db->or_like($item, $_POST['search']['value']);
-        //         }
+        foreach ($this->column as $item) {
+            if ($_POST['search']['value']) {
+                if ($i === 0) {
+                    $this->db->group_start();
+                    $this->db->like($item, $_POST['search']['value']);
+                } else {
+                    $this->db->or_like($item, $_POST['search']['value']);
+                }
 
-        //         if (count($this->column) - 1 == $i) {
-        //             $this->db->group_end();
-        //         }
-        //     }
-        //     $column[$i] = $item;
-        //     $i++;
-        // }
+                if (count($this->column) - 1 == $i) {
+                    $this->db->group_end();
+                }
+            }
+            $column[$i] = $item;
+            $i++;
+        }
         if (!empty($search)) {
 
 			if (!empty($search['start_date'])) {

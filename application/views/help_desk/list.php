@@ -284,7 +284,7 @@ $users_data = $this->session->userdata('auth_users');
 
             </div> <!-- 4 -->
 
-            <div class="col-sm-4">
+            <div class="col-sm-4 d-flex justify-content-center" style="margin-left: 177px;margin-top: 35px;">
 
               <!--<a class="btn-custom" id="reset_date" onclick="reset_search();"><i class="fa fa-refresh"></i> Reset</a>
           <br>

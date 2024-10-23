@@ -108,7 +108,7 @@ class Emergency_booking extends CI_Controller
       }
       $row[] = $test->token_no;
       $row[] = $test->opd_type == 0 ? 'Normal' : 'FastTrack';
-      $row[] = $test->patient_reg_no;
+      $row[] = $test->patient_code;
       $row[] = $test->eme_booking_code;
       $row[] = $test->patient_name;
       $row[] = $test->patient_category_name;
@@ -207,7 +207,7 @@ class Emergency_booking extends CI_Controller
           if ($test->status == 0) {
             $flag = 'eye_history';
             $type = 'eme_booking';
-            $btn_history .= '<li><a href="' . base_url("eye/add_eye_prescription/test/" . $test->id . "?flag=" . $flag. "&type=" . $type) . '" title="Add Prescription"><i class="fa fa-history"></i> History</a></li>';
+            $btn_history .= '<li><a href="' . base_url("eye/add_eye_prescription/test/" . $test->id . "?flag=" . $flag . "&type=" . $type) . '" title="Add Prescription"><i class="fa fa-history"></i> History</a></li>';
           }
 
           $btn_prescription .= '<li><a  href="' . base_url("eye/add_eye_prescription/test/" . $test->id) . '" title="Add Prescription"><i class="fa fa-eye"></i> Add Adv. Eye Prescription</a></li>';
@@ -439,7 +439,7 @@ class Emergency_booking extends CI_Controller
       // added By Nitin Sharma 02/02/2024
       // End Action Button //
       // . $btn_a . $print_mlc
-      $row[] = $btn_confirm . $btn_edit . $btn_delete . $btn_print. $btn_a;
+      $row[] = $btn_confirm . $btn_edit . $btn_delete . $btn_print . $btn_a;
       $data[] = $row;
       $i++;
     }
@@ -787,9 +787,9 @@ class Emergency_booking extends CI_Controller
       $state_id = $branch_result['state_id'];
     }
     $post = $this->input->post();
-    // echo "<pre>";
-    // print_r($post);
-    // die;
+      // echo "<pre>";
+      // print_r($post);
+      // die;
     $patient_id = "";
     $patient_code = "";
     $simulation_id = "";
@@ -1272,7 +1272,7 @@ class Emergency_booking extends CI_Controller
           //echo "<pre>";print_r($receiver_device_details); exit;
           if (!empty($receiver_device_details)) {
             require APPPATH . '/libraries/PushNotification.php';
-            $sms_msg = rawurlencode('Opd booking successfully done.');
+            $sms_msg = rawurlencode('Eme. booking successfully done.');
             foreach ($receiver_device_details as $receiver_device_detail) {
               //echo $receiver_device_detail->device_token; exit;
               $token = array($receiver_device_detail->device_token);
@@ -1299,19 +1299,19 @@ class Emergency_booking extends CI_Controller
         }
 
 
-        $this->session->set_flashdata('success', 'Opd booking successfully booked.');
+        $this->session->set_flashdata('success', 'Emergency booking successfully booked.');
         redirect(base_url('emergency_booking/?status=print'));
 
         $this->load->model('opd_setting/opd_print_setting_model');
         $opd_setting_data = $this->opd_print_setting_model->get_print_setting();
         if (isset($opd_setting_data[1]) && !empty($opd_setting_data) && $opd_setting_data[1] == 0) {
-          redirect(base_url('emergency_booking/booking?status=print'));
+          redirect(base_url('emergency_booking/emergency_booking?status=print'));
         } elseif (isset($opd_setting_data[1]) && !empty($opd_setting_data) && $opd_setting_data[1] == 1) {
-          redirect(base_url('emergency_booking/booking?presc_status=print_prescription'));
+          redirect(base_url('emergency_booking/emergency_booking?presc_status=print_prescription'));
         } elseif (isset($opd_setting_data[1]) && !empty($opd_setting_data) && $opd_setting_data[1] == 2) {
-          redirect(base_url('emergency_booking/booking?presc_status=print_prescription&status=print'));
+          redirect(base_url('emergency_booking/emergency_booking?presc_status=print_prescription&status=print'));
         } else {
-          redirect(base_url('emergency_booking/booking?status=print'));
+          redirect(base_url('emergency_booking/emergency_booking?status=print'));
         }
         redirect(base_url('emergency_booking/?status=print'));
       } else {
@@ -1437,7 +1437,7 @@ class Emergency_booking extends CI_Controller
       $this->load->model('general/general_model');
       $post = $this->input->post();
       $result = $this->emergency_booking->get_by_id($id);
-      // print '<pre>' ;print_r($result);die;
+      // echo '<pre>' ;print_r($result);die;
       $data['simulation_array'] = $this->general_model->simulation_list();
       $data['country_list'] = $this->general_model->country_list();
       $data['simulation_list'] = $this->general_model->simulation_list();
@@ -1621,6 +1621,8 @@ class Emergency_booking extends CI_Controller
         "identification_mark" => $result['identification_mark'] ?? '',
         "eme_booking_charge" => number_format($result['eme_booking_charge'], 2) ?? '',
         "eme_reg_charge" => number_format($result['eme_reg_charge'], 2) ?? '',
+        "identification_mark" => $result['identification_mark'] ?? '',
+        "on_set" => $result['on_set'] ?? '',
       );
       if (isset($post) && !empty($post)) {
         $data['form_data'] = $this->_validateform();
@@ -1852,13 +1854,28 @@ class Emergency_booking extends CI_Controller
         $discount_total = '0.00';
       }
 
-      $balance = number_format($consultants_charge + $kit_amount - $post['discount'] - $post['paid_amount'], 2, '.', '');
+      // $balance = number_format($consultants_charge + $kit_amount - $post['discount'] - $post['paid_amount'], 2, '.', '');
+      $consultants_charge = floatval($consultants_charge);
+      $kit_amount = floatval($kit_amount);
+      $discount = isset($post['discount']) ? floatval($post['discount']) : 0;
+      $paid_amount = isset($post['paid_amount']) ? floatval($post['paid_amount']) : 0;
+
+      $balance = number_format($consultants_charge + $kit_amount - $discount - $paid_amount, 2, '.', '');
       $regCharge = $this->general_model->get_reg_charge();
       $eme_reg_charge = isset($doctor_data[0]->eme_reg_charge) ? (float) $doctor_data[0]->eme_reg_charge : 0;
       $reg_charge = isset($regCharge[0]->charge) ? (float) $regCharge[0]->charge : 0;
 
-      $pay_arr = array('kit_amount' => number_format($kit_amount, 2, '.', ''), 'consultants_charge' => number_format($consultants_charge, 2, '.', ''), 'total_amount' => number_format($consultants_charge + $kit_amount + $eme_reg_charge + $reg_charge, 2, '.', ''), 'discount' => $discount_total, 'net_amount' => number_format($kit_amount + $consultants_charge - $post['discount'], 2, '.', ''), 'paid_amount' => number_format($kit_amount + $consultants_charge - $post['discount'], 2, '.', ''), 'balance' => $balance, 'eme_reg_charge' => number_format($eme_reg_charge, 2, '.', ''),  // Use eme_reg_charge
-    'reg_charge' => number_format($reg_charge, 2, '.', ''));
+      $pay_arr = array(
+        'kit_amount' => number_format($kit_amount, 2, '.', ''),
+        'consultants_charge' => number_format($consultants_charge, 2, '.', ''),
+        'total_amount' => number_format($kit_amount + $eme_reg_charge + $reg_charge, 2, '.', ''),
+        'discount' => $discount_total,
+        'net_amount' => number_format($kit_amount + $eme_reg_charge + $reg_charge - $post['discount'], 2, '.', ''),
+        'paid_amount' => number_format($kit_amount + $eme_reg_charge + $reg_charge - $post['discount'], 2, '.', ''),
+        'balance' => $balance,
+        'eme_reg_charge' => number_format($eme_reg_charge, 2, '.', ''),  // Use eme_reg_charge
+        'reg_charge' => number_format($reg_charge, 2, '.', '')
+      );
 
       $json = json_encode($pay_arr, true);
       echo $json;
@@ -2064,6 +2081,9 @@ class Emergency_booking extends CI_Controller
   public function calculate_payment()
   {
     $post = $this->input->post();
+    // echo "<pre>";
+    // print_r($post);
+    // die;
     if (isset($post) && !empty($post)) {
 
       $total_amount = $post['total_amount'];
@@ -2075,7 +2095,16 @@ class Emergency_booking extends CI_Controller
       $balance = $post['balance'];
       $paid_amount = $post['paid_amount'];
       $paid_amount = $net_amount;
-      $pay_arr = array('consultants_charge' => number_format($consultants_charge, 2, '.', ''), 'kit_amount' => 0, 'total_amount' => number_format($total_amount, 2, '.', ''), 'net_amount' => number_format($net_amount, 2, '.', ''), 'discount' => number_format($discount, 2, '.', ''), 'balance' => number_format($balance, 2, '.', ''), 'paid_amount' => number_format($paid_amount, 2, '.', ''));
+      // $pay_arr = array('consultants_charge' => number_format($consultants_charge, 2, '.', ''), 'kit_amount' => 0, 'total_amount' => number_format($total_amount, 2, '.', ''), 'net_amount' => number_format($net_amount, 2, '.', ''), 'discount' => number_format($discount, 2, '.', ''), 'balance' => number_format($balance, 2, '.', ''), 'paid_amount' => number_format($paid_amount, 2, '.', ''));
+      $pay_arr = array(
+        'consultants_charge' => number_format((float) $consultants_charge, 2, '.', ''),
+        'kit_amount' => 0,
+        'total_amount' => number_format((float) $total_amount, 2, '.', ''),
+        'net_amount' => number_format((float) $net_amount, 2, '.', ''),
+        'discount' => number_format((float) $discount, 2, '.', ''),
+        'balance' => number_format((float) $balance, 2, '.', ''),
+        'paid_amount' => number_format((float) $paid_amount, 2, '.', '')
+      );
       $json = json_encode($pay_arr, true);
       echo $json;
 
@@ -3130,13 +3159,13 @@ class Emergency_booking extends CI_Controller
       "status" => "",
       "remark" => "",
       "branch_id" => '',
-      'source_from' => '',
-      "disease" => "",
-      "disease_code" => "",
-      "insurance_type" => "",
-      "insurance_type_id" => "",
-      "ins_company_id" => "",
-      "emergency_booking" => "3",
+      // 'source_from' => '',
+      // "disease" => "",
+      // "disease_code" => "",
+      // "insurance_type" => "",
+      // "insurance_type_id" => "",
+      // "ins_company_id" => "",
+      // "emergency_booking" => "3",
     );
     if (isset($post) && !empty($post)) {
       $marge_post = array_merge($data['form_data'], $post);

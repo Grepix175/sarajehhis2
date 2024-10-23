@@ -177,7 +177,7 @@ $users_data = $this->session->userdata('auth_users');
                   <th width="40" align="center"> <input type="checkbox" name="selectall" class="" id="selectAll" value="">
                   </th>
                   <th> Charge </th>
-                  <th> Status </th>
+                  <!-- <th> Status </th> -->
                   <th> Created Date </th>
                   <th> Action </th>
                 </tr>

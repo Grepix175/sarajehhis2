@@ -70,7 +70,7 @@ class Emg_reg_charge extends CI_Controller
 
             $row[] = number_format((float)$emg_charge->charge, 2, '.', '');
 
-            $row[] = $status;
+            // $row[] = $status;
             $row[] = date('d-M-Y H:i A', strtotime($emg_charge->created_date));
             $btnedit = '';
             $btndelete = '';

@@ -317,7 +317,7 @@ $field_list = mandatory_section_field_list(1);
                     </div> <!-- row -->
                     <div class="row m-b-5">
                       <div class="col-xs-4">
-                        <strong><?php echo $charge_name = 'Emergency change';  ?></strong>
+                        <strong><?php echo $charge_name = 'Emergency charge';  ?></strong>
                       </div>
                       <div class="col-xs-8">
                         <input type="text"  name="eme_reg_charge" class="price_float" id="eme_reg_charge" value="<?php echo $form_data['eme_reg_charge']; ?>">
