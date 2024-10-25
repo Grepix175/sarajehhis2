@@ -514,6 +514,8 @@ class Contact_lens extends CI_Controller
         $data['form_data'] = array(
             "start_date" => '',
             "end_date" => '',
+            "patient_name" => '',
+            "patient_code" => '',
             "hospital_code" => "",
             "item_description" => "",
             "menufacturer" => "",

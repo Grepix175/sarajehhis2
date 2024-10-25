@@ -69,15 +69,16 @@ class Tokenno_model extends CI_Model
                 $this->db->where('hms_token.status', $opd_search['search_type']);
             }
 
-        } else {
-            if (!empty($opd_search['search_type'])) {
-                $this->db->where('hms_token.status', $opd_search['search_type']);
-            }
-            // If no filters are applied, default to today's date and only pending records (status = 1)
-            $today_date = date('Y-m-d');
-            $this->db->where('DATE(hms_token.created_date)', $today_date);
-            $this->db->where('hms_token.status', 1);  // Pending status
         }
+        //  else {
+        //     if (!empty($opd_search['search_type'])) {
+        //         $this->db->where('hms_token.status', $opd_search['search_type']);
+        //     }
+        //     // If no filters are applied, default to today's date and only pending records (status = 1)
+        //     $today_date = date('Y-m-d');
+        //     $this->db->where('DATE(hms_token.created_date)', $today_date);
+        //     $this->db->where('hms_token.status', 1);  // Pending status
+        // }
 
         // Search functionality
         if (!empty($_POST['search']['value'])) {
