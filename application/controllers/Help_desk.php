@@ -10,16 +10,13 @@ class Help_desk extends CI_Controller
     auth_users();
     $this->load->model('help_desk/help_desk_model', 'prescription');
     $this->load->model('opd/opd_model', 'opd');
+    $this->load->model('contact_lens/Contact_lens_model', 'contact_lens');
   }
 
 
   public function index()
   {
-    // echo "<pre>";
-    // print_r('Hello');
-    // die;
     unauthorise_permission('389', '2413');
-    // $data['page_title'] = 'Eye Prescription List';
     $data['page_title'] = 'Help Desk List';
     $this->load->model('default_search_setting/default_search_setting_model');
     $default_search_data = $this->default_search_setting_model->get_default_setting();
@@ -89,34 +86,21 @@ class Help_desk extends CI_Controller
       // print_r($prescription->booking_id);
       // print_r($prescription->booking_id);
       $pat_status = '';
+      $contact_lens_txt = '';
       $patient_status = $this->opd->get_by_id_patient_status($prescription->booking_id);
-      $refraction_exists = $this->opd->get_by_id_refraction($prescription->booking_id);
-      // print_r($patient_status);
+      $contact_lens_status = $this->contact_lens->get_by_contact_lens_status($prescription->booking_id,$prescription->patient_id);
       // echo "<pre>";
       // print_r($patient_status);
-      // // die;
-      // if ($patient_status['completed'] == '1') {
-      //   $pat_status = '<font style="background-color: #1CAF9A;color:white">Completed</font>';
-      // } 
-      // else 
-      if ($patient_status == 1) {
-        $pat_status = '<font style="background-color: #228B22;color:white">Vision</font>';
-      }
-      // else if ($patient_status['doctor'] == '1') {
-      //   $pat_status = '<font style="background-color: #1CAF9A;color:white">Doctor</font>';
-      // }
-      //  else if ($patient_status['optimetrist'] == '1') {
-      //   $pat_status = '<font style="background-color: #1CAF9A;color:white">Opt.Optom</font>';
-      // } 
-      // else if ($patient_status['reception'] == '1') {
-      //   $pat_status = '<font style="background-color: #1CAF9A;color:white">Reception</font>';
-      // }
-      //  else if ($patient_status['arrive'] == '1') {
-      //   $pat_status = '<font style="background-color: #1CAF9A;color:white">Arrived</font>';
-      // } 
-      else {
-        $pat_status = '<font style="background-color: #1CAF9A;color:white">Not Arrived</font>';
-      }
+      // die;
+      $refraction_exists = $this->opd->get_by_id_refraction($prescription->booking_id);
+      $pat_status = ($patient_status == 1) 
+        ? '<font style="background-color: #228B22;color:white">Vision</font>' 
+        : '<font style="background-color: #1CAF9A;color:white">Not Arrived</font>';
+
+    // Determine contact lens status
+    $contact_lens_txt = ($contact_lens_status == 1) 
+        ? '<font style="background-color: #228B30;color:white">Contact Lens</font>' 
+        : '';
       $age_y = $prescription->age_y;
       $age_m = $prescription->age_m;
       $age_d = $prescription->age_d;
@@ -151,10 +135,8 @@ class Help_desk extends CI_Controller
       $row[] = $prescription->patient_name;
       $row[] = $prescription->mobile_no;
       $row[] = $age;
-      // $row[] = $d_status;
-      // $row[] = $status;
-      // $row[] = $app_type;
-      $row[] = $pat_status;
+      $row[] = trim($pat_status . (!empty($pat_status) && !empty($contact_lens_txt) ? ' / ' : '') . $contact_lens_txt);
+    
       $row[] = date('d-M-Y', strtotime($prescription->created_date));
 
       //Action button /////
@@ -165,6 +147,8 @@ class Help_desk extends CI_Controller
       $btn_print_pre = "";
       $btn_upload_pre = "";
       $btn_view_upload_pre = "";
+      $btn_contact_lens = "";
+      $btn_hess_chart = "";
 
       if ($users_data['parent_id'] == $prescription->branch_id) {
         if (in_array('2413', $users_data['permission']['action'])) {
@@ -177,7 +161,20 @@ class Help_desk extends CI_Controller
         //   $btn_delete = ' <a class="btn-custom" onClick="return delete_eye_prescription(' . $prescription->id . ')" href="javascript:void(0)" title="Delete" data-url="512"><i class="fa fa-trash"></i> Delete</a>';
         // }
       }
+      // echo "<pre>";
+      // print_r($contact_lens_status);
+      // die;
+      if ($contact_lens_status == '1') {
+        $btn_contact_lens = '<a class="btn-custom disabled" href="javascript:void(0);" title="Contact Lens" style="pointer-events: none; opacity: 0.6;" data-url="512">  Contact Lens</a>';
+      } else {
+        // $btn_contact_lens = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title=" Contact Lens"> Contact Lens</a>';
+        $btn_contact_lens = '<a class="btn-custom" href="' . base_url("contact_lens/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Contact Lens" data-url="512">Contact Lens</a>';
+      }
+      $flag = 'hess_chart'; 
+      $type = 'help_desk';
+      $btn_hess_chart = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . "&type=" . $type . '" title="Hess Chart">Hess Chart</a>';
 
+      
       /* if(in_array('2413',$users_data['permission']['action'])) 
             {
                $btn_view_pre = ' <a class="btn-custom"  href="'.base_url('eye/add_eye_prescription/view_prescription/'.$prescription->id.'/'.$prescription->booking_id).'" title="View Eye Prescription" target="_blank" data-url="512"><i class="fa fa-info-circle"></i> View Eye Prescription</a>';
@@ -197,13 +194,9 @@ class Help_desk extends CI_Controller
       }
       if (in_array('2413', $users_data['permission']['action'])) {
         $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . "'";
-        // onClick="return print_window_page(' . $print_url . ')"
-        // $send_to_vission = ' <a class="btn-custom"  href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Send To Vision"  data-url="512"> Vision</a>';
         if ($patient_status == 1) {
-          // If patient_status is 1, disable the button
           $send_to_vission = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Vision</a>';
         } else {
-          // If patient_status is not 1, enable the button
           $send_to_vission = '<a class="btn-custom" href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Vision" data-url="512">Vision</a>';
         }
       }
@@ -212,7 +205,8 @@ class Help_desk extends CI_Controller
       // $btn_print_chasma_pre = ' <a class="btn-custom" onClick="return print_window_page(' . $print_chasma_url . ')" href="javascript:void(0)" title="Print Chasma Detail"  data-url="512"><i class="fa fa-print"></i> Print Chasma Detail</a>';
 
       // . $btn_print_chasma_pre
-      $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission ;
+      $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission . $btn_contact_lens .
+      $btn_hess_chart ;
       // print_r($row);
       $data[] = $row;
       $i++;

@@ -357,5 +357,7 @@ class Help_desk_model extends CI_Model
 		}
 	}
 
+	
+
 }
 ?>
