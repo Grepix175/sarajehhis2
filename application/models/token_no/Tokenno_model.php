@@ -33,10 +33,10 @@ class Tokenno_model extends CI_Model
         // $result = $query->result();
         $result = $query->row();
 
-        if (empty($result)) {
-            return 1; // Return 1 if no results found
+        if (empty($result) || !is_numeric($result->token_no)) {
+            return 1; // Return 1 if no results found or token_no is not numeric
         } else {
-            return $result->token_no + 1;
+            return (int)$result->token_no + 1; // Cast token_no to integer before adding
         }
         //$this->session->unset_userdata('token_search');
     }

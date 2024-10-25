@@ -160,6 +160,10 @@ $field_list = mandatory_section_field_list(2);
 <body>
   <div class="container-fluid">
     <?php
+    // echo "<pre>";
+    //     print_r($data['form_data']);
+    //     echo "</pre>";
+    //     die;
     $this->load->view('include/header');
     $this->load->view('include/inner_header');
     ?>

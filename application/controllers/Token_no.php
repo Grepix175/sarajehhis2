@@ -28,7 +28,7 @@ class Token_no extends CI_Controller
             $end_date = date('d-m-Y');
         }
 
-        $data['page_title'] = 'Token List';
+        $data['page_title'] = 'Patient List';
         $data['form_data'] = array('token_no' => '', 'patient_code' => '', 'patient_id' => '', 'status' => '', 'from_date' => '', 'to_date' => '');
         $this->load->view('token_grid/opd_token_list', $data);
     }

@@ -139,6 +139,7 @@ $users_data = $this->session->userdata('auth_users');
       <form id="prescription_form" name="prescription_form" action="<?php echo current_url(); ?>" method="post"
         enctype="multipart/form-data">
         <input type="hidden" name="branch_id" value="<?php echo $branch_id; ?>">
+        <input type="hidden" name="flag" value="<?php echo $flag ?? ''; ?>">
         <input type="hidden" name="booking_id" value="<?php echo $booking_id; ?>">
         <input type="hidden" name="patient_id" value="<?php echo $patient_id; ?>">
         <input type="hidden" name="booking_code" value="<?php echo $booking_code; ?>">
@@ -149,7 +150,9 @@ $users_data = $this->session->userdata('auth_users');
         } ?>">
         <input type="hidden" name="sale_id" value="<?php echo $sale_id; ?>">
         <?php
+        
         if (empty($flag)) {
+          
           ?>
           <div class="row">
             <div class="col-md-2">
@@ -195,7 +198,7 @@ $users_data = $this->session->userdata('auth_users');
                 <input type="checkbox" name="print_drawing_flag" <?php if ($form_data['drawing_flag'] == 1) {
                   echo 'checked';
                 } ?> id="checkboxdrawing" value="1">
-                <label for="checkboxdrawing">Drawing</label>
+                <label for="checkboxdrawing">Hess Chart</label>
               </div>
 
               <div class="ckbox ckbox-default col-md-3 col-sm-3">
@@ -231,7 +234,8 @@ $users_data = $this->session->userdata('auth_users');
 
           </div>
           <?php
-        } else {
+        }
+        else if($flag == 'eye_history'){
           ?>
           <input type="checkbox" name="print_history_flag" <?php if ($form_data['history_flag'] == 1) {
             echo 'checked';
@@ -240,6 +244,28 @@ $users_data = $this->session->userdata('auth_users');
 
           <?php
         }
+        else if($flag == 'hess_chart'){
+          
+          ?>
+          <input type="checkbox" name="print_drawing_flag" checked id="checkboxdrawing" value="1">
+                <label for="checkboxdrawing">Hess Chart</label>
+
+          <?php
+
+        }
+         else {
+          ?>
+          <!-- <input type="checkbox" name="print_history_flag" <?php if ($form_data['history_flag'] == 1) {echo 'checked';} ?>
+            id="checkboxhistory" value="1" hidden> -->
+
+          <?php
+        }
+        ?>
+        <?php
+        // echo "<pre>";
+    //   print_r($data['form_data']);
+    //   // print_r($booking_id);
+    //   die; 
         ?>
         <div class="col-md-2">
           <label class="col-md-12 col-sm-12" for="printsummary-labels"><strong>Token No: </strong>
@@ -249,33 +275,50 @@ $users_data = $this->session->userdata('auth_users');
 
 
         <?php
+        if ($flag == 'hess_chart') {
+          $classtab8 = $class9 = '';
+          if (in_array('2429', $users_data['permission']['action'])) {
+            $class9 = 'class="active"';
+            $classtab8 = 'fade in active';
+          }
+          
+        }else if($flag == 'eye_history'){
+          $classtab1 = $class1 = '';
+          if (in_array('2429', $users_data['permission']['action'])) {
+            $class1 = 'class="active"';
+            $classtab1 = 'fade in active';
+          }
 
-        $class1 = $class2 = $class3 = $class4 = $class5 = $class6 = $class7 = '';
-        $classtab1 = $classtab2 = $classtab3 = $classtab4 = $classtab8 = $classtab5 = $classtab6 = $classtab7 = $class8 = '';
-        if (in_array('2416', $users_data['permission']['action'])) {
-          $class1 = 'class="active"';
-          $classtab1 = 'fade in active';
-        } else if (in_array('2417', $users_data['permission']['action'])) {
-          $class2 = 'class="active"';
-          $classtab2 = 'fade in active';
-        } else if (in_array('2418', $users_data['permission']['action'])) {
-          $class3 = 'class="active"';
-          $classtab3 = 'fade in active';
-        } else if (in_array('2429', $users_data['permission']['action'])) {
-          $class8 = 'class="active"';
-          $classtab8 = 'fade in active';
-        } else if (in_array('2419', $users_data['permission']['action'])) {
-          $class4 = 'class="active"';
-          $classtab4 = 'fade in active';
-        } else if (in_array('2420', $users_data['permission']['action'])) {
-          $class5 = 'class="active"';
-          $classtab5 = 'fade in active';
-        } else if (in_array('2421', $users_data['permission']['action'])) {
-          $class6 = 'class="active"';
-          $classtab6 = 'fade in active';
-        } else if (in_array('2422', $users_data['permission']['action'])) {
-          $class7 = 'class="active"';
-          $classtab7 = 'fade in active';
+        } 
+        else {
+          $class1 = $class2 = $class3 = $class4 = $class5 = $class6 = $class7 = '';
+          $classtab1 = $classtab2 = $classtab3 = $classtab4 = $classtab8 = $classtab5 = $classtab6 = $classtab7 = $class8 = '';
+
+          if (in_array('2416', $users_data['permission']['action'])) {
+            $class1 = 'class="active"';
+            $classtab1 = 'fade in active';
+          } else if (in_array('2417', $users_data['permission']['action'])) {
+            $class2 = 'class="active"';
+            $classtab2 = 'fade in active';
+          } else if (in_array('2418', $users_data['permission']['action'])) {
+            $class3 = 'class="active"';
+            $classtab3 = 'fade in active';
+          } else if (in_array('2429', $users_data['permission']['action'])) {
+            $class8 = 'class="active"';
+            $classtab8 = 'fade in active';
+          } else if (in_array('2419', $users_data['permission']['action'])) {
+            $class4 = 'class="active"';
+            $classtab4 = 'fade in active';
+          } else if (in_array('2420', $users_data['permission']['action'])) {
+            $class5 = 'class="active"';
+            $classtab5 = 'fade in active';
+          } else if (in_array('2421', $users_data['permission']['action'])) {
+            $class6 = 'class="active"';
+            $classtab6 = 'fade in active';
+          } else if (in_array('2422', $users_data['permission']['action'])) {
+            $class7 = 'class="active"';
+            $classtab7 = 'fade in active';
+          }
         } ?>
 
 
@@ -289,6 +332,10 @@ $users_data = $this->session->userdata('auth_users');
                   <?php if ($flag === 'eye_history') { ?>
                     <?php if (in_array('2416', $users_data['permission']['action'])) { ?>
                       <li <?php echo $class1; ?>><a data-toggle="tab" href="#history">History</a></li>
+                    <?php } ?>
+                    <?php } elseif ($flag === 'hess_chart') { ?> <!-- Additional elseif condition -->
+                      <?php if (in_array('2429', $users_data['permission']['action'])) { ?>
+                      <li <?php echo $class9; ?>><a data-toggle="tab" href="#Drawing">Hess Chart</a></li>
                     <?php } ?>
 
                   <?php } else { ?>
@@ -304,7 +351,7 @@ $users_data = $this->session->userdata('auth_users');
                     <?php } ?>
 
                     <?php if (in_array('2429', $users_data['permission']['action'])) { ?>
-                      <li <?php echo $class3; ?>><a data-toggle="tab" href="#Drawing">Drawing</a></li>
+                      <li <?php echo $class9; ?>><a data-toggle="tab" href="#Drawing">Hess Chart</a></li>
                     <?php } ?>
 
                     <?php if (in_array('2419', $users_data['permission']['action'])) { ?>

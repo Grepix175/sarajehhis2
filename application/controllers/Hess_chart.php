@@ -1,14 +1,14 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Help_desk extends CI_Controller
+class Hess_chart extends CI_Controller
 {
 
   function __construct()
   {
     parent::__construct();
     auth_users();
-    $this->load->model('help_desk/help_desk_model', 'prescription');
+    $this->load->model('hess_chart/hess_chart_model', 'prescription');
     $this->load->model('opd/opd_model', 'opd');
     $this->load->model('contact_lens/Contact_lens_model', 'contact_lens');
   }
@@ -16,8 +16,11 @@ class Help_desk extends CI_Controller
 
   public function index()
   {
+    // echo "<pre>";
+    // print_r('hello');
+    // die;
     unauthorise_permission('389', '2413');
-    $data['page_title'] = 'Help Desk List';
+    $data['page_title'] = 'Hess Chart List';
     $this->load->model('default_search_setting/default_search_setting_model');
     $default_search_data = $this->default_search_setting_model->get_default_setting();
     if (isset($default_search_data[1]) && !empty($default_search_data) && $default_search_data[1] == 1) {
@@ -28,7 +31,7 @@ class Help_desk extends CI_Controller
       $end_date = date('d-m-Y');
     }
     $data['form_data'] = array('patient_name' => '', 'mobile_no' => '', 'patient_code' => '', 'mobile_no' => '', 'start_date' => $start_date, 'end_date' => $end_date);
-    $this->load->view('help_desk/list', $data);
+    $this->load->view('hess_chart/list', $data);
   }
 
   public function ajax_list()
@@ -141,7 +144,7 @@ class Help_desk extends CI_Controller
       $values = array_filter([$pat_status, $contact_lens_txt, $hess_chart]);
 
       // $row[] = trim($pat_status . (!empty($pat_status) && !empty($hess_chart) && !empty($contact_lens_txt) ? ' / ' : '') . $contact_lens_txt);
-      $row[] = implode(' / ', $values);
+      // $row[] = implode(' / ', $values);
     
       $row[] = date('d-M-Y', strtotime($prescription->created_date));
 
@@ -156,33 +159,33 @@ class Help_desk extends CI_Controller
       $btn_contact_lens = "";
       $btn_hess_chart = "";
 
-      if ($users_data['parent_id'] == $prescription->branch_id) {
+      // if ($users_data['parent_id'] == $prescription->branch_id) {
         if (in_array('2413', $users_data['permission']['action'])) {
-          $flag = 'eye_history';
-          $btn_edit = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title="Edit History"><i class="fa fa-pencil"></i> Edit History</a>';
+          $flag = 'hess_chart';
+          $btn_edit = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title="Edit History"><i class="fa fa-pencil"></i> Edit Hess chart</a>';
 
         }
-        $btn_delete = '';
-        // if (in_array('2413', $users_data['permission']['action'])) {
-        //   $btn_delete = ' <a class="btn-custom" onClick="return delete_eye_prescription(' . $prescription->id . ')" href="javascript:void(0)" title="Delete" data-url="512"><i class="fa fa-trash"></i> Delete</a>';
-        // }
-      }
+      //   $btn_delete = '';
+      //   // if (in_array('2413', $users_data['permission']['action'])) {
+      //   //   $btn_delete = ' <a class="btn-custom" onClick="return delete_eye_prescription(' . $prescription->id . ')" href="javascript:void(0)" title="Delete" data-url="512"><i class="fa fa-trash"></i> Delete</a>';
+      //   // }
+      // }
       // echo "<pre>";
       // print_r($contact_lens_status);
       // die;
-      if ($contact_lens_status == '1') {
-        $btn_contact_lens = '<a class="btn-custom disabled" href="javascript:void(0);" title="Contact Lens" style="pointer-events: none; opacity: 0.6;" data-url="512">  Contact Lens</a>';
-      } else {
-        // $btn_contact_lens = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title=" Contact Lens"> Contact Lens</a>';
-        $btn_contact_lens = '<a class="btn-custom" href="' . base_url("contact_lens/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Contact Lens" data-url="512">Contact Lens</a>';
-      }
-      if($prescription->drawing_flag == 0){
-        $flag = 'hess_chart'; 
-        $type = 'help_desk';
-        $btn_hess_chart = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . "&type=" . $type . '" title="Hess Chart">Hess Chart</a>';
-      }else{
-        $btn_hess_chart = '<a class="btn-custom disabled" href="javascript:void(0);" title="Hess Chart" style="pointer-events: none; opacity: 0.6;" data-url="512">  Hess Chart</a>';
-      }
+      // if ($contact_lens_status == '1') {
+      //   $btn_contact_lens = '<a class="btn-custom disabled" href="javascript:void(0);" title="Contact Lens" style="pointer-events: none; opacity: 0.6;" data-url="512">  Contact Lens</a>';
+      // } else {
+      //   // $btn_contact_lens = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title=" Contact Lens"> Contact Lens</a>';
+      //   $btn_contact_lens = '<a class="btn-custom" href="' . base_url("contact_lens/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Contact Lens" data-url="512">Contact Lens</a>';
+      // }
+      // if($prescription->drawing_flag == 0){
+      //   $flag = 'hess_chart'; 
+      //   $type = 'help_desk';
+      //   $btn_hess_chart = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . "&type=" . $type . '" title="Hess Chart">Hess Chart</a>';
+      // }else{
+      //   $btn_hess_chart = '<a class="btn-custom disabled" href="javascript:void(0);" title="Hess Chart" style="pointer-events: none; opacity: 0.6;" data-url="512">  Hess Chart</a>';
+      // }
 
       
       /* if(in_array('2413',$users_data['permission']['action'])) 
@@ -190,26 +193,28 @@ class Help_desk extends CI_Controller
                $btn_view_pre = ' <a class="btn-custom"  href="'.base_url('eye/add_eye_prescription/view_prescription/'.$prescription->id.'/'.$prescription->booking_id).'" title="View Eye Prescription" target="_blank" data-url="512"><i class="fa fa-info-circle"></i> View Eye Prescription</a>';
             } */
       if (in_array('2413', $users_data['permission']['action'])) {
-        $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . "'";
-        $btn_print_pre = ' <a class="btn-custom" onClick="return print_window_page(' . $print_url . ')" href="javascript:void(0)" title="Print History"  data-url="512"><i class="fa fa-print"></i> Print History</a>';
+          $flag = 'hess_chart'; 
+        $type = 'help_desk';
+        $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . '?flag=' . $flag . "&type=" . $type . "'";
+        $btn_print_pre = ' <a class="btn-custom" onClick="return print_window_page(' . $print_url . ')" href="javascript:void(0)" title="Print History"  data-url="512"><i class="fa fa-print"></i> Print Hess Chart</a>';
       }
-      if (in_array('2413', $users_data['permission']['action'])) {
-        if ($refraction_exists == 1) {
+      // if (in_array('2413', $users_data['permission']['action'])) {
+      //   if ($refraction_exists == 1) {
 
-        $refraction = '<a class="btn-custom " disabled href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction</a>';
-        }else{
-          $refraction = '<a class="btn-custom" href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction</a>';
+      //   $refraction = '<a class="btn-custom " disabled href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction</a>';
+      //   }else{
+      //     $refraction = '<a class="btn-custom" href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction</a>';
 
-        }
-      }
-      if (in_array('2413', $users_data['permission']['action'])) {
-        $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . "'";
-        if ($patient_status == 1) {
-          $send_to_vission = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Vision</a>';
-        } else {
-          $send_to_vission = '<a class="btn-custom" href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Vision" data-url="512">Vision</a>';
-        }
-      }
+      //   }
+      // }
+      // if (in_array('2413', $users_data['permission']['action'])) {
+      //   $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . "'";
+      //   if ($patient_status == 1) {
+      //     $send_to_vission = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Vision</a>';
+      //   } else {
+      //     $send_to_vission = '<a class="btn-custom" href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Vision" data-url="512">Vision</a>';
+      //   }
+      // }
 
       // $print_chasma_url = "'" . base_url('eye/add_eye_prescription/print_chasma_details/' . $prescription->id . '/' . $prescription->booking_id) . "'";
       // $btn_print_chasma_pre = ' <a class="btn-custom" onClick="return print_window_page(' . $print_chasma_url . ')" href="javascript:void(0)" title="Print Chasma Detail"  data-url="512"><i class="fa fa-print"></i> Print Chasma Detail</a>';
@@ -255,7 +260,7 @@ class Help_desk extends CI_Controller
     if (isset($prescription_search) && !empty($prescription_search)) {
       $data['form_data'] = $prescription_search;
     }
-    $this->load->view('help_desk/advance_search', $data);
+    $this->load->view('hess_chart/advance_search', $data);
   }
 
   public function reset_search()
@@ -412,7 +417,7 @@ class Help_desk extends CI_Controller
     }
 
     // Load the view and capture the HTML output
-    $this->load->view('help_desk/help_desk_html', $data);
+    $this->load->view('hess_chart/help_desk_html', $data);
     $html = $this->output->get_output();
 
     // Load PDF library and convert HTML to PDF

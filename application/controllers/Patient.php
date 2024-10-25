@@ -886,7 +886,10 @@ class Patient extends CI_Controller
         $tokenno = $this->Tokenno_model->get_token();
 
 
-
+        // echo "<pre>";
+        // print_r($post);
+        // echo "</pre>";
+        // die;
 
         $data['form_data'] = array(
             "data_id" => "",
@@ -948,7 +951,7 @@ class Patient extends CI_Controller
         );
 
         // echo "<pre>";
-        // print_r($post);
+        // print_r($data['form_data']);
         // echo "</pre>";
         // die;
 
