@@ -240,7 +240,7 @@ class Contact_lens extends CI_Controller
                 return;
             }
             // Prepare data for the view
-            $data['page_title'] = "Update Vision";
+            $data['page_title'] = "Update Contact lens";
             $data['form_error'] = '';
             $data['form_data'] = array(
                 'items' => $result ?? [],

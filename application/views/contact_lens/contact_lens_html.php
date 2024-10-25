@@ -76,12 +76,13 @@
 
 
     <table width="100%" cellpadding="5" cellspacing="0"
-        style="font:14px Arial; margin-bottom: 10px;  margin-top: 10px; border: 1px solid #000; text-align: center;">
+        style="font:14px Arial; margin-bottom: 10px;  margin-top: 10px;  text-align: center;">
         <tr>
-            <td><strong>Contact Lens List</strong></td>
+            <td><strong>Internal Communications</strong></td>
         </tr>
     </table>
-    <table width="100%" cellpadding="0" cellspacing="0" border="1px" style="font:8px Arial;">
+    <h3><strong>With Intermidiate effect below mentioned device is chargeable to patient for Contact Lens</strong></h3>
+    <table width="100%" cellpadding="0" cellspacing="0" border="1px">
         <tr>
             <th>Sr. No</th>
             <th> Hospital Code </th>

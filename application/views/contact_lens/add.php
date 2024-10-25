@@ -179,7 +179,7 @@ $field_list = mandatory_section_field_list(2);
                         </div>
                         <button type="button" class="btn-save" id="addRowBtn">Add Row</button>
                         <button type="submit" class="btn-save">Submit</button>
-                        <a href="http://localhost/sarajehhis2/contact_lens" class="btn-anchor"><i
+                        <a href="<?php echo base_url('contact_lens'); ?>" class="btn-anchor"><i
                                 class="fa fa-sign-out"></i> Exit</a>
                     </div>
                 </div>

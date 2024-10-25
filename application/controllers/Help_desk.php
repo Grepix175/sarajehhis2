@@ -88,21 +88,19 @@ class Help_desk extends CI_Controller
       $pat_status = '';
       $contact_lens_txt = '';
       $patient_status = $this->opd->get_by_id_patient_status($prescription->booking_id);
-      $contact_lens_status = $this->contact_lens->get_by_contact_lens_status($prescription->booking_id,$prescription->patient_id);
-      // echo "<pre>";
-      // print_r($patient_status);
-      // die;
+      $contact_lens_status = $this->contact_lens->get_by_contact_lens_status($prescription->booking_id, $prescription->patient_id);
+     
       $refraction_exists = $this->opd->get_by_id_refraction($prescription->booking_id);
-      $pat_status = ($patient_status == 1) 
-        ? '<font style="background-color: #228B22;color:white">Vision</font>' 
-        : '<font style="background-color: #1CAF9A;color:white">Not Arrived</font>';
-
-    // Determine contact lens status
-    $contact_lens_txt = ($contact_lens_status == 1) 
-        ? '<font style="background-color: #228B30;color:white">Contact Lens</font>' 
+      $pat_status = ($patient_status == 1)
+        ? '<font style="background-color: #228B22;color:white">Vision</font>'
         : '';
-    $hess_chart = ($prescription->drawing_flag == 1) 
-        ? '<font style="background-color: #228B30;color:white">Hess Chart</font>' 
+
+      // Determine contact lens status
+      $contact_lens_txt = ($contact_lens_status == 1)
+        ? '<font style="background-color: #228B30;color:white">Contact Lens</font>'
+        : '';
+      $hess_chart = ($prescription->drawing_flag == 1)
+        ? '<font style="background-color: #228B30;color:white">Hess Chart</font>'
         : '';
       $age_y = $prescription->age_y;
       $age_m = $prescription->age_m;
@@ -141,8 +139,8 @@ class Help_desk extends CI_Controller
       $values = array_filter([$pat_status, $contact_lens_txt, $hess_chart]);
 
       // $row[] = trim($pat_status . (!empty($pat_status) && !empty($hess_chart) && !empty($contact_lens_txt) ? ' / ' : '') . $contact_lens_txt);
-      $row[] = implode(' / ', $values);
-    
+      $row[] = !empty($values) ? implode(' / ', $values) : 'Not Arrived';
+
       $row[] = date('d-M-Y', strtotime($prescription->created_date));
 
       //Action button /////
@@ -176,15 +174,15 @@ class Help_desk extends CI_Controller
         // $btn_contact_lens = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title=" Contact Lens"> Contact Lens</a>';
         $btn_contact_lens = '<a class="btn-custom" href="' . base_url("contact_lens/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Contact Lens" data-url="512">Contact Lens</a>';
       }
-      if($prescription->drawing_flag == 0){
-        $flag = 'hess_chart'; 
+      if ($prescription->drawing_flag == 0) {
+        $flag = 'hess_chart';
         $type = 'help_desk';
         $btn_hess_chart = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . "&type=" . $type . '" title="Hess Chart">Hess Chart</a>';
-      }else{
+      } else {
         $btn_hess_chart = '<a class="btn-custom disabled" href="javascript:void(0);" title="Hess Chart" style="pointer-events: none; opacity: 0.6;" data-url="512">  Hess Chart</a>';
       }
 
-      
+
       /* if(in_array('2413',$users_data['permission']['action'])) 
             {
                $btn_view_pre = ' <a class="btn-custom"  href="'.base_url('eye/add_eye_prescription/view_prescription/'.$prescription->id.'/'.$prescription->booking_id).'" title="View Eye Prescription" target="_blank" data-url="512"><i class="fa fa-info-circle"></i> View Eye Prescription</a>';
@@ -196,8 +194,8 @@ class Help_desk extends CI_Controller
       if (in_array('2413', $users_data['permission']['action'])) {
         if ($refraction_exists == 1) {
 
-        $refraction = '<a class="btn-custom " disabled href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction</a>';
-        }else{
+          $refraction = '<a class="btn-custom " disabled href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction</a>';
+        } else {
           $refraction = '<a class="btn-custom" href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction</a>';
 
         }
@@ -216,7 +214,7 @@ class Help_desk extends CI_Controller
 
       // . $btn_print_chasma_pre
       $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission . $btn_contact_lens .
-      $btn_hess_chart ;
+        $btn_hess_chart;
       // print_r($row);
       $data[] = $row;
       $i++;
@@ -425,15 +423,15 @@ class Help_desk extends CI_Controller
   }
 
   function deleteall()
-    {
-        unauthorise_permission('411', '2488');
-        $post = $this->input->post();
-        if (!empty($post)) {
-            $result = $this->prescription->deleteall($post['row_id']);
-            $response = "Help Desk successfully deleted.";
-            echo $response;
-        }
+  {
+    unauthorise_permission('411', '2488');
+    $post = $this->input->post();
+    if (!empty($post)) {
+      $result = $this->prescription->deleteall($post['row_id']);
+      $response = "Help Desk successfully deleted.";
+      echo $response;
     }
+  }
 
 }
 ?>
