@@ -312,7 +312,7 @@ $users_data = $this->session->userdata('auth_users');
                   <th> Mobile No </th>
                   <th> Age </th>
                   <th> Patient Status </th>
-                  <th> Vision Name </th>
+                  <!-- <th> Vision Name </th> -->
                   <!-- <th> Side Effect </th> -->
                   <th> Created Date </th>
                   <th> Action </th>

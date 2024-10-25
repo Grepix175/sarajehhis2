@@ -18,9 +18,9 @@ class Help_desk_model extends CI_Model
 		$search = $this->session->userdata('prescription_search');
 
 		// Select fields with proper aliasing if needed
-		$this->db->select("hms_std_eye_prescription.*, hms_patient.simulation_id, hms_patient.patient_name, hms_patient.patient_code, hms_patient.mobile_no, hms_patient.age_y, hms_patient.age_m, hms_patient.age_d, hms_opd_booking.dilate_status, hms_opd_booking.app_type, hms_opd_booking.token_no");
+		$this->db->select("hms_std_eye_prescription.*, hms_patient.simulation_id, hms_patient.patient_name, hms_patient.patient_code, hms_patient.mobile_no,hms_patient.gender, hms_patient.age_y, hms_patient.age_m, hms_patient.age_d, hms_opd_booking.dilate_status, hms_opd_booking.app_type, hms_opd_booking.token_no");
 		$this->db->from('hms_std_eye_prescription');
-		$this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_std_eye_prescription.booking_id');
+		$this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_std_eye_prescription.booking_id','left');
 		$this->db->join('hms_patient', 'hms_patient.id = hms_std_eye_prescription.patient_id', 'left');
 
 		$this->db->where('hms_std_eye_prescription.is_deleted', '0');

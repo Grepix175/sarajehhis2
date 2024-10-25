@@ -340,7 +340,7 @@ $field_list = mandatory_section_field_list(2);
                                     <div class="col-md-6">
                                         <textarea rows="2" class="form-control input-height" name="reason_ffa_not_done"
                                             placeholder="Enter the reason FFA was not done"
-                                            required><?php echo isset($form_data['reason_ffa_not_done']) ? htmlspecialchars($form_data['reason_ffa_not_done']) : ''; ?></textarea>
+                                            ><?php echo isset($form_data['reason_ffa_not_done']) ? htmlspecialchars($form_data['reason_ffa_not_done']) : ''; ?></textarea>
                                     </div>
                                 </div>
                             </div>

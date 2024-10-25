@@ -107,7 +107,7 @@ class Vision extends CI_Controller
             $row[] = $vision->mobile_no;
             $row[] = $age;
             $row[] = $pat_status;
-            $row[] = $vision->procedure_purpose;
+            // $row[] = $vision->procedure_purpose;
             // $row[] = $vision->side_effect_name;
             // $row[] = $vision->informed_consent ? 'Yes' : 'No';
             // $row[] = $vision->previous_ffa ? 'Yes' : 'No';

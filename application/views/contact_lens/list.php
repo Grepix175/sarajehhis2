@@ -46,6 +46,10 @@ $users_data = $this->session->userdata('auth_users');
           "ajax": {
             "url": "<?php echo base_url('contact_lens/ajax_list') ?>",
             "type": "POST",
+            // "data": function (d) {
+            //     // Here you can add additional data if needed
+            //     d.search = $('#table_filter input').val(); // Uses the search box value
+            // }
           },
           "columnDefs": [
             {
@@ -56,6 +60,10 @@ $users_data = $this->session->userdata('auth_users');
           ],
 
         });
+        // Trigger search functionality in real-time
+    $('#table_filter input').unbind().bind('keyup', function () {
+        table.search(this.value).draw();
+    });
       });
     <?php } ?>
 

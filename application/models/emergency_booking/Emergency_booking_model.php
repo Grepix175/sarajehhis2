@@ -939,7 +939,7 @@ class Emergency_booking_model extends CI_Model
 			"subsidy_created" => date('Y-m-d H:i:s', strtotime($post['subsidy_created'])) ?? '',
 			"subsidy_amount" => $post['subsidy_amount'] ?? '',
 			"on_Set" => $post['on_set'] ?? '',
-			"nature_of_emergency" => implode(', ', $post['nature_of_emergency']) ?? '',
+			"nature_of_emergency" => isset($post['nature_of_emergency']) ? implode(', ', $post['nature_of_emergency']) : '',
 			"identification_mark" => $post['identification_mark'] ?? '',
 			"eme_booking_charge" => $post['eme_booking_charge'] ?? '',
 			"eme_reg_charge" => $post['eme_reg_charge'] ?? '',

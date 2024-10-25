@@ -16,7 +16,7 @@ class Token_no extends CI_Controller
     public function index()
     {
         // echo "hi";die;
-        $this->session->unset_userdata('patient_search');
+        $this->session->unset_userdata('token_search');
         // Default Search Setting
         $this->load->model('default_search_setting/default_search_setting_model');
         $default_search_data = $this->default_search_setting_model->get_default_setting();
@@ -29,7 +29,7 @@ class Token_no extends CI_Controller
         }
 
         $data['page_title'] = 'Patient List';
-        $data['form_data'] = array('token_no' => '', 'patient_code' => '', 'patient_id' => '', 'status' => '', 'from_date' => '', 'to_date' => '');
+        $data['form_data'] = array('token_no' => '', 'patient_code' => '', 'patient_id' => '', 'status' => '', 'from_date' => $start_date, 'to_date' => $end_date);
         $this->load->view('token_grid/opd_token_list', $data);
     }
 
@@ -293,6 +293,11 @@ class Token_no extends CI_Controller
             ob_end_clean();
             $objWriter->save('php://output');
         }
+    }
+
+    public function reset_search()
+    {
+        $this->session->unset_userdata('token_search');
     }
 
     

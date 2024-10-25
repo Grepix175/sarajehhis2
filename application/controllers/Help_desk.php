@@ -128,12 +128,13 @@ class Help_desk extends CI_Controller
         }
         $age .= ", " . $age_d . " " . $day;
       }
-
+      $gender = array('0' => 'Female', '1' => 'Male', '2' => 'Others');
       $row[] = '<input type="checkbox" name="prescription[]" class="checklist" value="' . $prescription->id . '">' . $check_script;
       $row[] = $prescription->token_no;
       $row[] = $prescription->booking_code;
       $row[] = $prescription->patient_code;
       $row[] = $prescription->patient_name;
+      $row[] = $gender[$prescription->gender];
       $row[] = $prescription->mobile_no;
       $row[] = $age;
       $values = array_filter([$pat_status, $contact_lens_txt, $hess_chart]);

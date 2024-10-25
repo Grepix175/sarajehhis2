@@ -245,8 +245,10 @@ $user_role = $users_data['users_role'];
     function reset_search() {
       $('#doctor_id').val('');
       $('#specialization_id').val('');
+      $('#from_date').val('');
+      $('#to_date').val('');
       $.ajax({
-        url: "<?php echo base_url(); ?>token_status/reset_search/",
+        url: "<?php echo base_url(); ?>token_no/reset_search/",
         success: function (result) {
           reload_table();
         }
