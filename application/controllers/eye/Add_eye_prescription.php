@@ -1132,10 +1132,7 @@ class Add_eye_prescription extends CI_Controller
     $data['patient_id'] = $result['patient_id'];
     $data['booking_id'] = $result['id'];
     $data['doctor_list'] = $this->add_prescript->get_doctor_list_both($result['branch_id']);
-
-    // echo "<pre>";
-    // print_r($post);
-    // die;
+    $flag = $this->input->get('flag');
     // unauthorise_permission('351','2108');
     if (!empty($post)) {
       $emeId = $test_id = $this->uri->segment(4);;
@@ -1144,7 +1141,16 @@ class Add_eye_prescription extends CI_Controller
       // die;
       $this->add_prescript->save($emeId);
       $this->session->set_flashdata('success', 'Prescription successfully added.');
-      redirect(base_url('help_desk'));
+      $flag = $this->input->get('flag');
+      if($flag == 'eye_history'){
+        redirect(base_url('help_desk'));
+        
+      }else{
+        // echo "<pre>";
+        // print_r('$post');
+        // die;
+        return redirect(base_url('hess_chart'));
+      }
     }
 
     if (!empty($pres_id)) {

@@ -282,7 +282,7 @@ class Hess_chart extends CI_Controller
     $to_date = $this->input->get('end_date');
 
     // Main header with date range if provided
-    $mainHeader = "Help Desk List";
+    $mainHeader = "Hess Chart List";
     if (!empty($from_date) && !empty($to_date)) {
       $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
     }
@@ -297,7 +297,7 @@ class Hess_chart extends CI_Controller
     $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
 
     // Field names (header row) should start in row 3
-    $fields = array('Token No.', 'OPD. No.', 'Patient Reg. No.', 'Patient Name', 'Mobile No.', 'Age', 'Patient Status');
+    $fields = array('Token No.', 'OPD. No.', 'Patient Reg. No.', 'Patient Name', 'Mobile No.', 'Age', 'Created Date');
 
     $col = 0; // Initialize the column index
     foreach ($fields as $field) {
@@ -372,7 +372,7 @@ class Hess_chart extends CI_Controller
           $opds->patient_name,
           $opds->mobile_no,
           $age,
-          $pat_status,
+          date('d-M-Y', strtotime($opds->created_date)),
         );
 
         foreach ($data as $cellValue) {
@@ -385,7 +385,7 @@ class Hess_chart extends CI_Controller
 
     // Send headers to force download of the file
     header('Content-Type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment;filename="help_desk_list_' . time() . '.xls"');
+    header('Content-Disposition: attachment;filename="hess_chart_list_' . time() . '.xls"');
     header('Cache-Control: max-age=0');
 
     // Write the Excel file
@@ -411,7 +411,7 @@ class Hess_chart extends CI_Controller
     // print_r($data);
     // die;
     // Create main header
-    $data['mainHeader'] = "Help Desk List";
+    $data['mainHeader'] = "Hess Chart List";
     if (!empty($from_date) && !empty($to_date)) {
       $data['mainHeader'] .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
     }
@@ -426,7 +426,7 @@ class Hess_chart extends CI_Controller
     $this->pdf->render();
 
     // Stream the generated PDF to the browser
-    $this->pdf->stream("help_desk_list_" . time() . ".pdf", array("Attachment" => 1));
+    $this->pdf->stream("hess_chart_list_" . time() . ".pdf", array("Attachment" => 1));
   }
 
   function deleteall()
