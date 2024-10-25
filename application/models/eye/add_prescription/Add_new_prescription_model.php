@@ -1644,14 +1644,22 @@ class Add_new_prescription_model extends CI_Model
 	{
 		$user_data = $this->session->userdata('auth_users');
 		$post = $this->input->post();
-		// 	echo "sagar";
-// 	echo "<pre>"; print_r($post); die;
-		$history_flag = isset($post['print_history_flag']) ? '1' : '0';
+	// 		echo "sagar";
+	// echo "<pre>"; print_r($post); die;
+		$history_flag = 0;
+		$drawing_flag = 0;
+		if($post['flag'] == 'hess_chart'){
+			$history_flag = 1;
+			$drawing_flag = isset($post['print_drawing_flag']) ? '1' : '0';
+		}else{
+
+			$history_flag = isset($post['print_history_flag']) ? '1' : '0';
+		}
 		$contactlens_flag = isset($post['print_contactlens_flag']) ? '1' : '0';
 		$glassesprescriptions_flag = isset($post['print_glassesprescriptions_flag']) ? '1' : '0';
 		$intermediate_glasses_prescriptions_flag = isset($post['print_intermediate_glasses_prescriptions_flag']) ? '1' : '0';
 		$examination_flag = isset($post['print_examination_flag']) ? '1' : '0';
-		$drawing_flag = isset($post['print_drawing_flag']) ? '1' : '0';
+		
 		$diagnosis_flag = isset($post['print_diagnosis_flag']) ? '1' : '0';
 		$investigations_flag = isset($post['print_investigations_flag']) ? '1' : '0';
 		$advice_flag = isset($post['print_advice_flag']) ? '1' : '0';
@@ -3943,10 +3951,12 @@ class Add_new_prescription_model extends CI_Model
 	}
 	public function get_prescription_by_id($booking_id = '', $presc_id = '')
 	{
-		$this->db->select('*');
-		$this->db->where('id', $presc_id);
-		$this->db->where('booking_id', $booking_id);
+		$this->db->select('hms_std_eye_prescription.*, hms_opd_booking.id AS opd_id, hms_opd_booking.token_no');
 		$this->db->from('hms_std_eye_prescription');
+		$this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_std_eye_prescription.booking_id','left');
+		$this->db->where('hms_std_eye_prescription.id', $presc_id);
+		$this->db->where('hms_std_eye_prescription.booking_id', $booking_id);
+		// echo $this->db->get_compiled_select(); 
 		$result = $this->db->get()->row_array();
 		return $result;
 	}

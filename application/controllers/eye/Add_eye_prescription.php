@@ -120,14 +120,13 @@ class Add_eye_prescription extends CI_Controller
     $result = $this->add_prescript->get_new_data_by_id($booking_id);
 
     $type = $this->input->get('type') ?? '';
-    if($type == 'eme_booking'){
-      $token_no = $this->emergency_booking->get_booking_details($booking_id);
+    if($type == 'eme_booking' || $type == 'help_desk'){
+      // $token_no = $this->emergency_booking->get_booking_details($booking_id);
+      $token_no = $this->opd->get_opd_details($booking_id);
+      
     }else{
       $token_no = $this->opd->get_opd_details($booking_id);
     }
-    // echo "<pre>";
-    // print_r($token_no);
-    // die;
     $this->opd->opd_status_update($booking_id);
     $data['flag'] = $this->input->get('flag') ?? '';
 
@@ -144,6 +143,10 @@ class Add_eye_prescription extends CI_Controller
 
 
     $data['form_data'] = array('history_flag' => 1, 'contactlens_flag' => 1, 'glassesprescriptions_flag' => 1, 'intermediate_glasses_prescriptions_flag' => 1, 'examination_flag' => 1, 'diagnosis_flag' => 1, 'investigations_flag' => 1, 'advice_flag' => 1, 'token_no' => $token_no['token_no'] ?? '', 'symptom_fever' => '', 'symptom_cough' => '', 'symptom_smell_taste', 'symptom_loose_stools' => '', 'symptom_local_zone' => '', 'symptom_travel' => '', 'symptom_contact' => '');
+    // echo "<pre>";
+    //   print_r($data['form_data']);
+    //   // print_r($booking_id);
+    //   die;
     /* Investigation Tab data */
     $data['eye_region'] = $this->general_model->eye_region();
     $data['lab_investigations'] = $this->general_model->lab_test_list();
@@ -165,8 +168,8 @@ class Add_eye_prescription extends CI_Controller
 
 
     if (!empty($pres_id)) {
-      // echo "<pre>"; print_r($pres_id); die;
       $pres_result = $this->add_prescript->get_prescription_by_id($booking_id, $pres_id);
+      // echo "<pre>"; print_r($pres_result); die;
       $result_edit = $this->add_prescript->get_prescription_new_by_id($booking_id, $pres_id);
       $result_refraction = $this->add_prescript->get_prescription_refraction_new_by_id($booking_id, $pres_id);
       $result_examination = $this->add_prescript->get_prescription_examination_id($booking_id, $pres_id);
@@ -395,6 +398,10 @@ class Add_eye_prescription extends CI_Controller
         'comment' => $result_edit['comment']
       );
     } else {
+      // echo "<pre>";
+      // print_r($data['form_data']);
+      // // print_r($booking_id);
+      // die;
       // echo "<pre>";
       // print_r($post);
       // die;
@@ -1153,7 +1160,7 @@ class Add_eye_prescription extends CI_Controller
         $this->session->set_userdata('eye_file_upload', '');
       }
     }
-    // echo "ddd";die;
+    // echo "<pre>";print_r($data);die;
     $this->load->view('eye/new_add_eye_prescription/prescription', $data);
   }
 
@@ -2029,7 +2036,14 @@ class Add_eye_prescription extends CI_Controller
     
     $stylesheet = file_get_contents(ROOT_CSS_PATH.'report_pdf.css'); 
     $this->m_pdf->pdf->WriteHTML($stylesheet,1); */
-    $middle_replace = $this->load->view('help_desk/view', $data, true);
+    $flag = $this->input->get('flag') ?? '';
+    
+    if(!empty($flag) &&  $flag == 'hess_chart'){
+      $middle_replace = $this->load->view('hess_chart/view', $data, true);
+    }else{
+      $middle_replace = $this->load->view('help_desk/view', $data, true);
+
+    }
 
     $middle_replace_part = str_replace("{prescription_data}", $middle_replace, $middle_replace_part);
     //echo $middle_replace_part;die;

@@ -56,18 +56,6 @@
 				</table>
 				<hr style="margin: 2px !important;">
 			<?php } ?>
-			<?php
-			// echo "<pre>";
-			// echo (isset($symptom_fever) && $symptom_fever == 0) ? 'checked' : '';
-			// print_r($symptom_fever);
-			// print_r($symptom_cough);
-			// print_r($symptom_smell_taste);
-			// print_r($symptom_loose_stools);
-			// print_r($symptom_local_zone);
-			// print_r($symptom_travel);
-			// print_r($symptom_contact);
-			// die;
-			?>
 
 			<div class="container">
 				<div class="box">
