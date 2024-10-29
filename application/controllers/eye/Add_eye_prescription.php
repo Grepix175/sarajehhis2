@@ -9,6 +9,7 @@ class Add_eye_prescription extends CI_Controller
     auth_users();
     $this->load->model('eye/add_prescription/add_new_prescription_model', 'add_prescript');
     $this->load->model('general/general_model');
+    error_reporting(E_ALL & ~E_NOTICE);
   }
 
   public function index($booking_id = "")
@@ -118,6 +119,8 @@ class Add_eye_prescription extends CI_Controller
     $plan_list = $this->plan_mgmt->get_plan_list();
     $data['vitals_list'] = $this->general_model->vitals_list();
     $result = $this->add_prescript->get_new_data_by_id($booking_id);
+    $data['booking_data'] = $this->add_prescript->get_booking_by_id($booking_id);
+
 
     $type = $this->input->get('type') ?? '';
     if($type == 'eme_booking' || $type == 'help_desk'){

@@ -198,43 +198,36 @@ class Hess_chart extends CI_Controller
         $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . '?flag=' . $flag . "&type=" . $type . "'";
         $btn_print_pre = ' <a class="btn-custom" onClick="return print_window_page(' . $print_url . ')" href="javascript:void(0)" title="Print History"  data-url="512"><i class="fa fa-print"></i> Print Hess Chart</a>';
       }
-      // if (in_array('2413', $users_data['permission']['action'])) {
-      //   if ($refraction_exists == 1) {
+        if (in_array('2413', $users_data['permission']['action'])) {
+          // Logic for $refraction
+          if ($refraction_exists == 1) {
+              $refraction = '<a class="btn-custom" disabled href="#" title="Refraction" style="pointer-events: none; opacity: 0.6;">Refraction</a>';
+          } else {
+              $refraction = '<a class="btn-custom" href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction">Refraction</a>';
+          }
+          // Logic for $send_to_vission
+          if ($patient_status == 1) {
+              $send_to_vission = '<a class="btn-custom disabled" href="#" title="Send To Vision" style="pointer-events: none; opacity: 0.6;">Vision</a>';
+          } else {
+              $send_to_vission = '<a class="btn-custom" href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Vision">Vision</a>';
+          }
+      }
 
-      //   $refraction = '<a class="btn-custom " disabled href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction</a>';
-      //   }else{
-      //     $refraction = '<a class="btn-custom" href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction</a>';
+      // Add buttons to the row
+      $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission . $btn_contact_lens . $btn_hess_chart;
 
-      //   }
-      // }
-      // if (in_array('2413', $users_data['permission']['action'])) {
-      //   $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . "'";
-      //   if ($patient_status == 1) {
-      //     $send_to_vission = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Vision</a>';
-      //   } else {
-      //     $send_to_vission = '<a class="btn-custom" href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Vision" data-url="512">Vision</a>';
-      //   }
-      // }
-
-      // $print_chasma_url = "'" . base_url('eye/add_eye_prescription/print_chasma_details/' . $prescription->id . '/' . $prescription->booking_id) . "'";
-      // $btn_print_chasma_pre = ' <a class="btn-custom" onClick="return print_window_page(' . $print_chasma_url . ')" href="javascript:void(0)" title="Print Chasma Detail"  data-url="512"><i class="fa fa-print"></i> Print Chasma Detail</a>';
-
-      // . $btn_print_chasma_pre
-      $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission . $btn_contact_lens .
-      $btn_hess_chart ;
-      // print_r($row);
       $data[] = $row;
       $i++;
-    }
+  }
 
-    $output = array(
+  $output = array(
       "draw" => $_POST['draw'],
       "recordsTotal" => $this->prescription->count_all(),
       "recordsFiltered" => $this->prescription->count_filtered(),
       "data" => $data,
-    );
-    echo json_encode($output);
-  }
+  );
+  echo json_encode($output);
+}
 
 
   public function advance_search()

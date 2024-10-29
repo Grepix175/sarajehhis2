@@ -122,6 +122,27 @@ class Contact_lens_model extends CI_Model
 		return $query->num_rows();
 	}
 
+	public function get_booking_by_id($booking_id)
+	{
+		// Select all fields from both tables
+		$this->db->select('hms_opd_booking.*, hms_patient.*'); // Select all fields
+		$this->db->from('hms_opd_booking'); // Start with the bookings table
+		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
+
+		// Filter by the booking ID
+		$this->db->where('hms_opd_booking.id', $booking_id); // Assuming 'id' is the primary key for bookings
+		$query = $this->db->get();
+
+		// Check if any results were returned
+		if ($query->num_rows() > 0) {
+			return $query->row_array(); // Return the first result as an associative array
+		}
+
+		return null; // Return null if no data found
+	}
+
+
+
 	public function count_all()
 	{
 		$this->db->from($this->table);
@@ -286,116 +307,118 @@ class Contact_lens_model extends CI_Model
 
 	function search_report_data($id = '', $booking_id = '', $patient_id = '')
 	{
+		// echo "<pre>";print_r($booking_id);die;
 		$search = $this->session->userdata('ipd_booking_search');
 		$user_data = $this->session->userdata('auth_users');
 
 		$this->db->select("
-		hms_contact_lens.id AS contact_lens_id,
-		hms_contact_lens.hospital_code,
-		hms_contact_lens.item_description,
-		hms_contact_lens.menufacturer,
-		hms_contact_lens.qty,
-		hms_contact_lens.unit,
-		hms_contact_lens.hospital_rate,
-		hms_contact_lens.created_date,
-		hms_contact_lens.booking_id,
-		hms_contact_lens.patient_id,
-		hms_patient.simulation_id,
-		hms_patient.patient_name,
-		hms_patient.patient_code,
-		hms_patient.gender,
-		hms_patient.mobile_no,
-		hms_patient.age_y,
-		hms_patient.age_m,
-		hms_patient.age_d,
-		hms_opd_booking.dilate_status,
-		hms_opd_booking.app_type,
-		hms_opd_booking.token_no,
-		hms_opd_booking.booking_code
-	");
+			hms_contact_lens.id AS contact_lens_id,
+			hms_contact_lens.hospital_code,
+			hms_contact_lens.item_description,
+			hms_contact_lens.menufacturer,
+			hms_contact_lens.qty,
+			hms_contact_lens.unit,
+			hms_contact_lens.hospital_rate,
+			hms_contact_lens.created_date,
+			hms_contact_lens.booking_id,
+			hms_contact_lens.patient_id,
+			hms_patient.simulation_id,
+			hms_patient.patient_name,
+			hms_patient.patient_code,
+			hms_patient.gender,
+			hms_patient.mobile_no,
+			hms_patient.age_y,
+			hms_patient.age_m,
+			hms_patient.age_d,
+			hms_opd_booking.dilate_status,
+			hms_opd_booking.app_type,
+			hms_opd_booking.token_no,
+			hms_opd_booking.booking_code
+		");
 	
-	$this->db->from('hms_contact_lens');
-	$this->db->join('hms_patient', 'hms_patient.id = hms_contact_lens.patient_id', 'left');
-	$this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_contact_lens.booking_id', 'left');
+		$this->db->from('hms_contact_lens');
+		$this->db->join('hms_patient', 'hms_patient.id = hms_contact_lens.patient_id', 'left');
+		$this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_contact_lens.booking_id', 'left');
 
-	$this->db->where('hms_contact_lens.booking_id', $booking_id);
-	$this->db->where('hms_contact_lens.patient_id', $patient_id);
-	
-	// Filter out deleted records
-	$this->db->where('hms_contact_lens.is_deleted', '0');
-	
-	// Role-based filtering (if necessary)
-	if ($user_data['users_role'] == 4) {
-		if (!empty($branch_id)) {
-			$this->db->where('hms_contact_lens.patient_id', $branch_id);
+		$this->db->where('hms_contact_lens.booking_id', $booking_id);
+		$this->db->where('hms_contact_lens.patient_id', $patient_id);
+		
+		// Filter out deleted records
+		$this->db->where('hms_contact_lens.is_deleted', '0');
+		
+		// Role-based filtering (if necessary)
+		if ($user_data['users_role'] == 4) {
+			if (!empty($branch_id)) {
+				$this->db->where('hms_contact_lens.patient_id', $branch_id);
+			} else {
+				$this->db->where('hms_contact_lens.patient_id', $user_data['parent_id']);
+			}
+		} elseif ($user_data['users_role'] == 3) {
+			$this->db->where('hms_opd_booking.referral_doctor', $user_data['parent_id']);
 		} else {
-			$this->db->where('hms_contact_lens.patient_id', $user_data['parent_id']);
+			if (!empty($branch_id)) {
+				$this->db->where('hms_contact_lens.branch_id', $branch_id);
+			} else {
+				$this->db->where('hms_contact_lens.branch_id', $user_data['parent_id']);
+			}
 		}
-	} elseif ($user_data['users_role'] == 3) {
-		$this->db->where('hms_opd_booking.referral_doctor', $user_data['parent_id']);
-	} else {
-		if (!empty($branch_id)) {
-			$this->db->where('hms_contact_lens.branch_id', $branch_id);
-		} else {
-			$this->db->where('hms_contact_lens.branch_id', $user_data['parent_id']);
+		
+		// Execute the query
+		$query = $this->db->get();
+		
+		// Check for errors
+		if (!$query) {
+			log_message('error', 'Query failed: ' . $this->db->last_query());
+			log_message('error', 'Error message: ' . $this->db->error()['message']);
+			return []; // Handle error appropriately
 		}
-	}
-	
-	// Execute the query
-	$query = $this->db->get();
-	
-	// Check for errors
-	if (!$query) {
-		log_message('error', 'Query failed: ' . $this->db->last_query());
-		log_message('error', 'Error message: ' . $this->db->error()['message']);
-		return []; // Handle error appropriately
-	}
-	
-	// Initialize an array to hold the structured results
-	$results = [];
-	
-	// Process the query results
-	foreach ($query->result() as $row) {
-		// Create a unique key based on patient and booking ID
-		$key = $row->patient_id . '-' . $row->booking_id;
-	
-		// Check if the patient already exists in the results
-		if (!isset($results[$key])) {
-			// Initialize the patient object
-			$results[$key] = [
-				'patient_id' => $row->patient_id,
-				'simulation_id' => $row->simulation_id,
-				'patient_name' => $row->patient_name,
-				'patient_code' => $row->patient_code,
-				'mobile_no' => $row->mobile_no,
-				'age_y' => $row->age_y,
-				'age_m' => $row->age_m,
-				'age_d' => $row->age_d,
-				'dilate_status' => $row->dilate_status,
-				'app_type' => $row->app_type,
-				'token_no' => $row->token_no,
-				'booking_code' => $row->booking_code,
-				'contact_lens' => [] // Initialize empty array for contact lens records
+		
+		// Initialize an array to hold the structured results
+		$results = [];
+		
+		// Process the query results
+		foreach ($query->result() as $row) {
+			// Create a unique key based on patient and booking ID
+			$key = $row->patient_id . '-' . $row->booking_id;
+		
+			// Check if the patient already exists in the results
+			if (!isset($results[$key])) {
+				// Initialize the patient object
+				$results[$key] = [
+					'patient_id' => $row->patient_id,
+					'simulation_id' => $row->simulation_id,
+					'patient_name' => $row->patient_name,
+					'patient_code' => $row->patient_code,
+					'mobile_no' => $row->mobile_no,
+					'gender' => $row->gender,
+					'age_y' => $row->age_y,
+					'age_m' => $row->age_m,
+					'age_d' => $row->age_d,
+					'dilate_status' => $row->dilate_status,
+					'app_type' => $row->app_type,
+					'token_no' => $row->token_no,
+					'booking_code' => $row->booking_code,
+					'contact_lens' => [] // Initialize empty array for contact lens records
+				];
+			}
+		
+			// Add the contact lens record to the patient's contact lens array
+			$results[$key]['contact_lens'][] = [
+				'id' => $row->contact_lens_id,
+				'booking_id' => $row->booking_id,
+				'hospital_code' => $row->hospital_code,
+				'item_description' => $row->item_description,
+				'menufacturer' => $row->menufacturer,
+				'qty' => $row->qty,
+				'unit' => $row->unit,
+				'hospital_rate' => $row->hospital_rate,
+				'created_date' => $row->created_date
 			];
 		}
-	
-		// Add the contact lens record to the patient's contact lens array
-		$results[$key]['contact_lens'][] = [
-			'id' => $row->contact_lens_id,
-			'booking_id' => $row->booking_id,
-			'hospital_code' => $row->hospital_code,
-			'item_description' => $row->item_description,
-			'menufacturer' => $row->menufacturer,
-			'qty' => $row->qty,
-			'unit' => $row->unit,
-			'hospital_rate' => $row->hospital_rate,
-			'created_date' => $row->created_date
-		];
-	}
-	
-	// Return the structured array as an array of objects
-	return array_values($results); // Convert associative array back to indexed array
-	
+		
+		// Return the structured array as an array of objects
+		return array_values($results); // Convert associative array back to indexed array
+		
 
 
 

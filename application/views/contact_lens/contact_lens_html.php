@@ -1,5 +1,5 @@
 <html>
-
+<?php error_reporting(E_ALL & ~E_DEPRECATED & ~E_WARNING); ?>
 <head>
     <title>Contact Lens List</title>
     <?php
@@ -14,14 +14,30 @@
     ?>
     <style>
         body {
-            font-size: 10px;
+            font-size: 7px; /* Reduced font size */
         }
-
+        table{
+            margin-top: 5px;
+        }
         td {
             padding-left: 3px;
         }
-    </style>
-    <style>
+
+        .footer {
+            position: absolute; /* Fixed position at the bottom */
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 11px; /* Smaller font size for footer text */
+        }
+
+        .footer hr {
+            border: none;
+            border-top: 1px solid #000; /* Line style */
+            margin: 0; /* Remove margins */
+        }
+
         .patient-info-table {
             width: 100%;
             border: 1px solid #000;
@@ -34,14 +50,10 @@
             vertical-align: top;
         }
 
-        .patient-info-table th,
-        .patient-info-table td {
-            border: none;
-        }
-
         .info-label {
             font-weight: bold;
             white-space: nowrap;
+            padding-right: 5px; /* Space between label and content */
         }
 
         .info-content {
@@ -53,54 +65,60 @@
             width: 50%;
         }
 
+        /* Ensure all labels and contents in both columns align vertically */
         .left-column td,
         .right-column td {
             padding: 2px;
         }
 
-        .right-column .info-label {
-            text-align: right;
+        /* Ensure that the tables in both columns align to the top */
+        .left-column table, 
+        .right-column table {
+            width: 100%; /* Ensures full width usage */
+            border-collapse: collapse; /* Remove spaces between inner table cells */
         }
     </style>
 </head>
 
 <body>
-<?php
-        // Loop through the contact lens data
-        $age_y = $data_list[0]['age_y'];
-        $age_m = $data_list[0]['age_m'];
-        $age_d = $data_list[0]['age_d'];
+    <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p>
 
-        $age = "";
-        if ($age_y > 0) {
-            $year = 'Years';
-            if ($age_y == 1) {
-                $year = 'Year';
-            }
-            $age .= $age_y . " " . $year;
+    <?php
+    // Loop through the contact lens data
+    $age_y = $data_list[0]['age_y'];
+    $age_m = $data_list[0]['age_m'];
+    $age_d = $data_list[0]['age_d'];
+
+    $age = "";
+    if ($age_y > 0) {
+        $year = 'Years';
+        if ($age_y == 1) {
+            $year = 'Year';
         }
-        if ($age_m > 0) {
-            $month = 'Months';
-            if ($age_m == 1) {
-                $month = 'Month';
-            }
-            $age .= ", " . $age_m . " " . $month;
+        $age .= $age_y . " " . $year;
+    }
+    if ($age_m > 0) {
+        $month = 'Months';
+        if ($age_m == 1) {
+            $month = 'Month';
         }
-        if ($age_d > 0) {
-            $day = 'Days';
-            if ($age_d == 1) {
-                $day = 'Day';
-            }
-            $age .= ", " . $age_d . " " . $day;
+        $age .= ", " . $age_m . " " . $month;
+    }
+    if ($age_d > 0) {
+        $day = 'Days';
+        if ($age_d == 1) {
+            $day = 'Day';
         }
-        ?>
-    <table class="patient-info-table">
+        $age .= ", " . $age_d . " " . $day;
+    }
+    ?>
+    <table class="patient-info-table" style=" margin-top: 20px; ">
         <tr>
             <td class="left-column">
                 <table>
                     <tr>
                         <td class="info-label">Patient</td>
-                        <td class="info-content">:<?php echo $data_list[0]['patient_name']; ?></td>
+                        <td class="info-content">: <?php echo $data_list[0]['patient_name']; ?></td>
                     </tr>
                     <tr>
                         <td class="info-label">Patient Reg. No</td>
@@ -109,6 +127,10 @@
                     <tr>
                         <td class="info-label">Token No</td>
                         <td class="info-content">: <?php echo $data_list[0]['token_no']; ?></td>
+                    </tr>
+                    <tr>
+                        <td class="info-label">OPD No</td>
+                        <td class="info-content">: <?php echo $data_list[0]['booking_code']; ?></td>
                     </tr>
                 </table>
             </td>
@@ -123,77 +145,21 @@
                         <td class="info-content">: <?php echo $age; ?></td>
                     </tr>
                     <tr>
-                        <td class="info-label">Gender:</td>
-                        <td class="info-content">: <?php echo $data_list[0]['gender']; ?></td>
+                        <td class="info-label">Gender</td>
+                        <td class="info-content">: <?php echo ($booking_data['gender'] == '0') ? 'Female' : 'Male'; ?></td>
                     </tr>
-
                 </table>
             </td>
         </tr>
     </table>
-    <!-- Patient Details Section -->
-    <!-- <table width="100%" cellpadding="5" cellspacing="0" border="1"
-        style="font-family: Arial, sans-serif; font-size: 12px; border-collapse: collapse;">
-        <tr>
-            <td colspan="2"
-                style="font-weight: bold; font-size: 14px; text-align: center; padding: 10px 0; font-family: Arial, sans-serif; border: 1px solid black;">
-                Patient Details
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: center; border: 1px solid black;"><strong>Name:</strong>
-                <?php echo $data_list[0]['patient_name']; ?></td>
-            <td style="text-align: center; border: 1px solid black;"><strong>Patient Reg. No:</strong>
-                <?php echo $data_list[0]['patient_code']; ?></td>
-        </tr>
-        <?php
-        // Loop through the contact lens data
-        $age_y = $data_list[0]['age_y'];
-        $age_m = $data_list[0]['age_m'];
-        $age_d = $data_list[0]['age_d'];
-
-        $age = "";
-        if ($age_y > 0) {
-            $year = 'Years';
-            if ($age_y == 1) {
-                $year = 'Year';
-            }
-            $age .= $age_y . " " . $year;
-        }
-        if ($age_m > 0) {
-            $month = 'Months';
-            if ($age_m == 1) {
-                $month = 'Month';
-            }
-            $age .= ", " . $age_m . " " . $month;
-        }
-        if ($age_d > 0) {
-            $day = 'Days';
-            if ($age_d == 1) {
-                $day = 'Day';
-            }
-            $age .= ", " . $age_d . " " . $day;
-        }
-        ?>
-        <tr>
-            <td style="text-align: center; border: 1px solid black;"><strong>Mobile No:</strong>
-                <?php echo $data_list[0]['mobile_no']; ?></td>
-            <td style="text-align: center; border: 1px solid black;"><strong>Age:</strong> <?php echo $age; ?></td>
-        </tr>
-        <tr>
-            <td style="text-align: center; border: 1px solid black;"><strong>Gender:</strong>
-                <?php echo $data_list[0]['gender']; ?></td>
-        </tr>
-    </table> -->
-
 
     <table width="100%" cellpadding="5" cellspacing="0"
-        style="font:14px Arial; margin-bottom: 10px;  margin-top: 10px;  text-align: center;">
+        style="font:10px Arial; margin-bottom: 10px;  margin-top: 20px;  text-align: center;">
         <tr>
             <td><strong>Internal Communications</strong></td>
         </tr>
     </table>
-    <h3><strong>With Intermidiate effect below mentioned device is chargeable to patient for Contact Lens</strong></h3>
+    <h3 style="font-size: 12px;"><strong>With Intermidiate effect below mentioned device is chargeable to patient for Contact Lens</strong></h3>
     <table width="100%" cellpadding="0" cellspacing="0" border="1px">
         <tr>
             <th>Sr. No</th>
@@ -204,16 +170,11 @@
             <th> Unit </th>
             <th> Hospital Rate </th>
             <th> Created Date </th>
-
         </tr>
         <?php
         if (!empty($data_list)) {
-            //  echo "<pre>";print_r($data_list);
             $i = 1;
             foreach ($data_list[0]['contact_lens'] as $contact_lens) {
-                // echo "<pre>";
-                // print_r($contact_lens);
-                // die;
                 if ($contact_lens->discharge_date == '0000-00-00 00:00:00') {
                     $createdate = '';
                 } else {
@@ -236,19 +197,24 @@
         }
         ?>
     </table>
-    <div style="margin-top:20px; margin-bottom: 20px;">
+    <div style="margin-top: 40px; margin-bottom: 20px;">
         <div style="margin-bottom: 24px; display: flex; justify-content: space-between;">
             <div style="text-align: left; width: 48%;">
-                <p style="font-weight: bold;">Signature</p>
-                <div style="border-top: 1px solid #000; padding-top: 8px; width: 50%; margin-top: 24px;">
+                <p style="font-weight: bold; font-size: 10px; margin-top: 10px;">Signature</p> <!-- Increased font size -->
+                <div style="border-top: 1px solid #000; padding-top: 8px; width: 50%; margin-top: 30px;"> <!-- Increased margin-top -->
                 </div>
             </div>
             <div style="text-align: right; width: 48%;">
-                <p style="font-weight: bold;">Signature</p>
-                <div style="border-top: 1px solid #000; padding-top: 8px; width: 50%; margin-top: 24px; float: right;">
+                <p style="font-weight: bold; font-size: 10px; margin-top: 10px;">Signature</p> <!-- Increased font size -->
+                <div style="border-top: 1px solid #000; padding-top: 8px; width: 50%; margin-top: 30px; float: right;"> <!-- Increased margin-top -->
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="footer">
+        <hr />
+        <p>Powered by Sara Software</p>
     </div>
 </body>
 
