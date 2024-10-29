@@ -36,6 +36,7 @@ class Contact_lens extends CI_Controller
         $data = array();
         $no = $_POST['start'];
         $i = 1;
+        $total_num = '';
         foreach ($list as $contact_lens) {
             $no++;
             $row = array();
@@ -144,6 +145,7 @@ class Contact_lens extends CI_Controller
         $data['item_desc_list'] = $this->hospital_entry->item_desc_list();
         $data['unit_list'] = $this->hospital_entry->unit_list();
         $data['manuf_company_list'] = $this->hospital_entry->manuf_company_list();
+        $data['booking_data'] = $this->contact_lens->get_booking_by_id($booking_id);
 
         // Initialize form data
         $data['form_data'] = array(
