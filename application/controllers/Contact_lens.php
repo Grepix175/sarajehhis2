@@ -225,6 +225,8 @@ class Contact_lens extends CI_Controller
             $data['item_desc_list'] = $this->hospital_entry->item_desc_list();
             $data['unit_list'] = $this->hospital_entry->unit_list();
             $data['manuf_company_list'] = $this->hospital_entry->manuf_company_list();
+            $data['booking_data'] = $this->contact_lens->get_booking_by_id($booking_id);
+
             // $data['contact_lens'] = 
 
             // Retrieve the brand by ID
