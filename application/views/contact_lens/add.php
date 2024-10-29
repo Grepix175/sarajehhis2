@@ -36,9 +36,10 @@ $field_list = mandatory_section_field_list(2);
     <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datepicker.js"></script>
 
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        /* table {s */
+        td{
+            width: auto !important;
+            text-align: unset !important;
         }
 
         th,
@@ -57,7 +58,6 @@ $field_list = mandatory_section_field_list(2);
             width: 100%;
             padding: 6px;
             box-sizing: border-box;
-            border: none;
             outline: none;
         }
 
@@ -106,6 +106,90 @@ $field_list = mandatory_section_field_list(2);
                 <input type="hidden" name="patient_id" id="patient_id"
                     value="<?php echo isset($form_data['patient_id']) ? $form_data['patient_id'] : ''; ?>">
                 <div class="content-inner">
+                    <?php //echo "<pre>";print_r($booking_data);die('plp'); ?>
+                    <?php
+                        // Loop through the contact lens data
+                        $age_y = $booking_data['age_y'];
+                        $age_m = $booking_data['age_m'];
+                        $age_d = $booking_data['age_d'];
+
+                        $age = "";
+                        if ($age_y > 0) {
+                            $year = 'Years';
+                            if ($age_y == 1) {
+                                $year = 'Year';
+                            }
+                            $age .= $age_y . " " . $year;
+                        }
+                        if ($age_m > 0) {
+                            $month = 'Months';
+                            if ($age_m == 1) {
+                                $month = 'Month';
+                            }
+                            $age .= ", " . $age_m . " " . $month;
+                        }
+                        if ($age_d > 0) {
+                            $day = 'Days';
+                            if ($age_d == 1) {
+                                $day = 'Day';
+                            }
+                            $age .= ", " . $age_d . " " . $day;
+                        }
+                        ?>
+                        <div class="row">
+                            <div class="col-xs-5">
+                                <div class="row m-b-5">
+                                    <div class="col-xs-4"><strong>Patient</strong></div>
+                                    <div class="col-xs-8">
+                                        <input type="text" name="patient_name" value="<?php echo isset($booking_data['patient_name']) ? $booking_data['patient_name'] : 'N/A'; ?>" readonly="">
+                                    </div>
+                                </div>
+                                <div class="row m-b-5">
+                                    <div class="col-xs-4"><strong>Patient Reg. No</strong></div>
+                                    <div class="col-xs-8">
+                                        <input type="text" name="patient_code" value="<?php echo isset($booking_data['patient_code']) ? $booking_data['patient_code'] : 'N/A'; ?>" readonly="">
+                                    </div>
+                                </div>
+                                <div class="row m-b-5">
+                                    <div class="col-xs-4"><strong>OPD No</strong></div>
+                                    <div class="col-xs-8">
+                                        <input type="text" name="booking_code" value="<?php echo isset($booking_data['booking_code']) ? $booking_data['booking_code'] : 'N/A'; ?>" readonly="">
+                                    </div>
+                                    
+                                </div>
+                                <div class="row m-b-5">
+                                        <div class="col-xs-4"><strong>Token No</strong></div>
+                                        <div class="col-xs-8">
+                                            <input type="text" name="booking_code" value="<?php echo isset($booking_data['token_no']) ? $booking_data['token_no'] : 'N/A'; ?>" readonly="">
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="col-xs-5">
+                                <div class="row m-b-5">
+                                    <div class="col-xs-4"><strong>Mobile no.</strong></div>
+                                    <div class="col-xs-8">
+                                        <input type="text" name="mobile_no" value="<?php echo isset($booking_data['mobile_no']) ? $booking_data['mobile_no'] : 'N/A'; ?>" readonly="">
+                                    </div>
+                                </div>
+                                <div class="row m-b-5">
+                                    <div class="col-xs-4"><strong>Age</strong></div>
+                                    <div class="col-xs-8">
+                                        <input type="text" name="mobile_no" value="<?php echo isset($age) ? $age : 'N/A'; ?>" readonly="">
+                                    </div>
+                                </div>
+                                <div class="row m-b-5">
+                                    <div class="col-xs-4"><strong>Gender</strong></div>
+                                    <div class="col-xs-8">
+                                        <input type="text" name="gender" value="<?php echo ($booking_data['gender'] == '0') ? 'Female' : 'Male'; ?>" readonly="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+
+
+
+
                     <h3>Internal Communications</h3>
                     <h5>With Intermidiate effect below mentioned device is chargeable to patient for Contact Lens</h5>
                     <div class="pat-col">

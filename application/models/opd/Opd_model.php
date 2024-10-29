@@ -6269,6 +6269,24 @@ class Opd_model extends CI_Model
 		return 0; //
 
 	}
+	public function get_booking_by_id($booking_id)
+	{
+		// Select all fields from both tables
+		$this->db->select('hms_opd_booking.*, hms_patient.*'); // Select all fields
+		$this->db->from('hms_opd_booking'); // Start with the bookings table
+		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
+
+		// Filter by the booking ID
+		$this->db->where('hms_opd_booking.id', $booking_id); // Assuming 'id' is the primary key for bookings
+		$query = $this->db->get();
+
+		// Check if any results were returned
+		if ($query->num_rows() > 0) {
+			return $query->row_array(); // Return the first result as an associative array
+		}
+
+		return null; // Return null if no data found
+	}
 
 	function get_by_id_refraction($id = '')
 	{
