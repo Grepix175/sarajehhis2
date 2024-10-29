@@ -56,12 +56,16 @@ class Tokenno_model extends CI_Model
 
             // Apply date filter if provided
             if (!empty($opd_search['from_date']) && !empty($opd_search['to_date'])) {
-                $this->db->where('DATE(hms_token.created_date) >=', $opd_search['from_date']);
-                $this->db->where('DATE(hms_token.created_date) <=', $opd_search['to_date']);
+                $start_date = date('Y-m-d 00:00:00', strtotime($opd_search['from_date']));
+                $end_date = date('Y-m-d 23:59:59', strtotime($opd_search['to_date']));
+                $this->db->where('DATE(hms_token.created_date) >=', $start_date);
+                $this->db->where('DATE(hms_token.created_date) <=', $end_date);
             } elseif (!empty($opd_search['from_date'])) {
-                $this->db->where('DATE(hms_token.created_date) >=', $opd_search['from_date']);
+                $start_date = date('Y-m-d 00:00:00', strtotime($opd_search['from_date']));
+                $this->db->where('DATE(hms_token.created_date) >=', $start_date);
             } elseif (!empty($opd_search['to_date'])) {
-                $this->db->where('DATE(hms_token.created_date) <=', $opd_search['to_date']);
+                $end_date = date('Y-m-d 23:59:59', strtotime($opd_search['to_date']));
+                $this->db->where('DATE(hms_token.created_date) <=', $end_date);
             }
 
             // Apply status filter if provided
@@ -109,13 +113,25 @@ class Tokenno_model extends CI_Model
             }
 
             // Apply date filter
-            if (!empty($criteria['from_date']) && !empty($criteria['to_date'])) {
-                $this->db->where('DATE(hms_token.created_date) >=', $criteria['from_date']);
-                $this->db->where('DATE(hms_token.created_date) <=', $criteria['to_date']);
-            } elseif (!empty($criteria['from_date'])) {
-                $this->db->where('DATE(hms_token.created_date) >=', $criteria['from_date']);
-            } elseif (!empty($criteria['to_date'])) {
-                $this->db->where('DATE(hms_token.created_date) <=', $criteria['to_date']);
+            // if (!empty($criteria['from_date']) && !empty($criteria['to_date'])) {
+            //     $this->db->where('DATE(hms_token.created_date) >=', $criteria['from_date']);
+            //     $this->db->where('DATE(hms_token.created_date) <=', $criteria['to_date']);
+            // } elseif (!empty($criteria['from_date'])) {
+            //     $this->db->where('DATE(hms_token.created_date) >=', $criteria['from_date']);
+            // } elseif (!empty($criteria['to_date'])) {
+            //     $this->db->where('DATE(hms_token.created_date) <=', $criteria['to_date']);
+            // }
+            if (!empty($opd_search['from_date']) && !empty($opd_search['to_date'])) {
+                $start_date = date('Y-m-d 00:00:00', strtotime($opd_search['from_date']));
+                $end_date = date('Y-m-d 23:59:59', strtotime($opd_search['to_date']));
+                $this->db->where('DATE(hms_token.created_date) >=', $start_date);
+                $this->db->where('DATE(hms_token.created_date) <=', $end_date);
+            } elseif (!empty($opd_search['from_date'])) {
+                $start_date = date('Y-m-d 00:00:00', strtotime($opd_search['from_date']));
+                $this->db->where('DATE(hms_token.created_date) >=', $start_date);
+            } elseif (!empty($opd_search['to_date'])) {
+                $end_date = date('Y-m-d 23:59:59', strtotime($opd_search['to_date']));
+                $this->db->where('DATE(hms_token.created_date) <=', $end_date);
             }
         }
     }

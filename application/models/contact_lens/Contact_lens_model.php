@@ -166,7 +166,9 @@ class Contact_lens_model extends CI_Model
 	{
 		$user_data = $this->session->userdata('auth_users');
 		$post = $this->input->post();
-
+		// echo "<pre>";
+		// print_r($post['contact_lens_items']);
+		// die;
 		// Initializing the data ID
 		$data_id = $post['data_id'] ?? null;
 
@@ -193,7 +195,7 @@ class Contact_lens_model extends CI_Model
 				$this->db->delete('hms_contact_lens');
 
 				// Insert new or updated items
-				$this->insert_items($data_id, $post['items'], $user_data, $post);
+				$this->insert_items($data_id, $post['contact_lens_items'], $user_data, $post);
 			}
 
 		} else { // If `data_id` is not provided, perform an insert
@@ -205,8 +207,8 @@ class Contact_lens_model extends CI_Model
 
 			// Get the last inserted ID for the new record
 			// Insert the items if available
-			if (isset($post['items']) && !empty($post['items'])) {
-				$this->insert_items($data_id, $post['items'], $user_data, $post);
+			if (isset($post['contact_lens_items']) && !empty($post['contact_lens_items'])) {
+				$this->insert_items($data_id, $post['contact_lens_items'], $user_data, $post);
 			}
 			$data_id = $this->db->insert_id();
 
@@ -217,23 +219,24 @@ class Contact_lens_model extends CI_Model
 	}
 
 	// Helper function to insert items related to the main contact lens entry
-	private function insert_items($data_id, $items, $user_data, $post)
+	private function insert_items($data_id, $contact_lens_items_json, $user_data, $post)
 	{
-
+		$items = json_decode($contact_lens_items_json, true);
+		// echo "<pre>";
+		// print_r($items);
+		// die;
 		foreach ($items as $item) {
-			// echo "<pre>";
-			// print_r($item);
 			$item_data = [
 				// 'contact_lens_id' => $data_id,
 				// 'sl_no' => isset($item['sl_no']) ? $item['sl_no'] : null,
 				'branch_id' => $user_data['parent_id'],
 				'booking_id' => $post['booking_id'],
 				'patient_id' => $post['patient_id'],
-				'hospital_code' => isset($item['hospital_code']) ? $item['hospital_code'] : null,
-				'item_description' => isset($item['item_description']) ? $item['item_description'] : null,
-				'menufacturer' => isset($item['menufacturer']) ? $item['menufacturer'] : null,
+				'hospital_code' => isset($item['hospital_code_name']) ? $item['hospital_code_name'] : null,
+				'item_description' => isset($item['item_description_name']) ? $item['item_description_name'] : null,
+				'menufacturer' => isset($item['manufacturer_name']) ? $item['manufacturer_name'] : null,
 				'qty' => isset($item['qty']) ? $item['qty'] : null,
-				'unit' => isset($item['unit']) ? $item['unit'] : null,
+				'unit' => isset($item['unit_name']) ? $item['unit_name'] : null,
 				'hospital_rate' => isset($item['hospital_rate']) ? $item['hospital_rate'] : null,
 				'created_date' => date('Y-m-d H:i:s'),
 				'ip_address' => $_SERVER['REMOTE_ADDR'],

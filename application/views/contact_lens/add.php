@@ -71,7 +71,7 @@ $field_list = mandatory_section_field_list(2);
 
         .pat-col {
             float: left;
-            width: 89% !important;
+            width: 100% !important;
         }
 
         h5 {
@@ -212,19 +212,54 @@ $field_list = mandatory_section_field_list(2);
                                         <tr>
                                             <td><input type="text" name="items[<?php echo $index; ?>][sl_no]"
                                                     value="<?php echo $index + 1; ?>" readonly></td>
-                                            <td><input type="text" name="items[<?php echo $index; ?>][hospital_code]"
-                                                    value="<?php echo $item['hospital_code']; ?>"
-                                                    placeholder="Enter Hospital Code"></td>
-                                            <td><input type="text" name="items[<?php echo $index; ?>][item_description]"
-                                                    value="<?php echo $item['item_description']; ?>"
-                                                    placeholder="Enter Item Description"></td>
-                                            <td><input type="text" name="items[<?php echo $index; ?>][menufacturer]"
-                                                    value="<?php echo $item['menufacturer']; ?>"
-                                                    placeholder="Enter Manufacturer"></td>
+                                            <td>
+                                                <select id="hospital_code_dropdown_<?php echo $index; ?>" name="items[<?php echo $index; ?>][hospital_code]"
+                                                    class="hospital_code_dropdown" data-index="<?php echo $index; ?>">
+                                                    <option value="">Select Hospital Code</option>
+                                                    <?php foreach ($hospital_code_list as $code): ?>
+                                                        <option value="<?php echo $code->id; ?>" <?php echo ($code->hospital_code == $item['hospital_code']) ? 'selected' : ''; ?>>
+                                                            <?php echo $code->hospital_code; ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                
+                                                <select id="item_description_dropdown_<?php echo $index; ?>" name="items[<?php echo $index; ?>][item_description]"
+                                                    class="item_description_dropdown" data-index="<?php echo $index; ?>">
+                                                    <option value="">Select Item Description</option>
+                                                    <?php foreach ($item_desc_list as $desc): ?>
+                                                        <option value="<?php echo $desc->id; ?>" <?php echo ($desc->item_desc == $item['item_description']) ? 'selected' : ''; ?>>
+                                                            <?php echo $desc->item_desc; ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                
+                                                <select id="manufacturer_dropdown_<?php echo $index; ?>" name="items[<?php echo $index; ?>][manufacturer]"
+                                                    class="manufacturer_dropdown" data-index="<?php echo $index; ?>">
+                                                    <option value="">Select Manufacturer</option>
+                                                    <?php foreach ($manuf_company_list as $manufacturer): ?>
+                                                        <option value="<?php echo $manufacturer->id; ?>" <?php echo ($manufacturer->company_name === $item['menufacturer']) ? 'selected' : ''; ?>>
+                                                            <?php echo $manufacturer->company_name; ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </td>
                                             <td><input type="number" name="items[<?php echo $index; ?>][qty]"
                                                     value="<?php echo $item['qty']; ?>" placeholder="Qty"></td>
-                                            <td><input type="text" name="items[<?php echo $index; ?>][unit]"
-                                                    value="<?php echo $item['unit']; ?>" placeholder="Unit"></td>
+                                            <td>
+                                                <select id="unit_dropdown_<?php echo $index; ?>" name="items[<?php echo $index; ?>][unit]" class="unit_dropdown"
+                                                    data-index="<?php echo $index; ?>">
+                                                    <option value="">Select Unit</option>
+                                                    <?php foreach ($unit_list as $unit): ?>
+                                                        <option value="<?php echo $unit->id; ?>" <?php echo ($unit->medicine_unit == $item['unit']) ? 'selected' : ''; ?>>
+                                                            <?php echo $unit->medicine_unit; ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </td>
                                             <td><input type="text" name="items[<?php echo $index; ?>][hospital_rate]"
                                                     value="<?php echo $item['hospital_rate']; ?>" placeholder="Rate"></td>
                                             <td><button type="button" class="removeRowBtn">Remove</button></td>
@@ -233,14 +268,47 @@ $field_list = mandatory_section_field_list(2);
                                 <?php else: ?>
                                     <tr>
                                         <td><input type="text" name="items[0][sl_no]" value="1" readonly></td>
-                                        <td><input type="text" name="items[0][hospital_code]"
-                                                placeholder="Enter Hospital Code"></td>
-                                        <td><input type="text" name="items[0][item_description]"
-                                                placeholder="Enter Item Description"></td>
-                                        <td><input type="text" name="items[0][menufacturer]"
-                                                placeholder="Enter Manufacturer"></td>
+                                        <td>
+                                            <select id="hospital_code_dropdown_0" name="items[0][hospital_code]" class="hospital_code_dropdown"
+                                                data-index="0">
+                                                <option value="">Select Hospital Code</option>
+                                                <?php foreach ($hospital_code_list as $code): ?>
+                                                    <option value="<?php echo $code->id; ?>"><?php echo $code->hospital_code; ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select id="item_description_dropdown_0" name="items[0][item_description]" class="item_description_dropdown"
+                                                data-index="0">
+                                                <option value="">Select Item Description</option>
+                                                <?php foreach ($item_desc_list as $desc): ?>
+                                                    <option value="<?php echo $desc->id; ?>"><?php echo $desc->item_desc; ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select id="manufacturer_dropdown_0" name="items[0][manufacturer]" class="manufacturer_dropdown"
+                                                data-index="0">
+                                                <option value="">Select Manufacturer</option>
+                                                <?php foreach ($manuf_company_list as $manufacturer): ?>
+                                                    <option value="<?php echo $manufacturer->id; ?>">
+                                                        <?php echo $manufacturer->company_name; ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </td>
                                         <td><input type="number" name="items[0][qty]" placeholder="Qty"></td>
-                                        <td><input type="text" name="items[0][unit]" placeholder="Unit"></td>
+                                        <td>
+                                            <select id="unit_dropdown_0" name="items[0][unit]" class="unit_dropdown" data-index="0">
+                                                <option value="">Select Unit</option>
+                                                <?php foreach ($unit_list as $unit): ?>
+                                                    <option value="<?php echo $unit->id; ?>"><?php echo $unit->medicine_unit; ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </td>
                                         <td><input type="text" name="items[0][hospital_rate]" placeholder="Rate"></td>
                                         <td><button type="button" class="removeRowBtn">Remove</button></td>
                                     </tr>
@@ -268,6 +336,7 @@ $field_list = mandatory_section_field_list(2);
                     </div>
                 </div>
             </form>
+
         </section>
     </div>
     <?php
@@ -281,30 +350,41 @@ $field_list = mandatory_section_field_list(2);
     document.getElementById('contact_lens_modal_form').addEventListener('submit', function (event) {
         event.preventDefault();
 
+        event.preventDefault();
+
         var formData = new FormData(this);
         var items = [];
-        var itemsData = formData.getAll('items[0][sl_no]'); // Assuming items are always indexed like this
-        var itemCount = itemsData.length; // Total number of items
 
-        for (var i = 0; i < itemCount; i++) {
-            var item = {
-                sl_no: formData.get('items[' + i + '][sl_no]'),
-                hospital_code: formData.get('items[' + i + '][hospital_code]'),
-                item_description: formData.get('items[' + i + '][item_description]'),
-                menufacturer: formData.get('items[' + i + '][menufacturer]'),
-                qty: formData.get('items[' + i + '][qty]'),
-                unit: formData.get('items[' + i + '][unit]'),
-                hospital_rate: formData.get('items[' + i + '][hospital_rate]')
-            };
-            items.push(item); // Add item to the items array
-        }
+        // Get all rows in the table body
+        document.querySelectorAll('tbody tr').forEach((row, index) => {
+        // Get both value and text (name) for each dropdown
+        var hospital_code = row.querySelector(`select[name="items[${index}][hospital_code]"]`);
+        var item_description = row.querySelector(`select[name="items[${index}][item_description]"]`);
+        var manufacturer = row.querySelector(`select[name="items[${index}][manufacturer]"]`);
+        var unit = row.querySelector(`select[name="items[${index}][unit]"]`);
 
+        var item = {
+            sl_no: row.querySelector(`input[name="items[${index}][sl_no]"]`)?.value ?? 0,
+            hospital_code: hospital_code.value,
+            hospital_code_name: hospital_code.options[hospital_code.selectedIndex].text, // Get selected text
+            item_description: item_description.value,
+            item_description_name: item_description.options[item_description.selectedIndex].text,
+            manufacturer: manufacturer.value,
+            manufacturer_name: manufacturer.options[manufacturer.selectedIndex].text,
+            qty: row.querySelector(`input[name="items[${index}][qty]"]`).value,
+            unit: unit.value,
+            unit_name: unit.options[unit.selectedIndex].text,
+            hospital_rate: row.querySelector(`input[name="items[${index}][hospital_rate]"]`).value
+        };
+        items.push(item); // Add each item object to items array
+    });
+
+    // console.log(items, '===========');
+    //     return;
         // Now append items as a JSON string to formData
         formData.append('contact_lens_items', JSON.stringify(items));
 
-        //  formData.forEach(function(value, key) {
-        //     console.log(key + ': ' + value);
-        // });
+
 
         var booking_id = <?php echo json_encode($form_data['booking_id']); ?>;
         var patient_id = <?php echo json_encode($form_data['patient_id']); ?>;
@@ -318,11 +398,8 @@ $field_list = mandatory_section_field_list(2);
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data, '=====')
                 // Handle success or error response
                 if (data.success) {
-                    // alert('Form submitted successfully!');
-                    // Redirect to the conatct_lens list page
                     flash_session_msg(data.message);
                     window.location.href = '<?php echo base_url('contact_lens'); ?>'; // Adjust this URL as necessary
                 } else {
@@ -353,22 +430,58 @@ $field_list = mandatory_section_field_list(2);
                 $(this).find('input[name^="items["][name$="[sl_no]"]').val(index + 1);
             });
         }
-
+        function initializeSelect2() {
+            $('.hospital_code_dropdown, .item_description_dropdown, .manufacturer_dropdown, .unit_dropdown').select2({
+            width: '100%'
+        });
+        }
+                
+                // $('select').select2();
         // Add new item row
         $('#addRowBtn').on('click', function () {
-            var index = $('#itemTable tbody tr').length;
-            var newRow = `
-                <tr>
-                    <td><input type="text" name="items[${index}][sl_no]" value="${index + 1}" readonly></td>
-                    <td><input type="text" name="items[${index}][hospital_code]" placeholder="Enter Hospital Code"></td>
-                    <td><input type="text" name="items[${index}][item_description]" placeholder="Enter Item Description"></td>
-                    <td><input type="text" name="items[${index}][menufacturer]" placeholder="Enter Manufacturer"></td>
-                    <td><input type="number" name="items[${index}][qty]" placeholder="Qty"></td>
-                    <td><input type="text" name="items[${index}][unit]" placeholder="Unit"></td>
-                    <td><input type="text" name="items[${index}][hospital_rate]" placeholder="Rate"></td>
-                    <td><button type="button" class="removeRowBtn">Remove</button></td>
-                </tr>`;
-            $('#itemTable tbody').append(newRow);
+            let newIndex = $('tbody tr').length;
+            let newRow = `
+            <tr>
+                <td><input type="text" name="items[${newIndex}][sl_no]" value="${newIndex + 1}" readonly></td>
+                <td>
+                    <select id="hospital_code_dropdown_${newIndex}" name="items[${newIndex}][hospital_code]" class="hospital_code_dropdown" data-index="${newIndex}">
+                        <option value="">Select Hospital Code</option>
+                        <?php foreach ($hospital_code_list as $code): ?>
+                                        <option value="<?php echo $code->id; ?>"><?php echo $code->hospital_code; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+                <td>
+                    <select id="item_description_dropdown_${newIndex}" name="items[${newIndex}][item_description]" class="item_description_dropdown" data-index="${newIndex}">
+                        <option value="">Select Item Description</option>
+                        <?php foreach ($item_desc_list as $desc): ?>
+                                        <option value="<?php echo $desc->id; ?>"><?php echo $desc->item_desc; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+                <td>
+                    <select id="manufacturer_dropdown_${newIndex}" name="items[${newIndex}][manufacturer]" class="manufacturer_dropdown" data-index="${newIndex}">
+                        <option value="">Select Manufacturer</option>
+                        <?php foreach ($manuf_company_list as $manufacturer): ?>
+                                        <option value="<?php echo $manufacturer->id; ?>"><?php echo $manufacturer->company_name; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+                <td><input type="number" name="items[${newIndex}][qty]" placeholder="Qty"></td>
+                <td>
+                    <select id="unit_dropdown_${newIndex}" name="items[${newIndex}][unit]" class="unit_dropdown" data-index="${newIndex}">
+                        <option value="">Select Unit</option>
+                        <?php foreach ($unit_list as $unit): ?>
+                                        <option value="<?php echo $unit->id; ?>"><?php echo $unit->medicine_unit; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+                <td><input type="text" name="items[${newIndex}][hospital_rate]" placeholder="Rate"></td>
+                <td><button type="button" class="removeRowBtn">Remove</button></td>
+            </tr>
+        `;
+            $('tbody').append(newRow);
+            initializeSelect2();
         });
 
         // Remove item row
@@ -376,7 +489,72 @@ $field_list = mandatory_section_field_list(2);
             $(this).closest('tr').remove();
             updateSerialNumbers(); // Update serial numbers after removal
         });
+        $(document).on('change', '.hospital_code_dropdown', function () {
+            
+            let index = $(this).data('index');
+            let hospitalCode = $(this).val();
+            if (hospitalCode) {
+            $.ajax({
+                url: '<?php echo base_url("contact_lens/get_item_details"); ?>',
+                type: 'POST',
+                data: { hospital_code: hospitalCode },
+                success: function (response) {
+                    // Assuming response is in JSON format
+                    const data = JSON.parse(response); // Parse JSON response
+                    if (data && data.data && data.data[0]) {
+
+                        $(`select[name="items[${index}][item_description]"]`).val(data.data[0].item_desc_id).trigger('change');
+
+                        // Set the manufacturer with Select2 and trigger the change event
+                        $(`select[name="items[${index}][manufacturer]"]`).val(data.data[0].manuf_company).trigger('change');
+
+                        // Set the unit with Select2 and trigger the change event
+                        $(`select[name="items[${index}][unit]"]`).val(data.data[0].unit_id).trigger('change');
+
+                        // Set other input fields
+                        $(`input[name="items[${index}][qty]"]`).val(data.data[0].qty);
+                        $(`input[name="items[${index}][hospital_rate]"]`).val(data.data[0].hospital_rate)
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Error: ", error);
+                }
+            });
+        }
+        });
+
+
     });
+    $(document).on('change', '.hospital_code_dropdown', function () {
+        
+        let index = $(this).data('index');
+        let hospitalCode = $(this).val();
+
+        if (hospitalCode) {
+            $.ajax({
+                url: '<?php echo base_url("contact_lens/get_item_details"); ?>',
+                type: 'POST',
+                data: { hospital_code: hospitalCode },
+                success: function (response) {
+                    // Assuming response is in JSON format
+                    const data = JSON.parse(response); // Parse JSON response
+                    if (data && data.data && data.data[0]) {
+                        console.log(data.data)
+                        
+                        $(`select[name="items[${index}][item_description]"]`).val(data.data[0].item_desc_id);
+                        $(`select[name="items[${index}][manufacturer]"]`).val(data.data[0].manuf_company);
+                        $(`select[name="items[${index}][unit]"]`).val(data.data[0].unit_id);
+                        $(`input[name="items[${index}][qty]"]`).val(data.data[0].qty);
+                        $(`input[name="items[${index}][hospital_rate]"]`).val(data.data[0].hospital_rate);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Error: ", error);
+                }
+            });
+        }
+    });
+
 
 </script>
 
@@ -387,9 +565,11 @@ $field_list = mandatory_section_field_list(2);
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-    $("#side_effects").select2();
-    $("#side_effects").select2({
-        width: '435px'
+   $(document).ready(function () {
+    // Initialize Select2 for all existing dropdowns
+        $('.hospital_code_dropdown, .item_description_dropdown, .manufacturer_dropdown, .unit_dropdown').select2({
+            width: '100%'
+        });
     });
 </script>
 </body>
