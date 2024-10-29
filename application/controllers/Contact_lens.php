@@ -132,16 +132,18 @@ class Contact_lens extends CI_Controller
 
     public function add($booking_id = null, $patient_id = null)
     {
-        // echo "<pre>";
-        // print_r($booking_id);
-        // print_r($patient_id);
-        // die;
+
         // Load required models and libraries
         $this->load->library('form_validation');
         $this->load->model('contact_lens/contact_lens_model'); // Ensure this model is loaded
+        $this->load->model('hospital_code_entry/hospital_code_entry_model', 'hospital_entry');
         // $data['side_effects'] = $this->contact_lens->get_all_side_effects(); // Fetch side effects
         $data['page_title'] = 'Add Contact Lens Record';
         $data['booking_id'] = isset($booking_id) ? $booking_id : '';
+        $data['hospital_code_list'] = $this->hospital_entry->hospital_code_list();
+        $data['item_desc_list'] = $this->hospital_entry->item_desc_list();
+        $data['unit_list'] = $this->hospital_entry->unit_list();
+        $data['manuf_company_list'] = $this->hospital_entry->manuf_company_list();
 
         // Initialize form data
         $data['form_data'] = array(
@@ -155,29 +157,18 @@ class Contact_lens extends CI_Controller
             'hospital_rate' => '',
         );
 
-
         $post = $this->input->post();
+        // echo "<pre>";
+        // print_r($data);
+        // die;
         // Check if the form is submitted
         if (isset($post) && !empty($post)) {
-            // Validate the form
-            // $valid_response = $this->_validate();
 
-            // Check if validation passed
-            // if ($valid_response === true) {
-            // If validation passes, save the record
-            // echo "<pre>";
-            // print_r('abhay');
-            // print_r($post);
-            // die;
             $this->contact_lens->save(); // Save the validated data
             $this->session->set_flashdata('success', 'Contact Lens store successfully.');
             echo json_encode(['success' => true, 'message' => 'Contact Lens store successfully.']);
-            return; // Exit to prevent further output
-            // } else {
-            //     // Handle validation errors
-            //     $data['form_data'] = $valid_response['form_data']; // Retain form data for re-display
-            //     $data['form_error'] = validation_errors(); // Get validation errors
-            // }
+            return;
+
         }
         // Load the view with the data
         $this->load->view('contact_lens/add', $data);
@@ -224,9 +215,14 @@ class Contact_lens extends CI_Controller
 
     public function edit($id = "", $booking_id = "", $patient_id = "")
     {
+        $this->load->model('hospital_code_entry/hospital_code_entry_model', 'hospital_entry');
         // Validate the ID
         if (isset($id) && !empty($id) && is_numeric($id)) {
             $data['page_title'] = 'Edit Contact Lens';
+            $data['hospital_code_list'] = $this->hospital_entry->hospital_code_list();
+            $data['item_desc_list'] = $this->hospital_entry->item_desc_list();
+            $data['unit_list'] = $this->hospital_entry->unit_list();
+            $data['manuf_company_list'] = $this->hospital_entry->manuf_company_list();
             // $data['contact_lens'] = 
 
             // Retrieve the brand by ID
@@ -543,5 +539,41 @@ class Contact_lens extends CI_Controller
         // die;
         $this->load->view('contact_lens/contact_lens_html', $data);
     }
+
+
+    public function get_item_details()
+    {
+        
+        $this->load->model('hospital_code_entry/hospital_code_entry_model', 'hospital_entry');
+        $hospital_code_id = $this->input->post('hospital_code');
+        
+
+        if ($hospital_code_id) {
+            // Fetch data based on hospital_code
+            $data = $this->hospital_entry->get_item_by_code($hospital_code_id);
+            // echo "<pre>";
+            // print_r($data);
+            // die;
+            if (!empty($data)) {
+                echo json_encode(['success' => true, 'data' => $data]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'No data found for this hospital code.']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Invalid hospital code ID.']);
+        }
+    }
+    // public function get_item_details() {
+    //     $hospital_code = $this->input->post('hospital_code');
+    //     $this->load->model('hospital_code_entry/hospital_code_entry_model', 'hospital_entry');
+        
+    //     $item_details = $this->hospital_entry->get_item_by_code($hospital_code); // Implement this in your model
+    
+    //     if ($item_details) {
+    //         echo json_encode(['item' => $item_details]);
+    //     } else {
+    //         echo json_encode(['item' => null]);
+    //     }
+    // }
 
 }
