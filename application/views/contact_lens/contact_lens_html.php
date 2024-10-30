@@ -146,7 +146,7 @@
                     </tr>
                     <tr>
                         <td class="info-label">Gender</td>
-                        <td class="info-content">: <?php echo ($booking_data['gender'] == '0') ? 'Female' : 'Male'; ?></td>
+                        <td class="info-content">: <?php echo ($data_list[0]['gender'] == '0') ? 'Female' : 'Male'; ?></td>
                     </tr>
                 </table>
             </td>
@@ -175,11 +175,7 @@
         if (!empty($data_list)) {
             $i = 1;
             foreach ($data_list[0]['contact_lens'] as $contact_lens) {
-                if ($contact_lens->discharge_date == '0000-00-00 00:00:00') {
-                    $createdate = '';
-                } else {
-                    $createdate = date('d-M-Y h:i A', strtotime($contact_lens->discharge_date));
-                }
+                
                 ?>
                 <tr>
                     <td><?php echo $i; ?>.</td>
@@ -189,7 +185,7 @@
                     <td><?php echo $contact_lens['qty']; ?></td>
                     <td><?php echo $contact_lens['unit']; ?></td>
                     <td><?php echo $contact_lens['hospital_rate']; ?></td>
-                    <td><?php echo date('d-M-Y h:i A', strtotime($contact_lens->created_date)); ?></td>
+                    <td><?php echo date('d-M-Y h:i A', strtotime($contact_lens['created_date'])); ?></td>
                 </tr>
                 <?php
                 $i++;

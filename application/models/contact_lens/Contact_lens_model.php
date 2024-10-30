@@ -20,7 +20,7 @@ class Contact_lens_model extends CI_Model
 		// print_r($search);
 		// die;
 		// Select only required fields from hms_patient and hms_opd_booking
-		$this->db->select("hms_contact_lens.id,hms_contact_lens.booking_id,hms_contact_lens.patient_id,hms_patient.simulation_id,hms_patient.patient_name,hms_patient.patient_code,hms_patient.mobile_no,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d,hms_opd_booking.dilate_status,hms_opd_booking.app_type,hms_opd_booking.token_no, hms_opd_booking.booking_code,hms_contact_lens.created_date");
+		$this->db->select("hms_contact_lens.id,hms_contact_lens.booking_id,hms_contact_lens.patient_id,hms_patient.simulation_id,hms_patient.patient_name,hms_patient.patient_code,hms_patient.gender,hms_patient.mobile_no,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d,hms_opd_booking.dilate_status,hms_opd_booking.app_type,hms_opd_booking.token_no, hms_opd_booking.booking_code,hms_contact_lens.created_date");
 		$this->db->from('hms_contact_lens');
 		$this->db->join('hms_patient', 'hms_patient.id = hms_contact_lens.patient_id', 'left');
 		$this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_contact_lens.booking_id', 'left');

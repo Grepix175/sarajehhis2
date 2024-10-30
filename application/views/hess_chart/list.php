@@ -318,6 +318,7 @@ $users_data = $this->session->userdata('auth_users');
                   <th> OPD No. </th>
                   <th> <?php echo $data = get_setting_value('PATIENT_REG_NO'); ?> </th>
                   <th> Patient Name </th>
+                  <th> Gender </th>
                   <th> Mobile </th>
                   <th> Age </th>
                   <!-- <th> Patient Status </th> -->
