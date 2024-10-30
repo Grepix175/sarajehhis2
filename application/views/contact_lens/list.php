@@ -338,6 +338,7 @@ error_reporting(E_ALL & ~E_NOTICE);
                   <th> OPD No. </th>
                   <th> Patient Reg. No. </th>
                   <th> Patient Name </th>
+                  <th> Gender </th>
                   <th> Mobile No </th>
                   <th> Age </th>                  
                   <!-- <th> Side Effect </th> -->

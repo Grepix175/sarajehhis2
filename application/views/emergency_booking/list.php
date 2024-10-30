@@ -453,7 +453,7 @@ $user_role = $users_data['users_role'];
               <div class="col-sm-4 d-flex justify-content-center" style="margin-left: 133px;margin-top: 30px;">
                 <!-- <input value="Reset" class="col-sm-4 d-flex justify-content-center"
                   style="margin-left: 133px;margin-top: 30px;" onclick="clear_form_elements(this.form)" type="button"> -->
-                <a class="btn-custom" id="reset_date" onclick="clear_form_elements(this.form);">Reset</a>
+                <a class="btn-custom" id="reset_date" onclick="reset_search(this.form);">Reset</a>
                 <!-- <a href="javascript:void(0)" class="btn-a-search" id="opd_adv_search">
                   <i class="fa fa-cubes" aria-hidden="true"></i>
                   Advance Search

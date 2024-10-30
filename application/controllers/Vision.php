@@ -30,9 +30,9 @@ class Vision extends CI_Controller
     public function ajax_list()
     {
         $list = $this->vision_model->get_datatables();
-        // echo "<pre>";
-        // print_r($list);
-        // die;
+            // echo "<pre>";
+            // print_r($list);
+            // die;
         $data = array();
         $no = $_POST['start'];
         $i = 1;
@@ -98,12 +98,14 @@ class Vision extends CI_Controller
                 }
                 $age .= ", " . $age_d . " " . $day;
             }
+            $gender = array('0' => 'Female', '1' => 'Male', '2' => 'Others');
             // $row[] = $vision->id;
             $row[] = '<input type="checkbox" name="prescription[]" class="checklist" value="' . $vision->id . '">' . $check_script;
             $row[] = $vision->patient_code_auto;
             $row[] = $vision->booking_code;
             $row[] = $vision->patient_code;
             $row[] = $vision->patient_name;
+            $row[] = $gender[$vision->gender];
             $row[] = $vision->mobile_no;
             $row[] = $age;
             $row[] = $pat_status;

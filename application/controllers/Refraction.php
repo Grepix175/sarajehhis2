@@ -68,7 +68,7 @@ class Refraction extends CI_Controller
               }
               $age .= ", " . $age_d . " " . $day;
             }
-
+            $gender = array('0' => 'Female', '1' => 'Male', '2' => 'Others');
             // Add a checkbox for selecting the record
             $row[] = '<input type="checkbox" name="refraction_ids[]" value="' . $refraction->refraction_id . '">';
 
@@ -76,6 +76,7 @@ class Refraction extends CI_Controller
             $row[] = $refraction->booking_code;
             $row[] = $refraction->patient_code;
             $row[] = $refraction->patient_name;
+            $row[] = $gender[$refraction->gender];
             // $row[] = $refraction->patient_category_name;
             $row[] = $refraction->mobile_no;
             $row[] = $age;
