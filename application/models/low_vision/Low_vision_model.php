@@ -52,9 +52,7 @@ class Low_vision_model extends CI_Model
     private function _get_datatables_query()
     {
         $search = $this->session->userdata('prescription_search');
-
-        // Build the query
-        $this->db->select("hms_low_vision.id as refraction_id, hms_low_vision.*, hms_patient.*, hms_patient_category.patient_category as patient_category_name, hms_opd_booking.*, hms_doctors.doctor_name");
+        $this->db->select("hms_low_vision.id as refraction_id,hms_low_vision.*,hms_patient.*,hms_patient_category.patient_category as patient_category_name,hms_opd_booking.*,hms_doctors.doctor_name");
         $this->db->from($this->table);
         $this->db->join('hms_patient', 'hms_patient.id = hms_low_vision.patient_id', 'left');
         $this->db->join('hms_patient_category', 'hms_patient_category.id=hms_patient.patient_category', 'left');
@@ -63,10 +61,9 @@ class Low_vision_model extends CI_Model
         $this->db->where('hms_low_vision.is_deleted', '0');
         
         $i = 0;
-
-        // Handle search filters if available
+        // echo "<pre>";print_r($search);die;
         foreach ($this->column as $item) {
-            if (!empty($_POST['search']['value'])) {
+            if ($_POST['search']['value']) {
                 if ($i === 0) {
                     $this->db->group_start();
                     $this->db->like($item, $_POST['search']['value']);
@@ -74,15 +71,15 @@ class Low_vision_model extends CI_Model
                     $this->db->or_like($item, $_POST['search']['value']);
                 }
 
-                if ($i == count($this->column) - 1) {
+                if (count($this->column) - 1 == $i) {
                     $this->db->group_end();
                 }
             }
+            $column[$i] = $item;
             $i++;
         }
-
-        // Apply filters from search data
         if (!empty($search)) {
+
             if (!empty($search['start_date'])) {
                 $start_date = date('Y-m-d 00:00:00', strtotime($search['start_date']));
                 $this->db->where('hms_low_vision.created_date >=', $start_date);
@@ -100,38 +97,24 @@ class Low_vision_model extends CI_Model
             if (!empty($search['patient_code'])) {
                 $this->db->where('hms_patient.patient_code', $search['patient_code']);
             }
-
             if (!empty($search['mobile_no'])) {
                 $this->db->where('hms_patient.mobile_no', $search['mobile_no']);
             }
         }
-
-        // Handle order by
         if (isset($_POST['order'])) {
-            $this->db->order_by($this->column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+            $this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
         } else if (isset($this->order)) {
             $order = $this->order;
             $this->db->order_by(key($order), $order[key($order)]);
         }
     }
 
-
     public function get_datatables()
     {
-        // Call the datatables query method
         $this->_get_datatables_query();
-        
-        // Execute the query and handle errors silently
         $query = $this->db->get();
-
-        // Return an empty array if the query fails
-        if ($query === false) {
-            return []; // Return an empty result in case of failure
-        }
-
-        return $query->result(); // Return the result if successful
+        return $query->result();
     }
-
 
     public function count_filtered()
     {
@@ -297,30 +280,23 @@ class Low_vision_model extends CI_Model
         }
     }
 
-    public function get_by_low_vision_status($booking_id = '', $patient_id = '')
-    {
-        // Build the query
-        $this->db->select('booking_id');
-        $this->db->from('hms_low_vision');
-        $this->db->where('hms_low_vision.booking_id', $booking_id);
-        $this->db->where('hms_low_vision.patient_id', $patient_id);
-        $this->db->where('hms_low_vision.is_deleted', 0);
-        
-        // Execute the query
-        $query = $this->db->get();
+    function get_by_low_vision_status($booking_id = '', $patient_id = '')
+	{
+		$user_data = $this->session->userdata('auth_users');
+		$this->db->select('booking_id');
+		$this->db->from('hms_low_vision');
+		$this->db->where('hms_low_vision.booking_id', $booking_id);
+		$this->db->where('hms_low_vision.patient_id', $patient_id);
+		$this->db->where('hms_low_vision.is_deleted', 0);
 
-        // If query failed, return false silently
-        if ($query === false) {
-            return false; // Silently return false in case of a query error
-        }
+		$query = $this->db->get();
 
-        // If query is successful but no rows found, return false
-        if ($query->num_rows() > 0) {
-            return 1; // Return 1 if a match is found
-        }
+		if ($query->num_rows() > 0) {
+			return 1; // Return 1 if a match is found
+		}
 
-        // Return false if no rows match the criteria
-        return false;
-    }
+		return 0; //
+
+	}
 
 }
