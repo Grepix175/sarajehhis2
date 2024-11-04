@@ -563,6 +563,66 @@ $field_list = mandatory_section_field_list(2);
             </div>
         </div>
 
+        <div class="form-signatures mt-4">
+            <table class="table table-borderless mb-4 w-100">
+                <tbody>
+                    <tr>
+                        <!-- Optometrist Signature -->
+                        <td class="small text-center mt-5" style="width: 50%;">
+                            <div class="text-center">
+                                <span class="font-weight-bold">Signature of Optometrist:</span><br>
+                                <div class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;">
+                                    <span>
+                                        <?php
+                                        // Get the optometrist signature id from data_list
+                                        $optometristSignatureId = $data_list[0]->optometrist_signature ?? null;
+                                        // Find the optometrist name based on the signature id
+                                        $optometristName = 'Not Selected';
+                                        if ($optometristSignatureId) {
+                                            foreach ($doctor as $optometrist) {
+                                                if ($optometrist->id == $optometristSignatureId) {
+                                                    $optometristName = $optometrist->doctor_name;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        echo $optometristName;
+                                        ?>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Doctor Signature -->
+                        <td class="small text-center mt-5" style="width: 50%;">
+                            <div class="text-center">
+                                <span class="font-weight-bold">Signature of Doctor:</span><br>
+                                <div class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;">
+                                    <span>
+                                        <?php
+                                        // Get the doctor signature id from data_list
+                                        $doctorSignatureId = $data_list[0]->doctor_signature ?? null;
+                                        // Find the doctor name based on the signature id
+                                        $doctorName = 'Not Selected';
+                                        if ($doctorSignatureId) {
+                                            foreach ($doctor as $doc) {
+                                                if ($doc->id == $doctorSignatureId) {
+                                                    $doctorName = $doc->doctor_name;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        echo $doctorName;
+                                        ?>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
 
 
         <!-- <div class="footer" style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #f8f9fa; text-align: center; padding: 10px; box-shadow: 0 -2px 5px rgba(0,0,0,0.1);">

@@ -245,6 +245,8 @@ class Low_vision_model extends CI_Model
             hms_low_vision.final_advice,
             hms_low_vision.referred_for,
             hms_low_vision.follow_up,
+            hms_low_vision.optometrist_signature,
+            hms_low_vision.doctor_signature,
             hms_low_vision.created_date,
             hms_low_vision.booking_id,
             hms_low_vision.patient_id,
