@@ -9,7 +9,6 @@ class Add_eye_prescription extends CI_Controller
     auth_users();
     $this->load->model('eye/add_prescription/add_new_prescription_model', 'add_prescript');
     $this->load->model('general/general_model');
-    error_reporting(E_ALL & ~E_NOTICE);
   }
 
   public function index($booking_id = "")

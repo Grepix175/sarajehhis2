@@ -1,6 +1,5 @@
 <?php
 $users_data = $this->session->userdata('auth_users');
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -8,7 +7,6 @@ $users_data = $this->session->userdata('auth_users');
 <head>
   <title><?php echo $page_title . PAGE_TITLE; ?></title>
   <meta name="viewport" content="width=1024">
-
 
   <!-- bootstrap -->
   <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap.min.css">
@@ -29,15 +27,12 @@ $users_data = $this->session->userdata('auth_users');
   <!-- datatable js -->
   <script src="<?php echo ROOT_JS_PATH; ?>jquery.dataTables.min.js"></script>
   <script src="<?php echo ROOT_JS_PATH; ?>dataTables.bootstrap.min.js"></script>
-
   <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datepicker.css">
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datepicker.js"></script>
   <script type="text/javascript">
     var save_method;
     var table;
-    <?php
-    if (in_array('2413', $users_data['permission']['action'])) {
-      ?>
+    <?php if (in_array('2485', $users_data['permission']['action'])) { ?>
       $(document).ready(function () {
         table = $('#table').DataTable({
           "processing": true,
@@ -45,34 +40,23 @@ $users_data = $this->session->userdata('auth_users');
           "order": [],
           "pageLength": '20',
           "ajax": {
-            "url": "<?php echo base_url('contact_lens/ajax_list') ?>",
+            "url": "<?php echo base_url('low_vision/ajax_list') ?>",
             "type": "POST",
-            // "data": function (d) {
-            //     // Here you can add additional data if needed
-            //     d.search = $('#table_filter input').val(); // Uses the search box value
-            // }
           },
           "columnDefs": [
             {
-              "targets": [0, -1], //last column
-              "orderable": false, //set not orderable
-
+              "targets": [0, -1],
+              "orderable": false,
             },
           ],
-
         });
-        // Trigger search functionality in real-time
-    $('#table_filter input').unbind().bind('keyup', function () {
-        table.search(this.value).draw();
-    });
       });
     <?php } ?>
-
 
     $(document).ready(function () {
       var $modal = $('#load_add_modal_popup');
       $('#doctor_add_modal').on('click', function () {
-        $modal.load('<?php echo base_url() . 'help_Desk/add/' ?>',
+        $modal.load('<?php echo base_url() . 'low_vision/add/' ?>',
           {
             //'id1': '1',
             //'id2': '2'
@@ -85,7 +69,7 @@ $users_data = $this->session->userdata('auth_users');
 
 
       $('#adv_search').on('click', function () {
-        $modal.load('<?php echo base_url() . 'contact_lens/advance_search/' ?>',
+        $modal.load('<?php echo base_url() . 'low_vision/advance_search/' ?>',
           {
           },
           function () {
@@ -95,48 +79,16 @@ $users_data = $this->session->userdata('auth_users');
       });
 
     });
-    function delete_contact_lens(rate_id) {
-        $('#confirm').modal({
-          backdrop: 'static',
-          keyboard: false
-        })
-          .one('click', '#delete', function (e) {
-            $.ajax({
-              url: "<?php echo base_url('contact_lens/delete/'); ?>" + rate_id,
-              success: function (result) {
-                flash_session_msg(result);
-                // reload_table();
-              }
-            });
-          });
-      }
 
-      function edit(id, booking_id, patient_id) {
-        // Redirect to the edit page for contact lens with the specified IDs
-        window.location.href = '<?php echo base_url('contact_lens/edit/'); ?>' + id + '/' + booking_id + '/' + patient_id;
-    }
-      function print_con_lens_page(id, booking_id, patient_id) {
-        // Redirect to the edit page for contact lens with the specified IDs
-        window.location.href = '<?php echo base_url('contact_lens/print_contact_lens/'); ?>' + id + '/' + booking_id + '/' + patient_id;
-    }
 
-    function view_prescription(id) {
-      var $modal = $('#load_add_modal_popup');
-      $modal.load('<?php echo base_url() . 'contact_lens/view/' ?>' + id,
-        {
-          //'id1': '1',
-          //'id2': '2'
-        },
-        function () {
-          $modal.modal('show');
-        });
+    function edit_refraction(id) {
+      // Redirect to the edit page for refraction with the specified ID
+      window.location.href = '<?php echo base_url('low_vision/edit/'); ?>' + id;
     }
 
     function reload_table() {
-      table.ajax.reload(null, false); //reload datatable ajax 
+      table.ajax.reload(null, false);
     }
-
-
 
     function checkboxValues() {
       $('#table').dataTable();
@@ -158,7 +110,7 @@ $users_data = $this->session->userdata('auth_users');
           .one('click', '#delete', function (e) {
             $.ajax({
               type: "POST",
-              url: "<?php echo base_url('contact_lens/delete_multiple'); ?>",
+              url: "<?php echo base_url('low_vision/deleteall'); ?>",
               data: { row_id: allVals },
               success: function (result) {
                 flash_session_msg(result);
@@ -167,18 +119,21 @@ $users_data = $this->session->userdata('auth_users');
             });
           });
       }
+      else {
+        $('#confirm-select').modal({
+          backdrop: 'static',
+          keyboard: false
+        });
+      }
     }
 
+
+
   </script>
-
-
-
 
 </head>
 
 <body>
-
-
   <div class="container-fluid">
     <?php
     $this->load->view('include/header');
@@ -187,6 +142,16 @@ $users_data = $this->session->userdata('auth_users');
     <!-- ============================= Main content start here ===================================== -->
     <section class="userlist">
       <div class="userlist-box">
+        <div class="row m-b-5">
+          <div class="col-xs-12">
+            <div class="row">
+              <div class="col-xs-6">
+                <!-- Search area or other content -->
+              </div>
+              <div class="col-xs-6"></div>
+            </div>
+          </div>
+        </div>
         <form name="search_form" id="search_form">
 
           <div class="row">
@@ -198,7 +163,7 @@ $users_data = $this->session->userdata('auth_users');
                     type="text" value="<?php echo $form_data['start_date'] ?>">
                 </div>
               </div>
-              <!-- <div class="row m-b-5">
+              <div class="row m-b-5">
                 <div class="col-xs-5"><label><?php echo $data = get_setting_value('PATIENT_REG_NO'); ?></label></div>
                 <div class="col-xs-7">
                   <input name="patient_code" class="m_input_default" id="patient_code" onkeyup="return form_submit();"
@@ -211,7 +176,7 @@ $users_data = $this->session->userdata('auth_users');
                   <input name="mobile_no" value="<?php echo $form_data['mobile_no'] ?>" id="mobile_no"
                     onkeyup="return form_submit();" class="numeric m_input_default" maxlength="10" value="" type="text">
                 </div>
-              </div> -->
+              </div>
 
             </div> <!-- 4 -->
 
@@ -224,13 +189,13 @@ $users_data = $this->session->userdata('auth_users');
                     value="<?php echo $form_data['end_date'] ?>" type="text">
                 </div>
               </div>
-              <!-- <div class="row m-b-5">
+              <div class="row m-b-5">
                 <div class="col-xs-5"><label>Patient Name</label></div>
                 <div class="col-xs-7">
                   <input name="patient_name" value="<?php echo $form_data['patient_name'] ?>" id="patient_name"
                     onkeyup="return form_submit();" class="alpha_space m_input_default" value="" type="text">
                 </div>
-              </div> -->
+              </div>
 
               <?php
               $users_data = $this->session->userdata('auth_users');
@@ -274,7 +239,7 @@ $users_data = $this->session->userdata('auth_users');
                       <option selected="selected" <?php if (isset($_POST['branch_id']) && $_POST['branch_id'] == $users_data['parent_id']) {
                         echo 'selected="selected"';
                       } ?>
-                        value="<?php echo $users_data['parent_id']; ?>">Self</option>';
+           value="<?php echo $users_data['parent_id']; ?>">Self</option>';
                       <?php
                       if (!empty($sub_branch_details)) {
                         $i = 0;
@@ -303,19 +268,19 @@ $users_data = $this->session->userdata('auth_users');
 
             </div> <!-- 4 -->
 
-            <div class="col-sm-4 d-flex justify-content-center" style="margin-left: 177px;margin-bottom: 22px;">
+            <div class="col-sm-4 d-flex justify-content-center" style="margin-left: 178px;margin-top: 30px;">
 
               <!--<a class="btn-custom" id="reset_date" onclick="reset_search();"><i class="fa fa-refresh"></i> Reset</a>
-          <br>
-            <a href="javascript:void(0)" class="btn-a-search" id="patient_adv_search">
-              <i class="fa fa-cubes" aria-hidden="true"></i> 
-              Search
-            </a>-->
+<br>
+  <a href="javascript:void(0)" class="btn-a-search" id="patient_adv_search">
+    <i class="fa fa-cubes" aria-hidden="true"></i> 
+    Search
+  </a>-->
               <a class="btn-custom" id="reset_date" onclick="reset_search();"> Reset</a>
               <!--<a href="javascript:void(0)" class="btn-custom" id="patient_adv_search">
-              <i class="fa fa-cubes" aria-hidden="true"></i> 
-              Advance Search
-            </a>-->
+    <i class="fa fa-cubes" aria-hidden="true"></i> 
+    Advance Search
+  </a>-->
             </div> <!-- 4 -->
 
 
@@ -324,86 +289,68 @@ $users_data = $this->session->userdata('auth_users');
 
         </form>
         <form>
-          <?php if (in_array('2413', $users_data['permission']['action'])) {
-            ?>
+          <?php if (in_array('2485', $users_data['permission']['action'])) { ?>
             <!-- bootstrap data table -->
             <table id="table" class="table table-striped table-bordered prescription_list_tbl" cellspacing="0"
               width="100%">
-              <thead>
+              <thead class="bg-theme">
                 <tr>
                   <th width="40" align="center"> <input type="checkbox" name="selectall" class="" id="selectAll" value="">
                   </th>
-                  <th> Token No. </th>
+                  <th> Token No </th>
                   <th> OPD No. </th>
-                  <th> Patient Reg. No. </th>
+                  <th> Patient Reg No. </th>
                   <th> Patient Name </th>
+                  <!-- <th> Patient Category </th> -->
                   <th> Mobile No </th>
-                  <th> Age </th>                  
-                  <!-- <th> Side Effect </th> -->
+                  <th> Age </th>
+                  <!-- <th> Consultant </th> -->
+                  <!-- <th> Lens </th> -->
+                  <!-- <th> Comment </th> -->
+                  <th> Patient Status </th>
                   <th> Created Date </th>
                   <th> Action </th>
                 </tr>
               </thead>
             </table>
           <?php } ?>
-
-
         </form>
-
-
-      </div> <!-- close -->
-
-
-
-
-
-      <div class="userlist-right relative">
-        <div class="fixed">
-          <div class="btns">
-            <?php if (in_array('2413', $users_data['permission']['action'])) {
-              ?>
-              <!-- <button class="btn-update" onclick="window.location.href='<?php echo base_url('opd'); ?>'">
-               <i class="fa fa-plus"></i> New
-             </button> -->
-            <?php } ?>
-            <a data-toggle="tooltip" title="Download list in excel" href="#" id="contact_lens_download_excel"
-              class="btn-anchor m-b-2">
-              <i class="fa fa-file-excel-o"></i> Excel
-            </a>
-            <a data-toggle="tooltip" title="Download list in pdf" href="#" id="contact_lens_download_pdf"
-              class="btn-anchor m-b-2">
-              <i class="fa fa-file-pdf-o"></i> PDF
-            </a>
-            <?php if (in_array('2413', $users_data['permission']['action'])) {
-              ?>
-              <button class="btn-update" id="deleteAll" onclick="return checkboxValues();">
-                <i class="fa fa-trash"></i> Delete
-              </button>
-            <?php } ?>
-
+      </div>
+      <div class="userlist-right">
+        <div class="btns">
+          <?php if (in_array('2486', $users_data['permission']['action'])) { ?>
+            <!-- <button class="btn-update" id="1modal_add"
+                onclick="window.location.href='<?php echo base_url('low_vision/add'); ?>'">
+              <i class="fa fa-plus"></i> New
+            </button> -->
+          <?php } ?>
+          <a data-toggle="tooltip" title="Download list in excel" href="#" id="low_vision_download_excel"
+            class="btn-anchor m-b-2">
+            <i class="fa fa-file-excel-o"></i> Excel
+          </a>
+          <a data-toggle="tooltip" title="Download list in pdf" href="#" id="low_vision_download_pdf"
+            class="btn-anchor m-b-2">
+            <i class="fa fa-file-pdf-o"></i> PDF
+          </a>
+          <?php if (in_array('2488', $users_data['permission']['action'])) { ?>
+            <button class="btn-update" id="deleteAll" onclick="return checkboxValues();">
+              <i class="fa fa-trash"></i> Delete
+            </button>
+          <?php } ?>
+          <?php if (in_array('2486', $users_data['permission']['action'])) { ?>
             <button class="btn-update" onclick="reload_table()">
               <i class="fa fa-refresh"></i> Reload
             </button>
-
-
-            <button class="btn-exit" onclick="window.location.href='<?php echo base_url(); ?>'">
-              <i class="fa fa-sign-out"></i> Exit
-            </button>
-          </div>
+          <?php } ?>
+          <button class="btn-update" onclick="window.location.href='<?php echo base_url(); ?>'">
+            <i class="fa fa-sign-out"></i> Exit
+          </button>
         </div>
       </div>
-      <!-- right -->
 
-      <!-- cbranch-rslt close -->
+    </section>
 
-
-
-
-
-    </section> <!-- cbranch -->
-    <?php
-    $this->load->view('include/footer');
-    ?>
+    <?php $this->load->view('include/footer'); ?>
 
     <script>
       $(document).ready(function () {
@@ -414,9 +361,10 @@ $users_data = $this->session->userdata('auth_users');
         $('#end_date_patient').val('');
         $('#patient_code').val('');
         $('#patient_name').val('');
+        $('#mobile_no').val('');
 
         $.ajax({
-          url: "<?php echo base_url(); ?>contact_lens/reset_search/",
+          url: "<?php echo base_url(); ?>low_vision/reset_search/",
           success: function (result) {
             reload_table();
           }
@@ -439,12 +387,7 @@ $users_data = $this->session->userdata('auth_users');
       }).on("change", function (selectedDate) {
         form_submit();
       });
-      <?php
-      $flash_success = $this->session->flashdata('success');
-      if (isset($flash_success) && !empty($flash_success)) {
-        echo 'flash_session_msg("' . $flash_success . '");';
-      }
-      ?>
+
       function form_submit() {
         $('#search_form').delay(200).submit();
       }
@@ -452,7 +395,7 @@ $users_data = $this->session->userdata('auth_users');
         event.preventDefault();
 
         $.ajax({
-          url: "<?php echo base_url('contact_lens/advance_search/'); ?>",
+          url: "<?php echo base_url('low_vision/advance_search/'); ?>",
           type: "post",
           data: $(this).serialize(),
           success: function (result) {
@@ -461,22 +404,14 @@ $users_data = $this->session->userdata('auth_users');
         });
 
       });
-      <?php
-      $flash_success = $this->session->flashdata('success');
-      if (isset($flash_success) && !empty($flash_success)) {
-        echo 'flash_session_msg("' . $flash_success . '");';
-      }
-      ?>
-
-
-      function delete_eye_prescription(prescription_id) {
+      function delete_vision(rate_id) {
         $('#confirm').modal({
           backdrop: 'static',
           keyboard: false
         })
           .one('click', '#delete', function (e) {
             $.ajax({
-              url: "<?php echo base_url('eye/add_eye_prescription/delete_eye_prescription/'); ?>" + prescription_id,
+              url: "<?php echo base_url('low_vision/delete/'); ?>" + rate_id,
               success: function (result) {
                 flash_session_msg(result);
                 reload_table();
@@ -484,46 +419,19 @@ $users_data = $this->session->userdata('auth_users');
             });
           });
       }
-      $('document').ready(function () {
-        <?php if (isset($_GET['status']) && $_GET['status'] == 'print' && !isset($_GET['type'])) { ?>
-          $('#confirm_print').modal({
-            backdrop: 'static',
-            keyboard: false
-          })
+      <?php
+      $flash_success = $this->session->flashdata('success');
+      if (isset($flash_success) && !empty($flash_success)) {
+        echo 'flash_session_msg("' . $flash_success . '");';
+      }
+      ?>
 
-            .one('click', '#cancel', function (e) {
-              window.location.href = '<?php echo base_url('help_desk'); ?>';
-            });
-
-        <?php } ?>
-
-        <?php if (isset($_GET['status']) && $_GET['status'] == 'print_eye' && !isset($_GET['type'])) { ?>
-          $('#confirm_print_eye').modal({
-            backdrop: 'static',
-            keyboard: false
-          })
-
-            .one('click', '#cancel', function (e) {
-              window.location.href = '<?php echo base_url('help_desk'); ?>';
-            });
-
-        <?php } ?>
+      $(document).ready(function () {
+        $('#load_add_vision_popup').on('shown.bs.modal', function (e) {
+          $('.inputFocus').focus();
+        });
       });
-
-
-      $('#patient_adv_search').on('click', function () {
-        var $modal = $('#load_add_modal_popup');
-        $modal.load('<?php echo base_url() . 'opd/patient_adv_search/' ?>',
-          {
-          },
-          function () {
-            $modal.modal('show');
-          });
-
-      });
-
-
-      document.getElementById('contact_lens_download_excel').addEventListener('click', function (e) {
+      document.getElementById('low_vision_download_excel').addEventListener('click', function (e) {
         e.preventDefault();
 
 
@@ -531,7 +439,7 @@ $users_data = $this->session->userdata('auth_users');
         var toDate = document.getElementById('end_date_patient').value;
 
 
-        var url = '<?php echo base_url("contact_lens/contact_lens_excel"); ?>';
+        var url = '<?php echo base_url("low_vision/low_vision_excel"); ?>';
 
 
         if (fromDate || toDate) {
@@ -546,7 +454,8 @@ $users_data = $this->session->userdata('auth_users');
         window.location.href = url;
       });
 
-      document.getElementById('contact_lens_download_pdf').addEventListener('click', function (e) {
+      document.getElementById('low_vision_download_pdf').addEventListener('click', function (e) {
+        // alert();
         e.preventDefault();
 
         var fromDate = document.getElementById('start_date_patient').value;
@@ -558,68 +467,45 @@ $users_data = $this->session->userdata('auth_users');
 
 
 
-        var url = '<?php echo base_url("contact_lens/contact_lens_pdf"); ?>';
+        var url = '<?php echo base_url("low_vision/low_vision_pdf"); ?>';
         url += '?start_date=' + encodeURIComponent(fromDate) + '&end_date=' + encodeURIComponent(toDate);
 
         window.location.href = url;
       });
-
     </script>
-    <!-- Confirmation Box -->
 
-    <div id="confirm_print" class="modal fade dlt-modal">
+    <!-- Confirmation Modals -->
+    <div id="confirm-select" class="modal fade dlt-modal">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header bg-theme">
-            <h4>Are You Sure?</h4>
+            <h4>Please select at least one record.</h4>
           </div>
-          <!-- <div class="modal-body"></div> -->
           <div class="modal-footer">
-            <a data-dismiss="modal" class="btn-anchor"
-              onClick="return print_window_page('<?php echo base_url("contact_lens/print_prescriptions"); ?>');">Print</a>
-
-
-            <button type="button" data-dismiss="modal" class="btn-cancel" id="cancel">Close</button>
+            <button type="button" data-dismiss="modal" class="btn-cancel">Close</button>
           </div>
         </div>
       </div>
     </div>
+
     <div id="confirm" class="modal fade dlt-modal">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header bg-theme">
             <h4>Are You Sure?</h4>
           </div>
-          <div class="modal-body" style="font-size:8px;">*Data that have been in Archive more than 60 days will be
+          <div class="modal-body" style="font-size:8px;">*Data that has been archived for more than 60 days will be
             automatically deleted.</div>
           <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn-update" id="delete">Confirm</button>
-            <button type="button" data-dismiss="modal" class="btn-cancel">Close</button>
-          </div>
-        </div>
-      </div>
-    </div> <!-- modal -->
-    <div id="confirm_print_eye" class="modal fade dlt-modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header bg-theme">
-            <h4>Are You Sure?</h4>
-          </div>
-          <!-- <div class="modal-body"></div> -->
-          <div class="modal-footer">
-            <a data-dismiss="modal" class="btn-anchor"
-              onClick="return print_window_page('<?php echo base_url("eye/add_prescription/print_prescriptions"); ?>');">Print</a>
-
-
-            <button type="button" data-dismiss="modal" class="btn-cancel" id="cancel">Close</button>
+            <button type="button" data-dismiss="modal" class="btn-cancel">Cancel</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Confirmation Box end -->
-    <div id="load_add_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
-  </div><!-- container-fluid -->
+    <div id="load_add_vision_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
+  </div>
 </body>
 
 </html>
