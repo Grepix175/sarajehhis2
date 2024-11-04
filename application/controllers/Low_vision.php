@@ -7,6 +7,7 @@ class Low_vision extends CI_Controller
     {
         parent::__construct();
         $this->load->model('low_vision/Low_vision_model', 'low_vision');
+        $this->load->model('doctors/Doctors_model', 'doctor');
         $this->load->library('form_validation');
     }
 
@@ -125,7 +126,8 @@ class Low_vision extends CI_Controller
         $result_refraction = $this->low_vision->get_prescription_refraction_new_by_id($booking_id, $id);
         // echo "<pre>";print_r($result_refraction);die;
         $data['booking_data'] = $this->low_vision->get_booking_by_id($booking_id);
-
+        $data['doctor'] = $this->doctor->doctors_list();
+        // echo "<pre>";print_r($data['doctors']);die;
 
         $low_vision_auto_refraction = isset($result_refraction['auto_refraction'])?json_decode($result_refraction['auto_refraction']):'';
         $data['refrtsn_auto_ref'] = (array) $low_vision_auto_refraction;
@@ -297,7 +299,8 @@ class Low_vision extends CI_Controller
            $color_vision = json_decode($result['color_vision'], true); // Decode into an associative array
            $contrast_sensivity = json_decode($result['contrast_sensivity'], true); // Decode into an associative array
            $data['booking_data'] = $this->low_vision->get_booking_by_id($result['booking_id']);
-
+           $data['doctor'] = $this->doctor->doctors_list();
+        //    echo "<pre>";print_r($data['doctor']);die;
 
             // Check if decoding was successful
             if (json_last_error() !== JSON_ERROR_NONE) {
@@ -334,7 +337,7 @@ class Low_vision extends CI_Controller
                 'referred_for' => $result['referred_for'],
                 'follow_up' =>  $result['follow_up'],
             );
-            // echo "<pre>";print_r($this->input->post());die('okok');
+            // echo "<pre>";print_r($data['form_data']);die('okok');
             // Check if there is form submission
             if ($this->input->post()) {
                 // Prepare the refraction data for JSON
@@ -436,6 +439,7 @@ class Low_vision extends CI_Controller
         $data['print_status'] = "1";
         $data['data_list'] = $this->low_vision->search_report_data($booking_id,$id);
         $data['booking_data'] = $this->low_vision->get_booking_by_id($booking_id);
+        $data['doctor'] = $this->doctor->doctors_list();
 
 
         // Fetch the OPD billing details based on the ID

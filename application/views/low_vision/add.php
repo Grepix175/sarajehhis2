@@ -428,8 +428,8 @@ $field_list = mandatory_section_field_list(2);
 
         <div class="grp-full">
             <!-- Patient Name -->
-            <div class="grp" style="width: 115%;">
-                <label>Patient Name <span class="star">*</span> </label>
+            <!-- <div class="grp" style="width: 115%;">
+                <label>Patient Name  </label>
                 <div class="box-right" style="padding-left: 2.5rem;">
                     <input type="text" name="patient_name" class="alpha_space_name txt_firstCap input-height"
                         id="patient_name" value="<?php echo isset($booking_data['patient_name']) ? htmlspecialchars($booking_data['patient_name']) : ''; ?>" autofocus
@@ -441,11 +441,11 @@ $field_list = mandatory_section_field_list(2);
                     endif;
                     ?>
                 </div>
-            </div>
+            </div> -->
 
             <!-- AMSLER GRID -->
             <div class="grp" style="width: 115%;">
-                <label>AMSLER GRID <span class="star">*</span> </label>
+                <label>AMSLER GRID  </label>
                 <div class="box-right" style="padding-left: 2.5rem;">
                     <input type="text" name="amsler_grid" class="txt_firstCap input-height"
                         id="amsler_grid" value="<?php echo isset($form_data['amsler_grid']) ? htmlspecialchars($form_data['amsler_grid']) : ''; ?>" style="width: 374px;" />
@@ -455,7 +455,7 @@ $field_list = mandatory_section_field_list(2);
 
             <!-- LVA TRIAL -->
             <div class="grp" style="width: 115%;">
-                <label>LVA TRIAL <span class="star">*</span> </label>
+                <label>LVA TRIAL  </label>
                 <div class="box-right" style="padding-left: 2.5rem;">
                     <input type="text" name="lva_trial" class="txt_firstCap input-height"
                         id="lva_trial" value="<?php echo isset($form_data['lva_trial']) ? htmlspecialchars($form_data['lva_trial']) : ''; ?>" style="width: 374px;" />
@@ -465,7 +465,7 @@ $field_list = mandatory_section_field_list(2);
 
             <!-- DISTANCE LVA -->
             <div class="grp" style="width: 115%;">
-                <label>DISTANCE LVA <span class="star">*</span> </label>
+                <label>DISTANCE LVA  </label>
                 <div class="box-right" style="padding-left: 2.5rem;">
                     <input type="text" name="distance_lva" class="txt_firstCap input-height"
                         id="distance_lva" value="<?php echo isset($form_data['distance_lva']) ? htmlspecialchars($form_data['distance_lva']) : ''; ?>" style="width: 374px;" />
@@ -475,7 +475,7 @@ $field_list = mandatory_section_field_list(2);
 
             <!-- NEAR LVA -->
             <div class="grp" style="width: 115%;">
-                <label>NEAR LVA <span class="star">*</span> </label>
+                <label>NEAR LVA  </label>
                 <div class="box-right" style="padding-left: 2.5rem;">
                     <input type="text" name="near_lva" class="txt_firstCap input-height"
                         id="near_lva" value="<?php echo isset($form_data['near_lva']) ? htmlspecialchars($form_data['near_lva']) : ''; ?>" style="width: 374px;" />
@@ -485,7 +485,7 @@ $field_list = mandatory_section_field_list(2);
 
             <!-- NON OPTICAL DEVICE -->
             <div class="grp" style="width: 115%;">
-                <label>NON OPTICAL DEVICE <span class="star">*</span> </label>
+                <label>NON OPTICAL DEVICE  </label>
                 <div class="box-right" style="padding-left: 2.5rem;">
                     <input type="text" name="non_optical_device" class="txt_firstCap input-height"
                         id="non_optical_device" value="<?php echo isset($form_data['non_optical_device']) ? htmlspecialchars($form_data['non_optical_device']) : ''; ?>" style="width: 374px;" />
@@ -495,7 +495,7 @@ $field_list = mandatory_section_field_list(2);
 
             <!-- FINAL ADVICE -->
             <div class="grp" style="width: 115%;">
-                <label>FINAL ADVICE <span class="star">*</span> </label>
+                <label>FINAL ADVICE  </label>
                 <div class="box-right" style="padding-left: 2.5rem;">
                     <input type="text" name="final_advice" class="txt_firstCap input-height"
                         id="final_advice" value="<?php echo isset($form_data['final_advice']) ? htmlspecialchars($form_data['final_advice']) : ''; ?>" style="width: 374px;" />
@@ -505,7 +505,7 @@ $field_list = mandatory_section_field_list(2);
 
             <!-- REFERRED FOR(IF NEEDED) -->
             <div class="grp" style="width: 115%;">
-                <label>REFERRED FOR(IF NEEDED) <span class="star">*</span> </label>
+                <label>REFERRED FOR(IF NEEDED)  </label>
                 <div class="box-right" style="padding-left: 2.5rem;">
                     <input type="text" name="referred_for" class="txt_firstCap input-height"
                         id="referred_for" value="<?php echo isset($form_data['referred_for']) ? htmlspecialchars($form_data['referred_for']) : ''; ?>" style="width: 374px;" />
@@ -515,13 +515,61 @@ $field_list = mandatory_section_field_list(2);
 
             <!-- FOLLOW UP/COMPLIANCE -->
             <div class="grp" style="width: 115%;">
-                <label>FOLLOW UP/COMPLIANCE <span class="star">*</span> </label>
+                <label>FOLLOW UP/COMPLIANCE  </label>
                 <div class="box-right" style="padding-left: 2.5rem;">
                     <input type="text" name="follow_up" class="txt_firstCap input-height"
                         id="follow_up" value="<?php echo isset($form_data['follow_up']) ? htmlspecialchars($form_data['follow_up']) : ''; ?>" style="width: 374px;" />
                     <?php echo form_error('follow_up'); ?>
                 </div>
             </div>
+
+            <div class="form-signatures mt-4">
+                <table class="table table-borderless mb-4 w-100">
+                    <tbody>
+                        <tr>
+                            <!-- Optometrist Dropdown -->
+                            <td class="small text-center mt-5" style="width: 50%;">
+                                <div class="text-center">
+                                    <span class="font-weight-bold">Signature of Optometrist:</span><br>
+                                    <div class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;">
+                                        <select name="optometrist_signature" class="form-control mx-auto" style="width: 200px;">
+                                            <option value="">Select Optometrist</option>
+                                            <?php foreach ($doctor as $optometrist) : ?>
+                                                <option value="<?= $optometrist->id; ?>" 
+                                                    <?= isset($form_data['optometrist_signature']) && $form_data['optometrist_signature'] == $optometrist->id ? 'selected' : ''; ?>>
+                                                    <?= $optometrist->doctor_name; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <!-- Doctor Dropdown -->
+                            <td class="small text-center mt-5" style="width: 50%;">
+                                <div class="text-center">
+                                    <span class="font-weight-bold">Signature of Doctor:</span><br>
+                                    <div class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;">
+                                        <select name="doctor_signature" class="form-control mx-auto" style="width: 200px;">
+                                            <option value="">Select Doctor</option>
+                                            <?php foreach ($doctor as $doc) : ?>
+                                                <option value="<?= $doc->id; ?>" 
+                                                    <?= isset($form_data['doctor_signature']) && $form_data['doctor_signature'] == $doc->id ? 'selected' : ''; ?>>
+                                                    <?= $doc->doctor_name; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
         </div>
 
 
