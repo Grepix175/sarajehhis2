@@ -384,13 +384,17 @@ $field_list = mandatory_section_field_list(2);
 
                         <div class="col-md-4">
                             <div class="btn-group">
+                                <!-- Hidden input to retain previous value if no new value is selected -->
+                                <input type="hidden" name="low_vision_contra_sens_l" value="<?= $form_data['low_vision_contra_sens_l'] ?>">
+                                
                                 <?php foreach ($contrast_values as $value): ?>
                                     <label class="btn_radio_small d-none con_sen <?= $form_data['low_vision_contra_sens_l'] == $value ? 'active' : '' ?>" style="display: inline-block;">
-                                        <input type="radio" name="low_vision_contra_sens_l" class="low_vision_contra_sens_l" value="<?= $value ?>"> <?= $value ?>
+                                        <input type="radio" name="low_vision_contra_sens_l" class="low_vision_contra_sens_l" value="<?= $value ?>" <?= $form_data['low_vision_contra_sens_l'] == $value ? 'checked' : '' ?>> <?= $value ?>
                                     </label>
                                 <?php endforeach; ?>
                             </div>
                         </div>
+
 
                         <div class="col-md-2">
                             <div class="label_name">CONTRAST SENSITIVITY 
@@ -405,13 +409,17 @@ $field_list = mandatory_section_field_list(2);
 
                         <div class="col-md-4">
                             <div class="btn-group">
+                                <!-- Hidden input to retain previous value if no new value is selected -->
+                                <input type="hidden" name="low_vision_contra_sens_r" value="<?= $form_data['low_vision_contra_sens_r'] ?>">
+                                
                                 <?php foreach ($contrast_values as $value): ?>
                                     <label class="btn_radio_small d-none con_sen <?= $form_data['low_vision_contra_sens_r'] == $value ? 'active' : '' ?>" style="display: inline-block;">
-                                        <input type="radio" name="low_vision_contra_sens_r" class="low_vision_contra_sens_r" value="<?= $value ?>"> <?= $value ?>
+                                        <input type="radio" name="low_vision_contra_sens_r" class="low_vision_contra_sens_r" value="<?= $value ?>" <?= $form_data['low_vision_contra_sens_r'] == $value ? 'checked' : '' ?>> <?= $value ?>
                                     </label>
                                 <?php endforeach; ?>
                             </div>
                         </div>
+
 
                 </div>
             </div>

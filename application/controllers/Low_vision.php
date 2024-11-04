@@ -246,7 +246,7 @@ class Low_vision extends CI_Controller
             ];
             // echo "<pre>";
             // print_r($data_to_save); // For debugging
-            // die;
+            // die("ok");
 
             // Save the data
             $this->low_vision->save($data_to_save);
@@ -274,7 +274,7 @@ class Low_vision extends CI_Controller
 
     public function edit($id = "")
     {
-        // echo $id;die;        // Check user permissions
+        // echo $id;die;         // Check user permissions
         $this->load->library('form_validation');
 
         unauthorise_permission('411', '2486');
@@ -337,64 +337,61 @@ class Low_vision extends CI_Controller
             // echo "<pre>";print_r($this->input->post());die('okok');
             // Check if there is form submission
             if ($this->input->post()) {
-                // echo "ij";die;
-                // Validate the form
-                // $data['form_data'] = $this->_validate(); // Adjust validation method as needed
-                // if ($this->form_validation->run() == TRUE) {
-                    // Prepare the refraction data for JSON
-                    $color_vision_data = [
-                        'low_vision_col_vis_l' => $this->input->post('low_vision_col_vis_l'),
-                        'low_vision_col_vis_r' => $this->input->post('low_vision_col_vis_r'),
-                    ];
-        
-                    $contrast_data = [
-                        'low_vision_contra_sens_l' => $this->input->post('low_vision_contra_sens_l'),
-                        'low_vision_contra_sens_r' => $this->input->post('low_vision_contra_sens_r'),
-                    ];
-
-                    // Convert the refraction data to JSON
-                    $color_vision_data_json = json_encode($color_vision_data);
-                    $contrast_data_json = json_encode($contrast_data);
-
-                    // Prepare the data for updating
-                    $data_to_update = [
-                        'id' => $this->input->post('id'),
-                        'branch_id' => $this->input->post('branch_id'),
-                        'booking_code' => $this->input->post('booking_code'),
-                        'pres_id' => $this->input->post('pres_id'),
-                        'patient_id' => $this->input->post('patient_id'),
-                        'booking_id' => $this->input->post('booking_id'),
-                        'color_vision' => isset($color_vision_data_json) ? $color_vision_data_json : '',
-                        'contrast_sensivity' => isset($contrast_data_json) ? $contrast_data_json : '',
-                        'patient_name' => $this->input->post('patient_name') ,
-                        'amsler_grid' => $this->input->post('amsler_grid') ,
-                        'lva_trial' => $this->input->post('lva_trial') ,
-                        'distance_lva' => $this->input->post('distance_lva') ,
-                        'near_lva' => $this->input->post('near_lva') ,
-                        'non_optical_device' => $this->input->post('non_optical_device') ,
-                        'final_advice' => $this->input->post('final_advice') ,
-                        'referred_for' => $this->input->post('referred_for') ,
-                        'follow_up' =>$this->input->post('follow_up') ,
-                        'optometrist_signature' => $this->input->post('optometrist_signature'),
-                        'doctor_signature' => $this->input->post('doctor_signature'),
-                        'status' => 1, // Or whatever default value you need
-                        'is_deleted' => 0, // Assuming this is default
-                        'modified_date' => date('Y-m-d H:i:s'), // Current timestamp for update
-                        'ip_address' => $this->input->ip_address(),
-                    ];
-
-                    
-
-                    // Update the data
-                    $this->low_vision->save($data_to_update); // Adjust this method according to your model
-                    $this->session->set_flashdata('success', 'Low Vision record updated successfully.');
-                    echo json_encode(['success' => true, 'message' => 'Low Vision record updated successfully.']);
-                    return; // Exit to prevent further output
-                // } else {
-                //     // Capture validation errors
-                //     $data['form_error'] = validation_errors();
-                // }
+                // Prepare the refraction data for JSON
+                $color_vision_data = [
+                    'low_vision_col_vis_l' => $this->input->post('low_vision_col_vis_l'),
+                    'low_vision_col_vis_r' => $this->input->post('low_vision_col_vis_r'),
+                ];
+            
+                // Check if contrast sensitivity fields are empty, if yes, retain the previous values
+                $contrast_data = [
+                    'low_vision_contra_sens_l' => $this->input->post('low_vision_contra_sens_l') !== '' 
+                        ? $this->input->post('low_vision_contra_sens_l') 
+                        : $contrast_sensivity['low_vision_contra_sens_l'],
+                        
+                    'low_vision_contra_sens_r' => $this->input->post('low_vision_contra_sens_r') !== '' 
+                        ? $this->input->post('low_vision_contra_sens_r') 
+                        : $contrast_sensivity['low_vision_contra_sens_r'],
+                ];
+            
+                // Convert the refraction data to JSON
+                $color_vision_data_json = json_encode($color_vision_data);
+                $contrast_data_json = json_encode($contrast_data);
+            
+                // Prepare the data for updating
+                $data_to_update = [
+                    'id' => $this->input->post('id'),
+                    'branch_id' => $this->input->post('branch_id'),
+                    'booking_code' => $this->input->post('booking_code'),
+                    'pres_id' => $this->input->post('pres_id'),
+                    'patient_id' => $this->input->post('patient_id'),
+                    'booking_id' => $this->input->post('booking_id'),
+                    'color_vision' => isset($color_vision_data_json) ? $color_vision_data_json : '',
+                    'contrast_sensivity' => isset($contrast_data_json) ? $contrast_data_json : '',
+                    'patient_name' => $this->input->post('patient_name'),
+                    'amsler_grid' => $this->input->post('amsler_grid'),
+                    'lva_trial' => $this->input->post('lva_trial'),
+                    'distance_lva' => $this->input->post('distance_lva'),
+                    'near_lva' => $this->input->post('near_lva'),
+                    'non_optical_device' => $this->input->post('non_optical_device'),
+                    'final_advice' => $this->input->post('final_advice'),
+                    'referred_for' => $this->input->post('referred_for'),
+                    'follow_up' => $this->input->post('follow_up'),
+                    'optometrist_signature' => $this->input->post('optometrist_signature'),
+                    'doctor_signature' => $this->input->post('doctor_signature'),
+                    'status' => 1, // Or whatever default value you need
+                    'is_deleted' => 0, // Assuming this is default
+                    'modified_date' => date('Y-m-d H:i:s'), // Current timestamp for update
+                    'ip_address' => $this->input->ip_address(),
+                ];
+            
+                // Update the data
+                $this->low_vision->save($data_to_update); // Adjust this method according to your model
+                $this->session->set_flashdata('success', 'Low Vision record updated successfully.');
+                echo json_encode(['success' => true, 'message' => 'Low Vision record updated successfully.']);
+                return; // Exit to prevent further output
             }
+            
             // echo "<pre>";print_r($data);die;
             // Load the view with the prepared data
             $this->load->view('low_vision/add', $data); // Adjust the view name as necessary

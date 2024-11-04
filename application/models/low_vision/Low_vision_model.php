@@ -207,7 +207,7 @@ class Low_vision_model extends CI_Model
     // Method to save or update a refraction record
     public function save($data)
     {
-        // echo "<pre>";print_r($data);die('dsfsdfsf');
+        // echo "<pre>";print_r($data['id']);die('dsfsdfsf');
         // If a pres_id exists, update the record
         if (!empty($data['id'])) {
             $this->db->where('id', $data['id']);

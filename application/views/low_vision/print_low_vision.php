@@ -400,13 +400,14 @@ $field_list = mandatory_section_field_list(2);
         ?>
 
         <section class="panel panel-default" style="border:none;">
-            <div class="panel-body">
-                <div class="row" style="display: flex; flex-wrap: nowrap;">
-                    <div class="col-md-12 text-right btn_edit" style="display: none;">
-                        <a href="javascript:void(0)" class="btn_fill" onclick="$('.con_sen').toggle();">Edit</a>
-                        <hr>
-                    </div>
-
+            <div class="panel-body" style="padding: 0; border: 0;">
+                <table class="table table-borderless" style="margin-bottom: 0;">
+                    <tr>
+                        <td colspan="4" class="text-right btn_edit" style="display: none;">
+                            <a href="javascript:void(0)" class="btn_fill" onclick="$('.con_sen').toggle();">Edit</a>
+                            <hr>
+                        </td>
+                    </tr>
                     <?php
                     // Array of contrast sensitivity values
                     $contrast_values = [
@@ -417,46 +418,33 @@ $field_list = mandatory_section_field_list(2);
                     ?>
 
                     <!-- Left Side Contrast Sensitivity -->
-                    <div style="width: 50%; flex: 0 0 50%; display: inline-block; padding: 2px;">
-                        <div class="label_name">LEFT CONTRAST SENSITIVITY 
-                            <i onclick="low_vision_contra_sens_ltr()" title="Copy Left to Right" class="fa fa-arrow-right"></i>
-                        </div>
-                        <small class="mini_outline_btn d-none cons_clr_l" 
-                            onclick="$('.low_vision_contra_sens_l').prop('checked', false); 
-                                    $('.low_vision_contra_sens_l').parent().removeClass('active'); $(this).hide();">
-                            clear
-                        </small>
-                        <div class="btn-group">
-                            <?php foreach ($contrast_values as $value): ?>
-                                <label class="btn_radio_small con_sen <?= $low_vision_contra_sens_l == $value ? 'active' : '' ?>" style="display: inline-block;">
-                                    <input type="radio" name="low_vision_contra_sens_l" class="low_vision_contra_sens_l" value="<?= $value ?>" <?= $low_vision_contra_sens_l == $value ? 'checked' : '' ?> onchange="updateLabel('left', '<?= $value ?>')"> <?= $value ?>
-                                </label>
-                            <?php endforeach; ?>
-                        </div>
-                        <div class="selected_value" id="left_selected_value" style="display: <?= $low_vision_contra_sens_l ? 'block' : 'none'; ?>">Selected: <?= $low_vision_contra_sens_l ?? '' ?></div>
-                    </div>
+                    <tr>
+                        <td style="width: 26%;">
+                            <div class="text-center">
+                                <div class="label_name">LEFT CONTRAST SENSITIVITY 
+                                    <i onclick="low_vision_contra_sens_ltr();" title="Copy Left to Right" class="fa fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="width: 20%;">
+                            <input type="text" name="low_vision_contra_sens_l" id="low_vision_contra_sens_l" class="form-control" value="<?= htmlspecialchars($low_vision_contra_sens_l); ?>" readonly />
+                        </td>
 
-                    <!-- Right Side Contrast Sensitivity -->
-                    <div style="width: 50%; flex: 0 0 50%; display: inline-block; padding: 2px;">
-                        <div class="label_name">RIGHT CONTRAST SENSITIVITY 
-                            <i onclick="low_vision_contra_sens_rtl();" title="Copy Right to Left" class="fa fa-arrow-left"></i>
-                        </div>
-                        <small class="mini_outline_btn d-none cons_clr_r" 
-                            onclick="$('.low_vision_contra_sens_r').prop('checked', false); 
-                                    $('.low_vision_contra_sens_r').parent().removeClass('active'); $(this).hide();">
-                            clear
-                        </small>
-                        <div class="btn-group">
-                            <?php foreach ($contrast_values as $value): ?>
-                                <label class="btn_radio_small con_sen <?= $low_vision_contra_sens_r == $value ? 'active' : '' ?>" style="display: inline-block;">
-                                    <input type="radio" name="low_vision_contra_sens_r" class="low_vision_contra_sens_r" value="<?= $value ?>" <?= $low_vision_contra_sens_r == $value ? 'checked' : '' ?> onchange="updateLabel('right', '<?= $value ?>')"> <?= $value ?>
-                                </label>
-                            <?php endforeach; ?>
-                        </div>
-                        <div class="selected_value" id="right_selected_value" style="display: <?= $low_vision_contra_sens_r ? 'block' : 'none'; ?>">Selected: <?= $low_vision_contra_sens_r ?? '' ?></div>
-                    </div>
-                </div>
+                        <!-- Right Side Contrast Sensitivity -->
+                        <td style="width: 25%;">
+                            <div class="text-center">
+                                <div class="label_name">RIGHT CONTRAST SENSITIVITY 
+                                    <i onclick="low_vision_contra_sens_rtl();" title="Copy Right to Left" class="fa fa-arrow-left"></i>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="width: 20%;">
+                            <input type="text" name="low_vision_contra_sens_r" id="low_vision_contra_sens_r" class="form-control" value="<?= htmlspecialchars($low_vision_contra_sens_r); ?>" readonly />
+                        </td>
+                    </tr>
+                </table>
             </div>
+
         </section>
 
         <div class="grp-full">
