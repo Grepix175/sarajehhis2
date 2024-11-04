@@ -11,6 +11,7 @@ class Help_desk extends CI_Controller
     $this->load->model('help_desk/help_desk_model', 'prescription');
     $this->load->model('opd/opd_model', 'opd');
     $this->load->model('contact_lens/Contact_lens_model', 'contact_lens');
+    $this->load->model('low_vision/Low_vision_model', 'low_vision');
   }
 
 
@@ -89,6 +90,7 @@ class Help_desk extends CI_Controller
       $contact_lens_txt = '';
       $patient_status = $this->opd->get_by_id_patient_status($prescription->booking_id);
       $contact_lens_status = $this->contact_lens->get_by_contact_lens_status($prescription->booking_id, $prescription->patient_id);
+      $low_vision_status = $this->low_vision->get_by_low_vision_status($prescription->booking_id, $prescription->patient_id);
      
       $refraction_exists = $this->opd->get_by_id_refraction($prescription->booking_id);
       $pat_status = ($patient_status == 1)
@@ -154,6 +156,7 @@ class Help_desk extends CI_Controller
       $btn_view_upload_pre = "";
       $btn_contact_lens = "";
       $btn_hess_chart = "";
+      $btn_low_vision = "";
 
       if ($users_data['parent_id'] == $prescription->branch_id) {
         if (in_array('2413', $users_data['permission']['action'])) {
@@ -174,6 +177,12 @@ class Help_desk extends CI_Controller
       } else {
         // $btn_contact_lens = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title=" Contact Lens"> Contact Lens</a>';
         $btn_contact_lens = '<a class="btn-custom" href="' . base_url("contact_lens/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Contact Lens" data-url="512">Contact Lens</a>';
+      }
+      if ($low_vision_status == '1') {
+        $btn_low_vision = '<a class="btn-custom disabled" href="javascript:void(0);" title="Contact Lens" style="pointer-events: none; opacity: 0.6;" data-url="512"> Low Vision</a>';
+      } else {
+        // $btn_contact_lens = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title=" Contact Lens"> Contact Lens</a>';
+        $btn_low_vision = '<a class="btn-custom" href="' . base_url("low_vision/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Contact Lens" data-url="512">Low vision</a>';
       }
       if ($prescription->drawing_flag == 0) {
         $flag = 'hess_chart';
@@ -214,7 +223,7 @@ class Help_desk extends CI_Controller
       // $btn_print_chasma_pre = ' <a class="btn-custom" onClick="return print_window_page(' . $print_chasma_url . ')" href="javascript:void(0)" title="Print Chasma Detail"  data-url="512"><i class="fa fa-print"></i> Print Chasma Detail</a>';
 
       // . $btn_print_chasma_pre
-      $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission . $btn_contact_lens .
+      $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission . $btn_contact_lens . $btn_low_vision.
         $btn_hess_chart;
       // print_r($row);
       $data[] = $row;
