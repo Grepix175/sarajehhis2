@@ -88,8 +88,8 @@ td
           <td><?php echo $low_power->patient_name; ?></td>
           <td><?php echo $low_power->mobile_no; ?></td>
           <td><?php echo $age; ?></td>
-          <td><?php echo $low_power->status; ?></td>
-     </tr>
+          <td><?php echo ($low_power->status == 1) ? 'Active' : 'Inactive'; ?></td>
+          </tr>
    	   <?php
    	   $i++;	
    	 }	
