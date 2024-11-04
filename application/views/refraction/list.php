@@ -301,6 +301,7 @@ $users_data = $this->session->userdata('auth_users');
                   <th> OPD No. </th>
                   <th> Patient Reg No. </th>
                   <th> Patient Name </th>
+                  <th> Gender </th>
                   <!-- <th> Patient Category </th> -->
                   <th> Mobile No </th>
                   <th> Age </th>

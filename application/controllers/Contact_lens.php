@@ -88,12 +88,14 @@ class Contact_lens extends CI_Controller
                 $age .= ", " . $age_d . " " . $day;
             }
             // $row[] = $contact_lens->id;
+            $gender = array('0' => 'Female', '1' => 'Male', '2' => 'Others');
             $row[] = '<input type="checkbox" name="prescription[]" class="checklist" value="' . $contact_lens->id . '">' . $check_script;
             $row[] = $contact_lens->token_no;
             $row[] = $contact_lens->booking_code;
             $row[] = $contact_lens->patient_code;
             // $row[] = $contact_lens->patient_code;
             $row[] = $contact_lens->patient_name;
+            $row[] = $gender[$contact_lens->gender];
             $row[] = $contact_lens->mobile_no;
             $row[] = $age;
             // $row[] = $pat_status;
