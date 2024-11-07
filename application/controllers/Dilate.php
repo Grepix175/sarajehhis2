@@ -478,7 +478,7 @@ class Dilate extends CI_Controller
 
                 // Prepare data to be populated
                 $data = array(
-                    $records[0]->booking_ide,
+                    $records[0]->booking_id,
                     implode(', ', $medicine_names),
                     $records[0]->patient_name, // Make sure this is retrieved correctly
                     date('d-M-Y', strtotime($records[0]->created_date)),
