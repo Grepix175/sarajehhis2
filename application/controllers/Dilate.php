@@ -508,24 +508,58 @@ class Dilate extends CI_Controller
         ini_set('memory_limit', '2048M');
         ini_set('max_execution_time', 300);
 
-        // Prepare data for the PDF
-        // $data['print_status'] = "";
-        // $from_date = $this->input->get('start_date');
-        // $to_date = $this->input->get('end_date');
-
-        // Fetch OPD data
+        // Fetch the list of dilate data
         $list = $this->dilate->get_datatables();
+        
         // Assuming you want to fetch booking data based on the first patient's booking_id
         $data['booking_data'] = $this->dilate->get_booking_by_id($list[0]->booking_id);
-        // echo "<pre>";
-        // print_r($data);
-        // die;
-        // $data['data_list']['side_effect_name'] = $this->dilate->get_side_effect_name($data['data_list']['side_effects']);
-        // Create main header
+        
+        // Group records by patient_id
+        $grouped_data = [];
+        foreach ($list as $dilated) {
+            $grouped_data[$dilated->patient_id][] = $dilated;
+        }
+
+        // Prepare data array to be passed to the view
+        $data['grouped_data'] = [];
+        foreach ($grouped_data as $patient_id => $records) {
+            $row = [];
+
+            // Patient code (you can replace it with actual logic if needed)
+            $row['patient_code'] = '1';
+
+            // Patient ID and Booking ID
+            $row['patient_id'] = $patient_id;
+            $row['booking_id'] = $records[0]->booking_id;
+
+            // Concatenate medicine names, salts, and percentages for each patient group
+            $medicine_names = [];
+            $salts = [];
+            $percentages = [];
+            foreach ($records as $dilated) {
+                $medicine_names[] = $dilated->medicine_name;
+                $salts[] = $dilated->salt;
+                $percentages[] = $dilated->percentage;
+            }
+
+            // Store medicine, salt, and percentage data
+            $row['medicine_names'] = implode(', ', $medicine_names);
+            $row['salts'] = implode(', ', $salts);
+            $row['percentages'] = implode(', ', $percentages);
+
+            // Patient name and status
+            $row['patient_name'] = $records[0]->patient_name;
+            $row['patient_status'] = '<font style="background-color: #1CAF9A;color:white">Not Arrived</font>';
+
+            // Created date
+            $row['created_date'] = date('d-M-Y', strtotime($records[0]->created_date));
+
+            // Append this row to grouped data
+            $data['grouped_data'][] = $row;
+        }
+
+        // Prepare the main header for the PDF
         $data['mainHeader'] = "Dilate List";
-        // if (!empty($from_date) && !empty($to_date)) {
-        // $data['mainHeader'] .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
-        // }
 
         // Load the view and capture the HTML output
         $this->load->view('dilate/dilate_html', $data);
@@ -537,8 +571,9 @@ class Dilate extends CI_Controller
         $this->pdf->render();
 
         // Stream the generated PDF to the browser
-        $this->pdf->stream("help_desk_list_" . time() . ".pdf", array("Attachment" => 1));
+        $this->pdf->stream("dilate_list_" . time() . ".pdf", array("Attachment" => 1));
     }
+
 
     public function delete($id)
     {

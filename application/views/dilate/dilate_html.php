@@ -37,7 +37,7 @@ td
 <table width="100%" cellpadding="0" cellspacing="0" border="1px">
  <tr>
 
-    <th> Token No </th>
+    <!--<th> Token No </th>-->
     <th> Patient Reg No. </th>
     <th> OPD No. </th>
     <th> Drop Name </th>
@@ -54,31 +54,26 @@ td
 
  </tr>
  <?php
-   if(!empty($data_list))
+//  
+   if(!empty($grouped_data))
    {
    	 
    	 $i=1;
-   	 foreach($data_list as $dilate)
+   	 foreach($grouped_data as $dilate)
    	 {
          
-        $medicine_names = [];
-            $salts = [];
-            $percentages = [];
-            foreach ($records as $dilated) {
-                $medicine_names[] = $dilated->medicine_name;
-                $salts[] = $dilated->salt;
-                $percentages[] = $dilated->percentage;
-            }
+        //echo "<pre>";print_r($dilate);die;
+            
    	   ?>
    	    <tr>
-          <td><?php echo $dilate->token_no; ?></td>
-          <td><?php echo $dilate->patient_id; ?></td>
-   	      <td><?php echo $records[0]->booking_id; ?></td>
-          <td><?php echo implode(', ', $medicine_names) ?></td>
-          <td><?php echo $records[0]->patient_name; ?></td>
-          <td><?php echo implode(', ', $salts); ?></td>
-          <td><?php echo ($dilate->status == 1) ? 'Active' : 'Inactive'; ?></td>
-          <td><?php echo date('d-M-Y', strtotime($records[0]->created_date)); ?></td>
+          <!--<td><?php //echo $dilate[token_no; ?></td>-->
+          <td><?php echo $dilate['patient_id']; ?></td>
+   	      <td><?php echo $dilate['booking_id']; ?></td>
+          <td><?php echo $dilate['medicine_names']; ?></td>
+          <td><?php echo $dilate['patient_name']; ?></td>
+          <td><?php echo $dilate['salts']; ?></td>
+          <td><?php echo ($dilate['status'] == 1) ? 'Active' : 'Inactive'; ?></td>
+          <td><?php echo date('d-M-Y', strtotime($dilate['created_date'])); ?></td>
           </tr>
    	   <?php
    	   $i++;	
