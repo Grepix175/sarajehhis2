@@ -6327,6 +6327,19 @@ class Opd_model extends CI_Model
 		$query = $this->db->update('hms_opd_booking');
 		return $query;
 	}
+
+	public function get_by_id_dilate($booking_id) {
+        $this->db->select('*'); // Select all fields (or you can specify the fields you need)
+        $this->db->from('hms_dilated'); // Replace with the name of your table
+        $this->db->where('booking_id', $booking_id); // Filter by booking_id
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            return $query->row(); // Return a single row (assuming you expect only one result)
+        } else {
+            return false; // Return false if no record is found
+        }
+    }
 	public function opd_status_update($id = '')
 	{
 		$this->db->set('hms_opd_booking.status', 1);
