@@ -7,6 +7,7 @@ class Dilate extends CI_Controller
     {
         parent::__construct();
         $this->load->model('dilate/Dilate_model', 'dilate');
+        $this->load->model('opd/Opd_model', 'opd');
         $this->load->library('form_validation');
         $this->load->model('eye/add_prescription/add_new_prescription_model', 'add_prescript');
         error_reporting(0);
@@ -38,18 +39,19 @@ class Dilate extends CI_Controller
         $list = $this->dilate->get_datatables();
         // Assuming you want to fetch booking data based on the first patient's booking_id
         $data['booking_data'] = $this->dilate->get_booking_by_id($list[0]->booking_id);
+        $data['opd'] = $this->dilate->get_booking_by_p_id($list[0]->booking_id);
         $data = array();
         $no = $_POST['start'];
-        // echo "<pre>";print_r($data['booking_data']);die;
-
+        
         // Group records by patient_id
         $grouped_data = [];
         foreach ($list as $dilated) {
             $grouped_data[$dilated->patient_id][] = $dilated;
         }
-
+        
         // Iterate through grouped data (grouped by patient_id)
         foreach ($grouped_data as $patient_id => $records) {
+            // echo "<pre>";print_r($records);die;
             $no++;
             $row = array();
 
@@ -57,7 +59,7 @@ class Dilate extends CI_Controller
             $row[] = '<input type="checkbox" name="prescription[]" class="checklist" value="' . $patient_id . '">';
 
             // Patient code auto (you can replace it with actual logic if needed)
-            $row[] = '1';
+            $row[] = $records[0]->token_no??1;
 
             // Assuming you want to show patient_id for the first record in the group
             $row[] = $patient_id;
@@ -492,7 +494,7 @@ class Dilate extends CI_Controller
 
         // Send headers to force download of the file
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="help_desk_list_' . time() . '.xls"');
+        header('Content-Disposition: attachment;filename="dilate_list_' . time() . '.xls"');
         header('Cache-Control: max-age=0');
 
         // Write the Excel file

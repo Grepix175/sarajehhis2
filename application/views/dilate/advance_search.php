@@ -67,10 +67,10 @@
                           </div>
                         </div>
                         
-                        <div class="grp">
+                        <!-- <div class="grp">
                           <label>Mobile No. </label>
                           <input type="text" maxlength="10" name="mobile_no" value="<?php echo $form_data['mobile_no']; ?>" onkeypress="return isNumberKey(event);">
-                        </div>
+                        </div> -->
 
                     
                        
@@ -114,7 +114,7 @@
 function reset_search()
 {
   
-  $.ajax({url: "<?php echo base_url(); ?>prescription/reset_search/", 
+  $.ajax({url: "<?php echo base_url(); ?>dilate/reset_search/", 
     success: function(result)
     {
       $("#search_form").reset();
@@ -138,7 +138,7 @@ $("#search_form").on("submit", function(event) {
   $('#overlay-loader').show();
    
   $.ajax({
-    url: "<?php echo base_url('prescription/advance_search/'); ?>",
+    url: "<?php echo base_url('dilate/advance_search/'); ?>",
     type: "post",
     data: $(this).serialize(),
     success: function(result) 

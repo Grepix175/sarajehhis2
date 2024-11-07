@@ -40,7 +40,11 @@ class Dilate_model extends CI_Model
 		$user_data = $this->session->userdata('auth_users');
 
 		// Select fields relevant to hms_dilated table
-		$this->db->select("hms_dilated.*, hms_patient.patient_name, hms_opd_booking.booking_code, hms_medicine_entry.medicine_name"); // Include medicine_name in select
+		$this->db->select("hms_dilated.*, 
+		hms_patient.patient_name, 
+		hms_opd_booking.booking_code, 
+		hms_opd_booking.token_no,  
+		hms_medicine_entry.medicine_name"); 
 		$this->db->from('hms_dilated'); // Main table
 		$this->db->where('hms_dilated.is_deleted', '0');
 		$this->db->where('hms_dilated.status', 1);
@@ -182,6 +186,7 @@ class Dilate_model extends CI_Model
         return null;
     }
     public function get_booking_by_p_id($booking_id) {
+		// echo "hihi";die;
         // Select all fields from both tables
         $this->db->select('hms_opd_booking.*, hms_patient.*');
         $this->db->from('hms_opd_booking');
@@ -198,30 +203,44 @@ class Dilate_model extends CI_Model
 	public function dilate_start($id = '')
 	{
 		$time = strtotime(date('H:i:s'));
-		$start_time = strtotime(date('Y-m-d H:i:s'));
-
 		$start_time_save = date("Y-m-d H:i:s");
-
 		$endTime = date("H:i:s", strtotime('+30 minutes', $time));
 		$end = date('Y-m-d ') . $endTime;
+
+		// Update hms_opd_booking
 		$this->db->set('dilate_time', $end);
 		$this->db->set('dilate_start_time', $start_time_save);
 		$this->db->set('dilate_status', 1);
-		$this->db->where('hms_opd_booking.id', $id);
-		$query = $this->db->update('hms_opd_booking');
+		$this->db->where('id', $id);
+		$this->db->update('hms_opd_booking');
+
+		// Update hms_dilated table for the same booking_id
+		$this->db->set('dilate_time', $end);
+		$this->db->set('dilate_start_time', $start_time_save);
+		$this->db->set('dilate_status', 1);
+		$this->db->where('booking_id', $id); // Assuming `booking_id` in `hms_dilated` corresponds to `id` in `hms_opd_booking`
+		$query = $this->db->update('hms_dilated');
+
 		return $query;
 	}
 
-	public function dilate_stop($booked_id = 's') {
-        if (empty($booked_id)) {
-            return false;
-        }
+	public function dilate_stop($booked_id = 's')
+	{
+		if (empty($booked_id)) {
+			return false;
+		}
 
-        // Assuming 'dilate_status' 2 means "stopped"
-        $this->db->set('dilate_status', 2);  // Update status to 'stopped'
-        $this->db->where('id', $booked_id);
-        return $this->db->update('hms_opd_booking');
-    }
+		// Assuming 'dilate_status' 2 means "stopped"
+		// Update hms_opd_booking table
+		$this->db->set('dilate_status', 2);  // Set status to 'stopped'
+		$this->db->where('id', $booked_id);
+		$this->db->update('hms_opd_booking');
+
+		// Update hms_dilated table for the same booking_id
+		$this->db->set('dilate_status', 2);  // Set status to 'stopped'
+		$this->db->where('booking_id', $booked_id);  // Assuming booking_id corresponds to id in hms_opd_booking
+		return $this->db->update('hms_dilated');
+	}
 
     public function get_item_by_medicine($medicine_id) {
         // Select all fields from hms_medicine_entry
@@ -528,6 +547,7 @@ class Dilate_model extends CI_Model
 
 	public function deleteall($ids = array())
 	{
+		// echo "ok";die;
 		if (!empty($ids)) {
 			$id_list = [];
 			foreach ($ids as $id) {
@@ -540,8 +560,8 @@ class Dilate_model extends CI_Model
 			$this->db->set('is_deleted', 1);
 			$this->db->set('deleted_by', $user_data['id']);
 			$this->db->set('deleted_date', date('Y-m-d H:i:s'));
-			$this->db->where('id IN (' . $branch_ids . ')');
-			$this->db->update('hms_hospital_code_entry');
+			$this->db->where('patient_id IN (' . $branch_ids . ')');
+			$this->db->update('hms_dilated');
 		}
 	}
 
