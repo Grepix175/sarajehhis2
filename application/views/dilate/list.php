@@ -92,6 +92,7 @@ $users_data = $this->session->userdata('auth_users');
     }
 
     function checkboxValues() {
+      
       $('#table').dataTable();
       var allVals = [];
       $(':checkbox').each(function () {
@@ -99,6 +100,7 @@ $users_data = $this->session->userdata('auth_users');
           allVals.push($(this).val());
         }
       });
+      // alert(allVals)
       allbranch_delete(allVals);
     }
 
@@ -111,7 +113,7 @@ $users_data = $this->session->userdata('auth_users');
           .one('click', '#delete', function (e) {
             $.ajax({
               type: "POST",
-              url: "<?php echo base_url('dilate/deleteall'); ?>",
+              url: "<?php echo base_url('dilate/delete_multiple'); ?>",
               data: { row_id: allVals },
               success: function (result) {
                 flash_session_msg(result);
@@ -167,17 +169,17 @@ $users_data = $this->session->userdata('auth_users');
               <div class="row m-b-5">
                 <div class="col-xs-5"><label><?php echo $data = get_setting_value('PATIENT_REG_NO'); ?></label></div>
                 <div class="col-xs-7">
-                  <input name="patient_code" class="m_input_default" id="patient_code" onkeyup="return form_submit();"
-                    value="<?php echo $form_data['patient_code'] ?>" type="text" autofocus>
+                  <input name="patient_id" class="m_input_default" id="patient_id" onkeyup="return form_submit();"
+                    value="<?php echo $form_data['patient_id'] ?>" type="text" autofocus>
                 </div>
               </div>
-              <div class="row m-b-5">
+              <!-- <div class="row m-b-5">
                 <div class="col-xs-5"><label>Mobile No.</label></div>
                 <div class="col-xs-7">
                   <input name="mobile_no" value="<?php echo $form_data['mobile_no'] ?>" id="mobile_no"
                     onkeyup="return form_submit();" class="numeric m_input_default" maxlength="10" value="" type="text">
                 </div>
-              </div>
+              </div> -->
 
             </div> <!-- 4 -->
 
@@ -362,7 +364,7 @@ $users_data = $this->session->userdata('auth_users');
       function reset_search() {
         $('#start_date_patient').val('');
         $('#end_date_patient').val('');
-        $('#patient_code').val('');
+        $('#patient_id').val('');
         $('#patient_name').val('');
         $('#mobile_no').val('');
 
