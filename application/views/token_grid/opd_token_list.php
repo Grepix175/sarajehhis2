@@ -34,6 +34,40 @@ $user_role = $users_data['users_role'];
     .radio-label input[type="radio"] {
       margin-right: 5px;
     }
+    .border-red {
+        border: 2px solid red; 
+    }
+
+    .border-blue {
+        border: 2px solid blue; 
+    }
+
+    .border-yellow {
+        border: 2px solid yellow; 
+    }
+
+    .border-red, .border-blue, .border-yellow {
+        padding: 10px; 
+        margin: 5px 0;
+    }
+    #additional_selection .radio-label {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 20px; /* Adds spacing between each radio button group */
+    }
+
+    #additional_selection input[type="radio"] {
+      margin-right: 5px; /* Adjust spacing between radio button and label */
+      
+    }
+    #additional_selection .col-xs-9 {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-left: -38px;
+    }
+    /*  */
+
   </style>
   <!-- js -->
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>jquery.min.js"></script>
@@ -56,35 +90,50 @@ $user_role = $users_data['users_role'];
     if (in_array('2073', $users_data['permission']['action'])) {
       ?>
       $(document).ready(function () {
-        table = $('#table').DataTable({
-          "processing": true,
-          "serverSide": true,
-          "order": [],
-          "pageLength": '20',
-          "ajax": {
-            "url": "<?php echo base_url('token_no/ajax_list') ?>",
-            "type": "POST",
-          },
-          "columnDefs": [
-            {
-              "targets": [0, -1], //last column
-              "orderable": false, //set not orderable
+          table = $('#table').DataTable({
+              "processing": true,
+              "serverSide": true,
+              "order": [],
+              "pageLength": '20',
+              "ajax": {
+                  "url": "<?php echo base_url('token_no/ajax_list') ?>",
+                  "type": "POST",
+              },
+              "columnDefs": [
+                  {
+                      "targets": [0, -1], // last column
+                      "orderable": false, // set not orderable
+                  },
+                  {
+                      "targets": -1, // Hide the last column (emergency_status)
+                      "visible": false,
+                  },
+                  {
+                      "targets": 5, // Ensure the fifth column is visible
+                      "visible": true,
+                  }
+              ],
+              "createdRow": function (row, data, dataIndex) {
+                  // Access emergency_status (assuming it's the last column in the data array)
+                  var emergencyStatus = data[data.length - 1]; // Get the emergency_status value
 
-            },
-          ],
-          "createdRow": function (row, data, dataIndex) {
-            // Assuming "Completed" is indicated by status = '2'
-            // if (data[3] === 'Completed') { // data[3] is the status column
-            //   $('td', row).eq(4).html(''); // Hide action column
-            // }
-          },
+                  // Change the background color of the first column based on emergency_status
+                  var firstColumn = $('td', row).eq(0); // Get the first column cell
 
-        });
-        $('.tog-col').on('click', function (e) {
-          var column = table.column($(this).attr('data-column'));
-          column.visible(!column.visible());
-        });
+                  if (emergencyStatus == 1) {
+                      firstColumn.css('border', '3px solid red'); // Change to red for emergency_status 1
+                  } else if (emergencyStatus == 2) {
+                      firstColumn.css('border', '3px solid blue'); // Change to blue for emergency_status 2
+                  } else if (emergencyStatus == 3) {
+                      firstColumn.css('border', ' 3px solid yellow'); // Change to yellow for emergency_status 3
+                  }
+              },
+          });
 
+          $('.tog-col').on('click', function (e) {
+              var column = table.column($(this).attr('data-column'));
+              column.visible(!column.visible());
+          });
       });
     <?php } ?>
 
@@ -149,6 +198,8 @@ $user_role = $users_data['users_role'];
                 </div>
 
               </div>
+              
+
             </div> <!-- 4 -->
 
 
@@ -163,6 +214,7 @@ $user_role = $users_data['users_role'];
                 </div>
 
               </div>
+              
 
               <?php //if(in_array('1',$permission_section)){ ?>
 
@@ -180,7 +232,40 @@ $user_role = $users_data['users_role'];
 
 
             </div> <!-- 4 -->
-          </div> <!-- row -->
+          </div> <!-- row --> 
+          <div class="row" id="additional_selection">
+
+              <div class="col-xs-2"><label>Priority</label></div>
+ 
+                <div class="col-xs-9">
+                  <label class="radio-label">
+                    <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
+                    <span>Priority</span>
+                  </label>
+
+                  <label class="radio-label">
+                    <input type="radio" name="priority_type" value="2" id="fasttrack_blue" onclick="return form_submit();">
+                    <span>Fast Track</span>
+                  </label>
+
+                  <label class="radio-label">
+                    <input type="radio" name="priority_type" value="3" id="priority_yellow" onclick="return form_submit();">
+                    <span>Post-Operative</span>
+                  </label>
+                </div>
+          </div>
+          <script>
+            $(document).ready(function() {
+                // Function to show/hide additional selection based on radio button selection
+                $('input[name="search_type"]').change(function() {
+                    if ($(this).val() == "1") { // If Pending is selected
+                        $('#additional_selection').show();
+                    } else {
+                        $('#additional_selection').hide();
+                    }
+                });
+            });
+            </script>
         </form>
         <?php //} ?>
 
@@ -240,7 +325,16 @@ $user_role = $users_data['users_role'];
 
   <script>
 
-
+  $(document).ready(function() {
+      // Function to show/hide additional selection based on radio button selection
+      $('input[name="search_type"]').change(function() {
+          if ($(this).val() == "1") { // If Pending is selected
+              $('#additional_selection').show();
+          } else {
+              $('#additional_selection').hide();
+          }
+      });
+  });
 
     function reset_search() {
       $('#doctor_id').val('');
@@ -260,14 +354,14 @@ $user_role = $users_data['users_role'];
     function form_submit(vals) {
       var specialization_id = $('#specialization_id').val();
       var doctor_id = $('#doctor_id').val();
-      // var search_type = $('#search_type').val();
+      var priority_type = $('input[name="priority_type"]:checked').val();
       var search_type = $('input[name="search_type"]:checked').val();
       var start_date = $('#from_date').val();
       var end_date = $('#to_date').val();
       $.ajax({
         url: "<?php echo base_url('token_no/advance_search/'); ?>",
         type: 'POST',
-        data: { doctor_id: doctor_id, specialization_id: specialization_id, search_type: search_type, from_date: start_date, to_date: end_date },
+        data: { doctor_id: doctor_id, specialization_id: specialization_id, search_type: search_type,priority_type: priority_type, from_date: start_date, to_date: end_date },
         success: function (result) {
           if (vals != "1") {
             reload_table();

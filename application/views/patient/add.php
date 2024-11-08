@@ -152,6 +152,98 @@ $field_list = mandatory_section_field_list(2);
       height: 40px !important;
       /* width: 380px !important; */
     }
+    .color-selection {
+        display: flex; /* Use flexbox for alignment */
+        /* flex-direction: column; Stack items vertically */
+        gap: 10px; /* Space between items */
+    }
+
+    .new_color {
+        display: flex; /* Align radio button and label horizontally */
+        align-items: center; /* Center align items vertically */
+    }
+
+    input[type="radio"] {
+        margin-right: 10px; /* Space between radio button and label */
+        cursor: pointer; /* Change cursor to pointer on hover */
+        
+    }
+    /* .color-selection input[type="radio"] {
+      display: none; /* Hide the default radio button only within .color-selection 
+    } */
+
+
+    .color-box {
+      display: inline-block;
+      padding: 7px ; /* Add padding to increase size */
+      border-radius: 5px;
+      text-align: center;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 12px; 
+      width: 180px; /* Set a fixed width for all labels */
+      height: 50px; /* Set a fixed height for all labels */
+      line-height: 30px; /* Vertically center the text inside the label */
+    }
+
+    .color-box.red {
+        background-color:  red; /* Light red background */
+    }
+
+    .color-box.blue {
+        background-color:  blue; /* Light blue background */
+    }
+
+    .color-box.yellow {
+        background-color:  yellow;  /* Light yellow background */
+    }
+
+    /* Change the background color and text color when the radio is checked */
+    .color-selection input[type="radio"]:checked + label.color-box.red {
+      background-color: red; /* Change to red when checked */
+      color: black; /* Text color for red box */
+    }
+
+    .color-selection input[type="radio"]:checked + label.color-box.blue {
+      background-color: blue; /* Change to blue when checked */
+      color: white; /* Text color for blue box */
+    }
+
+    .color-selection input[type="radio"]:checked + label.color-box.yellow {
+      background-color: yellow; /* Change to yellow when checked */
+      color: black; /* Text color for yellow box */
+    }
+
+    /* Optional: Change border color when checked */
+    .color-selection input[type="radio"]:checked + label.color-box {
+      border-color: black; /* Change border color to black when checked */
+    }
+    .grp {
+        display: flex; /* Use flexbox for layout */
+        align-items: center; /* Center items vertically */
+        margin-bottom: 15px; /* Space between groups */
+    }
+
+    .label-container {
+        display: flex; /* Make label and select inline */
+        align-items: center; /* Center align items */
+        width: 100%; /* Full width for the container */
+    }
+
+    label {
+        margin-right: 10px; /* Space between label and select box */
+        font-weight: bold; /* Optional: make the label bold */
+    }
+
+    .box-right {
+        flex-grow: 1; /* Allow the select box to take available space */
+    }
+
+    /* Optional: Adjust select box appearance */
+    .select-height {
+        height: 35px; /* Adjust height as needed */
+        width: 100%; /* Full width for the select box */
+    }
   </style>
   <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datetimepicker.css">
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datetimepicker.js"></script>
@@ -175,16 +267,16 @@ $field_list = mandatory_section_field_list(2);
         <input type="hidden" name="data_id" id="patient_id" value="<?php echo $form_data['data_id']; ?>">
         <div class="content-inner">
 
-          <div class="pat-col">
-            <div class="row">
+            <div class="pat-col">
+              <div class="row">
               <div class="col-md-12">
                 <!-- <div class="grp">
-            <span class="new_patient"><input type="radio" name="new_patient" <?php //if(empty($form_data['patient_id'])) { 
-            ?> checked <?php //} 
-             ?> > <label>Patient</label></span>
-            <span class="new_patient"><input type="radio" name="new_patient"
-                onClick="window.location='<?php echo base_url('patient'); ?>';" <?php if (!empty($form_data['patient_id'])) { ?> checked <?php } ?>> <label>Visitor</label></span>
-          </div> -->
+                <span class="new_patient"><input type="radio" name="new_patient" <?php //if(empty($form_data['patient_id'])) { 
+                ?> checked <?php //} 
+                ?> > <label>Patient</label></span>
+                <span class="new_patient"><input type="radio" name="new_patient"
+                    onClick="window.location='<?php echo base_url('patient'); ?>';" <?php if (!empty($form_data['patient_id'])) { ?> checked <?php } ?>> <label>Visitor</label></span>
+                </div> -->
                 <div class="grp">
                   <span class="new_patient">
                     <input type="radio" name="new_patient" id="patient_radio"
@@ -200,44 +292,59 @@ $field_list = mandatory_section_field_list(2);
                 </div>
               </div>
             </div>
-            <div class="grp-full">
-              <div class="grp">
-                <label>Patient Category <span class="star">*</span>
-                </label>
+            <div class="pat-col">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="grp">
+                    <div class="color-selection"> <!-- Specific div for radio buttons -->
+                      <span class="new_color">
+                        <input type="radio" name="color" value="1" id="red">
+                        <label for="red" class="color-box red">Priority</label>
+                      </span>
 
-                <div class="box-right">
-                  <select name="patient_category" id="patient_category" class="m_input_default select-height">
-                    <option value="">Select Patient Category</option>
-                    <?php
+                      <span class="new_color">
+                        <input type="radio" name="color" value="2" id="blue" >
+                        <label for="blue" class="color-box blue">Fast Track OPD Consultation</label>
+                      </span>
 
-                    if (!empty($patient_category_list)) {
-                      foreach ($patient_category_list as $patient_category) {
-                        $selected_patient_category = "";
-                        if ($patient_category->id == $form_data['patient_category']) {
-                          $selected_patient_category = 'selected="selected"';
-                        }
-                        echo '<option value="' . $patient_category->id . '" ' . $selected_patient_category . '>' . $patient_category->patient_category . '</option>';
-                      }
-                    }
-                    ?>
-                  </select>
-                  <?php
-                  if (!empty($form_error)) {
-                    echo form_error('patient_category');
-                  }
-
-                  ?>
+                      <span class="new_color">
+                        <input type="radio" name="color" value="3" id="yellow" >
+                        <label for="yellow" class="color-box yellow">Post-Operative</label>
+                      </span>
+                    </div> <!-- End of color-selection div -->
+                  </div>
                 </div>
               </div>
-
-              <?php //if(in_array('51',$users_data['permission']['action'])) {
-              ?>
-              <!-- <div class="grp-right">
-                  <a title="Add Religion" class="btn-new" href="javascript:void(0)" onClick="patient_category_modal()"><i class="fa fa-plus"></i> New</a>
-               </div> -->
-              <?php //} 
-              ?>
             </div>
+            <script>
+            $(document).ready(function() {
+                // Assuming form_data is an object that contains the selected color
+                var form_data = {
+                    selectedColor: <?php echo $form_data['color']; ?>// Example value, this should come from your actual data
+                };
+
+                // Set the radio button based on the selected color
+                $('input[name="color"][value="' + form_data.selectedColor + '"]').prop('checked', true);
+            });
+            </script>
+
+            
+            
+
+            <div class="row m-b-5">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-4" style="text-align: left;"> <a href="javascript:void(0);" class="show_hide_more" data-content="toggle-text" onclick="more_patient_info()">More Info</a></div>
+                  <div class="col-md-8" >
+                    
+                  </div>
+                </div>
+              </div>
+            </div> <!-- row -->
+            <div class="more_content" id="patient_info" style="display: none;" > 
+
+
+            
             <?php $data = get_setting_value('PATIENT_REG_NO');
             if (!empty($data) && isset($data)) {
               ?>
@@ -252,7 +359,7 @@ $field_list = mandatory_section_field_list(2);
 
             <div class="grp-full">
               <div class="grp" style="width: 115%;">
-                <label>Patient Name <span class="star">*</span> </label>
+                <label>Patient Name </label>
                 <div class="box-right" style="width: 552px;padding-left: 2.5rem;">
 
                   <select name="simulation_id" id="simulation_id" class="pat-select1 select-height"
@@ -363,7 +470,7 @@ $field_list = mandatory_section_field_list(2);
        </div> -->
 
             <div class="grp">
-              <label>Gender <span class="star">*</span></label>
+              <label>Gender </label>
               <div class="box-right" id="gender">
                 <input type="radio" name="gender" value="1" <?php if ($form_data['gender'] == 1) {
                   echo 'checked="checked"';
@@ -424,7 +531,7 @@ $field_list = mandatory_section_field_list(2);
               <label>Mobile No.
                 <?php if (!empty($field_list)) {
                   if ($field_list[0]['mandatory_field_id'] == 5 && $field_list[0]['mandatory_branch_id'] == $users_data['parent_id']) { ?>
-                    <span class="star">*</span>
+                    
                     <?php
                   }
                 }
@@ -551,7 +658,7 @@ $field_list = mandatory_section_field_list(2);
         </div>
       </div> -->
 
-
+      </div>
             <div class="grp">
               <?php
               if (isset($form_data['patient_code_auto']) && !empty($form_data['patient_code_auto'])) {
@@ -570,7 +677,7 @@ $field_list = mandatory_section_field_list(2);
 
             </div>
 
-
+           
 
 
             <!-- <div class="grp-full">
@@ -930,6 +1037,12 @@ $field_list = mandatory_section_field_list(2);
   $this->load->view('include/footer');
   ?>
   <script>
+    function more_patient_info()
+    {
+        var txt = $(".more_content").is(':visible') ? 'More Info' : 'Less Info';
+        $(".show_hide_more").text(txt);
+        $("#patient_info").slideToggle();
+    }
     function get_patient_detail_by_mobile() {
       var val = $('#mobile_no').val();
       if (val.length == 10) {

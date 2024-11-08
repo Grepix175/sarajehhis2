@@ -449,7 +449,7 @@ $field_list = mandatory_section_field_list(2);
 
         <div class="grp-full">
             <!-- Patient Name -->
-            <div class="grp" style="width: 100%;">
+            <!-- <div class="grp" style="width: 100%;">
                 <div class="box-right">
                     <span>
                         <strong>
@@ -459,7 +459,7 @@ $field_list = mandatory_section_field_list(2);
                     </span>
                     
                 </div>
-            </div>
+            </div> -->
 
             <!-- AMSLER GRID -->
             <div class="grp" style="width: 100%;">

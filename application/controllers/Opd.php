@@ -484,6 +484,7 @@ class Opd extends CI_Controller
       // added By Nitin Sharma 02/02/2024
       // End Action Button //
       $row[] = $btn_confirm . $btn_edit . $btn_delete . $btn_print . $btn_a . $print_mlc;
+      $row[] = $test->emergency_status; // Add emergency_status to the row
       $data[] = $row;
       $i++;
     }
@@ -3155,8 +3156,13 @@ class Opd extends CI_Controller
       "emergency_booking" => "3",
     );
     if (isset($post) && !empty($post)) {
-      $marge_post = array_merge($data['form_data'], $post);
-      $this->session->set_userdata('opd_search', $marge_post);
+      // $priority_type = null;
+      // if (isset($post['search_type']) && $post['search_type'] == 1) {
+        //     $priority_type = !empty($post['priority_type']) ? $post['priority_type'] : null;
+        // }
+        $marge_post = array_merge($data['form_data'], $post);
+        $this->session->set_userdata('opd_search', $marge_post);
+        // echo "<pre>";print_r($marge_post);die;
 
     }
     $opd_search = $this->session->userdata('opd_search');

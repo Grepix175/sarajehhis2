@@ -17,7 +17,7 @@ class Opd_model extends CI_Model
 	{
 		$user_data = $this->session->userdata('auth_users');
 		$this->db->select("hms_opd_booking.*,hms_patient.patient_name,hms_patient.mobile_no, 
-			hms_patient.patient_code as patient_reg_no, hms_patient.mobile_no, (CASE WHEN hms_patient.gender=1 THEN  'Male' ELSE 'Female' END ) as gender, concat_ws(' ',hms_patient.address, hms_patient.address2, hms_patient.address3) as address, hms_patient.father_husband,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h,hms_patient.pincode,hms_patient.adhar_no,,hms_patient.address2, sim.simulation as father_husband_simulation,hms_patient.patient_email,hms_patient_category.patient_category as patient_category_name,hms_payment_mode.payment_mode as payment_mode_name, ins_type.insurance_type, ins_cmpy.insurance_company, src.source as patient_source, ds.disease , (CASE WHEN hms_opd_booking.referred_by =1 THEN concat(hms_hospital.hospital_name,' (Hospital)')  ELSE concat('Dr. ',hms_doctors.doctor_name) END) as doctor_hospital_name, spcl.specialization, docs.doctor_name , pkg.title,hms_patient.dob,(select sum(payment.credit) as paid_amount1 from hms_payment as payment where payment.parent_id = hms_opd_booking.id AND payment.section_id =2) as paid_amount1,
+			hms_patient.patient_code as patient_reg_no,hms_patient.emergency_status, hms_patient.mobile_no, (CASE WHEN hms_patient.gender=1 THEN  'Male' ELSE 'Female' END ) as gender, concat_ws(' ',hms_patient.address, hms_patient.address2, hms_patient.address3) as address, hms_patient.father_husband,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h,hms_patient.pincode,hms_patient.adhar_no,,hms_patient.address2, sim.simulation as father_husband_simulation,hms_patient.patient_email,hms_patient_category.patient_category as patient_category_name,hms_payment_mode.payment_mode as payment_mode_name, ins_type.insurance_type, ins_cmpy.insurance_company, src.source as patient_source, ds.disease , (CASE WHEN hms_opd_booking.referred_by =1 THEN concat(hms_hospital.hospital_name,' (Hospital)')  ELSE concat('Dr. ',hms_doctors.doctor_name) END) as doctor_hospital_name, spcl.specialization, docs.doctor_name , pkg.title,hms_patient.dob,(select sum(payment.credit) as paid_amount1 from hms_payment as payment where payment.parent_id = hms_opd_booking.id AND payment.section_id =2) as paid_amount1,
 (select sum(credit)-sum(debit) as balance from hms_payment as  payment where payment.parent_id = hms_opd_booking.id AND payment.section_id=2 AND payment.branch_id = " . $user_data['parent_id'] . ") as balance1");
 
 		$this->db->join('hms_patient', 'hms_patient.id=hms_opd_booking.patient_id');
@@ -84,7 +84,9 @@ class Opd_model extends CI_Model
 				$this->db->where('hms_opd_booking.booking_date <= "' . $end_date . '"');
 			}
 
-
+			if (!empty($search['priority_type'])) {
+                $this->db->where('hms_patient.emergency_status', $search['priority_type']);
+            }
 
 			/* Booking */
 
@@ -304,7 +306,7 @@ class Opd_model extends CI_Model
 
 
 		if (isset($search) && !empty($search)) {
-
+			// echo "<pre>";print_r($search);die;
 			if (!empty($search['source_from'])) {
 				$this->db->where('hms_opd_booking.source_from', $search['source_from']);
 			}
@@ -318,7 +320,6 @@ class Opd_model extends CI_Model
 				$end_date = date('Y-m-d', strtotime($search['end_date']));
 				$this->db->where('hms_opd_booking.booking_date <= "' . $end_date . '"');
 			}
-
 
 
 			/* Booking */
@@ -344,6 +345,9 @@ class Opd_model extends CI_Model
 			}
 
 
+			if (!empty($search['priority_type'])) {
+                $this->db->where('hms_patient.emergency_status', $search['priority_type']);
+            }
 
 			if (!empty($search['amount_from'])) {
 				$this->db->where('hms_opd_booking.total_amount >= "' . $search['amount_from'] . '"');
@@ -4292,7 +4296,7 @@ class Opd_model extends CI_Model
 	{
 		$user_data = $this->session->userdata('auth_users');
 		$this->db->select("hms_opd_booking.*,hms_patient.patient_name,hms_patient.mobile_no,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d,hms_patient.gender,hms_patient.patient_code,(select sum(payment.credit) as paid_amount1 from hms_payment as payment where payment.parent_id = hms_opd_booking.id AND payment.section_id =2) as paid_amount1,
-(select sum(credit)-sum(debit) as balance from hms_payment as  payment where payment.parent_id = hms_opd_booking.id AND payment.section_id=2 AND payment.branch_id = " . $user_data['parent_id'] . ") as balance1,src.source as patient_source, ds.disease");
+		(select sum(credit)-sum(debit) as balance from hms_payment as  payment where payment.parent_id = hms_opd_booking.id AND payment.section_id=2 AND payment.branch_id = " . $user_data['parent_id'] . ") as balance1,src.source as patient_source, ds.disease");
 		$this->db->join('hms_patient', 'hms_patient.id=hms_opd_booking.patient_id', 'inner');
 		$this->db->join('hms_patient_source as src', 'src.id=hms_opd_booking.source_from', 'Left');
 		$this->db->join('hms_disease as ds', 'ds.id=hms_opd_booking.diseases', 'left');
@@ -4323,22 +4327,27 @@ class Opd_model extends CI_Model
 		/////// Search query end //////////////
 		if (isset($search) && !empty($search)) {
 
-			/*if(!empty($search['start_date']))
-														 {
-															 $start_date = date('Y-m-d h:i:s',strtotime($search['start_date']));
-															 $this->db->where('hms_opd_booking.booking_date >= "'.$start_date.'"');
-														 }
+		/*if(!empty($search['start_date']))
+			{
+				$start_date = date('Y-m-d h:i:s',strtotime($search['start_date']));
+				$this->db->where('hms_opd_booking.booking_date >= "'.$start_date.'"');
+			}
 
-														 if(!empty($search['end_date']))
-														 {
-															 $end_date = date('Y-m-d h:i:s',strtotime($search['end_date']));
-															 $this->db->where('hms_opd_booking.booking_date <= "'.$end_date.'"');
-														 }*/
+			if(!empty($search['end_date']))
+			{
+				$end_date = date('Y-m-d h:i:s',strtotime($search['end_date']));
+				$this->db->where('hms_opd_booking.booking_date <= "'.$end_date.'"');
+			}*/
 
 			if (!empty($search['start_date'])) {
 				$booking_from_date = date('Y-m-d', strtotime($search['start_date'])) . ' 00:00:00';
 				$this->db->where('hms_opd_booking.booking_date >= "' . $booking_from_date . '"');
 			}
+
+			if (!empty($search['priority_type'])) {
+                $this->db->where('hms_patient.emergency_status', $search['priority_type']);
+            }
+			
 
 			if (!empty($search['end_date'])) {
 				$booking_to_date = date('Y-m-d', strtotime($search['end_date'])) . ' 23:59:59';
@@ -6327,6 +6336,19 @@ class Opd_model extends CI_Model
 		$query = $this->db->update('hms_opd_booking');
 		return $query;
 	}
+
+	public function get_by_id_dilate($patient_id) {
+        $this->db->select('*'); // Select all fields (or you can specify the fields you need)
+        $this->db->from('hms_dilated'); // Replace with the name of your table
+        $this->db->where('patient_id', $patient_id); // Filter by booking_id
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            return true; // Return a single row (assuming you expect only one result)
+        } else {
+            return false; // Return false if no record is found
+        }
+    }
 	public function opd_status_update($id = '')
 	{
 		$this->db->set('hms_opd_booking.status', 1);
