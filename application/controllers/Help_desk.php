@@ -104,6 +104,9 @@ class Help_desk extends CI_Controller
       $hess_chart = ($prescription->drawing_flag == 1)
         ? '<font style="background-color: #228B30;color:white">Hess Chart</font>'
         : '';
+        $refraction_below8 = ($prescription->refraction_below8 == 1)
+        ? '<font style="background-color: #228B30;color:white">Refraction Below 8 Year</font>'
+        : '';
       $age_y = $prescription->age_y;
       $age_m = $prescription->age_m;
       $age_d = $prescription->age_d;
@@ -139,7 +142,7 @@ class Help_desk extends CI_Controller
       $row[] = $gender[$prescription->gender];
       $row[] = $prescription->mobile_no;
       $row[] = $age;
-      $values = array_filter([$pat_status, $contact_lens_txt, $hess_chart]);
+      $values = array_filter([$pat_status, $contact_lens_txt, $hess_chart,$refraction_below8]);
 
       // $row[] = trim($pat_status . (!empty($pat_status) && !empty($hess_chart) && !empty($contact_lens_txt) ? ' / ' : '') . $contact_lens_txt);
       $row[] = !empty($values) ? implode(' / ', $values) : 'Not Arrived';
@@ -157,6 +160,7 @@ class Help_desk extends CI_Controller
       $btn_contact_lens = "";
       $btn_hess_chart = "";
       $btn_low_vision = "";
+      $btn_refraction_below8 = "";
 
       if ($users_data['parent_id'] == $prescription->branch_id) {
         if (in_array('2413', $users_data['permission']['action'])) {
@@ -192,6 +196,20 @@ class Help_desk extends CI_Controller
         $btn_hess_chart = '<a class="btn-custom disabled" href="javascript:void(0);" title="Hess Chart" style="pointer-events: none; opacity: 0.6;" data-url="512">  Hess Chart</a>';
       }
 
+      if ($prescription->refraction_below8 == 0) {
+        
+
+        $flag = 'refraction_below_8_years';
+        $type = 'help_desk';
+        $btn_refraction_below8 = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . "&type=" . $type . '" title="Refraction below 8 Years">Refraction Below 8 Years</a>';
+        
+      } else {
+
+        $btn_refraction_below8 = '<a class="btn-custom disabled" href="javascript:void(0);" title="Refraction below 8 Years" style="pointer-events: none; opacity: 0.6;" data-url="512">Refraction Below 8 Years</a>';
+      }
+
+      
+
 
       /* if(in_array('2413',$users_data['permission']['action'])) 
             {
@@ -224,7 +242,7 @@ class Help_desk extends CI_Controller
 
       // . $btn_print_chasma_pre
       $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission . $btn_contact_lens . $btn_low_vision.
-        $btn_hess_chart;
+        $btn_hess_chart.$btn_refraction_below8;
       // print_r($row);
       $data[] = $row;
       $i++;

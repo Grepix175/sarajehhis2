@@ -10,7 +10,7 @@
 	.input-group-addon {border-radius:0px;border-color:#aaa;} 
 </style>
 
-<section>
+<!-- <section>
 	<div class="row">
 		<div class="col-md-6"><div class="panel-heading bg-theme text-center">R / OD</div> </div>
 		<div class="col-md-6"><div class="panel-heading bg-theme text-center">L / OS</div></div>
@@ -29,7 +29,6 @@
 			<div class=" first_row">Comments: <?php echo $refrtsn_vl_act['refraction_va_r_comm'];?> </div>
 		</div>
 	</div> <br>
-	<!-- 1st row -->
 	<div class="row d-none first_row">
 		<div class="col-md-1">
 			<span>UA</span> <br>
@@ -100,7 +99,7 @@
 			<label class="btn_radio_small btn-custom"><input type="checkbox" value="P" name="refraction_va_ua_r_p" id="refraction_va_ua_r_p"> P</label>
 		</div>
 	</div>
-	<!-- 2nd row -->
+
 	<div class="row m-t-3 d-none first_row">
 		<div class="col-md-1">
 			<br>
@@ -257,7 +256,7 @@
 		</div>
 	</div>
 	<br>
-	<!-- 3rd row -->
+
 	<div class="row m-t-3 d-none first_row">
 		<div class="col-md-1">
 			<span>Pinhole</span>
@@ -289,7 +288,6 @@
 				<label class="btn_radio_small"><input type="radio" class="refraction_va_ph_l" name="refraction_va_ph_l" value="6/7.5"> 6/7.5</label>
 				<label class="btn_radio_small"><input type="radio" class="refraction_va_ph_l" name="refraction_va_ph_l" value="6/6"> 6/6</label>
 				<label class="btn_radio_small"><input type="radio" class="refraction_va_ph_l" name="refraction_va_ph_l" value="6/5"> 6/5</label>
-				<!-- <label class="btn_radio_small"><input type="radio" class="refraction_va_ph_l" name="refraction_va_ph_l" value="P"> P</label> -->
 			</div>
 		</div>
 		<div class="col-md-1 btn-group">
@@ -326,7 +324,6 @@
 				<label class="btn_radio_small"><input type="radio" class="refraction_va_ph_r" name="refraction_va_ph_r" value="6/7.5"> 6/7.5</label>
 				<label class="btn_radio_small"><input type="radio" class="refraction_va_ph_r" name="refraction_va_ph_r" value="6/6"> 6/6</label>
 				<label class="btn_radio_small"><input type="radio" class="refraction_va_ph_r" name="refraction_va_ph_r" value="6/5"> 6/5</label>
-				<!-- <label class="btn_radio_small"><input type="radio" class="refraction_va_ph_r" name="refraction_va_ph_r" value="P"> P</label> -->
 			</div>
 		</div>
 		<div class="col-md-1 btn-group">
@@ -335,7 +332,6 @@
 		</div>
 	</div>
 
-	<!-- 4th row -->
 	<div class="row m-t-3 d-none first_row">
 		<div class="col-md-1">
 			<span>Glasses</span>
@@ -409,7 +405,7 @@
 		</div>
 	</div>
 
-	<!-- 5th row -->
+	
 	<div class="row m-t-3 d-none first_row">
 		<div class="col-md-1">
 			<br>
@@ -486,7 +482,7 @@
 		</div>
 	</div>
 
-	<!-- 6th row -->
+	
 	<div class="row m-t-3 d-none first_row">
 		<div class="col-md-1">
 			<span>Contact Lens</span>
@@ -572,534 +568,9 @@
 			</div>
 		</div>
 	</div>
-</section>
+</section> -->
 
-
-<section class="panel panel-default">
-	<div class="panel-body">
-		<div class="row">				
-			<div class="col-md-12">
-				<div class="text-right btn_edit"><a href="javascript:void(0)" class="btn_fill" onclick="$('.kero_meter').toggle();">Edit</a><hr></div>
-			</div>
-			<div class="col-md-2">
-				<div class="label_name">KERATOMETRY (K) <i onclick="refraction_km_ltr();" class="fa fa-arrow-right" title="Copy Left to Right"></i> </div>
-			</div>
-			<div class="col-md-4">
-				<table class="table table-bordered">
-					<thead class="bg-info">
-						<tr>
-							<th width="33.33%"></th>
-							<th width="33.33%"></th>
-							<th width="33.33%">Axis</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td style="text-align:left;">Kh</td>
-							<td>
-								<span class="kero_meter"><?php echo $refrtsn_kerat['refraction_km_l_kh'];?></span> <input type="text" name="refraction_km_l_kh" id="refraction_km_l_kh" class="w-100px kero_meter" value="<?php echo $refrtsn_kerat['refraction_km_l_kh'];?>" style="display:none;">
-							</td>
-							<td><span class="kero_meter"> <?php echo $refrtsn_kerat['refraction_km_l_kh_a'];?> </span> <input type="text" name="refraction_km_l_kh_a" id="refraction_km_l_kh_a" value="<?php echo $refrtsn_kerat['refraction_km_l_kh_a'];?>" class="w-100px kero_meter" style="display:none;"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Kv</td>
-							
-							<td>
-								<span class="kero_meter"><?php echo $refrtsn_kerat['refraction_km_l_kv'];?></span> <input type="text" name="refraction_km_l_kv" id="refraction_km_l_kv" class="w-100px kero_meter" value="<?php echo $refrtsn_kerat['refraction_km_l_kv'];?>" style="display:none;">
-							</td>
-							<td><span class="kero_meter"> <?php echo $refrtsn_kerat['refraction_km_l_kv_a'];?> </span> <input type="text" name="refraction_km_l_kv_a" id="refraction_km_l_kv_a" value="<?php echo $refrtsn_kerat['refraction_km_l_kv_a'];?>" class="w-100px kero_meter" style="display:none;"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>			
-			<div class="col-md-2">
-				<div class="label_name">KERATOMETRY (K) <i onclick="refraction_km_rtl();" class="fa fa-arrow-left" title="Copy Right to Left"></i> </div>
-			</div>
-			<div class="col-md-4">
-				<table class="table table-bordered">
-					<thead class="bg-info">
-						<tr>
-							<th width="33.33%"></th>
-							<th width="33.33%"></th>
-							<th width="33.33%">Axis</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td style="text-align:left;">Kh</td>
-							<td>
-								<span class="kero_meter"><?php echo $refrtsn_kerat['refraction_km_r_kh'];?></span> <input type="text" name="refraction_km_r_kh" id="refraction_km_r_kh" class="w-100px kero_meter" value="<?php echo $refrtsn_kerat['refraction_km_r_kh'];?>" style="display:none;">
-							</td>
-							<td><span class="kero_meter"> <?php echo $refrtsn_kerat['refraction_km_r_kh_a'];?> </span> <input type="text" name="refraction_km_r_kh_a" id="refraction_km_r_kh_a" class="w-100px kero_meter" value="<?php echo $refrtsn_kerat['refraction_km_r_kh_a'];?>" style="display:none;"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Kv</td>
-							<td>
-								<span class="kero_meter"><?php echo $refrtsn_kerat['refraction_km_r_kv'];?></span> <input type="text" name="refraction_km_r_kv" id="refraction_km_r_kv" class="w-100px kero_meter" value="<?php echo $refrtsn_kerat['refraction_km_r_kv'];?>" style="display:none;">
-							</td>
-							<td><span class="kero_meter"> <?php echo $refrtsn_kerat['refraction_km_r_kv_a'];?> </span> <input type="text" name="refraction_km_r_kv_a" id="refraction_km_r_kv_a" class="w-100px kero_meter" value="<?php echo $refrtsn_kerat['refraction_km_r_kv_a'];?>" style="display:none;"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>			
-</section>
-
-<section class="panel panel-default">
-	<div class="panel-body">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="text-right btn_edit"><a href="javascript:void(0)" class="btn_fill" onclick="$('.meter_pgp').toggle();">Edit</a><hr></div>
-			</div>
-			<div class="col-md-2">
-				<div class="label_name">PGP <i onclick="refraction_pgp_ltr();" class="fa fa-arrow-right" title="Copy Left to Right"></i> </div>
-				<button type="button" class="btn_fill meter_pgp d-none" title="Fill PGP" onclick="return open_modals('refraction_pgp','PGP');">Fill <i class="fa fa-arrow-right"></i> </button> 	
-				<button type="button" title="Copy PGP to Glass Prescription" onclick="cpoy_to_glass_pres('refraction_pgp');"  class="btn_fill"> Copy <i class="fa fa-arrow-down"></i></button>	
-			</div>					
-			<div class="col-md-4">
-				<table class="table table-bordered">
-					<thead class="bg-info">
-						<tr>
-							<th width="20%"></th>
-							<th width="20%">Sph</th>
-							<th width="20%">Cyl</th>
-							<th width="20%">Axis</th>
-							<th width="20%">Vision</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td style="text-align:left;">Distant</td> 
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_dt_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_dt_sph'];?>" name="refraction_pgp_l_dt_sph" id="refraction_pgp_l_dt_sph" class="w-50px meter_pgp d-none"></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_dt_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_dt_cyl'];?>" name="refraction_pgp_l_dt_cyl" id="refraction_pgp_l_dt_cyl" class="w-50px meter_pgp d-none"></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_dt_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_dt_axis'];?>" name="refraction_pgp_l_dt_axis" id="refraction_pgp_l_dt_axis" class="w-50px meter_pgp d-none"></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_dt_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_dt_vision'];?>" name="refraction_pgp_l_dt_vision" id="refraction_pgp_l_dt_vision" class="w-50px meter_pgp d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Add <span class="text-danger">#</span></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_ad_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_ad_sph'];?>" name="refraction_pgp_l_ad_sph" id="refraction_pgp_l_ad_sph" class="w-50px meter_pgp d-none"></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_ad_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_ad_cyl'];?>" name="refraction_pgp_l_ad_cyl" id="refraction_pgp_l_ad_cyl" class="w-50px meter_pgp d-none" disabled></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_ad_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_ad_axis'];?>" name="refraction_pgp_l_ad_axis" id="refraction_pgp_l_ad_axis" class="w-50px meter_pgp d-none" disabled></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_ad_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_ad_vision'];?>" name="refraction_pgp_l_ad_vision" id="refraction_pgp_l_ad_vision" class="w-50px meter_pgp d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Near</td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_nr_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_nr_sph'];?>" name="refraction_pgp_l_nr_sph" id="refraction_pgp_l_nr_sph" class="w-50px meter_pgp d-none"></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_nr_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_nr_cyl'];?>" name="refraction_pgp_l_nr_cyl" id="refraction_pgp_l_nr_cyl" class="w-50px meter_pgp d-none"></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_nr_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_nr_axis'];?>" name="refraction_pgp_l_nr_axis" id="refraction_pgp_l_nr_axis" class="w-50px meter_pgp d-none"></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_nr_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_nr_vision'];?>" name="refraction_pgp_l_nr_vision" id="refraction_pgp_l_nr_vision" class="w-50px meter_pgp d-none"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="col-md-2">
-				<div class="label_name">PGP <i onclick="refraction_pgp_rtl();" class="fa fa-arrow-left" title="Copy Right to Left"></i> </div>							
-			</div>					
-			<div class="col-md-4">
-				<table class="table table-bordered">
-					<thead class="bg-info">
-						<tr>
-							<th width="20%"></th>
-							<th width="20%">Sph</th>
-							<th width="20%">Cyl</th>
-							<th width="20%">Axis</th>
-							<th width="20%">Vision</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td style="text-align:left;">Distant</td> 
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_dt_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_dt_sph'];?>" name="refraction_pgp_r_dt_sph" id="refraction_pgp_r_dt_sph" class="w-50px meter_pgp d-none"></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_dt_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_dt_cyl'];?>" name="refraction_pgp_r_dt_cyl" id="refraction_pgp_r_dt_cyl" class="w-50px meter_pgp d-none"></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_dt_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_dt_axis'];?>" name="refraction_pgp_r_dt_axis" id="refraction_pgp_r_dt_axis" class="w-50px meter_pgp d-none"></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_dt_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_dt_vision'];?>" name="refraction_pgp_r_dt_vision" id="refraction_pgp_r_dt_vision" class="w-50px meter_pgp d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Add <span class="text-danger">#</span></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_ad_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_ad_sph'];?>" name="refraction_pgp_r_ad_sph" id="refraction_pgp_r_ad_sph" class="w-50px meter_pgp d-none"></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_ad_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_ad_cyl'];?>" name="refraction_pgp_r_ad_cyl" id="refraction_pgp_r_ad_cyl" class="w-50px meter_pgp d-none" disabled></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_ad_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_ad_axis'];?>" name="refraction_pgp_r_ad_axis" id="refraction_pgp_r_ad_axis" class="w-50px meter_pgp d-none" disabled></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_ad_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_ad_vision'];?>" name="refraction_pgp_r_ad_vision" id="refraction_pgp_r_ad_vision" class="w-50px meter_pgp d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Near</td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_nr_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_nr_sph'];?>" name="refraction_pgp_r_nr_sph" id="refraction_pgp_r_nr_sph" class="w-50px meter_pgp d-none"></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_nr_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_nr_cyl'];?>" name="refraction_pgp_r_nr_cyl" id="refraction_pgp_r_nr_cyl" class="w-50px meter_pgp d-none"></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_nr_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_nr_axis'];?>" name="refraction_pgp_r_nr_axis" id="refraction_pgp_r_nr_axis" class="w-50px meter_pgp d-none"></td>
-							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_nr_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_nr_vision'];?>" name="refraction_pgp_r_nr_vision" id="refraction_pgp_r_nr_vision" class="w-50px meter_pgp d-none"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-	<div class="panel-footer meter_pgp d-none">
-		<div class="row">
-			<div class="col-md-2"></div>
-			<div class="col-md-1 pr-0">Type of Lens :</div>
-			<div class="col-md-3">
-				<select name="refraction_pgp_l_lens" id="refraction_pgp_l_lens" class="custom-select">
-					<option value="">Select</option>
-					<option value="Single Vision - Distant" <?php if($refrtsn_pgp['refraction_pgp_l_lens']=='Single Vision - Distant'){ echo 'selected';} ?>>Single Vision - Distant</option>
-					<option value="Single Vision - Near" <?php if($refrtsn_pgp['refraction_pgp_l_lens']=='Single Vision - Near'){ echo 'selected';} ?>>Single Vision - Near</option>
-					<option value="Bifocal" <?php if($refrtsn_pgp['refraction_pgp_l_lens']=='Bifocal'){ echo 'selected';} ?>>Bifocal</option>
-					<option value="Progressive" <?php if($refrtsn_pgp['refraction_pgp_l_lens']=='Progressive'){ echo 'selected';} ?>>Progressive</option>
-					<option value="D Bifocal" <?php if($refrtsn_pgp['refraction_pgp_l_lens']=='D Bifocal'){ echo 'selected';} ?>>D Bifocal</option>
-					<option value="KT Bifocal" <?php if($refrtsn_pgp['refraction_pgp_l_lens']=='KT Bifocal'){ echo 'selected';} ?>>KT Bifocal</option>
-				</select>
-			</div>			
-			<div class="col-md-2"></div>
-			<div class="col-md-1 pr-0">Type of Lens :</div>
-			<div class="col-md-3">
-				<select name="refraction_pgp_r_lens" id="refraction_pgp_r_lens" class="custom-select">
-					<option value="">Select</option>
-					<option value="Single Vision - Distant" <?php if($refrtsn_pgp['refraction_pgp_r_lens']=='Single Vision - Distant'){ echo 'selected';} ?>>Single Vision - Distant</option>
-					<option value="Single Vision - Near" <?php if($refrtsn_pgp['refraction_pgp_r_lens']=='Single Vision - Near'){ echo 'selected';} ?>>Single Vision - Near</option>
-					<option value="Bifocal" <?php if($refrtsn_pgp['refraction_pgp_r_lens']=='Bifocal'){ echo 'selected';} ?>>Bifocal</option>
-					<option value="Progressive" <?php if($refrtsn_pgp['refraction_pgp_r_lens']=='Progressive'){ echo 'selected';} ?>>Progressive</option>
-					<option value="D Bifocal" <?php if($refrtsn_pgp['refraction_pgp_r_lens']=='D Bifocal'){ echo 'selected';} ?>>D Bifocal</option>
-					<option value="KT Bifocal" <?php if($refrtsn_pgp['refraction_pgp_r_lens']=='KT Bifocal'){ echo 'selected';} ?>>KT Bifocal</option>
-				</select>
-			</div>	
-		</div>
-	</div>
-</section>
-
-<section class="panel panel-default">
-	<div class="panel-body">
-		<div class="row">
-			<div class="col-md-12 text-right btn_edit"><a href="javascript:void(0)" class="btn_fill" onclick="$('.auto_ref').toggle();">Edit</a><hr></div>
-			<div class="col-md-2">
-				<div class="label_name">AUTO REFRACTION (ARx) <i onclick="refraction_ar_ltr();" title="Copy Left to Right" class="fa fa-arrow-right"></i></div>
-				<button type="button" class="btn_fill auto_ref d-none" title="Fill AUTO REFRACTION" onclick="return open_modals_2('refraction_ar');">Fill <i class="fa fa-arrow-right"></i> </button> 	
-				
-			</div>
-			<div class="col-md-4">
-				<table class="table table-bordered">
-					<thead class="bg-info">
-						<tr>
-							<th width="25%"></th>
-							<th width="25%">Sph</th>
-							<th width="25%">Cyl</th>
-							<th width="25%">Axis</th>
-						</tr>
-					</thead>
-					<tbody> 
-						<tr> 
-							<td style="text-align:left;">Dry</td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_dry_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_dry_sph'];?>" name="refraction_ar_l_dry_sph" id="refraction_ar_l_dry_sph" class="w-50px auto_ref d-none"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_dry_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_dry_cyl'];?>" name="refraction_ar_l_dry_cyl" id="refraction_ar_l_dry_cyl" class="w-50px auto_ref d-none"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_dry_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_dry_axis'];?>" name="refraction_ar_l_dry_axis" id="refraction_ar_l_dry_axis" class="w-50px auto_ref d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Dilated</td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_dd_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_dd_sph'];?>" name="refraction_ar_l_dd_sph" id="refraction_ar_l_dd_sph" class="w-50px auto_ref d-none"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_dd_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_dd_cyl'];?>" name="refraction_ar_l_dd_cyl" id="refraction_ar_l_dd_cyl" class="w-50px auto_ref d-none"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_dd_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_dd_axis'];?>" name="refraction_ar_l_dd_axis" id="refraction_ar_l_dd_axis" class="w-50px auto_ref d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_b1_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_b1_sph'];?>" name="refraction_ar_l_b1_sph" id="refraction_ar_l_b1_sph" class="w-50px auto_ref d-none"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_b1_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_b1_cyl'];?>" name="refraction_ar_l_b1_cyl" id="refraction_ar_l_b1_cyl" class="w-50px auto_ref d-none"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_b1_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_b1_axis'];?>" name="refraction_ar_l_b1_axis" id="refraction_ar_l_b1_axis" class="w-50px auto_ref d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_b2_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_b2_sph'];?>" name="refraction_ar_l_b2_sph" id="refraction_ar_l_b2_sph" class="w-50px auto_ref d-none"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_b2_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_b2_cyl'];?>" name="refraction_ar_l_b2_cyl" id="refraction_ar_l_b2_cyl" class="w-50px auto_ref d-none"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_b2_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_b2_axis'];?>" name="refraction_ar_l_b2_axis" id="refraction_ar_l_b2_axis" class="w-50px auto_ref d-none"></td>
-						</tr>
-					</tbody>
-				</table> 
-			</div>
-			<div class="col-md-2">
-				<div class="label_name">AUTO REFRACTION (ARx) <i onclick="refraction_ar_rtl();" title="Copy Right to Left" class="fa fa-arrow-left"></i> </div>
-			</div>
-			<div class="col-md-4">
-				<table class="table table-bordered">
-					<thead class="bg-info">
-						<tr>
-							<th width="25%"></th>
-							<th width="25%">Sph</th>
-							<th width="25%">Cyl</th>
-							<th width="25%">Axis</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr> 
-							<td style="text-align:left;">Dry</td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_dry_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_dry_sph'];?>" name="refraction_ar_r_dry_sph" id="refraction_ar_r_dry_sph" class="w-50px auto_ref d-none"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_dry_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_dry_cyl'];?>" name="refraction_ar_r_dry_cyl" id="refraction_ar_r_dry_cyl" class="w-50px auto_ref d-none"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_dry_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_dry_axis'];?>" name="refraction_ar_r_dry_axis" id="refraction_ar_r_dry_axis" class="w-50px auto_ref d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Dilated</td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_dd_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_dd_sph'];?>" name="refraction_ar_r_dd_sph" id="refraction_ar_r_dd_sph" class="w-50px auto_ref d-none"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_dd_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_dd_cyl'];?>" name="refraction_ar_r_dd_cyl" id="refraction_ar_r_dd_cyl" class="w-50px auto_ref d-none"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_dd_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_dd_axis'];?>" name="refraction_ar_r_dd_axis" id="refraction_ar_r_dd_axis" class="w-50px auto_ref d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_b1_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_b1_sph'];?>" name="refraction_ar_r_b1_sph" id="refraction_ar_r_b1_sph" class="w-50px auto_ref d-none"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_b1_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_b1_cyl'];?>" name="refraction_ar_r_b1_cyl" id="refraction_ar_r_b1_cyl" class="w-50px auto_ref d-none"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_b1_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_b1_axis'];?>" name="refraction_ar_r_b1_axis" id="refraction_ar_r_b1_axis" class="w-50px auto_ref d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_b2_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_b2_sph'];?>" name="refraction_ar_r_b2_sph" id="refraction_ar_r_b2_sph" class="w-50px auto_ref d-none"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_b2_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_b2_cyl'];?>" name="refraction_ar_r_b2_cyl" id="refraction_ar_r_b2_cyl" class="w-50px auto_ref d-none"></td>
-							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_b2_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_b2_axis'];?>" name="refraction_ar_r_b2_axis" id="refraction_ar_r_b2_axis" class="w-50px auto_ref d-none"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-</section>
-
-<section class="panel panel-default">
-	<div class="panel-body">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="text-right btn_edit"><a href="javascript:void(0)" class="btn_fill" onclick="$('.dry_ref').toggle();">Edit</a><hr></div>
-			</div>
-			<div class="col-md-2">
-				<div class="label_name">DRY REFRACTION <i onclick="refraction_dry_ref_ltr();" title="Copy Left to Right" class="fa fa-arrow-right"></i> </div>
-				<button type="button" class="btn_fill dry_ref d-none" title="Fill DRY REFRACTION" onclick="return open_modals('refraction_dry_ref','DRY-REFRACTION');">Fill <i class="fa fa-arrow-right"></i> </button> 	
-				<button type="button" onclick="cpoy_to_glass_pres('refraction_dry_ref');" title="Copy Dry Refraction to Glass Prescription" class="btn_fill"> Copy <i class="fa fa-arrow-down"></i></button>	
-			</div>					
-			<div class="col-md-4">
-				<table class="table table-bordered">
-					<thead class="bg-info">
-						<tr>
-							<th width="20%"></th>
-							<th width="20%">Sph</th>
-							<th width="20%">Cyl</th>
-							<th width="20%">Axis</th>
-							<th width="20%">Vision</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td style="text-align:left;">Distant</td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_dt_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_dt_sph'];?>" name="refraction_dry_ref_l_dt_sph" id="refraction_dry_ref_l_dt_sph" class="w-50px dry_ref d-none"></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_dt_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_dt_cyl'];?>" name="refraction_dry_ref_l_dt_cyl" id="refraction_dry_ref_l_dt_cyl" class="w-50px dry_ref d-none"></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_dt_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_dt_axis'];?>" name="refraction_dry_ref_l_dt_axis" id="refraction_dry_ref_l_dt_axis" class="w-50px dry_ref d-none"></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_dt_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_dt_vision'];?>" name="refraction_dry_ref_l_dt_vision" id="refraction_dry_ref_l_dt_vision" class="w-50px dry_ref d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Add <span class="text-danger">#</span></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_ad_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_ad_sph'];?>" name="refraction_dry_ref_l_ad_sph" id="refraction_dry_ref_l_ad_sph" class="w-50px dry_ref d-none"></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_ad_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_ad_cyl'];?>" name="refraction_dry_ref_l_ad_cyl" id="refraction_dry_ref_l_ad_cyl" class="w-50px dry_ref d-none" disabled></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_ad_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_ad_axis'];?>" name="refraction_dry_ref_l_ad_axis" id="refraction_dry_ref_l_ad_axis" class="w-50px dry_ref d-none" disabled></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_ad_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_ad_vision'];?>" name="refraction_dry_ref_l_ad_vision" id="refraction_dry_ref_l_ad_vision" class="w-50px dry_ref d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Near</td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_nr_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_nr_sph'];?>" name="refraction_dry_ref_l_nr_sph" id="refraction_dry_ref_l_nr_sph" class="w-50px dry_ref d-none"></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_nr_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_nr_cyl'];?>" name="refraction_dry_ref_l_nr_cyl" id="refraction_dry_ref_l_nr_cyl" class="w-50px dry_ref d-none"></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_nr_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_nr_axis'];?>" name="refraction_dry_ref_l_nr_axis" id="refraction_dry_ref_l_nr_axis" class="w-50px dry_ref d-none"></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_nr_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_nr_vision'];?>" name="refraction_dry_ref_l_nr_vision" id="refraction_dry_ref_l_nr_vision" class="w-50px dry_ref d-none"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="col-md-2">
-				<div class="label_name">DRY REFRACTION <i onclick="refraction_dry_ref_rtl();" title="Copy Right to Left" class="fa fa-arrow-left"></i></div>
-			</div>					
-			<div class="col-md-4">
-				<table class="table table-bordered">
-					<thead class="bg-info">
-						<tr>
-							<th width="20%"></th>
-							<th width="20%">Sph</th>
-							<th width="20%">Cyl</th>
-							<th width="20%">Axis</th>
-							<th width="20%">Vision</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td style="text-align:left;">Distant</td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_dt_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_dt_sph'];?>" name="refraction_dry_ref_r_dt_sph" id="refraction_dry_ref_r_dt_sph" class="w-50px dry_ref d-none"></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_dt_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_dt_cyl'];?>" name="refraction_dry_ref_r_dt_cyl" id="refraction_dry_ref_r_dt_cyl" class="w-50px dry_ref d-none"></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_dt_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_dt_axis'];?>" name="refraction_dry_ref_r_dt_axis" id="refraction_dry_ref_r_dt_axis" class="w-50px dry_ref d-none"></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_dt_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_dt_vision'];?>" name="refraction_dry_ref_r_dt_vision" id="refraction_dry_ref_r_dt_vision" class="w-50px dry_ref d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Add <span class="text-danger">#</span></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_ad_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_ad_sph'];?>" name="refraction_dry_ref_r_ad_sph" id="refraction_dry_ref_r_ad_sph" class="w-50px dry_ref d-none"></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_ad_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_ad_cyl'];?>" name="refraction_dry_ref_r_ad_cyl" id="refraction_dry_ref_r_ad_cyl" class="w-50px dry_ref d-none" disabled></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_ad_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_ad_axis'];?>" name="refraction_dry_ref_r_ad_axis" id="refraction_dry_ref_r_ad_axis" class="w-50px dry_ref d-none" disabled></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_ad_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_ad_vision'];?>" name="refraction_dry_ref_r_ad_vision" id="refraction_dry_ref_r_ad_vision" class="w-50px dry_ref d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Near</td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_nr_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_nr_sph'];?>" name="refraction_dry_ref_r_nr_sph" id="refraction_dry_ref_r_nr_sph" class="w-50px dry_ref d-none"></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_nr_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_nr_cyl'];?>" name="refraction_dry_ref_r_nr_cyl" id="refraction_dry_ref_r_nr_cyl" class="w-50px dry_ref d-none"></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_nr_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_nr_axis'];?>" name="refraction_dry_ref_r_nr_axis" id="refraction_dry_ref_r_nr_axis" class="w-50px dry_ref d-none"></td>
-							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_nr_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_nr_vision'];?>" name="refraction_dry_ref_r_nr_vision" id="refraction_dry_ref_r_nr_vision" class="w-50px dry_ref d-none"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-	<div class="panel-footer dry_ref d-none">
-		<div class="row">
-			<div class="col-md-2">Comment:</div>
-			<div class="col-md-4">
-				<textarea name="refraction_dry_ref_l_comm" id="refraction_dry_ref_l_comm" class="form-control"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_comm'];?></textarea>
-			</div>
-			<div class="col-md-2">Comment:</div>
-			<div class="col-md-4">
-				<textarea name="refraction_dry_ref_r_comm" id="refraction_dry_ref_r_comm"  class="form-control"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_comm'];?></textarea>
-			</div>
-		</div>
-	</div>
-</section>
-
-<section class="panel panel-default">
-	<div class="panel-body">
-		<div class="row">
-			<div class="col-md-12 text-right btn_edit"><a href="javascript:void(0)" class="btn_fill" onclick="$('.ref_dil').toggle();">Edit</a><hr></div>
-			<div class="col-md-2">
-				<div class="label_name">REFRACTION (DILATED) <i onclick="refraction_ref_dtd_ltr();" title="Copy Left to Right" class="fa fa-arrow-right"></i> </div>
-				<button type="button" class="btn_fill ref_dil d-none" title="Fill REFRACTION (DILATED)" onclick="return open_modals('refraction_ref_dtd','REFRACTION-DILATED');">Fill <i class="fa fa-arrow-right"></i> </button> 	
-				<button type="button" title="Copy Dilated Refraction to Glass Prescription" onclick="cpoy_to_glass_pres('refraction_ref_dtd');" class="btn_fill"> Copy <i class="fa fa-arrow-down"></i></button>	
-			</div>			
-			<div class="col-md-4">
-				<table class="table table-bordered">
-					<thead class="bg-info">
-						<tr>
-							<th width="20%"></th>
-							<th width="20%">Sph</th>
-							<th width="20%">Cyl</th>
-							<th width="20%">Axis</th>
-							<th width="20%">Vision</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td style="text-align:left;">Distant</td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_dt_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_dt_sph'];?>" name="refraction_ref_dtd_l_dt_sph" id="refraction_ref_dtd_l_dt_sph" class="w-50px ref_dil d-none"></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_dt_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_dt_cyl'];?>" name="refraction_ref_dtd_l_dt_cyl" id="refraction_ref_dtd_l_dt_cyl" class="w-50px ref_dil d-none"></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_dt_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_dt_axis'];?>" name="refraction_ref_dtd_l_dt_axis" id="refraction_ref_dtd_l_dt_axis" class="w-50px ref_dil d-none"></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_dt_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_dt_vision'];?>" name="refraction_ref_dtd_l_dt_vision" id="refraction_ref_dtd_l_dt_vision" class="w-50px ref_dil d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Add <span class="text-danger">#</span></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_ad_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_ad_sph'];?>" name="refraction_ref_dtd_l_ad_sph" id="refraction_ref_dtd_l_ad_sph" class="w-50px ref_dil d-none"></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_ad_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_ad_cyl'];?>" name="refraction_ref_dtd_l_ad_cyl" id="refraction_ref_dtd_l_ad_cyl" class="w-50px ref_dil d-none" disabled ></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_ad_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_ad_axis'];?>" name="refraction_ref_dtd_l_ad_axis" id="refraction_ref_dtd_l_ad_axis" class="w-50px ref_dil d-none" disabled></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_ad_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_ad_vision'];?>" name="refraction_ref_dtd_l_ad_vision" id="refraction_ref_dtd_l_ad_vision" class="w-50px ref_dil d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Near</td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_nr_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_nr_sph'];?>" name="refraction_ref_dtd_l_nr_sph" id="refraction_ref_dtd_l_nr_sph" class="w-50px ref_dil d-none"></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_nr_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_nr_cyl'];?>" name="refraction_ref_dtd_l_nr_cyl" id="refraction_ref_dtd_l_nr_cyl" class="w-50px ref_dil d-none"></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_nr_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_nr_axis'];?>" name="refraction_ref_dtd_l_nr_axis" id="refraction_ref_dtd_l_nr_axis" class="w-50px ref_dil d-none"></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_nr_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_nr_vision'];?>" name="refraction_ref_dtd_l_nr_vision" id="refraction_ref_dtd_l_nr_vision" class="w-50px ref_dil d-none"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="col-md-2">
-				<div class="label_name">REFRACTION (DILATED) <i onclick="refraction_ref_dtd_rtl();" title="Copy Right to Left" class="fa fa-arrow-left"></i> </div>							
-			</div>			
-			<div class="col-md-4">
-				<table class="table table-bordered">
-					<thead class="bg-info">
-						<tr>
-							<th width="20%"></th>
-							<th width="20%">Sph</th>
-							<th width="20%">Cyl</th>
-							<th width="20%">Axis</th>
-							<th width="20%">Vision</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td style="text-align:left;">Distant</td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_dt_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_dt_sph'];?>" name="refraction_ref_dtd_r_dt_sph" id="refraction_ref_dtd_r_dt_sph" class="w-50px ref_dil d-none"></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_dt_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_dt_cyl'];?>" name="refraction_ref_dtd_r_dt_cyl" id="refraction_ref_dtd_r_dt_cyl" class="w-50px ref_dil d-none"></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_dt_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_dt_axis'];?>" name="refraction_ref_dtd_r_dt_axis" id="refraction_ref_dtd_r_dt_axis" class="w-50px ref_dil d-none"></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_dt_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_dt_vision'];?>" name="refraction_ref_dtd_r_dt_vision" id="refraction_ref_dtd_r_dt_vision" class="w-50px ref_dil d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Add <span class="text-danger">#</span></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_ad_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_ad_sph'];?>" name="refraction_ref_dtd_r_ad_sph" id="refraction_ref_dtd_r_ad_sph" class="w-50px ref_dil d-none"></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_ad_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_ad_cyl'];?>" name="refraction_ref_dtd_r_ad_cyl" id="refraction_ref_dtd_r_ad_cyl" class="w-50px ref_dil d-none" disabled ></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_ad_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_ad_axis'];?>" name="refraction_ref_dtd_r_ad_axis" id="refraction_ref_dtd_r_ad_axis" class="w-50px ref_dil d-none" disabled></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_ad_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_ad_vision'];?>" name="refraction_ref_dtd_r_ad_vision" id="refraction_ref_dtd_r_ad_vision" class="w-50px ref_dil d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Near</td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_nr_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_nr_sph'];?>" name="refraction_ref_dtd_r_nr_sph" id="refraction_ref_dtd_r_nr_sph" class="w-50px ref_dil d-none"></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_nr_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_nr_cyl'];?>" name="refraction_ref_dtd_r_nr_cyl" id="refraction_ref_dtd_r_nr_cyl" class="w-50px ref_dil d-none"></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_nr_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_nr_axis'];?>" name="refraction_ref_dtd_r_nr_axis" id="refraction_ref_dtd_r_nr_axis" class="w-50px ref_dil d-none"></td>
-							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_nr_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_nr_vision'];?>" name="refraction_ref_dtd_r_nr_vision" id="refraction_ref_dtd_r_nr_vision" class="w-50px ref_dil d-none"></td>
-						</tr>
-					</tbody>
-				</table>							
-			</div>
-		</div>					
-	</div>
-	<div class="panel-footer ref_dil d-none">
-		<div class="row">
-			<div class="col-md-2"></div>
-			<div class="col-md-4">
-				<div class="row">
-					<div class="col-md-4">Drug Used</div>
-					<div class="col-md-8">
-						<select name="refraction_ref_dtd_l_du" id="refraction_ref_dtd_l_du" class="custom-selct">
-							<option value="">Select</option>
-							<option value="Tropicamide" <?php if($refrtsn_dltd['refraction_ref_dtd_l_du']=='Tropicamide'){ echo 'selected';} ?>>Tropicamide</option>
-							<option value="Tropicamide - P" <?php if($refrtsn_dltd['refraction_ref_dtd_l_du']=='Tropicamide - P'){ echo 'selected';} ?>>Tropicamide - P</option>
-							<option value="Atropine" <?php if($refrtsn_dltd['refraction_ref_dtd_l_du']=='Atropine'){ echo 'selected';} ?>>Atropine</option>
-							<option value="Cyclopentolate" <?php if($refrtsn_dltd['refraction_ref_dtd_l_du']=='Cyclopentolate'){ echo 'selected';} ?>>Cyclopentolate</option>
-							<option value="Homide" <?php if($refrtsn_dltd['refraction_ref_dtd_l_du']=='Homide'){ echo 'selected';} ?>>Homide</option>
-							<option value="Dry" <?php if($refrtsn_dltd['refraction_ref_dtd_l_du']=='Dry'){ echo 'selected';} ?>>Dry</option>
-						</select>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-2"></div>
-			<div class="col-md-4">
-				<div class="row">
-					<div class="col-md-4">Drug Used</div>
-					<div class="col-md-8">
-						<select name="refraction_ref_dtd_r_du" id="refraction_ref_dtd_r_du" class="custom-selct">
-							<option value="">Select</option>
-							<option value="Tropicamide" <?php if($refrtsn_dltd['refraction_ref_dtd_r_du']=='Tropicamide'){ echo 'selected';} ?>>Tropicamide</option>
-							<option value="Tropicamide - P" <?php if($refrtsn_dltd['refraction_ref_dtd_r_du']=='Tropicamide - P'){ echo 'selected';} ?>>Tropicamide - P</option>
-							<option value="Atropine" <?php if($refrtsn_dltd['refraction_ref_dtd_r_du']=='Atropine'){ echo 'selected';} ?>>Atropine</option>
-							<option value="Cyclopentolate" <?php if($refrtsn_dltd['refraction_ref_dtd_r_du']=='Cyclopentolate'){ echo 'selected';} ?>>Cyclopentolate</option>
-							<option value="Homide" <?php if($refrtsn_dltd['refraction_ref_dtd_r_du']=='Homide'){ echo 'selected';} ?>>Homide</option>
-							<option value="Dry" <?php if($refrtsn_dltd['refraction_ref_dtd_r_du']=='Dry'){ echo 'selected';} ?>>Dry</option>
-						</select>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="panel-footer ref_dil d-none">
-		<div class="row">
-			<div class="col-md-2">Comment:</div>
-			<div class="col-md-4">
-				<textarea name="refraction_ref_dtd_l_comm" id="refraction_ref_dtd_l_comm" class="form-control"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_comm'];?></textarea>
-			</div>
-			<div class="col-md-2">Comment:</div>
-			<div class="col-md-4">
-				<textarea name="refraction_ref_dtd_r_comm" id="refraction_ref_dtd_r_comm" class="form-control"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_comm'];?></textarea>
-			</div>
-		</div>
-	</div>
-</section>
-
-
-<section class="panel panel-default">
+<!-- <section class="panel panel-default">
 	<div class="panel-body retin_pad">			
 		<div class="row">
 			<div class="col-md-12 text-right btn_edit"><a href="javascript:void(0)" class="btn_fill" onclick="$('.retin').toggle();$('.retin_pad').css({'padding-bottom':'0px', 'margin-bottom':'0px', 'border':'0'})">Edit</a><hr class="retin_pad"></div>
@@ -1265,98 +736,11 @@
 			</div>
 		</div>
 	</div>
-</section>
+</section> -->
 
-<section class="panel panel-default">
-	<div class="panel-body">			
-		<div class="row">
-			<div class="col-md-12 text-right btn_edit"><a href="javascript:void(0)" class="btn_fill" onclick="$('.pmt').toggle();">Edit</a><hr></div>
-			<div class="col-md-2">
-				<div class="label_name">PMT <i onclick="refraction_pmt_ltr();" title="Copy Left to Right" class="fa fa-arrow-right"></i> </div>
-				<button type="button" class="btn_fill pmt d-none" title="Fill PMT" onclick="return open_modals('refraction_pmt','PMT');">Fill <i class="fa fa-arrow-right"></i> </button> 	
-				<button type="button" title="Copy PMT to Glass Prescription" onclick="cpoy_to_glass_pres('refraction_pmt');" class="btn_fill"> Copy <i class="fa fa-arrow-down"></i></button>	
-			</div>			
-			<div class="col-md-4">
-				<table class="table table-bordered">
-					<thead class="bg-info">
-						<tr>
-							<th width="20%"></th>
-							<th width="20%">Sph</th>
-							<th width="20%">Cyl</th>
-							<th width="20%">Axis</th>
-							<th width="20%">Vision</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td style="text-align:left;">Distant</td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_dt_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_dt_sph'];?>" name="refraction_pmt_l_dt_sph" id="refraction_pmt_l_dt_sph" class="w-50px pmt d-none"></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_dt_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_dt_cyl'];?>" name="refraction_pmt_l_dt_cyl" id="refraction_pmt_l_dt_cyl" class="w-50px pmt d-none"></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_dt_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_dt_axis'];?>" name="refraction_pmt_l_dt_axis" id="refraction_pmt_l_dt_axis" class="w-50px pmt d-none"></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_dt_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_dt_vision'];?>" name="refraction_pmt_l_dt_vision" id="refraction_pmt_l_dt_vision" class="w-50px pmt d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Add<span class="text-danger">#</span></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_ad_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_ad_sph'];?>" name="refraction_pmt_l_ad_sph" id="refraction_pmt_l_ad_sph" class="w-50px pmt d-none"></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_ad_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_ad_cyl'];?>" name="refraction_pmt_l_ad_cyl" id="refraction_pmt_l_ad_cyl" class="w-50px pmt d-none" disabled ></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_ad_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_ad_axis'];?>" name="refraction_pmt_l_ad_axis" id="refraction_pmt_l_ad_axis" class="w-50px pmt d-none" disabled ></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_ad_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_ad_vision'];?>" name="refraction_pmt_l_ad_vision" id="refraction_pmt_l_ad_vision" class="w-50px pmt d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Near</td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_nr_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_nr_sph'];?>" name="refraction_pmt_l_nr_sph" id="refraction_pmt_l_nr_sph" class="w-50px pmt d-none"></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_nr_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_nr_cyl'];?>" name="refraction_pmt_l_nr_cyl" id="refraction_pmt_l_nr_cyl" class="w-50px pmt d-none"></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_nr_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_nr_axis'];?>" name="refraction_pmt_l_nr_axis" id="refraction_pmt_l_nr_axis" class="w-50px pmt d-none"></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_nr_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_nr_vision'];?>" name="refraction_pmt_l_nr_vision" id="refraction_pmt_l_nr_vision" class="w-50px pmt d-none"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>					
-			<div class="col-md-2">
-				<div class="label_name">PMT <i onclick="refraction_pmt_rtl();" title="Copy Right to Left" class="fa fa-arrow-left"></i> </div>							
-			</div>			
-			<div class="col-md-4">
-				<table class="table table-bordered">
-					<thead class="bg-info">
-						<tr>
-							<th width="20%"></th>
-							<th width="20%">Sph</th>
-							<th width="20%">Cyl</th>
-							<th width="20%">Axis</th>
-							<th width="20%">Vision</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td style="text-align:left;">Distant</td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_dt_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_dt_sph'];?>" name="refraction_pmt_r_dt_sph" id="refraction_pmt_r_dt_sph" class="w-50px pmt d-none"></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_dt_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_dt_cyl'];?>" name="refraction_pmt_r_dt_cyl" id="refraction_pmt_r_dt_cyl" class="w-50px pmt d-none"></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_dt_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_dt_axis'];?>" name="refraction_pmt_r_dt_axis" id="refraction_pmt_r_dt_axis" class="w-50px pmt d-none"></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_dt_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_dt_vision'];?>" name="refraction_pmt_r_dt_vision" id="refraction_pmt_r_dt_vision" class="w-50px pmt d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Add<span class="text-danger">#</span></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_ad_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_ad_sph'];?>" name="refraction_pmt_r_ad_sph" id="refraction_pmt_r_ad_sph" class="w-50px pmt d-none"></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_ad_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_ad_cyl'];?>" name="refraction_pmt_r_ad_cyl" id="refraction_pmt_r_ad_cyl" class="w-50px pmt d-none" disabled></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_ad_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_ad_axis'];?>" name="refraction_pmt_r_ad_axis" id="refraction_pmt_r_ad_axis" class="w-50px pmt d-none" disabled></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_ad_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_ad_vision'];?>" name="refraction_pmt_r_ad_vision" id="refraction_pmt_r_ad_vision" class="w-50px pmt d-none"></td>
-						</tr>
-						<tr>
-							<td style="text-align:left;">Near</td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_nr_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_nr_sph'];?>" name="refraction_pmt_r_nr_sph" id="refraction_pmt_r_nr_sph" class="w-50px pmt d-none"></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_nr_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_nr_cyl'];?>" name="refraction_pmt_r_nr_cyl" id="refraction_pmt_r_nr_cyl" class="w-50px pmt d-none"></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_nr_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_nr_axis'];?>" name="refraction_pmt_r_nr_axis" id="refraction_pmt_r_nr_axis" class="w-50px pmt d-none"></td>
-							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_nr_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_nr_vision'];?>" name="refraction_pmt_r_nr_vision" id="refraction_pmt_r_nr_vision" class="w-50px pmt d-none"></td>
-						</tr>
-						</tr>
-					</tbody>
-				</table>							
-			</div>
-		</div>
-	</div>
-</section>
 
-<section class="panel panel-default">
+
+<!-- <section class="panel panel-default">
 	<div class="panel-body">			
 		<div class="row">
 			<div class="col-md-12 text-right btn_edit"><a href="javascript:void(0)" class="btn_fill" onclick="$('.glasses_pre').toggle();">Edit</a><hr></div>
@@ -1689,10 +1073,10 @@
 			</div>
 		</div>
 	</div>
-</section>
+</section> -->
 
 
-<section  class="panel panel-default ">
+<!-- <section  class="panel panel-default ">
 	<div class="panel-body">
 		<div class="row">
 			<div class="col-md-12 text-right btn_edit"><a href="javascript:void(0)" class="btn_fill" onclick="$('.inter_glass').toggle();">Edit</a> <hr></div>
@@ -2025,10 +1409,10 @@
 			</div>
 		</div>
 	</div>
-</section>
+</section> -->
 
 
-<section class="panel panel-default">
+<!-- <section class="panel panel-default">
 	<div class="panel-body">
 		<div class="row">
 			<div class="col-md-12 text-right btn_edit"><a href="javascript:void(0)" class="btn_fill" onclick="$('.contact_lens').toggle();">Edit</a><hr></div>
@@ -2132,7 +1516,6 @@
 						<div class="row">
 							<div class="col-xs-4">Type</div>
 							<div class="col-xs-8">
-								<!-- <input type="text" value="<?php echo $refrtsn_cntct_lns['refraction_clp_l_tp'];?>" name="refraction_clp_l_tp" id="refraction_clp_l_tp" class="form-control"> -->
 								
 							<select  name="refraction_clp_l_tp" id="refraction_clp_l_tp" class="form-control">
 								<option <?php if($refrtsn_cntct_lns['refraction_clp_l_tp']==''){echo 'selected';} ?> value="">Select</option>
@@ -2166,7 +1549,6 @@
 						<div class="row">
 							<div class="col-xs-4">Type</div>
 							<div class="col-xs-8">
-								<!-- <input type="text" value="<?php echo $refrtsn_cntct_lns['refraction_clp_r_tp'];?>" name="refraction_clp_r_tp" id="refraction_clp_r_tp" class="form-control"> -->
 								<select  name="refraction_clp_r_tp" id="refraction_clp_r_tp" class="form-control">
 								<option <?php if($refrtsn_cntct_lns['refraction_clp_r_tp']==''){echo 'selected';} ?> value="">Select</option>
 								<option <?php if($refrtsn_cntct_lns['refraction_clp_r_tp']=='Soft'){echo 'selected';} ?> value="Soft">Soft</option>
@@ -2198,9 +1580,9 @@
 			</div>
 		</div>
 	</div>
-</section>
+</section> -->
 
-<section class="panel panel-default">
+<!-- <section class="panel panel-default">
 	<div class="panel-body">
 		<div class="row">
 			<div class="col-md-2">
@@ -2216,9 +1598,9 @@
 				<textarea name="refraction_col_vis_r" id="refraction_col_vis_r" style="height: 60px" class="form-control"><?php echo $refrtsn_clr_vsn['refraction_col_vis_r'];?></textarea>
 			</div>	
 		</div>
-</section>
+</section> -->
 
-<section class="panel panel-default">
+<!-- <section class="panel panel-default">
 	<div class="panel-body">
 		<div class="row">
 			<div class="col-md-12 text-right btn_edit"><a href="javascript:void(0)" class="btn_fill" onclick="$('.con_sen').toggle();">Edit</a><hr></div>
@@ -2272,9 +1654,9 @@
 			</div>
 		</div>
 	</div>
-</section>
+</section> -->
 
-<section class="panel panel-default">
+<!--<section class="panel panel-default">
 	<div class="panel-body">
 		<div class="row">
 			<div class="col-md-2">
@@ -2324,10 +1706,10 @@
 			</div>
 		</div>
 	</div>
-</section>
+</section> -->
 
 
-<section class="panel panel-default">
+<!-- <section class="panel panel-default">
 	<div class="panel-body">		
 		<div class="row">
 			<div class="col-md-2">
@@ -2344,6 +1726,913 @@
 			</div>						
 		</div>
 	</div>
+</section> -->
+<section class="panel panel-default">
+
+    <div class="panel-body">
+        <div class="row">
+            <!-- <div class="col-md-12 text-right btn_edit">
+                <a href="javascript:void(0)" class="btn_fill" onclick="$('.auto_ref').toggle();">Edit</a>
+                <hr>
+            </div> -->
+
+            <!-- UnVn Row -->
+            <div class="col-md-6">
+                <table class="table table-bordered">
+                    <thead class="bg-info">
+                        <tr>
+                            <th width="25%">UnVn</th>
+                            <th width="25%">OD</th>
+                            <th width="25%">OS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>UnVn</td>
+                            <!-- <td><input type="text" id="unvn_od" name="unvn_od" class="w-50px"></td> -->
+							<td><input type="text" value="<?php echo $UnVn['unvn_od'];?>" name="unvn_od" id="unvn_od" ></td>
+							<td><input type="text" value="<?php echo $UnVn['unvn_os'];?>" name="unvn_os" id="unvn_os" ></td>
+                            <!-- <td><input type="text" id="unvn_os" name="unvn_os" class="w-50px"></td> -->
+                        </tr>
+                    </tbody>
+                </table>
+            <!-- </div>
+
+             PgVnq Row 
+            <div class="col-md-4"> -->
+                <table class="table table-bordered">
+                    <thead class="bg-info">
+                        <tr>
+                            <th width="25%">PgVnq</th>
+                            <th width="25%">OD</th>
+                            <th width="25%">OS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>PgVnq</td>
+							<td><input type="text" value="<?php echo $PgVnq['pgvnq_od'];?>" name="pgvnq_od" id="pgvnq_od" ></td>
+							<td><input type="text" value="<?php echo $PgVnq['pgvnq_os'];?>" name="pgvnq_os" id="pgvnq_os" ></td>
+                            <!-- <td><input type="text" id="pgvnq_od" name="pgvnq_od" class="w-50px"></td>
+                            <td><input type="text" id="pgvnq_os" name="pgvnq_os" class="w-50px"></td> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+           
+
+            <!-- Hirschberg Test Row -->
+            
+
+            <!-- Pupillary Reaction Row -->
+            <div class="col-md-6">
+                <table class="table table-bordered">
+                    <thead class="bg-info">
+                        <tr>
+                            <th width="25%">Pupillary Reaction</th>
+                            <th width="25%">OD</th>
+                            <th width="25%">OS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Pupillary Reaction</td>
+							<td><input type="text" value="<?php echo $pupillary_reaction['pupillary_reaction_od'];?>" name="pupillary_reaction_od" id="pupillary_reaction_od" ></td>
+							<td><input type="text" value="<?php echo $pupillary_reaction['pupillary_reaction_os'];?>" name="pupillary_reaction_os" id="pupillary_reaction_os" ></td>
+<!-- 							
+                            <td><input type="text" id="pupillary_reaction_od" name="pupillary_reaction_od" class="w-50px"></td>
+                            <td><input type="text" id="pupillary_reaction_os" name="pupillary_reaction_os" class="w-50px"></td> -->
+                        </tr >
+                    </tbody>
+                </table>
+            <!-- </div> -->
+
+            <!-- ROPGAS Row -->
+            <!-- <div class="col-md-4"> -->
+                <table class="table table-bordered">
+                    <thead class="bg-info">
+                        <tr>
+                            <th width="25%">ROPGAS</th>
+                            <th width="25%">OD</th>
+                            <th width="25%">OS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>ROPGAS</td>
+                            <!-- <td><input type="text" id="ropgas_od" name="ropgas_od" class="w-50px"></td>
+                            <td><input type="text" id="ropgas_os" name="ropgas_os" class="w-50px"></td> -->
+							<td><input type="text" value="<?php echo $ropgas['ropgas_od'];?>" name="ropgas_od" id="ropgas_od" ></td>
+							<td><input type="text" value="<?php echo $ropgas['ropgas_os'];?>" name="ropgas_os" id="ropgas_os" ></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+		
+        <div class="row">
+            <!-- Vision with CL Row -->
+            <div class="col-md-4">
+                <div class="grp-full">
+                    <div class="form-group row">
+                        <label for="vision_with_cl" class="col-md-4 col-form-label">Vision with CL:</label>
+                        <div class="col-md-8">
+							
+                            <input type="text" id="vision_with_cl" name="vision_with_cl" class="form-control" style="width: 200px;" value="<?php echo $refraction_data['vision_with_cl'];?>">
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </div>
+
+        <div class="row">
+            <!-- Hirschberg Test Row -->
+            <div class="col-md-4">
+                <div class="grp-full">
+                    <div class="form-group row">
+                        <label for="hirschberg_test" class="col-md-4 col-form-label">Hirschberg Test - Ortho:</label>
+                        <div class="col-md-8">
+                            <select id="hirschberg_test" name="hirschberg_test" class="form-control pat-select1 select-height" style="padding-left: 0rem;">
+                                <option value="">Select</option>
+                                <option value="7"<?php echo ($refraction_data['hirschberg_test'] == 7) ? 'selected' : ''; ?>>7°</option>
+                                <option value="15"<?php echo ($refraction_data['hirschberg_test'] == 15) ? 'selected' : ''; ?>>15°</option>
+                                <option value="30"<?php echo ($refraction_data['hirschberg_test'] == 30) ? 'selected' : ''; ?>>30°</option>
+                                <option value="45"<?php echo ($refraction_data['hirschberg_test'] == 45) ? 'selected' : ''; ?>>45°</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="panel panel-default">
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-12 text-right btn_edit"><a href="javascript:void(0)" class="btn_fill" onclick="$('.auto_ref').toggle();">Edit</a><hr></div>
+			<div class="col-md-2">
+				<!-- <div class="label_name">AUTO REFRACTION (ARx) <i onclick="refraction_ar_ltr();" title="Copy Left to Right" class="fa fa-arrow-right"></i></div> -->
+				<div class="label_name">AUTO REFRACTION (DRY) <i onclick="refraction_ar_ltr();" title="Copy Left to Right" class="fa fa-arrow-right"></i></div>
+				<button type="button" class="btn_fill auto_ref d-none" title="Fill AUTO REFRACTION" onclick="return open_modals_2('refraction_ar');">Fill <i class="fa fa-arrow-right"></i> </button> 	
+				
+			</div>
+			<div class="col-md-4">
+				<table class="table table-bordered">
+					<thead class="bg-info">
+						<tr>
+							<th width="25%"></th>
+							<th width="25%">Sph</th>
+							<th width="25%">Cyl</th>
+							<th width="25%">Axis</th>
+						</tr>
+					</thead>
+					<tbody> 
+						<tr> 
+							<!-- <td style="text-align:left;">Dry</td> -->
+							<td style="text-align:left;">OD</td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_dry_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_dry_sph'];?>" name="refraction_ar_l_dry_sph" id="refraction_ar_l_dry_sph" class="w-50px auto_ref d-none"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_dry_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_dry_cyl'];?>" name="refraction_ar_l_dry_cyl" id="refraction_ar_l_dry_cyl" class="w-50px auto_ref d-none"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_dry_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_dry_axis'];?>" name="refraction_ar_l_dry_axis" id="refraction_ar_l_dry_axis" class="w-50px auto_ref d-none"></td>
+						</tr>
+						<tr>
+							<!-- <td style="text-align:left;">Dilated</td> -->
+							<td style="text-align:left;">OS</td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_dd_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_dd_sph'];?>" name="refraction_ar_l_dd_sph" id="refraction_ar_l_dd_sph" class="w-50px auto_ref d-none"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_dd_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_dd_cyl'];?>" name="refraction_ar_l_dd_cyl" id="refraction_ar_l_dd_cyl" class="w-50px auto_ref d-none"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_dd_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_dd_axis'];?>" name="refraction_ar_l_dd_axis" id="refraction_ar_l_dd_axis" class="w-50px auto_ref d-none"></td>
+						</tr>
+						<!-- <tr>
+							<td style="text-align:left;"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_b1_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_b1_sph'];?>" name="refraction_ar_l_b1_sph" id="refraction_ar_l_b1_sph" class="w-50px auto_ref d-none"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_b1_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_b1_cyl'];?>" name="refraction_ar_l_b1_cyl" id="refraction_ar_l_b1_cyl" class="w-50px auto_ref d-none"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_b1_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_b1_axis'];?>" name="refraction_ar_l_b1_axis" id="refraction_ar_l_b1_axis" class="w-50px auto_ref d-none"></td>
+						</tr> -->
+						<!-- <tr>
+							<td style="text-align:left;"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_b2_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_b2_sph'];?>" name="refraction_ar_l_b2_sph" id="refraction_ar_l_b2_sph" class="w-50px auto_ref d-none"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_b2_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_b2_cyl'];?>" name="refraction_ar_l_b2_cyl" id="refraction_ar_l_b2_cyl" class="w-50px auto_ref d-none"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_l_b2_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_l_b2_axis'];?>" name="refraction_ar_l_b2_axis" id="refraction_ar_l_b2_axis" class="w-50px auto_ref d-none"></td>
+						</tr> -->
+					</tbody>
+				</table> 
+			</div>
+			<!-- <div class="col-md-2">
+				<div class="label_name">AUTO REFRACTION (ARx) <i onclick="refraction_ar_rtl();" title="Copy Right to Left" class="fa fa-arrow-left"></i> </div>
+			</div>
+			<div class="col-md-4">
+				<table class="table table-bordered">
+					<thead class="bg-info">
+						<tr>
+							<th width="25%"></th>
+							<th width="25%">Sph</th>
+							<th width="25%">Cyl</th>
+							<th width="25%">Axis</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr> 
+							<td style="text-align:left;">Dry</td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_dry_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_dry_sph'];?>" name="refraction_ar_r_dry_sph" id="refraction_ar_r_dry_sph" class="w-50px auto_ref d-none"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_dry_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_dry_cyl'];?>" name="refraction_ar_r_dry_cyl" id="refraction_ar_r_dry_cyl" class="w-50px auto_ref d-none"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_dry_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_dry_axis'];?>" name="refraction_ar_r_dry_axis" id="refraction_ar_r_dry_axis" class="w-50px auto_ref d-none"></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Dilated</td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_dd_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_dd_sph'];?>" name="refraction_ar_r_dd_sph" id="refraction_ar_r_dd_sph" class="w-50px auto_ref d-none"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_dd_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_dd_cyl'];?>" name="refraction_ar_r_dd_cyl" id="refraction_ar_r_dd_cyl" class="w-50px auto_ref d-none"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_dd_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_dd_axis'];?>" name="refraction_ar_r_dd_axis" id="refraction_ar_r_dd_axis" class="w-50px auto_ref d-none"></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_b1_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_b1_sph'];?>" name="refraction_ar_r_b1_sph" id="refraction_ar_r_b1_sph" class="w-50px auto_ref d-none"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_b1_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_b1_cyl'];?>" name="refraction_ar_r_b1_cyl" id="refraction_ar_r_b1_cyl" class="w-50px auto_ref d-none"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_b1_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_b1_axis'];?>" name="refraction_ar_r_b1_axis" id="refraction_ar_r_b1_axis" class="w-50px auto_ref d-none"></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_b2_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_b2_sph'];?>" name="refraction_ar_r_b2_sph" id="refraction_ar_r_b2_sph" class="w-50px auto_ref d-none"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_b2_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_b2_cyl'];?>" name="refraction_ar_r_b2_cyl" id="refraction_ar_r_b2_cyl" class="w-50px auto_ref d-none"></td>
+							<td><span class="auto_ref"><?php echo $refrtsn_auto_ref['refraction_ar_r_b2_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref['refraction_ar_r_b2_axis'];?>" name="refraction_ar_r_b2_axis" id="refraction_ar_r_b2_axis" class="w-50px auto_ref d-none"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div> -->
+		</div>
+	</div>
+</section>
+<section class="panel panel-default">
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-12 text-right btn_edit"><a href="javascript:void(0)" class="btn_fill" onclick="$('.auto_fer2').toggle();">Edit</a><hr></div>
+			<div class="col-md-2">
+				<div class="label_name">AUTO REFRACTION (PLATED) <i onclick="refraction_ar_ltr_plated();" title="Copy Left to Right" class="fa fa-arrow-right"></i></div>
+				<!-- <button type="button" class="btn_fill auto_fer2 d-none" title="Fill AUTO REFRACTION" onclick="return open_modals_3('refraction_ar');">Fill <i class="fa fa-arrow-right"></i> </button> 	 -->
+				
+			</div>
+			<div class="col-md-4">
+				<table class="table table-bordered">
+					<thead class="bg-info">
+						<tr>
+							<th width="25%"></th>
+							<th width="25%">Sph</th>
+							<th width="25%">Cyl</th>
+							<th width="25%">Axis</th>
+						</tr>
+					</thead>
+					<tbody> 
+						<tr> 
+							<!-- <td style="text-align:left;">Dry</td> -->
+							<td style="text-align:left;">OD</td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_dry_sph_plated'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_dry_sph_plated'];?>" name="refraction_ar_l_dry_sph_plated" id="refraction_ar_l_dry_sph_plated" class="w-50px auto_fer2 d-none"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_dry_cyl_plated'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_dry_cyl_plated'];?>" name="refraction_ar_l_dry_cyl_plated" id="refraction_ar_l_dry_cyl_plated" class="w-50px auto_fer2 d-none"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_dry_axis_plated'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_dry_axis_plated'];?>" name="refraction_ar_l_dry_axis_plated" id="refraction_ar_l_dry_axis_plated" class="w-50px auto_fer2 d-none"></td>
+						</tr>
+						<tr>
+							<!-- <td style="text-align:left;">Dilated</td> -->
+							<td style="text-align:left;">OS</td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_dd_sph_plated'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_dd_sph_plated'];?>" name="refraction_ar_l_dd_sph_plated" id="refraction_ar_l_dd_sph_plated" class="w-50px auto_fer2 d-none"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_dd_cyl_plated'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_dd_cyl_plated'];?>" name="refraction_ar_l_dd_cyl_plated" id="refraction_ar_l_dd_cyl_plated" class="w-50px auto_fer2 d-none"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_dd_axis_plated'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_dd_axis_plated'];?>" name="refraction_ar_l_dd_axis_plated" id="refraction_ar_l_dd_axis_plated" class="w-50px auto_fer2 d-none"></td>
+						</tr>
+						<!-- <tr>
+							<td style="text-align:left;"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_b1_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_b1_sph'];?>" name="refraction_ar_l_b1_sph" id="refraction_ar_l_b1_sph" class="w-50px auto_fer2 d-none"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_b1_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_b1_cyl'];?>" name="refraction_ar_l_b1_cyl" id="refraction_ar_l_b1_cyl" class="w-50px auto_fer2 d-none"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_b1_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_b1_axis'];?>" name="refraction_ar_l_b1_axis" id="refraction_ar_l_b1_axis" class="w-50px auto_fer2 d-none"></td>
+						</tr> -->
+						<!-- <tr>
+							<td style="text-align:left;"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_b2_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_b2_sph'];?>" name="refraction_ar_l_b2_sph" id="refraction_ar_l_b2_sph" class="w-50px auto_fer2 d-none"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_b2_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_b2_cyl'];?>" name="refraction_ar_l_b2_cyl" id="refraction_ar_l_b2_cyl" class="w-50px auto_fer2 d-none"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_b2_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_l_b2_axis'];?>" name="refraction_ar_l_b2_axis" id="refraction_ar_l_b2_axis" class="w-50px auto_fer2 d-none"></td>
+						</tr> -->
+					</tbody>
+				</table> 
+			</div>
+			<!-- <div class="col-md-2">
+				<div class="label_name">AUTO REFRACTION (ARx) <i onclick="refraction_ar_rtl();" title="Copy Right to Left" class="fa fa-arrow-left"></i> </div>
+			</div>
+			<div class="col-md-4">
+				<table class="table table-bordered">
+					<thead class="bg-info">
+						<tr>
+							<th width="25%"></th>
+							<th width="25%">Sph</th>
+							<th width="25%">Cyl</th>
+							<th width="25%">Axis</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr> 
+							<td style="text-align:left;">Dry</td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_dry_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_dry_sph'];?>" name="refraction_ar_r_dry_sph" id="refraction_ar_r_dry_sph" class="w-50px auto_fer2 d-none"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_dry_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_dry_cyl'];?>" name="refraction_ar_r_dry_cyl" id="refraction_ar_r_dry_cyl" class="w-50px auto_fer2 d-none"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_dry_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_dry_axis'];?>" name="refraction_ar_r_dry_axis" id="refraction_ar_r_dry_axis" class="w-50px auto_fer2 d-none"></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Dilated</td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_dd_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_dd_sph'];?>" name="refraction_ar_r_dd_sph" id="refraction_ar_r_dd_sph" class="w-50px auto_fer2 d-none"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_dd_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_dd_cyl'];?>" name="refraction_ar_r_dd_cyl" id="refraction_ar_r_dd_cyl" class="w-50px auto_fer2 d-none"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_dd_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_dd_axis'];?>" name="refraction_ar_r_dd_axis" id="refraction_ar_r_dd_axis" class="w-50px auto_fer2 d-none"></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_b1_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_b1_sph'];?>" name="refraction_ar_r_b1_sph" id="refraction_ar_r_b1_sph" class="w-50px auto_fer2 d-none"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_b1_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_b1_cyl'];?>" name="refraction_ar_r_b1_cyl" id="refraction_ar_r_b1_cyl" class="w-50px auto_fer2 d-none"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_b1_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_b1_axis'];?>" name="refraction_ar_r_b1_axis" id="refraction_ar_r_b1_axis" class="w-50px auto_fer2 d-none"></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_b2_sph'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_b2_sph'];?>" name="refraction_ar_r_b2_sph" id="refraction_ar_r_b2_sph" class="w-50px auto_fer2 d-none"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_b2_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_b2_cyl'];?>" name="refraction_ar_r_b2_cyl" id="refraction_ar_r_b2_cyl" class="w-50px auto_fer2 d-none"></td>
+							<td><span class="auto_fer2"><?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_b2_axis'];?></span> <input type="text" value="<?php echo $refrtsn_auto_ref_dilted['refraction_ar_r_b2_axis'];?>" name="refraction_ar_r_b2_axis" id="refraction_ar_r_b2_axis" class="w-50px auto_fer2 d-none"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div> -->
+		</div>
+	</div>
+</section>
+
+<section class="panel panel-default">
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="text-right btn_edit"><a href="javascript:void(0)" class="btn_fill" onclick="$('.dry_ref').toggle();">Edit</a><hr></div>
+			</div>
+			<div class="col-md-2">
+				<div class="label_name">DRY REFRACTION <i onclick="refraction_dry_ref_ltr();" title="Copy Left to Right" class="fa fa-arrow-right"></i> </div>
+				<button type="button" class="btn_fill dry_ref d-none" title="Fill DRY REFRACTION" onclick="return open_modals('refraction_dry_ref','DRY-REFRACTION');">Fill <i class="fa fa-arrow-right"></i> </button> 	
+				<button type="button" onclick="cpoy_to_glass_pres('refraction_dry_ref');" title="Copy Dry Refraction to Glass Prescription" class="btn_fill"> Copy <i class="fa fa-arrow-down"></i></button>	
+			</div>					
+			<div class="col-md-4">
+				<table class="table table-bordered">
+					<thead class="bg-info">
+						<tr>
+							<th width="20%"></th>
+							<th width="20%">Sph</th>
+							<th width="20%">Cyl</th>
+							<th width="20%">Axis</th>
+							<th width="20%">Vision</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="text-align:left;">Distant</td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_dt_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_dt_sph'];?>" name="refraction_dry_ref_l_dt_sph" id="refraction_dry_ref_l_dt_sph" class="w-50px dry_ref d-none"></td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_dt_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_dt_cyl'];?>" name="refraction_dry_ref_l_dt_cyl" id="refraction_dry_ref_l_dt_cyl" class="w-50px dry_ref d-none"></td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_dt_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_dt_axis'];?>" name="refraction_dry_ref_l_dt_axis" id="refraction_dry_ref_l_dt_axis" class="w-50px dry_ref d-none"></td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_dt_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_dt_vision'];?>" name="refraction_dry_ref_l_dt_vision" id="refraction_dry_ref_l_dt_vision" class="w-50px dry_ref d-none"></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Prism</td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_ad_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_ad_sph'];?>" name="refraction_dry_ref_l_ad_sph" id="refraction_dry_ref_l_ad_sph" class="w-50px dry_ref d-none"></td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_ad_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_ad_cyl'];?>" name="refraction_dry_ref_l_ad_cyl" id="refraction_dry_ref_l_ad_cyl" class="w-50px dry_ref d-none" ></td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_ad_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_ad_axis'];?>" name="refraction_dry_ref_l_ad_axis" id="refraction_dry_ref_l_ad_axis" class="w-50px dry_ref d-none" ></td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_ad_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_ad_vision'];?>" name="refraction_dry_ref_l_ad_vision" id="refraction_dry_ref_l_ad_vision" class="w-50px dry_ref d-none"></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Near</td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_nr_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_nr_sph'];?>" name="refraction_dry_ref_l_nr_sph" id="refraction_dry_ref_l_nr_sph" class="w-50px dry_ref d-none"></td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_nr_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_nr_cyl'];?>" name="refraction_dry_ref_l_nr_cyl" id="refraction_dry_ref_l_nr_cyl" class="w-50px dry_ref d-none"></td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_nr_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_nr_axis'];?>" name="refraction_dry_ref_l_nr_axis" id="refraction_dry_ref_l_nr_axis" class="w-50px dry_ref d-none"></td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_nr_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_l_nr_vision'];?>" name="refraction_dry_ref_l_nr_vision" id="refraction_dry_ref_l_nr_vision" class="w-50px dry_ref d-none"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-md-2">
+				<div class="label_name">DRY REFRACTION <i onclick="refraction_dry_ref_rtl();" title="Copy Right to Left" class="fa fa-arrow-left"></i></div>
+			</div>					
+			<div class="col-md-4">
+				<table class="table table-bordered">
+					<thead class="bg-info">
+						<tr>
+							<th width="20%"></th>
+							<th width="20%">Sph</th>
+							<th width="20%">Cyl</th>
+							<th width="20%">Axis</th>
+							<th width="20%">Vision</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="text-align:left;">Distant</td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_dt_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_dt_sph'];?>" name="refraction_dry_ref_r_dt_sph" id="refraction_dry_ref_r_dt_sph" class="w-50px dry_ref d-none"></td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_dt_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_dt_cyl'];?>" name="refraction_dry_ref_r_dt_cyl" id="refraction_dry_ref_r_dt_cyl" class="w-50px dry_ref d-none"></td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_dt_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_dt_axis'];?>" name="refraction_dry_ref_r_dt_axis" id="refraction_dry_ref_r_dt_axis" class="w-50px dry_ref d-none"></td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_dt_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_dt_vision'];?>" name="refraction_dry_ref_r_dt_vision" id="refraction_dry_ref_r_dt_vision" class="w-50px dry_ref d-none"></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Prism</td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_ad_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_ad_sph'];?>" name="refraction_dry_ref_r_ad_sph" id="refraction_dry_ref_r_ad_sph" class="w-50px dry_ref d-none"></td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_ad_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_ad_cyl'];?>" name="refraction_dry_ref_r_ad_cyl" id="refraction_dry_ref_r_ad_cyl" class="w-50px dry_ref d-none" ></td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_ad_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_ad_axis'];?>" name="refraction_dry_ref_r_ad_axis" id="refraction_dry_ref_r_ad_axis" class="w-50px dry_ref d-none" ></td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_ad_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_ad_vision'];?>" name="refraction_dry_ref_r_ad_vision" id="refraction_dry_ref_r_ad_vision" class="w-50px dry_ref d-none"></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Near</td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_nr_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_nr_sph'];?>" name="refraction_dry_ref_r_nr_sph" id="refraction_dry_ref_r_nr_sph" class="w-50px dry_ref d-none"></td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_nr_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_nr_cyl'];?>" name="refraction_dry_ref_r_nr_cyl" id="refraction_dry_ref_r_nr_cyl" class="w-50px dry_ref d-none"></td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_nr_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_nr_axis'];?>" name="refraction_dry_ref_r_nr_axis" id="refraction_dry_ref_r_nr_axis" class="w-50px dry_ref d-none"></td>
+							<td><span class="dry_ref"><?php echo $refrtsn_dry_ref['refraction_dry_ref_r_nr_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dry_ref['refraction_dry_ref_r_nr_vision'];?>" name="refraction_dry_ref_r_nr_vision" id="refraction_dry_ref_r_nr_vision" class="w-50px dry_ref d-none"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<!-- <div class="panel-footer dry_ref d-none">
+		<div class="row">
+			<div class="col-md-2">Comment:</div>
+			<div class="col-md-4">
+				<textarea name="refraction_dry_ref_l_comm" id="refraction_dry_ref_l_comm" class="form-control"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_comm'];?></textarea>
+			</div>
+			<div class="col-md-2">Comment:</div>
+			<div class="col-md-4">
+				<textarea name="refraction_dry_ref_r_comm" id="refraction_dry_ref_r_comm"  class="form-control"><?php echo $refrtsn_dry_ref['refraction_dry_ref_l_comm'];?></textarea>
+			</div>
+		</div>
+	</div> -->
+</section>
+
+<section class="panel panel-default">
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-12 text-right btn_edit"><a href="javascript:void(0)" class="btn_fill" onclick="$('.ref_dil').toggle();">Edit</a><hr></div>
+			<div class="col-md-2">
+				<div class="label_name">REFRACTION (DILATED) <i onclick="refraction_ref_dtd_ltr();" title="Copy Left to Right" class="fa fa-arrow-right"></i> </div>
+				<button type="button" class="btn_fill ref_dil d-none" title="Fill REFRACTION (DILATED)" onclick="return open_modals('refraction_ref_dtd','REFRACTION-DILATED');">Fill <i class="fa fa-arrow-right"></i> </button> 	
+				<button type="button" title="Copy Dilated Refraction to Glass Prescription" onclick="cpoy_to_glass_pres('refraction_ref_dtd');" class="btn_fill"> Copy <i class="fa fa-arrow-down"></i></button>	
+			</div>			
+			<div class="col-md-4">
+				<table class="table table-bordered">
+					<thead class="bg-info">
+						<tr>
+							<th width="20%"></th>
+							<th width="20%">Sph</th>
+							<th width="20%">Cyl</th>
+							<th width="20%">Axis</th>
+							<th width="20%">Vision</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="text-align:left;">Distant</td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_dt_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_dt_sph'];?>" name="refraction_ref_dtd_l_dt_sph" id="refraction_ref_dtd_l_dt_sph" class="w-50px ref_dil d-none"></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_dt_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_dt_cyl'];?>" name="refraction_ref_dtd_l_dt_cyl" id="refraction_ref_dtd_l_dt_cyl" class="w-50px ref_dil d-none"></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_dt_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_dt_axis'];?>" name="refraction_ref_dtd_l_dt_axis" id="refraction_ref_dtd_l_dt_axis" class="w-50px ref_dil d-none"></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_dt_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_dt_vision'];?>" name="refraction_ref_dtd_l_dt_vision" id="refraction_ref_dtd_l_dt_vision" class="w-50px ref_dil d-none"></td>
+						</tr>
+						<!-- <tr>
+							<td style="text-align:left;">Add <span class="text-danger">#</span></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_ad_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_ad_sph'];?>" name="refraction_ref_dtd_l_ad_sph" id="refraction_ref_dtd_l_ad_sph" class="w-50px ref_dil d-none"></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_ad_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_ad_cyl'];?>" name="refraction_ref_dtd_l_ad_cyl" id="refraction_ref_dtd_l_ad_cyl" class="w-50px ref_dil d-none" disabled ></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_ad_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_ad_axis'];?>" name="refraction_ref_dtd_l_ad_axis" id="refraction_ref_dtd_l_ad_axis" class="w-50px ref_dil d-none" disabled></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_ad_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_ad_vision'];?>" name="refraction_ref_dtd_l_ad_vision" id="refraction_ref_dtd_l_ad_vision" class="w-50px ref_dil d-none"></td>
+						</tr> -->
+						<tr>
+							<td style="text-align:left;">Near</td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_nr_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_nr_sph'];?>" name="refraction_ref_dtd_l_nr_sph" id="refraction_ref_dtd_l_nr_sph" class="w-50px ref_dil d-none"></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_nr_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_nr_cyl'];?>" name="refraction_ref_dtd_l_nr_cyl" id="refraction_ref_dtd_l_nr_cyl" class="w-50px ref_dil d-none"></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_nr_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_nr_axis'];?>" name="refraction_ref_dtd_l_nr_axis" id="refraction_ref_dtd_l_nr_axis" class="w-50px ref_dil d-none"></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_nr_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_l_nr_vision'];?>" name="refraction_ref_dtd_l_nr_vision" id="refraction_ref_dtd_l_nr_vision" class="w-50px ref_dil d-none"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-md-2">
+				<div class="label_name">REFRACTION (DILATED) <i onclick="refraction_ref_dtd_rtl();" title="Copy Right to Left" class="fa fa-arrow-left"></i> </div>							
+			</div>			
+			<div class="col-md-4">
+				<table class="table table-bordered">
+					<thead class="bg-info">
+						<tr>
+							<th width="20%"></th>
+							<th width="20%">Sph</th>
+							<th width="20%">Cyl</th>
+							<th width="20%">Axis</th>
+							<th width="20%">Vision</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="text-align:left;">Distant</td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_dt_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_dt_sph'];?>" name="refraction_ref_dtd_r_dt_sph" id="refraction_ref_dtd_r_dt_sph" class="w-50px ref_dil d-none"></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_dt_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_dt_cyl'];?>" name="refraction_ref_dtd_r_dt_cyl" id="refraction_ref_dtd_r_dt_cyl" class="w-50px ref_dil d-none"></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_dt_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_dt_axis'];?>" name="refraction_ref_dtd_r_dt_axis" id="refraction_ref_dtd_r_dt_axis" class="w-50px ref_dil d-none"></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_dt_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_dt_vision'];?>" name="refraction_ref_dtd_r_dt_vision" id="refraction_ref_dtd_r_dt_vision" class="w-50px ref_dil d-none"></td>
+						</tr>
+						<!-- <tr>
+							<td style="text-align:left;">Add <span class="text-danger">#</span></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_ad_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_ad_sph'];?>" name="refraction_ref_dtd_r_ad_sph" id="refraction_ref_dtd_r_ad_sph" class="w-50px ref_dil d-none"></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_ad_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_ad_cyl'];?>" name="refraction_ref_dtd_r_ad_cyl" id="refraction_ref_dtd_r_ad_cyl" class="w-50px ref_dil d-none" disabled ></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_ad_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_ad_axis'];?>" name="refraction_ref_dtd_r_ad_axis" id="refraction_ref_dtd_r_ad_axis" class="w-50px ref_dil d-none" disabled></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_ad_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_ad_vision'];?>" name="refraction_ref_dtd_r_ad_vision" id="refraction_ref_dtd_r_ad_vision" class="w-50px ref_dil d-none"></td>
+						</tr> -->
+						<tr>
+							<td style="text-align:left;">Near</td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_nr_sph'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_nr_sph'];?>" name="refraction_ref_dtd_r_nr_sph" id="refraction_ref_dtd_r_nr_sph" class="w-50px ref_dil d-none"></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_nr_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_nr_cyl'];?>" name="refraction_ref_dtd_r_nr_cyl" id="refraction_ref_dtd_r_nr_cyl" class="w-50px ref_dil d-none"></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_nr_axis'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_nr_axis'];?>" name="refraction_ref_dtd_r_nr_axis" id="refraction_ref_dtd_r_nr_axis" class="w-50px ref_dil d-none"></td>
+							<td><span class="ref_dil"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_nr_vision'];?></span> <input type="text" value="<?php echo $refrtsn_dltd['refraction_ref_dtd_r_nr_vision'];?>" name="refraction_ref_dtd_r_nr_vision" id="refraction_ref_dtd_r_nr_vision" class="w-50px ref_dil d-none"></td>
+						</tr>
+					</tbody>
+				</table>							
+			</div>
+		</div>					
+	</div>
+	<div class="panel-footer ref_dil d-none">
+		<div class="row">
+			<div class="col-md-2"></div>
+			<div class="col-md-4">
+				<div class="row">
+					<div class="col-md-4">Drug Used</div>
+					<div class="col-md-8">
+						<select name="refraction_ref_dtd_l_du" id="refraction_ref_dtd_l_du" class="custom-selct">
+							<option value="">Select</option>
+							<option value="Tropicamide" <?php if($refrtsn_dltd['refraction_ref_dtd_l_du']=='Tropicamide'){ echo 'selected';} ?>>Tropicamide</option>
+							<option value="Tropicamide - P" <?php if($refrtsn_dltd['refraction_ref_dtd_l_du']=='Tropicamide - P'){ echo 'selected';} ?>>Tropicamide - P</option>
+							<option value="Atropine" <?php if($refrtsn_dltd['refraction_ref_dtd_l_du']=='Atropine'){ echo 'selected';} ?>>Atropine</option>
+							<option value="Cyclopentolate" <?php if($refrtsn_dltd['refraction_ref_dtd_l_du']=='Cyclopentolate'){ echo 'selected';} ?>>Cyclopentolate</option>
+							<option value="Homide" <?php if($refrtsn_dltd['refraction_ref_dtd_l_du']=='Homide'){ echo 'selected';} ?>>Homide</option>
+							<option value="Dry" <?php if($refrtsn_dltd['refraction_ref_dtd_l_du']=='Dry'){ echo 'selected';} ?>>Dry</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2"></div>
+			<div class="col-md-4">
+				<div class="row">
+					<div class="col-md-4">Drug Used</div>
+					<div class="col-md-8">
+						<select name="refraction_ref_dtd_r_du" id="refraction_ref_dtd_r_du" class="custom-selct">
+							<option value="">Select</option>
+							<option value="Tropicamide" <?php if($refrtsn_dltd['refraction_ref_dtd_r_du']=='Tropicamide'){ echo 'selected';} ?>>Tropicamide</option>
+							<option value="Tropicamide - P" <?php if($refrtsn_dltd['refraction_ref_dtd_r_du']=='Tropicamide - P'){ echo 'selected';} ?>>Tropicamide - P</option>
+							<option value="Atropine" <?php if($refrtsn_dltd['refraction_ref_dtd_r_du']=='Atropine'){ echo 'selected';} ?>>Atropine</option>
+							<option value="Cyclopentolate" <?php if($refrtsn_dltd['refraction_ref_dtd_r_du']=='Cyclopentolate'){ echo 'selected';} ?>>Cyclopentolate</option>
+							<option value="Homide" <?php if($refrtsn_dltd['refraction_ref_dtd_r_du']=='Homide'){ echo 'selected';} ?>>Homide</option>
+							<option value="Dry" <?php if($refrtsn_dltd['refraction_ref_dtd_r_du']=='Dry'){ echo 'selected';} ?>>Dry</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel-footer ref_dil d-none">
+		<div class="row">
+			<div class="col-md-2">Comment:</div>
+			<div class="col-md-4">
+				<textarea name="refraction_ref_dtd_l_comm" id="refraction_ref_dtd_l_comm" class="form-control"><?php echo $refrtsn_dltd['refraction_ref_dtd_l_comm'];?></textarea>
+			</div>
+			<div class="col-md-2">Comment:</div>
+			<div class="col-md-4">
+				<textarea name="refraction_ref_dtd_r_comm" id="refraction_ref_dtd_r_comm" class="form-control"><?php echo $refrtsn_dltd['refraction_ref_dtd_r_comm'];?></textarea>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="panel panel-default">
+	<div class="panel-body">			
+		<div class="row">
+			<div class="col-md-12 text-right btn_edit"><a href="javascript:void(0)" class="btn_fill" onclick="$('.pmt').toggle();">Edit</a><hr></div>
+			<div class="col-md-2">
+				<div class="label_name">PMT <i onclick="refraction_pmt_ltr();" title="Copy Left to Right" class="fa fa-arrow-right"></i> </div>
+				<button type="button" class="btn_fill pmt d-none" title="Fill PMT" onclick="return open_modals('refraction_pmt','PMT');">Fill <i class="fa fa-arrow-right"></i> </button> 	
+				<button type="button" title="Copy PMT to Glass Prescription" onclick="cpoy_to_glass_pres('refraction_pmt');" class="btn_fill"> Copy <i class="fa fa-arrow-down"></i></button>	
+			</div>			
+			<div class="col-md-4">
+				<table class="table table-bordered">
+					<thead class="bg-info">
+						<tr>
+							<th width="20%"></th>
+							<th width="20%">Sph</th>
+							<th width="20%">Cyl</th>
+							<th width="20%">Axis</th>
+							<th width="20%">Vision</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="text-align:left;">Distant</td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_dt_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_dt_sph'];?>" name="refraction_pmt_l_dt_sph" id="refraction_pmt_l_dt_sph" class="w-50px pmt d-none"></td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_dt_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_dt_cyl'];?>" name="refraction_pmt_l_dt_cyl" id="refraction_pmt_l_dt_cyl" class="w-50px pmt d-none"></td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_dt_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_dt_axis'];?>" name="refraction_pmt_l_dt_axis" id="refraction_pmt_l_dt_axis" class="w-50px pmt d-none"></td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_dt_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_dt_vision'];?>" name="refraction_pmt_l_dt_vision" id="refraction_pmt_l_dt_vision" class="w-50px pmt d-none"></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Prism</td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_ad_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_ad_sph'];?>" name="refraction_pmt_l_ad_sph" id="refraction_pmt_l_ad_sph" class="w-50px pmt d-none"></td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_ad_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_ad_cyl'];?>" name="refraction_pmt_l_ad_cyl" id="refraction_pmt_l_ad_cyl" class="w-50px pmt d-none"  ></td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_ad_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_ad_axis'];?>" name="refraction_pmt_l_ad_axis" id="refraction_pmt_l_ad_axis" class="w-50px pmt d-none"  ></td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_ad_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_ad_vision'];?>" name="refraction_pmt_l_ad_vision" id="refraction_pmt_l_ad_vision" class="w-50px pmt d-none"></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Near</td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_nr_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_nr_sph'];?>" name="refraction_pmt_l_nr_sph" id="refraction_pmt_l_nr_sph" class="w-50px pmt d-none"></td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_nr_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_nr_cyl'];?>" name="refraction_pmt_l_nr_cyl" id="refraction_pmt_l_nr_cyl" class="w-50px pmt d-none"></td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_nr_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_nr_axis'];?>" name="refraction_pmt_l_nr_axis" id="refraction_pmt_l_nr_axis" class="w-50px pmt d-none"></td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_l_nr_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_l_nr_vision'];?>" name="refraction_pmt_l_nr_vision" id="refraction_pmt_l_nr_vision" class="w-50px pmt d-none"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>					
+			<div class="col-md-2">
+				<div class="label_name">PMT <i onclick="refraction_pmt_rtl();" title="Copy Right to Left" class="fa fa-arrow-left"></i> </div>							
+			</div>			
+			<div class="col-md-4">
+				<table class="table table-bordered">
+					<thead class="bg-info">
+						<tr>
+							<th width="20%"></th>
+							<th width="20%">Sph</th>
+							<th width="20%">Cyl</th>
+							<th width="20%">Axis</th>
+							<th width="20%">Vision</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="text-align:left;">Distant</td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_dt_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_dt_sph'];?>" name="refraction_pmt_r_dt_sph" id="refraction_pmt_r_dt_sph" class="w-50px pmt d-none"></td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_dt_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_dt_cyl'];?>" name="refraction_pmt_r_dt_cyl" id="refraction_pmt_r_dt_cyl" class="w-50px pmt d-none"></td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_dt_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_dt_axis'];?>" name="refraction_pmt_r_dt_axis" id="refraction_pmt_r_dt_axis" class="w-50px pmt d-none"></td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_dt_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_dt_vision'];?>" name="refraction_pmt_r_dt_vision" id="refraction_pmt_r_dt_vision" class="w-50px pmt d-none"></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Prism</td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_ad_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_ad_sph'];?>" name="refraction_pmt_r_ad_sph" id="refraction_pmt_r_ad_sph" class="w-50px pmt d-none"></td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_ad_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_ad_cyl'];?>" name="refraction_pmt_r_ad_cyl" id="refraction_pmt_r_ad_cyl" class="w-50px pmt d-none" ></td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_ad_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_ad_axis'];?>" name="refraction_pmt_r_ad_axis" id="refraction_pmt_r_ad_axis" class="w-50px pmt d-none" ></td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_ad_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_ad_vision'];?>" name="refraction_pmt_r_ad_vision" id="refraction_pmt_r_ad_vision" class="w-50px pmt d-none"></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">Near</td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_nr_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_nr_sph'];?>" name="refraction_pmt_r_nr_sph" id="refraction_pmt_r_nr_sph" class="w-50px pmt d-none"></td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_nr_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_nr_cyl'];?>" name="refraction_pmt_r_nr_cyl" id="refraction_pmt_r_nr_cyl" class="w-50px pmt d-none"></td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_nr_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_nr_axis'];?>" name="refraction_pmt_r_nr_axis" id="refraction_pmt_r_nr_axis" class="w-50px pmt d-none"></td>
+							<td><span class="pmt"><?php echo $refrtsn_pmt['refraction_pmt_r_nr_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pmt['refraction_pmt_r_nr_vision'];?>" name="refraction_pmt_r_nr_vision" id="refraction_pmt_r_nr_vision" class="w-50px pmt d-none"></td>
+						</tr>
+						</tr>
+					</tbody>
+				</table>							
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="panel panel-default">
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="text-right btn_edit"><a href="javascript:void(0)" class="btn_fill" onclick="$('.meter_pgp').toggle();">Edit</a><hr></div>
+			</div>
+			<div class="col-md-2">
+				<div class="label_name">PGP <i onclick="refraction_pgp_ltr();" class="fa fa-arrow-right" title="Copy Left to Right"></i> </div>
+				<button type="button" class="btn_fill meter_pgp d-none" title="Fill PGP" onclick="return open_modals('refraction_pgp','PGP');">Fill <i class="fa fa-arrow-right"></i> </button> 	
+				<button type="button" title="Copy PGP to Glass Prescription" onclick="cpoy_to_glass_pres('refraction_pgp');"  class="btn_fill"> Copy <i class="fa fa-arrow-down"></i></button>	
+			</div>					
+			<div class="col-md-4">
+				<table class="table table-bordered">
+					<thead class="bg-info">
+						<tr>
+							<th width="20%"></th>
+							<th width="20%">Sph</th>
+							<th width="20%">Cyl</th>
+							<th width="20%">Axis</th>
+							<th width="20%">Vision</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="text-align:left;">Distant</td> 
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_dt_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_dt_sph'];?>" name="refraction_pgp_l_dt_sph" id="refraction_pgp_l_dt_sph" class="w-50px meter_pgp d-none"></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_dt_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_dt_cyl'];?>" name="refraction_pgp_l_dt_cyl" id="refraction_pgp_l_dt_cyl" class="w-50px meter_pgp d-none"></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_dt_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_dt_axis'];?>" name="refraction_pgp_l_dt_axis" id="refraction_pgp_l_dt_axis" class="w-50px meter_pgp d-none"></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_dt_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_dt_vision'];?>" name="refraction_pgp_l_dt_vision" id="refraction_pgp_l_dt_vision" class="w-50px meter_pgp d-none"></td>
+						</tr>
+						<!-- <tr>
+							<td style="text-align:left;">Add <span class="text-danger">#</span></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_ad_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_ad_sph'];?>" name="refraction_pgp_l_ad_sph" id="refraction_pgp_l_ad_sph" class="w-50px meter_pgp d-none"></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_ad_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_ad_cyl'];?>" name="refraction_pgp_l_ad_cyl" id="refraction_pgp_l_ad_cyl" class="w-50px meter_pgp d-none" disabled></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_ad_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_ad_axis'];?>" name="refraction_pgp_l_ad_axis" id="refraction_pgp_l_ad_axis" class="w-50px meter_pgp d-none" disabled></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_ad_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_ad_vision'];?>" name="refraction_pgp_l_ad_vision" id="refraction_pgp_l_ad_vision" class="w-50px meter_pgp d-none"></td>
+						</tr> -->
+						<tr>
+							<td style="text-align:left;">Near</td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_nr_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_nr_sph'];?>" name="refraction_pgp_l_nr_sph" id="refraction_pgp_l_nr_sph" class="w-50px meter_pgp d-none"></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_nr_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_nr_cyl'];?>" name="refraction_pgp_l_nr_cyl" id="refraction_pgp_l_nr_cyl" class="w-50px meter_pgp d-none"></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_nr_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_nr_axis'];?>" name="refraction_pgp_l_nr_axis" id="refraction_pgp_l_nr_axis" class="w-50px meter_pgp d-none"></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_l_nr_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_l_nr_vision'];?>" name="refraction_pgp_l_nr_vision" id="refraction_pgp_l_nr_vision" class="w-50px meter_pgp d-none"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-md-2">
+				<div class="label_name">PGP <i onclick="refraction_pgp_rtl();" class="fa fa-arrow-left" title="Copy Right to Left"></i> </div>							
+			</div>					
+			<div class="col-md-4">
+				<table class="table table-bordered">
+					<thead class="bg-info">
+						<tr>
+							<th width="20%"></th>
+							<th width="20%">Sph</th>
+							<th width="20%">Cyl</th>
+							<th width="20%">Axis</th>
+							<th width="20%">Vision</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="text-align:left;">Distant</td> 
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_dt_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_dt_sph'];?>" name="refraction_pgp_r_dt_sph" id="refraction_pgp_r_dt_sph" class="w-50px meter_pgp d-none"></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_dt_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_dt_cyl'];?>" name="refraction_pgp_r_dt_cyl" id="refraction_pgp_r_dt_cyl" class="w-50px meter_pgp d-none"></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_dt_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_dt_axis'];?>" name="refraction_pgp_r_dt_axis" id="refraction_pgp_r_dt_axis" class="w-50px meter_pgp d-none"></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_dt_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_dt_vision'];?>" name="refraction_pgp_r_dt_vision" id="refraction_pgp_r_dt_vision" class="w-50px meter_pgp d-none"></td>
+						</tr>
+						<!-- <tr>
+							<td style="text-align:left;">Add <span class="text-danger">#</span></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_ad_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_ad_sph'];?>" name="refraction_pgp_r_ad_sph" id="refraction_pgp_r_ad_sph" class="w-50px meter_pgp d-none"></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_ad_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_ad_cyl'];?>" name="refraction_pgp_r_ad_cyl" id="refraction_pgp_r_ad_cyl" class="w-50px meter_pgp d-none" disabled></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_ad_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_ad_axis'];?>" name="refraction_pgp_r_ad_axis" id="refraction_pgp_r_ad_axis" class="w-50px meter_pgp d-none" disabled></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_ad_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_ad_vision'];?>" name="refraction_pgp_r_ad_vision" id="refraction_pgp_r_ad_vision" class="w-50px meter_pgp d-none"></td>
+						</tr> -->
+						<tr>
+							<td style="text-align:left;">Near</td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_nr_sph'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_nr_sph'];?>" name="refraction_pgp_r_nr_sph" id="refraction_pgp_r_nr_sph" class="w-50px meter_pgp d-none"></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_nr_cyl'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_nr_cyl'];?>" name="refraction_pgp_r_nr_cyl" id="refraction_pgp_r_nr_cyl" class="w-50px meter_pgp d-none"></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_nr_axis'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_nr_axis'];?>" name="refraction_pgp_r_nr_axis" id="refraction_pgp_r_nr_axis" class="w-50px meter_pgp d-none"></td>
+							<td><span class="meter_pgp"><?php echo $refrtsn_pgp['refraction_pgp_r_nr_vision'];?></span> <input type="text" value="<?php echo $refrtsn_pgp['refraction_pgp_r_nr_vision'];?>" name="refraction_pgp_r_nr_vision" id="refraction_pgp_r_nr_vision" class="w-50px meter_pgp d-none"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="panel-footer meter_pgp d-none">
+		<div class="row">
+			<div class="col-md-2"></div>
+			<div class="col-md-1 pr-0">Type of Lens :</div>
+			<div class="col-md-3">
+				<select name="refraction_pgp_l_lens" id="refraction_pgp_l_lens" class="custom-select">
+					<option value="">Select</option>
+					<option value="Single Vision - Distant" <?php if($refrtsn_pgp['refraction_pgp_l_lens']=='Single Vision - Distant'){ echo 'selected';} ?>>Single Vision - Distant</option>
+					<option value="Single Vision - Near" <?php if($refrtsn_pgp['refraction_pgp_l_lens']=='Single Vision - Near'){ echo 'selected';} ?>>Single Vision - Near</option>
+					<option value="Bifocal" <?php if($refrtsn_pgp['refraction_pgp_l_lens']=='Bifocal'){ echo 'selected';} ?>>Bifocal</option>
+					<option value="Progressive" <?php if($refrtsn_pgp['refraction_pgp_l_lens']=='Progressive'){ echo 'selected';} ?>>Progressive</option>
+					<option value="D Bifocal" <?php if($refrtsn_pgp['refraction_pgp_l_lens']=='D Bifocal'){ echo 'selected';} ?>>D Bifocal</option>
+					<option value="KT Bifocal" <?php if($refrtsn_pgp['refraction_pgp_l_lens']=='KT Bifocal'){ echo 'selected';} ?>>KT Bifocal</option>
+				</select>
+			</div>			
+			<div class="col-md-2"></div>
+			<div class="col-md-1 pr-0">Type of Lens :</div>
+			<div class="col-md-3">
+				<select name="refraction_pgp_r_lens" id="refraction_pgp_r_lens" class="custom-select">
+					<option value="">Select</option>
+					<option value="Single Vision - Distant" <?php if($refrtsn_pgp['refraction_pgp_r_lens']=='Single Vision - Distant'){ echo 'selected';} ?>>Single Vision - Distant</option>
+					<option value="Single Vision - Near" <?php if($refrtsn_pgp['refraction_pgp_r_lens']=='Single Vision - Near'){ echo 'selected';} ?>>Single Vision - Near</option>
+					<option value="Bifocal" <?php if($refrtsn_pgp['refraction_pgp_r_lens']=='Bifocal'){ echo 'selected';} ?>>Bifocal</option>
+					<option value="Progressive" <?php if($refrtsn_pgp['refraction_pgp_r_lens']=='Progressive'){ echo 'selected';} ?>>Progressive</option>
+					<option value="D Bifocal" <?php if($refrtsn_pgp['refraction_pgp_r_lens']=='D Bifocal'){ echo 'selected';} ?>>D Bifocal</option>
+					<option value="KT Bifocal" <?php if($refrtsn_pgp['refraction_pgp_r_lens']=='KT Bifocal'){ echo 'selected';} ?>>KT Bifocal</option>
+				</select>
+			</div>	
+		</div>
+	</div>
+</section>
+
+<section class="panel panel-default">
+	<div class="panel-body">
+		<div class="row">				
+			<div class="col-md-12">
+				<div class="text-right btn_edit"><a href="javascript:void(0)" class="btn_fill" onclick="$('.kero_meter').toggle();">Edit</a><hr></div>
+			</div>
+			<div class="col-md-2">
+				<div class="label_name">KERATOMETRY (K) <i onclick="refraction_km_ltr();" class="fa fa-arrow-right" title="Copy Left to Right"></i> </div>
+			</div>
+			<div class="col-md-4">
+				<table class="table table-bordered">
+					<thead class="bg-info">
+						<tr>
+							<th width="33.33%"></th>
+							<th width="33.33%">Value</th>
+							<th width="33.33%">Axis</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="text-align:left;">k1</td>
+							<td>
+								<span class="kero_meter"><?php echo $refrtsn_kerat['refraction_km_l_kh'];?></span> <input type="text" name="refraction_km_l_kh" id="refraction_km_l_kh" class="w-100px kero_meter" value="<?php echo $refrtsn_kerat['refraction_km_l_kh'];?>" style="display:none;">
+							</td>
+							<td><span class="kero_meter"> <?php echo $refrtsn_kerat['refraction_km_l_kh_a'];?> </span> <input type="text" name="refraction_km_l_kh_a" id="refraction_km_l_kh_a" value="<?php echo $refrtsn_kerat['refraction_km_l_kh_a'];?>" class="w-100px kero_meter" style="display:none;"></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">K2</td>
+							
+							<td>
+								<span class="kero_meter"><?php echo $refrtsn_kerat['refraction_km_l_kv'];?></span> <input type="text" name="refraction_km_l_kv" id="refraction_km_l_kv" class="w-100px kero_meter" value="<?php echo $refrtsn_kerat['refraction_km_l_kv'];?>" style="display:none;">
+							</td>
+							<td><span class="kero_meter"> <?php echo $refrtsn_kerat['refraction_km_l_kv_a'];?> </span> <input type="text" name="refraction_km_l_kv_a" id="refraction_km_l_kv_a" value="<?php echo $refrtsn_kerat['refraction_km_l_kv_a'];?>" class="w-100px kero_meter" style="display:none;"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>			
+			<div class="col-md-2">
+				<div class="label_name">KERATOMETRY (K) <i onclick="refraction_km_rtl();" class="fa fa-arrow-left" title="Copy Right to Left"></i> </div>
+			</div>
+			<div class="col-md-4">
+				<table class="table table-bordered">
+					<thead class="bg-info">
+						<tr>
+							<th width="33.33%"></th>
+							<th width="33.33%">Value</th>
+							<th width="33.33%">Axis</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="text-align:left;">K1</td>
+							<td>
+								<span class="kero_meter"><?php echo $refrtsn_kerat['refraction_km_r_kh'];?></span> <input type="text" name="refraction_km_r_kh" id="refraction_km_r_kh" class="w-100px kero_meter" value="<?php echo $refrtsn_kerat['refraction_km_r_kh'];?>" style="display:none;">
+							</td>
+							<td><span class="kero_meter"> <?php echo $refrtsn_kerat['refraction_km_r_kh_a'];?> </span> <input type="text" name="refraction_km_r_kh_a" id="refraction_km_r_kh_a" class="w-100px kero_meter" value="<?php echo $refrtsn_kerat['refraction_km_r_kh_a'];?>" style="display:none;"></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">K2</td>
+							<td>
+								<span class="kero_meter"><?php echo $refrtsn_kerat['refraction_km_r_kv'];?></span> <input type="text" name="refraction_km_r_kv" id="refraction_km_r_kv" class="w-100px kero_meter" value="<?php echo $refrtsn_kerat['refraction_km_r_kv'];?>" style="display:none;">
+							</td>
+							<td><span class="kero_meter"> <?php echo $refrtsn_kerat['refraction_km_r_kv_a'];?> </span> <input type="text" name="refraction_km_r_kv_a" id="refraction_km_r_kv_a" class="w-100px kero_meter" value="<?php echo $refrtsn_kerat['refraction_km_r_kv_a'];?>" style="display:none;"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+
+			
+            
+				
+			
+
+		</div>
+
+		<div class="row">
+				<div class="col-md-4">
+					<div class="grp-full">
+						<div class="form-group row">
+							<label for="average_k1" class="col-md-4 col-form-label">Average K :</label>
+							<div class="col-md-8">
+								
+								<input type="text" id="average_k1" name="average_k1" class="form-control" style="width: 200px;" value="<?php echo $refraction_data['average_k1'];?>">
+							</div>
+						</div>
+					</div>
+				</div> 
+				
+				<div class="col-md-2"></div>
+				
+				<div class="col-md-4">
+					<div class="grp-full">
+						<div class="form-group row">
+							<label for="average_k2" class="col-md-4 col-form-label">Average k :</label>
+							<div class="col-md-8">
+								
+								<input type="text" id="average_k2" name="average_k2" class="form-control" style="width: 200px;" value="<?php echo $refraction_data['average_k2'];?>">
+							</div>
+						</div>
+					</div>
+				</div> 
+				<div class="col-md-4">
+					<div class="grp-full">
+						<div class="form-group row">
+							<label for="eye1" class="col-md-4 col-form-label">Eye:</label>
+							<div class="col-md-8">
+								
+								<input type="text" id="eye1" name="eye1" class="form-control" style="width: 200px;" value="<?php echo $refraction_data['eye1'];?>">
+							</div>
+						</div>
+					</div>
+				</div> 
+				<div class="col-md-2"></div>
+
+				<div class="col-md-4">
+					<div class="grp-full">
+						<div class="form-group row">
+							<label for="eye2" class="col-md-4 col-form-label">Eye :</label>
+							<div class="col-md-8">
+								
+								<input type="text" id="eye2" name="eye2" class="form-control" style="width: 200px;" value="<?php echo $refraction_data['eye2'];?>">
+							</div>
+						</div>
+					</div>
+				</div> 
+		</div>
+	</div>			
 </section>
 
 <script>
@@ -2523,6 +2812,15 @@ $(document).ready(function(){
 
   	function open_modals_2(modal_tab) {
 			var $modal = $('#load_add_type_modal_popup');
+			$modal.load('<?php echo base_url().'eye/add_eye_prescription/fill_eye_data_auto_refraction/' ?>'+modal_tab,
+			{
+			},
+			function(){
+			$modal.modal('show');
+			});
+  	}
+	function open_modals_3(modal_tab) {
+			var $modal = $('#load_add_type_modal_popup_2');
 			$modal.load('<?php echo base_url().'eye/add_eye_prescription/fill_eye_data_auto_refraction/' ?>'+modal_tab,
 			{
 			},
@@ -2780,21 +3078,37 @@ $(document).ready(function(){
 		$('#refraction_ar_r_b2_cyl').val($('#refraction_ar_l_b2_cyl').val());
 		$('#refraction_ar_r_b2_axis').val($('#refraction_ar_l_b2_axis').val());
     }
-    function refraction_ar_rtl()
+
+	function refraction_ar_ltr_plated()
     {
-    	$('#refraction_ar_l_dry_sph').val($('#refraction_ar_r_dry_sph').val());
-		$('#refraction_ar_l_dry_cyl').val($('#refraction_ar_r_dry_cyl').val());
-		$('#refraction_ar_l_dry_axis').val($('#refraction_ar_r_dry_axis').val());
-		$('#refraction_ar_l_dd_sph').val($('#refraction_ar_r_dd_sph').val());
-		$('#refraction_ar_l_dd_cyl').val($('#refraction_ar_r_dd_cyl').val());
-		$('#refraction_ar_l_dd_axis').val($('#refraction_ar_r_dd_axis').val());
-		$('#refraction_ar_l_b1_sph').val($('#refraction_ar_r_b1_sph').val());
-		$('#refraction_ar_l_b1_cyl').val($('#refraction_ar_r_b1_cyl').val());
-		$('#refraction_ar_l_b1_axis').val($('#refraction_ar_r_b1_axis').val());
-		$('#refraction_ar_l_b2_sph').val($('#refraction_ar_r_b2_sph').val());
-		$('#refraction_ar_l_b2_cyl').val($('#refraction_ar_r_b2_cyl').val());
-		$('#refraction_ar_l_b2_axis').val($('#refraction_ar_r_b2_axis').val());
+    	$('#refraction_ar_r_dry_sph_plated').val($('#refraction_ar_l_dry_sph_plated').val());
+		$('#refraction_ar_r_dry_cyl_plated').val($('#refraction_ar_l_dry_cyl_plated').val());
+		$('#refraction_ar_r_dry_axis_plated').val($('#refraction_ar_l_dry_axis_plated').val());
+		$('#refraction_ar_r_dd_sph_plated').val($('#refraction_ar_l_dd_sph_plated').val());
+		$('#refraction_ar_r_dd_cyl_plated').val($('#refraction_ar_l_dd_cyl_plated').val());
+		$('#refraction_ar_r_dd_axis_plated').val($('#refraction_ar_l_dd_axis_plated').val());
+		// $('#refraction_ar_r_b1_sph_plated').val($('#refraction_ar_l_b1_sph_plated').val());
+		// $('#refraction_ar_r_b1_cyl_plated').val($('#refraction_ar_l_b1_cyl_plated').val());
+		// $('#refraction_ar_r_b1_axis_plated').val($('#refraction_ar_l_b1_axis_plated').val());
+		// $('#refraction_ar_r_b2_sph_plated').val($('#refraction_ar_l_b2_sph_plated').val());
+		// $('#refraction_ar_r_b2_cyl_plated').val($('#refraction_ar_l_b2_cyl_plated').val());
+		// $('#refraction_ar_r_b2_axis_plated').val($('#refraction_ar_l_b2_axis_plated').val());
     }
+    // function refraction_ar_rtl()
+    // {
+    // 	$('#refraction_ar_l_dry_sph').val($('#refraction_ar_r_dry_sph').val());
+	// 	$('#refraction_ar_l_dry_cyl').val($('#refraction_ar_r_dry_cyl').val());
+	// 	$('#refraction_ar_l_dry_axis').val($('#refraction_ar_r_dry_axis').val());
+	// 	$('#refraction_ar_l_dd_sph').val($('#refraction_ar_r_dd_sph').val());
+	// 	$('#refraction_ar_l_dd_cyl').val($('#refraction_ar_r_dd_cyl').val());
+	// 	$('#refraction_ar_l_dd_axis').val($('#refraction_ar_r_dd_axis').val());
+	// 	$('#refraction_ar_l_b1_sph').val($('#refraction_ar_r_b1_sph').val());
+	// 	$('#refraction_ar_l_b1_cyl').val($('#refraction_ar_r_b1_cyl').val());
+	// 	$('#refraction_ar_l_b1_axis').val($('#refraction_ar_r_b1_axis').val());
+	// 	$('#refraction_ar_l_b2_sph').val($('#refraction_ar_r_b2_sph').val());
+	// 	$('#refraction_ar_l_b2_cyl').val($('#refraction_ar_r_b2_cyl').val());
+	// 	$('#refraction_ar_l_b2_axis').val($('#refraction_ar_r_b2_axis').val());
+    // }
     function refraction_dry_ref_ltr()
     {
     	$('#refraction_dry_ref_r_dt_sph').val($('#refraction_dry_ref_l_dt_sph').val());
@@ -3271,3 +3585,4 @@ $(document).ready(function(){
 
 
 <div id="load_add_type_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
+<div id="load_add_type_modal_popup2" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>

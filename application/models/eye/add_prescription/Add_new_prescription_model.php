@@ -1648,7 +1648,11 @@ class Add_new_prescription_model extends CI_Model
 	// echo "<pre>"; print_r($post); die;
 		$history_flag = 0;
 		$drawing_flag = 0;
-		if($post['flag'] == 'hess_chart'){
+		$refraction_below8 = 0;
+		if($post['flag'] == 'refraction_below_8_years'){
+			$history_flag = 1;
+			$refraction_below8 = 1;
+		}elseif($post['flag'] == 'hess_chart'){
 			$history_flag = 1;
 			$drawing_flag = isset($post['print_drawing_flag']) ? '1' : '0';
 		}else{
@@ -1664,7 +1668,20 @@ class Add_new_prescription_model extends CI_Model
 		$investigations_flag = isset($post['print_investigations_flag']) ? '1' : '0';
 		$advice_flag = isset($post['print_advice_flag']) ? '1' : '0';
 		$biometry_flag = isset($post['print_biometry_flag']) ? '1' : '0';
-		$pres_data = array('branch_id' => $post['branch_id'], 'booking_code' => $post['booking_code'], 'patient_id' => $post['patient_id'], 'booking_id' => $post['booking_id'], 'history_flag' => $history_flag, 'contactlens_flag' => $contactlens_flag, 'glassesprescriptions_flag' => $glassesprescriptions_flag, 'intermediate_glasses_prescriptions_flag' => $intermediate_glasses_prescriptions_flag, 'examination_flag' => $examination_flag, 'drawing_flag' => $drawing_flag, 'diagnosis_flag' => $diagnosis_flag, 'investigations_flag' => $investigations_flag, 'advice_flag' => $advice_flag, 'biometry_flag' => $biometry_flag, 'status' => 1, 'ip_address' => $_SERVER['REMOTE_ADDR'], 'created_by' => $post['branch_id']);
+		$biometry_flag = isset($post['print_biometry_flag']) ? '1' : '0';
+		
+		if($post['flag'] == 'refraction_below_8_years'){
+		
+			$pres_data = array('branch_id' => $post['branch_id'], 'booking_code' => $post['booking_code'], 'patient_id' => $post['patient_id'], 'booking_id' => $post['booking_id'], 'refraction_below8' => $refraction_below8, 'status' => 1, 'ip_address' => $_SERVER['REMOTE_ADDR'], 'created_by' => $post['branch_id']);
+
+		}elseif($post['flag'] == 'hess_chart'){
+			$pres_data = array('branch_id' => $post['branch_id'], 'booking_code' => $post['booking_code'], 'patient_id' => $post['patient_id'], 'booking_id' => $post['booking_id'], 'drawing_flag' => $drawing_flag, 'status' => 1, 'ip_address' => $_SERVER['REMOTE_ADDR'], 'created_by' => $post['branch_id']);
+		}else{
+
+			$pres_data = array('branch_id' => $post['branch_id'], 'booking_code' => $post['booking_code'], 'patient_id' => $post['patient_id'], 'booking_id' => $post['booking_id'], 'history_flag' => $history_flag, 'contactlens_flag' => $contactlens_flag, 'glassesprescriptions_flag' => $glassesprescriptions_flag, 'intermediate_glasses_prescriptions_flag' => $intermediate_glasses_prescriptions_flag, 'examination_flag' => $examination_flag, 'drawing_flag' => $drawing_flag, 'diagnosis_flag' => $diagnosis_flag, 'investigations_flag' => $investigations_flag, 'advice_flag' => $advice_flag, 'biometry_flag' => $biometry_flag,'refraction_below8' => $refraction_below8, 'status' => 1, 'ip_address' => $_SERVER['REMOTE_ADDR'], 'created_by' => $post['branch_id']);
+		}
+		
+
 		
 		if (!empty($post['prescrption_id']) || $post['prescrption_id'] != '') {
 			if (!empty($post['sale_id']) || $post['sale_id'] != 0) {
@@ -2241,6 +2258,33 @@ class Add_new_prescription_model extends CI_Model
 			'refraction_ar_r_b2_axis' => $post['refraction_ar_r_b2_axis']
 		);
 
+		$auto_ref_plated = array(
+			'refraction_ar_l_dry_sph_plated' => $post['refraction_ar_l_dry_sph_plated'],
+			'refraction_ar_l_dry_cyl_plated' => $post['refraction_ar_l_dry_cyl_plated'],
+			'refraction_ar_l_dry_axis_plated' => $post['refraction_ar_l_dry_axis_plated'],
+			'refraction_ar_l_dd_sph_plated' => $post['refraction_ar_l_dd_sph_plated'],
+			'refraction_ar_l_dd_cyl_plated' => $post['refraction_ar_l_dd_cyl_plated'],
+			'refraction_ar_l_dd_axis_plated' => $post['refraction_ar_l_dd_axis_plated'],
+			'refraction_ar_l_b1_sph_plated' => $post['refraction_ar_l_b1_sph_plated'],
+			'refraction_ar_l_b1_cyl_plated' => $post['refraction_ar_l_b1_cyl_plated'],
+			'refraction_ar_l_b1_axis_plated' => $post['refraction_ar_l_b1_axis_plated'],
+			'refraction_ar_l_b2_sph_plated' => $post['refraction_ar_l_b2_sph_plated'],
+			'refraction_ar_l_b2_cyl_plated' => $post['refraction_ar_l_b2_cyl_plated'],
+			'refraction_ar_l_b2_axis_plated' => $post['refraction_ar_l_b2_axis_plated'],
+			'refraction_ar_r_dry_sph_plated' => $post['refraction_ar_r_dry_sph_plated'],
+			'refraction_ar_r_dry_cyl_plated' => $post['refraction_ar_r_dry_cyl_plated'],
+			'refraction_ar_r_dry_axis_plated' => $post['refraction_ar_r_dry_axis_plated'],
+			'refraction_ar_r_dd_sph_plated' => $post['refraction_ar_r_dd_sph_plated'],
+			'refraction_ar_r_dd_cyl_plated' => $post['refraction_ar_r_dd_cyl_plated'],
+			'refraction_ar_r_dd_axis_plated' => $post['refraction_ar_r_dd_axis_plated'],
+			'refraction_ar_r_b1_sph_plated' => $post['refraction_ar_r_b1_sph_plated'],
+			'refraction_ar_r_b1_cyl_plated' => $post['refraction_ar_r_b1_cyl_plated'],
+			'refraction_ar_r_b1_axis_plated' => $post['refraction_ar_r_b1_axis_plated'],
+			'refraction_ar_r_b2_sph_plated' => $post['refraction_ar_r_b2_sph_plated'],
+			'refraction_ar_r_b2_cyl_plated' => $post['refraction_ar_r_b2_cyl_plated'],
+			'refraction_ar_r_b2_axis_plated' => $post['refraction_ar_r_b2_axis_plated']
+		);
+
 		$dry_ref = array(
 			'refraction_dry_ref_l_dt_sph' => $post['refraction_dry_ref_l_dt_sph'],
 			'refraction_dry_ref_l_dt_cyl' => $post['refraction_dry_ref_l_dt_cyl'],
@@ -2425,6 +2469,8 @@ class Add_new_prescription_model extends CI_Model
 			'refraction_col_vis_r' => $post['refraction_col_vis_r']
 		);
 
+		
+
 		$conta_sens = array(
 			'refraction_contra_sens_l' => $refraction_contra_sens_l,
 			'refraction_contra_sens_r' => $refraction_contra_sens_r
@@ -2445,7 +2491,24 @@ class Add_new_prescription_model extends CI_Model
 			'refraction_ortho_r' => $post['refraction_ortho_r']
 		);
 
-		$ref_data = array('branch_id' => $post['branch_id'], 'pres_id' => $prescriptionid, 'booking_code' => $post['booking_code'], 'patient_id' => $post['patient_id'], 'booking_id' => $post['booking_id'], 'visual_acuity' => json_encode($visal_acuity), 'keratometry' => json_encode($keratometry), 'pgp' => json_encode($pgp), 'auto_refraction' => json_encode($auto_ref), 'dry_refraction' => json_encode($dry_ref), 'refraction_delated' => json_encode($ref_dtd), 'retinoscopy' => json_encode($retinoscopy), 'pmt' => json_encode($pmt), 'glass_prescription' => json_encode($glass_pres), 'inter_glass_presc' => json_encode($inter_gls_pres), 'contact_lens_presc' => json_encode($cont_lens_pres), 'color_vision' => json_encode($color_vision), 'contrast_sensivity' => json_encode($conta_sens), 'intraocular_press' => json_encode($intra_press), 'orthoptics' => json_encode($orthoptics), 'status' => 1, 'ip_address' => $_SERVER['REMOTE_ADDR'], 'created_by' => $user_data['id'], 'created_date' => date('Y-m-d H:i:s'));
+		$UnVn = array(
+			'unvn_od' => $post['unvn_od'],
+			'unvn_os' => $post['unvn_os']
+		);
+		$PgVnq = array(
+			'pgvnq_od' => $post['pgvnq_od'],
+			'pgvnq_os' => $post['pgvnq_os']
+		);
+		$pupillary_reaction = array(
+			'pupillary_reaction_od' => $post['pupillary_reaction_od'],
+			'pupillary_reaction_os' => $post['pupillary_reaction_os']
+		);
+		$ropgas = array(
+			'ropgas_od' => $post['ropgas_od'],
+			'ropgas_os' => $post['ropgas_os']
+		);
+
+		$ref_data = array('branch_id' => $post['branch_id'], 'pres_id' => $prescriptionid, 'booking_code' => $post['booking_code'], 'patient_id' => $post['patient_id'], 'booking_id' => $post['booking_id'], 'visual_acuity' => json_encode($visal_acuity), 'keratometry' => json_encode($keratometry), 'pgp' => json_encode($pgp), 'auto_refraction' => json_encode($auto_ref),'auto_refraction_dilated' => json_encode($auto_ref_plated), 'dry_refraction' => json_encode($dry_ref), 'refraction_delated' => json_encode($ref_dtd), 'retinoscopy' => json_encode($retinoscopy), 'pmt' => json_encode($pmt), 'glass_prescription' => json_encode($glass_pres), 'inter_glass_presc' => json_encode($inter_gls_pres), 'contact_lens_presc' => json_encode($cont_lens_pres), 'color_vision' => json_encode($color_vision), 'contrast_sensivity' => json_encode($conta_sens), 'intraocular_press' => json_encode($intra_press), 'orthoptics' => json_encode($orthoptics), 'status' => 1, 'ip_address' => $_SERVER['REMOTE_ADDR'], 'created_by' => $user_data['id'], 'created_date' => date('Y-m-d H:i:s'),'UnVn' => json_encode($UnVn),'PgVnq' => json_encode($PgVnq),'pupillary_reaction' => json_encode($pupillary_reaction),'ropgas' => json_encode($ropgas),'vision_with_cl' => $post['vision_with_cl'],'hirschberg_test' => $post['hirschberg_test'],'average_k1' => $post['average_k1'],'average_k2' => $post['average_k2'],'eye1' => $post['eye1'],'eye2' => $post['eye2']);
 
 		// history tabs
 		$visit_comm = $post['visit_comm'];
