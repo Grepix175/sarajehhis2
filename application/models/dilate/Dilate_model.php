@@ -43,6 +43,7 @@ class Dilate_model extends CI_Model
 		$this->db->select("hms_dilated.*, 
 		hms_patient.patient_name, 
 		hms_opd_booking.booking_code, 
+				hms_patient.patient_code as patient_no, 
 		hms_opd_booking.token_no,  
 		hms_medicine_entry.medicine_name"); 
 		$this->db->from('hms_dilated'); // Main table
@@ -87,6 +88,16 @@ class Dilate_model extends CI_Model
 
 		if (isset($search['dilate_status']) && $search['dilate_status'] != "") {
 			$this->db->where('hms_dilated.dilate_status', $search['dilate_status']);
+		}
+		if (!empty($search['patient_name'])) {
+			$this->db->like('hms_patient.patient_name', $search['patient_name'], 'after');
+		}
+
+		if (!empty($search['patient_code'])) {
+			$this->db->where('hms_patient.patient_code', $search['patient_code']);
+		}
+		if (!empty($search['mobile_no'])) {
+			$this->db->where('hms_patient.mobile_no', $search['mobile_no']);
 		}
 
 		// Implement search functionality for DataTables
@@ -270,128 +281,31 @@ class Dilate_model extends CI_Model
 	function search_report_data()
 	{
 
-		$search = $this->session->userdata('medicine_entry_search');
-		// print_r($search);die;
-		$user_data = $this->session->userdata('auth_users');
-		$this->db->select("hms_hospital_code_entry.*, hms_medicine_company.company_name, hms_medicine_unit.medicine_unit, hms_item_desc.item_desc, hms_hospital_code.hospital_code");
-		$this->db->from($this->table);
-		$this->db->where('hms_hospital_code_entry.is_deleted', '0');
-		$this->db->join('hms_medicine_company', 'hms_medicine_company.id = hms_hospital_code_entry.manuf_company', 'left');
-		$this->db->join('hms_medicine_unit', 'hms_medicine_unit.id = hms_hospital_code_entry.unit_id', 'left');
-		$this->db->join('hms_item_desc', 'hms_item_desc.id = hms_hospital_code_entry.item_desc_id', 'left');
-		$this->db->join('hms_hospital_code', 'hms_hospital_code.id = hms_hospital_code_entry.hos_code_id', 'left');
+		$this->db->select("hms_dilated.*, 
+				hms_patient.patient_name, 
+				hms_opd_booking.booking_code, 
+				hms_patient.patient_code as patient_no, 
+				hms_opd_booking.token_no,  
+				hms_medicine_entry.medicine_name"); 
+		$this->db->from('hms_dilated'); // Main table
+		$this->db->where('hms_dilated.is_deleted', '0');
+		$this->db->where('hms_dilated.status', 1);
 
+		// Example joins
+		$this->db->join('hms_patient', 'hms_patient.id = hms_dilated.patient_id', 'left');
+		$this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_dilated.booking_id', 'left');
+		$this->db->join('hms_medicine_entry', 'hms_medicine_entry.id = hms_dilated.drop_name', 'left');
 
-
-		if (!empty($search['branch_type']) && trim(strtolower($search['branch_type'])) == "self") {
-			$this->db->where('hms_hospital_code_entry.branch_id', $user_data['parent_id']);
-		} else {
-			if ($search['branch_type'] != "") {
-				$this->db->where_in('hms_hospital_code_entry.branch_id', $search['branch_type']);
-			} else {
-				$this->db->where_in('hms_hospital_code_entry.branch_id', $user_data['parent_id']);
-			}
-			/* $this->db->where('hms_hospital_code_entry.id NOT IN (select download_id from hms_hospital_code_entry where branch_id = "'.$user_data['parent_id'].'" AND is_deleted != 2)');*/
-
-		}
-		// $this->db->from($this->table);
-		$i = 0;
-		if (isset($search) && !empty($search)) {
-			if (!empty($search['start_date'])) {
-				$start_date = date('Y-m-d', strtotime($search['start_date'])) . ' 00:00:00';
-				$this->db->where('hms_hospital_code_entry.created_date >= "' . $start_date . '"');
-			}
-
-			if (!empty($search['end_date'])) {
-				$end_date = date('Y-m-d', strtotime($search['end_date'])) . ' 23:59:59';
-				$this->db->where('hms_hospital_code_entry.created_date <= "' . $end_date . '"');
-			}
-
-			if (!empty($search['medicine_name'])) {
-				$this->db->where('hms_hospital_code_entry.medicine_name LIKE "' . $search['medicine_name'] . '%"');
-			}
-
-			if (!empty($search['medicine_company'])) {
-				$this->db->join('hms_medicine_company', 'hms_medicine_company.id = hms_hospital_code_entry.manuf_company', 'left');
-				$this->db->where('hms_medicine_company.company_name LIKE"' . $search['medicine_company'] . '%"');
-			}
-
-			if (!empty($search['medicine_code'])) {
-
-				$this->db->where('hms_hospital_code_entry.medicine_code', $search['medicine_code']);
-			}
-
-
-
-			if (isset($search['unit1']) && $search['unit1'] != "") {
-				$this->db->where('hms_hospital_code_entry.unit_id = "' . $search['unit1'] . '"');
-			}
-
-			if (isset($search['unit2']) && $search['unit2'] != "") {
-				$this->db->where('hms_hospital_code_entry.unit_second_id ="' . $search['unit2'] . '"');
-			}
-
-			if (isset($search['packing']) && $search['packing'] != "") {
-
-				//$this->db->where('packing',$search['packing']);
-				$this->db->where('hms_hospital_code_entry.packing LIKE "' . $search['packing'] . '%"');
-			}
-
-			if (isset($search['hsn_no']) && $search['hsn_no'] != "") {
-
-				//$this->db->where('packing',$search['packing']);
-				$this->db->where('hms_hospital_code_entry.hsn_no LIKE "' . $search['hsn_no'] . '%"');
-			}
-
-			if (isset($search['cgst']) && $search['cgst'] != "") {
-
-				//$this->db->where('packing',$search['packing']);
-				$this->db->where('hms_hospital_code_entry.cgst LIKE "' . $search['cgst'] . '%"');
-			}
-			if (isset($search['sgst']) && $search['sgst'] != "") {
-
-				//$this->db->where('packing',$search['packing']);
-				$this->db->where('hms_hospital_code_entry.sgst LIKE "' . $search['sgst'] . '%"');
-			}
-			if (isset($search['igst']) && $search['igst'] != "") {
-
-				//$this->db->where('packing',$search['packing']);
-				$this->db->where('hms_hospital_code_entry.igst LIKE "' . $search['igst'] . '%"');
-			}
-
-			if (isset($search['mrp_to']) && $search['mrp_to'] != "") {
-				$this->db->where('hms_hospital_code_entry.mrp >="' . $search['mrp_to'] . '"');
-			}
-
-			if (isset($search['mrp_from']) && $search['mrp_from'] != "") {
-				$this->db->where('hms_hospital_code_entry.mrp <="' . $search['mrp_from'] . '"');
-			}
-
-			if (isset($search['purchase_to']) && $search['purchase_to'] != "") {
-				$this->db->where('hms_hospital_code_entry.purchase_rate >= "' . $search['purchase_to'] . '"');
-			}
-
-			if (isset($search['purchase_from']) && $search['purchase_from'] != "") {
-				$this->db->where('hms_hospital_code_entry.purchase_rate <="' . $search['purchase_from'] . '"');
-			}
-
-			if (isset($search['rack_no']) && $search['rack_no'] != "") {
-				//$this->db->join('hms_medicine_racks','hms_medicine_racks.id = hms_hospital_code_entry.rack_no','left');
-				$this->db->where('hms_medicine_racks.rack_no', $search['rack_no']);
-
-			}
-			if (isset($search['min_alert']) && $search['min_alert'] != "") {
-				$this->db->where('hms_hospital_code_entry.min_alrt', $search['min_alert']);
-			}
-			if (isset($search['discount']) && $search['discount'] != "") {
-				$this->db->where('hms_hospital_code_entry.discount', $search['discount']);
-			}
-		}
 		$query = $this->db->get();
 
-		$data = $query->result();
-
-		return $data;
+        // Check if the query executed successfully
+        if ($query->num_rows() > 0) {
+            // Return the result as an array of objects
+            return $query->result();
+        } else {
+            // Return an empty array if no results were found
+            return [];
+        }
 	}
 
 
