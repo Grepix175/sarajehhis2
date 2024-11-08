@@ -42,7 +42,7 @@ class Tokenno_model extends CI_Model
     }
     public function _get_datatables_query()
     {
-        $this->db->select("hms_token.token_no, hms_token.status, hms_token.patient_id, hms_patient.patient_name,hms_patient.patient_code, hms_token.created_date");
+        $this->db->select("hms_token.token_no, hms_token.status, hms_token.patient_id, hms_patient.patient_name,hms_patient.patient_code, hms_token.created_date, hms_patient.emergency_status");
         $this->db->from("hms_token");
         $this->db->join('hms_patient', 'hms_patient.id = hms_token.patient_id', 'left');
 
@@ -110,6 +110,9 @@ class Tokenno_model extends CI_Model
             // Apply status filter
             if (!empty($criteria['search_type'])) {
                 $this->db->where('hms_token.status', $criteria['search_type']);
+            }
+            if (!empty($criteria['priority_type'])) {
+                $this->db->where('hms_patient.emergency_status', $criteria['priority_type']);
             }
 
             // Apply date filter

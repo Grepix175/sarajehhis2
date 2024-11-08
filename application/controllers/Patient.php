@@ -888,7 +888,6 @@ class Patient extends CI_Controller
 
         // echo "<pre>";
         // print_r($post);
-        // echo "</pre>";
         // die;
 
         $data['form_data'] = array(
@@ -1076,6 +1075,7 @@ class Patient extends CI_Controller
                 "relation_type" => $result['relation_type'],
                 "relation_name" => $result['relation_name'],
                 "adhar_no" => $adhar_no,
+                "color" =>  $result['emergency_status'],
                 // "dob"=>$result['dob'],
                 "address" => $result['address'],
                 "address_second" => $result['address2'],
@@ -1173,18 +1173,18 @@ class Patient extends CI_Controller
         $data['photo_name'] = $post['old_img'];
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
         $this->form_validation->set_rules('simulation_id', 'simulation', 'trim|required');
-        $this->form_validation->set_rules('patient_name', 'patient name', 'trim|required');
-        $this->form_validation->set_rules('gender', 'gender', 'trim|required');
+        // $this->form_validation->set_rules('patient_name', 'patient name', 'trim|required');
+        // $this->form_validation->set_rules('gender', 'gender', 'trim|required');
         // $this->form_validation->set_rules('adhar_no', 'aadhaar no.', 'min_length[12]|max_length[16]'); 
         // $this->form_validation->set_rules('age_y', 'age year', 'trim|required');
         // $this->form_validation->set_rules('address', 'Village/Town', 'trim|required');
-        $this->form_validation->set_rules('patient_category', 'patient category', 'trim|required');
+        // $this->form_validation->set_rules('patient_category', 'patient category', 'trim|required');
 
 
         if (!empty($field_list)) {
 
             if ($field_list[0]['mandatory_field_id'] == '5' && $field_list[0]['mandatory_branch_id'] == $users_data['parent_id']) {
-                $this->form_validation->set_rules('mobile_no', 'mobile no.', 'trim|required|numeric|min_length[10]|max_length[10]');
+                //$this->form_validation->set_rules('mobile_no', 'mobile no.', 'trim|required|numeric|min_length[10]|max_length[10]');
             }
 
             // if($field_list[1]['mandatory_field_id']=='7' && $field_list[1]['mandatory_branch_id']==$users_data['parent_id'])

@@ -24,8 +24,8 @@ class Token_no extends CI_Controller
             $start_date = '';
             $end_date = '';
         } else {
-            $start_date = date('d-m-Y');
-            $end_date = date('d-m-Y');
+            $start_date = date('Y-m-d');
+            $end_date = date('Y-m-d');
         }
 
         $data['page_title'] = 'Patient List';
@@ -52,14 +52,28 @@ class Token_no extends CI_Controller
         foreach ($list as $test) {
             $no++;
             $row = array();
-            $row[] = $test->token_no;
+        
+            // Add a class based on emergency_status
+            $row_class = '';
+            if ($test->emergency_status == 1) {
+                $row_class = 'border-red'; // Class for red border
+            } elseif ($test->emergency_status == 2) {
+                $row_class = 'border-blue'; // Class for blue border
+            } elseif ($test->emergency_status == 3) {
+                $row_class = 'border-yellow'; // Class for yellow border
+            }
+        
+            // Add token_no directly
+            $row[] = $test->token_no; // Add token_no directly
+        
+            // Add other patient details
             $row[] = $test->patient_code;
             $row[] = $test->patient_name;
-    
+        
             // Display status
             $status = ($test->status == 1) ? 'Pending' : 'Completed';
             $row[] = $status;
-    
+        
             // Generate action button (hide if status is 'Complete')
             if ($test->status == 1) {  // Show button only if status is 'Pending'
                 $action_url = base_url("opd/booking/" . $test->patient_id);
@@ -67,11 +81,15 @@ class Token_no extends CI_Controller
             } else {
                 $row[] = '';  // Leave action column empty for 'Complete' status
             }
-    
-            $data[] = $row;
+        
+            // Add emergency_status to the row
+            $row[] = $test->emergency_status; // Add emergency_status to the row
+        
+            // Add the row to data
+            $data[] = $row; // Each row now includes emergency_status
             $i++;
         }
-    
+        // echo "<pre>";print_r($data);die;
         $output = array(
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->token_no->count_all(),  // Correct reference to model
@@ -87,16 +105,25 @@ class Token_no extends CI_Controller
     {
         $post = $this->input->post();
         if (!empty($post)) {
+            // Check if search_type is 1, and set priority_type accordingly
+            $priority_type = null;
+            if (isset($post['search_type']) && $post['search_type'] == 1) {
+                $priority_type = !empty($post['priority_type']) ? $post['priority_type'] : null;
+            }
+
             // Set the filter criteria (status, from_date, to_date) in the session
             $search_criteria = array(
                 'search_type' => $post['search_type'],   // Status filter
+                'priority_type' => $priority_type,        // Priority type filter (null if search_type is not 1)
                 'from_date' => !empty($post['from_date']) ? $post['from_date'] : null,   // From date filter
                 'to_date' => !empty($post['to_date']) ? $post['to_date'] : null          // To date filter
             );
 
+            // Save the search criteria in the session
             $this->session->set_userdata('token_search', $search_criteria);
         }
 
+        // Retrieve search criteria from session (if available)
         $opd_search = $this->session->userdata('token_search');
         if (!empty($opd_search)) {
             // Optionally prepare the response data for form pre-filling or debugging
@@ -105,6 +132,7 @@ class Token_no extends CI_Controller
 
         return 'ok';
     }
+
 
 
     // Method to update the status of a token
