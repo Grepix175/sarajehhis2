@@ -6328,14 +6328,14 @@ class Opd_model extends CI_Model
 		return $query;
 	}
 
-	public function get_by_id_dilate($booking_id) {
+	public function get_by_id_dilate($patient_id) {
         $this->db->select('*'); // Select all fields (or you can specify the fields you need)
         $this->db->from('hms_dilated'); // Replace with the name of your table
-        $this->db->where('booking_id', $booking_id); // Filter by booking_id
+        $this->db->where('patient_id', $patient_id); // Filter by booking_id
         $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
-            return $query->row(); // Return a single row (assuming you expect only one result)
+            return true; // Return a single row (assuming you expect only one result)
         } else {
             return false; // Return false if no record is found
         }

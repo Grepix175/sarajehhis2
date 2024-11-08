@@ -42,6 +42,7 @@ class Dilate extends CI_Controller
         $data['opd'] = $this->dilate->get_booking_by_p_id($list[0]->booking_id);
         $data = array();
         $no = $_POST['start'];
+        // echo "<pre>";print_r($list);die;
         
         // Group records by patient_id
         $grouped_data = [];
@@ -62,7 +63,7 @@ class Dilate extends CI_Controller
             $row[] = $records[0]->token_no??1;
 
             // Assuming you want to show patient_id for the first record in the group
-            $row[] = $patient_id;
+            $row[] = $records[0]->patient_no;
 
             // Booking code (showing booking_id from the first record)
             $row[] = $records[0]->booking_id;

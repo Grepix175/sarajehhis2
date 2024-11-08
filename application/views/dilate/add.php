@@ -39,7 +39,7 @@ $field_list = mandatory_section_field_list(2);
         /* table {s */
         td{
             width: auto !important;
-            text-align: unset !important;
+            /* text-align: unset !important; */
         }
 
         th,
