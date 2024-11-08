@@ -36,7 +36,7 @@ class Dilate_model extends CI_Model
 
 	private function _get_datatables_query()
 	{
-		$search = $this->session->userdata('dilated_entry_search'); // Adjust session key as necessary
+		$search = $this->session->userdata('prescription_search'); // Adjust session key as necessary
 		$user_data = $this->session->userdata('auth_users');
 
 		// Select fields relevant to hms_dilated table
