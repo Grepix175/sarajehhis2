@@ -344,7 +344,45 @@ $field_list = mandatory_section_field_list(2);
             <div class="more_content" id="patient_info" style="display: none;" > 
 
 
-            
+            <div class="grp-full">
+              <div class="grp">
+                <label>Patient Category <span class="star">*</span>
+                </label>
+
+                <div class="box-right">
+                  <select name="patient_category" id="patient_category" class="m_input_default select-height">
+                    <option value="">Select Patient Category</option>
+                    <?php
+
+                    if (!empty($patient_category_list)) {
+                      foreach ($patient_category_list as $patient_category) {
+                        $selected_patient_category = "";
+                        if ($patient_category->id == $form_data['patient_category']) {
+                          $selected_patient_category = 'selected="selected"';
+                        }
+                        echo '<option value="' . $patient_category->id . '" ' . $selected_patient_category . '>' . $patient_category->patient_category . '</option>';
+                      }
+                    }
+                    ?>
+                  </select>
+                  <?php
+                  if (!empty($form_error)) {
+                    echo form_error('patient_category');
+                  }
+
+                  ?>
+                </div>
+              </div>
+
+              <?php //if(in_array('51',$users_data['permission']['action'])) {
+              ?>
+              <!-- <div class="grp-right">
+                  <a title="Add Religion" class="btn-new" href="javascript:void(0)" onClick="patient_category_modal()"><i class="fa fa-plus"></i> New</a>
+               </div> -->
+              <?php //} 
+              ?>
+            </div>
+
             <?php $data = get_setting_value('PATIENT_REG_NO');
             if (!empty($data) && isset($data)) {
               ?>
@@ -356,6 +394,7 @@ $field_list = mandatory_section_field_list(2);
               </div>
             <?php } ?>
 
+            
 
             <div class="grp-full">
               <div class="grp" style="width: 115%;">
