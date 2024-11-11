@@ -107,6 +107,7 @@ class Add_eye_prescription extends CI_Controller
   public function test($booking_id = "", $pres_id = "")
   {
     $post = $this->input->post();
+    // echo $pres_id;
     // echo "<pre>";
     // print_r($post);
     // die;
@@ -148,7 +149,7 @@ class Add_eye_prescription extends CI_Controller
     // echo "<pre>";
     //   print_r($data['form_data']);
     //   // print_r($booking_id);
-    //   die;
+    //   die('sddadsa');
     /* Investigation Tab data */
     $data['eye_region'] = $this->general_model->eye_region();
     $data['lab_investigations'] = $this->general_model->lab_test_list();
@@ -170,10 +171,16 @@ class Add_eye_prescription extends CI_Controller
 
 
     if (!empty($pres_id)) {
+      
       $pres_result = $this->add_prescript->get_prescription_by_id($booking_id, $pres_id);
       // echo "<pre>"; print_r($pres_result); die;
       $result_edit = $this->add_prescript->get_prescription_new_by_id($booking_id, $pres_id);
       $result_refraction = $this->add_prescript->get_prescription_refraction_new_by_id($booking_id, $pres_id);
+
+    //   echo "<pre>";
+    // print_r($result_refraction);
+    // die;
+
       $result_examination = $this->add_prescript->get_prescription_examination_id($booking_id, $pres_id);
 
 
@@ -309,6 +316,8 @@ class Add_eye_prescription extends CI_Controller
       $data['symptom_contact'] = $result_edit['symptom_contact'];
       //$data['pres_id']=$result_edit['id'];
       $data['pres_id'] = $pres_id;
+
+      // die('refe');
       // Refraction
       $refraction_visual_acuity = json_decode($result_refraction['visual_acuity']);
       $data['refrtsn_vl_act'] = (array) $refraction_visual_acuity;
@@ -321,6 +330,36 @@ class Add_eye_prescription extends CI_Controller
 
       $refraction_auto_refraction = json_decode($result_refraction['auto_refraction']);
       $data['refrtsn_auto_ref'] = (array) $refraction_auto_refraction;
+
+      $refrtsn_auto_ref_plated = json_decode($result_refraction['auto_refraction_dilated']);
+      $data['refrtsn_auto_ref_dilted'] = (array) $refrtsn_auto_ref_plated;
+
+      // echo "<pre>";
+      // print_r($result_refraction);
+      // die('sdasdd');
+      $UnVn = json_decode($result_refraction['UnVn']);
+      $data['UnVn'] = (array) $UnVn;
+
+      $PgVnq = json_decode($result_refraction['PgVnq']);
+      $data['PgVnq'] = (array) $PgVnq;
+
+      $pupillary_reaction = json_decode($result_refraction['pupillary_reaction']);
+      $data['pupillary_reaction'] = (array) $pupillary_reaction;
+
+      $ropgas = json_decode($result_refraction['ropgas']);
+      $data['ropgas'] = (array) $ropgas;
+      
+
+      $data['refraction_data']['vision_with_cl'] = $result_refraction['vision_with_cl'];
+      $data['refraction_data']['hirschberg_test'] = $result_refraction['hirschberg_test'];
+
+      $data['refraction_data']['average_k1'] = $result_refraction['average_k1'];
+      $data['refraction_data']['average_k2'] = $result_refraction['average_k2'];
+      $data['refraction_data']['eye1'] = $result_refraction['eye1'];
+      $data['refraction_data']['eye2'] = $result_refraction['eye2'];
+      // echo "<pre>";
+      // print_r($data);
+      // die('sdasdd');
 
       $refraction_dry_refraction = json_decode($result_refraction['dry_refraction']);
       $data['refrtsn_dry_ref'] = (array) $refraction_dry_refraction;
@@ -386,6 +425,10 @@ class Add_eye_prescription extends CI_Controller
       $data['exam_gnscp'] = (array) $exam_gonioscopy;
       $exam_fundus = json_decode($result_examination['fundus']);
       $data['exam_fundus'] = (array) $exam_fundus;
+      // echo "<pre>";
+      // print_r($data);
+
+      // die('end');
       $data['history'] = array(
         'visit_comm' => $result_edit['free_test'],
         'family' => $result_edit['family'],
@@ -1147,11 +1190,13 @@ class Add_eye_prescription extends CI_Controller
       if($flag == 'eye_history'){
         redirect(base_url('help_desk'));
         
-      }else{
+      }elseif(($flag == 'hess_chart')){
         // echo "<pre>";
         // print_r('$post');
         // die;
         return redirect(base_url('hess_chart'));
+      }else{
+        return redirect(base_url('refraction_below8'));
       }
     }
 
@@ -1804,6 +1849,36 @@ class Add_eye_prescription extends CI_Controller
     $refraction_auto_refraction = json_decode($result_refraction['auto_refraction']);
     $data['refrtsn_auto_ref'] = (array) $refraction_auto_refraction;
 
+    $refrtsn_auto_ref_plated = json_decode($result_refraction['auto_refraction_dilated']);
+    $data['refrtsn_auto_ref_dilted'] = (array) $refrtsn_auto_ref_plated;
+
+    // echo "<pre>";
+    // print_r($result_refraction);
+    // die('sdasdd');
+    $UnVn = json_decode($result_refraction['UnVn']);
+    $data['UnVn'] = (array) $UnVn;
+
+    $PgVnq = json_decode($result_refraction['PgVnq']);
+    $data['PgVnq'] = (array) $PgVnq;
+
+    $pupillary_reaction = json_decode($result_refraction['pupillary_reaction']);
+    $data['pupillary_reaction'] = (array) $pupillary_reaction;
+
+    $ropgas = json_decode($result_refraction['ropgas']);
+    $data['ropgas'] = (array) $ropgas;
+    
+
+    $data['refraction_data']['vision_with_cl'] = $result_refraction['vision_with_cl'];
+    $data['refraction_data']['hirschberg_test'] = $result_refraction['hirschberg_test'];
+
+    $data['refraction_data']['average_k1'] = $result_refraction['average_k1'];
+    $data['refraction_data']['average_k2'] = $result_refraction['average_k2'];
+    $data['refraction_data']['eye1'] = $result_refraction['eye1'];
+    $data['refraction_data']['eye2'] = $result_refraction['eye2'];
+    // echo "<pre>";
+    // print_r($data);
+    // die('sdasdd');
+
     $refraction_dry_refraction = json_decode($result_refraction['dry_refraction']);
     $data['refrtsn_dry_ref'] = (array) $refraction_dry_refraction;
 
@@ -1834,7 +1909,7 @@ class Add_eye_prescription extends CI_Controller
     $refraction_intra_pres = json_decode($result_refraction['intraocular_press']);
     $data['refrtsn_intrap'] = (array) $refraction_intra_pres;
 
-    //echo "<pre>"; print_r($data['refrtsn_intrap']);
+
 
     $refraction_orthoptics = json_decode($result_refraction['orthoptics']);
     $data['refrtsn_orthoptics'] = (array) $refraction_orthoptics;
@@ -2046,7 +2121,9 @@ class Add_eye_prescription extends CI_Controller
     $this->m_pdf->pdf->WriteHTML($stylesheet,1); */
     $flag = $this->input->get('flag') ?? '';
     
-    if(!empty($flag) &&  $flag == 'hess_chart'){
+    if(!empty($flag) &&  $flag == 'refraction_below_8_years'){
+      $middle_replace = $this->load->view('refraction_below8/view', $data, true);
+    }elseif(!empty($flag) &&  $flag == 'hess_chart'){
       $middle_replace = $this->load->view('hess_chart/view', $data, true);
     }else{
       $middle_replace = $this->load->view('help_desk/view', $data, true);
@@ -2220,6 +2297,7 @@ class Add_eye_prescription extends CI_Controller
     $result_edit = $this->add_prescript->get_prescription_new_by_id($booking_id, $pres_id);
     $data['drawing_list'] = $this->add_prescript->get_drawing($booking_id, $pres_id);
     $result_refraction = $this->add_prescript->get_prescription_refraction_new_by_id($booking_id, $pres_id);
+    
 
     $result_examination = $this->add_prescript->get_prescription_examination_id($booking_id, $pres_id);
     /* advice */

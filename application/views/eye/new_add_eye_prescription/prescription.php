@@ -378,6 +378,14 @@ $users_data = $this->session->userdata('auth_users');
           }
 
         } 
+        else if($flag == 'refraction_below_8_years'){
+          $classtab2 = $class2 = '';
+          if (in_array('2429', $users_data['permission']['action'])) {
+            $class2 = 'class="active"';
+            $classtab2 = 'fade in active';
+          }
+
+        } 
         else {
           $class1 = $class2 = $class3 = $class4 = $class5 = $class6 = $class7 = '';
           $classtab1 = $classtab2 = $classtab3 = $classtab4 = $classtab8 = $classtab5 = $classtab6 = $classtab7 = $class8 = '';
@@ -424,6 +432,10 @@ $users_data = $this->session->userdata('auth_users');
                     <?php } elseif ($flag === 'hess_chart') { ?> <!-- Additional elseif condition -->
                       <?php if (in_array('2429', $users_data['permission']['action'])) { ?>
                       <li <?php echo $class9; ?>><a data-toggle="tab" href="#Drawing">Hess Chart</a></li>
+                    <?php } ?>
+                    <?php } elseif ($flag === 'refraction_below_8_years') { ?> <!-- Additional elseif condition -->
+                      <?php if (in_array('2417', $users_data['permission']['action'])) { ?>
+                        <li <?php echo $class2; ?>><a data-toggle="tab" href="#refraction">Refraction</a></li>
                     <?php } ?>
 
                   <?php } else { ?>
