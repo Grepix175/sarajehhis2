@@ -258,79 +258,88 @@ $field_list = mandatory_section_field_list(2);
     <form id="low_vision_form" method="post" action="<?php echo current_url(); ?>">
 
         <?php
-        // Loop through the contact lens data
-        $age_y = $booking_data['age_y']??'';
-        $age_m = $booking_data['age_m']??'';
-        $age_d = $booking_data['age_d']??'';
+            // Loop through the contact lens data
+            $age_y = $booking_data['age_y'];
+            $age_m = $booking_data['age_m'];
+            $age_d = $booking_data['age_d'];
 
-        $age = "";
-        if ($age_y > 0) {
-            $year = 'Years';
-            if ($age_y == 1) {
-                $year = 'Year';
+            $age = "";
+            if ($age_y > 0) {
+                $year = 'Years';
+                if ($age_y == 1) {
+                    $year = 'Year';
+                }
+                $age .= $age_y . " " . $year;
             }
-            $age .= $age_y . " " . $year;
-        }
-        if ($age_m > 0) {
-            $month = 'Months';
-            if ($age_m == 1) {
-                $month = 'Month';
+            if ($age_m > 0) {
+                $month = 'Months';
+                if ($age_m == 1) {
+                    $month = 'Month';
+                }
+                $age .= ", " . $age_m . " " . $month;
             }
-            $age .= ", " . $age_m . " " . $month;
-        }
-        if ($age_d > 0) {
-            $day = 'Days';
-            if ($age_d == 1) {
-                $day = 'Day';
+            if ($age_d > 0) {
+                $day = 'Days';
+                if ($age_d == 1) {
+                    $day = 'Day';
+                }
+                $age .= ", " . $age_d . " " . $day;
             }
-            $age .= ", " . $age_d . " " . $day;
-        }
         ?>
-        <table class="patient-info-table" style=" margin-top: 20px; ">
-            <tr>
-                <td class="left-column">
-                    <table>
-                        <tr>
-                            <td class="info-label">Patient</td>
-                            <td class="info-content">: <?php echo $booking_data['patient_name']??''; ?></td>
-                        </tr>
-                        <tr>
-                            <td class="info-label">Patient Reg. No</td>
-                            <td class="info-content">: <?php echo $booking_data['patient_code']??''; ?></td>
-                        </tr>
-                        <tr>
-                            <td class="info-label">Token No</td>
-                            <td class="info-content">: <?php echo $booking_data['token_no']??''; ?></td>
-                        </tr>
-                        <tr>
-                            <td class="info-label">OPD No</td>
-                            <td class="info-content">: <?php echo $booking_data['booking_code']??''; ?></td>
-                        </tr>
-                    </table>
-                </td>
-                <td class="right-column">
-                    <table>
-                        <tr>
-                            <td class="info-label">Mobile no.</td>
-                            <td class="info-content">: <?php echo $booking_data['mobile_no']??''; ?></td>
-                        </tr>
-                        <tr>
-                            <td class="info-label">Age</td>
-                            <td class="info-content">: <?php echo $age??''; ?></td>
-                        </tr>
-                        <tr>
-                            <td class="info-label">Gender</td>
-                            <td class="info-content">: <?php echo ($booking_data['gender'] == '0') ? 'Female' : 'Male'; ?></td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
+        <div class="row">
+            <div class="col-xs-5">
+                <div class="row m-b-5">
+                    <div class="col-xs-4"><strong>Patient</strong></div>
+                    <div class="col-xs-8">
+                        <input type="text" name="patient_name" value="<?php echo isset($booking_data['patient_name']) ? $booking_data['patient_name'] : 'N/A'; ?>" readonly="">
+                    </div>
+                </div>
+                <div class="row m-b-5">
+                    <div class="col-xs-4"><strong>Patient Reg. No</strong></div>
+                    <div class="col-xs-8">
+                        <input type="text" name="patient_code" value="<?php echo isset($booking_data['patient_code']) ? $booking_data['patient_code'] : 'N/A'; ?>" readonly="">
+                    </div>
+                </div>
+                <div class="row m-b-5">
+                    <div class="col-xs-4"><strong>OPD No</strong></div>
+                    <div class="col-xs-8">
+                        <input type="text" name="booking_code" value="<?php echo isset($booking_data['booking_code']) ? $booking_data['booking_code'] : 'N/A'; ?>" readonly="">
+                    </div>
+                    
+                </div>
+                <div class="row m-b-5">
+                        <div class="col-xs-4"><strong>Token No</strong></div>
+                        <div class="col-xs-8">
+                            <input type="text" name="token_no" value="<?php echo isset($booking_data['token_no']) ? $booking_data['token_no'] : 'N/A'; ?>" readonly="">
+                        </div>
+                    </div>
+            </div>
+            <div class="col-xs-5">
+                <div class="row m-b-5">
+                    <div class="col-xs-4"><strong>Mobile no.</strong></div>
+                    <div class="col-xs-8">
+                        <input type="text" name="mobile_no" value="<?php echo isset($booking_data['mobile_no']) ? $booking_data['mobile_no'] : 'N/A'; ?>" readonly="">
+                    </div>
+                </div>
+                <div class="row m-b-5">
+                    <div class="col-xs-4"><strong>Age</strong></div>
+                    <div class="col-xs-8">
+                        <input type="text" name="mobile_no" value="<?php echo isset($age) ? $age : 'N/A'; ?>" readonly="">
+                    </div>
+                </div>
+                <div class="row m-b-5">
+                    <div class="col-xs-4"><strong>Gender</strong></div>
+                    <div class="col-xs-8">
+                        <input type="text" name="gender" value="<?php echo ($booking_data['gender'] == '0') ? 'Female' : 'Male'; ?>" readonly="">
+                    </div>
+                </div>
+            </div>
+        </div>
         <?php //echo"<pre>";print_r($form_data);die; ?>
         <input type="hidden" id="id" name="id" value="<?php echo isset($form_data['id']) ? $form_data['id'] : ''; ?>">
         <input type="hidden" id="booking_id" name="booking_id" value="<?php echo isset($form_data['booking_id']) ? $form_data['booking_id'] : ''; ?>">
         <input type="hidden" id="branch_id" name="branch_id" value="<?php echo isset($form_data['branch_id']) ? $form_data['branch_id'] : ''; ?>">
-        <input type="hidden" id="booking_code" name="booking_code" value="<?php echo isset($form_data['booking_code']) ? $form_data['booking_code'] : ''; ?>">
+        <!-- <input type="hidden" id="booking_code" name="booking_code" value="<?php echo isset($form_data['booking_code']) ? $form_data['booking_code'] : ''; ?>"> -->
         <input type="hidden" id="pres_id" name="pres_id" value="<?php echo isset($id) ? $id : ''; ?>">
         <input type="hidden" id="patient_id" name="patient_id" value="<?php echo isset($form_data['patient_id']) ? $form_data['patient_id'] : ''; ?>">
         <input type="hidden" id="editable" name="editable" value="<?php echo isset($form_data['editable']) ? $form_data['editable'] : ''; ?>">

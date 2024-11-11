@@ -43,8 +43,8 @@ class Dilate_model extends CI_Model
 		$this->db->select("hms_dilated.*, 
 		hms_patient.patient_name, 
 		hms_opd_booking.booking_code, 
-				hms_patient.patient_code as patient_no, 
-		hms_opd_booking.token_no,  
+		hms_patient.patient_code as patient_no, 
+		hms_opd_booking.token_no as token,  
 		hms_medicine_entry.medicine_name, hms_patient.emergency_status"); 
 		$this->db->from('hms_dilated'); // Main table
 		$this->db->where('hms_dilated.is_deleted', '0');
@@ -52,7 +52,7 @@ class Dilate_model extends CI_Model
 
 		// Example joins
 		$this->db->join('hms_patient', 'hms_patient.id = hms_dilated.patient_id', 'left');
-		$this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_dilated.booking_id', 'left');
+		$this->db->join('hms_opd_booking', 'hms_opd_booking.booking_code = hms_dilated.booking_id', 'left');
 		$this->db->join('hms_medicine_entry', 'hms_medicine_entry.id = hms_dilated.drop_name', 'left'); // Correct join based on the relationship
 
 		// Adjust branch filtering logic

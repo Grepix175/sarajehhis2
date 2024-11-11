@@ -312,6 +312,40 @@ $users_data = $this->session->userdata('auth_users');
                 <input type="hidden" name="branch_id" id="branch_id" value="<?php echo $users_data['parent_id']; ?>">
               <?php } ?>
 
+              <div class="row  m-b-5" id="additional_selection">
+
+                <div class="col-xs-5"><label>Priority</label></div>
+
+                  <div class="col-xs-7">
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
+                      <span>Priority</span>
+                    </label>
+
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="2" id="fasttrack_blue" onclick="return form_submit();">
+                      <span>Fast Track</span>
+                    </label>
+
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="3" id="priority_yellow" onclick="return form_submit();">
+                      <span>Post-Operative</span>
+                    </label>
+                  </div>
+                </div>
+                <script>
+                $(document).ready(function() {
+                // Function to show/hide additional selection based on radio button selection
+                $('input[name="search_type"]').change(function() {
+                    if ($(this).val() == "0") { // If Pending is selected
+                        $('#additional_selection').show();
+                    } else {
+                        $('#additional_selection').hide();
+                    }
+                });
+                });
+                </script>
+
             </div> <!-- 4 -->
 
             <div class="col-sm-4 d-flex justify-content-center" style="margin-left: 177px;margin-top: 35px;">

@@ -49,6 +49,10 @@ class Help_desk_model extends CI_Model
 				$this->db->like('hms_patient.patient_name', $search['patient_name'], 'after');
 			}
 
+			if (!empty($search['priority_type'])) {
+				$this->db->where('hms_patient.emergency_status', $search['priority_type']);
+			}
+
 			if (!empty($search['patient_code'])) {
 				$this->db->where('hms_patient.patient_code', $search['patient_code']);
 			}
