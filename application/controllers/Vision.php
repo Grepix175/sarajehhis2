@@ -134,8 +134,10 @@ class Vision extends CI_Controller
             // Add action buttons
             $row[] = '  <a onClick="return edit_vision(' . $vision->id . ');" class="btn-custom" href="javascript:void(0)" style="' . $vision->id . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
                        <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("vision/print_vision/" . $vision->id) . '\');">
-    <i class="fa fa-print"></i> Print
-</a>';
+                <i class="fa fa-print"></i> Print
+            </a>';
+            $row[] = $vision->emergency_status;
+
 
             $data[] = $row;
         }

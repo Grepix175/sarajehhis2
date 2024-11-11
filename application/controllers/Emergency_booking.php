@@ -440,6 +440,7 @@ class Emergency_booking extends CI_Controller
       // End Action Button //
       // . $btn_a . $print_mlc
       $row[] = $btn_confirm . $btn_edit . $btn_delete . $btn_print . $btn_a;
+      $row[] = $test->emergency_status;
       $data[] = $row;
       $i++;
     }

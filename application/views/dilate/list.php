@@ -35,22 +35,42 @@ $users_data = $this->session->userdata('auth_users');
     <?php if (in_array('2485', $users_data['permission']['action'])) { ?>
       $(document).ready(function () {
         table = $('#table').DataTable({
-          "processing": true,
-          "serverSide": true,
-          "order": [],
-          "pageLength": '20',
-          "ajax": {
-            "url": "<?php echo base_url('dilate/ajax_list') ?>",
-            "type": "POST",
-          },
-          "columnDefs": [
-            {
-              "targets": [0, -1],
-              "orderable": false,
+            "processing": true,
+            "serverSide": true,
+            "order": [],
+            "pageLength": '20',
+            "ajax": {
+                "url": "<?php echo base_url('dilate/ajax_list') ?>",
+                "type": "POST",
             },
-          ],
+            "columnDefs": [
+                {
+                    "targets": [0, -1], // Targets first and last column
+                    "orderable": false,  // Set not orderable
+                },
+            ],
+            "createdRow": function (row, data, dataIndex) {
+                // Access emergency_status value (assuming it's the last column)
+                var emergencyStatus = data[data.length - 1]; // Adjust index based on your structure
+                // console.log(emergencyStatus); // Uncomment for debugging
+
+                // Get the first column cell (adjust index if needed)
+                var firstColumn = $('td', row).eq(1); // Adjust the column index if needed
+
+                // Apply background color based on emergency_status
+                if (emergencyStatus == 1) {
+                    firstColumn.css('background-color', 'red'); // Red for emergency_status 1
+                } else if (emergencyStatus == 2) {
+                    firstColumn.css('background-color', 'blue'); // Blue for emergency_status 2
+                } else if (emergencyStatus == 3) {
+                    firstColumn.css('background-color', 'yellow'); // Yellow for emergency_status 3
+                } else {
+                    firstColumn.css('background-color', 'white'); // Default to white for other statuses
+                }
+            }
         });
-      });
+    });
+
     <?php } ?>
 
     $(document).ready(function () {
@@ -180,6 +200,40 @@ $users_data = $this->session->userdata('auth_users');
                     onkeyup="return form_submit();" class="numeric m_input_default" maxlength="10" value="" type="text">
                 </div>
               </div> -->
+              <div class="row  m-b-5" id="additional_selection">
+
+                <div class="col-xs-5"><label>Priority</label></div>
+
+                  <div class="col-xs-7">
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
+                      <span>Priority</span>
+                    </label>
+
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="2" id="fasttrack_blue" onclick="return form_submit();">
+                      <span>Fast Track</span>
+                    </label>
+
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="3" id="priority_yellow" onclick="return form_submit();">
+                      <span>Post-Operative</span>
+                    </label>
+                  </div>
+                </div>
+                <script>
+                $(document).ready(function() {
+                // Function to show/hide additional selection based on radio button selection
+                $('input[name="search_type"]').change(function() {
+                    if ($(this).val() == "0") { // If Pending is selected
+                        $('#additional_selection').show();
+                    } else {
+                        $('#additional_selection').hide();
+                    }
+                });
+                });
+                </script>
+
 
             </div> <!-- 4 -->
 
@@ -268,6 +322,8 @@ $users_data = $this->session->userdata('auth_users');
               <?php } else { ?>
                 <input type="hidden" name="branch_id" id="branch_id" value="<?php echo $users_data['parent_id']; ?>">
               <?php } ?>
+
+              
 
             </div> <!-- 4 -->
 

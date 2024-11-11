@@ -45,7 +45,7 @@ class Dilate_model extends CI_Model
 		hms_opd_booking.booking_code, 
 				hms_patient.patient_code as patient_no, 
 		hms_opd_booking.token_no,  
-		hms_medicine_entry.medicine_name"); 
+		hms_medicine_entry.medicine_name, hms_patient.emergency_status"); 
 		$this->db->from('hms_dilated'); // Main table
 		$this->db->where('hms_dilated.is_deleted', '0');
 		$this->db->where('hms_dilated.status', 1);
@@ -70,6 +70,10 @@ class Dilate_model extends CI_Model
 		if (!empty($search['start_date'])) {
 			$start_date = date('Y-m-d', strtotime($search['start_date'])) . ' 00:00:00';
 			$this->db->where('hms_dilated.created_date >=', $start_date);
+		}
+
+		if (!empty($search['priority_type'])) {
+			$this->db->where('hms_patient.emergency_status', $search['priority_type']);
 		}
 
 		if (!empty($search['end_date'])) {

@@ -94,6 +94,8 @@ class Low_vision extends CI_Controller
                     <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("low_vision/print_low_vision/" . $low_vision->booking_id."/".$low_vision->id) . '\');">
                         <i class="fa fa-print"></i> Print
                     </a>';
+            $row[] = $low_vision->emergency_status;
+
 
             $data[] = $row;
         }

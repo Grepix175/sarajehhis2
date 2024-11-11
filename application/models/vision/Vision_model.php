@@ -46,7 +46,7 @@ class Vision_model extends CI_Model
         // echo "<pre>";
         // print_r($search);
         // die;
-        $this->db->select("hms_vision.*, hms_patient.id as patient_id, hms_side_effect.side_effect_name, hms_patient.patient_code_auto,hms_patient.gender,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h, hms_patient.mobile_no, hms_opd_booking.booking_code");
+        $this->db->select("hms_vision.*, hms_patient.id as patient_id, hms_side_effect.side_effect_name,hms_patient.emergency_status, hms_patient.patient_code_auto,hms_patient.gender,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h, hms_patient.mobile_no, hms_opd_booking.booking_code");
         $this->db->from($this->table);
         $this->db->join('hms_patient', 'hms_patient.patient_code = hms_vision.patient_code', 'left');
         $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_vision.booking_id', 'left');
@@ -76,6 +76,10 @@ class Vision_model extends CI_Model
 				$start_date = date('Y-m-d 00:00:00', strtotime($search['start_date']));
 				$this->db->where('hms_vision.created_at >=', $start_date);
 			}
+
+            if (!empty($search['priority_type'])) {
+                $this->db->where('hms_patient.emergency_status', $search['priority_type']);
+            }
 
 			if (!empty($search['end_date'])) {
 				$end_date = date('Y-m-d 23:59:59', strtotime($search['end_date']));

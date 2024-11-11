@@ -12,6 +12,7 @@ class Help_desk extends CI_Controller
     $this->load->model('opd/opd_model', 'opd');
     $this->load->model('contact_lens/Contact_lens_model', 'contact_lens');
     $this->load->model('low_vision/Low_vision_model', 'low_vision');
+    error_reporting(0);
   }
 
 
@@ -97,7 +98,6 @@ class Help_desk extends CI_Controller
       $pat_status = ($patient_status == 1)
         ? '<font style="background-color: #228B22;color:white">Vision</font>'
         : '';
-
       // Determine contact lens status
       $contact_lens_txt = ($contact_lens_status == 1)
         ? '<font style="background-color: #228B30;color:white">Contact Lens</font>'
@@ -255,6 +255,7 @@ class Help_desk extends CI_Controller
       // . $btn_print_chasma_pre
       $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission . $btn_contact_lens . $btn_low_vision.
         $btn_hess_chart.$btn_refraction_below8.$dilate;
+        $row[] = $prescription->emergency_status; // Add emergency_status to the row
       // print_r($row);
       $data[] = $row;
       $i++;

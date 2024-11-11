@@ -52,7 +52,7 @@ class Low_vision_model extends CI_Model
     private function _get_datatables_query()
     {
         $search = $this->session->userdata('prescription_search');
-        $this->db->select("hms_low_vision.id as refraction_id,hms_low_vision.*,hms_patient.*,hms_patient_category.patient_category as patient_category_name,hms_opd_booking.*,hms_doctors.doctor_name");
+        $this->db->select("hms_low_vision.id as refraction_id,hms_low_vision.*,hms_patient.*,hms_patient_category.patient_category as patient_category_name,hms_opd_booking.*,hms_doctors.doctor_name, hms_patient.emergency_status");
         $this->db->from($this->table);
         $this->db->join('hms_patient', 'hms_patient.id = hms_low_vision.patient_id', 'left');
         $this->db->join('hms_patient_category', 'hms_patient_category.id=hms_patient.patient_category', 'left');
@@ -88,6 +88,10 @@ class Low_vision_model extends CI_Model
             if (!empty($search['end_date'])) {
                 $end_date = date('Y-m-d 23:59:59', strtotime($search['end_date']));
                 $this->db->where('hms_low_vision.created_date <=', $end_date);
+            }
+
+            if (!empty($search['priority_type'])) {
+                $this->db->where('hms_patient.emergency_status', $search['priority_type']);
             }
 
             if (!empty($search['patient_name'])) {

@@ -198,6 +198,8 @@ class Refraction_below8 extends CI_Controller
 
         // Add buttons to the row
         $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete ;
+        $row[] = $refraction_below8->emergency_status;
+
 
         $data[] = $row;
         $i++;

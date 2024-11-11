@@ -99,6 +99,8 @@ class Dilate extends CI_Controller
                     <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("dilate/print_dilate/" . $patient_id) . '\');">
                         <i class="fa fa-print"></i> Print
                     </a>';
+            $row[] = $records[0]->emergency_status;
+
 
             // Add row to data array
             $data[] = $row;

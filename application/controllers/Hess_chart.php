@@ -216,6 +216,7 @@ class Hess_chart extends CI_Controller
 
       // Add buttons to the row
       $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission . $btn_contact_lens . $btn_hess_chart;
+      $row[] = $prescription->emergency_status;
 
       $data[] = $row;
       $i++;

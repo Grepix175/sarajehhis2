@@ -94,6 +94,7 @@ class Refraction extends CI_Controller
                     <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("refraction/print_refraction/" . $refraction->booking_id."/".$refraction->refraction_id) . '\');">
                         <i class="fa fa-print"></i> Print
                     </a>';
+            $row[] = $refraction->emergency_status; // Add emergency_status to the row
 
             $data[] = $row;
         }
