@@ -444,11 +444,44 @@ $user_role = $users_data['users_role'];
                       <span style="margin-top: 5px;">All</span>
                     </label>
                   </div>
-
-                </div>
-
+                 
+                
 
               </div> <!-- 4 -->
+              <div class="row  m-b-5" id="additional_selection">
+
+                <div class="col-xs-5"><label>Priority</label></div>
+
+                  <div class="col-xs-7">
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
+                      <span>Priority</span>
+                    </label>
+
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="2" id="fasttrack_blue" onclick="return form_submit();">
+                      <span>Fast Track</span>
+                    </label>
+
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="3" id="priority_yellow" onclick="return form_submit();">
+                      <span>Post-Operative</span>
+                    </label>
+                  </div>
+                </div>
+                <script>
+                $(document).ready(function() {
+                // Function to show/hide additional selection based on radio button selection
+                $('input[name="search_type"]').change(function() {
+                    if ($(this).val() == "0") { // If Pending is selected
+                        $('#additional_selection').show();
+                    } else {
+                        $('#additional_selection').hide();
+                    }
+                });
+                });
+                </script>
+              </div>
 
               <div class="col-sm-4 d-flex justify-content-center" style="margin-left: 133px;margin-top: 30px;">
                 <!-- <input value="Reset" class="col-sm-4 d-flex justify-content-center"
@@ -462,6 +495,7 @@ $user_role = $users_data['users_role'];
               </div> <!-- 4 -->
             </div> <!-- row -->
 
+          
 
           </form>
 
@@ -709,6 +743,7 @@ $user_role = $users_data['users_role'];
         var branch_id = $('#branch_id').val();
         var specialization_id = $('#specialization_id').val();
         var mobile_no = $('#mobile_no').val();
+        var priority_type = $('input[name="priority_type"]:checked').val();
         var booking_code = $('#booking_code').val();
         var patient_name = $('#patient_name').val();
         var status = $('input[name="search_type"]:checked').val();
@@ -717,7 +752,7 @@ $user_role = $users_data['users_role'];
         $.ajax({
           url: "<?php echo base_url('emergency_booking/advance_search/'); ?>",
           type: 'POST',
-          data: { start_date: start_date, end_date: end_date, branch_id: branch_id, emergency_booking: emergency_booking, specialization_id: specialization_id, mobile_no: mobile_no, booking_code: booking_code, patient_name: patient_name, status: status },
+          data: { start_date: start_date, end_date: end_date, branch_id: branch_id,priority_type: priority_type, emergency_booking: emergency_booking, specialization_id: specialization_id, mobile_no: mobile_no, booking_code: booking_code, patient_name: patient_name, status: status },
           success: function (result) {
             if (vals != "1") {
               reload_table();
@@ -750,6 +785,23 @@ $user_role = $users_data['users_role'];
 
               },
             ],
+            "createdRow": function (row, data, dataIndex) {
+              // console.log(data)
+                // Access emergency_status (assuming it's the last column in the data array)
+                var emergencyStatus = data[data.length - 1]; // Get the emergency_status value
+                // console.log(emergencyStatus)
+
+                // Change the background color of the first column based on emergency_status
+                var firstColumn = $('td', row).eq(1); // Get the first column cell
+
+                if (emergencyStatus == 1) {
+                    firstColumn.css('background-color', 'red'); // Change to red for emergency_status 1
+                } else if (emergencyStatus == 2) {
+                    firstColumn.css('background-color', 'blue'); // Change to blue for emergency_status 2
+                } else if (emergencyStatus == 3) {
+                    firstColumn.css('background-color', 'yellow'); // Change to yellow for emergency_status 3
+                }
+            },
             // Adjust the search input
             "initComplete": function () {
               // Wrap the search input with a clearable div

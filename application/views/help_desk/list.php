@@ -39,24 +39,54 @@ $users_data = $this->session->userdata('auth_users');
       ?>
       $(document).ready(function () {
         table = $('#table').DataTable({
-          "processing": true,
-          "serverSide": true,
-          "order": [],
-          "pageLength": '20',
-          "ajax": {
-            "url": "<?php echo base_url('help_desk/ajax_list') ?>",
-            "type": "POST",
-          },
-          "columnDefs": [
-            {
-              "targets": [0, -1], //last column
-              "orderable": false, //set not orderable
-
+            "processing": true,
+            "serverSide": true,
+            "order": [],
+            "pageLength": '20',
+            "ajax": {
+                "url": "<?php echo base_url('help_desk/ajax_list') ?>",
+                "type": "POST",
             },
-          ],
+            "columnDefs": [
+                {
+                    "targets": [0, -1], // last column
+                    "orderable": false, // set not orderable
+                },
+                {
+                    // "targets": -1, // Hide the last column (emergency_status)
+                    // "visible": false,
+                },
+                {
+                    "targets": 5, // Ensure the fifth column is visible
+                    "visible": true,
+                }
+            ],
+            "createdRow": function (row, data, dataIndex) {
+              // console.log(data)
+                // Access emergency_status (assuming it's the last column in the data array)
+                var emergencyStatus = data[data.length - 1]; // Get the emergency_status value
+                // console.log(emergencyStatus)
 
+                // Change the background color of the first column based on emergency_status
+                var firstColumn = $('td', row).eq(1); // Get the first column cell
+
+                if (emergencyStatus == 1) {
+                    firstColumn.css('background-color', 'red'); // Change to red for emergency_status 1
+                } else if (emergencyStatus == 2) {
+                    firstColumn.css('background-color', 'blue'); // Change to blue for emergency_status 2
+                } else if (emergencyStatus == 3) {
+                    firstColumn.css('background-color', 'yellow'); // Change to yellow for emergency_status 3
+                }
+            },
         });
-      });
+
+        // Toggle columns visibility
+        $('.tog-col').on('click', function (e) {
+            var column = table.column($(this).attr('data-column'));
+            column.visible(!column.visible());
+        });
+    });
+
     <?php } ?>
 
 

@@ -119,6 +119,7 @@ class Contact_lens extends CI_Controller
             <i class="fa fa-trash"></i> Delete
         </a>
         ';
+        $row[] = $contact_lens->emergency_status;
 
             $data[] = $row;
         }

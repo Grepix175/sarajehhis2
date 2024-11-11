@@ -37,22 +37,41 @@ error_reporting(E_ALL & ~E_WARNING);
     <?php if (in_array('2485', $users_data['permission']['action'])) { ?>
       $(document).ready(function () {
         table = $('#table').DataTable({
-          "processing": true,
-          "serverSide": true,
-          "order": [],
-          "pageLength": '20',
-          "ajax": {
-            "url": "<?php echo base_url('refraction_below8/ajax_list') ?>",
-            "type": "POST",
-          },
-          "columnDefs": [
-            {
-              "targets": [0, -1],
-              "orderable": false,
+            "processing": true,
+            "serverSide": true,
+            "order": [],
+            "pageLength": '20',
+            "ajax": {
+                "url": "<?php echo base_url('refraction_below8/ajax_list') ?>",
+                "type": "POST",
             },
-          ],
+            "columnDefs": [
+                {
+                    "targets": [0, -1], // Target first and last columns
+                    "orderable": false,  // Set not orderable
+                },
+            ],
+            "createdRow": function (row, data, dataIndex) {
+                // Assuming emergency_status is at the last index of the data array
+                var emergencyStatus = data[data.length - 1]; // Adjust if emergency_status is elsewhere
+
+                // Access the first column (you can change this index as needed)
+                var firstColumn = $('td', row).eq(1); // Target the first column (change the index if needed)
+
+                // Change background color based on emergency_status
+                if (emergencyStatus == 1) {
+                    firstColumn.css('background-color', 'red'); // Red for emergency_status 1
+                } else if (emergencyStatus == 2) {
+                    firstColumn.css('background-color', 'blue'); // Blue for emergency_status 2
+                } else if (emergencyStatus == 3) {
+                    firstColumn.css('background-color', 'yellow'); // Yellow for emergency_status 3
+                } else {
+                    firstColumn.css('background-color', 'white'); // Default background
+                }
+            }
         });
-      });
+    });
+
     <?php } ?>
 
     $(document).ready(function () {
@@ -267,6 +286,39 @@ error_reporting(E_ALL & ~E_WARNING);
               <?php } else { ?>
                 <input type="hidden" name="branch_id" id="branch_id" value="<?php echo $users_data['parent_id']; ?>">
               <?php } ?>
+              <div class="row  m-b-5" id="additional_selection">
+
+                <div class="col-xs-5"><label>Priority</label></div>
+
+                  <div class="col-xs-7">
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
+                      <span>Priority</span>
+                    </label>
+
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="2" id="fasttrack_blue" onclick="return form_submit();">
+                      <span>Fast Track</span>
+                    </label>
+
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="3" id="priority_yellow" onclick="return form_submit();">
+                      <span>Post-Operative</span>
+                    </label>
+                  </div>
+                </div>
+                <script>
+                $(document).ready(function() {
+                // Function to show/hide additional selection based on radio button selection
+                $('input[name="search_type"]').change(function() {
+                    if ($(this).val() == "0") { // If Pending is selected
+                        $('#additional_selection').show();
+                    } else {
+                        $('#additional_selection').hide();
+                    }
+                });
+                });
+                </script>
 
             </div> <!-- 4 -->
 

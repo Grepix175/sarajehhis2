@@ -82,6 +82,10 @@ class Refraction_model extends CI_Model
 				$this->db->where('hms_opd_refraction.created_date <=', $end_date);
 			}
 
+            if (!empty($search['priority_type'])) {
+                $this->db->where('hms_patient.emergency_status', $search['priority_type']);
+            }
+
 			if (!empty($search['patient_name'])) {
 				$this->db->like('hms_patient.patient_name', $search['patient_name'], 'after');
 			}
