@@ -91,13 +91,14 @@ class Help_desk extends CI_Controller
       $contact_lens_txt = '';
       $patient_status = $this->opd->get_by_id_patient_status($prescription->booking_id);
       $contact_lens_status = $this->contact_lens->get_by_contact_lens_status($prescription->booking_id, $prescription->patient_id);
-      $low_vision_status = $this->low_vision->get_by_low_vision_status($prescription->booking_id, $prescription->patient_id);
+      $low_vision_status = $this->low_vision->get_by_low_vision_status($prescription->booking_code, $prescription->patient_code);
      
       $refraction_exists = $this->opd->get_by_id_refraction($prescription->booking_id);
       $dilate_exists = $this->opd->get_by_id_dilate($prescription->patient_id);
       $pat_status = ($patient_status == 1)
         ? '<font style="background-color: #228B22;color:white">Vision</font>'
         : '';
+
       // Determine contact lens status
       $contact_lens_txt = ($contact_lens_status == 1)
         ? '<font style="background-color: #228B30;color:white">Contact Lens</font>'

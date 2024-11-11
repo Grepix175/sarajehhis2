@@ -1187,6 +1187,10 @@ class Add_eye_prescription extends CI_Controller
       $this->add_prescript->save($emeId);
       $this->session->set_flashdata('success', 'Prescription successfully added.');
       $flag = $this->input->get('flag');
+      if(empty($flag))
+      {
+        $flag=$post['flag'];
+      }
       if($flag == 'eye_history'){
         redirect(base_url('help_desk'));
         

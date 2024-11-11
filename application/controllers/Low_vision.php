@@ -35,9 +35,9 @@ class Low_vision extends CI_Controller
         $data = array();
         // $plist = $this->low_vision->get_patient_name_by_booking_id($list->booking_id);
 
-        // echo "<pre>";print_r($list);die;
         $no = $_POST['start'];
-
+        
+        // echo "<pre>";print_r($list);die('okok');
         foreach ($list as $low_vision) {
             $no++;
 
@@ -73,8 +73,8 @@ class Low_vision extends CI_Controller
             // Add a checkbox for selecting the record
             $row[] = '<input type="checkbox" name="refraction_ids[]" value="' . $low_vision->refraction_id . '">';
 
-            $row[] = $low_vision->token_no;
-            $row[] = $low_vision->booking_code;
+            $row[] = $low_vision->token;
+            $row[] = $low_vision->booking_id;
             $row[] = $low_vision->patient_code;
             $row[] = $low_vision->patient_name;
             // $row[] = $low_vision->patient_category_name;
@@ -126,10 +126,10 @@ class Low_vision extends CI_Controller
         // echo "<pre>";print_r($plist);die('ok');
         $data['booking_id'] = isset($booking_id) ? $booking_id : '';
         $result_refraction = $this->low_vision->get_prescription_refraction_new_by_id($booking_id, $id);
-        // echo "<pre>";print_r($result_refraction);die;
-        $data['booking_data'] = $this->low_vision->get_booking_by_id($booking_id);
+        // echo "<pre>";print_r($booking_id);die;
+        $data['booking_data'] = $this->low_vision->get_bookings_by_id($booking_id);
         $data['doctor'] = $this->doctor->doctors_list();
-        // echo "<pre>";print_r($data['doctors']);die;
+        // echo "<pre>";print_r($data['booking_data']);die;
 
         $low_vision_auto_refraction = isset($result_refraction['auto_refraction'])?json_decode($result_refraction['auto_refraction']):'';
         $data['refrtsn_auto_ref'] = (array) $low_vision_auto_refraction;
@@ -146,24 +146,24 @@ class Low_vision extends CI_Controller
 
         // // Initialize form data
         $data['form_data'] = array(
-            'booking_id' => isset($plist['booking_id'])?$plist['booking_id']:'', // Booking ID
+            'booking_id' => isset($data['booking_data']['booking_id']) ? $data['booking_data']['booking_id'] : '', // Booking ID
             'low_vision_col_vis_l' => '', // Left eye dry sph
             'low_vision_col_vis_r' => '', // Left eye dry cyl
             'low_vision_contra_sens_l' => '', // Left eye dry axis
             'low_vision_contra_sens_r' => '', // Left eye dd sph
-            'branch_id' => isset($plist['branch_id'])?$plist['branch_id']:'', // To be filled from form
-            'booking_code' => isset($plist['booking_code'])?$plist['booking_code']:'', // To be filled from form
-            'pres_id' => isset($id)?$id:'', // To be filled from form
-            'patient_id' => isset($plist['patient_id'])?$plist['patient_id']:'', // To be filled from form
-            'patient_name' => isset($plist['patient_name'])?$plist['patient_name']:'',
-            'amsler_grid' =>'',
-            'lva_trial' =>  '',
-            'distance_lva' =>'',
+            'branch_id' => isset($data['booking_data']['branch_id']) ? $data['booking_data']['branch_id'] : '', // To be filled from form
+            'booking_code' => isset($data['booking_data']['booking_code']) ? $data['booking_data']['booking_code'] : '', // To be filled from form
+            'pres_id' => isset($id) ? $id : '', // To be filled from form
+            'patient_id' => isset($data['booking_data']['patient_id']) ? $data['booking_data']['patient_id'] : '', // To be filled from form
+            'patient_name' => isset($data['booking_data']['patient_name']) ? $data['booking_data']['patient_name'] : '',
+            'amsler_grid' => '',
+            'lva_trial' => '',
+            'distance_lva' => '',
             'near_lva' => '',
             'non_optical_device' => '',
             'final_advice' => '',
             'referred_for' => '',
-            'follow_up' =>  '',
+            'follow_up' => '',
             'optometrist_signature' => '', // To be filled from form
             'doctor_signature' => '', // To be filled from form
             'status' => 1, // Default value
@@ -172,6 +172,7 @@ class Low_vision extends CI_Controller
             'created_date' => date('Y-m-d H:i:s'), // Current timestamp
             'ip_address' => $this->input->ip_address(), // IP address
         );
+        
         // echo "<pre>";print_r($data);die;
 
         $post = $this->input->post();
@@ -179,7 +180,7 @@ class Low_vision extends CI_Controller
         // // Check if the form is submitted
         // echo "<pre>";print_r($post);die('ss');
         if (isset($post) && !empty($post)) {
-            // echo "<pre>";print_r($post);die;
+            // echo "<pre>";print_r($post);die('dfk');
         
             // Prepare the refraction data based on received fields
             $color_vision_data = [
@@ -199,10 +200,10 @@ class Low_vision extends CI_Controller
             // Prepare the data for saving
             $id = $this->input->post('id');
             $branch_id = $this->input->post('branch_id');
-            $booking_code = $this->input->post('booking_code');
+            // $booking_code = $this->input->post('booking_code');
             $pres_id = $this->input->post('pres_id');
             $patient_id = $this->input->post('patient_id');
-            $booking_id = $this->input->post('booking_id');
+            $booking_id = $this->input->post('booking_code');
             $optometrist_signature = $this->input->post('optometrist_signature');
             $doctor_signature = $this->input->post('doctor_signature');
             $created_by = $this->session->userdata('user_id');
@@ -225,7 +226,7 @@ class Low_vision extends CI_Controller
             $data_to_save = [
                 'id' => isset($id) ? $id : '',
                 'branch_id' => isset($branch_id) ? $branch_id : '',
-                'booking_code' => isset($booking_code) ? $booking_code : '',
+                // 'booking_code' => isset($booking_code) ? $booking_code : '',
                 'pres_id' => isset($pres_id) ? $pres_id : '',
                 'patient_id' => isset($patient_id) ? $patient_id : '',
                 'booking_id' => isset($booking_id) ? $booking_id : '',
@@ -339,9 +340,9 @@ class Low_vision extends CI_Controller
                 'referred_for' => $result['referred_for'],
                 'follow_up' =>  $result['follow_up'],
             );
-            // echo "<pre>";print_r($data['form_data']);die('okok');
             // Check if there is form submission
             if ($this->input->post()) {
+                // echo "<pre>";print_r($this->input->post());die('okok');
                 // Prepare the refraction data for JSON
                 $color_vision_data = [
                     'low_vision_col_vis_l' => $this->input->post('low_vision_col_vis_l'),

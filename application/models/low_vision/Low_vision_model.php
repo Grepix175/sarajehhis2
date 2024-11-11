@@ -52,11 +52,11 @@ class Low_vision_model extends CI_Model
     private function _get_datatables_query()
     {
         $search = $this->session->userdata('prescription_search');
-        $this->db->select("hms_low_vision.id as refraction_id,hms_low_vision.*,hms_patient.*,hms_patient_category.patient_category as patient_category_name,hms_opd_booking.*,hms_doctors.doctor_name, hms_patient.emergency_status");
+        $this->db->select("hms_low_vision.id as refraction_id,hms_low_vision.*,hms_patient.*,hms_patient_category.patient_category as patient_category_name,hms_opd_booking.*,hms_doctors.doctor_name,hms_opd_booking.token_no as token, hms_patient.emergency_status");
         $this->db->from($this->table);
         $this->db->join('hms_patient', 'hms_patient.id = hms_low_vision.patient_id', 'left');
         $this->db->join('hms_patient_category', 'hms_patient_category.id=hms_patient.patient_category', 'left');
-        $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_low_vision.booking_id', 'left');
+        $this->db->join('hms_opd_booking', 'hms_opd_booking.booking_code = hms_low_vision.booking_id', 'left');
         $this->db->join('hms_doctors', 'hms_doctors.id = hms_opd_booking.attended_doctor', 'left');
         $this->db->where('hms_low_vision.is_deleted', '0');
         
@@ -189,8 +189,9 @@ class Low_vision_model extends CI_Model
         return $query->result(); // Return the result as an array of objects
     }
 
-    public function get_booking_by_id($booking_id)
+    public function get_bookings_by_id($booking_id)
 	{
+        // echo $booking_id;die;
 		// Select all fields from both tables
 		$this->db->select('hms_opd_booking.*, hms_patient.*'); // Select all fields
 		$this->db->from('hms_opd_booking'); // Start with the bookings table
@@ -208,10 +209,30 @@ class Low_vision_model extends CI_Model
 		return null; // Return null if no data found
 	}
 
+    public function get_booking_by_id($booking_id)
+	{
+        // echo $booking_id;die;
+		// Select all fields from both tables
+		$this->db->select('hms_opd_booking.*, hms_patient.*'); // Select all fields
+		$this->db->from('hms_opd_booking'); // Start with the bookings table
+		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
+
+		// Filter by the booking ID
+		$this->db->where('hms_opd_booking.booking_code', $booking_id); // Assuming 'id' is the primary key for bookings
+		$query = $this->db->get();
+
+		// Check if any results were returned
+		if ($query->num_rows() > 0) {
+			return $query->row_array(); // Return the first result as an associative array
+		}
+
+		return null; // Return null if no data found
+	}
+
     // Method to save or update a refraction record
     public function save($data)
     {
-        // echo "<pre>";print_r($data['id']);die('dsfsdfsf');
+        // echo "<pre>";print_r($data);die('dsfsdfsf');
         // If a pres_id exists, update the record
         if (!empty($data['id'])) {
             $this->db->where('id', $data['id']);
@@ -292,7 +313,7 @@ class Low_vision_model extends CI_Model
 		$this->db->select('booking_id');
 		$this->db->from('hms_low_vision');
 		$this->db->where('hms_low_vision.booking_id', $booking_id);
-		$this->db->where('hms_low_vision.patient_id', $patient_id);
+		// $this->db->where('hms_low_vision.patient_id', $patient_id);
 		$this->db->where('hms_low_vision.is_deleted', 0);
 
 		$query = $this->db->get();

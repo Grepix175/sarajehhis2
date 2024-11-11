@@ -60,7 +60,7 @@ class Dilate extends CI_Controller
             $row[] = '<input type="checkbox" name="prescription[]" class="checklist" value="' . $patient_id . '">';
 
             // Patient code auto (you can replace it with actual logic if needed)
-            $row[] = $records[0]->token_no??1;
+            $row[] = $records[0]->token??1;
 
             // Assuming you want to show patient_id for the first record in the group
             $row[] = $records[0]->patient_no;

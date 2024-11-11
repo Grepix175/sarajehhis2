@@ -185,17 +185,24 @@ class Refraction_model extends CI_Model
     // Method to save or update a refraction record
     public function save($data)
     {
-        // echo "<pre>";print_r($data);die('dsfsdfsf');
-        // If a pres_id exists, update the record
         if (!empty($data['id'])) {
-            $this->db->where('id', $data['id']);
-            $this->db->update($this->table, $data);
+            // For updates, remove the 'created_date' if present to avoid updating it
+            unset($data['created_date']);
+            
+            // Update only the modified_date and other fields
+            $data['modified_date'] = date('Y-m-d H:i:s'); // Set current time for modified_date
+            $this->db->where('patient_id', $data['id']);
+            $this->db->update('hms_opd_refraction', $data);
         } else {
-            // Otherwise, insert a new record
-            // echo "<pre>";print_r($data);die;
+            // Set the created_date for new records
+            $data['created_date'] = date('Y-m-d H:i:s'); // Set current time for created_date
+            $data['modified_date'] = date('Y-m-d H:i:s'); // Set current time for modified_date
+            
+            // Insert a new record
             $this->db->insert($this->table, $data);
         }
     }
+    
 
     // Method to delete a refraction record
     public function delete($pres_id = "")

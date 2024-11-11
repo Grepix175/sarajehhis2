@@ -239,7 +239,7 @@ class Refraction extends CI_Controller
 
             $data_to_save = [
                 'id' => isset($id)?$id:'',
-                'branch_id' => isset($branch_id)?$branch_id:'22',
+                'branch_id' => isset($branch_id)?$branch_id:'',
                 'booking_code' => isset($booking_code) ? $booking_code : '',
                 'pres_id' => isset($pres_id) ? $pres_id : '',
                 'patient_id' => isset($patient_id) ? $patient_id : '',
