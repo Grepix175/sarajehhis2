@@ -818,11 +818,11 @@ $user_role = $users_data['users_role'];
 
                   // Apply border styles based on emergency status
                   if (emergencyStatus == 1) {
-                      firstColumn.css('border', '3px solid red'); // Change to red for emergency_status 1
+                      firstColumn.css('background-color', 'red'); // Change to red for emergency_status 1
                   } else if (emergencyStatus == 2) {
-                      firstColumn.css('border', '3px solid blue'); // Change to blue for emergency_status 2
+                      firstColumn.css('background-color', 'blue'); // Change to blue for emergency_status 2
                   } else if (emergencyStatus == 3) {
-                      firstColumn.css('border', '3px solid yellow'); // Change to yellow for emergency_status 3
+                      firstColumn.css('background-color', 'yellow'); // Change to yellow for emergency_status 3
                   }
               }
           });
