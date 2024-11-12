@@ -86,7 +86,7 @@ class Refraction extends CI_Controller
             // $row[] = $refraction->comment;
 
             // Check status and set active or not active
-            $row[] = ($refraction->status == 1) ? 'Active' : 'Not Active';
+            $row[] = '<font style="background-color: #228B30;color:white">'.$refraction->pat_status.'</font>' ;
             $row[] = date('d-M-Y', strtotime($refraction->created_date));
 
             // Add action buttons

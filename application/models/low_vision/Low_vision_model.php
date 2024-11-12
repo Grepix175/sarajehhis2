@@ -256,17 +256,24 @@ class Low_vision_model extends CI_Model
     // Method to save or update a refraction record
     public function save($data)
     {
-        // echo "<pre>";print_r($data);die('dsfsdfsf');
+        // echo "<pre>";print_r($data);die;
         // If a pres_id exists, update the record
         if (!empty($data['id'])) {
+            // Update the existing record
             $this->db->where('id', $data['id']);
             $this->db->update($this->table, $data);
         } else {
-            // Otherwise, insert a new record
-            // echo "<pre>";print_r($data);die;
+            // Insert a new record
             $this->db->insert($this->table, $data);
+
+            // Update the hms_patient table to set pat_status to 'low_vision' for the corresponding patient_code during insert only
+            if (!empty($data['patient_id'])) {
+                $this->db->where('id', $data['patient_id']);
+                $this->db->update('hms_patient', ['pat_status' => 'Low vision']);
+            }
         }
     }
+
 
     // Method to delete a refraction record
     public function delete($pres_id = "")

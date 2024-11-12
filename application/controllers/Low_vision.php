@@ -86,7 +86,7 @@ class Low_vision extends CI_Controller
             // $row[] = $low_vision->comment;
 
             // Check status and set active or not active
-            $row[] = ($low_vision->status == 1) ? 'Active' : 'Not Active';
+            $row[] = '<font style="background-color: #228B30;color:white">'.$low_vision->pat_status.'</font>' ;
             $row[] = date('d-M-Y', strtotime($low_vision->created));
 
             // Add action buttons

@@ -159,7 +159,7 @@ class Vision_model extends CI_Model
             'patient_name' => isset($post['patient_name']) ? $post['patient_name'] : '',
             'booking_id' => isset($post['booking_id']) ? $post['booking_id'] : '',
             'procedure_purpose' => isset($post['procedure_purpose']) ? $post['procedure_purpose'] : '',
-            'side_effects' => isset($post['side_effects']) ? $post['side_effects'] : '', // Assuming this is the ID of the side effect
+            'side_effects' => isset($post['side_effects']) ? $post['side_effects'] : '',
             'informed_consent' => isset($post['informed_consent']) ? $post['informed_consent'] : '',
             'previous_ffa' => isset($post['previous_ffa']) ? $post['previous_ffa'] : '',
             'history_allergy' => isset($post['history_allergy']) ? $post['history_allergy'] : '',
@@ -179,18 +179,28 @@ class Vision_model extends CI_Model
         );
 
         if (!empty($post['data_id']) && $post['data_id'] > 0) {
+            // For update
             $this->db->set('updated_at', date('Y-m-d H:i:s'));
             $this->db->where('id', $post['data_id']);
             $this->db->update($this->table, $data);
         } else {
+            // For insert
             $this->db->set('created_at', date('Y-m-d H:i:s'));
             $this->db->insert($this->table, $data);
+            
+            // After insert, update the patient status to 'low_vision' for the corresponding patient_code
+            if (!empty($post['patient_code'])) {
+                $this->db->where('patient_code', $post['patient_code']);
+                $this->db->update('hms_patient', ['pat_status' => 'Vision']);
+            }
         }
 
+        // Update hms_std_opd_patient_status for the corresponding booking_id
         $this->db->set('send_vision', 1);
         $this->db->where('booking_id', $post['booking_id']);
         $this->db->update('hms_std_opd_patient_status');
     }
+
 
 
     public function delete($id = "")

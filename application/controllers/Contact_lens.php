@@ -98,7 +98,7 @@ class Contact_lens extends CI_Controller
             $row[] = $gender[$contact_lens->gender];
             $row[] = $contact_lens->mobile_no;
             $row[] = $age;
-            $row[] = $pat_status;
+            $row[] = '<font style="background-color: #228B30;color:white">'.$contact_lens->pat_status.'</font>' ;;
             // $row[] = $contact_lens->hospital_code;
             // $row[] = $contact_lens->item_description;
             // $row[] = $contact_lens->menufacturer;

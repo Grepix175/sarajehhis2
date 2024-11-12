@@ -225,16 +225,16 @@ error_reporting(E_ALL & ~E_WARNING);
 
             <div class="col-sm-4">
               <div class="row m-b-5">
-                <div class="col-xs-5"><label>To Date</label></div>
-                <div class="col-xs-7">
+                <div class="col-xs-4"><label>To Date</label></div>
+                <div class="col-xs-8">
                   <input name="end_date" id="end_date_patient"
                     class="datepicker datepicker_to end_datepicker m_input_default"
                     value="<?php echo $form_data['end_date'] ?>" type="text">
                 </div>
               </div>
               <div class="row m-b-5">
-                <div class="col-xs-5"><label>Patient Name</label></div>
-                <div class="col-xs-7">
+                <div class="col-xs-4"><label>Patient Name</label></div>
+                <div class="col-xs-8">
                   <input name="patient_name" value="<?php echo $form_data['patient_name'] ?>" id="patient_name"
                     onkeyup="return form_submit();" class="alpha_space m_input_default" value="" type="text">
                 </div>
@@ -272,8 +272,8 @@ error_reporting(E_ALL & ~E_WARNING);
               ?>
               <?php if (in_array('1', $permission_section)) { ?>
                 <div class="row m-b-5">
-                  <div class="col-xs-5"><label>Branch</label></div>
-                  <div class="col-xs-7">
+                  <div class="col-xs-4"><label>Branch</label></div>
+                  <div class="col-xs-8">
 
 
 
@@ -310,9 +310,9 @@ error_reporting(E_ALL & ~E_WARNING);
               <?php } ?>
               <div class="row  m-b-5" id="additional_selection">
 
-                <div class="col-xs-5"><label>Priority</label></div>
+                <div class="col-xs-4"><label>Priority</label></div>
 
-                  <div class="col-xs-7">
+                  <div class="col-xs-8">
                     <label class="radio-label">
                       <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
                       <span>Priority</span>
@@ -384,7 +384,7 @@ error_reporting(E_ALL & ~E_WARNING);
                   <!-- <th> Consultant </th> -->
                   <!-- <th> Lens </th> -->
                   <!-- <th> Comment </th> -->
-                  <!-- <th> Patient Status </th> -->
+                  <th> Patient Status </th>
                   <th> Created Date </th>
                   <th> Action </th>
                 </tr>

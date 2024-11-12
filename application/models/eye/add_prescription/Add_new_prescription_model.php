@@ -1671,10 +1671,11 @@ class Add_new_prescription_model extends CI_Model
 		$biometry_flag = isset($post['print_biometry_flag']) ? '1' : '0';
 		
 		if($post['flag'] == 'refraction_below_8_years'){
-		
+			$refstatus = 'Refraction';
 			$pres_data = array('branch_id' => $post['branch_id'], 'booking_code' => $post['booking_code'], 'patient_id' => $post['patient_id'], 'booking_id' => $post['booking_id'], 'refraction_below8' => $refraction_below8, 'status' => 1, 'ip_address' => $_SERVER['REMOTE_ADDR'], 'created_by' => $post['branch_id']);
 
 		}elseif($post['flag'] == 'hess_chart'){
+			$refstatus = 'Hess chart';
 			$pres_data = array('branch_id' => $post['branch_id'], 'booking_code' => $post['booking_code'], 'patient_id' => $post['patient_id'], 'booking_id' => $post['booking_id'], 'drawing_flag' => $drawing_flag, 'status' => 1, 'ip_address' => $_SERVER['REMOTE_ADDR'], 'created_by' => $post['branch_id']);
 		}else{
 
@@ -1727,6 +1728,10 @@ class Add_new_prescription_model extends CI_Model
 				$this->db->set('sale_id', $sale_id);
 				$this->db->set('created_date', date('Y-m-d H:i:s'));
 				$this->db->insert('hms_std_eye_prescription', $pres_data);
+				if (!empty($post['patient_id'])) {
+					$this->db->where('id', $post['patient_id']);
+					$this->db->update('hms_patient', ['pat_status' => $refstatus]);
+				}
 				//echo $this->db->last_query(); exit;
 				$prescriptionid = $this->db->insert_id();
 			}
