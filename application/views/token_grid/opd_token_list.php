@@ -53,7 +53,7 @@ $user_role = $users_data['users_role'];
     #additional_selection .radio-label {
       display: inline-flex;
       align-items: center;
-      margin-right: 20px; /* Adds spacing between each radio button group */
+      /* margin-right: 20px; Adds spacing between each radio button group */
     }
 
     #additional_selection input[type="radio"] {
@@ -66,6 +66,11 @@ $user_role = $users_data['users_role'];
       align-items: center;
       margin-left: -38px;
     }
+    
+    span {
+      font-weight: normal;
+    }
+
     /*  */
 
   </style>
@@ -121,12 +126,30 @@ $user_role = $users_data['users_role'];
                   var firstColumn = $('td', row).eq(0); // Get the first column cell
 
                   if (emergencyStatus == 1) {
-                      firstColumn.css('background-color', 'red'); // Change to red for emergency_status 1
-                  } else if (emergencyStatus == 2) {
-                      firstColumn.css('background-color', 'blue'); // Change to blue for emergency_status 2
-                  } else if (emergencyStatus == 3) {
-                      firstColumn.css('background-color', ' yellow'); // Change to yellow for emergency_status 3
-                  }
+                    firstColumn.css({
+                        'background-color': 'red',   // Red background for emergency_status 1
+                        // 'color': 'white',            // White font color
+                        'font-weight': 'bold'        // Bold font
+                    });
+                } else if (emergencyStatus == 2) {
+                    firstColumn.css({
+                        'background-color': 'blue',  // Blue background for emergency_status 2
+                        // 'color': 'white',            // White font color
+                        'font-weight': 'bold'        // Bold font
+                    });
+                } else if (emergencyStatus == 3) {
+                    firstColumn.css({
+                        'background-color': 'yellow', // Yellow background for emergency_status 3
+                        // 'color': 'black',             // Black font color (or default)
+                        'font-weight': 'bold'         // Bold font
+                    });
+                } else {
+                    firstColumn.css({
+                        'background-color': 'white',  // Default white background
+                        // 'color': 'black',             // Default font color
+                        'font-weight': 'bold'         // Bold font by default
+                    });
+                }
               },
           });
 
@@ -165,16 +188,16 @@ $user_role = $users_data['users_role'];
           <div class="row">
             <div class="col-sm-4">
               <div class="row m-b-5">
-                <div class="col-xs-5"><label for="from_date">From Date</label></div>
-                <div class="col-xs-7">
+                <div class="col-xs-4"><label for="from_date">From Date</label></div>
+                <div class="col-xs-8">
                   <input id="from_date" name="from_date" class="start_datepicker m_input_default" type="text"
                     value="<?php echo isset($form_data['from_date']) && !empty($form_data['from_date']) ? $form_data['from_date'] : date('Y-m-d'); ?>">
                 </div>
 
               </div>
               <div class="row m-b-5">
-                <div class="col-xs-5"><label>Status</label></div>
-                <div class="col-xs-7">
+                <div class="col-xs-4"><label>Status</label></div>
+                <div class="col-xs-8">
                   <!-- Pending (Default) -->
                   <label class="radio-label">
                     <input type="radio" name="search_type" value="1" id="search_type_default"
@@ -198,7 +221,27 @@ $user_role = $users_data['users_role'];
                 </div>
 
               </div>
-              
+              <div class="row  m-b-5" id="additional_selection">
+
+                <div class="col-xs-4"><label>Priority</label></div>
+
+                  <div class="col-xs-8">
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
+                      <span>Priority</span>
+                    </label>
+
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="2" id="fasttrack_blue" onclick="return form_submit();">
+                      <span>Fast Track</span>
+                    </label>
+
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="3" id="priority_yellow" onclick="return form_submit();">
+                      <span>Post-Operative</span>
+                    </label>
+                  </div>
+                </div>
 
             </div> <!-- 4 -->
 
@@ -233,27 +276,7 @@ $user_role = $users_data['users_role'];
 
             </div> <!-- 4 -->
           </div> <!-- row --> 
-          <div class="row" id="additional_selection">
-
-              <div class="col-xs-2"><label>Priority</label></div>
- 
-                <div class="col-xs-9">
-                  <label class="radio-label">
-                    <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
-                    <span>Priority</span>
-                  </label>
-
-                  <label class="radio-label">
-                    <input type="radio" name="priority_type" value="2" id="fasttrack_blue" onclick="return form_submit();">
-                    <span>Fast Track</span>
-                  </label>
-
-                  <label class="radio-label">
-                    <input type="radio" name="priority_type" value="3" id="priority_yellow" onclick="return form_submit();">
-                    <span>Post-Operative</span>
-                  </label>
-                </div>
-          </div>
+          
           <script>
             $(document).ready(function() {
                 // Function to show/hide additional selection based on radio button selection

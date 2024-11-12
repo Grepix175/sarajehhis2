@@ -25,6 +25,12 @@ $users_data = $this->session->userdata('auth_users');
   <!-- js -->
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>jquery.min.js"></script>
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap.min.js"></script>
+  <style>
+    span {
+      font-weight: normal;
+    }
+
+  </style>
 
   <!-- datatable js -->
   <script src="<?php echo ROOT_JS_PATH; ?>jquery.dataTables.min.js"></script>
@@ -65,14 +71,30 @@ $users_data = $this->session->userdata('auth_users');
                 
                 // Apply background color based on emergency_status
                 if (emergencyStatus == 1) {
-                    firstColumn.css('background-color', 'red'); // Red for emergency_status 1
-                } else if (emergencyStatus == 2) {
-                    firstColumn.css('background-color', 'blue'); // Blue for emergency_status 2
-                } else if (emergencyStatus == 3) {
-                    firstColumn.css('background-color', 'yellow'); // Yellow for emergency_status 3
-                } else {
-                    firstColumn.css('background-color', 'white'); // Default color if status doesn't match
-                }
+                      firstColumn.css({
+                          'background-color': 'red',   // Red background for emergency_status 1
+                          // 'color': 'white',            // White font color
+                          'font-weight': 'bold'        // Bold font
+                      });
+                  } else if (emergencyStatus == 2) {
+                      firstColumn.css({
+                          'background-color': 'blue',  // Blue background for emergency_status 2
+                          // 'color': 'white',            // White font color
+                          'font-weight': 'bold'        // Bold font
+                      });
+                  } else if (emergencyStatus == 3) {
+                      firstColumn.css({
+                          'background-color': 'yellow', // Yellow background for emergency_status 3
+                          // 'color': 'black',             // Black font color (or default)
+                          'font-weight': 'bold'         // Bold font
+                      });
+                  } else {
+                      firstColumn.css({
+                          'background-color': 'white',  // Default white background
+                          // 'color': 'black',             // Default font color
+                          'font-weight': 'bold'         // Bold font by default
+                      });
+                  }
             }
         });
 
@@ -209,8 +231,8 @@ $users_data = $this->session->userdata('auth_users');
           <div class="row">
             <div class="col-sm-4">
               <div class="row m-b-5">
-                <div class="col-xs-5"><label>From Date</label></div>
-                <div class="col-xs-7">
+                <div class="col-xs-4"><label>From Date</label></div>
+                <div class="col-xs-8">
                   <input id="start_date_patient" name="start_date" class="datepicker start_datepicker m_input_default"
                     type="text" value="<?php echo $form_data['start_date'] ?>">
                 </div>
@@ -232,9 +254,9 @@ $users_data = $this->session->userdata('auth_users');
 
               <div class="row  m-b-5" id="additional_selection">
 
-                <div class="col-xs-5"><label>Priority</label></div>
+                <div class="col-xs-4"><label>Priority</label></div>
 
-                  <div class="col-xs-7">
+                  <div class="col-xs-8">
                     <label class="radio-label">
                       <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
                       <span>Priority</span>
@@ -394,7 +416,7 @@ $users_data = $this->session->userdata('auth_users');
                   <th> Gender </th>
                   <th> Mobile No </th>
                   <th> Age </th>                  
-                  <!-- <th> Side Effect </th> -->
+                  <th> Status</th>
                   <th> Created Date </th>
                   <th> Action </th>
                 </tr>

@@ -199,23 +199,23 @@ class Hess_chart extends CI_Controller
         $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . '?flag=' . $flag . "&type=" . $type . "'";
         $btn_print_pre = ' <a class="btn-custom" onClick="return print_window_page(' . $print_url . ')" href="javascript:void(0)" title="Print History"  data-url="512"><i class="fa fa-print"></i> Print Hess Chart</a>';
       }
-        if (in_array('2413', $users_data['permission']['action'])) {
-          // Logic for $refraction
-          if ($refraction_exists == 1) {
-              $refraction = '<a class="btn-custom" disabled href="#" title="Refraction" style="pointer-events: none; opacity: 0.6;">Refraction</a>';
-          } else {
-              $refraction = '<a class="btn-custom" href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction">Refraction</a>';
-          }
-          // Logic for $send_to_vission
-          if ($patient_status == 1) {
-              $send_to_vission = '<a class="btn-custom disabled" href="#" title="Send To Vision" style="pointer-events: none; opacity: 0.6;">Vision</a>';
-          } else {
-              $send_to_vission = '<a class="btn-custom" href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Vision">Vision</a>';
-          }
-      }
+      //   if (in_array('2413', $users_data['permission']['action'])) {
+      //     // Logic for $refraction
+      //     if ($refraction_exists == 1) {
+      //         $refraction = '<a class="btn-custom" disabled href="#" title="Refraction" style="pointer-events: none; opacity: 0.6;">Refraction</a>';
+      //     } else {
+      //         $refraction = '<a class="btn-custom" href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction">Refraction</a>';
+      //     }
+      //     // Logic for $send_to_vission
+      //     if ($patient_status == 1) {
+      //         $send_to_vission = '<a class="btn-custom disabled" href="#" title="Send To Vision" style="pointer-events: none; opacity: 0.6;">Vision</a>';
+      //     } else {
+      //         $send_to_vission = '<a class="btn-custom" href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Vision">Vision</a>';
+      //     }
+      // }
 
       // Add buttons to the row
-      $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission . $btn_contact_lens . $btn_hess_chart;
+      $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $btn_contact_lens . $btn_hess_chart;
       $row[] = $prescription->emergency_status;
 
       $data[] = $row;

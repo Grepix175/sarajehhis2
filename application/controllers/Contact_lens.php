@@ -54,13 +54,13 @@ class Contact_lens extends CI_Controller
                               })</script>";
             }
             $pat_status = '';
-            // $patient_status = $this->opd->get_by_id_patient_status($prescription->booking_id);
-            // if ($patient_status == 1) {
-            //     $pat_status = '<font style="background-color: #228B22;color:white">Vision</font>';
-            // }
-            // else {
-            //     $pat_status = '<font style="background-color: #1CAF9A;color:white">Not Arrived</font>';
-            // }
+            $patient_status = $this->opd->get_by_id_patient_status($contact_lens->booking_id);
+            if ($patient_status == 1) {
+                $pat_status = '<font style="background-color: #228B22;color:white">Vision</font>';
+            }
+            else {
+                $pat_status = '<font style="background-color: #1CAF9A;color:white">Not Arrived</font>';
+            }
             $age_y = $contact_lens->age_y;
             $age_m = $contact_lens->age_m;
             $age_d = $contact_lens->age_d;
@@ -98,7 +98,7 @@ class Contact_lens extends CI_Controller
             $row[] = $gender[$contact_lens->gender];
             $row[] = $contact_lens->mobile_no;
             $row[] = $age;
-            // $row[] = $pat_status;
+            $row[] = $pat_status;
             // $row[] = $contact_lens->hospital_code;
             // $row[] = $contact_lens->item_description;
             // $row[] = $contact_lens->menufacturer;
@@ -115,9 +115,7 @@ class Contact_lens extends CI_Controller
            onClick="return print_con_lens_page(' . $contact_lens->id . ', ' . $contact_lens->booking_id . ', ' . $contact_lens->patient_id . ');">
             <i class="fa fa-print"></i> Print
         </a>
-        <a class="btn-custom" onClick="return delete_contact_lens(' . $contact_lens->id . ')" href="javascript:void(0)" title="Delete" data-url="550">
-            <i class="fa fa-trash"></i> Delete
-        </a>
+        
         ';
         $row[] = $contact_lens->emergency_status;
 
