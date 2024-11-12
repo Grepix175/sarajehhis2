@@ -46,6 +46,10 @@ $user_role = $users_data['users_role'];
       /* Add space for the clear button */
     }
 
+    label, span {
+      font-weight: normal;
+    }
+
     .clearable .clear-icon {
       position: absolute;
       right: 10px;
@@ -426,7 +430,7 @@ $user_role = $users_data['users_role'];
                     <!-- Pending (Default) -->
                     <label class="radio-label">
                       <input type="radio" name="search_type" value="0" id="search_type_default"
-                        onclick="return form_submit();" checked="checked">
+                        onclick="return form_submit();">
                       <span style="margin-top: 5px;">Pending</span>
                     </label>
 
@@ -446,9 +450,49 @@ $user_role = $users_data['users_role'];
                   </div>
 
                 </div>
+                <div class="row  m-b-5" id="additional_selection">
 
 
-              </div> <!-- 4 -->
+                  <!-- <div class="col-md-4"></div> -->
+                  <!-- <div class="col-md-7" style="padding:2px;"> -->
+                  <div class="col-xs-5"><label>Priority</label></div>
+
+                    <div class="col-xs-7" >
+                      <label class="radio-label">
+                        <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
+                        <span>Priority</span>
+                      </label>
+
+                      <label class="radio-label">
+                        <input type="radio" name="priority_type" value="2" id="fasttrack_blue" onclick="return form_submit();">
+                        <span>Fast Track</span>
+                      </label>
+
+                      <label class="radio-label">
+                        <input type="radio" name="priority_type" value="3" id="priority_yellow" onclick="return form_submit();">
+                        <span>Post-Operative</span>
+                      </label>
+                    </div>
+                    </div>
+                  </div>
+                  <script>
+                    $(document).ready(function() {
+                      // Initially hide the additional selection
+                      $('#additional_selection').hide();
+
+                      // Function to show/hide additional selection based on radio button selection
+                      $('input[name="search_type"]').change(function() {
+                        if ($(this).val() == "0") { // If Pending is selected
+                          $('#additional_selection').show();
+                        } else {
+                          $('#additional_selection').hide();
+                        }
+                      });
+                    });
+                </script>
+
+
+               <!-- 4 -->
 
               <div class="col-sm-4 d-flex justify-content-center" style="margin-left: 133px;margin-top: 30px;">
                 <!-- <input value="Reset" class="col-sm-4 d-flex justify-content-center"
@@ -462,43 +506,7 @@ $user_role = $users_data['users_role'];
 
               </div> <!-- 4 -->
             </div> <!-- row -->
-            <div class="row" id="additional_selection">
-
-
-              <div class="col-md-4"></div>
-              <div class="col-md-7" style="padding:2px;">
-              <div class="col-xs-2"><label>Priority</label></div>
- 
-                <div class="col-xs-9" style="margin-left:55px;">
-                  <label class="radio-label">
-                    <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
-                    <span>Priority</span>
-                  </label>
-
-                  <label class="radio-label">
-                    <input type="radio" name="priority_type" value="2" id="fasttrack_blue" onclick="return form_submit();">
-                    <span>Fast Track</span>
-                  </label>
-
-                  <label class="radio-label">
-                    <input type="radio" name="priority_type" value="3" id="priority_yellow" onclick="return form_submit();">
-                    <span>Post-Operative</span>
-                  </label>
-                </div>
-                </div>
-          </div>
-          <script>
-            $(document).ready(function() {
-                // Function to show/hide additional selection based on radio button selection
-                $('input[name="search_type"]').change(function() {
-                    if ($(this).val() == "0") { // If Pending is selected
-                        $('#additional_selection').show();
-                    } else {
-                        $('#additional_selection').hide();
-                    }
-                });
-            });
-            </script>
+            
 
           </form>
 
@@ -705,20 +713,27 @@ $user_role = $users_data['users_role'];
       }
 
       function reset_search() {
+        // Clear the form inputs
         $('#start_date_patient').val('');
         $('#end_date_patient').val('');
         $('#booking_code').val('');
         $('#patient_name').val('');
         $('#mobile_no').val('');
-        $.ajax({
-          url: "<?php echo base_url(); ?>opd/reset_search/",
-          success: function (result) {
 
-            //document.getElementById("search_form").reset(); 
-            reload_table();
-          }
+        // Select the "All" radio button
+        $('#search_type_process').prop('checked', true);
+
+        // Perform the AJAX request
+        $.ajax({
+            url: "<?php echo base_url(); ?>opd/reset_search/",
+            success: function (result) {
+                // Reset other form elements if needed
+                // document.getElementById("search_form").reset(); 
+                reload_table();
+            }
         });
-      }
+    }
+
 
 
       $('.start_datepicker').datepicker({
