@@ -423,7 +423,7 @@ class Dilate_model extends CI_Model
 		$medicine_names_in_post = array_column($post['items'], 'medicine_name');
 		foreach ($existing_medicines as $existing_medicine) {
 			// Check if the current medicine's 'drop_name' is not in the POST data and if the patient_id matches
-			if (!in_array($existing_medicine['drop_name'], $medicine_names_in_post) ) {
+			if (!in_array($existing_medicine['drop_name'], $medicine_names_in_post)) {
 				// Mark the medicine as inactive (status = 0) only if the patient_id matches
 				$update_status_data[] = [
 					'id' => $existing_medicine['id'],
@@ -435,15 +435,19 @@ class Dilate_model extends CI_Model
 				];
 			}
 		}
-		// echo "<pre>";print_r($update_status_data);
 
-		// die;
 		// Update the removed/deactivated medicines in the database
 		if (!empty($update_status_data)) {
 			foreach ($update_status_data as $record) {
 				$this->db->where('id', $record['id']);
 				$this->db->update('hms_dilated', $record['data']);
 			}
+		}
+
+		// After successful insert/update, update the patient's status to 'dilated'
+		if (!empty($post['patient_id'])) {
+			$this->db->where('id', $post['patient_id']); // Assuming 'id' is the primary key for 'hms_patient'
+			$this->db->update('hms_patient', ['pat_status' => 'Dilated']);
 		}
 	}
 

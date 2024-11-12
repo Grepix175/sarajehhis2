@@ -169,9 +169,7 @@ class Contact_lens_model extends CI_Model
 	{
 		$user_data = $this->session->userdata('auth_users');
 		$post = $this->input->post();
-		// echo "<pre>";
-		// print_r($post['contact_lens_items']);
-		// die;
+
 		// Initializing the data ID
 		$data_id = $post['data_id'] ?? null;
 
@@ -185,14 +183,13 @@ class Contact_lens_model extends CI_Model
 
 		// If `data_id` exists, perform an update
 		if (!empty($data_id) && $data_id > 0) {
-			// Update the main contact lens entry
-			// $this->db->where('id', $data_id);
-			// $this->db->update($this->table, $data);
+			// Update the main contact lens entry (assuming related table for this entry)
+			$this->db->where('id', $data_id);
+			$this->db->update($this->table, $data);
 
-			// Now handle the items update (assuming items are related to this main entry)
-			if (isset($post['items']) && !empty($post['items'])) {
-				// Optional: Clear the existing items before updating (if needed)
-				// $this->db->where('contact_lens_id', $data_id);
+			// Handle the items update
+			if (isset($post['contact_lens_items']) && !empty($post['contact_lens_items'])) {
+				// Clear existing items related to this booking and patient before updating
 				$this->db->where('booking_id', $post['booking_id']);
 				$this->db->where('patient_id', $post['patient_id']);
 				$this->db->delete('hms_contact_lens');
@@ -203,18 +200,24 @@ class Contact_lens_model extends CI_Model
 
 		} else { // If `data_id` is not provided, perform an insert
 			// Insert new data into the main table
-			// $data['created_at'] = date('Y-m-d H:i:s');
-			// $this->db->set('ip_address', $_SERVER['REMOTE_ADDR']);
-			// $this->db->set('created_by', $user_data['id']);
-			// $this->db->insert('hms_contact_lens');
+			$data['created_at'] = date('Y-m-d H:i:s');
+			$this->db->set('ip_address', $_SERVER['REMOTE_ADDR']);
+			$this->db->set('created_by', $user_data['id']);
+			$this->db->insert($this->table, $data);
 
 			// Get the last inserted ID for the new record
+			$data_id = $this->db->insert_id();
+
 			// Insert the items if available
 			if (isset($post['contact_lens_items']) && !empty($post['contact_lens_items'])) {
 				$this->insert_items($data_id, $post['contact_lens_items'], $user_data, $post);
 			}
-			$data_id = $this->db->insert_id();
 
+			// After successful insert, update the patient's status to 'low_vision'
+			if (!empty($post['patient_id'])) {
+				$this->db->where('patient_id', $post['patient_id']);
+				$this->db->update('hms_patient', ['pat_status' => 'Contact Lens']);
+			}
 		}
 
 		// Return the ID of the inserted or updated record

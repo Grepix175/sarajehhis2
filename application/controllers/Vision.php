@@ -108,7 +108,7 @@ class Vision extends CI_Controller
             $row[] = $gender[$vision->gender];
             $row[] = $vision->mobile_no;
             $row[] = $age;
-            $row[] = $pat_status;
+            $row[] = '<font style="background-color: #228B30;color:white">'.$vision->pat_status.'</font>' ;;
             // $row[] = $vision->procedure_purpose;
             // $row[] = $vision->side_effect_name;
             // $row[] = $vision->informed_consent ? 'Yes' : 'No';

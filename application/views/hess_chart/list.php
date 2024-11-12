@@ -394,7 +394,7 @@ $users_data = $this->session->userdata('auth_users');
                   <th> Gender </th>
                   <th> Mobile </th>
                   <th> Age </th>
-                  <!-- <th> Patient Status </th> -->
+                  <th> Patient Status </th>
                   <th> Created Date </th>
                   <th> Action </th>
                 </tr>

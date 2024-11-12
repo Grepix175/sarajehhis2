@@ -106,8 +106,17 @@ class Help_desk extends CI_Controller
       $hess_chart = ($prescription->drawing_flag == 1)
         ? '<font style="background-color: #228B30;color:white">Hess Chart</font>'
         : '';
-        $refraction_below8 = ($prescription->refraction_below8 == 1)
+      $refraction_below8 = ($prescription->refraction_below8 == 1)
         ? '<font style="background-color: #228B30;color:white">Refraction Below 8 Year</font>'
+        : '';
+      $low_vision = ($low_vision_status == 1)
+        ? '<font style="background-color: #228B30;color:white">Low vision</font>'
+        : '';
+      $dilate = ($dilate_exists == 1)
+        ? '<font style="background-color: #228B30;color:white">Dilate</font>'
+        : '';
+      $refraction = ($refraction_exists == 1)
+        ? '<font style="background-color: #228B30;color:white">Refraction</font>'
         : '';
       $age_y = $prescription->age_y;
       $age_m = $prescription->age_m;
@@ -144,7 +153,7 @@ class Help_desk extends CI_Controller
       $row[] = $gender[$prescription->gender];
       $row[] = $prescription->mobile_no;
       $row[] = $age;
-      $values = array_filter([$pat_status, $contact_lens_txt, $hess_chart,$refraction_below8]);
+      $values = array_filter([$pat_status, $contact_lens_txt, $hess_chart,$refraction_below8,$low_vision,$dilate]);
 
       // $row[] = trim($pat_status . (!empty($pat_status) && !empty($hess_chart) && !empty($contact_lens_txt) ? ' / ' : '') . $contact_lens_txt);
       $row[] = !empty($values) ? implode(' / ', $values) : 'Not Arrived';
@@ -257,7 +266,7 @@ class Help_desk extends CI_Controller
       $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission . $btn_contact_lens . $btn_low_vision.
         $btn_hess_chart.$btn_refraction_below8.$dilate;
         $row[] = $prescription->emergency_status; // Add emergency_status to the row
-      // print_r($row);
+      // echo "<pre>";print_r($row);die;
       $data[] = $row;
       $i++;
     }
