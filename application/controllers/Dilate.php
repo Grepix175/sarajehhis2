@@ -89,7 +89,7 @@ class Dilate extends CI_Controller
 
             // Patient status (use the existing status logic for now)
             $pat_status = '<font style="background-color: #1CAF9A;color:white">Not Arrived</font>';
-            $row[] = '<font style="background-color: #228B30;color:white">'.$record[0]->pat_status.'</font>' ;;
+            $row[] = '<font style="background-color: #228B30;color:white">'.$records[0]->pat_status.'</font>' ;;
 
             // Created at date (showing created date from the first record in the group)
             $row[] = date('d-M-Y', strtotime($records[0]->created_date));

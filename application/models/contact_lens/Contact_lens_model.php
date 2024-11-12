@@ -20,7 +20,7 @@ class Contact_lens_model extends CI_Model
 		// print_r($search);
 		// die;
 		// Select only required fields from hms_patient and hms_opd_booking
-		$this->db->select("hms_contact_lens.id,hms_contact_lens.booking_id,hms_contact_lens.patient_id, hms_patient.emergency_status,hms_patient.simulation_id,hms_patient.patient_name,hms_patient.patient_code,hms_patient.gender,hms_patient.mobile_no,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d,hms_opd_booking.dilate_status,hms_opd_booking.app_type,hms_opd_booking.token_no, hms_opd_booking.booking_code,hms_contact_lens.created_date");
+		$this->db->select("hms_contact_lens.id,hms_contact_lens.booking_id,hms_contact_lens.patient_id, hms_patient.emergency_status, hms_patient.pat_status,hms_patient.simulation_id,hms_patient.patient_name,hms_patient.patient_code,hms_patient.gender,hms_patient.mobile_no,hms_patient.age_y,hms_patient.age_m,hms_patient.age_d,hms_opd_booking.dilate_status,hms_opd_booking.app_type,hms_opd_booking.token_no, hms_opd_booking.booking_code,hms_contact_lens.created_date");
 		$this->db->from('hms_contact_lens');
 		$this->db->join('hms_patient', 'hms_patient.id = hms_contact_lens.patient_id', 'left');
 		$this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_contact_lens.booking_id', 'left');
@@ -200,7 +200,7 @@ class Contact_lens_model extends CI_Model
 
 		} else { // If `data_id` is not provided, perform an insert
 			// Insert new data into the main table
-			$data['created_at'] = date('Y-m-d H:i:s');
+			$data['created_date'] = date('Y-m-d H:i:s');
 			$this->db->set('ip_address', $_SERVER['REMOTE_ADDR']);
 			$this->db->set('created_by', $user_data['id']);
 			$this->db->insert($this->table, $data);
@@ -212,10 +212,10 @@ class Contact_lens_model extends CI_Model
 			if (isset($post['contact_lens_items']) && !empty($post['contact_lens_items'])) {
 				$this->insert_items($data_id, $post['contact_lens_items'], $user_data, $post);
 			}
-
+			// echo "<pre>";print_r($data);die;
 			// After successful insert, update the patient's status to 'low_vision'
-			if (!empty($post['patient_id'])) {
-				$this->db->where('patient_id', $post['patient_id']);
+			if (!empty($data['patient_id'])) {
+				$this->db->where('id', $data['patient_id']);
 				$this->db->update('hms_patient', ['pat_status' => 'Contact Lens']);
 			}
 		}

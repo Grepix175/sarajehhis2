@@ -314,6 +314,10 @@ $user_role = $users_data['users_role'];
       </div>
       <div class="userlist-right" style="margin-top: 0px;">
         <div class="btns">
+            <button class="btn-update" data-toggle="tooltip" title="Add New patient"
+              onclick="window.location.href='<?php echo base_url('patient/add'); ?>'">
+              <i class="fa fa-plus"></i> New
+            </button>
           <!-- <button class="btn-update" id="modal_add">
             <i class="fa fa-plus"></i> New
           </button>

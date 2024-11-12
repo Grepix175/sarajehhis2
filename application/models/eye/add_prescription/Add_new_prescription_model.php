@@ -1645,7 +1645,7 @@ class Add_new_prescription_model extends CI_Model
 		$user_data = $this->session->userdata('auth_users');
 		$post = $this->input->post();
 	// 		echo "sagar";
-	// echo "<pre>"; print_r($post); die;
+	// echo "<pre>"; print_r($post);
 		$history_flag = 0;
 		$drawing_flag = 0;
 		$refraction_below8 = 0;
@@ -1671,7 +1671,7 @@ class Add_new_prescription_model extends CI_Model
 		$biometry_flag = isset($post['print_biometry_flag']) ? '1' : '0';
 		
 		if($post['flag'] == 'refraction_below_8_years'){
-			$refstatus = 'Refraction';
+			$refstatus = 'Refraction below 8 years';
 			$pres_data = array('branch_id' => $post['branch_id'], 'booking_code' => $post['booking_code'], 'patient_id' => $post['patient_id'], 'booking_id' => $post['booking_id'], 'refraction_below8' => $refraction_below8, 'status' => 1, 'ip_address' => $_SERVER['REMOTE_ADDR'], 'created_by' => $post['branch_id']);
 
 		}elseif($post['flag'] == 'hess_chart'){
@@ -1692,13 +1692,17 @@ class Add_new_prescription_model extends CI_Model
 				$this->db->where(array('branch_id' => $post['branch_id'], 'parent_id' => $post['sale_id'], 'type' => 8));
 				$this->db->delete('hms_medicine_stock');
 			}
-			
 			$prescriptionid = $post['prescrption_id'];
 			// echo "<pre>"; print_r($pres_data); die;
 			$this->db->where('id', $post['prescrption_id']);
 			$this->db->where('booking_id', $post['booking_id']);
 			$this->db->where('branch_id', $post['branch_id']);
 			$this->db->update('hms_std_eye_prescription', $pres_data);
+
+			if (!empty($post['patient_id'])) {
+				$this->db->where('id', $post['patient_id']);
+				$this->db->update('hms_patient', ['pat_status' => $refstatus]);
+			}
 		} else {
 			if (!empty($post['advs']['medication'])) {
 				$sale_no = generate_unique_id(16);
@@ -1728,10 +1732,8 @@ class Add_new_prescription_model extends CI_Model
 				$this->db->set('sale_id', $sale_id);
 				$this->db->set('created_date', date('Y-m-d H:i:s'));
 				$this->db->insert('hms_std_eye_prescription', $pres_data);
-				if (!empty($post['patient_id'])) {
-					$this->db->where('id', $post['patient_id']);
-					$this->db->update('hms_patient', ['pat_status' => $refstatus]);
-				}
+				// echo $refstatus;die;
+				
 				//echo $this->db->last_query(); exit;
 				$prescriptionid = $this->db->insert_id();
 			}

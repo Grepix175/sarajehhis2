@@ -123,7 +123,7 @@ class Refraction extends CI_Controller
         $plist = $this->refraction->get_patient_name_by_booking_id($booking_id);
         // echo "<pre>";print_r($plist);die('ok');
         $data['booking_id'] = isset($booking_id) ? $booking_id : '';
-        $data['booking_data'] = $this->refraction->get_booking_by_id($data['booking_id']);
+        $data['booking_data'] = $this->refraction->get_booking_byp_id($data['booking_id']);
         $result_refraction = $this->refraction->get_prescription_refraction_new_by_id($booking_id, $id);
         // echo "<pre>";print_r($result_refraction);die;
 

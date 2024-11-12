@@ -120,13 +120,16 @@ class Low_vision_model extends CI_Model
             }
         }
 
+        // Handle ordering from DataTables or default ordering
         if (isset($_POST['order'])) {
+            // Order by the specified column and direction
             $this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-        } else if (isset($this->order)) {
-            $order = $this->order;
-            $this->db->order_by(key($order), $order[key($order)]);
+        } else {
+            // Default sorting: change here for custom default sorting
+            $this->db->order_by('hms_low_vision.created_date', 'DESC');  // Custom default sort by created_date descending
         }
     }
+
 
 
     public function get_datatables()

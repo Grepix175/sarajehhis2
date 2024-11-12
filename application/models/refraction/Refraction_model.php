@@ -98,10 +98,11 @@ class Refraction_model extends CI_Model
 			}
 		}
         if (isset($_POST['order'])) {
+            // Order by the specified column and direction
             $this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-        } else if (isset($this->order)) {
-            $order = $this->order;
-            $this->db->order_by(key($order), $order[key($order)]);
+        } else {
+            // Default sorting: change here for custom default sorting
+            $this->db->order_by('hms_opd_refraction.created_date', 'DESC');  // Custom default sort by created_date descending
         }
     }
 
@@ -219,6 +220,26 @@ class Refraction_model extends CI_Model
 
 		// Filter by the booking ID
 		$this->db->where('hms_opd_booking.booking_code', $booking_id); // Assuming 'id' is the primary key for bookings
+		$query = $this->db->get();
+
+		// Check if any results were returned
+		if ($query->num_rows() > 0) {
+			return $query->row_array(); // Return the first result as an associative array
+		}
+
+		return null; // Return null if no data found
+	}
+    
+    public function get_booking_byp_id($booking_id)
+	{
+        // echo $booking_id;die;
+		// Select all fields from both tables
+		$this->db->select('hms_opd_booking.*, hms_patient.*'); // Select all fields
+		$this->db->from('hms_opd_booking'); // Start with the bookings table
+		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
+
+		// Filter by the booking ID
+		$this->db->where('hms_opd_booking.patient_id', $booking_id); // Assuming 'id' is the primary key for bookings
 		$query = $this->db->get();
 
 		// Check if any results were returned
