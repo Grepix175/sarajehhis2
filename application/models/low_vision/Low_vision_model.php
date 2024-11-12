@@ -52,16 +52,28 @@ class Low_vision_model extends CI_Model
     private function _get_datatables_query()
     {
         $search = $this->session->userdata('prescription_search');
-        $this->db->select("hms_low_vision.id as refraction_id,hms_low_vision.*,hms_patient.*,hms_patient_category.patient_category as patient_category_name,hms_opd_booking.*,hms_doctors.doctor_name,hms_opd_booking.token_no as token, hms_patient.emergency_status");
+        
+        // Use DISTINCT to avoid duplicate rows
+        $this->db->distinct();
+        
+        // Select relevant columns
+        $this->db->select("hms_low_vision.id as refraction_id, hms_low_vision.*, hms_patient.*, hms_patient_category.patient_category as patient_category_name, hms_opd_booking.*, hms_doctors.doctor_name, hms_opd_booking.token_no as token, hms_patient.emergency_status, hms_low_vision.created_date as created");
+        
         $this->db->from($this->table);
+        
+        // Joining tables
         $this->db->join('hms_patient', 'hms_patient.id = hms_low_vision.patient_id', 'left');
-        $this->db->join('hms_patient_category', 'hms_patient_category.id=hms_patient.patient_category', 'left');
+        $this->db->join('hms_patient_category', 'hms_patient_category.id = hms_patient.patient_category', 'left');
         $this->db->join('hms_opd_booking', 'hms_opd_booking.booking_code = hms_low_vision.booking_id', 'left');
         $this->db->join('hms_doctors', 'hms_doctors.id = hms_opd_booking.attended_doctor', 'left');
+        
+        // Filter deleted entries
         $this->db->where('hms_low_vision.is_deleted', '0');
         
+        // Group by to prevent duplicate rows
+        $this->db->group_by('hms_low_vision.id'); 
+        
         $i = 0;
-        // echo "<pre>";print_r($search);die;
         foreach ($this->column as $item) {
             if ($_POST['search']['value']) {
                 if ($i === 0) {
@@ -78,8 +90,9 @@ class Low_vision_model extends CI_Model
             $column[$i] = $item;
             $i++;
         }
-        if (!empty($search)) {
 
+        if (!empty($search)) {
+            // Additional filters based on search
             if (!empty($search['start_date'])) {
                 $start_date = date('Y-m-d 00:00:00', strtotime($search['start_date']));
                 $this->db->where('hms_low_vision.created_date >=', $start_date);
@@ -101,10 +114,12 @@ class Low_vision_model extends CI_Model
             if (!empty($search['patient_code'])) {
                 $this->db->where('hms_patient.patient_code', $search['patient_code']);
             }
+
             if (!empty($search['mobile_no'])) {
                 $this->db->where('hms_patient.mobile_no', $search['mobile_no']);
             }
         }
+
         if (isset($_POST['order'])) {
             $this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
         } else if (isset($this->order)) {
@@ -113,12 +128,21 @@ class Low_vision_model extends CI_Model
         }
     }
 
+
     public function get_datatables()
     {
+        // Call the query builder method
         $this->_get_datatables_query();
+
+        // Execute the query
         $query = $this->db->get();
+
+        // Display the last executed query for debugging
+
+        // Return the query results as usual
         return $query->result();
     }
+
 
     public function count_filtered()
     {

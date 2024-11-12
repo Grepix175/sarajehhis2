@@ -23,6 +23,12 @@ $users_data = $this->session->userdata('auth_users');
   <!-- js -->
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>jquery.min.js"></script>
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap.min.js"></script>
+  <style>
+    span {
+      font-weight: normal;
+    }
+
+  </style>
 
   <!-- datatable js -->
   <script src="<?php echo ROOT_JS_PATH; ?>jquery.dataTables.min.js"></script>
@@ -59,14 +65,32 @@ $users_data = $this->session->userdata('auth_users');
 
                 // Apply background color based on emergency_status
                 if (emergencyStatus == 1) {
-                    firstColumn.css('background-color', 'red'); // Red for emergency_status 1
+                    firstColumn.css({
+                        'background-color': 'red',   // Red background for emergency_status 1
+                        // 'color': 'white',            // White font color
+                        'font-weight': 'bold'        // Bold font
+                    });
                 } else if (emergencyStatus == 2) {
-                    firstColumn.css('background-color', 'blue'); // Blue for emergency_status 2
+                    firstColumn.css({
+                        'background-color': 'blue',  // Blue background for emergency_status 2
+                        // 'color': 'white',            // White font color
+                        'font-weight': 'bold'        // Bold font
+                    });
                 } else if (emergencyStatus == 3) {
-                    firstColumn.css('background-color', 'yellow'); // Yellow for emergency_status 3
+                    firstColumn.css({
+                        'background-color': 'yellow', // Yellow background for emergency_status 3
+                        // 'color': 'black',             // Black font color (or default)
+                        'font-weight': 'bold'         // Bold font
+                    });
                 } else {
-                    firstColumn.css('background-color', 'white'); // Default color if status doesn't match
+                    firstColumn.css({
+                        'background-color': 'white',  // Default white background
+                        // 'color': 'black',             // Default font color
+                        'font-weight': 'bold'         // Bold font by default
+                    });
                 }
+
+
             }
         });
     });
@@ -202,16 +226,16 @@ $users_data = $this->session->userdata('auth_users');
 
             <div class="col-sm-4">
               <div class="row m-b-5">
-                <div class="col-xs-5"><label>To Date</label></div>
-                <div class="col-xs-7">
+                <div class="col-xs-4"><label>To Date</label></div>
+                <div class="col-xs-8">
                   <input name="end_date" id="end_date_patient"
                     class="datepicker datepicker_to end_datepicker m_input_default"
                     value="<?php echo $form_data['end_date'] ?>" type="text">
                 </div>
               </div>
               <div class="row m-b-5">
-                <div class="col-xs-5"><label>Patient Name</label></div>
-                <div class="col-xs-7">
+                <div class="col-xs-4"><label>Patient Name</label></div>
+                <div class="col-xs-8">
                   <input name="patient_name" value="<?php echo $form_data['patient_name'] ?>" id="patient_name"
                     onkeyup="return form_submit();" class="alpha_space m_input_default" value="" type="text">
                 </div>
@@ -288,9 +312,9 @@ $users_data = $this->session->userdata('auth_users');
 
               <div class="row  m-b-5" id="additional_selection">
 
-                <div class="col-xs-5"><label>Priority</label></div>
+                <div class="col-xs-4"><label>Priority</label></div>
 
-                  <div class="col-xs-7">
+                  <div class="col-xs-8">
                     <label class="radio-label">
                       <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
                       <span>Priority</span>

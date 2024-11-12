@@ -25,6 +25,12 @@ error_reporting(E_ALL & ~E_WARNING);
   <!-- js -->
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>jquery.min.js"></script>
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap.min.js"></script>
+    <style>
+    span {
+      font-weight: normal;
+    }
+
+  </style>
 
   <!-- datatable js -->
   <script src="<?php echo ROOT_JS_PATH; ?>jquery.dataTables.min.js"></script>
@@ -60,14 +66,30 @@ error_reporting(E_ALL & ~E_WARNING);
 
                 // Change background color based on emergency_status
                 if (emergencyStatus == 1) {
-                    firstColumn.css('background-color', 'red'); // Red for emergency_status 1
-                } else if (emergencyStatus == 2) {
-                    firstColumn.css('background-color', 'blue'); // Blue for emergency_status 2
-                } else if (emergencyStatus == 3) {
-                    firstColumn.css('background-color', 'yellow'); // Yellow for emergency_status 3
-                } else {
-                    firstColumn.css('background-color', 'white'); // Default background
-                }
+                      firstColumn.css({
+                          'background-color': 'red',   // Red background for emergency_status 1
+                          // 'color': 'white',            // White font color
+                          'font-weight': 'bold'        // Bold font
+                      });
+                  } else if (emergencyStatus == 2) {
+                      firstColumn.css({
+                          'background-color': 'blue',  // Blue background for emergency_status 2
+                          // 'color': 'white',            // White font color
+                          'font-weight': 'bold'        // Bold font
+                      });
+                  } else if (emergencyStatus == 3) {
+                      firstColumn.css({
+                          'background-color': 'yellow', // Yellow background for emergency_status 3
+                          // 'color': 'black',             // Black font color (or default)
+                          'font-weight': 'bold'         // Bold font
+                      });
+                  } else {
+                      firstColumn.css({
+                          'background-color': 'white',  // Default white background
+                          // 'color': 'black',             // Default font color
+                          'font-weight': 'bold'         // Bold font by default
+                      });
+                  }
             }
         });
     });

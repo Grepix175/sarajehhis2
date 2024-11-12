@@ -46,7 +46,7 @@ $user_role = $users_data['users_role'];
       /* Add space for the clear button */
     }
 
-    label, span {
+    span {
       font-weight: normal;
     }
 
@@ -325,18 +325,18 @@ $user_role = $users_data['users_role'];
 
               </div> <!-- 4 -->
 
-              <div class="col-sm-4">
+              <div class="col-sm-5">
                 <div class="row m-b-5">
-                  <div class="col-xs-5"><label>To Date</label></div>
-                  <div class="col-xs-7">
+                  <div class="col-xs-4"><label>To Date</label></div>
+                  <div class="col-xs-8">
                     <input name="end_date" id="end_date_patient"
                       class="datepicker datepicker_to end_datepicker m_input_default"
                       value="<?php echo $form_data['end_date'] ?>" type="text">
                   </div>
                 </div>
                 <div class="row m-b-5">
-                  <div class="col-xs-5"><label>Patient Name</label></div>
-                  <div class="col-xs-7">
+                  <div class="col-xs-4"><label>Patient Name</label></div>
+                  <div class="col-xs-8">
                     <input name="patient_name" value="<?php echo $form_data['patient_name'] ?>" id="patient_name"
                       onkeyup="return form_submit();" class="alpha_space m_input_default" value="" type="text">
                   </div>
@@ -373,8 +373,8 @@ $user_role = $users_data['users_role'];
                 ?>
                 <?php if (in_array('1', $permission_section)) { ?>
                   <div class="row m-b-5">
-                    <div class="col-xs-5"><label>Branch</label> </div>
-                    <div class="col-xs-7">
+                    <div class="col-xs-4"><label>Branch</label> </div>
+                    <div class="col-xs-8">
 
 
 
@@ -412,8 +412,8 @@ $user_role = $users_data['users_role'];
 
 
                 <div class="row m-b-5">
-                  <div class="col-xs-5"><label> Booking Type</label></div>
-                  <div class="col-xs-7">
+                  <div class="col-xs-4"><label> Booking Type</label></div>
+                  <div class="col-xs-8">
                     <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="3"
                       type="radio" <?php if ($form_data['emergency_booking'] == '3') {
                         echo 'checked';
@@ -425,12 +425,12 @@ $user_role = $users_data['users_role'];
                   </div>
                 </div>
                 <div class="row m-b-5">
-                  <div class="col-xs-5"><label>Status</label></div>
-                  <div class="col-xs-7">
+                  <div class="col-xs-4"><label>Status</label></div>
+                  <div class="col-xs-8">
                     <!-- Pending (Default) -->
                     <label class="radio-label">
                       <input type="radio" name="search_type" value="0" id="search_type_default"
-                        onclick="return form_submit();">
+                        onclick="return form_submit();" checked="checked">
                       <span style="margin-top: 5px;">Pending</span>
                     </label>
 
@@ -449,52 +449,53 @@ $user_role = $users_data['users_role'];
                     </label>
                   </div>
 
-                </div>
-                <div class="row  m-b-5" id="additional_selection">
+                  <div  id="additional_selection">
 
 
-                  <!-- <div class="col-md-4"></div> -->
-                  <!-- <div class="col-md-7" style="padding:2px;"> -->
-                  <div class="col-xs-5"><label>Priority</label></div>
+                    <!-- <div class="col-md-4"></div> -->
+                    <!-- <div class="col-md-7" style="padding:2px;"> -->
+                    <div class="col-xs-4"><label>Priority</label></div>
 
-                    <div class="col-xs-7" >
-                      <label class="radio-label">
-                        <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
-                        <span>Priority</span>
-                      </label>
+                      <div class="col-xs-8" >
+                        <label class="radio-label">
+                          <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
+                          <span>Priority</span>
+                        </label>
 
-                      <label class="radio-label">
-                        <input type="radio" name="priority_type" value="2" id="fasttrack_blue" onclick="return form_submit();">
-                        <span>Fast Track</span>
-                      </label>
+                        <label class="radio-label">
+                          <input type="radio" name="priority_type" value="2" id="fasttrack_blue" onclick="return form_submit();">
+                          <span>Fast Track</span>
+                        </label>
 
-                      <label class="radio-label">
-                        <input type="radio" name="priority_type" value="3" id="priority_yellow" onclick="return form_submit();">
-                        <span>Post-Operative</span>
-                      </label>
+                        <label class="radio-label">
+                          <input type="radio" name="priority_type" value="3" id="priority_yellow" onclick="return form_submit();">
+                          <span>Post-Operative</span>
+                        </label>
+                      </div>
+                      </div>
                     </div>
-                    </div>
-                  </div>
-                  <script>
-                    $(document).ready(function() {
-                      // Initially hide the additional selection
-                      $('#additional_selection').hide();
+                    <script>
+                      $(document).ready(function() {
+                        // Initially hide the additional selection
+                        // $('#additional_selection').hide();
 
-                      // Function to show/hide additional selection based on radio button selection
-                      $('input[name="search_type"]').change(function() {
-                        if ($(this).val() == "0") { // If Pending is selected
-                          $('#additional_selection').show();
-                        } else {
-                          $('#additional_selection').hide();
-                        }
+                        // Function to show/hide additional selection based on radio button selection
+                        $('input[name="search_type"]').change(function() {
+                          if ($(this).val() == "0") { // If Pending is selected
+                            $('#additional_selection').show();
+                          } else {
+                            $('#additional_selection').hide();
+                          }
+                        });
                       });
-                    });
-                </script>
+                    </script>
+              </div>
+               
 
 
                <!-- 4 -->
 
-              <div class="col-sm-4 d-flex justify-content-center" style="margin-left: 133px;margin-top: 30px;">
+              <div class="col-sm-3 d-flex justify-content-center" style="margin-left: 133px;margin-top: 30px;">
                 <!-- <input value="Reset" class="col-sm-4 d-flex justify-content-center"
                   style="margin-left: 133px;margin-top: 30px;" onclick="clear_form_elements(this.form)" type="button"> -->
                   <a class="btn-custom" id="reset_date" onclick="reset_search(this.form);">Reset</a>
@@ -833,11 +834,29 @@ $user_role = $users_data['users_role'];
 
                   // Apply border styles based on emergency status
                   if (emergencyStatus == 1) {
-                      firstColumn.css('background-color', 'red'); // Change to red for emergency_status 1
+                      firstColumn.css({
+                          'background-color': 'red',   // Red background for emergency_status 1
+                          // 'color': 'white',            // White font color
+                          'font-weight': 'bold'        // Bold font
+                      });
                   } else if (emergencyStatus == 2) {
-                      firstColumn.css('background-color', 'blue'); // Change to blue for emergency_status 2
+                      firstColumn.css({
+                          'background-color': 'blue',  // Blue background for emergency_status 2
+                          // 'color': 'white',            // White font color
+                          'font-weight': 'bold'        // Bold font
+                      });
                   } else if (emergencyStatus == 3) {
-                      firstColumn.css('background-color', 'yellow'); // Change to yellow for emergency_status 3
+                      firstColumn.css({
+                          'background-color': 'yellow', // Yellow background for emergency_status 3
+                          // 'color': 'black',             // Black font color (or default)
+                          'font-weight': 'bold'         // Bold font
+                      });
+                  } else {
+                      firstColumn.css({
+                          'background-color': 'white',  // Default white background
+                          // 'color': 'black',             // Default font color
+                          'font-weight': 'bold'         // Bold font by default
+                      });
                   }
               }
           });

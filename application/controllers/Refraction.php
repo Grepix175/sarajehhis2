@@ -123,6 +123,7 @@ class Refraction extends CI_Controller
         $plist = $this->refraction->get_patient_name_by_booking_id($booking_id);
         // echo "<pre>";print_r($plist);die('ok');
         $data['booking_id'] = isset($booking_id) ? $booking_id : '';
+        $data['booking_data'] = $this->refraction->get_booking_by_id($data['booking_id']);
         $result_refraction = $this->refraction->get_prescription_refraction_new_by_id($booking_id, $id);
         // echo "<pre>";print_r($result_refraction);die;
 
@@ -298,6 +299,8 @@ class Refraction extends CI_Controller
                 show_error('Refraction record not found', 404);
                 return;
             }
+
+            $data['booking_data'] = $this->refraction->get_booking_by_id($result['booking_code']);
 
             // Prepare data for the view
            // Assuming $result['auto_refraction'] could be a JSON string

@@ -87,7 +87,7 @@ class Low_vision extends CI_Controller
 
             // Check status and set active or not active
             $row[] = ($low_vision->status == 1) ? 'Active' : 'Not Active';
-            $row[] = date('d-M-Y', strtotime($low_vision->created_date));
+            $row[] = date('d-M-Y', strtotime($low_vision->created));
 
             // Add action buttons
             $row[] = '<a onClick="return edit_refraction(' . $low_vision->refraction_id . ');" class="btn-custom" href="javascript:void(0)" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
@@ -119,7 +119,7 @@ class Low_vision extends CI_Controller
         $this->load->library('form_validation');
         // $this->load->model('low_vision/refraction_model'); // Ensure this model is loaded
         // $data['side_effects'] = $this->low_vision->get_all_side_effects(); // Fetch side effects
-        $data['page_title'] = 'Add refraction Record';
+        $data['page_title'] = 'Add Low vision Record';
         // $pres_id = 28;
         
         $plist = $this->low_vision->get_patient_name_by_booking_id($booking_id);
@@ -129,7 +129,7 @@ class Low_vision extends CI_Controller
         // echo "<pre>";print_r($booking_id);die;
         $data['booking_data'] = $this->low_vision->get_bookings_by_id($booking_id);
         $data['doctor'] = $this->doctor->doctors_list();
-        // echo "<pre>";print_r($data['booking_data']);die;
+        // echo "<pre>";print_r($data['booking_data']);die('kkkk');
 
         $low_vision_auto_refraction = isset($result_refraction['auto_refraction'])?json_decode($result_refraction['auto_refraction']):'';
         $data['refrtsn_auto_ref'] = (array) $low_vision_auto_refraction;
