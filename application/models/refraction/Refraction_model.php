@@ -205,7 +205,7 @@ class Refraction_model extends CI_Model
             // Update the hms_patient table to set pat_status to 'low_vision' for the corresponding patient_code during insert only
             if (!empty($data['patient_id'])) {
                 $this->db->where('id', $data['patient_id']);
-                $this->db->update('hms_patient', ['pat_status' => 'Refraction']);
+                $this->db->update('hms_patient', ['pat_status' => 'Refraction above 8 years']);
             }
         }
     }
