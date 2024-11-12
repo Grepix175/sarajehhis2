@@ -42,6 +42,7 @@ class Dilate_model extends CI_Model
 		// Select fields relevant to hms_dilated table
 		$this->db->select("hms_dilated.*, 
 		hms_patient.patient_name, 
+		hms_patient.pat_status, 
 		hms_opd_booking.booking_code, 
 		hms_patient.patient_code as patient_no, 
 		hms_opd_booking.token_no as token,  
@@ -398,7 +399,7 @@ class Dilate_model extends CI_Model
 				$insert_data[] = $data;
 			}
 		}
-
+		// echo "<pre>";print_r($insert_data);die;
 		// Insert new records
 		if (!empty($insert_data)) {
 			$this->db->insert_batch('hms_dilated', $insert_data);

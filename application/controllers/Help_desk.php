@@ -116,7 +116,7 @@ class Help_desk extends CI_Controller
         ? '<font style="background-color: #228B30;color:white">Dilate</font>'
         : '';
       $refraction = ($refraction_exists == 1)
-        ? '<font style="background-color: #228B30;color:white">Refraction</font>'
+        ? '<font style="background-color: #228B30;color:white">Refraction above 8 years</font>'
         : '';
       $age_y = $prescription->age_y;
       $age_m = $prescription->age_m;
@@ -153,10 +153,10 @@ class Help_desk extends CI_Controller
       $row[] = $gender[$prescription->gender];
       $row[] = $prescription->mobile_no;
       $row[] = $age;
-      $values = array_filter([$pat_status, $contact_lens_txt, $hess_chart,$refraction_below8,$low_vision,$dilate]);
+      $values = array_filter([$refraction, $contact_lens_txt, $hess_chart,$refraction_below8,$low_vision,$dilate,$pat_status]);
 
       // $row[] = trim($pat_status . (!empty($pat_status) && !empty($hess_chart) && !empty($contact_lens_txt) ? ' / ' : '') . $contact_lens_txt);
-      $row[] = !empty($values) ? implode(' / ', $values) : 'Not Arrived';
+      $row[] = !empty($values) ? implode(' / ', $values) : '<font style="background-color: #228B30;color:white">History</font>';
 
       $row[] = date('d-M-Y', strtotime($prescription->created_date));
 
@@ -234,9 +234,9 @@ class Help_desk extends CI_Controller
       if (in_array('2413', $users_data['permission']['action'])) {
         if ($refraction_exists == 1) {
 
-          $refraction = '<a class="btn-custom " disabled href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction</a>';
+          $refraction = '<a class="btn-custom disabled " style="pointer-events: none; opacity: 0.6;" href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction above 8 years</a>';
         } else {
-          $refraction = '<a class="btn-custom" href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction</a>';
+          $refraction = '<a class="btn-custom" href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction above 8 years</a>';
 
         }
       }

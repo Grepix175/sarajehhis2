@@ -997,7 +997,7 @@ class Patient extends CI_Controller
                 // die();
 
                 $this->session->set_flashdata('success', 'Patient successfully added.');
-                redirect(base_url('patient'));
+                redirect(base_url('token_no'));
             } else {
                 // print_r($valid_response['form_data']);
                 // die();

@@ -1332,7 +1332,7 @@ class Opd extends CI_Controller
 
 
         $this->session->set_flashdata('success', 'Opd booking successfully booked.');
-        redirect(base_url('opd/?status=print'));
+        redirect(base_url('token_no/?status=print'));
 
         $this->load->model('opd_setting/opd_print_setting_model');
         $opd_setting_data = $this->opd_print_setting_model->get_print_setting();
