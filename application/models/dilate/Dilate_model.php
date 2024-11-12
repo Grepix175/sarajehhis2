@@ -371,7 +371,7 @@ class Dilate_model extends CI_Model
 			$data = array(
 				'branch_id' => $user_data['parent_id'],
 				'patient_id' => $post['patient_id'], // Assuming patient_id is passed in POST
-				'booking_id' => $post['booking_id'], // Assuming booking_id is passed in POST
+				'booking_id' => $post['booking_code'], // Assuming booking_id is passed in POST
 				'drop_name' => $item['medicine_name'], // Fetching medicine_name from item
 				'salt' => $item['salt'], // Fetching salt from item
 				'percentage' => $item['percentage'], // Fetching percentage from item
