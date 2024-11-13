@@ -440,115 +440,115 @@ class Prosthetic extends CI_Controller
 
     
     public function prosthetic_excel()
-{
-    // Load the PHPExcel library (Make sure the 'excel' library is correctly loaded in your application)
-    $this->load->library('excel');
-    
-    // Initialize PHPExcel
-    $objPHPExcel = new PHPExcel();
-    $objPHPExcel->getProperties()->setTitle("Prosthetic List")->setDescription("none");
-    $objPHPExcel->setActiveSheetIndex(0);
+    {
+        // Load the PHPExcel library (Make sure the 'excel' library is correctly loaded in your application)
+        $this->load->library('excel');
+        
+        // Initialize PHPExcel
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setTitle("Prosthetic List")->setDescription("none");
+        $objPHPExcel->setActiveSheetIndex(0);
 
-    $from_date = $this->input->get('start_date');
-    $to_date = $this->input->get('end_date');
+        $from_date = $this->input->get('start_date');
+        $to_date = $this->input->get('end_date');
 
-    // Main header with date range if provided
-    $mainHeader = "Prosthetic List";
-    if (!empty($from_date) && !empty($to_date)) {
-        $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
-    }
-
-    // Set the main header in row 1
-    $objPHPExcel->getActiveSheet()->mergeCells('A1:G1');
-    $objPHPExcel->getActiveSheet()->setCellValue('A1', $mainHeader);
-    $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-    $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true)->setSize(16);
-
-    // Leave row 2 blank
-    $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
-
-    // Field names (header row) should start in row 3
-    $fields = array('Token No', 'OPD No', 'Patient Reg No.', 'Patient Name', 'Mobile No', 'Age', 'Status');
-
-    $col = 0; // Initialize the column index
-    foreach ($fields as $field) {
-        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 3, $field); // Row 3 for headers
-        $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn($col)->setAutoSize(true); // Auto-size columns
-        $col++;
-    }
-
-    // Style for header row (Row 3)
-    $objPHPExcel->getActiveSheet()->getStyle('A3:G3')->getFont()->setBold(true);
-    $objPHPExcel->getActiveSheet()->getStyle('A3:G3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-    $objPHPExcel->getActiveSheet()->getStyle('A3:G3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-
-    // Fetching the OPD data
-    $list = $this->prosthetic->get_datatables();
-    // echo "<pre>";print_r($list);die;
-
-    // Populate the data starting from row 4
-    $row = 4; // Start at row 4 for data
-    if (!empty($list)) {
-        foreach ($list as $prosthetic) {
-            // Reset column index for each new row
-            $col = 0;
-            
-            $age_y = $prosthetic->age_y;
-            $age_m = $prosthetic->age_m;
-            $age_d = $prosthetic->age_d;
-      
-            $age = "";
-            if ($age_y > 0) {
-              $year = 'Years';
-              if ($age_y == 1) {
-                $year = 'Year';
-              }
-              $age .= $age_y . " " . $year;
-            }
-            if ($age_m > 0) {
-              $month = 'Months';
-              if ($age_m == 1) {
-                $month = 'Month';
-              }
-              $age .= ", " . $age_m . " " . $month;
-            }
-            if ($age_d > 0) {
-              $day = 'Days';
-              if ($age_d == 1) {
-                $day = 'Day';
-              }
-              $age .= ", " . $age_d . " " . $day;
-            }
-
-            // Prepare data to be populated
-            $data = array(
-                $prosthetic->token_no,
-                $prosthetic->booking_code,
-                $prosthetic->patient_code,
-                $prosthetic->patient_name,
-                $prosthetic->mobile_no,
-                $age, // Adding missing 'Age' field
-                $prosthetic->status == 1 ? 'Active' : 'Not Active',
-            );
-
-            foreach ($data as $cellValue) {
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $cellValue);
-                $col++;
-            }
-            $row++; // Move to the next row
+        // Main header with date range if provided
+        $mainHeader = "Prosthetic List";
+        if (!empty($from_date) && !empty($to_date)) {
+            $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
         }
+
+        // Set the main header in row 1
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', $mainHeader);
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true)->setSize(16);
+
+        // Leave row 2 blank
+        $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
+
+        // Field names (header row) should start in row 3
+        $fields = array('Token No', 'OPD No', 'Patient Reg No.', 'Patient Name', 'Mobile No', 'Age');
+
+        $col = 0; // Initialize the column index
+        foreach ($fields as $field) {
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 3, $field); // Row 3 for headers
+            $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn($col)->setAutoSize(true); // Auto-size columns
+            $col++;
+        }
+
+        // Style for header row (Row 3)
+        $objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+        // Fetching the OPD data
+        $list = $this->prosthetic->get_datatables();
+        // echo "<pre>";print_r($list);die;
+
+        // Populate the data starting from row 4
+        $row = 4; // Start at row 4 for data
+        if (!empty($list)) {
+            foreach ($list as $prosthetic) {
+                // Reset column index for each new row
+                $col = 0;
+                
+                $age_y = $prosthetic->age_y;
+                $age_m = $prosthetic->age_m;
+                $age_d = $prosthetic->age_d;
+        
+                $age = "";
+                if ($age_y > 0) {
+                $year = 'Years';
+                if ($age_y == 1) {
+                    $year = 'Year';
+                }
+                $age .= $age_y . " " . $year;
+                }
+                if ($age_m > 0) {
+                $month = 'Months';
+                if ($age_m == 1) {
+                    $month = 'Month';
+                }
+                $age .= ", " . $age_m . " " . $month;
+                }
+                if ($age_d > 0) {
+                $day = 'Days';
+                if ($age_d == 1) {
+                    $day = 'Day';
+                }
+                $age .= ", " . $age_d . " " . $day;
+                }
+
+                // Prepare data to be populated
+                $data = array(
+                    $prosthetic->token,
+                    $prosthetic->booking_id,
+                    $prosthetic->patient_code,
+                    $prosthetic->patient_name,
+                    $prosthetic->mobile_no,
+                    $age, // Adding missing 'Age' field
+                    // $prosthetic->status == 1 ? 'Active' : 'Not Active',
+                );
+
+                foreach ($data as $cellValue) {
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $cellValue);
+                    $col++;
+                }
+                $row++; // Move to the next row
+            }
+        }
+
+        // Send headers to force download of the file
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="prosthetic_list_' . time() . '.xls"');
+        header('Cache-Control: max-age=0');
+
+        // Write the Excel file
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        ob_end_clean(); // Prevent any output before sending file
+        $objWriter->save('php://output');
     }
-
-    // Send headers to force download of the file
-    header('Content-Type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment;filename="prosthetic_list_' . time() . '.xls"');
-    header('Cache-Control: max-age=0');
-
-    // Write the Excel file
-    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-    ob_end_clean(); // Prevent any output before sending file
-    $objWriter->save('php://output');
-}
 
 
 

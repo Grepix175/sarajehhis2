@@ -358,7 +358,7 @@ $field_list = mandatory_section_field_list(2);
                 <div class="grp" style="">
                     <label>Date </label>
                     <div class="box-right">
-                        <input type="text" name="date" class="txt_firstCap input-height"
+                        <input type="text" disabled name="date" class="txt_firstCap input-height"
                             id="date" value="<?php echo isset($form_data['date']) ? htmlspecialchars($form_data['date']) : date('Y-m-d'); ?>" style="width: 374px;" />
                         <?php echo form_error('date'); ?>
                     </div>
@@ -366,7 +366,7 @@ $field_list = mandatory_section_field_list(2);
                 <div class="grp" style="">
                     <label>Time </label>
                     <div class="box-right">
-                        <input type="text" name="time" class="txt_firstCap input-height"
+                        <input type="text" disabled name="time" class="txt_firstCap input-height"
                             id="time" value="<?php echo isset($form_data['time']) ? htmlspecialchars($form_data['time']) : date('H:i:s'); ?>" style="width: 374px;" />
                         <?php echo form_error('time'); ?>
                     </div>
@@ -511,13 +511,17 @@ $field_list = mandatory_section_field_list(2);
                             </tbody>
                         </table>
                     </div>
-                    <div class="form-group col-md-12">
-                        <label for="trial_given">Trial Given:</label>
-                        <select class="form-control" id="trial_given" name="trial_given">
-                            <option value="Yes" <?= isset($form_data['trial_given']) && $form_data['trial_given'] == 'Yes' ? 'selected' : ''; ?>>Yes</option>
-                            <option value="No" <?= isset($form_data['trial_given']) && $form_data['trial_given'] == 'No' ? 'selected' : ''; ?>>No</option>
-                        </select>
+                    <div class="grp" style="padding:15px;">
+                        <label for="trial_given">Trial Given</label>
+                        <div class="box-right">
+                            <select class="txt_firstCap input-height form-control" id="trial_given" name="trial_given" style="width: 374px;">
+                                <option value="Yes" <?= isset($form_data['trial_given']) && $form_data['trial_given'] == 'Yes' ? 'selected' : ''; ?>>Yes</option>
+                                <option value="No" <?= isset($form_data['trial_given']) && $form_data['trial_given'] == 'No' ? 'selected' : ''; ?>>No</option>
+                            </select>
+                            <?php echo form_error('trial_given'); ?>
+                        </div>
                     </div>
+
                 </div>
 
                 <div class="row">
@@ -566,17 +570,36 @@ $field_list = mandatory_section_field_list(2);
                     </div>
                 </div>
 
-                <div class="form-group col-md-12">
+                <!-- <div class="form-group col-md-12">
                     <label for="consent_form">Consent Form:</label>
                     <input type="file" class="form-control" id="consent_form" name="consent_form">
-                </div>
+                </div> -->
             </div>
             <div class="form-signatures mt-4">
                 <table class="table table-borderless mb-4 w-100">
                     <tbody>
                         <tr>
+                            <!-- Doctor Dropdown -->
+                            <td class="small text-center mt-5" style="width: 33%;">
+                                <div class="text-center">
+                                    <span class="font-weight-bold">Signature of Doctor:</span><br>
+                                    <div class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;">
+                                        <select name="doctor_signature" class="form-control mx-auto" style="width: 200px;">
+                                            <option value="">Select Doctor</option>
+                                            <?php foreach ($doctor as $doc) : ?>
+                                                <option value="<?= $doc->id; ?>" 
+                                                    <?= isset($form_data['doctor_signature']) && $form_data['doctor_signature'] == $doc->id ? 'selected' : ''; ?>>
+                                                    <?= $doc->doctor_name; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </td>
+                            
                             <!-- Optometrist Dropdown -->
-                            <td class="small text-center mt-5" style="width: 50%;">
+                            <td class="small text-center mt-5" style="width: 33%;">
                                 <div class="text-center">
                                     <span class="font-weight-bold">Signature of Optometrist:</span><br>
                                     <div class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;">
@@ -594,21 +617,16 @@ $field_list = mandatory_section_field_list(2);
                                 </div>
                             </td>
 
-                            <!-- Doctor Dropdown -->
-                            <td class="small text-center mt-5" style="width: 50%;">
+                            
+
+                            <!-- Patient Name (Non-dropdown) -->
+                            <td class="small text-center mt-5" style="width: 34%;">
                                 <div class="text-center">
-                                    <span class="font-weight-bold">Signature of Doctor:</span><br>
-                                    <div class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;">
-                                        <select name="doctor_signature" class="form-control mx-auto" style="width: 200px;">
-                                            <option value="">Select Doctor</option>
-                                            <?php foreach ($doctor as $doc) : ?>
-                                                <option value="<?= $doc->id; ?>" 
-                                                    <?= isset($form_data['doctor_signature']) && $form_data['doctor_signature'] == $doc->id ? 'selected' : ''; ?>>
-                                                    <?= $doc->doctor_name; ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                        <span></span>
+                                    <span class="font-weight-bold">Signature of Patient:</span><br>
+                                    <div class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px;border-top:1px solid black; margin-top: 24px;">
+                                        <!-- Display current patient's name -->
+                                        <input type="text" name="patient_signature" class="" style="width: 200px;" 
+                                            value="<?= isset($booking_data['patient_name']) ? htmlspecialchars($booking_data['patient_name']) : 'Current Patient Name'; ?>" readonly />
                                     </div>
                                 </div>
                             </td>
@@ -616,6 +634,7 @@ $field_list = mandatory_section_field_list(2);
                     </tbody>
                 </table>
             </div>
+
         </section>
         
            
