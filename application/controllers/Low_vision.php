@@ -86,7 +86,14 @@ class Low_vision extends CI_Controller
             // $row[] = $low_vision->comment;
 
             // Check status and set active or not active
-            $row[] = '<font style="background-color: #228B30;color:white">'.$low_vision->pat_status.'</font>' ;
+            // Assuming pat_status contains comma-separated values like 'Contact Lens, Low vision'
+            $statuses = explode(',', $low_vision->pat_status);
+
+            // Trim any whitespace from the statuses and get the last one
+            $last_status = trim(end($statuses));
+
+            // Display the last status with the desired styling
+            $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';
             $row[] = date('d-M-Y', strtotime($low_vision->created));
 
             // Add action buttons

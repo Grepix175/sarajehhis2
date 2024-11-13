@@ -153,10 +153,32 @@ class Help_desk extends CI_Controller
       $row[] = $gender[$prescription->gender];
       $row[] = $prescription->mobile_no;
       $row[] = $age;
-      $values = array_filter([$refraction, $contact_lens_txt, $hess_chart,$refraction_below8,$low_vision,$dilate,$pat_status]);
+      // Assuming pat_status contains comma-separated values like 'Contact Lens, Low vision'
+      $statuses = explode(',', $prescription->pat_status);
 
-      // $row[] = trim($pat_status . (!empty($pat_status) && !empty($hess_chart) && !empty($contact_lens_txt) ? ' / ' : '') . $contact_lens_txt);
-      $row[] = !empty($values) ? implode(' / ', $values) : '<font style="background-color: #228B30;color:white">History</font>';
+      // Initialize an empty array to hold the formatted statuses
+      $formatted_statuses = [];
+
+      // Remove any empty values from the statuses array
+      $statuses = array_filter(array_map('trim', $statuses));
+
+      // Check if there are any valid statuses
+      if (!empty($statuses)) {
+          // Loop through each status and format it with your desired style
+          foreach ($statuses as $status) {
+              // Apply the style to each non-empty status
+              $formatted_statuses[] = '<font style="background-color: #228B30;color:white;">' . $status . '</font>';
+          }
+
+          // Join the formatted statuses with ' / ' as the separator
+          $row[] = implode(' / ', $formatted_statuses);
+      } else {
+          // If no valid statuses are found, display a default message (history)
+          $row[] = '<font style="background-color: #228B30;color:white;">History</font>';
+      }
+
+
+
 
       $row[] = date('d-M-Y', strtotime($prescription->created_date));
 

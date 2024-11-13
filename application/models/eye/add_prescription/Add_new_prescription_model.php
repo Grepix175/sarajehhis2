@@ -1700,9 +1700,23 @@ class Add_new_prescription_model extends CI_Model
 			$this->db->update('hms_std_eye_prescription', $pres_data);
 
 			if (!empty($post['patient_id'])) {
+				// Retrieve the current 'pat_status' value for the given patient
+				$this->db->select('pat_status');
 				$this->db->where('id', $post['patient_id']);
-				$this->db->update('hms_patient', ['pat_status' => $refstatus]);
+				$query = $this->db->get('hms_patient');
+				
+				if ($query->num_rows() > 0) {
+					$current_status = $query->row()->pat_status;
+			
+					// Concatenate the current status with the new status (e.g., 'Low vision')
+					$new_status = $current_status . ', ' . $refstatus;
+			
+					// Update the 'pat_status' field with the concatenated value
+					$this->db->where('id', $post['patient_id']);
+					$this->db->update('hms_patient', ['pat_status' => $new_status]);
+				}
 			}
+			
 		} else {
 			if (!empty($post['advs']['medication'])) {
 				$sale_no = generate_unique_id(16);
@@ -1807,18 +1821,18 @@ class Add_new_prescription_model extends CI_Model
 				"credit" => $medicine['mqty'],
 				"debit" => '0',
 				"mrp" => $data_expi->mrp,
-				'batch_no' => $data_expi->batch_no,
+				// 'batch_no' => $data_expi->batch_no,
 				'conversion' => $data_expi->conversion,
-				'manuf_date' => $data_expi->manuf_date,
-				'expiry_date' => $data_expi->expiry_date,
-				"discount" => $data_expi->discount,
-				'sgst' => $data_expi->sgst,
-				'igst' => $data_expi->igst,
-				'cgst' => $data_expi->cgst,
+				// 'manuf_date' => $data_expi->manuf_date,
+				// 'expiry_date' => $data_expi->expiry_date,
+				// "discount" => $data_expi->discount,
+				// 'sgst' => $data_expi->sgst,
+				// 'igst' => $data_expi->igst,
+				// 'cgst' => $data_expi->cgst,
 				'hsn_no' => $data_expi->hsn_no,
-				'bar_code' => $data_expi->bar_code,
+				// 'bar_code' => $data_expi->bar_code,
 				"created_by" => $user_data['id'],
-				'per_pic_price' => $per_pic_amount,
+				// 'per_pic_price' => $per_pic_amount,
 				"created_date" => date('Y-m-d H:i:s')
 			);
 			$this->db->insert('hms_medicine_stock', $data_new_stock);

@@ -1697,6 +1697,7 @@ class Opd extends CI_Controller
       $this->form_validation->set_rules('field_name[]', 'field', 'trim|required');
     }
     $this->form_validation->set_rules('gender', 'gender', 'trim|required');
+    $this->form_validation->set_rules('patient_category', 'Patient Category', 'trim|required');
 
     if (!empty($field_list)) {
       if ($field_list[0]['mandatory_field_id'] == '25' && $field_list[0]['mandatory_branch_id'] == $users_data['parent_id']) {

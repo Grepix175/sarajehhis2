@@ -86,7 +86,18 @@ class Refraction extends CI_Controller
             // $row[] = $refraction->comment;
 
             // Check status and set active or not active
-            $row[] = '<font style="background-color: #228B30;color:white">'.$refraction->pat_status.'</font>' ;
+            $statuses = explode(',', $refraction->pat_status);
+
+            // Trim any whitespace from the statuses and get the last one
+            $last_status = trim(end($statuses));
+
+            // Display the last status with the desired styling
+            $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';
+            // Trim any whitespace from the statuses and get the last one
+            $last_status = trim(end($statuses));
+
+            // Display the last status with the desired styling
+            // $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';            
             $row[] = date('d-M-Y', strtotime($refraction->created_date));
 
             // Add action buttons

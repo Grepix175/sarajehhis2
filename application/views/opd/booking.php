@@ -938,7 +938,9 @@ $field_list = mandatory_section_field_list(3);
               <div class="row m-b-5">
                 <div class="col-md-12">
                   <div class="row">
-                    <div class="col-md-5"><b>Patient Category</b></div>
+                    <div class="col-md-5"><b>Patient Category
+                    <span class="star">*</span>
+                    </b></div>
                     <div class="col-md-7">
                       <select name="patient_category" id="patient_category" class="m_select_btn"
                         onChange="handlePaymentMode();">

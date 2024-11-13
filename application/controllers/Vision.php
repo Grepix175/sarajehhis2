@@ -108,7 +108,15 @@ class Vision extends CI_Controller
             $row[] = $gender[$vision->gender];
             $row[] = $vision->mobile_no;
             $row[] = $age;
-            $row[] = '<font style="background-color: #228B30;color:white">'.$vision->pat_status.'</font>' ;;
+            $statuses = explode(',', $vision->pat_status);
+
+            // Trim any whitespace from the statuses and get the last one
+            $last_status = trim(end($statuses));
+
+            // Display the last status with the desired styling
+            $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';
+            // Trim any whitespace from the statuses and get the last one
+            $last_status = trim(end($statuses));
             // $row[] = $vision->procedure_purpose;
             // $row[] = $vision->side_effect_name;
             // $row[] = $vision->informed_consent ? 'Yes' : 'No';

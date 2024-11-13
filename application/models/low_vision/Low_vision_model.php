@@ -271,9 +271,24 @@ class Low_vision_model extends CI_Model
 
             // Update the hms_patient table to set pat_status to 'low_vision' for the corresponding patient_code during insert only
             if (!empty($data['patient_id'])) {
+                // Retrieve the current 'pat_status' value for the given patient
+                $this->db->select('pat_status');
                 $this->db->where('id', $data['patient_id']);
-                $this->db->update('hms_patient', ['pat_status' => 'Low vision']);
+                $query = $this->db->get('hms_patient');
+            
+                if ($query->num_rows() > 0) {
+                    $current_status = $query->row()->pat_status;
+            
+                    // Concatenate the current status with 'Low vision'
+                    $new_status = $current_status . ', Low vision';
+                    // echo "<pre>";print_r($new_status);die;
+            
+                    // Update the 'pat_status' field with the concatenated value
+                    $this->db->where('id', $data['patient_id']);
+                    $this->db->update('hms_patient', ['pat_status' => $new_status]);
+                }
             }
+            
         }
     }
 

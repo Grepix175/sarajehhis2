@@ -121,8 +121,15 @@ class Refraction_below8 extends CI_Controller
         $row[] = $gender[$refraction_below8->gender];
         $row[] = $refraction_below8->mobile_no;
         $row[] = $age;
-        $row[] = '<font style="background-color: #228B30;color:white">'.$refraction_below8->pat_status.'</font>' ;
+        $statuses = explode(',', $refraction_below8->pat_status);
 
+        // Trim any whitespace from the statuses and get the last one
+        $last_status = trim(end($statuses));
+  
+        // Display the last status with the desired styling
+        $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';
+        // Trim any whitespace from the statuses and get the last one
+        $last_status = trim(end($statuses));
         // $row[] = trim($pat_status . (!empty($pat_status) && !empty($hess_chart) && !empty($contact_lens_txt) ? ' / ' : '') . $contact_lens_txt);
         // $row[] = implode(' / ', $values);
       
