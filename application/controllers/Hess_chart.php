@@ -142,8 +142,15 @@ class Hess_chart extends CI_Controller
       $row[] = $gender[$prescription->gender];
       $row[] = $prescription->mobile_no;
       $row[] = $age;
-      $row[] = '<font style="background-color: #228B30;color:white">'.$prescription->pat_status.'</font>' ;
+      $statuses = explode(',', $prescription->pat_status);
 
+      // Trim any whitespace from the statuses and get the last one
+      $last_status = trim(end($statuses));
+
+      // Display the last status with the desired styling
+      $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';
+      // Trim any whitespace from the statuses and get the last one
+      $last_status = trim(end($statuses));
       $values = array_filter([$pat_status, $contact_lens_txt, $hess_chart]);
 
       // $row[] = trim($pat_status . (!empty($pat_status) && !empty($hess_chart) && !empty($contact_lens_txt) ? ' / ' : '') . $contact_lens_txt);

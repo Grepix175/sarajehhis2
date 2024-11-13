@@ -437,6 +437,25 @@ class Dilate_model extends CI_Model
 			}
 		}
 
+		if (!empty($post['patient_id'])) {
+			// Retrieve the current 'pat_status' value for the given patient
+			$this->db->select('pat_status');
+			$this->db->where('id', $post['patient_id']);
+			$query = $this->db->get('hms_patient');
+			
+			if ($query->num_rows() > 0) {
+				$current_status = $query->row()->pat_status;
+		
+				// Concatenate the current status with the new status (e.g., 'Low vision')
+				$new_status = $current_status . ', ' . 'Dilated';
+		
+				// Update the 'pat_status' field with the concatenated value
+				$this->db->where('id', $post['patient_id']);
+				$this->db->update('hms_patient', ['pat_status' => $new_status]);
+			}
+		}
+		
+
 		// Update the removed/deactivated medicines in the database
 		if (!empty($update_status_data)) {
 			foreach ($update_status_data as $record) {
@@ -445,11 +464,7 @@ class Dilate_model extends CI_Model
 			}
 		}
 
-		// After successful insert/update, update the patient's status to 'dilated'
-		if (!empty($post['patient_id'])) {
-			$this->db->where('id', $post['patient_id']); // Assuming 'id' is the primary key for 'hms_patient'
-			$this->db->update('hms_patient', ['pat_status' => 'Dilated']);
-		}
+		
 	}
 
 

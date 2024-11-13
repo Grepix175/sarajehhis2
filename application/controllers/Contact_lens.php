@@ -98,8 +98,15 @@ class Contact_lens extends CI_Controller
             $row[] = $gender[$contact_lens->gender];
             $row[] = $contact_lens->mobile_no;
             $row[] = $age;
-            $row[] = '<font style="background-color: #228B30;color:white">'.$contact_lens->pat_status.'</font>' ;;
-            // $row[] = $contact_lens->hospital_code;
+            $statuses = explode(',', $contact_lens->pat_status);
+
+            // Trim any whitespace from the statuses and get the last one
+            $last_status = trim(end($statuses));
+
+            // Display the last status with the desired styling
+            $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';
+            // Trim any whitespace from the statuses and get the last one
+            $last_status = trim(end($statuses));            // $row[] = $contact_lens->hospital_code;
             // $row[] = $contact_lens->item_description;
             // $row[] = $contact_lens->menufacturer;
             // $row[] = $contact_lens->qty;

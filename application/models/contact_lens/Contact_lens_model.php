@@ -212,12 +212,25 @@ class Contact_lens_model extends CI_Model
 			if (isset($post['contact_lens_items']) && !empty($post['contact_lens_items'])) {
 				$this->insert_items($data_id, $post['contact_lens_items'], $user_data, $post);
 			}
-			// echo "<pre>";print_r($data);die;
 			// After successful insert, update the patient's status to 'low_vision'
 			if (!empty($data['patient_id'])) {
+				// Retrieve the current 'pat_status' value for the given patient
+				$this->db->select('pat_status');
 				$this->db->where('id', $data['patient_id']);
-				$this->db->update('hms_patient', ['pat_status' => 'Contact Lens']);
+				$query = $this->db->get('hms_patient');
+			
+				if ($query->num_rows() > 0) {
+					$current_status = $query->row()->pat_status;
+			
+					// Concatenate the current status with 'Contact Lens'
+					$new_status = $current_status . ', Contact Lens';
+			
+					// Update the 'pat_status' field with the concatenated value
+					$this->db->where('id', $data['patient_id']);
+					$this->db->update('hms_patient', ['pat_status' => $new_status]);
+				}
 			}
+			
 		}
 
 		// Return the ID of the inserted or updated record

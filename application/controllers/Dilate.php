@@ -87,9 +87,13 @@ class Dilate extends CI_Controller
             // Age (showing age from the booking data)
             $row[] = implode(', ', $salts);
 
-            // Patient status (use the existing status logic for now)
-            $pat_status = '<font style="background-color: #1CAF9A;color:white">Not Arrived</font>';
-            $row[] = '<font style="background-color: #228B30;color:white">'.$records[0]->pat_status.'</font>' ;;
+            $statuses = explode(',', $records[0]->pat_status);
+
+            // Trim any whitespace from the statuses and get the last one
+            $last_status = trim(end($statuses));
+
+            // Display the last status with the desired styling
+            $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';
 
             // Created at date (showing created date from the first record in the group)
             $row[] = date('d-M-Y', strtotime($records[0]->created_date));

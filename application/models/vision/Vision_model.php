@@ -187,12 +187,27 @@ class Vision_model extends CI_Model
             // For insert
             $this->db->set('created_at', date('Y-m-d H:i:s'));
             $this->db->insert($this->table, $data);
-            
-            // After insert, update the patient status to 'low_vision' for the corresponding patient_code
-            if (!empty($post['patient_code'])) {
+
+            if (!empty($data['patient_code'])) {
+                // Retrieve the current 'pat_status' value for the given patient
+                $this->db->select('pat_status');
                 $this->db->where('patient_code', $post['patient_code']);
-                $this->db->update('hms_patient', ['pat_status' => 'Vision']);
+                $query = $this->db->get('hms_patient');
+            
+                if ($query->num_rows() > 0) {
+                    $current_status = $query->row()->pat_status;
+            
+                    // Concatenate the current status with 'Low vision'
+                    $new_status = $current_status . ', Vision';
+                    // echo "<pre>";print_r($new_status);die;
+            
+                    // Update the 'pat_status' field with the concatenated value
+                    $this->db->where('patient_code', $post['patient_code']);
+                    $this->db->update('hms_patient', ['pat_status' => $new_status]);
+                }
             }
+            
+            
         }
 
         // Update hms_std_opd_patient_status for the corresponding booking_id
