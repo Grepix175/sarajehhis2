@@ -275,39 +275,37 @@ class Prosthetic_model extends CI_Model
             }
         } else {
             // echo $this->table;die;
-            try {
-                
-                // Insert new record
-                if ($this->db->insert($this->table, $data)) {
-                    return true; // Return true if insert is successful
-                } else {
-                    // Log or handle error (insert failed)
-                    log_message('error', 'Failed to insert record: ' . $this->db->last_query());
-                    return false; // Return false if insert failed
-                }
+            // Insert new record
+            if ($this->db->insert($this->table, $data)) {
+                // Check if patient_id is provided
                 if (!empty($data['patient_id'])) {
                     // Retrieve the current 'pat_status' value for the given patient
                     $this->db->select('pat_status');
                     $this->db->where('id', $data['patient_id']);
                     $query = $this->db->get('hms_patient');
-                
+
                     if ($query->num_rows() > 0) {
                         $current_status = $query->row()->pat_status;
-                
+
                         // Concatenate the current status with 'Low vision'
                         $new_status = $current_status . ', Prosthetic';
-                        // echo "<pre>";print_r($new_status);die;
-                
+
                         // Update the 'pat_status' field with the concatenated value
                         $this->db->where('id', $data['patient_id']);
-                        $this->db->update('hms_patient', ['pat_status' => $new_status]);
+                        if (!$this->db->update('hms_patient', ['pat_status' => $new_status])) {
+                            log_message('error', 'Failed to update pat_status for patient ID: ' . $data['patient_id']);
+                            return false;
+                        }
                     }
                 }
-            } catch (Exception $e) {
-                // Handle exception and log the error message
-                log_message('error', 'Database error: ' . $e->getMessage());
-                return false; // Return false if an exception occurs
+
+                return true; // Return true if insert and update are successful
+            } else {
+                // Log or handle error (insert failed)
+                log_message('error', 'Failed to insert record: ' . $this->db->last_query());
+                return false; // Return false if insert failed
             }
+
         }
     }
 

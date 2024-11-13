@@ -37,6 +37,7 @@ td
 <table width="100%" cellpadding="0" cellspacing="0" border="1px">
  <tr>
 
+
       <th>Token No.</th>
       <th>OPD No.</th>
       <th>Patient Reg. No.</th>
@@ -44,18 +45,18 @@ td
       <th>Mobile No.</th>
       <th>Age</th>
       <th>Patient Status</th>
+      <th>Created Date</th>
 
  </tr>
  <?php
    if(!empty($data_list))
    {
-   	 echo "<pre>";print_r($data_list);die;
    	 $i=1;
-   	 foreach($data_list as $low_power)
+   	 foreach($data_list as $prosthetic)
    	 {
-         $age_y = $low_power->age_y;
-        $age_m = $low_power->age_m;
-        $age_d = $low_power->age_d;
+         $age_y = $prosthetic->age_y;
+        $age_m = $prosthetic->age_m;
+        $age_d = $prosthetic->age_d;
 
         $age = "";
         if ($age_y > 0) {
@@ -82,13 +83,19 @@ td
         
    	   ?>
    	    <tr>
-          <td><?php echo $low_power->token_no; ?></td>
-          <td><?php echo $low_power->booking_code; ?></td>
-   	      <td><?php echo $low_power->patient_code; ?></td>
-          <td><?php echo $low_power->patient_name; ?></td>
-          <td><?php echo $low_power->mobile_no; ?></td>
+          <td><?php echo $prosthetic->token; ?></td>
+          <td><?php echo $prosthetic->booking_id; ?></td>
+   	      <td><?php echo $prosthetic->patient_code; ?></td>
+          <td><?php echo $prosthetic->patient_name; ?></td>
+          <td><?php echo $prosthetic->mobile_no; ?></td>
           <td><?php echo $age; ?></td>
-          <td><?php echo ($low_power->status == 1) ? 'Active' : 'Inactive'; ?></td>
+          <td><?php 
+          $statuses = explode(',', $prosthetic->pat_status);
+          
+          // Trim any whitespace from the statuses and get the last one
+          $last_status = trim(end($statuses));
+          echo ($last_status); ?></td>
+          <td><?php echo $prosthetic->created; ?></td>
           </tr>
    	   <?php
    	   $i++;	
