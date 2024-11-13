@@ -12,6 +12,7 @@ class Help_desk extends CI_Controller
     $this->load->model('opd/opd_model', 'opd');
     $this->load->model('contact_lens/Contact_lens_model', 'contact_lens');
     $this->load->model('low_vision/Low_vision_model', 'low_vision');
+    $this->load->model('prosthetic/Prosthetic_model', 'prosthetic');
     error_reporting(0);
   }
 
@@ -92,6 +93,7 @@ class Help_desk extends CI_Controller
       $patient_status = $this->opd->get_by_id_patient_status($prescription->booking_id);
       $contact_lens_status = $this->contact_lens->get_by_contact_lens_status($prescription->booking_id, $prescription->patient_id);
       $low_vision_status = $this->low_vision->get_by_low_vision_status($prescription->booking_code, $prescription->patient_code);
+      $prosthetic_status = $this->prosthetic->get_by_low_vision_status($prescription->booking_code, $prescription->patient_code);
      
       $refraction_exists = $this->opd->get_by_id_refraction($prescription->booking_id);
       $dilate_exists = $this->opd->get_by_id_dilate($prescription->patient_id);
@@ -105,6 +107,9 @@ class Help_desk extends CI_Controller
         : '';
       $hess_chart = ($prescription->drawing_flag == 1)
         ? '<font style="background-color: #228B30;color:white">Hess Chart</font>'
+        : '';
+      $prosthetic = ($prosthetic_status == 1)
+        ? '<font style="background-color: #228B30;color:white">Prosthetic</font>'
         : '';
       $refraction_below8 = ($prescription->refraction_below8 == 1)
         ? '<font style="background-color: #228B30;color:white">Refraction Below 8 Year</font>'
@@ -195,6 +200,7 @@ class Help_desk extends CI_Controller
       $btn_low_vision = "";
       $btn_refraction_below8 = "";
       $dilate = "";
+      $prosthetic = "";
 
       if ($users_data['parent_id'] == $prescription->branch_id) {
         if (in_array('2413', $users_data['permission']['action'])) {
@@ -272,6 +278,12 @@ class Help_desk extends CI_Controller
         }
       
       }
+      if ($prosthetic_status == '1') {
+        $btn_prosthetic = '<a class="btn-custom disabled" href="javascript:void(0);" title="Contact Lens" style="pointer-events: none; opacity: 0.6;" data-url="512"> Prosthetic</a>';
+      } else {
+        // $btn_contact_lens = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title=" Contact Lens"> Contact Lens</a>';
+        $btn_prosthetic = '<a class="btn-custom" href="' . base_url("prosthetic/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Contact Lens" data-url="512">Prosthetic</a>';
+      }
       if (in_array('2413', $users_data['permission']['action'])) {
         $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . "'";
         if ($patient_status == 1) {
@@ -286,7 +298,7 @@ class Help_desk extends CI_Controller
 
       // . $btn_print_chasma_pre
       $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission . $btn_contact_lens . $btn_low_vision.
-        $btn_hess_chart.$btn_refraction_below8.$dilate;
+        $btn_hess_chart.$btn_refraction_below8.$dilate.$btn_prosthetic;
         $row[] = $prescription->emergency_status; // Add emergency_status to the row
       // echo "<pre>";print_r($row);die;
       $data[] = $row;
