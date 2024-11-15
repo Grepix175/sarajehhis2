@@ -145,7 +145,7 @@ class Oct_hfa extends CI_Controller
         $this->load->library('form_validation');
         // $this->load->model('oct_hfa/refraction_model'); // Ensure this model is loaded
         // $data['side_effects'] = $this->oct_hfa->get_all_side_effects(); // Fetch side effects
-        $data['page_title'] = 'Add Oct_hfa Record';
+        $data['page_title'] = 'Add Oct/hfa Record';
         $pres_id = 28;
 
         $result = $this->oct_hfa->get_chief_complaints_by_patient_id($booking_id); // Adjust this method according to your model
@@ -183,23 +183,23 @@ class Oct_hfa extends CI_Controller
             'booking_id' => isset($data['booking_data']['booking_id']) ? $data['booking_data']['booking_id'] : '', // Booking ID
            
         );       
-        $newOct_hfaFields = array(
-            'indication' => isset($data['indication']) ? $data['indication'] : '',
-            'anterior_segment_evaluation' => isset($data['anterior_segment_evaluation']) ? $data['anterior_segment_evaluation'] : '',
-            'spectacle_power_od' => isset($data['spectacle_power_od']) ? $data['spectacle_power_od'] : '',
-            'spectacle_power_os' => isset($data['spectacle_power_os']) ? $data['spectacle_power_os'] : '',
-            'keratometry_od' => isset($data['keratometry_od']) ? $data['keratometry_od'] : '',
-            'keratometry_os' => isset($data['keratometry_os']) ? $data['keratometry_os'] : '',
-            'hvid_od' => isset($data['hvid_od']) ? $data['hvid_od'] : '',
-            'hvid_os' => isset($data['hvid_os']) ? $data['hvid_os'] : '',
-            'contact_lens_trial_table' => isset($data['contact_lens_trial_table']) ? json_encode($data['contact_lens_trial_table']) : '',
-            'trial_given' => isset($data['trial_given']) ? $data['trial_given'] : '',
-            'final_order_table' => isset($data['final_order_table']) ? json_encode($data['final_order_table']) : '',            
-            'instruction_given_lens_dispensed_on' => isset($data['instruction_given_lens_dispensed_on']) ? $data['instruction_given_lens_dispensed_on'] : '',
-            'consent_form' => isset($_FILES['consent_form']) ? $_FILES['consent_form'] : ''
-        );
+        // $chief_complaints = array(
+        //     'indication' => isset($data['indication']) ? $data['indication'] : '',
+        //     'anterior_segment_evaluation' => isset($data['anterior_segment_evaluation']) ? $data['anterior_segment_evaluation'] : '',
+        //     'spectacle_power_od' => isset($data['spectacle_power_od']) ? $data['spectacle_power_od'] : '',
+        //     'spectacle_power_os' => isset($data['spectacle_power_os']) ? $data['spectacle_power_os'] : '',
+        //     'keratometry_od' => isset($data['keratometry_od']) ? $data['keratometry_od'] : '',
+        //     'keratometry_os' => isset($data['keratometry_os']) ? $data['keratometry_os'] : '',
+        //     'hvid_od' => isset($data['hvid_od']) ? $data['hvid_od'] : '',
+        //     'hvid_os' => isset($data['hvid_os']) ? $data['hvid_os'] : '',
+        //     'contact_lens_trial_table' => isset($data['contact_lens_trial_table']) ? json_encode($data['contact_lens_trial_table']) : '',
+        //     'trial_given' => isset($data['trial_given']) ? $data['trial_given'] : '',
+        //     'final_order_table' => isset($data['final_order_table']) ? json_encode($data['final_order_table']) : '',            
+        //     'instruction_given_lens_dispensed_on' => isset($data['instruction_given_lens_dispensed_on']) ? $data['instruction_given_lens_dispensed_on'] : '',
+        //     'consent_form' => isset($_FILES['consent_form']) ? $_FILES['consent_form'] : ''
+        // );
         
-        $data['form_data'] = array_merge($data['form_data'],$newOct_hfaFields);
+        $data['form_data'] = array_merge($data['form_data']);
         // echo "<pre>";print_r($data['form_data']);die;
 
         $post = $this->input->post();
@@ -472,7 +472,7 @@ class Oct_hfa extends CI_Controller
 
         }
         
-        
+        // $data['chief_complaints'] = $chief_complaints;
 
         // If the form is not submitted or validation fails, load the view with the existing data
 
@@ -502,7 +502,7 @@ class Oct_hfa extends CI_Controller
             // Retrieve the refraction record by ID
             $result = $this->oct_hfa->get_by_id($id); // Adjust this method according to your model
             // echo "<pre>";print_r($result);die;
-            $comp = $this->oct_hfa->get_chief_complaints_by_patient_id($result['booking_id']);
+            $comp = $this->oct_hfa->get_chief_complaints_by_booking_id($result['booking_id']);
             $chief_complaints = json_decode($comp['chief_complaints']); // Adjust this method according to your model
             $data['chief_complaints'] = (array) $chief_complaints;
             // echo "<pre>";print_r($data['chief_complaints']);die;

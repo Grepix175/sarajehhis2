@@ -453,6 +453,9 @@ $field_list = mandatory_section_field_list(2);
                 </td>
             </tr>
         </table>
+       
+
+
         <?php //echo"<pre>";print_r($data_list[0]);die; ?>
         <input type="hidden" id="id" name="id" value="<?php echo isset($data_list['id']) ? $data_list['id'] : ''; ?>">
         <input type="hidden" id="booking_id" name="booking_id" value="<?php echo isset($data_list['booking_id']) ? $data_list['booking_id'] : ''; ?>">
@@ -475,8 +478,68 @@ $field_list = mandatory_section_field_list(2);
                 $squint_history = (array) $squint_history;
                 // echo "<pre>";print_r($squint_history);die;
             ?>
+            <div class="row" style="font-size: 10px; font-weight: normal;">
+                    <table style="width: 100%; border-collapse: collapse;padding-left:15px;">
+                        <tr>
+                            <!-- Step-1 History -->
+                            <td style="text-align: left; padding: 15px 15px 0 15px;width:20%;">
+                                Step-1 History
+                            </td>
 
+                            <!-- Step-2 Refraction -->
+                            <td style="text-align: left; padding: 15px 0 0 15px;">
+                                Step-2 Refraction
+                            </td>
+
+                            <!-- Step-3 Examination -->
+                            <td style="text-align: left; padding: 15px 15px 0 0;">
+                                Step-3 Examination
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row" style="font-size: 10px; font-weight: normal;">
+                    <table style="width: 100%; border-collapse: collapse; padding-left: 15px;">
+                        <tr>
+                            <!-- Step-1 History -->
+                            <td style="text-align: left; padding: 15px; width: 25%;">
+                                <strong>Visit:</strong>
+                            </td>
+                            <td style="text-align: left; padding: 15px; width: 8%;">
+                                <strong>...</strong>
+                            </td>
+
+                            <!-- Step-2 Refraction -->
+                            <td style="text-align: left; padding: 15px;">
+                                <strong>General checkup</strong>
+                            </td>
+
+                            <!-- Step-3 Examination -->
+                            <td style="text-align: left; padding: 15px;">
+                                <strong>Routine checkup</strong>
+                            </td>
+                    
+                            <!-- Step-1 History -->
+                            <td style="text-align: left; padding: 15px;">
+                                <strong>PostOP CHECK Up</strong>
+                            </td>
+
+                            <!-- Step-2 Refraction -->
+                            <td style="text-align: left; padding: 15px;">
+                                <strong>2nd Opinion Referred</strong>
+                            </td>
+
+                            <!-- Step-3 Examination -->
+                            <td style="text-align: left; padding: 15px;">
+                                <!-- Empty cell if needed -->
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             <ul style="list-style:none;margin:5px 0 15px;padding:0px;font-size:11px;">
+                <strong>Chied compalaints:</strong>
+                
                 <?php 
 				if ($chief_complaints['bdv_m'] == 1) { ?>
 					<li style=""> Blurring/Diminution of vision in <strong style="font-size:10px;">
@@ -1126,11 +1189,11 @@ $field_list = mandatory_section_field_list(2);
 
                 <!-- New Column for Squint History -->
                 <div style="width: 50%; float: left;">
-                    <!-- <strong>Squint History:</strong> -->
+                    <!-- <strong>Squint History:</strong>222 -->
                     <table id="newtab" style="width: 100%; font-size: 10px; text-align: left;">
                         <thead>
                             <tr>
-                                <th style="width:25%;">Squint History</th>
+                                <th style="width:50%;">Squint History</th>
                                 <th>Side</th>
                                 <th>Duration</th>
                                 <th>Duration Unit</th>
@@ -1193,9 +1256,9 @@ $field_list = mandatory_section_field_list(2);
                                     <td><?php echo !empty($squint_history['history_chief_antisupression_unit']) ? $squint_history['history_chief_antisupression_unit'] : 'N/A'; ?></td>
                                 </tr>
                             <?php } 
-                            if ($chief_complaints['history_chief_comm'] != '') { ?>
+                            if ($chief_complaints['squint_comm'] != '') { ?>
                                 <li style="margin-top:8px;"> <strong style="font-size: 10px;">
-                                        <?php echo '- ' . $chief_complaints['history_chief_comm']; ?></strong> </li>
+                                        <?php echo '- ' . $chief_complaints['squint_comm']; ?></strong> </li>
                             <?php } ?>
                         </tbody>
                     </table>

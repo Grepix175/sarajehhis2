@@ -181,7 +181,7 @@ class Oct_hfa_model extends CI_Model
         $query = $this->db->get();
         return $query->row_array();
     }
-    
+
     public function get_by_booking_id($booking_id)
     {
         // Select fields from hms_oct_hfa and hms_patient
@@ -203,6 +203,23 @@ class Oct_hfa_model extends CI_Model
 
     public function get_chief_complaints_by_patient_id($booking_id)
     {
+        // echo $booking_id;die;
+        // Select the chief_complaints field from hms_std_eye_prescription_history
+        $this->db->select('chief_complaints');
+        $this->db->from('hms_std_eye_prescription_history');
+        
+        // Filter by the given patient_id
+        $this->db->where('booking_id', $booking_id);
+        
+        // Fetch the result
+        $query = $this->db->get();
+        
+        // Return the result as a single row (since patient_id is unique)
+        return $query->row_array(); // Will return only the chief_complaints field in the array
+    }
+    public function get_chief_complaints_by_booking_id($booking_id)
+    {
+        // echo $booking_id;die;
         // Select the chief_complaints field from hms_std_eye_prescription_history
         $this->db->select('chief_complaints');
         $this->db->from('hms_std_eye_prescription_history');
