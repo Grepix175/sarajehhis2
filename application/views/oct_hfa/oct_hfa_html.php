@@ -52,11 +52,11 @@ td
    if(!empty($data_list))
    {
    	 $i=1;
-   	 foreach($data_list as $prosthetic)
+   	 foreach($data_list as $oct_hfa)
    	 {
-         $age_y = $prosthetic->age_y;
-        $age_m = $prosthetic->age_m;
-        $age_d = $prosthetic->age_d;
+         $age_y = $oct_hfa->age_y;
+        $age_m = $oct_hfa->age_m;
+        $age_d = $oct_hfa->age_d;
 
         $age = "";
         if ($age_y > 0) {
@@ -83,19 +83,28 @@ td
         
    	   ?>
    	    <tr>
-          <td><?php echo $prosthetic->token; ?></td>
-          <td><?php echo $prosthetic->booking_id; ?></td>
-   	      <td><?php echo $prosthetic->patient_code; ?></td>
-          <td><?php echo $prosthetic->patient_name; ?></td>
-          <td><?php echo $prosthetic->mobile_no; ?></td>
+          <td><?php echo $oct_hfa->token; ?></td>
+          <td><?php echo $oct_hfa->booking_id; ?></td>
+   	      <td><?php echo $oct_hfa->patient_code; ?></td>
+          <td><?php echo $oct_hfa->patient_name; ?></td>
+          <td><?php echo $oct_hfa->mobile_no; ?></td>
           <td><?php echo $age; ?></td>
           <td><?php 
-          $statuses = explode(',', $prosthetic->pat_status);
+          $statuses = explode(',', $oct_hfa->pat_status);
+
+          $last_status = '';
+          if (in_array('OCT-HFA', $statuses)) {
+              // echo "Status OCT-HFA is present.";
+              $last_status = 'OCT-HFA';
+          } 
           
           // Trim any whitespace from the statuses and get the last one
-          $last_status = trim(end($statuses));
-          echo ($last_status); ?></td>
-          <td><?php echo $prosthetic->created; ?></td>
+          // $last_status = trim(end($statuses));
+          echo ($last_status);
+           ?>
+          </td>
+          <!-- <td><?php echo $oct_hfa->created; ?></td> -->
+          <td><?php echo date('d-m-Y h:i A', strtotime($oct_hfa->created)); ?></td>
           </tr>
    	   <?php
    	   $i++;	

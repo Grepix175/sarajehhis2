@@ -95,7 +95,8 @@ td
           // Trim any whitespace from the statuses and get the last one
           $last_status = trim(end($statuses));
           echo ($last_status); ?></td>
-          <td><?php echo $prosthetic->created; ?></td>
+          <!-- <td><?php echo $prosthetic->created; ?></td> -->
+          <td><?php echo date('d-m-Y h:i A', strtotime($prosthetic->created)); ?></td>
           </tr>
    	   <?php
    	   $i++;	
