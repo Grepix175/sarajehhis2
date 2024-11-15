@@ -91,18 +91,10 @@ td
           <td><?php echo $age; ?></td>
           <td><?php 
           $statuses = explode(',', $oct_hfa->pat_status);
-
-          $last_status = '';
-          if (in_array('OCT-HFA', $statuses)) {
-              // echo "Status OCT-HFA is present.";
-              $last_status = 'OCT-HFA';
-          } 
           
           // Trim any whitespace from the statuses and get the last one
-          // $last_status = trim(end($statuses));
-          echo ($last_status);
-           ?>
-          </td>
+          $last_status = trim(end($statuses));
+          echo ($last_status); ?></td>
           <!-- <td><?php echo $oct_hfa->created; ?></td> -->
           <td><?php echo date('d-m-Y h:i A', strtotime($oct_hfa->created)); ?></td>
           </tr>
