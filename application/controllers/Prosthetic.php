@@ -468,7 +468,7 @@ class Prosthetic extends CI_Controller
         $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
 
         // Field names (header row) should start in row 3
-        $fields = array('Token No', 'OPD No', 'Patient Reg No.', 'Patient Name', 'Mobile No', 'Age');
+        $fields = array('Token No', 'OPD No', 'Patient Reg No.', 'Patient Name', 'Mobile No', 'Age','Patient Status','Created Date');
 
         $col = 0; // Initialize the column index
         foreach ($fields as $field) {
@@ -519,7 +519,11 @@ class Prosthetic extends CI_Controller
                 }
                 $age .= ", " . $age_d . " " . $day;
                 }
-
+                $statuses = explode(',', $prosthetic->pat_status);
+          
+                // Trim any whitespace from the statuses and get the last one
+                $last_status = trim(end($statuses));
+                $created_date = date('d-m-Y h:i A', strtotime($prosthetic->created));
                 // Prepare data to be populated
                 $data = array(
                     $prosthetic->token,
@@ -529,6 +533,8 @@ class Prosthetic extends CI_Controller
                     $prosthetic->mobile_no,
                     $age, // Adding missing 'Age' field
                     // $prosthetic->status == 1 ? 'Active' : 'Not Active',
+                    $last_status,
+                    $created_date 
                 );
 
                 foreach ($data as $cellValue) {

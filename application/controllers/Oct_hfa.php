@@ -662,6 +662,7 @@ class Oct_hfa extends CI_Controller
     
     public function oct_hfa_excel()
     {
+        
         // Load the PHPExcel library (Make sure the 'excel' library is correctly loaded in your application)
         $this->load->library('excel');
         
@@ -689,7 +690,7 @@ class Oct_hfa extends CI_Controller
         $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
 
         // Field names (header row) should start in row 3
-        $fields = array('Token No', 'OPD No', 'Patient Reg No.', 'Patient Name', 'Mobile No', 'Age');
+        $fields = array('Token No', 'OPD No', 'Patient Reg No.', 'Patient Name', 'Mobile No', 'Age','Patient Status','Created Date');
 
         $col = 0; // Initialize the column index
         foreach ($fields as $field) {
@@ -740,7 +741,16 @@ class Oct_hfa extends CI_Controller
                 }
                 $age .= ", " . $age_d . " " . $day;
                 }
-
+                $statuses = explode(',', $oct_hfa->pat_status);
+                $last_status = '';
+                if (in_array('OCT-HFA', $statuses)) {
+                    // echo "Status OCT-HFA is present.";
+                    $last_status = 'OCT-HFA';
+                } 
+          
+                // Trim any whitespace from the statuses and get the last one
+                // $last_status = trim(end($statuses));
+                $created_date = date('d-m-Y h:i A', strtotime($oct_hfa->created));
                 // Prepare data to be populated
                 $data = array(
                     $oct_hfa->token,
@@ -750,6 +760,8 @@ class Oct_hfa extends CI_Controller
                     $oct_hfa->mobile_no,
                     $age, // Adding missing 'Age' field
                     // $oct_hfa->status == 1 ? 'Active' : 'Not Active',
+                    $last_status,
+                    $created_date
                 );
 
                 foreach ($data as $cellValue) {

@@ -518,7 +518,7 @@ $users_data = $this->session->userdata('auth_users');
         var toDate = document.getElementById('end_date_patient').value;
 
 
-        var url = '<?php echo base_url("oct_hfa/low_vision_excel"); ?>';
+        var url = '<?php echo base_url("oct_hfa/oct_hfa_excel"); ?>';
 
 
         if (fromDate || toDate) {
