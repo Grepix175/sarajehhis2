@@ -1705,15 +1705,17 @@ class Add_new_prescription_model extends CI_Model
 				$this->db->where('id', $post['patient_id']);
 				$query = $this->db->get('hms_patient');
 				
-				if ($query->num_rows() > 0) {
-					$current_status = $query->row()->pat_status;
-			
-					// Concatenate the current status with the new status (e.g., 'Low vision')
-					$new_status = $current_status . ', ' . $refstatus;
-			
-					// Update the 'pat_status' field with the concatenated value
-					$this->db->where('id', $post['patient_id']);
-					$this->db->update('hms_patient', ['pat_status' => $new_status]);
+				if($refstatus != '' && !empty($refstatus)){
+					if ($query->num_rows() > 0) {
+						
+						$current_status = $query->row()->pat_status;
+						// Concatenate the current status with the new status (e.g., 'Low vision')
+						$new_status = $current_status . ', ' . $refstatus;
+				
+						// Update the 'pat_status' field with the concatenated value
+						$this->db->where('id', $post['patient_id']);
+						$this->db->update('hms_patient', ['pat_status' => $new_status]);
+					}
 				}
 			}
 			
