@@ -309,7 +309,7 @@ $field_list = mandatory_section_field_list(2);
         <div class="userlist">
 
 
-            <d id="oct_hfa_form" method="post" action="<?php echo current_url(); ?>">
+            <form id="oct_hfa_form" method="post" action="<?php echo current_url(); ?>">
 
                 <?php
                 // Loop through the contact lens data
