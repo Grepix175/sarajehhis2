@@ -48,7 +48,7 @@ $field_list = mandatory_section_field_list(2);
             width: 50%;
             display: flex;
             align-items: center;
-            margin-bottom: 1rem;
+            /* margin-bottom: 1rem; */
         }
 
         .grp label {
@@ -255,6 +255,109 @@ $field_list = mandatory_section_field_list(2);
             width:60%;
             margin:auto;
         }
+        .tabledata td {
+            text-align: left !important; /* Ensures all table cells have left-aligned text */
+            padding: 8px; /* Add padding for better spacing */
+            border-bottom: 1px solid #ddd; /* Adds a bottom border to all table cells */
+        }
+
+
+        @media print {
+            body {
+                font-size: 10px; /* Reduce font size */
+            }
+            
+            .table-bordered {
+                font-size: 8px; /* Smaller table text */
+            }
+
+            .row, .col-md-4, .col-md-8 {
+                padding: 0; /* Remove padding */
+            }
+
+            .table {
+                width: 100%; /* Ensure the table fits on the page */
+            }
+
+            /* Adjust spacing for labels and content */
+            label {
+                font-size: 9px;
+                margin-bottom: 2px;
+            }
+
+            /* Set table headers smaller */
+            .table thead th {
+                font-size: 8px;
+            }
+
+            /* Box styling adjustments */
+            .box-right span {
+                font-size: 9px;
+            }
+
+            /* Reduce spacing between elements */
+            .row {
+                margin-bottom: 5px; /* Reduce row spacing */
+            }
+
+            .form-group {
+                margin-bottom: 5px; /* Reduce form-group spacing */
+            }
+
+            /* Adjust table cell padding for print */
+            .table td, .table th {
+                padding: 2px;
+            }
+        }
+        /* Reduce table font size and cell padding */
+        .box-right table {
+            width: 100%; /* Ensures the table fits the box */
+            font-size: 12px; /* Smaller font size */
+            border-collapse: collapse; /* Ensures borders are clean and tight */
+        }
+
+        .box-right td, 
+        .box-right th {
+            padding: ; /* Reduce padding for a more compact table */
+            text-align: center; /* Keeps the text centered inside cells */
+        }
+
+        .box-right th {
+            background-color: #17a2b8; /* Optional: Ensure header background color stays intact */
+            color: white;
+        }
+
+        .box-right table,
+        .box-right th,
+        .box-right td {
+            border: 1px solid #ddd; /* Ensure proper borders for cells */
+        }
+
+        /* Reduce table font size and cell padding */
+        .row .table {
+            font-size: 12px; /* Smaller font size */
+            border-collapse: collapse; /* Ensures borders are clean and tight */
+            width: 100%; /* Ensure the table fits within the column */
+        }
+
+        .row .table th, 
+        .row .table td {
+            padding: ; /* Reduce padding for a more compact layout */
+            text-align: center; /* Keeps the text aligned to the center */
+        }
+
+        .row .table th {
+            background-color: #17a2b8; /* Optional: Set header background color */
+            color: white; /* Ensure text color is white in the header */
+        }
+
+        .row .table, 
+        .row .table th, 
+        .row .table td {
+            border: 1px solid #ddd; /* Define border style */
+        }
+
+
     </style>
 
         
@@ -267,8 +370,68 @@ $field_list = mandatory_section_field_list(2);
 <div class="container-fluid">
     
     <?php //echo "<pre>";print_r($data_list);die; ?>
-    <div class="panel-body"   style="padding:20px;">
+    <div class="panel-body"  style="padding:0px;">
     <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p>
+
+    <!-- Single Row for Date, Time, and Work-up Done By -->
+        <div style="display: flex; justify-content: space-between; width: 100%; padding: 8px;">
+        <!-- Date Section -->
+        <div style="flex: 1; padding: 8px; text-align: left;">
+            <strong>Date:</strong>
+            <span>
+                <?php
+                    if (isset($data_list[0]->created_date) && !empty($data_list[0]->created_date)) {
+                        echo htmlspecialchars(date('Y-m-d', strtotime($data_list[0]->created_date)));
+                    } else {
+                        echo date('Y-m-d');
+                    }
+                ?>
+            </span>
+        </div>
+
+        <!-- Time Section -->
+        <div style="flex: 1; padding: 8px; text-align: left;">
+            <strong>Time:</strong>
+            <span>
+                <?php
+                    if (isset($data_list[0]->created_date) && !empty($data_list[0]->created_date)) {
+                        echo htmlspecialchars(date('H:i:s', strtotime($data_list[0]->created_date)));
+                    } else {
+                        echo date('H:i:s');
+                    }
+                ?>
+            </span>
+        </div>
+
+        <!-- Work-up Done By Section -->
+        <div style="flex: 1; padding: 8px; text-align: left;">
+            <strong>Work-up Done By:</strong>
+            <span>
+                <?php
+                    if (!empty($doctor)) {
+                        foreach ($doctor as $doctorObj) {
+                            if (isset($data_list[0]->workup_by) && $doctorObj->id == $data_list[0]->workup_by) {
+                                echo htmlspecialchars($doctorObj->doctor_name);
+                                break;
+                            }
+                        }
+                    } else {
+                        echo 'No doctor found.';
+                    }
+                ?>
+            </span>
+        </div>
+    </div>
+
+    <table style="width:100%;">
+
+        <!-- Full-Width Row for CONTACT LENS CLINIC / PROSTHETIC WORK SHEET -->
+        <tr>
+            <td colspan="6" style="padding: 16px; text-align:center; border: 2px solid #000; background-color: #f4f4f4;">
+                <strong>CONTACT LENS CLINIC / PROSTHETIC WORK SHEET</strong>
+            </td>
+        </tr>
+    </table>
 
 
         <?php
@@ -349,187 +512,135 @@ $field_list = mandatory_section_field_list(2);
         <input type="hidden" id="patient_id" name="patient_id" value="<?php echo isset($data_list['patient_id']) ? $data_list['patient_id'] : ''; ?>">
         
 
-        <div class="panel-body">
+        <div class="panel-body" style="padding:0px;">
             <?php //echo "<pre>";print_r($data_list);die; ?>
 
                 
-            <div class="row" style="display: flex; align-items: center;">
-                <!-- Label Section -->
-                <div class="col-md-4" style="padding-right: 10px;">
-                    <label>Date:</label>
-                </div>
+            <!-- Date Section -->
+            <table id="tabledata" style="width: 100%; border-collapse: collapse;">
+                
 
-                <!-- Value Section -->
-                <div class="col-md-8">
-                    <div class="box-right">
-                        <span><?php echo isset($data_list[0]->date) ? htmlspecialchars($data_list[0]->date) : date('Y-m-d'); ?></span>
-                    </div>
-                </div>
-            </div>
+                <!-- Indication Row -->
+                <tr>
+                    <td style="text-align:left; "><strong>Indication:</strong></td>
+                    <td style="text-align:left; ">
+                        <?php echo isset($data_list[0]->indication) ? htmlspecialchars($data_list[0]->indication) : ''; ?>
+                    </td>
+                </tr>
 
-
-            <!-- Time Section -->
-            <div class="row" style="display: flex; align-items: center;">
-                <div class="col-md-4" style="padding-right: 10px;">
-                    <label>Time:</label>
-                </div>
-                <div class="col-md-8">
-                    <div class="box-right">
-                        <span><?php echo isset($data_list[0]->time) ? htmlspecialchars($data_list[0]->time) : date('H:i:s'); ?></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Work-up Done By Section -->
-            <div class="row" style="display: flex; align-items: center;">
-                <div class="col-md-4" style="padding-right: 10px;">
-                    <label style="margin-right: 10px;">Work-up Done By:</label>
-                </div>
-                <div class="col-md-8">
-                    <div class="box-right">
-                        <span>
-                            <?php
-                            if (!empty($doctor)) {
-                                foreach ($doctor as $doctorObj) {
-                                    if (isset($data_list[0]->workup_by) && $doctorObj->id == $data_list[0]->workup_by) {
-                                        echo htmlspecialchars($doctorObj->doctor_name);
-                                        break;
-                                    }
-                                }
-                            } else {
-                                echo 'No doctor found.';
-                            }
-                            ?>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Indication Section -->
-            <div class="row" style="display: flex; align-items: center;">
-                <div class="col-md-4" style="padding-right: 10px;">
-                    <label>Indication:</label>
-                </div>
-                <div class="col-md-8">
-                    <div class="box-right">
-                        <span><?php echo isset($data_list[0]->indication) ? htmlspecialchars($data_list[0]->indication) : ''; ?></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Anterior Segment Evaluation Section -->
-            <div class="row" style="display: flex; align-items: center;">
-                <div class="col-md-4" style="padding-right: 10px;">
-                    <label>Anterior Segment Evaluation:</label>
-                </div>
-                <div class="col-md-8">
-                    <div class="box-right">
-                        <span><?php echo isset($data_list[0]->anterior_segment_evaluation) ? htmlspecialchars($data_list[0]->anterior_segment_evaluation) : ''; ?></span>
-                    </div>
-                </div>
-            </div>
+                <!-- Anterior Segment Evaluation Row -->
+                <tr>
+                    <td style=" text-align:left;"><strong>Anterior Segment Evaluation:</strong></td>
+                    <td style=" ">
+                        <?php echo isset($data_list[0]->anterior_segment_evaluation) ? htmlspecialchars($data_list[0]->anterior_segment_evaluation) : ''; ?>
+                    </td>
+                </tr>
+            </table>
 
 
 
             <div class="grp" style="">
-            <!-- <div class="col-md-2"> -->
-            <!-- <div class="label_name">                <i onclick="refraction_ar_ltr_plated();" title="Copy Left to Right"></i></div> -->
+                <!-- <div class="col-md-2"> -->
+                <!-- <div class="label_name">                <i onclick="refraction_ar_ltr_plated();" title="Copy Left to Right"></i></div> -->
 
-            <!-- </div> -->
-            <div class="box-right" >
-                <table class="table table-bordered">
-                    <thead class="bg-info">
-                        <tr>
-                            <th width="25%"></th>
-                            <th width="25%">OD</th>
-                            <th width="25%">OS</th>
-                            <!-- <th width="25%">Axis</th> -->
-                        </tr>
-                    </thead>
-                    <tbody> 
-                        <tr> 
-                            <td style="text-align:left;">SPECTACLE POWER</td>
-                            <td><?php echo isset($data_list[0]->spectacle_power_od) ? htmlspecialchars($data_list[0]->spectacle_power_od) : ''; ?></td>
-                            <td><?php echo isset($data_list[0]->spectacle_power_os) ? htmlspecialchars($data_list[0]->spectacle_power_os) : ''; ?></td>
-                        </tr>
-                        <tr>
-                            <td style="text-align:left;">KERATOMETRY</td>
-                            <td><?php echo isset($data_list[0]->keratometry_od) ? htmlspecialchars($data_list[0]->keratometry_od) : ''; ?></td>
-                            <td><?php echo isset($data_list[0]->keratometry_os) ? htmlspecialchars($data_list[0]->keratometry_os) : ''; ?></td>
-                        </tr>
-                        <tr>
-                            <td style="text-align:left;">HVID</td>
-                            <td><?php echo isset($data_list[0]->hvid_od) ? htmlspecialchars($data_list[0]->hvid_od) : ''; ?></td>
-                            <td><?php echo isset($data_list[0]->hvid_os) ? htmlspecialchars($data_list[0]->hvid_os) : ''; ?></td>
-                        </tr>
-
-                    </tbody>
-                </table> 
-            </div>
-
-        </div>
-
-                        <?php //echo "<pre>";print_r($data_list);die;?>
-            <div class="row" style="display: flex; align-items: center;">
-                <!-- Label Section -->
-                <div class="col-md-4" style="padding-right: 10px;">
-                    <label>Contact Lens Trial:</label>
-                </div>
-
-                <!-- Table Section -->
-                <div class="col-md-8">
-                    <table class="table table-bordered">
-                        <thead>
+                <!-- </div> -->
+                <div class="box-right">
+                    <table class="table table-bordered" style="width:100%; font-size:12px; border-collapse:collapse;">
+                        <thead class="bg-info">
                             <tr>
-                                <th></th>    
-                                <th>B.C (MM)</th>
-                                <th>DIA (MM)</th>
-                                <th>Power</th>
-                                <th>VN</th>
-                                <th>Remarks</th>
-                                <th>RX On Top</th>
+                                <th width="25%" style="padding:0px;"> </th>
+                                <th width="25%" style="padding:0px;">OD</th>
+                                <th width="25%" style="padding:0px;">OS</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <?php 
-                            // Decode the JSON string into an object
-                            $contactLensTrial = json_decode($data_list[0]->contact_lens_trial_table);
-                            ?>
-                            <tr>
-                                <td>OD OS</td>
-                                <td><?php echo isset($contactLensTrial->bc_od) ? htmlspecialchars($contactLensTrial->bc_od) : ''; ?></td>
-                                <td><?php echo isset($contactLensTrial->dia_od) ? htmlspecialchars($contactLensTrial->dia_od) : ''; ?></td>
-                                <td><?php echo isset($contactLensTrial->power_od) ? htmlspecialchars($contactLensTrial->power_od) : ''; ?></td>
-                                <td><?php echo isset($contactLensTrial->vn_od) ? htmlspecialchars($contactLensTrial->vn_od) : ''; ?></td>
-                                <td><?php echo isset($contactLensTrial->remarks_od) ? htmlspecialchars($contactLensTrial->remarks_od) : ''; ?></td>
-                                <td><?php echo isset($contactLensTrial->rx_od) ? htmlspecialchars($contactLensTrial->rx_od) : ''; ?></td>
+                        <tbody> 
+                            <tr> 
+                                <td style="text-align:left; padding:0px;">SPECTACLE POWER</td>
+                                <td style="padding:0px;"><?php echo isset($data_list[0]->spectacle_power_od) ? htmlspecialchars($data_list[0]->spectacle_power_od) : ''; ?></td>
+                                <td style="padding:0px;"><?php echo isset($data_list[0]->spectacle_power_os) ? htmlspecialchars($data_list[0]->spectacle_power_os) : ''; ?></td>
                             </tr>
                             <tr>
-                                <td>OD OS</td>
-                                <td><?php echo isset($contactLensTrial->bc_os) ? htmlspecialchars($contactLensTrial->bc_os) : ''; ?></td>
-                                <td><?php echo isset($contactLensTrial->dia_os) ? htmlspecialchars($contactLensTrial->dia_os) : ''; ?></td>
-                                <td><?php echo isset($contactLensTrial->power_os) ? htmlspecialchars($contactLensTrial->power_os) : ''; ?></td>
-                                <td><?php echo isset($contactLensTrial->vn_os) ? htmlspecialchars($contactLensTrial->vn_os) : ''; ?></td>
-                                <td><?php echo isset($contactLensTrial->remarks_os) ? htmlspecialchars($contactLensTrial->remarks_os) : ''; ?></td>
-                                <td><?php echo isset($contactLensTrial->rx_os) ? htmlspecialchars($contactLensTrial->rx_os) : ''; ?></td>
+                                <td style="text-align:left; padding:0px;">KERATOMETRY</td>
+                                <td style="padding:0px;"><?php echo isset($data_list[0]->keratometry_od) ? htmlspecialchars($data_list[0]->keratometry_od) : ''; ?></td>
+                                <td style="padding:0px;"><?php echo isset($data_list[0]->keratometry_os) ? htmlspecialchars($data_list[0]->keratometry_os) : ''; ?></td>
                             </tr>
                             <tr>
-                                <td>OD OS</td>
-                                <td><?php echo isset($contactLensTrial->bc_os2) ? htmlspecialchars($contactLensTrial->bc_os2) : ''; ?></td>
-                                <td><?php echo isset($contactLensTrial->dia_os2) ? htmlspecialchars($contactLensTrial->dia_os2) : ''; ?></td>
-                                <td><?php echo isset($contactLensTrial->power_os2) ? htmlspecialchars($contactLensTrial->power_os2) : ''; ?></td>
-                                <td><?php echo isset($contactLensTrial->vn_os2) ? htmlspecialchars($contactLensTrial->vn_os2) : ''; ?></td>
-                                <td><?php echo isset($contactLensTrial->remarks_o2) ? htmlspecialchars($contactLensTrial->remarks_o2) : ''; ?></td>
-                                <td><?php echo isset($contactLensTrial->rx_os2) ? htmlspecialchars($contactLensTrial->rx_os2) : ''; ?></td>
+                                <td style="text-align:left; padding:0px;">HVID</td>
+                                <td style="padding:0px;"><?php echo isset($data_list[0]->hvid_od) ? htmlspecialchars($data_list[0]->hvid_od) : ''; ?></td>
+                                <td style="padding:0px;"><?php echo isset($data_list[0]->hvid_os) ? htmlspecialchars($data_list[0]->hvid_os) : ''; ?></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+
+
             </div>
 
+                        <?php //echo "<pre>";print_r($data_list);die;?>
             <div class="row" style="display: flex; align-items: center;">
+                    <!-- Label Section (Name First) -->
+                    <div class="col-md-12" style="padding-right: 10px;padding-left:15px; text-align: left;">
+                        <label><strong>Contact Lens Trial:</strong></label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Table Section -->
+                    <div class="col-md-12">
+                        <table class="table table-bordered" style="font-size:12px; border-collapse:collapse; width:100%;">
+                            <thead>
+                                <tr>
+                                    <th style="padding:0px;"></th>
+                                    <th style="padding:0px;">B.C (MM)</th>
+                                    <th style="padding:0px;">DIA (MM)</th>
+                                    <th style="padding:0px;">Power</th>
+                                    <th style="padding:0px;">VN</th>
+                                    <th style="padding:0px;">Remarks</th>
+                                    <th style="padding:0px;">RX On Top</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                // Decode the JSON string into an object
+                                $contactLensTrial = json_decode($data_list[0]->contact_lens_trial_table);
+                                ?>
+                                <tr>
+                                    <td style="padding:0px;">OD OS</td>
+                                    <td style="padding:0px;"><?php echo isset($contactLensTrial->bc_od) ? htmlspecialchars($contactLensTrial->bc_od) : ''; ?></td>
+                                    <td style="padding:0px;"><?php echo isset($contactLensTrial->dia_od) ? htmlspecialchars($contactLensTrial->dia_od) : ''; ?></td>
+                                    <td style="padding:0px;"><?php echo isset($contactLensTrial->power_od) ? htmlspecialchars($contactLensTrial->power_od) : ''; ?></td>
+                                    <td style="padding:0px;"><?php echo isset($contactLensTrial->vn_od) ? htmlspecialchars($contactLensTrial->vn_od) : ''; ?></td>
+                                    <td style="padding:0px;"><?php echo isset($contactLensTrial->remarks_od) ? htmlspecialchars($contactLensTrial->remarks_od) : ''; ?></td>
+                                    <td style="padding:0px;"><?php echo isset($contactLensTrial->rx_od) ? htmlspecialchars($contactLensTrial->rx_od) : ''; ?></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:0px;">OD OS</td>
+                                    <td style="padding:0px;"><?php echo isset($contactLensTrial->bc_os) ? htmlspecialchars($contactLensTrial->bc_os) : ''; ?></td>
+                                    <td style="padding:0px;"><?php echo isset($contactLensTrial->dia_os) ? htmlspecialchars($contactLensTrial->dia_os) : ''; ?></td>
+                                    <td style="padding:0px;"><?php echo isset($contactLensTrial->power_os) ? htmlspecialchars($contactLensTrial->power_os) : ''; ?></td>
+                                    <td style="padding:0px;"><?php echo isset($contactLensTrial->vn_os) ? htmlspecialchars($contactLensTrial->vn_os) : ''; ?></td>
+                                    <td style="padding:0px;"><?php echo isset($contactLensTrial->remarks_os) ? htmlspecialchars($contactLensTrial->remarks_os) : ''; ?></td>
+                                    <td style="padding:0px;"><?php echo isset($contactLensTrial->rx_os) ? htmlspecialchars($contactLensTrial->rx_os) : ''; ?></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:0px;">OD OS</td>
+                                    <td style="padding:0px;"><?php echo isset($contactLensTrial->bc_os2) ? htmlspecialchars($contactLensTrial->bc_os2) : ''; ?></td>
+                                    <td style="padding:0px;"><?php echo isset($contactLensTrial->dia_os2) ? htmlspecialchars($contactLensTrial->dia_os2) : ''; ?></td>
+                                    <td style="padding:0px;"><?php echo isset($contactLensTrial->power_os2) ? htmlspecialchars($contactLensTrial->power_os2) : ''; ?></td>
+                                    <td style="padding:0px;"><?php echo isset($contactLensTrial->vn_os2) ? htmlspecialchars($contactLensTrial->vn_os2) : ''; ?></td>
+                                    <td style="padding:0px;"><?php echo isset($contactLensTrial->remarks_o2) ? htmlspecialchars($contactLensTrial->remarks_o2) : ''; ?></td>
+                                    <td style="padding:0px;"><?php echo isset($contactLensTrial->rx_os2) ? htmlspecialchars($contactLensTrial->rx_os2) : ''; ?></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+
+            <div class="row" style="display: flex; align-items: center;padding-left:15px;">
                 <!-- Trial Given Label and Value Section -->
-                <div class="col-md-4" style="padding-right: 10px;">
+                <div class="col-md-4" >
                     <label for="trial_given">Trial Given:</label>
                 </div>
                 <div class="col-md-8">
@@ -541,65 +652,114 @@ $field_list = mandatory_section_field_list(2);
 
 
 
-            <div class="row" style="display: flex; align-items: center;">
-                <!-- Label Section -->
-                <div class="col-md-4" style="padding-right: 10px;">
-                    <label>Final Order:</label>
+            <div class="row" style="padding-left: 3px;">
+                    <!-- Label Section (Name First) -->
+                    <div class="col-md-12" style="text-align: left;">
+                        <label><strong>Final Order:</strong></label>
+                    </div>
                 </div>
 
-                <!-- Table Section -->
-                <div class="col-md-8">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>B.C (MM)</th>
-                                <th>DIA (MM)</th>
-                                <th>Power</th>
-                                <th>Tint</th>
-                                <th>Material</th>
-                                <th>Company</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            // Decode the final_order_table JSON string into an object
-                            $finalOrderTable = json_decode($data_list[0]->final_order_table);
-                            ?>
-                            <tr>
-                                <td>OD</td>
-                                <td><?php echo isset($finalOrderTable->bc_od) ? htmlspecialchars($finalOrderTable->bc_od) : ''; ?></td>
-                                <td><?php echo isset($finalOrderTable->dia_od) ? htmlspecialchars($finalOrderTable->dia_od) : ''; ?></td>
-                                <td><?php echo isset($finalOrderTable->power_od) ? htmlspecialchars($finalOrderTable->power_od) : ''; ?></td>
-                                <td><?php echo isset($finalOrderTable->tint_od) ? htmlspecialchars($finalOrderTable->tint_od) : ''; ?></td>
-                                <td><?php echo isset($finalOrderTable->material_od) ? htmlspecialchars($finalOrderTable->material_od) : ''; ?></td>
-                                <td><?php echo isset($finalOrderTable->company_od) ? htmlspecialchars($finalOrderTable->company_od) : ''; ?></td>
-                            </tr>
-                            <tr>
-                                <td>OS</td>
-                                <td><?php echo isset($finalOrderTable->bc_os) ? htmlspecialchars($finalOrderTable->bc_os) : ''; ?></td>
-                                <td><?php echo isset($finalOrderTable->dia_os) ? htmlspecialchars($finalOrderTable->dia_os) : ''; ?></td>
-                                <td><?php echo isset($finalOrderTable->power_os) ? htmlspecialchars($finalOrderTable->power_os) : ''; ?></td>
-                                <td><?php echo isset($finalOrderTable->tint_os) ? htmlspecialchars($finalOrderTable->tint_os) : ''; ?></td>
-                                <td><?php echo isset($finalOrderTable->material_os) ? htmlspecialchars($finalOrderTable->material_os) : ''; ?></td>
-                                <td><?php echo isset($finalOrderTable->company_os) ? htmlspecialchars($finalOrderTable->company_os) : ''; ?></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="row">
+                    <!-- Table Section -->
+                    <div class="col-md-12">
+                        <table class="table table-bordered" style="font-size: 12px; border-collapse: collapse; width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th style="padding: 0px;"></th>
+                                    <th style="padding: 0px;">B.C (MM)</th>
+                                    <th style="padding: 0px;">DIA (MM)</th>
+                                    <th style="padding: 0px;">Power</th>
+                                    <th style="padding: 0px;">Tint</th>
+                                    <th style="padding: 0px;">Material</th>
+                                    <th style="padding: 0px;">Company</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                // Decode the final_order_table JSON string into an object
+                                $finalOrderTable = json_decode($data_list[0]->final_order_table);
+                                ?>
+                                <tr>
+                                    <td style="padding: 0px;">OD</td>
+                                    <td style="padding: 0px;"><?php echo isset($finalOrderTable->bc_od) ? htmlspecialchars($finalOrderTable->bc_od) : ''; ?></td>
+                                    <td style="padding: 0px;"><?php echo isset($finalOrderTable->dia_od) ? htmlspecialchars($finalOrderTable->dia_od) : ''; ?></td>
+                                    <td style="padding: 0px;"><?php echo isset($finalOrderTable->power_od) ? htmlspecialchars($finalOrderTable->power_od) : ''; ?></td>
+                                    <td style="padding: 0px;"><?php echo isset($finalOrderTable->tint_od) ? htmlspecialchars($finalOrderTable->tint_od) : ''; ?></td>
+                                    <td style="padding: 0px;"><?php echo isset($finalOrderTable->material_od) ? htmlspecialchars($finalOrderTable->material_od) : ''; ?></td>
+                                    <td style="padding: 0px;"><?php echo isset($finalOrderTable->company_od) ? htmlspecialchars($finalOrderTable->company_od) : ''; ?></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0px;">OS</td>
+                                    <td style="padding: 0px;"><?php echo isset($finalOrderTable->bc_os) ? htmlspecialchars($finalOrderTable->bc_os) : ''; ?></td>
+                                    <td style="padding: 0px;"><?php echo isset($finalOrderTable->dia_os) ? htmlspecialchars($finalOrderTable->dia_os) : ''; ?></td>
+                                    <td style="padding: 0px;"><?php echo isset($finalOrderTable->power_os) ? htmlspecialchars($finalOrderTable->power_os) : ''; ?></td>
+                                    <td style="padding: 0px;"><?php echo isset($finalOrderTable->tint_os) ? htmlspecialchars($finalOrderTable->tint_os) : ''; ?></td>
+                                    <td style="padding: 0px;"><?php echo isset($finalOrderTable->material_os) ? htmlspecialchars($finalOrderTable->material_os) : ''; ?></td>
+                                    <td style="padding: 0px;"><?php echo isset($finalOrderTable->company_os) ? htmlspecialchars($finalOrderTable->company_os) : ''; ?></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+
+
+            <div class="form-group col-md-12" style="padding:0px;padding-top:5px;">
+                <label for="instruction_given">Instruction Given/Lens Dispensed on:</label>
+                <span>
+                    <?php 
+                        if (isset($data_list[0]->instruction_given_lens_dispensed_on) && !empty($data_list[0]->instruction_given_lens_dispensed_on)) {
+                            // Convert the date to the desired format (dd/mm/yyyy)
+                            echo date('d/m/Y', strtotime($data_list[0]->instruction_given_lens_dispensed_on));
+                        } else {
+                            // Show the placeholder if no date is provided
+                            echo '__/__/__';
+                        }
+                    ?>
+                </span>
             </div>
 
-            <div class="form-group col-md-12">
-                    <label for="instruction_given">Instruction Given/Lens Dispensed on:</label>
-                    <span><?php echo isset($data_list[0]->instruction_given_lens_dispensed_on) ? htmlspecialchars($data_list[0]->instruction_given_lens_dispensed_on) : ''; ?></span>
-                </div>
+            <div class="form-group col-md-12" style="padding:0px;padding-top:5px;">
+                <h4>Informed Consent for Contact Lens Trial</h4>
+                <p>
+                    I, ____________________________, underwent contact lens trial & understood 
+                    the process of contact lens handling (insertion, removal & care regimen). 
+                    I am responsible for delivered contact lens now.
+                </p>
+            </div>
 
-            <div class="form-signatures mt-4">
+            <div class="form-signatures mt-4" style="padding-top:5px;">
                 <table class="table table-borderless mb-4 w-100">
                     <tbody>
                         <tr>
+
+                            <!-- Doctor Signature -->
+                            <td class="small text-center mt-5" style="width: 33%;">
+                                <div class="text-center">
+                                    <span class="font-weight-bold">Signature of Doctor:</span><br>
+                                    <div class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;">
+                                        <span>
+                                            <?php
+                                            // Get the doctor signature id from data_list
+                                            $doctorSignatureId = $data_list[0]->doctor_signature ?? null;
+                                            // Find the doctor name based on the signature id
+                                            $doctorName = 'Not Selected';
+                                            if ($doctorSignatureId) {
+                                                foreach ($doctor as $doc) {
+                                                    if ($doc->id == $doctorSignatureId) {
+                                                        $doctorName = $doc->doctor_name;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            echo $doctorName;
+                                            ?>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+
                             <!-- Optometrist Signature -->
-                            <td class="small text-center mt-5" style="width: 50%;">
+                            <td class="small text-center mt-5" style="width: 33%;">
                                 <div class="text-center">
                                     <span class="font-weight-bold">Signature of Optometrist:</span><br>
                                     <div class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;">
@@ -624,31 +784,31 @@ $field_list = mandatory_section_field_list(2);
                                 </div>
                             </td>
 
-                            <!-- Doctor Signature -->
-                            <td class="small text-center mt-5" style="width: 50%;">
+                            <td class="small text-center mt-5" style="width: 33%;">
                                 <div class="text-center">
-                                    <span class="font-weight-bold">Signature of Doctor:</span><br>
+                                    <span class="font-weight-bold">Signature of Patient:</span><br>
                                     <div class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;">
                                         <span>
                                             <?php
-                                            // Get the doctor signature id from data_list
-                                            $doctorSignatureId = $data_list[0]->doctor_signature ?? null;
-                                            // Find the doctor name based on the signature id
-                                            $doctorName = 'Not Selected';
-                                            if ($doctorSignatureId) {
-                                                foreach ($doctor as $doc) {
-                                                    if ($doc->id == $doctorSignatureId) {
-                                                        $doctorName = $doc->doctor_name;
+                                            // Get the optometrist signature id from data_list
+                                            $optometristSignatureId = $data_list[0]->optometrist_signature ?? null;
+                                            // Find the optometrist name based on the signature id
+                                            $optometristName = 'Not Selected';
+                                            if ($optometristSignatureId) {
+                                                foreach ($doctor as $optometrist) {
+                                                    if ($optometrist->id == $optometristSignatureId) {
+                                                        $optometristName = $optometrist->doctor_name;
                                                         break;
                                                     }
                                                 }
                                             }
-                                            echo $doctorName;
+                                            echo $booking_data['patient_name'];
                                             ?>
                                         </span>
                                     </div>
                                 </div>
                             </td>
+                            
                         </tr>
                     </tbody>
                 </table>
@@ -662,10 +822,10 @@ $field_list = mandatory_section_field_list(2);
 
 
 
-        <!-- <div class="footer" style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #f8f9fa; text-align: center; padding: 10px; box-shadow: 0 -2px 5px rgba(0,0,0,0.1);">
+        <div class="footer" style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #f8f9fa; text-align: center; padding: 10px; box-shadow: 0 -2px 5px rgba(0,0,0,0.1);">
         <hr />
-        <p style="margin: 0;">Powered by Sara Software</p> -->
-    <!-- </div> -->
+        <p style="margin: 0;">Powered by Sara Software</p> 
+   </div>
         
     </div>
     <div id="load_add_type_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
