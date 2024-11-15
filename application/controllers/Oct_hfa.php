@@ -742,14 +742,9 @@ class Oct_hfa extends CI_Controller
                 $age .= ", " . $age_d . " " . $day;
                 }
                 $statuses = explode(',', $oct_hfa->pat_status);
-                $last_status = '';
-                if (in_array('OCT-HFA', $statuses)) {
-                    // echo "Status OCT-HFA is present.";
-                    $last_status = 'OCT-HFA';
-                } 
           
                 // Trim any whitespace from the statuses and get the last one
-                // $last_status = trim(end($statuses));
+                $last_status = trim(end($statuses));
                 $created_date = date('d-m-Y h:i A', strtotime($oct_hfa->created));
                 // Prepare data to be populated
                 $data = array(
