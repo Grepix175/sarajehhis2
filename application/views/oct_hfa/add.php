@@ -2003,10 +2003,7 @@ $field_list = mandatory_section_field_list(2);
                                     </div>
                                 </div>
                             </section>
-                        </div>
-                        <h4>Birth History:</h4>
-                        <section style="padding-left:15px;">
-                            <div class="grp">
+                            <div class="grp " style="margin-top:15px;">
                                 <label>Past Ocular History: </label>
                                 <div class="box-right" style="margin-left: 45px;">
                                     <input type="text" name="ocular_history" class="txt_firstCap input-height"
@@ -2026,8 +2023,10 @@ $field_list = mandatory_section_field_list(2);
                                     <?php echo form_error('medical_history'); ?>
                                 </div>
                             </div>
-
-
+                        </div>
+                        <h4>Birth History:</h4>
+                        <section style="padding-left:15px;">
+                            
                             <div class="grp" style="">
                                 <label>No of child </label>
                                 <div class="box-right" style="margin-left: 45px;">
