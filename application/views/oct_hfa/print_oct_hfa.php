@@ -380,10 +380,6 @@ $field_list = mandatory_section_field_list(2);
     <?php //echo "<pre>";print_r($data_list);die; ?>
     <div class="panel-body"  style="padding:0px;">
     <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p>
-
-    
-
-
         <?php
         // Loop through the contact lens data
         $age_y = $booking_data['age_y']??'';
