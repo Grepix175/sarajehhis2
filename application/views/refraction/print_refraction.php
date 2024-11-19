@@ -189,17 +189,20 @@ $field_list = mandatory_section_field_list(2);
             <div class="col-md-6">
                 <div class="date-section">
                     <label for="date">Date:</label>
-                    <input type="text" id="date"
-                        value="<?php echo date('d-m-Y H:i', strtotime($form_data['date'])); ?>">
+                    <span style="width: 100%; padding: 10px;"><?php echo date('d-m-Y H:i', strtotime($form_data['date'])); ?></span>                    
                 </div>
                 <div class="name-age-section">
                     <div class="name-section" style="width: 37%;">
                         <label for="age">Name:</label>
-                        <input type="text" id="name" placeholder="" value="<?php echo $form_data['patient_name']; ?>">
+                        <span style="padding: 10px;"> <?php echo $form_data['patient_name']; ?></span>
                     </div>
                     <div class="name-section">
                         <label for="age">Age:</label>
-                        <input type="text" id="name" placeholder="" value="<?php echo $form_data['age']; ?>">
+                        <span style="padding: 10px;"> <?php echo $form_data['age']; ?></span>
+                    </div>
+                    <div class="name-section">
+                        <label for="age">Token No:</label>
+                        <span style="padding: 10px;"> <?php echo $form_data['token_no']; ?></span>
                     </div>
                 </div>
             </div>
@@ -415,11 +418,13 @@ $field_list = mandatory_section_field_list(2);
                 <div class="signature-section" style="display: flex; justify-content: space-between;">
                     <div>
                         <label for="optometrist">Signature of Optometrist:</label>
-                        <input type="text" id="optometrist">
+                        <!-- <input type="text" id="optometrist"> -->
+                         ___________________________________
                     </div>
                     <div>
                         <label for="doctor">Signature of Doctor:</label>
-                        <input type="text" id="doctor">
+                        ____________________________________
+                        <!-- <input type="text" id="doctor"> -->
                     </div>
                 </div>
             </div>

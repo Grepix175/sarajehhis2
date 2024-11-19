@@ -318,7 +318,7 @@ class Help_desk extends CI_Controller
         if ($patient_status == 1) {
           $send_to_vission = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Vision</a>';
         } else {
-          $send_to_vission = '<a class="btn-custom" href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->id) . '" title="Vision" data-url="512">Vision</a>';
+          $send_to_vission = '<a class="btn-custom" href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Vision" data-url="512">Vision</a>';
         }
       }
 

@@ -313,7 +313,7 @@ $field_list = mandatory_section_field_list(2);
                                 <input type="text" value="<?= isset($form_data['refraction_ar_l_nv_axis']) ? htmlspecialchars($form_data['refraction_ar_l_nv_axis']) : '' ?>" name="refraction_ar_l_nv_axis" id="refraction_ar_l_nv_axis" class="w-50px auto_ref d-none" style="display: inline-block;">
                             </td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td style="text-align:left;"></td>
                             <td>
                                 <span class="auto_ref" style="display: none;"></span>
@@ -327,8 +327,8 @@ $field_list = mandatory_section_field_list(2);
                                 <span class="auto_ref" style="display: none;"></span>
                                 <input type="text" disabled value="<?= isset($form_data['refraction_ar_l_b1_axis']) ? htmlspecialchars($form_data['refraction_ar_l_b1_axis']) : '' ?>" name="refraction_ar_l_b1_axis" id="refraction_ar_l_b1_axis" class="w-50px auto_ref d-none" style="display: inline-block;">
                             </td>
-                        </tr>
-                        <tr>
+                        </tr> -->
+                        <!-- <tr>
                             <td style="text-align:left;"></td>
                             <td>
                                 <span class="auto_ref" style="display: none;"></span>
@@ -342,7 +342,7 @@ $field_list = mandatory_section_field_list(2);
                                 <span class="auto_ref" style="display: none;"></span>
                                 <input type="text" disabled value="<?= isset($form_data['refraction_ar_l_b2_axis']) ? htmlspecialchars($form_data['refraction_ar_l_b2_axis']) : '' ?>" name="refraction_ar_l_b2_axis" id="refraction_ar_l_b2_axis" class="w-50px auto_ref d-none" style="display: inline-block;">
                             </td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
             </div>
@@ -390,7 +390,7 @@ $field_list = mandatory_section_field_list(2);
                                 <input type="text" value="<?= isset($form_data['refraction_ar_r_nv_axis']) ? htmlspecialchars($form_data['refraction_ar_r_nv_axis']) : '' ?>" name="refraction_ar_r_nv_axis" id="refraction_ar_r_nv_axis" class="w-50px auto_ref d-none" style="display: inline-block;">
                             </td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td style="text-align:left;"></td>
                             <td>
                                 <span class="auto_ref" style="display: none;"></span>
@@ -419,7 +419,7 @@ $field_list = mandatory_section_field_list(2);
                                 <span class="auto_ref" style="display: none;"></span>
                                 <input type="text" disabled value="<?= isset($form_data['refraction_ar_r_b2_axis']) ? htmlspecialchars($form_data['refraction_ar_r_b2_axis']) : '' ?>" name="refraction_ar_r_b2_axis" id="refraction_ar_r_b2_axis" class="w-50px auto_ref d-none" style="display: inline-block;">
                             </td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
             </div>

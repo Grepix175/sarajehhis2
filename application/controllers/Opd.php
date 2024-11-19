@@ -72,7 +72,7 @@ class Opd extends CI_Controller
       // } elseif ($test->booking_status == 2) {
       //   $booking_status = '<font color="blue">Attended</font>';
       // }
-      
+
 
 
       if ($test->app_type == 0) {
@@ -155,7 +155,7 @@ class Opd extends CI_Controller
       ///////////////////////////////////////
       $row[] = $age;
       $row[] = $test->mobile_no;
-      
+
       $row[] = $test->status == 0 ? '<font color="green">Pending</font>' : '<font color="red">Completed</font>';
 
       // if ($test->appointment_date == '0000-00-00') {
@@ -177,7 +177,7 @@ class Opd extends CI_Controller
 
       // $row[] = $test->address;
       // $row[] = $test->father_husband_simulation . " " . $test->father_husband;
-      
+
       // $row[] = $test->insurance_type;
       // $row[] = $test->insurance_company;
       // $row[] = $test->patient_source;
@@ -201,8 +201,8 @@ class Opd extends CI_Controller
       // else
       //   $row[] = "";
 
-      $row[] = number_format($test->total_amount, 2);
-      $row[] = number_format($test->net_amount, 2);
+      // $row[] = number_format($test->total_amount, 2);
+      // $row[] = number_format($test->net_amount, 2);
       $row[] = number_format($test->paid_amount, 2);
       // $row[] = number_format($test->discount, 2);
       // $row[] = $test->policy_no;
@@ -213,23 +213,19 @@ class Opd extends CI_Controller
       $btn_prescription = "";
       $blank_btn_print = '';
       $opd_consolidated_bill = '';
-
+      $btn_history = '';
       if ($users_data['parent_id'] == $test->branch_id) {
         if ($test->booking_status != 1) {
           if (in_array('531', $users_data['permission']['action'])) {
             $btn_confirm = ' <a class="btn-custom" onclick="return confirm_booking(' . $test->id . ');" title="Confirm Booking"><i class="fa fa-pencil"></i> Confirm </a>';
           }
         }
-
-        if (in_array('524', $users_data['permission']['action'])) {
-          $btn_edit = ' <a class="btn-custom" href="' . base_url("opd/edit_booking/" . $test->id) . '" title="Edit Booking"><i class="fa fa-pencil"></i> Edit</a>';
-          $btn_edit = ' <a class="btn-custom" href="' . base_url("opd/edit_booking/" . $test->id) . '" title="Edit Booking"><i class="fa fa-pencil"></i> Edit</a>';
+        if ($test->status == 0) {
+          $flag = 'eye_history';
+          $type = 'opd_booking';
+          $btn_history .= '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $test->id . "?flag=" . $flag . "&type=" . $type) . '" title="Add Prescription"><i class="fa fa-history"></i> History</a>';
         }
 
-
-        if (in_array('525', $users_data['permission']['action'])) {
-          $btn_delete = ' <a class="btn-custom" onClick="return delete_opd_booking(' . $test->id . ')" href="javascript:void(0)" title="Delete" data-url="512"><i class="fa fa-trash"></i> Delete</a>';
-        }
       }
       $btn_prescription = '';
       $checking_status = '';
@@ -247,21 +243,25 @@ class Opd extends CI_Controller
           }
         }
 
-        $btn_history='';
-        if (in_array('2413', $users_data['permission']['action']) ) {
-          if($test->status == 0){
-            $flag = 'eye_history'; 
-            $type = 'opd_booking'; 
-            $btn_history .= '<li><a href="' . base_url("eye/add_eye_prescription/test/" . $test->id . "?flag=" . $flag. "&type=" . $type) . '" title="Add Prescription"><i class="fa fa-history"></i> History</a></li>';
+
+        if (in_array('2413', $users_data['permission']['action'])) {
+          if (in_array('524', $users_data['permission']['action'])) {
+            $btn_edit = ' <a class="" href="' . base_url("opd/edit_booking/" . $test->id) . '" title="Edit Booking"><i class="fa fa-pencil"></i> Edit</a>';
+            $btn_edit = ' <a class="" href="' . base_url("opd/edit_booking/" . $test->id) . '" title="Edit Booking"><i class="fa fa-pencil"></i> Edit</a>';
+          }
+
+
+          if (in_array('525', $users_data['permission']['action'])) {
+            $btn_delete = ' <a class="" onClick="return delete_opd_booking(' . $test->id . ')" href="javascript:void(0)" title="Delete" data-url="512"><i class="fa fa-trash"></i> Delete</a>';
           }
 
           $btn_prescription .= '<li><a  href="' . base_url("eye/add_eye_prescription/test/" . $test->id) . '" title="Add Prescription"><i class="fa fa-eye"></i> Add Adv. Eye Prescription</a></li>';
 
-          $btn_prescription .= '<li> <a onClick="return update_patient_arrival(' . $test->id . ')" href="javascript:void(0)" title="Patient Status" data-url="512"><i class="fa fa-pencil"></i> Patient Status</a></li>';
+          // $btn_prescription .= '<li> <a onClick="return update_patient_arrival(' . $test->id . ')" href="javascript:void(0)" title="Patient Status" data-url="512"><i class="fa fa-pencil"></i> Patient Status</a></li>';
 
 
           if (in_array('525', $users_data['permission']['action'])) {
-            $btn_prescription .= '<li> <a onClick="return update_eye_appontment_type(' . $test->id . ')" href="javascript:void(0)" title=" Update Appointment" data-url="512"><i class="fa fa-pencil"></i> Update Appointment</a></li>';
+            // $btn_prescription .= '<li> <a onClick="return update_eye_appontment_type(' . $test->id . ')" href="javascript:void(0)" title=" Update Appointment" data-url="512"><i class="fa fa-pencil"></i> Update Appointment</a></li>';
 
             $btn_prescription .= '<li> <a onClick="return update_patient_arrival(' . $test->id . ')" href="javascript:void(0)" title="Patient Status" data-url="512"><i class="fa fa-pencil"></i> Patient Status</a></li>';
 
@@ -477,13 +477,13 @@ class Opd extends CI_Controller
       $btn_a = '<div class="slidedown">
         <button disabled class="btn-custom">More <span class="caret"></span></button>
         <ul class="slidedown-content">
-          ' . $btn_barcode . $opd_consolidated_bill . $btn_history . $btn_prescription . $btn_download_prescription . $checking_status . $btn_download_image . $btn_upload_pre . $btn_view_upload_pre . $btn_view_test . $ipd_booking . $btn_print_label . '
+          ' . $btn_barcode . $opd_consolidated_bill . $btn_edit . $btn_delete . $btn_prescription . $btn_download_prescription . $checking_status . $btn_download_image . $btn_upload_pre . $btn_view_upload_pre . $btn_view_test . $ipd_booking . $btn_print_label . '
         </ul>
       </div> ';
       // Added By Nitin Sharma Ipd Booking Button  06/02/2024
       // added By Nitin Sharma 02/02/2024
       // End Action Button //
-      $row[] = $btn_confirm . $btn_edit . $btn_delete . $btn_print . $btn_a . $print_mlc;
+      $row[] = $btn_confirm . $btn_history . $btn_print . $btn_a . $print_mlc;
       $row[] = $test->emergency_status; // Add emergency_status to the row
       $data[] = $row;
       $i++;
@@ -1230,7 +1230,7 @@ class Opd extends CI_Controller
       'referral_hospital' => "",
       'token_type' => $token_type,
       'time_value' => '',
-      'token_no' =>'',
+      'token_no' => '',
       "insurance_type" => $insurance_type,
       "insurance_type_id" => $insurance_type_id,
       "ins_company_id" => $ins_company_id,
@@ -1515,7 +1515,7 @@ class Opd extends CI_Controller
 
       $this->load->model('general/general_model');
       $data['payment_mode'] = $this->general_model->payment_mode();
-      
+
       $get_payment_detail = $this->opd->payment_mode_detail_according_to_field($result['payment_mode'], $id);
       $total_values = array();
 
@@ -3159,11 +3159,11 @@ class Opd extends CI_Controller
     if (isset($post) && !empty($post)) {
       // $priority_type = null;
       // if (isset($post['search_type']) && $post['search_type'] == 1) {
-        //     $priority_type = !empty($post['priority_type']) ? $post['priority_type'] : null;
-        // }
-        $marge_post = array_merge($data['form_data'], $post);
-        $this->session->set_userdata('opd_search', $marge_post);
-        // echo "<pre>";print_r($marge_post);die;
+      //     $priority_type = !empty($post['priority_type']) ? $post['priority_type'] : null;
+      // }
+      $marge_post = array_merge($data['form_data'], $post);
+      $this->session->set_userdata('opd_search', $marge_post);
+      // echo "<pre>";print_r($marge_post);die;
 
     }
     $opd_search = $this->session->userdata('opd_search');
@@ -3315,7 +3315,7 @@ class Opd extends CI_Controller
     $objPHPExcel->setActiveSheetIndex(0);
     $data_patient_reg = get_setting_value('PATIENT_REG_NO');
     // Field names in the first row
-    $fields = array('OPD NO.', 'Patient Name', $data_patient_reg, 'Appointment Date', 'Booking Date', 'Age', 'Gender', 'Mobile', 'Doctor Name', 'Specialization', 'Source From', 'Disease', 'Total Amount', 'Net Amount');
+    $fields = array('OPD NO.', 'Patient Name', $data_patient_reg, 'Appointment Date', 'Booking Date', 'Age', 'Gender', 'Mobile', 'Doctor Name', 'Specialization', 'Source From', 'Disease');
     $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
     $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::VERTICAL_CENTER);
     $col = 0;
@@ -3333,8 +3333,8 @@ class Opd extends CI_Controller
       $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
       $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(15);
       $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(15);
-      $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(15);
-      $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(15);
+      // $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(15);
+      // $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(15);
       $objPHPExcel->getActiveSheet()->getStyle($row_heading)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
       $objPHPExcel->getActiveSheet()->getStyle($row_heading)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
       $row_heading++;
@@ -3393,7 +3393,8 @@ class Opd extends CI_Controller
           $age .= ", " . $age_d . " " . $day;
         }
         $patient_age = $age;
-        array_push($rowData, $opds->booking_code, $opds->patient_name, $opds->patient_code, $appointment_date, $booking_date, $patient_age, $gender, $opds->mobile_no, $attended_doctor_name, $specialization_id, $opds->patient_source, $opds->disease, number_format($opds->total_amount, 2), number_format($opds->net_amount, 2));
+        array_push($rowData, $opds->booking_code, $opds->patient_name, $opds->patient_code, $appointment_date, $booking_date, $patient_age, $gender, $opds->mobile_no, $attended_doctor_name, $specialization_id, $opds->patient_source, $opds->disease);
+        // , number_format($opds->total_amount, 2), number_format($opds->net_amount, 2)
         $count = count($rowData);
         for ($j = 0; $j < $count; $j++) {
 

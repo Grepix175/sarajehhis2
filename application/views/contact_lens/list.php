@@ -29,7 +29,6 @@ $users_data = $this->session->userdata('auth_users');
     span {
       font-weight: normal;
     }
-
   </style>
 
   <!-- datatable js -->
@@ -46,63 +45,63 @@ $users_data = $this->session->userdata('auth_users');
       ?>
       $(document).ready(function () {
         table = $('#table').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "order": [],
-            "pageLength": '20',
-            "ajax": {
-                "url": "<?php echo base_url('contact_lens/ajax_list') ?>",
-                "type": "POST",
-                "deferRender": true,
-            },
-            "columnDefs": [
-                {
-                    "targets": [0, -1], // Last column (adjust as necessary)
-                    "orderable": false, // Set not orderable
-                }
-            ],
-            "createdRow": function (row, data, dataIndex) {
-                // Access emergency_status value (adjust index if necessary)
-                var emergencyStatus = data[data.length - 1]; // Assuming emergency_status is the last column
-                // console.log(emergencyStatus); // Uncomment for debugging
-                
-                // Get the first column cell (you can change index if needed)
-                var firstColumn = $('td', row).eq(1); // Adjust index based on your structure
-                
-                // Apply background color based on emergency_status
-                if (emergencyStatus == 1) {
-                      firstColumn.css({
-                          'background-color': 'red',   // Red background for emergency_status 1
-                          // 'color': 'white',            // White font color
-                          'font-weight': 'bold'        // Bold font
-                      });
-                  } else if (emergencyStatus == 2) {
-                      firstColumn.css({
-                          'background-color': 'blue',  // Blue background for emergency_status 2
-                          // 'color': 'white',            // White font color
-                          'font-weight': 'bold'        // Bold font
-                      });
-                  } else if (emergencyStatus == 3) {
-                      firstColumn.css({
-                          'background-color': 'yellow', // Yellow background for emergency_status 3
-                          // 'color': 'black',             // Black font color (or default)
-                          'font-weight': 'bold'         // Bold font
-                      });
-                  } else {
-                      firstColumn.css({
-                          'background-color': 'white',  // Default white background
-                          // 'color': 'black',             // Default font color
-                          'font-weight': 'bold'         // Bold font by default
-                      });
-                  }
+          "processing": true,
+          "serverSide": true,
+          "order": [],
+          "pageLength": '20',
+          "ajax": {
+            "url": "<?php echo base_url('contact_lens/ajax_list') ?>",
+            "type": "POST",
+            "deferRender": true,
+          },
+          "columnDefs": [
+            {
+              "targets": [0, -1], // Last column (adjust as necessary)
+              "orderable": false, // Set not orderable
             }
+          ],
+          "createdRow": function (row, data, dataIndex) {
+            // Access emergency_status value (adjust index if necessary)
+            var emergencyStatus = data[data.length - 1]; // Assuming emergency_status is the last column
+            // console.log(emergencyStatus); // Uncomment for debugging
+
+            // Get the first column cell (you can change index if needed)
+            var firstColumn = $('td', row).eq(1); // Adjust index based on your structure
+
+            // Apply background color based on emergency_status
+            if (emergencyStatus == 1) {
+              firstColumn.css({
+                'background-color': 'red',   // Red background for emergency_status 1
+                // 'color': 'white',            // White font color
+                'font-weight': 'bold'        // Bold font
+              });
+            } else if (emergencyStatus == 2) {
+              firstColumn.css({
+                'background-color': 'blue',  // Blue background for emergency_status 2
+                // 'color': 'white',            // White font color
+                'font-weight': 'bold'        // Bold font
+              });
+            } else if (emergencyStatus == 3) {
+              firstColumn.css({
+                'background-color': 'yellow', // Yellow background for emergency_status 3
+                // 'color': 'black',             // Black font color (or default)
+                'font-weight': 'bold'         // Bold font
+              });
+            } else {
+              firstColumn.css({
+                // 'background-color': 'white',  // Default white background
+                // 'color': 'black',             // Default font color
+                'font-weight': 'bold'         // Bold font by default
+              });
+            }
+          }
         });
 
         // Trigger search functionality in real-time
         $('#table_filter input').unbind().bind('keyup', function () {
-            table.search(this.value).draw();
+          table.search(this.value).draw();
         });
-    });
+      });
 
 
     <?php } ?>
@@ -135,28 +134,28 @@ $users_data = $this->session->userdata('auth_users');
 
     });
     function delete_contact_lens(rate_id) {
-        $('#confirm').modal({
-          backdrop: 'static',
-          keyboard: false
-        })
-          .one('click', '#delete', function (e) {
-            $.ajax({
-              url: "<?php echo base_url('contact_lens/delete/'); ?>" + rate_id,
-              success: function (result) {
-                flash_session_msg(result);
-                // reload_table();
-              }
-            });
+      $('#confirm').modal({
+        backdrop: 'static',
+        keyboard: false
+      })
+        .one('click', '#delete', function (e) {
+          $.ajax({
+            url: "<?php echo base_url('contact_lens/delete/'); ?>" + rate_id,
+            success: function (result) {
+              flash_session_msg(result);
+              // reload_table();
+            }
           });
-      }
-
-      function edit(id, booking_id, patient_id) {
-        // Redirect to the edit page for contact lens with the specified IDs
-        window.location.href = '<?php echo base_url('contact_lens/edit/'); ?>' + id + '/' + booking_id + '/' + patient_id;
+        });
     }
-      function print_con_lens_page(id, booking_id, patient_id) {
-        // Redirect to the edit page for contact lens with the specified IDs
-        window.location.href = '<?php echo base_url('contact_lens/print_contact_lens/'); ?>' + id + '/' + booking_id + '/' + patient_id;
+
+    function edit(id, booking_id, patient_id) {
+      // Redirect to the edit page for contact lens with the specified IDs
+      window.location.href = '<?php echo base_url('contact_lens/edit/'); ?>' + id + '/' + booking_id + '/' + patient_id;
+    }
+    function print_con_lens_page(id, booking_id, patient_id) {
+      // Redirect to the edit page for contact lens with the specified IDs
+      window.location.href = '<?php echo base_url('contact_lens/print_contact_lens/'); ?>' + id + '/' + booking_id + '/' + patient_id;
     }
 
     function view_prescription(id) {
@@ -237,6 +236,21 @@ $users_data = $this->session->userdata('auth_users');
                     type="text" value="<?php echo $form_data['start_date'] ?>">
                 </div>
               </div>
+              <div class="row m-b-5">
+                  <div class="col-xs-4"><label> Booking Type</label></div>
+                  <div class="col-xs-8">
+                    <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="3"
+                      type="radio" <?php if ($form_data['emergency_booking'] == '3') {
+                        echo 'checked';
+                      } ?>> Normal
+                    <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="4"
+                      type="radio" <?php if ($form_data['emergency_booking'] == '4') {
+                        echo 'checked';
+                      } ?>> FastTrack
+                    <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value=""
+                      type="radio" <?php echo 'checked';?>> All
+                  </div>
+                </div>
               <!-- <div class="row m-b-5">
                 <div class="col-xs-5"><label><?php echo $data = get_setting_value('PATIENT_REG_NO'); ?></label></div>
                 <div class="col-xs-7">
@@ -252,40 +266,20 @@ $users_data = $this->session->userdata('auth_users');
                 </div>
               </div> -->
 
-              <div class="row  m-b-5" id="additional_selection">
 
-                <div class="col-xs-4"><label>Priority</label></div>
-
-                  <div class="col-xs-8">
-                    <label class="radio-label">
-                      <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
-                      <span>Priority</span>
-                    </label>
-
-                    <label class="radio-label">
-                      <input type="radio" name="priority_type" value="2" id="fasttrack_blue" onclick="return form_submit();">
-                      <span>Fast Track</span>
-                    </label>
-
-                    <label class="radio-label">
-                      <input type="radio" name="priority_type" value="3" id="priority_yellow" onclick="return form_submit();">
-                      <span>Post-Operative</span>
-                    </label>
-                  </div>
-                </div>
-                <script>
-                $(document).ready(function() {
-                // Function to show/hide additional selection based on radio button selection
-                $('input[name="search_type"]').change(function() {
+              <script>
+                $(document).ready(function () {
+                  // Function to show/hide additional selection based on radio button selection
+                  $('input[name="search_type"]').change(function () {
                     if ($(this).val() == "0") { // If Pending is selected
-                        $('#additional_selection').show();
+                      $('#additional_selection').show();
                     } else {
-                        $('#additional_selection').hide();
+                      $('#additional_selection').hide();
                     }
+                  });
                 });
-                });
-                </script>
-              
+              </script>
+
 
             </div> <!-- 4 -->
 
@@ -374,10 +368,10 @@ $users_data = $this->session->userdata('auth_users');
               <?php } else { ?>
                 <input type="hidden" name="branch_id" id="branch_id" value="<?php echo $users_data['parent_id']; ?>">
               <?php } ?>
-              
+
 
             </div> <!-- 4 -->
-            
+
 
             <div class="col-sm-4 d-flex justify-content-center" style="margin-left: 177px;margin-bottom: 22px;">
 
@@ -397,6 +391,45 @@ $users_data = $this->session->userdata('auth_users');
 
           </div> <!-- row -->
 
+          <div class="row">
+            <div class="col-sm-12">
+              <div id="additional_selection">
+
+                <div class="col-xs-2"><label style="margin-left: -15px;">Type</label></div>
+
+                <div class="col-xs-10" style="margin-left: -80px;">
+                  <label class="radio-label">
+                    <input type="radio" name="priority_type" value="1" id="priority_red"
+                      onclick="return form_submit();">
+                    <span>Priority</span>
+                  </label>
+
+                  <label class="radio-label">
+                    <input type="radio" name="priority_type" value="2" id="fasttrack_blue"
+                      onclick="return form_submit();">
+                    <span>Fast Track OPD Consultation</span>
+                  </label>
+
+                  <label class="radio-label">
+                    <input type="radio" name="priority_type" value="3" id="priority_yellow"
+                      onclick="return form_submit();">
+                    <span>Post-Operative</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" name="priority_type" value="4" id="priority_normal"
+                      onclick="return form_submit();">
+                    <span>Normal</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" name="priority_type" value="" id="priority_all" onclick="return form_submit();"
+                      checked>
+                    <span>All</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
 
         </form>
         <form>
@@ -415,7 +448,7 @@ $users_data = $this->session->userdata('auth_users');
                   <th> Patient Name </th>
                   <th> Gender </th>
                   <th> Mobile No </th>
-                  <th> Age </th>                  
+                  <th> Age </th>
                   <th> Status</th>
                   <th> Created Date </th>
                   <th> Action </th>

@@ -356,10 +356,14 @@ $users_data = $this->session->userdata('auth_users');
                 </div>
             </div>
         </div>
+
+        
         
         <div class="col-md-2">
           <label class="col-md-12 col-sm-12" for="printsummary-labels"><strong>Token No: </strong>
-            <?php echo $form_data['token_no']; ?></label>
+            <!-- <?php echo $form_data['token_no']; ?> -->
+            <?php echo $token_no; ?>
+          </label>
         </div>
         <hr>
 

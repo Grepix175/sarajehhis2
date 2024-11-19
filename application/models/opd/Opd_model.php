@@ -83,10 +83,14 @@ class Opd_model extends CI_Model
 				$end_date = date('Y-m-d', strtotime($search['end_date']));
 				$this->db->where('hms_opd_booking.booking_date <= "' . $end_date . '"');
 			}
-
-			if (!empty($search['priority_type'])) {
-                $this->db->where('hms_patient.emergency_status', $search['priority_type']);
-            }
+			// echo "<pre>";
+			// print_r($search['priority_type'] === '4');
+			// die;
+			if (!empty($search['priority_type']) && $search['priority_type'] !== '4') {
+				$this->db->where('hms_patient.emergency_status', $search['priority_type']);
+			} else if ($search['priority_type'] === '4') {				
+				$this->db->where('hms_patient.emergency_status', NULL);
+			}
 
 			/* Booking */
 
@@ -227,7 +231,6 @@ class Opd_model extends CI_Model
 				$this->db->where('hms_opd_booking.opd_type', 1);
 			} else if ($search['emergency_booking'] == "3") {
 				$this->db->where('hms_opd_booking.opd_type', 0);
-
 			}
 		}
 

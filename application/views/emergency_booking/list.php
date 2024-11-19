@@ -444,42 +444,22 @@ $user_role = $users_data['users_role'];
                       <span style="margin-top: 5px;">All</span>
                     </label>
                   </div>
-                 
-                
 
-              </div> <!-- 4 -->
-              <div class="row  m-b-5" id="additional_selection">
 
-                <div class="col-xs-5"><label>Priority</label></div>
 
-                  <div class="col-xs-7">
-                    <label class="radio-label">
-                      <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
-                      <span>Priority</span>
-                    </label>
+                </div> <!-- 4 -->
 
-                    <label class="radio-label">
-                      <input type="radio" name="priority_type" value="2" id="fasttrack_blue" onclick="return form_submit();">
-                      <span>Fast Track</span>
-                    </label>
-
-                    <label class="radio-label">
-                      <input type="radio" name="priority_type" value="3" id="priority_yellow" onclick="return form_submit();">
-                      <span>Post-Operative</span>
-                    </label>
-                  </div>
-                </div>
                 <script>
-                $(document).ready(function() {
-                // Function to show/hide additional selection based on radio button selection
-                $('input[name="search_type"]').change(function() {
-                    if ($(this).val() == "0") { // If Pending is selected
+                  $(document).ready(function () {
+                    // Function to show/hide additional selection based on radio button selection
+                    $('input[name="search_type"]').change(function () {
+                      if ($(this).val() == "0") { // If Pending is selected
                         $('#additional_selection').show();
-                    } else {
+                      } else {
                         $('#additional_selection').hide();
-                    }
-                });
-                });
+                      }
+                    });
+                  });
                 </script>
               </div>
 
@@ -495,7 +475,46 @@ $user_role = $users_data['users_role'];
               </div> <!-- 4 -->
             </div> <!-- row -->
 
-          
+            <div class="row">
+              <div class="col-sm-12">
+                <div id="additional_selection">
+
+                  <div class="col-xs-2"><label style="margin-left: -15px;">Type</label></div>
+
+                  <div class="col-xs-10" style="margin-left: -43px;">
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="1" id="priority_red"
+                        onclick="return form_submit();">
+                      <span>Priority</span>
+                    </label>
+
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="2" id="fasttrack_blue"
+                        onclick="return form_submit();">
+                      <span>Fast Track OPD Consultation</span>
+                    </label>
+
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="3" id="priority_yellow"
+                        onclick="return form_submit();">
+                      <span>Post-Operative</span>
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="4" id="priority_normal"
+                        onclick="return form_submit();">
+                      <span>Normal</span>
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="" id="priority_all" onclick="return form_submit();"
+                        checked>
+                      <span>All</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
 
           </form>
 
@@ -575,7 +594,8 @@ $user_role = $users_data['users_role'];
           <div class="btns opd_booking_list_right_btns">
             <?php if (in_array('523', $users_data['permission']['action'])) {
               ?>
-              <button class="btn-update" onclick="window.location.href='<?php echo base_url('emergency_booking/add'); ?>'">
+              <button class="btn-update"
+                onclick="window.location.href='<?php echo base_url('emergency_booking/add'); ?>'">
                 <i class="fa fa-plus"></i> New
               </button>
             <?php } ?>
@@ -710,7 +730,7 @@ $user_role = $users_data['users_role'];
         $.ajax({
           url: "<?php echo base_url(); ?>emergency_booking/reset_search/",
           success: function (result) {
-
+            $('#additional_selection').hide();
             //document.getElementById("search_form").reset(); 
             reload_table();
           }
@@ -752,7 +772,7 @@ $user_role = $users_data['users_role'];
         $.ajax({
           url: "<?php echo base_url('emergency_booking/advance_search/'); ?>",
           type: 'POST',
-          data: { start_date: start_date, end_date: end_date, branch_id: branch_id,priority_type: priority_type, emergency_booking: emergency_booking, specialization_id: specialization_id, mobile_no: mobile_no, booking_code: booking_code, patient_name: patient_name, status: status },
+          data: { start_date: start_date, end_date: end_date, branch_id: branch_id, priority_type: priority_type, emergency_booking: emergency_booking, specialization_id: specialization_id, mobile_no: mobile_no, booking_code: booking_code, patient_name: patient_name, status: status },
           success: function (result) {
             if (vals != "1") {
               reload_table();
@@ -787,20 +807,20 @@ $user_role = $users_data['users_role'];
             ],
             "createdRow": function (row, data, dataIndex) {
               // console.log(data)
-                // Access emergency_status (assuming it's the last column in the data array)
-                var emergencyStatus = data[data.length - 1]; // Get the emergency_status value
-                // console.log(emergencyStatus)
+              // Access emergency_status (assuming it's the last column in the data array)
+              var emergencyStatus = data[data.length - 1]; // Get the emergency_status value
+              // console.log(emergencyStatus)
 
-                // Change the background color of the first column based on emergency_status
-                var firstColumn = $('td', row).eq(1); // Get the first column cell
+              // Change the background color of the first column based on emergency_status
+              var firstColumn = $('td', row).eq(1); // Get the first column cell
 
-                if (emergencyStatus == 1) {
-                    firstColumn.css('background-color', 'red'); // Change to red for emergency_status 1
-                } else if (emergencyStatus == 2) {
-                    firstColumn.css('background-color', 'blue'); // Change to blue for emergency_status 2
-                } else if (emergencyStatus == 3) {
-                    firstColumn.css('background-color', 'yellow'); // Change to yellow for emergency_status 3
-                }
+              if (emergencyStatus == 1) {
+                firstColumn.css('background-color', 'red'); // Change to red for emergency_status 1
+              } else if (emergencyStatus == 2) {
+                firstColumn.css('background-color', 'blue'); // Change to blue for emergency_status 2
+              } else if (emergencyStatus == 3) {
+                firstColumn.css('background-color', 'yellow'); // Change to yellow for emergency_status 3
+              }
             },
             // Adjust the search input
             "initComplete": function () {

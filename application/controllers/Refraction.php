@@ -506,6 +506,7 @@ class Refraction extends CI_Controller
             'pres_id' => $result['pres_id'],
             'patient_id' => $result['patient_id'],
             'patient_name' => $result['patient_name'],
+            'token_no' => $result['token_no'],
             'age' => $age,
             'lens' => $result['lens'],
             'comment' => $result['comment'],

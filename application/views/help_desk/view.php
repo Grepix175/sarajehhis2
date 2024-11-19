@@ -7,6 +7,10 @@
 
 <body style="font:8px 'Arial';">
 	<page size="A4">
+		<div style="display: flex; align-items: center; margin-bottom: 5px;">
+			<h3 style="margin-right: 10px; font-weight: bold; font-size: 10px; color: #333;">Token No: <?php echo $token_no ?? ''; ?></h3>
+			<!-- <h3 style="font-size: 18px; color: #007bff;"><?php echo $token_no ?? ''; ?></h3> -->
+		</div>
 		<h3 style="float:left;width:100%;text-align:center;margin:2px 2px;position:relative;">
 			<span style="position:absolute;height:2px;width:40%;background:#eee;"></span>
 			<span style="font-size:11px">OPD SUMMARY</span>
@@ -4811,7 +4815,7 @@
 									echo '<strong style="float:left;width:100%;font-size:10px;">Lens: </strong> Nature- ' . $exam_lens['examnsn_lens_l_ntr'] . ', ';
 								}
 								/*if($exam_lens['examnsn_lens_l_psn'] !='Central'){ echo 'Position- '.$exam_lens['examnsn_lens_l_psn'].', ';}else{ echo 'Central, '; }
-																													if($exam_lens['examnsn_lens_l_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_l_sz'].', ';}else{ echo 'Crystalline, ';}*/
+																																																					if($exam_lens['examnsn_lens_l_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_l_sz'].', ';}else{ echo 'Crystalline, ';}*/
 								if ($exam_lens['examnsn_lens_l_ntr'] == 'Cataract') {
 									echo ' LOCS Grading- ';
 									if ($exam_lens['examnsn_lens_l_locsg_ns'] != '') {
@@ -4835,7 +4839,7 @@
 									echo '<strong style="float:left;width:100%;font-size:10px;">Lens: </strong> Nature- ' . $exam_lens['examnsn_lens_r_ntr'] . ', ';
 								}
 								/*if($exam_lens['examnsn_lens_r_psn'] !='Central'){ echo 'Position- '.$exam_lens['examnsn_lens_r_psn'].', ';}else{ echo 'Central, '; }
-																													if($exam_lens['examnsn_lens_r_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_r_sz'].', ';}else{ echo 'Crystalline, ';}*/
+																																																					if($exam_lens['examnsn_lens_r_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_r_sz'].', ';}else{ echo 'Crystalline, ';}*/
 								if ($exam_lens['examnsn_lens_r_ntr'] == 'Cataract') {
 									'Lens Grading- ';
 									if ($exam_lens['examnsn_lens_r_locsg_ns'] != '') {

@@ -44,7 +44,7 @@ class Ortho_ptics extends CI_Controller
             $start_date = date('d-m-Y');
             $end_date = date('d-m-Y');
         }
-        $data['form_data'] = array('patient_name' => '', 'patient_code' => '','mobile_no' => '', 'start_date' => $start_date, 'end_date' => $end_date);
+        $data['form_data'] = array('patient_name' => '', 'patient_code' => '','mobile_no' => '', 'start_date' => $start_date, 'end_date' => $end_date,'emergency_booking'=>'');
         
         $this->load->view('ortho_ptics/list', $data);
     }

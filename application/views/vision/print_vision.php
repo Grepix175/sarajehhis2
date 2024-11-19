@@ -96,7 +96,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <span class="font-weight-bold">Age:</span> <?php echo isset($billing_data['age']) ? htmlspecialchars($billing_data['age']) : 'Not Defined'; ?>
+                            <span class="font-weight-bold">Age:</span> <?php echo isset($billing_data['age']) ? htmlspecialchars($billing_data['age']) : ''; ?>
                         </td>
                         <td>
                             <span class="font-weight-bold">Patient Category:</span> <?php echo isset($billing_data['patient_category']) ? htmlspecialchars($billing_data['patient_category']) : ''; ?>
@@ -189,7 +189,7 @@
                                 <p class="font-weight-bold mb-0 small">
                                     <?php 
                                     if (isset($form_data[$name])) {
-                                        echo ($form_data[$name] == 'yes') ? 'Yes' : (($form_data[$name] == 'no') ? 'No' : 'null');
+                                        echo ($form_data[$name] == 'yes') ? 'Yes' : (($form_data[$name] == 'no') ? 'No' : '');
                                     } else {
                                         echo ''; // If the value is not set at all
                                     }

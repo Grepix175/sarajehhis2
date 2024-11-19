@@ -37,8 +37,8 @@ td
     
     <th>Source From</th>
     <th>Disease</th>
-    <th>Total Amount</th>
-    <th>Net Amount</th>
+    <!-- <th>Total Amount</th>
+    <th>Net Amount</th> -->
     
     
     
@@ -131,8 +131,8 @@ td
             
             <td><?php echo $opds->patient_source; ?></td>
             <td><?php echo $opds->disease; ?></td>
-            <td><?php echo number_format($opds->total_amount,2); ?></td>
-            <td><?php echo number_format($opds->net_amount,2); ?></td>
+            <!-- <td><?php echo number_format($opds->total_amount,2); ?></td> -->
+            <!-- <td><?php echo number_format($opds->net_amount,2); ?></td> -->
             
             
             <!-- <td>< ?php echo $create_date; ?></td> -->
