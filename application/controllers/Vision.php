@@ -23,7 +23,7 @@ class Vision extends CI_Controller
             $start_date = date('d-m-Y');
             $end_date = date('d-m-Y');
         }
-        $data['form_data'] = array('patient_name' => '', 'patient_code' => '', 'start_date' => $start_date, 'end_date' => $end_date);
+        $data['form_data'] = array('patient_name' => '', 'patient_code' => '', 'start_date' => $start_date, 'end_date' => $end_date,'emergency_booking'=>'');
         $this->load->view('vision/list', $data);
     }
 
@@ -160,19 +160,23 @@ class Vision extends CI_Controller
         echo json_encode($output);
     }
 
-    public function add($booking_id = null)
+    public function add($booking_id = null,$patient_id = null)
     {
+        // echo "<pre>";
+        // print_r($booking_id);
+        // die('sagar');
         // Load required models and libraries
         $this->load->library('form_validation');
         $this->load->model('vision/vision_model'); // Ensure this model is loaded
         $data['side_effects'] = $this->vision_model->get_all_side_effects(); // Fetch side effects
         $data['page_title'] = 'Add Vision Record';
         $data['booking_id'] = isset($booking_id) ? $booking_id : '';
-
-        $patient_details = $this->vision_model->get_patient_name_by_booking_id($booking_id);
+        $data['patient_id'] = isset($patient_id) ? $patient_id : '';
+        $data['booking_data'] = $this->vision_model->get_booking_patient_details($data['patient_id']);
         // echo "<pre>";
-        // print_r($booking_id);
+        // print_r($data['booking_data']);
         // die;
+        $patient_details = $this->vision_model->get_patient_name_by_booking_id($booking_id);
         if ($booking_id && $patient_details) {
             $data['patient_name'] = $patient_details['patient_name'];
         } else {
@@ -318,7 +322,7 @@ class Vision extends CI_Controller
         // Check user permissions
         unauthorise_permission('411', '2486');
         $data['side_effects'] = $this->vision_model->get_all_side_effects(); // Fetch side effects
-
+        $this->load->model('vision/vision_model');
 
         // Validate the ID
         if (isset($id) && !empty($id) && is_numeric($id)) {
@@ -327,8 +331,8 @@ class Vision extends CI_Controller
 
             // Retrieve the brand by ID
             $result = $this->vision_model->get_by_id($id);
-            // echo "<pre>";print_r($result);die;
-
+            $data['booking_data'] = $this->vision_model->get_booking_patient_details_edit($result['booking_id']);
+            // echo "<pre>";print_r($data['booking_data']);die;
             // If no result is found, you might want to handle this case
             if (!$result) {
                 // Optionally, set an error message or redirect

@@ -105,9 +105,12 @@ class Prosthetic_model extends CI_Model
                 $this->db->where('hms_prosthetic.created_date <=', $end_date);
             }
 
-            if (!empty($search['priority_type'])) {
-                $this->db->where('hms_patient.emergency_status', $search['priority_type']);
-            }
+            
+            if (!empty($search['priority_type']) && $search['priority_type'] !== '4') {
+				$this->db->where('hms_patient.emergency_status', $search['priority_type']);
+			} else if ($search['priority_type'] === '4') {				
+				$this->db->where('hms_patient.emergency_status', NULL);
+			}
 
             if (!empty($search['patient_name'])) {
                 $this->db->like('hms_patient.patient_name', $search['patient_name'], 'after');
@@ -120,6 +123,11 @@ class Prosthetic_model extends CI_Model
             if (!empty($search['mobile_no'])) {
                 $this->db->where('hms_patient.mobile_no', $search['mobile_no']);
             }
+            if ($search['emergency_booking'] == "4") {
+				$this->db->where('hms_opd_booking.opd_type', 1);
+			} else if ($search['emergency_booking'] == "3") {
+				$this->db->where('hms_opd_booking.opd_type', 0);
+			}
         }
 
         // Handle ordering from DataTables or default ordering

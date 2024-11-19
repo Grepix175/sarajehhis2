@@ -291,26 +291,26 @@ $field_list = mandatory_section_field_list(2);
                 <div class="row m-b-5">
                     <div class="col-xs-4"><strong>Patient</strong></div>
                     <div class="col-xs-8">
-                        <input type="text" name="patient_name" value="<?php echo isset($booking_data['patient_name']) ? $booking_data['patient_name'] : 'N/A'; ?>" readonly="">
+                        <input type="text" name="patient_name" value="<?php echo isset($booking_data['patient_name']) ? $booking_data['patient_name'] : 'N/A'; ?>" readonly="" style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
                     </div>
                 </div>
                 <div class="row m-b-5">
                     <div class="col-xs-4"><strong>Patient Reg. No</strong></div>
                     <div class="col-xs-8">
-                        <input type="text" name="patient_code" value="<?php echo isset($booking_data['patient_code']) ? $booking_data['patient_code'] : 'N/A'; ?>" readonly="">
+                        <input type="text" name="patient_code" value="<?php echo isset($booking_data['patient_code']) ? $booking_data['patient_code'] : 'N/A'; ?>" readonly="" style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
                     </div>
                 </div>
                 <div class="row m-b-5">
                     <div class="col-xs-4"><strong>OPD No</strong></div>
                     <div class="col-xs-8">
-                        <input type="text" name="booking_code" value="<?php echo isset($booking_data['booking_code']) ? $booking_data['booking_code'] : 'N/A'; ?>" readonly="">
+                        <input type="text" name="booking_code" value="<?php echo isset($booking_data['booking_code']) ? $booking_data['booking_code'] : 'N/A'; ?>" readonly="" style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
                     </div>
                     
                 </div>
                 <div class="row m-b-5">
                         <div class="col-xs-4"><strong>Token No</strong></div>
                         <div class="col-xs-8">
-                            <input type="text" name="token_no" value="<?php echo isset($booking_data['token_no']) ? $booking_data['token_no'] : 'N/A'; ?>" readonly="">
+                            <input type="text" name="token_no" value="<?php echo isset($booking_data['token_no']) ? $booking_data['token_no'] : 'N/A'; ?>" readonly="" style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
                         </div>
                     </div>
             </div>
@@ -318,19 +318,19 @@ $field_list = mandatory_section_field_list(2);
                 <div class="row m-b-5">
                     <div class="col-xs-4"><strong>Mobile no.</strong></div>
                     <div class="col-xs-8">
-                        <input type="text" name="mobile_no" value="<?php echo isset($booking_data['mobile_no']) ? $booking_data['mobile_no'] : 'N/A'; ?>" readonly="">
+                        <input type="text" name="mobile_no" value="<?php echo isset($booking_data['mobile_no']) ? $booking_data['mobile_no'] : 'N/A'; ?>" readonly="" style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
                     </div>
                 </div>
                 <div class="row m-b-5">
                     <div class="col-xs-4"><strong>Age</strong></div>
                     <div class="col-xs-8">
-                        <input type="text" name="mobile_no" value="<?php echo isset($age) ? $age : 'N/A'; ?>" readonly="">
+                        <input type="text" name="mobile_no" value="<?php echo isset($age) ? $age : 'N/A'; ?>" readonly="" style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
                     </div>
                 </div>
                 <div class="row m-b-5">
                     <div class="col-xs-4"><strong>Gender</strong></div>
                     <div class="col-xs-8">
-                        <input type="text" name="gender" value="<?php echo ($booking_data['gender'] == '0') ? 'Female' : 'Male'; ?>" readonly="">
+                        <input type="text" name="gender" value="<?php echo ($booking_data['gender'] == '0') ? 'Female' : 'Male'; ?>" readonly="" style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
                     </div>
                 </div>
             </div>

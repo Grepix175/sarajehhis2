@@ -26,7 +26,6 @@ $users_data = $this->session->userdata('auth_users');
     span {
       font-weight: normal;
     }
-
   </style>
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap.min.js"></script>
 
@@ -41,57 +40,57 @@ $users_data = $this->session->userdata('auth_users');
     <?php if (in_array('2485', $users_data['permission']['action'])) { ?>
       $(document).ready(function () {
         table = $('#table').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "order": [],
-            "pageLength": '20',
-            "ajax": {
-                "url": "<?php echo base_url('dilate/ajax_list') ?>",
-                "type": "POST",
+          "processing": true,
+          "serverSide": true,
+          "order": [],
+          "pageLength": '20',
+          "ajax": {
+            "url": "<?php echo base_url('dilate/ajax_list') ?>",
+            "type": "POST",
+          },
+          "columnDefs": [
+            {
+              "targets": [0, -1], // Targets first and last column
+              "orderable": false,  // Set not orderable
             },
-            "columnDefs": [
-                {
-                    "targets": [0, -1], // Targets first and last column
-                    "orderable": false,  // Set not orderable
-                },
-            ],
-            "createdRow": function (row, data, dataIndex) {
-                // Access emergency_status value (assuming it's the last column)
-                var emergencyStatus = data[data.length - 1]; // Adjust index based on your structure
-                // console.log(emergencyStatus); // Uncomment for debugging
+          ],
+          "createdRow": function (row, data, dataIndex) {
+            // Access emergency_status value (assuming it's the last column)
+            var emergencyStatus = data[data.length - 1]; // Adjust index based on your structure
+            // console.log(emergencyStatus); // Uncomment for debugging
 
-                // Get the first column cell (adjust index if needed)
-                var firstColumn = $('td', row).eq(1); // Adjust the column index if needed
+            // Get the first column cell (adjust index if needed)
+            var firstColumn = $('td', row).eq(1); // Adjust the column index if needed
 
-                // Apply background color based on emergency_status
-                if (emergencyStatus == 1) {
-                    firstColumn.css({
-                        'background-color': 'red',   // Red background for emergency_status 1
-                        // 'color': 'white',            // White font color
-                        'font-weight': 'bold'        // Bold font
-                    });
-                } else if (emergencyStatus == 2) {
-                    firstColumn.css({
-                        'background-color': 'blue',  // Blue background for emergency_status 2
-                        // 'color': 'white',            // White font color
-                        'font-weight': 'bold'        // Bold font
-                    });
-                } else if (emergencyStatus == 3) {
-                    firstColumn.css({
-                        'background-color': 'yellow', // Yellow background for emergency_status 3
-                        // 'color': 'black',             // Black font color (or default)
-                        'font-weight': 'bold'         // Bold font
-                    });
-                } else {
-                    firstColumn.css({
-                        'background-color': 'white',  // Default white background
-                        // 'color': 'black',             // Default font color
-                        'font-weight': 'bold'         // Bold font by default
-                    });
-                }
+            // Apply background color based on emergency_status
+            if (emergencyStatus == 1) {
+              firstColumn.css({
+                'background-color': 'red',   // Red background for emergency_status 1
+                // 'color': 'white',            // White font color
+                'font-weight': 'bold'        // Bold font
+              });
+            } else if (emergencyStatus == 2) {
+              firstColumn.css({
+                'background-color': 'blue',  // Blue background for emergency_status 2
+                // 'color': 'white',            // White font color
+                'font-weight': 'bold'        // Bold font
+              });
+            } else if (emergencyStatus == 3) {
+              firstColumn.css({
+                'background-color': 'yellow', // Yellow background for emergency_status 3
+                // 'color': 'black',             // Black font color (or default)
+                'font-weight': 'bold'         // Bold font
+              });
+            } else {
+              firstColumn.css({
+                // 'background-color': 'white',  // Default white background
+                // 'color': 'black',             // Default font color
+                'font-weight': 'bold'         // Bold font by default
+              });
             }
+          }
         });
-    });
+      });
 
     <?php } ?>
 
@@ -134,7 +133,7 @@ $users_data = $this->session->userdata('auth_users');
     }
 
     function checkboxValues() {
-      
+
       $('#table').dataTable();
       var allVals = [];
       $(':checkbox').each(function () {
@@ -215,46 +214,26 @@ $users_data = $this->session->userdata('auth_users');
                     value="<?php echo $form_data['patient_id'] ?>" type="text" autofocus>
                 </div>
               </div>
-              <!-- <div class="row m-b-5">
-                <div class="col-xs-5"><label>Mobile No.</label></div>
-                <div class="col-xs-7">
+              <div class="row m-b-5">
+                <div class="col-xs-4"><label>Mobile No.</label></div>
+                <div class="col-xs-8">
                   <input name="mobile_no" value="<?php echo $form_data['mobile_no'] ?>" id="mobile_no"
                     onkeyup="return form_submit();" class="numeric m_input_default" maxlength="10" value="" type="text">
                 </div>
-              </div> -->
-              <div class="row  m-b-5" id="additional_selection">
+              </div>
 
-                <div class="col-xs-4"><label>Priority</label></div>
-
-                  <div class="col-xs-8">
-                    <label class="radio-label">
-                      <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
-                      <span>Priority</span>
-                    </label>
-
-                    <label class="radio-label">
-                      <input type="radio" name="priority_type" value="2" id="fasttrack_blue" onclick="return form_submit();">
-                      <span>Fast Track</span>
-                    </label>
-
-                    <label class="radio-label">
-                      <input type="radio" name="priority_type" value="3" id="priority_yellow" onclick="return form_submit();">
-                      <span>Post-Operative</span>
-                    </label>
-                  </div>
-                </div>
-                <script>
-                $(document).ready(function() {
-                // Function to show/hide additional selection based on radio button selection
-                $('input[name="search_type"]').change(function() {
+              <script>
+                $(document).ready(function () {
+                  // Function to show/hide additional selection based on radio button selection
+                  $('input[name="search_type"]').change(function () {
                     if ($(this).val() == "0") { // If Pending is selected
-                        $('#additional_selection').show();
+                      $('#additional_selection').show();
                     } else {
-                        $('#additional_selection').hide();
+                      $('#additional_selection').hide();
                     }
+                  });
                 });
-                });
-                </script>
+              </script>
 
 
             </div> <!-- 4 -->
@@ -273,6 +252,21 @@ $users_data = $this->session->userdata('auth_users');
                 <div class="col-xs-7">
                   <input name="patient_name" value="<?php echo $form_data['patient_name'] ?>" id="patient_name"
                     onkeyup="return form_submit();" class="alpha_space m_input_default" value="" type="text">
+                </div>
+              </div>
+              <div class="row m-b-5">
+                <div class="col-xs-4"><label> Booking Type</label></div>
+                <div class="col-xs-8">
+                  <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="3"
+                    type="radio" <?php if ($form_data['emergency_booking'] == '3') {
+                      echo 'checked';
+                    } ?>> Normal
+                  <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="4"
+                    type="radio" <?php if ($form_data['emergency_booking'] == '4') {
+                      echo 'checked';
+                    } ?>> FastTrack
+                  <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value=""
+                    type="radio" <?php echo 'checked'; ?>> All
                 </div>
               </div>
 
@@ -318,7 +312,7 @@ $users_data = $this->session->userdata('auth_users');
                       <option selected="selected" <?php if (isset($_POST['branch_id']) && $_POST['branch_id'] == $users_data['parent_id']) {
                         echo 'selected="selected"';
                       } ?>
-           value="<?php echo $users_data['parent_id']; ?>">Self</option>';
+                value="<?php echo $users_data['parent_id']; ?>">Self</option>';
                       <?php
                       if (!empty($sub_branch_details)) {
                         $i = 0;
@@ -345,7 +339,7 @@ $users_data = $this->session->userdata('auth_users');
                 <input type="hidden" name="branch_id" id="branch_id" value="<?php echo $users_data['parent_id']; ?>">
               <?php } ?>
 
-              
+
 
             </div> <!-- 4 -->
 
@@ -366,6 +360,45 @@ $users_data = $this->session->userdata('auth_users');
 
 
           </div> <!-- row -->
+
+          <div class="row">
+            <div class="col-sm-12">
+              <div id="additional_selection">
+
+                <div class="col-xs-2"><label style="margin-left: -15px;">Type</label></div>
+
+                <div class="col-xs-10" style="margin-left: -80px;">
+                  <label class="radio-label">
+                    <input type="radio" name="priority_type" value="1" id="priority_red"
+                      onclick="return form_submit();">
+                    <span>Priority</span>
+                  </label>
+
+                  <label class="radio-label">
+                    <input type="radio" name="priority_type" value="2" id="fasttrack_blue"
+                      onclick="return form_submit();">
+                    <span>Fast Track OPD Consultation</span>
+                  </label>
+
+                  <label class="radio-label">
+                    <input type="radio" name="priority_type" value="3" id="priority_yellow"
+                      onclick="return form_submit();">
+                    <span>Post-Operative</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" name="priority_type" value="4" id="priority_normal"
+                      onclick="return form_submit();">
+                    <span>Normal</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" name="priority_type" value="" id="priority_all" onclick="return form_submit();"
+                      checked>
+                    <span>All</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
 
 
         </form>

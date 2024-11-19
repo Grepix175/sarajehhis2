@@ -33,7 +33,6 @@ $users_data = $this->session->userdata('auth_users');
     span {
       font-weight: normal;
     }
-
   </style>
   <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datepicker.css">
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datepicker.js"></script>
@@ -45,71 +44,71 @@ $users_data = $this->session->userdata('auth_users');
       ?>
       $(document).ready(function () {
         table = $('#table').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "order": [],
-            "pageLength": '20',
-            "ajax": {
-                "url": "<?php echo base_url('help_desk/ajax_list') ?>",
-                "type": "POST",
+          "processing": true,
+          "serverSide": true,
+          "order": [],
+          "pageLength": '20',
+          "ajax": {
+            "url": "<?php echo base_url('help_desk/ajax_list') ?>",
+            "type": "POST",
+          },
+          "columnDefs": [
+            {
+              "targets": [0, -1], // last column
+              "orderable": false, // set not orderable
             },
-            "columnDefs": [
-                {
-                    "targets": [0, -1], // last column
-                    "orderable": false, // set not orderable
-                },
-                {
-                    // "targets": -1, // Hide the last column (emergency_status)
-                    // "visible": false,
-                },
-                {
-                    "targets": 5, // Ensure the fifth column is visible
-                    "visible": true,
-                }
-            ],
-            "createdRow": function (row, data, dataIndex) {
-              // console.log(data)
-                // Access emergency_status (assuming it's the last column in the data array)
-                var emergencyStatus = data[data.length - 1]; // Get the emergency_status value
-                // console.log(emergencyStatus)
-
-                // Change the background color of the first column based on emergency_status
-                var firstColumn = $('td', row).eq(1); // Get the first column cell
-
-                if (emergencyStatus == 1) {
-                      firstColumn.css({
-                          'background-color': 'red',   // Red background for emergency_status 1
-                          // 'color': 'white',            // White font color
-                          'font-weight': 'bold'        // Bold font
-                      });
-                  } else if (emergencyStatus == 2) {
-                      firstColumn.css({
-                          'background-color': 'blue',  // Blue background for emergency_status 2
-                          // 'color': 'white',            // White font color
-                          'font-weight': 'bold'        // Bold font
-                      });
-                  } else if (emergencyStatus == 3) {
-                      firstColumn.css({
-                          'background-color': 'yellow', // Yellow background for emergency_status 3
-                          // 'color': 'black',             // Black font color (or default)
-                          'font-weight': 'bold'         // Bold font
-                      });
-                  } else {
-                      firstColumn.css({
-                          'background-color': 'white',  // Default white background
-                          // 'color': 'black',             // Default font color
-                          'font-weight': 'bold'         // Bold font by default
-                      });
-                  }
+            {
+              // "targets": -1, // Hide the last column (emergency_status)
+              // "visible": false,
             },
+            {
+              "targets": 5, // Ensure the fifth column is visible
+              "visible": true,
+            }
+          ],
+          "createdRow": function (row, data, dataIndex) {
+            // console.log(data)
+            // Access emergency_status (assuming it's the last column in the data array)
+            var emergencyStatus = data[data.length - 1]; // Get the emergency_status value
+            // console.log(emergencyStatus)
+
+            // Change the background color of the first column based on emergency_status
+            var firstColumn = $('td', row).eq(1); // Get the first column cell
+
+            if (emergencyStatus == 1) {
+              firstColumn.css({
+                'background-color': 'red',   // Red background for emergency_status 1
+                // 'color': 'white',            // White font color
+                'font-weight': 'bold'        // Bold font
+              });
+            } else if (emergencyStatus == 2) {
+              firstColumn.css({
+                'background-color': 'blue',  // Blue background for emergency_status 2
+                // 'color': 'white',            // White font color
+                'font-weight': 'bold'        // Bold font
+              });
+            } else if (emergencyStatus == 3) {
+              firstColumn.css({
+                'background-color': 'yellow', // Yellow background for emergency_status 3
+                // 'color': 'black',             // Black font color (or default)
+                'font-weight': 'bold'         // Bold font
+              });
+            } else {
+              firstColumn.css({
+                // 'background-color': 'white',  // Default white background
+                // 'color': 'black',             // Default font color
+                'font-weight': 'bold'         // Bold font by default
+              });
+            }
+          },
         });
 
         // Toggle columns visibility
         $('.tog-col').on('click', function (e) {
-            var column = table.column($(this).attr('data-column'));
-            column.visible(!column.visible());
+          var column = table.column($(this).attr('data-column'));
+          column.visible(!column.visible());
         });
-    });
+      });
 
     <?php } ?>
 
@@ -317,9 +316,10 @@ $users_data = $this->session->userdata('auth_users');
                         foreach ($sub_branch_details as $key => $value) {
                           ?>
                           <option value="<?php echo $sub_branch_details[$i]['id']; ?>" <?php if (isset($_POST['branch_id']) && $_POST['branch_id'] == $sub_branch_details[$i]['id']) {
-                              echo 'selected="selected"';
-                            } ?>>
-                            <?php echo $sub_branch_details[$i]['branch_name']; ?> </option>
+                               echo 'selected="selected"';
+                             } ?>>
+                            <?php echo $sub_branch_details[$i]['branch_name']; ?>
+                          </option>
                           <?php
                           $i = $i + 1;
                         }
@@ -336,39 +336,19 @@ $users_data = $this->session->userdata('auth_users');
                 <input type="hidden" name="branch_id" id="branch_id" value="<?php echo $users_data['parent_id']; ?>">
               <?php } ?>
 
-              <div class="row  m-b-5" id="additional_selection">
 
-                <div class="col-xs-4"><label>Priority</label></div>
-
-                  <div class="col-xs-8">
-                    <label class="radio-label">
-                      <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
-                      <span>Priority</span>
-                    </label>
-
-                    <label class="radio-label">
-                      <input type="radio" name="priority_type" value="2" id="fasttrack_blue" onclick="return form_submit();">
-                      <span>Fast Track</span>
-                    </label>
-
-                    <label class="radio-label">
-                      <input type="radio" name="priority_type" value="3" id="priority_yellow" onclick="return form_submit();">
-                      <span>Post-Operative</span>
-                    </label>
-                  </div>
-                </div>
-                <script>
-                $(document).ready(function() {
-                // Function to show/hide additional selection based on radio button selection
-                $('input[name="search_type"]').change(function() {
+              <script>
+                $(document).ready(function () {
+                  // Function to show/hide additional selection based on radio button selection
+                  $('input[name="search_type"]').change(function () {
                     if ($(this).val() == "0") { // If Pending is selected
-                        $('#additional_selection').show();
+                      $('#additional_selection').show();
                     } else {
-                        $('#additional_selection').hide();
+                      $('#additional_selection').hide();
                     }
+                  });
                 });
-                });
-                </script>
+              </script>
 
             </div> <!-- 4 -->
 
@@ -389,6 +369,43 @@ $users_data = $this->session->userdata('auth_users');
 
 
           </div> <!-- row -->
+
+          <div class="row">
+            <div class="col-sm-12">
+              <div id="additional_selection">
+                <div class="col-xs-2"><label style="margin-left: -15px;">Type</label></div>
+                <div class="col-xs-10" style="margin-left: -43px;">
+                  <label class="radio-label">
+                    <input type="radio" name="priority_type" value="1" id="priority_red"
+                      onclick="return form_submit();">
+                    <span>Priority</span>
+                  </label>
+
+                  <label class="radio-label">
+                    <input type="radio" name="priority_type" value="2" id="fasttrack_blue"
+                      onclick="return form_submit();">
+                    <span>Fast Track OPD Consultation</span>
+                  </label>
+
+                  <label class="radio-label">
+                    <input type="radio" name="priority_type" value="3" id="priority_yellow"
+                      onclick="return form_submit();">
+                    <span>Post-Operative</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" name="priority_type" value="4" id="priority_normal"
+                      onclick="return form_submit();">
+                    <span>Normal</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" name="priority_type" value="" id="priority_all" onclick="return form_submit();"
+                      checked>
+                    <span>All</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
 
 
         </form>
@@ -489,6 +506,7 @@ $users_data = $this->session->userdata('auth_users');
         $.ajax({
           url: "<?php echo base_url(); ?>help_desk/reset_search/",
           success: function (result) {
+            // $('#additional_selection').hide();
             reload_table();
           }
         });
@@ -590,45 +608,45 @@ $users_data = $this->session->userdata('auth_users');
 
 
       document.getElementById('help_desk_download_excel').addEventListener('click', function (e) {
-      e.preventDefault();
+        e.preventDefault();
 
 
-      var fromDate = document.getElementById('start_date_patient').value;
-      var toDate = document.getElementById('end_date_patient').value;
+        var fromDate = document.getElementById('start_date_patient').value;
+        var toDate = document.getElementById('end_date_patient').value;
 
 
-      var url = '<?php echo base_url("help_desk/help_desk_excel"); ?>';
+        var url = '<?php echo base_url("help_desk/help_desk_excel"); ?>';
 
 
-      if (fromDate || toDate) {
-        url += '?';
-        if (fromDate) {
-          url += 'start_date=' + encodeURIComponent(fromDate);
+        if (fromDate || toDate) {
+          url += '?';
+          if (fromDate) {
+            url += 'start_date=' + encodeURIComponent(fromDate);
+          }
+          if (toDate) {
+            url += (fromDate ? '&' : '') + 'end_date=' + encodeURIComponent(toDate);
+          }
         }
-        if (toDate) {
-          url += (fromDate ? '&' : '') + 'end_date=' + encodeURIComponent(toDate);
-        }
-      }
-      window.location.href = url;
-    });
+        window.location.href = url;
+      });
 
-    document.getElementById('help_desk_download_pdf').addEventListener('click', function (e) {
-      e.preventDefault();
+      document.getElementById('help_desk_download_pdf').addEventListener('click', function (e) {
+        e.preventDefault();
 
-      var fromDate = document.getElementById('start_date_patient').value;
-      var toDate = document.getElementById('end_date_patient').value;
+        var fromDate = document.getElementById('start_date_patient').value;
+        var toDate = document.getElementById('end_date_patient').value;
 
 
-      var fromDateObj = new Date(fromDate);
-      var toDateObj = new Date(toDate);
+        var fromDateObj = new Date(fromDate);
+        var toDateObj = new Date(toDate);
 
 
 
-      var url = '<?php echo base_url("help_desk/help_desk_pdf"); ?>';
-      url += '?start_date=' + encodeURIComponent(fromDate) + '&end_date=' + encodeURIComponent(toDate);
+        var url = '<?php echo base_url("help_desk/help_desk_pdf"); ?>';
+        url += '?start_date=' + encodeURIComponent(fromDate) + '&end_date=' + encodeURIComponent(toDate);
 
-      window.location.href = url;
-    });
+        window.location.href = url;
+      });
 
     </script>
     <!-- Confirmation Box -->

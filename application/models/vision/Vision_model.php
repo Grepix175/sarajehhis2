@@ -77,9 +77,11 @@ class Vision_model extends CI_Model
 				$this->db->where('hms_vision.created_at >=', $start_date);
 			}
 
-            if (!empty($search['priority_type'])) {
-                $this->db->where('hms_patient.emergency_status', $search['priority_type']);
-            }
+            if (!empty($search['priority_type']) && $search['priority_type'] !== '4') {
+				$this->db->where('hms_patient.emergency_status', $search['priority_type']);
+			} else if ($search['priority_type'] === '4') {				
+				$this->db->where('hms_patient.emergency_status', NULL);
+			}
 
 			if (!empty($search['end_date'])) {
 				$end_date = date('Y-m-d 23:59:59', strtotime($search['end_date']));
@@ -92,6 +94,11 @@ class Vision_model extends CI_Model
 
 			if (!empty($search['patient_code'])) {
 				$this->db->where('hms_vision.patient_code', $search['patient_code']);
+			}
+            if ($search['emergency_booking'] == "4") {
+				$this->db->where('hms_opd_booking.opd_type', 1);
+			} else if ($search['emergency_booking'] == "3") {
+				$this->db->where('hms_opd_booking.opd_type', 0);
 			}
 		}
 
@@ -271,6 +278,45 @@ class Vision_model extends CI_Model
         return null; // Return null if no patient is found
     }
 
+    
+    public function get_booking_patient_details($booking_id)
+	{
+        // echo $booking_id;die;
+		// Select all fields from both tables
+		$this->db->select('hms_opd_booking.*, hms_patient.*'); // Select all fields
+		$this->db->from('hms_opd_booking'); // Start with the bookings table
+		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
+
+		// Filter by the booking ID
+		$this->db->where('hms_opd_booking.patient_id', $booking_id); // Assuming 'id' is the primary key for bookings
+		$query = $this->db->get();
+
+		// Check if any results were returned
+		if ($query->num_rows() > 0) {
+			return $query->row_array(); // Return the first result as an associative array
+		}
+
+		return null; // Return null if no data found
+	}
+    public function get_booking_patient_details_edit($booking_id)
+	{
+        // echo $booking_id;die;
+		// Select all fields from both tables
+		$this->db->select('hms_opd_booking.*, hms_patient.*'); // Select all fields
+		$this->db->from('hms_opd_booking'); // Start with the bookings table
+		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
+
+		// Filter by the booking ID
+		$this->db->where('hms_opd_booking.id', $booking_id); // Assuming 'id' is the primary key for bookings
+		$query = $this->db->get();
+
+		// Check if any results were returned
+		if ($query->num_rows() > 0) {
+			return $query->row_array(); // Return the first result as an associative array
+		}
+
+		return null; // Return null if no data found
+	}
 
     // New method to fetch all non-deleted side effects
     public function get_all_side_effects()

@@ -85,6 +85,7 @@ $field_list = mandatory_section_field_list(2);
             /* width: 480px; */
         }
 
+
         /* .input-height {
       height: 35px !important;
       padding: 8px;
@@ -158,6 +159,104 @@ $field_list = mandatory_section_field_list(2);
         <section class="content">
             <form id="vision_modal_form" method="post" action="<?php echo current_url(); ?>"
                 enctype="multipart/form-data"> <!-- Use method="post" -->
+                <?php
+                // Loop through the contact lens data
+                $age_y = $booking_data['age_y'];
+                $age_m = $booking_data['age_m'];
+                $age_d = $booking_data['age_d'];
+
+                $age = "";
+                if ($age_y > 0) {
+                    $year = 'Years';
+                    if ($age_y == 1) {
+                        $year = 'Year';
+                    }
+                    $age .= $age_y . " " . $year;
+                }
+                if ($age_m > 0) {
+                    $month = 'Months';
+                    if ($age_m == 1) {
+                        $month = 'Month';
+                    }
+                    $age .= ", " . $age_m . " " . $month;
+                }
+                if ($age_d > 0) {
+                    $day = 'Days';
+                    if ($age_d == 1) {
+                        $day = 'Day';
+                    }
+                    $age .= ", " . $age_d . " " . $day;
+                }
+                ?>
+                <div class="row" style="margin-bottom:10px;">
+                    <div class="col-xs-5">
+                        <div class="row m-b-5">
+                            <div class="col-xs-4"><strong>Patient</strong></div>
+                            <div class="col-xs-8">
+                                <input type="text" name="patient_name"
+                                    value="<?php echo isset($booking_data['patient_name']) ? $booking_data['patient_name'] : 'N/A'; ?>"
+                                    readonly=""
+                                    style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
+                            </div>
+                        </div>
+                        <div class="row m-b-5">
+                            <div class="col-xs-4"><strong>Patient Reg. No</strong></div>
+                            <div class="col-xs-8">
+                                <input type="text" name="patient_code"
+                                    value="<?php echo isset($booking_data['patient_code']) ? $booking_data['patient_code'] : 'N/A'; ?>"
+                                    readonly=""
+                                    style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
+                            </div>
+                        </div>
+                        <div class="row m-b-5">
+                            <div class="col-xs-4"><strong>OPD No</strong></div>
+                            <div class="col-xs-8">
+                                <input type="text" name="booking_code"
+                                    value="<?php echo isset($booking_data['booking_code']) ? $booking_data['booking_code'] : 'N/A'; ?>"
+                                    readonly=""
+                                    style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
+                            </div>
+
+                        </div>
+                        <div class="row m-b-5">
+                            <div class="col-xs-4"><strong>Token No</strong></div>
+                            <div class="col-xs-8">
+                                <input type="text" name="token_no"
+                                    value="<?php echo isset($booking_data['token_no']) ? $booking_data['token_no'] : 'N/A'; ?>"
+                                    readonly=""
+                                    style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-5">
+                        <div class="row m-b-5">
+                            <div class="col-xs-4"><strong>Mobile no.</strong></div>
+                            <div class="col-xs-8">
+                                <input type="text" name="mobile_no"
+                                    value="<?php echo isset($booking_data['mobile_no']) ? $booking_data['mobile_no'] : 'N/A'; ?>"
+                                    readonly=""
+                                    style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
+                            </div>
+                        </div>
+                        <div class="row m-b-5">
+                            <div class="col-xs-4"><strong>Age</strong></div>
+                            <div class="col-xs-8">
+                                <input type="text" name="mobile_no" value="<?php echo isset($age) ? $age : 'N/A'; ?>"
+                                    readonly=""
+                                    style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
+                            </div>
+                        </div>
+                        <div class="row m-b-5">
+                            <div class="col-xs-4"><strong>Gender</strong></div>
+                            <div class="col-xs-8">
+                                <input type="text" name="gender"
+                                    value="<?php echo ($booking_data['gender'] == '0') ? 'Female' : 'Male'; ?>"
+                                    readonly=""
+                                    style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <input type="hidden" name="data_id" id="patient_id"
                     value="<?php echo isset($form_data['data_id']) ? $form_data['data_id'] : ''; ?>">
                 <input type="hidden" name="booking_id" id="booking_id"
@@ -167,14 +266,14 @@ $field_list = mandatory_section_field_list(2);
                         <?php $data = get_setting_value('PATIENT_REG_NO');
                         if (!empty($data) && isset($data)) {
                             ?>
-                            <div class="grp">
+                            <!-- <div class="grp">
                                 <label><?php echo "Reg No : " ?></label>
                                 <div class="box-right"><?php echo $form_data['patient_code']; ?></div>
                                 <input type="hidden" name="patient_code" id="patient_code"
                                     value="<?php echo $form_data['patient_code']; ?>" />
-                            </div>
+                            </div> -->
                         <?php } ?>
-                        <div class="grp-full">
+                        <!-- <div class="grp-full">
                             <div class="row align-items-center">
                                 <div class="col-md-6">
                                     <label for="patient_name" class="font-weight-bold mb-0">Name of the patient: <span
@@ -196,7 +295,7 @@ $field_list = mandatory_section_field_list(2);
                                 </div>
 
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="grp-full">
                             <div class="row align-items-center">
@@ -221,7 +320,7 @@ $field_list = mandatory_section_field_list(2);
                                     <label for="sideEffects" class="font-weight-bold mb-0">Side Effects <span
                                             class="star">*</span></label>
                                 </div>
-                                
+
                                 <div class="col-md-6">
                                     <!-- <select name="side_effects" id="side_effects" class="m_input_default select-height">
                                         <option value="" <?php echo empty($form_data['side_effects']) ? 'selected' : ''; ?>>Select a side effect</option>
@@ -319,7 +418,7 @@ $field_list = mandatory_section_field_list(2);
                                             <td>
                                                 <div class="grp">
                                                     <label>
-                                                        <input type="radio" name="<?php echo $name; ?>" value="yes" <?php echo (isset($form_data[$name]) && $form_data[$name] == 'yes') ? 'checked' : ''; ?> > Yes
+                                                        <input type="radio" name="<?php echo $name; ?>" value="yes" <?php echo (isset($form_data[$name]) && $form_data[$name] == 'yes') ? 'checked' : ''; ?>> Yes
                                                     </label>
                                                     <label>
                                                         <input type="radio" name="<?php echo $name; ?>" value="no" <?php echo (isset($form_data[$name]) && $form_data[$name] == 'no') ? 'checked' : ''; ?>> No
@@ -339,8 +438,7 @@ $field_list = mandatory_section_field_list(2);
                                     </div>
                                     <div class="col-md-6">
                                         <textarea rows="2" class="form-control input-height" name="reason_ffa_not_done"
-                                            placeholder="Enter the reason FFA was not done"
-                                            ><?php echo isset($form_data['reason_ffa_not_done']) ? htmlspecialchars($form_data['reason_ffa_not_done']) : ''; ?></textarea>
+                                            placeholder="Enter the reason FFA was not done"><?php echo isset($form_data['reason_ffa_not_done']) ? htmlspecialchars($form_data['reason_ffa_not_done']) : ''; ?></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -428,20 +526,26 @@ $field_list = mandatory_section_field_list(2);
         event.preventDefault(); // Prevent the default form submission
 
         var formData = new FormData(this); // Gather form data
-        // formData.forEach(function(value, key) {
-        //     console.log(key + ': ' + value);
-        // });
+        formData.forEach(function (value, key) {
+            console.log(key + ': ' + value);
+        });
 
 
         fetch('<?php echo base_url('vision/add'); ?>', { // Update with the correct URL
             method: 'POST',
             body: formData,
         })
-            .then(response => response.json())
+            .then(response => {
+                // Check if the response is okay (status 200-299)
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response; // Parse the JSON response
+            })
             .then(data => {
-                console.log(data,'=====')
+                console.log(data, '=====')
                 // Handle success or error response
-                if (data.success) {
+                if (data.ok) {
                     // alert('Form submitted successfully!');
                     // Redirect to the vision list page
                     // flash_session_msg(data.message);

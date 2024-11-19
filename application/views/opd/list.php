@@ -323,7 +323,9 @@ $user_role = $users_data['users_role'];
                   </div>
                 </div>
 
+
               </div> <!-- 4 -->
+
 
               <div class="col-sm-5">
                 <div class="row m-b-5">
@@ -422,6 +424,8 @@ $user_role = $users_data['users_role'];
                       type="radio" <?php if ($form_data['emergency_booking'] == '4') {
                         echo 'checked';
                       } ?>> FastTrack
+                    <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value=""
+                      type="radio" <?php echo 'checked';?>> All
                   </div>
                 </div>
                 <div class="row m-b-5">
@@ -449,65 +453,73 @@ $user_role = $users_data['users_role'];
                     </label>
                   </div>
 
-                  <div  id="additional_selection">
 
+                </div>
+                <script>
+                  $(document).ready(function () {
+                    // Initially hide the additional selection
+                    // $('#additional_selection').hide();
 
-                    <!-- <div class="col-md-4"></div> -->
-                    <!-- <div class="col-md-7" style="padding:2px;"> -->
-                    <div class="col-xs-4"><label>Priority</label></div>
-
-                      <div class="col-xs-8" >
-                        <label class="radio-label">
-                          <input type="radio" name="priority_type" value="1" id="priority_red" onclick="return form_submit();">
-                          <span>Priority</span>
-                        </label>
-
-                        <label class="radio-label">
-                          <input type="radio" name="priority_type" value="2" id="fasttrack_blue" onclick="return form_submit();">
-                          <span>Fast Track</span>
-                        </label>
-
-                        <label class="radio-label">
-                          <input type="radio" name="priority_type" value="3" id="priority_yellow" onclick="return form_submit();">
-                          <span>Post-Operative</span>
-                        </label>
-                      </div>
-                      </div>
-                    </div>
-                    <script>
-                      $(document).ready(function() {
-                        // Initially hide the additional selection
-                        // $('#additional_selection').hide();
-
-                        // Function to show/hide additional selection based on radio button selection
-                        $('input[name="search_type"]').change(function() {
-                          if ($(this).val() == "0") { // If Pending is selected
-                            $('#additional_selection').show();
-                          } else {
-                            $('#additional_selection').hide();
-                          }
-                        });
-                      });
-                    </script>
+                    // Function to show/hide additional selection based on radio button selection
+                    $('input[name="search_type"]').change(function () {
+                      if ($(this).val() == "0") { // If Pending is selected
+                        $('#additional_selection').show();
+                      } else {
+                        $('#additional_selection').hide();
+                      }
+                    });
+                  });
+                </script>
               </div>
-               
-
-
-               <!-- 4 -->
-
+              <!-- 4 -->
               <div class="col-sm-3 d-flex justify-content-center" style="margin-left: 133px;margin-top: 30px;">
                 <!-- <input value="Reset" class="col-sm-4 d-flex justify-content-center"
                   style="margin-left: 133px;margin-top: 30px;" onclick="clear_form_elements(this.form)" type="button"> -->
-                  <a class="btn-custom" id="reset_date" onclick="reset_search(this.form);">Reset</a>
+                <a class="btn-custom" id="reset_date" onclick="reset_search(this.form);">Reset</a>
                 <!--<a class="btn-custom" id="reset_date" onclick="clear_form_elements(this.form);"><i class="fa fa-refresh"></i> Reset</a>-->
                 <!-- <a href="javascript:void(0)" class="btn-a-search" id="opd_adv_search">
                   <i class="fa fa-cubes" aria-hidden="true"></i>
                   Advance Search
                 </a> -->
-
               </div> <!-- 4 -->
             </div> <!-- row -->
-            
+            <div class="row">
+              <div class="col-sm-12">
+                <div id="additional_selection">
+                  <div class="col-xs-2"><label style="margin-left: -15px;">Type</label></div>
+                  <div class="col-xs-10" style="margin-left: -43px;">
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="1" id="priority_red"
+                        onclick="return form_submit();">
+                      <span>Priority</span>
+                    </label>
+
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="2" id="fasttrack_blue"
+                        onclick="return form_submit();">
+                      <span>Fast Track OPD Consultation</span>
+                    </label>
+
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="3" id="priority_yellow"
+                        onclick="return form_submit();">
+                      <span>Post-Operative</span>
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="4" id="priority_normal"
+                        onclick="return form_submit();">
+                      <span>Normal</span>
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="" id="priority_all"
+                        onclick="return form_submit();" checked>
+                      <span>All</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
 
           </form>
 
@@ -559,8 +571,8 @@ $user_role = $users_data['users_role'];
                     <!-- <th>Validity Date</th> -->
                     <!-- <th>Patient Status</th>
                     <th>Next Appointment</th> -->
-                    <th>Total Amount</th>
-                    <th>Net Amount</th>
+                    <!-- <th>Total Amount</th> -->
+                    <!-- <th>Net Amount</th> -->
                     <th>Paid Amount</th>
                     <!-- <th>Discount</th> -->
                     <!-- <th> Policy No. </th>  -->
@@ -689,7 +701,7 @@ $user_role = $users_data['users_role'];
         });
       })
       function clear_form_elements(ele) {
-        
+
         $.ajax({
           url: "<?php echo base_url(); ?>opd/reset_search/",
           success: function (result) {
@@ -726,14 +738,15 @@ $user_role = $users_data['users_role'];
 
         // Perform the AJAX request
         $.ajax({
-            url: "<?php echo base_url(); ?>opd/reset_search/",
-            success: function (result) {
-                // Reset other form elements if needed
-                // document.getElementById("search_form").reset(); 
-                reload_table();
-            }
+          url: "<?php echo base_url(); ?>opd/reset_search/",
+          success: function (result) {
+            // Reset other form elements if needed
+            // document.getElementById("search_form").reset(); 
+            $('#additional_selection').hide();
+            reload_table();
+          }
         });
-    }
+      }
 
 
 
@@ -770,7 +783,7 @@ $user_role = $users_data['users_role'];
         $.ajax({
           url: "<?php echo base_url('opd/advance_search/'); ?>",
           type: 'POST',
-          data: { start_date: start_date, end_date: end_date, branch_id: branch_id,priority_type: priority_type, emergency_booking: emergency_booking, specialization_id: specialization_id, mobile_no: mobile_no, booking_code: booking_code, patient_name: patient_name, status: status },
+          data: { start_date: start_date, end_date: end_date, branch_id: branch_id, priority_type: priority_type, emergency_booking: emergency_booking, specialization_id: specialization_id, mobile_no: mobile_no, booking_code: booking_code, patient_name: patient_name, status: status },
           success: function (result) {
             if (vals != "1") {
               reload_table();
@@ -785,7 +798,7 @@ $user_role = $users_data['users_role'];
       <?php
       if (in_array('529', $users_data['permission']['action'])) {
         ?>
-            
+
         $(document).ready(function () {
           table = $('#table').DataTable({
             "processing": true,
@@ -799,74 +812,74 @@ $user_role = $users_data['users_role'];
             },
             "columnDefs": [
               {
-                      "targets": [0, -1], // Last column
-                      "orderable": false, // Set not orderable
-                  },
-              ],
-              // Adjust the search input
-              "initComplete": function (settings, json) {
-                  // Wrap the search input with a clearable div
-                  var searchInput = $('.dataTables_filter input');
-                  searchInput.wrap('<div class="clearable"></div>');
-                  searchInput.attr('type', 'text'); // Ensure it's type=text
-
-                  // Append the custom clear button (cross icon)
-                  searchInput.after('<span class="clear-icon" style="cursor: pointer;">&#10006;</span>'); // Cross icon as X
-
-                  // Show/hide the clear icon based on input value
-                  searchInput.on('input', function () {
-                      var input = $(this);
-                      input.siblings('.clear-icon').toggle(input.val().length > 0);
-                  });
-
-                  // Handle clear icon click
-                  $('.clear-icon').on('click', function () {
-                      var input = $(this).siblings('input');
-                      input.val(''); // Clear input value
-                      input.trigger('input'); // Trigger input change to hide icon
-                      table.search('').draw(); // Reset DataTable search
-                  });
+                "targets": [0, -1], // Last column
+                "orderable": false, // Set not orderable
               },
-              // Row callback to style the first column based on emergency status
-              "rowCallback": function (row, data) {
-                  var emergencyStatus = data[data.length - 1]; // Assuming the last column contains emergency status
-                  var firstColumn = $('td', row).eq(1); // Get the first column cell
+            ],
+            // Adjust the search input
+            "initComplete": function (settings, json) {
+              // Wrap the search input with a clearable div
+              var searchInput = $('.dataTables_filter input');
+              searchInput.wrap('<div class="clearable"></div>');
+              searchInput.attr('type', 'text'); // Ensure it's type=text
 
-                  // Apply border styles based on emergency status
-                  if (emergencyStatus == 1) {
-                      firstColumn.css({
-                          'background-color': 'red',   // Red background for emergency_status 1
-                          // 'color': 'white',            // White font color
-                          'font-weight': 'bold'        // Bold font
-                      });
-                  } else if (emergencyStatus == 2) {
-                      firstColumn.css({
-                          'background-color': 'blue',  // Blue background for emergency_status 2
-                          // 'color': 'white',            // White font color
-                          'font-weight': 'bold'        // Bold font
-                      });
-                  } else if (emergencyStatus == 3) {
-                      firstColumn.css({
-                          'background-color': 'yellow', // Yellow background for emergency_status 3
-                          // 'color': 'black',             // Black font color (or default)
-                          'font-weight': 'bold'         // Bold font
-                      });
-                  } else {
-                      firstColumn.css({
-                          'background-color': 'white',  // Default white background
-                          // 'color': 'black',             // Default font color
-                          'font-weight': 'bold'         // Bold font by default
-                      });
-                  }
+              // Append the custom clear button (cross icon)
+              searchInput.after('<span class="clear-icon" style="cursor: pointer;">&#10006;</span>'); // Cross icon as X
+
+              // Show/hide the clear icon based on input value
+              searchInput.on('input', function () {
+                var input = $(this);
+                input.siblings('.clear-icon').toggle(input.val().length > 0);
+              });
+
+              // Handle clear icon click
+              $('.clear-icon').on('click', function () {
+                var input = $(this).siblings('input');
+                input.val(''); // Clear input value
+                input.trigger('input'); // Trigger input change to hide icon
+                table.search('').draw(); // Reset DataTable search
+              });
+            },
+            // Row callback to style the first column based on emergency status
+            "rowCallback": function (row, data) {
+              var emergencyStatus = data[data.length - 1]; // Assuming the last column contains emergency status
+              var firstColumn = $('td', row).eq(1); // Get the first column cell
+
+              // Apply border styles based on emergency status
+              if (emergencyStatus == 1) {
+                firstColumn.css({
+                  'background-color': 'red',   // Red background for emergency_status 1
+                  // 'color': 'white',            // White font color
+                  'font-weight': 'bold'        // Bold font
+                });
+              } else if (emergencyStatus == 2) {
+                firstColumn.css({
+                  'background-color': 'blue',  // Blue background for emergency_status 2
+                  // 'color': 'white',            // White font color
+                  'font-weight': 'bold'        // Bold font
+                });
+              } else if (emergencyStatus == 3) {
+                firstColumn.css({
+                  'background-color': 'yellow', // Yellow background for emergency_status 3
+                  // 'color': 'black',             // Black font color (or default)
+                  'font-weight': 'bold'         // Bold font
+                });
+              } else {
+                firstColumn.css({
+                  // 'background-color': 'white',  // Default white background
+                  // 'color': 'black',             // Default font color
+                  'font-weight': 'bold'         // Bold font by default
+                });
               }
+            }
           });
 
           // Toggle column visibility
           $('.tog-col').on('click', function (e) {
-              var column = table.column($(this).attr('data-column'));
-              column.visible(!column.visible());
+            var column = table.column($(this).attr('data-column'));
+            column.visible(!column.visible());
           });
-      });
+        });
       <?php } ?>
       $('document').ready(function () {
         <?php if (isset($_GET['status']) && $_GET['status'] == 'print' && !isset($_GET['type'])) { ?>

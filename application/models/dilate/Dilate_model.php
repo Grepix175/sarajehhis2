@@ -73,8 +73,11 @@ class Dilate_model extends CI_Model
 			$this->db->where('hms_dilated.created_date >=', $start_date);
 		}
 
-		if (!empty($search['priority_type'])) {
+		
+		if (!empty($search['priority_type']) && $search['priority_type'] !== '4') {
 			$this->db->where('hms_patient.emergency_status', $search['priority_type']);
+		} else if ($search['priority_type'] === '4') {				
+			$this->db->where('hms_patient.emergency_status', NULL);
 		}
 
 		if (!empty($search['end_date'])) {
@@ -103,6 +106,11 @@ class Dilate_model extends CI_Model
 		}
 		if (!empty($search['mobile_no'])) {
 			$this->db->where('hms_patient.mobile_no', $search['mobile_no']);
+		}
+		if ($search['emergency_booking'] == "4") {
+			$this->db->where('hms_opd_booking.opd_type', 1);
+		} else if ($search['emergency_booking'] == "3") {
+			$this->db->where('hms_opd_booking.opd_type', 0);
 		}
 
 		// Implement search functionality for DataTables
@@ -318,7 +326,7 @@ class Dilate_model extends CI_Model
 	public function get_by_id($id)
 	{
 		// Select fields from the main 'hms_dilated' table and join other related tables
-		$this->db->select("hms_dilated.*, hms_medicine.medicine_name"); // Assuming you want to get medicine name
+		$this->db->select("hms_dilated.*, hms_medicine.medicine_name,hms_opd_booking.token_no"); // Assuming you want to get medicine name
 
 		// Specify the main table 'hms_dilated'
 		$this->db->from('hms_dilated');
@@ -331,6 +339,7 @@ class Dilate_model extends CI_Model
 		// Join with the 'hms_medicine' table (adjust if your table or field names are different)
 		// Assuming 'drop_name' stores the medicine name and not an ID. If it is an ID, adjust the join condition accordingly
 		$this->db->join('hms_medicine', 'hms_medicine.id = hms_dilated.drop_name', 'left');
+		$this->db->join('hms_opd_booking', 'hms_opd_booking.booking_code = hms_dilated.booking_id', 'left');
 
 		// Get the result and return it as an associative array
 		$query = $this->db->get();

@@ -614,7 +614,7 @@ class Dilate extends CI_Controller
         $data['booking_data'] = $this->dilate->get_booking_by_id($result[0]['booking_code']);
         $data['medicine'] = $this->dilate->get_item_by_medicine($result['drop_name']);
         $data['medicines'] = $this->dilate->get_all_medicines();
-        // echo "<pre>";print_r($data);die;
+        // echo "<pre>";print_r($result);die;
 
         // If no result is found, handle the error
         if (!$result) {
@@ -630,6 +630,7 @@ class Dilate extends CI_Controller
             'data_id' => $id,
             'booking_id' => $result[0]['booking_id'],
             'patient_id' => $result[0]['patient_id'],
+            'token_no' => $result[0]['token_no'],
             'remarks' => $result[0]['remarks']
         );
         $data['booking_id'] = isset($result[0]['booking_id']) ? $result[0]['booking_id'] : '';

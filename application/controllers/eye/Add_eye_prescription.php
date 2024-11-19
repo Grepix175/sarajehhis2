@@ -130,6 +130,7 @@ class Add_eye_prescription extends CI_Controller
     }else{
       $token_no = $this->opd->get_opd_details($booking_id);
     }
+    $data['token_no'] = $token_no['token_no'] ?? '';
     $this->opd->opd_status_update($booking_id);
     $data['flag'] = $this->input->get('flag') ?? '';
 
@@ -144,8 +145,11 @@ class Add_eye_prescription extends CI_Controller
       $this->session->set_userdata('drawing_data', $drawing_list);
     }
 
-
+    
     $data['form_data'] = array('history_flag' => 1, 'contactlens_flag' => 1, 'glassesprescriptions_flag' => 1, 'intermediate_glasses_prescriptions_flag' => 1, 'examination_flag' => 1, 'diagnosis_flag' => 1, 'investigations_flag' => 1, 'advice_flag' => 1, 'token_no' => $token_no['token_no'] ?? '', 'symptom_fever' => '', 'symptom_cough' => '', 'symptom_smell_taste', 'symptom_loose_stools' => '', 'symptom_local_zone' => '', 'symptom_travel' => '', 'symptom_contact' => '');
+    // echo "<pre>";
+    //     print_r($data['form_data']);
+    //     die('sagar');
     // echo "<pre>";
     //   print_r($data['form_data']);
     //   // print_r($booking_id);
@@ -1749,11 +1753,18 @@ class Add_eye_prescription extends CI_Controller
     $this->load->library('m_pdf');
     $form_data = $this->prescription->get_by_ids($pres_id);
     $data['form_data'] = $form_data;
+    // echo "<pre>";
+    // print_r($data['form_data']['token_no']);
+    // die;
+    $data['token_no'] = $data['form_data']['token_no'] ?? '';
     $data['page_title'] = $data['form_data']['patient_name'] . " Prescription";
 
     $pres_result = $this->add_prescript->get_prescription_by_id($booking_id, $pres_id);
 
     $result_edit = $this->add_prescript->get_prescription_new_by_id($booking_id, $pres_id);
+    // echo "<pre>";
+    // print_r($result_edit);
+    // die;
     $data['drawing_list'] = $this->add_prescript->get_drawing($booking_id, $pres_id);
     $result_refraction = $this->add_prescript->get_prescription_refraction_new_by_id($booking_id, $pres_id);
 
@@ -2130,6 +2141,7 @@ class Add_eye_prescription extends CI_Controller
     }elseif(!empty($flag) &&  $flag == 'hess_chart'){
       $middle_replace = $this->load->view('hess_chart/view', $data, true);
     }else{
+     
       $middle_replace = $this->load->view('help_desk/view', $data, true);
 
     }

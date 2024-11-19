@@ -111,9 +111,11 @@ class Tokenno_model extends CI_Model
             if (!empty($criteria['search_type'])) {
                 $this->db->where('hms_token.status', $criteria['search_type']);
             }
-            if (!empty($criteria['priority_type'])) {
+            if (!empty($criteria['priority_type']) && $criteria['priority_type'] !== '4') {
                 $this->db->where('hms_patient.emergency_status', $criteria['priority_type']);
-            }
+            }else if ($criteria['priority_type'] === '4') {				
+				$this->db->where('hms_patient.emergency_status', NULL);
+			}
 
             // Apply date filter
             // if (!empty($criteria['from_date']) && !empty($criteria['to_date'])) {

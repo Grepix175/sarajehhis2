@@ -17,6 +17,7 @@ class Token_no extends CI_Controller
     {
         // echo "hi";die;
         $this->session->unset_userdata('token_search');
+        $this->session->unset_userdata('booked_patients');
         // Default Search Setting
         $this->load->model('default_search_setting/default_search_setting_model');
         $default_search_data = $this->default_search_setting_model->get_default_setting();
@@ -36,23 +37,24 @@ class Token_no extends CI_Controller
     // AJAX method to fetch the token list for display
     public function ajax_list()
     {
+        
         $users_data = $this->session->userdata('auth_users');
         $opd_search = $this->session->userdata('token_search'); // Get filter criteria from session
-    
+
         // Check if search criteria are set and adjust the query accordingly
         if (!empty($opd_search)) {
             $this->token_no->set_filter_criteria($opd_search); // Pass the filter criteria to the model
         }
-    
+
         $list = $this->token_no->get_datatables();  // Fetch token list with filter criteria
         $data = array();
         $no = $_POST['start'];
         $i = 1;
-    
+
         foreach ($list as $test) {
             $no++;
             $row = array();
-        
+
             // Add a class based on emergency_status
             $row_class = '';
             if ($test->emergency_status == 1) {
@@ -62,29 +64,42 @@ class Token_no extends CI_Controller
             } elseif ($test->emergency_status == 3) {
                 $row_class = 'border-yellow'; // Class for yellow border
             }
-        
+
             // Add token_no directly
             $row[] = $test->token_no; // Add token_no directly
-        
+
             // Add other patient details
             $row[] = $test->patient_code;
             $row[] = $test->patient_name;
-        
+
             // Display status
             $status = ($test->status == 1) ? 'Pending' : 'Completed';
             $row[] = $status;
-        
+
             // Generate action button (hide if status is 'Complete')
             if ($test->status == 1) {  // Show button only if status is 'Pending'
                 $action_url = base_url("opd/booking/" . $test->patient_id);
-                $row[] = '<a href="' . $action_url . '" class="btn-custom" title="Edit">Book Now</a>';
+                // $row[] = '<a href="' . $action_url . '" class="btn-custom" title="Edit">Book Now</a>';
+                $bookedPatients = $this->session->userdata('booked_patients') ?? [];
+
+                $isBooked = in_array($test->patient_id, $bookedPatients);
+                if ($isBooked) {
+                    // Render disabled button for already booked patients
+                    $row[] = '<button class="btn-custom book-now-btn" disabled>Booked</button>';
+                } else {
+                    // Render active button for patients not yet booked
+                    $row[] = '<button class="btn-custom book-now-btn" title="Book Now" 
+        data-id="' . $test->patient_id . '" 
+        data-url="' . base_url('opd/booking/' . $test->patient_id) . '">Book Now</button>';
+                }
+
             } else {
                 $row[] = '';  // Leave action column empty for 'Complete' status
             }
-        
+
             // Add emergency_status to the row
             $row[] = $test->emergency_status; // Add emergency_status to the row
-        
+
             // Add the row to data
             $data[] = $row; // Each row now includes emergency_status
             $i++;
@@ -96,10 +111,36 @@ class Token_no extends CI_Controller
             "recordsFiltered" => $this->token_no->count_filtered(),  // Correct reference to model
             "data" => $data,
         );
-    
+
         echo json_encode($output);
     }
-    
+
+    public function book_patient()
+    {
+        $patientId = $this->input->post('patient_id'); // Get patient ID from POST
+        $bookedPatients = $this->session->userdata('booked_patients') ?? [];
+
+        // Check if the patient is already booked
+        if (in_array($patientId, $bookedPatients)) {
+            echo json_encode(['status' => 'error', 'message' => 'This patient is already booked.']);
+            return;
+        }
+
+        // Simulate booking logic (e.g., save booking to the database)
+        // Add patient ID to session
+        $bookedPatients[] = $patientId;
+        $this->session->set_userdata('booked_patients', $bookedPatients);
+
+        echo json_encode(['status' => 'success', 'message' => 'Patient booked successfully.']);
+    }
+
+    public function clear_booking_session()
+    {
+        $this->session->unset_userdata('booked_patients');
+        echo "Booking session cleared!";
+    }
+
+
     // Method to handle search filters
     public function advance_search()
     {
@@ -246,7 +287,7 @@ class Token_no extends CI_Controller
 
         // Field names in the next row
         // $data = get_setting_value('PATIENT_REG_NO');
-        $fields = array('Token No.', 'Patient Reg. No.', 'Patient Name',  'Mobile No.', 'Status', 'Created Date');
+        $fields = array('Token No.', 'Patient Reg. No.', 'Patient Name', 'Mobile No.', 'Status', 'Created Date');
 
         $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getDefaultStyle()->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
@@ -285,7 +326,7 @@ class Token_no extends CI_Controller
                     $relation_name = $token->patient_relation . " " . $token->relation_name;
                 }
                 $status = $token->status == 1 ? 'Pending' : 'Completed';
-                array_push($rowData, $token->token_no, $token->patient_code, $token->patient_name,$token->mobile_no, $status, $created_date);
+                array_push($rowData, $token->token_no, $token->patient_code, $token->patient_name, $token->mobile_no, $status, $created_date);
                 $count = count($rowData);
                 for ($j = 0; $j < $count; $j++) {
                     $data[$i][$fields[$j]] = $rowData[$j];
@@ -328,6 +369,6 @@ class Token_no extends CI_Controller
         $this->session->unset_userdata('token_search');
     }
 
-    
+
 }
 ?>

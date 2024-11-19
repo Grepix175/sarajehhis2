@@ -1542,7 +1542,7 @@ class Add_new_prescription_model extends CI_Model
 	}
 	public function get_by_ids($id)
 	{
-		$this->db->select("hms_eye_prescription.*,hms_opd_booking.booking_code,hms_opd_booking.booking_date,hms_opd_booking.specialization_id,hms_opd_booking.referral_doctor,hms_opd_booking.attended_doctor,hms_opd_booking.booking_date,hms_opd_booking.booking_time,hms_patient.relation_type,hms_patient.relation_name,hms_patient.relation_simulation_id");  //,hms_opd_prescription_patient_test.*,hms_opd_prescription_patient_pres.*
+		$this->db->select("hms_eye_prescription.*,hms_opd_booking.booking_code,hms_opd_booking.booking_date,hms_opd_booking.specialization_id,hms_opd_booking.referral_doctor,hms_opd_booking.attended_doctor,hms_opd_booking.booking_date,hms_opd_booking.booking_time,hms_opd_booking.token_no,hms_patient.relation_type,hms_patient.relation_name,hms_patient.relation_simulation_id");  //,hms_opd_prescription_patient_test.*,hms_opd_prescription_patient_pres.*
 		$this->db->from('hms_eye_prescription');
 		$this->db->join('hms_opd_booking', 'hms_opd_booking.id=hms_eye_prescription.booking_id', 'left');
 		$this->db->join('hms_patient', 'hms_patient.id=hms_opd_booking.patient_id', 'left');
@@ -1644,8 +1644,8 @@ class Add_new_prescription_model extends CI_Model
 	{
 		$user_data = $this->session->userdata('auth_users');
 		$post = $this->input->post();
-	// 		echo "sagar";
-	// echo "<pre>"; print_r($post);
+		// echo "sagar";
+		// echo "<pre>"; print_r($post);
 		$history_flag = 0;
 		$drawing_flag = 0;
 		$refraction_below8 = 0;
@@ -1659,6 +1659,7 @@ class Add_new_prescription_model extends CI_Model
 
 			$history_flag = isset($post['print_history_flag']) ? '1' : '0';
 		}
+		// echo "<pre>"; print_r($drawing_flag); die('sagar');
 		$contactlens_flag = isset($post['print_contactlens_flag']) ? '1' : '0';
 		$glassesprescriptions_flag = isset($post['print_glassesprescriptions_flag']) ? '1' : '0';
 		$intermediate_glasses_prescriptions_flag = isset($post['print_intermediate_glasses_prescriptions_flag']) ? '1' : '0';
