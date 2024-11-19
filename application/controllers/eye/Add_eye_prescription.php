@@ -2077,9 +2077,12 @@ class Add_eye_prescription extends CI_Controller
 
 
     $print_setting = $this->add_prescript->prescription_html_template('', $pres_result['branch_id']);
-    //echo "<pre>"; print_r($print_setting); exit;
+    // echo "<pre>"; print_r($print_setting); exit;
     $data['print_setting'] = $print_setting;
     $header_replace_part = $print_setting->page_details;
+    // echo "<pre>";
+    // print_r($header_replace_part);
+    // die;
     $middle_replace_part = $print_setting->page_middle;
     $simulation = get_simulation_name($form_data['simulation_id']);
 
@@ -2094,11 +2097,11 @@ class Add_eye_prescription extends CI_Controller
       $sign_photo = '<img src="' . $sign_img . '" width="100px" />';
     }
     $header_replace_part = str_replace("{patient_name}", $simulation . ' ' . $form_data['patient_name'], $header_replace_part);
+    $header_replace_part = str_replace("{patient_reg_no}", $form_data['patient_code'], $header_replace_part);
 
     $header_replace_part = str_replace("{patient_address}", $form_data['paddress'] . ' ' . $form_data['paddress1'] . ' ' . $form_data['paddress2'], $header_replace_part);
 
     $header_replace_part = str_replace("{patient_age}", $age, $header_replace_part);
-    $header_replace_part = str_replace("{patient_reg_no}", $form_data['patient_code'], $header_replace_part);
     $header_replace_part = str_replace("{app_id}", $form_data['booking_code'], $header_replace_part);
     $header_replace_part = str_replace("{mobile_no}", $form_data['mobile_no'], $header_replace_part);
     $header_replace_part = str_replace("{booking_date}", $booking_date, $header_replace_part);
@@ -2141,7 +2144,7 @@ class Add_eye_prescription extends CI_Controller
     }elseif(!empty($flag) &&  $flag == 'hess_chart'){
       $middle_replace = $this->load->view('hess_chart/view', $data, true);
     }else{
-     
+      
       $middle_replace = $this->load->view('help_desk/view', $data, true);
 
     }

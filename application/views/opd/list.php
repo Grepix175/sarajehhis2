@@ -300,8 +300,23 @@ $user_role = $users_data['users_role'];
                       onkeyup="return form_submit();" class="numeric m_input_default" maxlength="10" value="" type="text">
                   </div>
                 </div>
-
                 <div class="row m-b-5">
+                  <div class="col-xs-5"><label> Booking Type</label></div>
+                  <div class="col-xs-7">
+                    <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="3"
+                      type="radio" <?php if ($form_data['emergency_booking'] == '3') {
+                        echo 'checked';
+                      } ?>> Normal
+                    <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="4"
+                      type="radio" <?php if ($form_data['emergency_booking'] == '4') {
+                        echo 'checked';
+                      } ?>> FastTrack
+                    <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value=""
+                      type="radio" <?php echo 'checked';?>> All
+                  </div>
+                </div>
+
+                <!-- <div class="row m-b-5">
                   <div class="col-xs-5"><label>Specialization</label></div>
                   <div class="col-xs-7">
                     <select name="specialization_id" id="specialization_id" onChange="return form_submit();">
@@ -321,7 +336,7 @@ $user_role = $users_data['users_role'];
                       ?>
                     </select>
                   </div>
-                </div>
+                </div> -->
 
 
               </div> <!-- 4 -->
@@ -413,21 +428,7 @@ $user_role = $users_data['users_role'];
                 <?php } ?>
 
 
-                <div class="row m-b-5">
-                  <div class="col-xs-4"><label> Booking Type</label></div>
-                  <div class="col-xs-8">
-                    <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="3"
-                      type="radio" <?php if ($form_data['emergency_booking'] == '3') {
-                        echo 'checked';
-                      } ?>> Normal
-                    <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="4"
-                      type="radio" <?php if ($form_data['emergency_booking'] == '4') {
-                        echo 'checked';
-                      } ?>> FastTrack
-                    <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value=""
-                      type="radio" <?php echo 'checked';?>> All
-                  </div>
-                </div>
+                
                 <div class="row m-b-5">
                   <div class="col-xs-4"><label>Status</label></div>
                   <div class="col-xs-8">

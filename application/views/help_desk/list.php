@@ -266,6 +266,21 @@ $users_data = $this->session->userdata('auth_users');
                     onkeyup="return form_submit();" class="alpha_space m_input_default" value="" type="text">
                 </div>
               </div>
+              <div class="row m-b-5">
+                  <div class="col-xs-4"><label> Booking Type</label></div>
+                  <div class="col-xs-8">
+                    <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="3"
+                      type="radio" <?php if ($form_data['emergency_booking'] == '3') {
+                        echo 'checked';
+                      } ?>> Normal
+                    <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="4"
+                      type="radio" <?php if ($form_data['emergency_booking'] == '4') {
+                        echo 'checked';
+                      } ?>> FastTrack
+                    <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value=""
+                      type="radio" <?php echo 'checked';?>> All
+                  </div>
+                </div>
 
               <?php
               $users_data = $this->session->userdata('auth_users');
