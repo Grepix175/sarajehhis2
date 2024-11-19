@@ -557,7 +557,7 @@ $user_role = $users_data['users_role'];
           } else {
             // If the patient is already booked or error occurs
             // alert(data.message);
-            btn.prop('disabled', false).text('Book Now');
+            btn.prop('disabled', false).text('Booking...');
           }
         },
         error: function () {

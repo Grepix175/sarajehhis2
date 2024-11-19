@@ -17,7 +17,7 @@ class Token_no extends CI_Controller
     {
         // echo "hi";die;
         $this->session->unset_userdata('token_search');
-        $this->session->unset_userdata('booked_patients');
+        // $this->session->unset_userdata('booked_patients');
         // Default Search Setting
         $this->load->model('default_search_setting/default_search_setting_model');
         $default_search_data = $this->default_search_setting_model->get_default_setting();
@@ -85,7 +85,7 @@ class Token_no extends CI_Controller
                 $isBooked = in_array($test->patient_id, $bookedPatients);
                 if ($isBooked) {
                     // Render disabled button for already booked patients
-                    $row[] = '<button class="btn-custom book-now-btn" disabled>Booked</button>';
+                    $row[] = '<button class="btn-custom book-now-btn" disabled>Booking...</button>';
                 } else {
                     // Render active button for patients not yet booked
                     $row[] = '<button class="btn-custom book-now-btn" title="Book Now" 
