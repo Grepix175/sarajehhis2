@@ -267,13 +267,13 @@ class Opd extends CI_Controller
 
             $btn_prescription .= '<li> <a href="' . base_url("eyes_patient_prescription_history/history/" . $test->patient_id) . '" title="Prescription History" data-url="512"><i class="fa fa-pencil"></i> Prescription History</a></li>';
           }
-          if ($test->dilate_status == 0) {
-            $btn_prescription .= '<li><a href="javascript:void(0)"  onclick="dilated(' . $test->id . ');" style="color:orange!important;"><i class="fa fa-hand-o-right"></i> Dilate</a></li>';
-          } else if ($test->dilate_status == 1) {
-            $btn_prescription .= '<li><a href="javascript:void(0)" style="color:red!important;"><i class="fa fa-hand-o-right"></i> D</a></li>';
-          } else if ($test->dilate_status == 2) {
-            $btn_prescription .= '<li><a href="javascript:void(0)" style="color:green!important;"><i class="fa fa-hand-o-right"></i>Dilated</a></li>';
-          }
+          // if ($test->dilate_status == 0) {
+          //   $btn_prescription .= '<li><a href="javascript:void(0)"  onclick="dilated(' . $test->id . ');" style="color:orange!important;"><i class="fa fa-hand-o-right"></i> Dilate</a></li>';
+          // } else if ($test->dilate_status == 1) {
+          //   $btn_prescription .= '<li><a href="javascript:void(0)" style="color:red!important;"><i class="fa fa-hand-o-right"></i> D</a></li>';
+          // } else if ($test->dilate_status == 2) {
+          //   $btn_prescription .= '<li><a href="javascript:void(0)" style="color:green!important;"><i class="fa fa-hand-o-right"></i>Dilated</a></li>';
+          // }
         }
 
 
@@ -284,12 +284,12 @@ class Opd extends CI_Controller
                 > Blank Eye Prescription  </a></li>';
           //$btn_prescription .='</div>';                
         }
-        if (in_array('1441', $users_data['permission']['action'])) {
-          $btn_prescription .= '<li><a  href="' . base_url("eye/biometric_details/add/" . $test->id) . '" title="Biometric Details"><i class="fa fa-eye"></i> Biometric Test Form</a></li>';
-          $print_url_eye = "'" . base_url('eye/biometric_details/biometric_details_print/' . $test->id) . "'";
-          $btn_prescription .= '<li><a  href="javascript:void(0)" onClick="return print_window_page(' . $print_url_eye . ')" title="Print" ><i class="fa fa-eye"></i
-                > Print Biometric  </a></li>';
-        }
+        // if (in_array('1441', $users_data['permission']['action'])) {
+        //   $btn_prescription .= '<li><a  href="' . base_url("eye/biometric_details/add/" . $test->id) . '" title="Biometric Details"><i class="fa fa-eye"></i> Biometric Test Form</a></li>';
+        //   $print_url_eye = "'" . base_url('eye/biometric_details/biometric_details_print/' . $test->id) . "'";
+        //   $btn_prescription .= '<li><a  href="javascript:void(0)" onClick="return print_window_page(' . $print_url_eye . ')" title="Print" ><i class="fa fa-eye"></i
+        //         > Print Biometric  </a></li>';
+        // }
       } elseif ($test->booking_type == 2) /* for pedic*/ {
         $prescription_count_pedic = $this->opd->get_prescription_count_for_pedic($test->id);
         if ($prescription_count_pedic < 1) {
@@ -394,7 +394,7 @@ class Opd extends CI_Controller
       $print_consolidated_url = "'" . base_url('opd/print_consolidate_dbooking_report/' . $test->id . '/' . $test->branch_id) . "'";
       // $opd_consolidated_bill = '<li> <a onClick="return print_window_page(' . $print_consolidated_url . ')" style="' . $test->id . '" title="Print Consolidated Bill"><i class="fa fa-print"></i> Print Consolidated Bill</a></li>';
       $opd_consolidated_bill = '';
-      $btn_print_label = ' <a onClick="return print_label(' . $test->id . ');"  href="javascript:void(0)" style="' . $test->id . '" title="Print"><i class="fa fa-print"></i> Print Label</a>';
+      // $btn_print_label = ' <a onClick="return print_label(' . $test->id . ');"  href="javascript:void(0)" style="' . $test->id . '" title="Print"><i class="fa fa-print"></i> Print Label</a>';
       $print_mlc = '';
       if (!empty($test->mlc)) {
         $print_mlcs = "'" . base_url('opd/mlc_print/' . $test->id . '/' . $test->branch_id) . "'";
@@ -470,9 +470,9 @@ class Opd extends CI_Controller
 
 
       // added By Nitin Sharma 02/02/2024
-      $btn_view_test = '<li><a onclick="return view_test_report(' . $test->patient_id . ')" href="javascript:void(0)" title="View Test Report"><i class="fa fa-list"></i> View Test Report</a></li>';
+      // $btn_view_test = '<li><a onclick="return view_test_report(' . $test->patient_id . ')" href="javascript:void(0)" title="View Test Report"><i class="fa fa-list"></i> View Test Report</a></li>';
       // Added By Nitin Sharma Ipd Booking Button  06/02/2024
-      $ipd_booking = '<li><a href="' . base_url('ipd_booking/add/?ipd=' . $test->patient_id . '') . '" title="IPD Booking"><i class="fa fa-plus"></i> Ipd Booking</a></li>';
+      // $ipd_booking = '<li><a href="' . base_url('ipd_booking/add/?ipd=' . $test->patient_id . '') . '" title="IPD Booking"><i class="fa fa-plus"></i> Ipd Booking</a></li>';
       // Added By Nitin Sharma Ipd Booking Button  06/02/2024
       $btn_a = '<div class="slidedown">
         <button disabled class="btn-custom">More <span class="caret"></span></button>

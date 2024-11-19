@@ -62,6 +62,11 @@ class Help_desk_model extends CI_Model
 			if (!empty($search['mobile_no'])) {
 				$this->db->like('hms_patient.mobile_no', $search['mobile_no'], 'after');
 			}
+			if ($search['emergency_booking'] == "4") {
+				$this->db->where('hms_opd_booking.opd_type', 1);
+			} else if ($search['emergency_booking'] == "3") {
+				$this->db->where('hms_opd_booking.opd_type', 0);
+			}
 		}
 
 		// Exclude prescription ID 1
