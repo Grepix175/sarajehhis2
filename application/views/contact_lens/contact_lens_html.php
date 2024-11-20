@@ -125,12 +125,12 @@
                         <td class="info-content">: <?php echo $data_list[0]['patient_code']; ?></td>
                     </tr>
                     <tr>
-                        <td class="info-label">Token No</td>
-                        <td class="info-content">: <?php echo $data_list[0]['token_no']; ?></td>
-                    </tr>
-                    <tr>
                         <td class="info-label">OPD No</td>
                         <td class="info-content">: <?php echo $data_list[0]['booking_code']; ?></td>
+                    </tr>
+                    <tr>
+                        <td class="info-label">Token No</td>
+                        <td class="info-content">: <?php echo $data_list[0]['token_no']; ?></td>
                     </tr>
                 </table>
             </td>
@@ -196,14 +196,15 @@
     <div style="margin-top: 40px; margin-bottom: 20px;">
         <div style="margin-bottom: 24px; display: flex; justify-content: space-between;">
             <div style="text-align: left; width: 48%;">
-                <p style="font-weight: bold; font-size: 10px; margin-top: 10px;">Signature</p> <!-- Increased font size -->
-                <div style="border-top: 1px solid #000; padding-top: 8px; width: 50%; margin-top: 30px;"> <!-- Increased margin-top -->
-                </div>
+                <p style="font-weight: bold; font-size: 10px; margin-top: 10px;">Signature of Optometrist</p>
+                <strong style="font-size: 15px; border-bottom: 1px solid #000;"><?php echo $data_list[0]['optometrist_signature_name']; ?></strong> <!-- Increased font size -->
+                <!-- <div style="border-top: 1px solid #000; padding-top: 8px; width: 50%; margin-top: 30px;">
+                </div> -->
             </div>
             <div style="text-align: right; width: 48%;">
-                <p style="font-weight: bold; font-size: 10px; margin-top: 10px;">Signature</p> <!-- Increased font size -->
-                <div style="border-top: 1px solid #000; padding-top: 8px; width: 50%; margin-top: 30px; float: right;"> <!-- Increased margin-top -->
-                </div>
+                <p style="font-weight: bold; font-size: 10px; margin-top: 10px;">Signature of Doctor</p>
+                 <strong style="font-size: 15px; border-bottom: 1px solid #000;"><?php echo $data_list[0]['doctor_signature_name']; ?></strong> <!-- Increased font size -->
+                
             </div>
         </div>
     </div>

@@ -7,6 +7,7 @@ class Refraction extends CI_Controller
     {
         parent::__construct();
         $this->load->model('refraction/Refraction_model', 'refraction');
+        $this->load->model('doctors/Doctors_model', 'doctor');
         $this->load->library('form_validation');
     }
 
@@ -140,6 +141,8 @@ class Refraction extends CI_Controller
 
         $refraction_auto_refraction = isset($result_refraction['auto_refraction'])?json_decode($result_refraction['auto_refraction']):'';
         $data['refrtsn_auto_ref'] = (array) $refraction_auto_refraction;
+
+        $data['doctor'] = $this->doctor->doctors_list();
 
         // $patient_details = $this->refraction->get_patient_name_by_booking_id($booking_id);
         // echo "<pre>";
@@ -312,6 +315,7 @@ class Refraction extends CI_Controller
             }
 
             $data['booking_data'] = $this->refraction->get_booking_by_id($result['booking_code']);
+            $data['doctor'] = $this->doctor->doctors_list();
 
             // Prepare data for the view
            // Assuming $result['auto_refraction'] could be a JSON string
@@ -326,7 +330,7 @@ class Refraction extends CI_Controller
             // echo "<pre>";print_r($auto_refraction_data);die;
             // Populate form data
             $data['form_data'] = array(
-                'id' => $result['id'],
+                'id' => $result['ref_id'],
                 'booking_id' => $result['booking_id'],
                 'branch_id' => $result['branch_id'],
                 'booking_code' => $result['booking_code'],
@@ -522,6 +526,8 @@ class Refraction extends CI_Controller
             'doctor_signature' => $result['doctor_signature'],
             'status' => $result['status'],
             'is_deleted' => $result['is_deleted'],
+            'optometrist_signature_name' => $result['optometrist_signature_name'],
+            'doctor_signature_name' => $result['doctor_signature_name'],
             // Populate refraction data safely
             'refraction_ar_l_dv_sph' => $auto_refraction_data['refraction_ar_l_dv_sph'] ?? '',
             'refraction_ar_l_dv_cyl' => $auto_refraction_data['refraction_ar_l_dv_cyl'] ?? '',

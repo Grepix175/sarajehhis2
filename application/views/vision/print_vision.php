@@ -393,16 +393,22 @@
                     <tr>
                         <td class="small text-center">
                             <p class="font-weight-bold pt-4">Optometrist's Signature</p>
+                            <br />
+                            <span><?php echo isset($form_data['optometrist_signature_name']) ? htmlspecialchars($form_data['optometrist_signature_name']) : ''; ?></span>
                             <!-- <div class="border-top pt-4">______________________</div> Increased padding for more space -->
                             <p class="mt-2 small">Date: <?php echo isset($form_data['optometrist_date']) ? date('F j, Y', strtotime($form_data['optometrist_date'])) : '__________________'; ?></p>
                         </td>
                         <td class="small text-center">
                             <p class="font-weight-bold pt-4">Anaesthetist's Signature</p>
+                            <br />
+                            <span><?php echo isset($form_data['anaesthetist_signature']) ? htmlspecialchars($form_data['anaesthetist_signature']) : ''; ?></span>
                             <!-- <div class="border-top pt-4">______________________</div> Increased padding for more space -->
                             <p class="mt-2 small">Date: <?php echo isset($form_data['anaesthetist_date']) ? date('F j, Y', strtotime($form_data['anaesthetist_date'])) : '__________________'; ?></p>
                         </td>
                         <td class="small text-center">
                             <p class="font-weight-bold pt-4">Doctor's Signature</p>
+                            <br />
+                            <span><?php echo isset($form_data['doctor_signature_name']) ? htmlspecialchars($form_data['doctor_signature_name']) : ''; ?></span>
                             <!-- <div class="border-top pt-4">______________________</div> Increased padding for more space -->
                             <p class="mt-2 small">Date: <?php echo isset($form_data['doctor_date']) ? date('F j, Y', strtotime($form_data['doctor_date'])) : '__________________'; ?></p>
                         </td>

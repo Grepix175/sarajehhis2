@@ -95,8 +95,41 @@ $user_role = $users_data['users_role'];
 
     .btn-custom:disabled,
     .btn-custom[style*="pointer-events: none;"] {
-      background-color: #cccccc;
+      /* background-color: #cccccc; */
       cursor: not-allowed;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      /* Space between buttons */
+      align-items: center;
+    }
+
+    .book-now-btn {
+      cursor: not-allowed;
+      /* Indicate that the button is disabled */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .refresh-btn {
+      text-decoration: none;
+      color: #fff;
+      background-color: #6c757d;
+      border: 1px solid #6c757d;
+      padding: 5px 10px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .refresh-btn:hover {
+      background-color: #5a6268;
+      /* Darker shade on hover */
+      border-color: #545b62;
     }
 
     /*  */
@@ -534,13 +567,14 @@ $user_role = $users_data['users_role'];
     //   window.location.href = url;
     // });
 
-    $(document).on('click', '.book-now-btn', function () {
+    $(document).on('click', '.book-now-btn-url', function () {
       const btn = $(this); // Get the clicked button
       const patientId = btn.data('id'); // Patient ID from data attribute
       const bookingUrl = btn.data('url'); // Redirect URL from data attribute
-
+      console.log(bookingUrl, '=======')
       // Disable the button and show "Booking..." text
-      btn.prop('disabled', true).text('Booking...');
+      // btn.prop('disabled', true).text('Booking...');
+      btn.prop('disabled', true).text('In Progess');
 
       // Send AJAX request to backend to handle booking
       $.ajax({
@@ -548,23 +582,62 @@ $user_role = $users_data['users_role'];
         type: 'POST',
         data: { patient_id: patientId },
         success: function (response) {
+          console.log(response, '==========')
           const data = JSON.parse(response);
-
           if (data.status === 'success') {
             // If booking is successful, open the booking page in a new tab
-            window.open(bookingUrl, '_blank');
+            // window.open(bookingUrl, '_blank');
+            window.location.href = bookingUrl;
             // btn.text('Booked');
-          } else {
-            // If the patient is already booked or error occurs
-            // alert(data.message);
-            btn.prop('disabled', false).text('Booking...');
           }
+          // else {
+          //   // If the patient is already booked or error occurs
+          //   // alert(data.message);
+          //   btn.prop('disabled', false).text('Booking...');
+          // }
         },
         error: function () {
           // Handle AJAX error
           alert('An error occurred. Please try again.');
           btn.prop('disabled', false).text('Book Now');
         }
+      });
+    });
+    $(document).on('click', '.refresh-btn', function () {
+      const patientId = $(this).data('patient_id'); // Get the patient ID from the button
+      const refreshButton = $(this); // Store the reference to the button for UI updates
+
+      if (!patientId) {
+        alert('Patient ID is missing!');
+        return;
+      }
+
+      // Disable the button to prevent multiple clicks
+      refreshButton.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
+
+      // AJAX call to update database status
+      $.ajax({
+        url: 'token_no/update_status_opd', // Replace with your backend endpoint
+        type: 'POST',
+        data: { patient_id: patientId }, // Send patient ID to the backend
+        dataType: 'json',
+        success: function (response) {
+          if (response.status === 'success') {
+            // alert('Status updated successfully!');
+            reload_table();
+            // Optionally update the UI or reload the table
+          } else {
+            alert(response.message || 'Failed to update status.');
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error('AJAX Error:', error);
+          alert('An error occurred while updating the status.');
+        },
+        // complete: function () {
+        //   // Re-enable the button after AJAX completes
+        //   refreshButton.prop('disabled', false).html('<i class="fa fa-refresh"></i>');
+        // }
       });
     });
 

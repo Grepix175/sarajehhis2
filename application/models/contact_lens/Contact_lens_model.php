@@ -190,6 +190,9 @@ class Contact_lens_model extends CI_Model
 
 		// If `data_id` exists, perform an update
 		if (!empty($data_id) && $data_id > 0) {
+			// echo "<pre>";
+			// print_r($data);
+			// die;
 			// Update the main contact lens entry (assuming related table for this entry)
 			$this->db->where('id', $data_id);
 			$this->db->update($this->table, $data);
@@ -207,6 +210,7 @@ class Contact_lens_model extends CI_Model
 
 		} else { // If `data_id` is not provided, perform an insert
 			// Insert new data into the main table
+			
 			$data['created_date'] = date('Y-m-d H:i:s');
 			$this->db->set('ip_address', $_SERVER['REMOTE_ADDR']);
 			$this->db->set('created_by', $user_data['id']);
@@ -249,7 +253,7 @@ class Contact_lens_model extends CI_Model
 	{
 		$items = json_decode($contact_lens_items_json, true);
 		// echo "<pre>";
-		// print_r($items);
+		// print_r($post);
 		// die;
 		foreach ($items as $item) {
 			$item_data = [
@@ -264,11 +268,13 @@ class Contact_lens_model extends CI_Model
 				'qty' => isset($item['qty']) ? $item['qty'] : null,
 				'unit' => isset($item['unit_name']) ? $item['unit_name'] : null,
 				'hospital_rate' => isset($item['hospital_rate']) ? $item['hospital_rate'] : null,
+				'optometrist_signature' => isset($post['optometrist_signature']) ? $post['optometrist_signature'] : null,
+				'doctor_signature' => isset($post['doctor_signature']) ? $post['doctor_signature'] : null,
 				'created_date' => date('Y-m-d H:i:s'),
 				'ip_address' => $_SERVER['REMOTE_ADDR'],
 				'created_by' => $user_data['id']
 			];
-
+			
 			// print_r($item_data);
 			// die;
 			// Insert each item into the items table
@@ -345,6 +351,8 @@ class Contact_lens_model extends CI_Model
 			hms_contact_lens.qty,
 			hms_contact_lens.unit,
 			hms_contact_lens.hospital_rate,
+			hms_contact_lens.optometrist_signature,
+			hms_contact_lens.doctor_signature,
 			hms_contact_lens.created_date,
 			hms_contact_lens.booking_id,
 			hms_contact_lens.patient_id,
@@ -359,13 +367,16 @@ class Contact_lens_model extends CI_Model
 			hms_opd_booking.dilate_status,
 			hms_opd_booking.app_type,
 			hms_opd_booking.token_no,
-			hms_opd_booking.booking_code
+			hms_opd_booking.booking_code,
+			optometrist.doctor_name as optometrist_signature_name, 
+            doctor.doctor_name as doctor_signature_name
 		");
 	
 		$this->db->from('hms_contact_lens');
 		$this->db->join('hms_patient', 'hms_patient.id = hms_contact_lens.patient_id', 'left');
 		$this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_contact_lens.booking_id', 'left');
-
+		$this->db->join('hms_doctors as optometrist', 'optometrist.id = hms_contact_lens.optometrist_signature', 'left');
+        $this->db->join('hms_doctors as doctor', 'doctor.id = hms_contact_lens.doctor_signature', 'left');
 		$this->db->where('hms_contact_lens.booking_id', $booking_id);
 		$this->db->where('hms_contact_lens.patient_id', $patient_id);
 		
@@ -404,6 +415,9 @@ class Contact_lens_model extends CI_Model
 		
 		// Process the query results
 		foreach ($query->result() as $row) {
+			// echo "<pre>";
+			// print_r($row);
+			// die('sagar');
 			// Create a unique key based on patient and booking ID
 			$key = $row->patient_id . '-' . $row->booking_id;
 		
@@ -424,6 +438,10 @@ class Contact_lens_model extends CI_Model
 					'app_type' => $row->app_type,
 					'token_no' => $row->token_no,
 					'booking_code' => $row->booking_code,
+					'optometrist_signature' => $row->optometrist_signature,
+					'doctor_signature' => $row->doctor_signature,
+					'optometrist_signature_name' => $row->optometrist_signature_name,
+					'doctor_signature_name' => $row->doctor_signature_name,
 					'contact_lens' => [] // Initialize empty array for contact lens records
 				];
 			}
@@ -438,6 +456,7 @@ class Contact_lens_model extends CI_Model
 				'qty' => $row->qty,
 				'unit' => $row->unit,
 				'hospital_rate' => $row->hospital_rate,
+				
 				'created_date' => $row->created_date
 			];
 		}

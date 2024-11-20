@@ -98,7 +98,7 @@ class Low_vision extends CI_Controller
 
             // Add action buttons
             $row[] = '<a onClick="return edit_refraction(' . $low_vision->refraction_id . ');" class="btn-custom" href="javascript:void(0)" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
-                    <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("low_vision/print_low_vision/" . $low_vision->booking_id."/".$low_vision->id) . '\');">
+                    <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("low_vision/print_low_vision/" . $low_vision->booking_id."/".$low_vision->refraction_id) . '\');">
                         <i class="fa fa-print"></i> Print
                     </a>';
             $row[] = $low_vision->emergency_status;
@@ -446,6 +446,10 @@ class Low_vision extends CI_Controller
     public function print_low_vision($booking_id = NULL ,$id = NULL)
     {
         // echo "ppk";die;
+        // echo "<pre>";
+        // print_r($booking_id);
+        // print_r($id);
+        // die();
         $data['print_status'] = "1";
         $data['data_list'] = $this->low_vision->search_report_data($booking_id,$id);
         $data['booking_data'] = $this->low_vision->get_booking_by_id($booking_id);
@@ -455,7 +459,7 @@ class Low_vision extends CI_Controller
         // Fetch the OPD billing details based on the ID
         // $booking_id = isset($data['form_data']['booking_id'])?$data['form_data']['booking_id']:'';
         // $data['billing_data'] = $this->vision_model->get_patient_name_by_booking_id($booking_id);
-        // echo "<pre>";print_r($data);die;
+        // echo "<pre>";print_r($data['booking_data']);die;
 
         // Load the print view with the data
         $this->load->view('low_vision/print_low_vision', $data);

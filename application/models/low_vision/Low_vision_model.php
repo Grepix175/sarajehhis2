@@ -310,7 +310,7 @@ class Low_vision_model extends CI_Model
         }
     }
 
-    public function search_report_data($id = '', $booking_id = '')
+    public function search_report_data( $booking_id = '',$id = '')
     {
         // echo $booking_id;die;
         // echo $booking_id;die;
@@ -348,7 +348,8 @@ class Low_vision_model extends CI_Model
         $this->db->from('hms_low_vision');
         $this->db->join('hms_patient', 'hms_patient.id = hms_low_vision.patient_id', 'left');
         $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_low_vision.booking_id', 'left');
-        $this->db->where('hms_low_vision.patient_id', $booking_id);
+        // $this->db->where('hms_low_vision.patient_id', $booking_id);
+        $this->db->where('hms_low_vision.id', $id);
         $this->db->where('hms_low_vision.is_deleted', '0');
 
         $query = $this->db->get();

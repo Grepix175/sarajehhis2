@@ -37,7 +37,7 @@ class Token_no extends CI_Controller
     // AJAX method to fetch the token list for display
     public function ajax_list()
     {
-        
+
         $users_data = $this->session->userdata('auth_users');
         $opd_search = $this->session->userdata('token_search'); // Get filter criteria from session
 
@@ -80,17 +80,25 @@ class Token_no extends CI_Controller
             if ($test->status == 1) {  // Show button only if status is 'Pending'
                 $action_url = base_url("opd/booking/" . $test->patient_id);
                 // $row[] = '<a href="' . $action_url . '" class="btn-custom" title="Edit">Book Now</a>';
-                $bookedPatients = $this->session->userdata('booked_patients') ?? [];
+                // $bookedPatients = $this->session->userdata('booked_patients') ?? [];
 
-                $isBooked = in_array($test->patient_id, $bookedPatients);
-                if ($isBooked) {
+                // $isBooked = in_array($test->patient_id, $bookedPatients);
+                if ($test->opd_status == 1) {
                     // Render disabled button for already booked patients
-                    $row[] = '<button class="btn-custom book-now-btn" disabled>Booking...</button>';
+                    $row[] = '<div class="action-buttons">
+                            <button class="btn-custom book-now-btn book-now-btn" disabled>
+                                <i class="fa fa-spinner fa-spin"></i> In Progress
+                            </button>
+                            <a href="javascript:void(0);" title="Refresh" class="btn btn-secondary refresh-btn" data-patient_id="' . $test->patient_id . '" >
+                                <i class="fa fa-refresh"></i>
+                            </a>
+                            </div>';
+                    // $row[] = '<a title="Print"><i class="fa fa-refresh"></i></a>';
                 } else {
                     // Render active button for patients not yet booked
-                    $row[] = '<button class="btn-custom book-now-btn" title="Book Now" 
-        data-id="' . $test->patient_id . '" 
-        data-url="' . base_url('opd/booking/' . $test->patient_id) . '">Book Now</button>';
+                    $row[] = '<button class="btn-custom book-now-btn-url" title="Book Now" 
+                            data-id="' . $test->patient_id . '" 
+                            data-url="' . base_url('opd/booking/' . $test->patient_id) . '">Book Now</button>';
                 }
 
             } else {
@@ -118,20 +126,27 @@ class Token_no extends CI_Controller
     public function book_patient()
     {
         $patientId = $this->input->post('patient_id'); // Get patient ID from POST
-        $bookedPatients = $this->session->userdata('booked_patients') ?? [];
+        // $bookedPatients = $this->session->userdata('booked_patients') ?? [];
 
         // Check if the patient is already booked
-        if (in_array($patientId, $bookedPatients)) {
-            echo json_encode(['status' => 'error', 'message' => 'This patient is already booked.']);
-            return;
-        }
+        // if (in_array($patientId, $bookedPatients)) {
+        //     echo json_encode(['status' => 'error', 'message' => 'This patient is already booked.']);
+        //     return;
+        // }
 
         // Simulate booking logic (e.g., save booking to the database)
         // Add patient ID to session
-        $bookedPatients[] = $patientId;
-        $this->session->set_userdata('booked_patients', $bookedPatients);
-
-        echo json_encode(['status' => 'success', 'message' => 'Patient booked successfully.']);
+        // $bookedPatients[] = $patientId;
+        // $this->session->set_userdata('booked_patients', $bookedPatients);
+        $result = $this->token_no->update_opd_status($patientId);
+        if ($result) {
+            // Only return JSON
+            echo json_encode(['status' => 'success', 'message' => 'Patient booked successfully.']);
+            exit; // Ensure no further output
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to update status.']);
+            exit; // Ensure no further output
+        }
     }
 
     public function clear_booking_session()
@@ -183,6 +198,24 @@ class Token_no extends CI_Controller
         $result = $this->token_no->update_token_status($post['token_id'], $post['token_no']);
         if ($result) {
             echo "Status successfully updated.";
+        }
+    }
+
+    public function update_status_opd() {
+        $patientId = $this->input->post('patient_id');
+        
+        if (!$patientId) {
+            echo json_encode(['status' => 'error', 'message' => 'Patient ID is required.']);
+            return;
+        }
+    
+        // Update status logic
+        $updated = $this->token_no->update_patient_list_opd_status($patientId, 'new_status'); // Adjust as needed
+    
+        if ($updated) {
+            echo json_encode(['status' => 'success', 'message' => 'Status updated successfully.']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to update status.']);
         }
     }
 
