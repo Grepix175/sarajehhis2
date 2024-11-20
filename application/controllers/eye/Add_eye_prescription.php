@@ -2064,6 +2064,7 @@ class Add_eye_prescription extends CI_Controller
       }
       $age .= ", " . $form_data['age_d'] . " " . $day;
     }
+    $gender = array('0' => 'Female', '1' => 'Male', '2' => 'Others');
     $appointment_date = '-';
     $booking_date = '';
 
@@ -2078,10 +2079,11 @@ class Add_eye_prescription extends CI_Controller
 
     $print_setting = $this->add_prescript->prescription_html_template('', $pres_result['branch_id']);
     // echo "<pre>"; print_r($print_setting); exit;
+    // echo "<pre>"; print_r($print_setting->page_header); exit;
     $data['print_setting'] = $print_setting;
     $header_replace_part = $print_setting->page_details;
     // echo "<pre>";
-    // print_r($header_replace_part);
+    // print_r($form_data);
     // die;
     $middle_replace_part = $print_setting->page_middle;
     $simulation = get_simulation_name($form_data['simulation_id']);
@@ -2098,14 +2100,18 @@ class Add_eye_prescription extends CI_Controller
     }
     $header_replace_part = str_replace("{patient_name}", $simulation . ' ' . $form_data['patient_name'], $header_replace_part);
     $header_replace_part = str_replace("{patient_reg_no}", $form_data['patient_code'], $header_replace_part);
-
-    $header_replace_part = str_replace("{patient_address}", $form_data['paddress'] . ' ' . $form_data['paddress1'] . ' ' . $form_data['paddress2'], $header_replace_part);
-
-    $header_replace_part = str_replace("{patient_age}", $age, $header_replace_part);
-    $header_replace_part = str_replace("{app_id}", $form_data['booking_code'], $header_replace_part);
+    $header_replace_part = str_replace("{token_no}", $form_data['token_no'], $header_replace_part);
+    $header_replace_part = str_replace("{age}", $age, $header_replace_part);
+    $header_replace_part = str_replace("{booking_code}", $form_data['booking_code'], $header_replace_part);
     $header_replace_part = str_replace("{mobile_no}", $form_data['mobile_no'], $header_replace_part);
-    $header_replace_part = str_replace("{booking_date}", $booking_date, $header_replace_part);
-    $header_replace_part = str_replace("{doctor_name}", 'Dr. ' . get_doctor_name($form_data['attended_doctor']), $header_replace_part);
+    $header_replace_part = str_replace("{gender}", $gender[$form_data['gender']], $header_replace_part);
+
+    
+    // $header_replace_part = str_replace("{patient_address}", $form_data['paddress'] . ' ' . $form_data['paddress1'] . ' ' . $form_data['paddress2'], $header_replace_part);
+    // $header_replace_part = str_replace("{patient_age}", $age, $header_replace_part);
+    // $header_replace_part = str_replace("{app_id}", $form_data['booking_code'], $header_replace_part);
+    // $header_replace_part = str_replace("{booking_date}", $booking_date, $header_replace_part);
+    // $header_replace_part = str_replace("{doctor_name}", 'Dr. ' . get_doctor_name($form_data['attended_doctor']), $header_replace_part);
 
 
 
@@ -2138,7 +2144,7 @@ class Add_eye_prescription extends CI_Controller
     $stylesheet = file_get_contents(ROOT_CSS_PATH.'report_pdf.css'); 
     $this->m_pdf->pdf->WriteHTML($stylesheet,1); */
     $flag = $this->input->get('flag') ?? '';
-    
+    // die($flag);
     if(!empty($flag) &&  $flag == 'refraction_below_8_years'){
       $middle_replace = $this->load->view('refraction_below8/view', $data, true);
     }elseif(!empty($flag) &&  $flag == 'hess_chart'){
@@ -2156,7 +2162,7 @@ class Add_eye_prescription extends CI_Controller
     $this->m_pdf->pdf->WriteHTML($stylesheet, 1);
     $this->m_pdf->pdf->setAutoTopMargin = 'stretch';
 
-    $this->m_pdf->pdf->SetHeader($print_setting->page_header . $header_replace_part);
+    $this->m_pdf->pdf->SetHeader($header_replace_part);
     $this->m_pdf->pdf->setAutoBottomMargin = 'stretch';
     $this->m_pdf->pdf->SetFooter($print_setting->page_footer);
     $pdfFilePath = $data['form_data']['patient_name'] . '_report.pdf';
