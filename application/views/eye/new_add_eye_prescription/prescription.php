@@ -328,12 +328,12 @@ $users_data = $this->session->userdata('auth_users');
                     </div>
                     
                 </div>
-                <!-- <div class="row m-b-5">
+                <div class="row m-b-5">
                         <div class="col-xs-4"><strong>Token No</strong></div>
                         <div class="col-xs-8">
                             <input type="text" name="token_no" value="<?php echo isset($booking_data['token_no']) ? $booking_data['token_no'] : 'N/A'; ?>" readonly="">
                         </div>
-                    </div> -->
+                    </div>
             </div>
             <div class="col-xs-5">
                 <div class="row m-b-5">
@@ -359,12 +359,11 @@ $users_data = $this->session->userdata('auth_users');
 
         
         
-        <div class="col-md-2">
+        <!-- <div class="col-md-2">
           <label class="col-md-12 col-sm-12" for="printsummary-labels"><strong>Token No: </strong>
-            <!-- <?php echo $form_data['token_no']; ?> -->
-            <?php echo $token_no; ?>
+            <?php //echo $token_no; ?>
           </label>
-        </div>
+        </div> -->
         <hr>
 
 

@@ -8,6 +8,7 @@ class Contact_lens extends CI_Controller
         parent::__construct();
         $this->load->model('contact_lens/contact_lens_model', 'contact_lens');
         $this->load->model('opd/opd_model', 'opd');
+        $this->load->model('doctors/Doctors_model', 'doctor');
         $this->load->library('form_validation');
     }
 
@@ -154,7 +155,7 @@ class Contact_lens extends CI_Controller
         $data['unit_list'] = $this->hospital_entry->unit_list();
         $data['manuf_company_list'] = $this->hospital_entry->manuf_company_list();
         $data['booking_data'] = $this->contact_lens->get_booking_by_id($booking_id);
-
+        $data['doctor'] = $this->doctor->doctors_list();
         // Initialize form data
         $data['form_data'] = array(
             "booking_id" => $booking_id,
@@ -165,11 +166,13 @@ class Contact_lens extends CI_Controller
             'qty' => '',
             'unit' => '',
             'hospital_rate' => '',
+            'optometrist_signature' => '',
+            'doctor_signature' => ''
         );
 
         $post = $this->input->post();
         // echo "<pre>";
-        // print_r($data);
+        // print_r($post);
         // die;
         // Check if the form is submitted
         if (isset($post) && !empty($post)) {
@@ -234,7 +237,7 @@ class Contact_lens extends CI_Controller
             $data['unit_list'] = $this->hospital_entry->unit_list();
             $data['manuf_company_list'] = $this->hospital_entry->manuf_company_list();
             $data['booking_data'] = $this->contact_lens->get_booking_by_id($booking_id);
-
+            $data['doctor'] = $this->doctor->doctors_list();
             // $data['contact_lens'] = 
 
             // Retrieve the brand by ID
@@ -254,7 +257,9 @@ class Contact_lens extends CI_Controller
                 'items' => $result ?? [],
                 'data_id' => $id,
                 'booking_id' => $booking_id,
-                'patient_id' => $patient_id
+                'patient_id' => $patient_id,
+                'optometrist_signature' => $result[0]['optometrist_signature'],
+                'doctor_signature' => $result[0]['doctor_signature']
             );
 
 

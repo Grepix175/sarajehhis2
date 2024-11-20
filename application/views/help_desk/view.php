@@ -59,91 +59,110 @@
 				</table>
 				<hr style="margin: 2px !important;">
 			<?php } ?>
-
+			<?php
+			// echo "<pre>";
+			// print_r($symptom_fever);
+			// print_r($symptom_smell_taste);
+			// die;
+			?>
 			<div class="container">
 				<div class="box">
 					<div class="questionnaire">
-						<div class="col-xs-12 question-item">
-							<div class="question-text">Any H/O Fever or following symptoms in the last 15 days</div>
-							<div class="radio-buttons">
-								<label class="btn-defaults">
-									<input type="radio" name="symptom_fever" value="1" <?php echo (isset($symptom_fever) && $symptom_fever == 1) ? 'checked="checked"' : ''; ?>>
-									Yes
-								</label>
-								<label class="btn-defaults">
-									<input type="radio" name="symptom_fever" value="0" <?php echo (isset($symptom_fever) && $symptom_fever == 0) ? 'checked="checked"' : ''; ?>>
-									No
-								</label>
+						<?php if (isset($symptom_fever) && ($symptom_fever == 0 || $symptom_fever == 1)): ?>
+							<div class="col-xs-12 question-item">
+								<div class="question-text">Any H/O Fever or following symptoms in the last 15 days</div>
+								<div class="radio-buttons">
+									<label class="btn-defaults">
+										<input type="radio" name="symptom_fever" value="1" <?php echo ($symptom_fever == 1) ? 'checked="checked"' : ''; ?>>
+										Yes
+									</label>
+									<label class="btn-defaults">
+										<input type="radio" name="symptom_fever" value="0" <?php echo ($symptom_fever == 0) ? 'checked="checked"' : ''; ?>>
+										No
+									</label>
+								</div>
 							</div>
-						</div>
-						<div class="question-item">
-							<div class="question-text">Any H/O Cough/ Cold Sore Throat/ Breathing difficulty</div>
-							<div class="radio-buttons">
-								<label class="btn-defaults">
-									<input type="radio" name="symptom_cough" value="1" <?php echo (isset($symptom_cough) && $symptom_cough == 1) ? 'checked="checked"' : ''; ?>> Yes
-								</label>
-								<label class="btn-defaults">
-									<input type="radio" name="symptom_cough" value="0" <?php echo (isset($symptom_cough) && $symptom_cough == 0) ? 'checked="checked"' : ''; ?>> No
-								</label>
+						<?php endif; ?>
+						<?php if (isset($symptom_cough) && ($symptom_cough == 0 || $symptom_cough == 1)): ?>
+							<div class="question-item">
+								<div class="question-text">Any H/O Cough/ Cold Sore Throat/ Breathing difficulty</div>
+								<div class="radio-buttons">
+									<label class="btn-defaults">
+										<input type="radio" name="symptom_cough" value="1" <?php echo (isset($symptom_cough) && $symptom_cough == 1) ? 'checked="checked"' : ''; ?>> Yes
+									</label>
+									<label class="btn-defaults">
+										<input type="radio" name="symptom_cough" value="0" <?php echo (isset($symptom_cough) && $symptom_cough == 0) ? 'checked="checked"' : ''; ?>> No
+									</label>
+								</div>
 							</div>
-						</div>
-						<div class="question-item">
-							<div class="question-text">Any Recent H/O Loss of Smell/Taste?</div>
-							<div class="radio-buttons">
-								<label class="btn-defaults">
-									<input type="radio" name="symptom_smell_taste" value="1" <?php echo (isset($symptom_smell_taste) && $symptom_smell_taste == 1) ? 'checked="checked"' : ''; ?>> Yes
-								</label>
-								<label class="btn-defaults">
-									<input type="radio" name="symptom_smell_taste" value="0" <?php echo (isset($symptom_smell_taste) && $symptom_smell_taste == 0) ? 'checked="checked"' : ''; ?>> No
-								</label>
+						<?php endif; ?>
+						<?php if (isset($symptom_smell_taste) && ($symptom_smell_taste == 0 || $symptom_smell_taste == 1)): ?>
+							<div class="question-item">
+								<div class="question-text">Any Recent H/O Loss of Smell/Taste?</div>
+								<div class="radio-buttons">
+									<label class="btn-defaults">
+										<input type="radio" name="symptom_smell_taste" value="1" <?php echo (isset($symptom_smell_taste) && $symptom_smell_taste == 1) ? 'checked="checked"' : ''; ?>> Yes
+									</label>
+									<label class="btn-defaults">
+										<input type="radio" name="symptom_smell_taste" value="0" <?php echo (isset($symptom_smell_taste) && $symptom_smell_taste == 0) ? 'checked="checked"' : ''; ?>> No
+									</label>
+								</div>
 							</div>
-						</div>
-						<div class="question-item">
-							<div class="question-text">Any H/O Loose Stools/ Myalgia/ Body Aches/ Headache/ Fatigue/
-								Weakness
+						<?php endif; ?>
+						<?php if (isset($symptom_loose_stools) && ($symptom_loose_stools == 0 || $symptom_loose_stools == 1)): ?>
+							<div class="question-item">
+								<div class="question-text">Any H/O Loose Stools/ Myalgia/ Body Aches/ Headache/ Fatigue/
+									Weakness
+								</div>
+								<div class="radio-buttons">
+									<label class="btn-defaults">
+										<input type="radio" name="symptom_loose_stools" value="1" <?php echo (isset($symptom_loose_stools) && $symptom_loose_stools == 1) ? 'checked="checked"' : ''; ?>> Yes
+									</label>
+									<label class="btn-defaults">
+										<input type="radio" name="symptom_loose_stools" value="0" <?php echo (isset($symptom_loose_stools) && $symptom_loose_stools == 0) ? 'checked="checked"' : ''; ?>> No
+									</label>
+								</div>
 							</div>
-							<div class="radio-buttons">
-								<label class="btn-defaults">
-									<input type="radio" name="symptom_loose_stools" value="1" <?php echo (isset($symptom_loose_stools) && $symptom_loose_stools == 1) ? 'checked="checked"' : ''; ?>> Yes
-								</label>
-								<label class="btn-defaults">
-									<input type="radio" name="symptom_loose_stools" value="0" <?php echo (isset($symptom_loose_stools) && $symptom_loose_stools == 0) ? 'checked="checked"' : ''; ?>> No
-								</label>
+						<?php endif; ?>
+						<?php if (isset($symptom_local_zone) && ($symptom_local_zone == 0 || $symptom_local_zone == 1)): ?>
+							<div class="question-item">
+								<div class="question-text">Any H/O Recent Visit to a Local Containment Zone</div>
+								<div class="radio-buttons">
+									<label class="btn-defaults">
+										<input type="radio" name="symptom_local_zone" value="1" <?php echo (isset($symptom_local_zone) && $symptom_local_zone == 1) ? 'checked="checked"' : ''; ?>> Yes
+									</label>
+									<label class="btn-defaults">
+										<input type="radio" name="symptom_local_zone" value="0" <?php echo (isset($symptom_local_zone) && $symptom_local_zone == 0) ? 'checked="checked"' : ''; ?>> No
+									</label>
+								</div>
 							</div>
-						</div>
-						<div class="question-item">
-							<div class="question-text">Any H/O Recent Visit to a Local Containment Zone</div>
-							<div class="radio-buttons">
-								<label class="btn-defaults">
-									<input type="radio" name="symptom_local_zone" value="1" <?php echo (isset($symptom_local_zone) && $symptom_local_zone == 1) ? 'checked="checked"' : ''; ?>> Yes
-								</label>
-								<label class="btn-defaults">
-									<input type="radio" name="symptom_local_zone" value="0" <?php echo (isset($symptom_local_zone) && $symptom_local_zone == 0) ? 'checked="checked"' : ''; ?>> No
-								</label>
+						<?php endif; ?>
+						<?php if (isset($symptom_travel) && ($symptom_travel == 0 || $symptom_travel == 1)): ?>
+							<div class="question-item">
+								<div class="question-text">Any H/O Recent Travel to Outside City/State</div>
+								<div class="radio-buttons">
+									<label class="btn-defaults">
+										<input type="radio" name="symptom_travel" value="1" <?php echo (isset($symptom_travel) && $symptom_travel == 1) ? 'checked="checked"' : ''; ?>> Yes
+									</label>
+									<label class="btn-defaults">
+										<input type="radio" name="symptom_travel" value="0" <?php echo (isset($symptom_travel) && $symptom_travel == 0) ? 'checked="checked"' : ''; ?>> No
+									</label>
+								</div>
 							</div>
-						</div>
-						<div class="question-item">
-							<div class="question-text">Any H/O Recent Travel to Outside City/State</div>
-							<div class="radio-buttons">
-								<label class="btn-defaults">
-									<input type="radio" name="symptom_travel" value="1" <?php echo (isset($symptom_travel) && $symptom_travel == 1) ? 'checked="checked"' : ''; ?>> Yes
-								</label>
-								<label class="btn-defaults">
-									<input type="radio" name="symptom_travel" value="0" <?php echo (isset($symptom_travel) && $symptom_travel == 0) ? 'checked="checked"' : ''; ?>> No
-								</label>
+						<?php endif; ?>
+						<?php if (isset($symptom_contact) && ($symptom_contact == 0 || $symptom_contact == 1)): ?>
+							<div class="question-item">
+								<div class="question-text">Any H/O Contact with Suspected/Confirmed Cases of COVID-19</div>
+								<div class="radio-buttons">
+									<label class="btn-defaults">
+										<input type="radio" name="symptom_contact" value="1" <?php echo (isset($symptom_contact) && $symptom_contact == 1) ? 'checked="checked"' : ''; ?>> Yes
+									</label>
+									<label class="btn-defaults">
+										<input type="radio" name="symptom_contact" value="0" <?php echo (isset($symptom_contact) && $symptom_contact == 0) ? 'checked="checked"' : ''; ?>> No
+									</label>
+								</div>
 							</div>
-						</div>
-						<div class="question-item">
-							<div class="question-text">Any H/O Contact with Suspected/Confirmed Cases of COVID-19</div>
-							<div class="radio-buttons">
-								<label class="btn-defaults">
-									<input type="radio" name="symptom_contact" value="1" <?php echo (isset($symptom_contact) && $symptom_contact == 1) ? 'checked="checked"' : ''; ?>> Yes
-								</label>
-								<label class="btn-defaults">
-									<input type="radio" name="symptom_contact" value="0" <?php echo (isset($symptom_contact) && $symptom_contact == 0) ? 'checked="checked"' : ''; ?>> No
-								</label>
-							</div>
-						</div>
+						<?php endif; ?>
 					</div>
 				</div>
 
@@ -164,27 +183,31 @@
 												$i = 0; // Counter for the vitals
 												foreach ($vitals_list as $vitals) {
 													$vital_val = get_vitals_value($vitals->id, $booking_id, 1);
-													?>
-													<td>
-														<label><?php echo $vitals->vitals_name; ?> <br>
-															<input name="data[<?php echo $vitals->id; ?>][name]"
-																value="<?php echo $vital_val; ?>" type="text" class="w-50px m_tiny">
-															<br> <?php echo $vitals->vitals_unit; ?>
-														</label>
-													</td>
-													<?php
-													$i++;
-													// Close the row after every 3 inputs
-													if ($i % 3 === 0) {
-														echo '</tr><tr>'; // Close current row and start a new row
+
+													// Check if the value is not empty
+													if (!empty($vital_val)) {
+														?>
+														<td>
+															<label>
+																<?php echo $vitals->vitals_name; ?> <br>
+																<input name="data[<?php echo $vitals->id; ?>][name]"
+																	value="<?php echo $vital_val; ?>" type="text" class="w-50px m_tiny">
+																<br> <?php echo $vitals->vitals_unit; ?>
+															</label>
+														</td>
+														<?php
+														$i++;
+														// Close the row after every 3 inputs
+														if ($i % 3 === 0) {
+															echo '</tr><tr>'; // Close current row and start a new row
+														}
 													}
 												}
 											}
 											?>
 										</tr>
-
-
 									</table>
+
 								</div>
 							</div>
 						</div>
@@ -4814,7 +4837,7 @@
 									echo '<strong style="float:left;width:100%;font-size:10px;">Lens: </strong> Nature- ' . $exam_lens['examnsn_lens_l_ntr'] . ', ';
 								}
 								/*if($exam_lens['examnsn_lens_l_psn'] !='Central'){ echo 'Position- '.$exam_lens['examnsn_lens_l_psn'].', ';}else{ echo 'Central, '; }
-																																																					if($exam_lens['examnsn_lens_l_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_l_sz'].', ';}else{ echo 'Crystalline, ';}*/
+																																																																	if($exam_lens['examnsn_lens_l_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_l_sz'].', ';}else{ echo 'Crystalline, ';}*/
 								if ($exam_lens['examnsn_lens_l_ntr'] == 'Cataract') {
 									echo ' LOCS Grading- ';
 									if ($exam_lens['examnsn_lens_l_locsg_ns'] != '') {
@@ -4838,7 +4861,7 @@
 									echo '<strong style="float:left;width:100%;font-size:10px;">Lens: </strong> Nature- ' . $exam_lens['examnsn_lens_r_ntr'] . ', ';
 								}
 								/*if($exam_lens['examnsn_lens_r_psn'] !='Central'){ echo 'Position- '.$exam_lens['examnsn_lens_r_psn'].', ';}else{ echo 'Central, '; }
-																																																					if($exam_lens['examnsn_lens_r_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_r_sz'].', ';}else{ echo 'Crystalline, ';}*/
+																																																																	if($exam_lens['examnsn_lens_r_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_r_sz'].', ';}else{ echo 'Crystalline, ';}*/
 								if ($exam_lens['examnsn_lens_r_ntr'] == 'Cataract') {
 									'Lens Grading- ';
 									if ($exam_lens['examnsn_lens_r_locsg_ns'] != '') {

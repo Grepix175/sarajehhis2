@@ -43,7 +43,6 @@ $field_list = mandatory_section_field_list(2);
 
         #patient_form input[type="text"],
         #patient_form input[type="password"],
-        #patient_form input[type="date"],
         #patient_form select,
         #patient_form .pat-col>.grp>.box-right {
             width: 300px;
@@ -142,8 +141,7 @@ $field_list = mandatory_section_field_list(2);
             /* Space between the row and the next element */
         }
     </style>
-    <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datetimepicker.css">
-    <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datetimepicker.js"></script>
+   
     <!-- <body onLoad="set_tpa(<?php echo $form_data['insurance_type']; ?>); set_married(<?php echo $form_data['marital_status']; ?>);">  -->
 
 <body>
@@ -369,14 +367,14 @@ $field_list = mandatory_section_field_list(2);
                                     <p class="font-weight-bold">Signature / LTI of patient</p>
                                     <div class="border-top pt-2"
                                         style="display: inline-block; width: 200px; margin-bottom: 0px;">
-                                        <span><?php echo isset($form_data['optometrist_signature']) ? htmlspecialchars($form_data['optometrist_signature']) : ''; ?></span>
+                                        <!-- <span><?php echo isset($form_data['optometrist_signature']) ? htmlspecialchars($form_data['optometrist_signature']) : ''; ?></span> -->
                                     </div>
                                 </div>
                                 <div class="col-md-6" style="text-align: right;">
                                     <p class="font-weight-bold">Signature / LTI of relative</p>
                                     <div class="border-top pt-2"
                                         style="display: inline-block; width: 200px; margin-bottom: 0px;">
-                                        <span><?php echo isset($form_data['anaesthetist_signature']) ? htmlspecialchars($form_data['anaesthetist_signature']) : ''; ?></span>
+                                        <!-- <span><?php echo isset($form_data['anaesthetist_signature']) ? htmlspecialchars($form_data['anaesthetist_signature']) : ''; ?></span> -->
                                     </div>
                                 </div>
                             </div>
@@ -448,9 +446,22 @@ $field_list = mandatory_section_field_list(2);
                             <div class="row mb-4">
                                 <div class="col-md-4 text-center">
                                     <p class="font-weight-bold">Optometrist's Signature</p>
-                                    <div class="border-top pt-2" style="width: 200px; margin: 0 auto;">
+                                    <!-- <div class="border-top pt-2" style="width: 200px; margin: 0 auto;">
+                                    </div> -->
+                                   
+                                    <div class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;">
+                                        <select name="optometrist_signature" class="form-control mx-auto" style="width: 200px;">
+                                            <option value="">Select Optometrist</option>
+                                            <?php foreach ($doctor as $optometrist) : ?>
+                                                <option value="<?= $optometrist->id; ?>" 
+                                                    <?= isset($form_data['optometrist_signature']) && $form_data['optometrist_signature'] == $optometrist->id ? 'selected' : ''; ?>>
+                                                    <?= $optometrist->doctor_name; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <span></span>
                                     </div>
-                                    <p class="mt-2" style="margin-top: 25px;">Date: <span
+                                    <!-- <p class="mt-2" style="margin-top: 25px;">Date: <span
                                             style="border-bottom: 1px solid #000; width: 130px; display: inline-block;">
                                             <input type="text" name="optometrist_date"
                                                 class="validity_date m_input_default"
@@ -458,13 +469,28 @@ $field_list = mandatory_section_field_list(2);
                                                 readonly="true" style="width: 130px !important;" />
                                         </span>
 
-                                    </p>
+                                    </p> -->
+                                    <p class="mt-2" style="margin-top: 25px;">Date: <span style="border-bottom: 1px solid #000; width: 130px; display: inline-block;">
+                                        <input type="text" name="optometrist_date" class="validity_date m_input_default"
+                                            value="<?php echo $form_data['optometrist_date']; ?>" id="validity_date_optometrist"
+                                            readonly="true" style="width: 130px !important;" />
+                                    </span></p>
                                 </div>
                                 <div class="col-md-4 text-center">
                                     <p class="font-weight-bold">Anaesthetist's Signature</p>
-                                    <div class="border-top pt-2" style="width: 200px; margin: 0 auto;">
+                                    <div class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;">
+                                        <select name="anaesthetist_signature" class="form-control mx-auto" style="width: 200px;">
+                                            <option value="">Select Doctor</option>
+                                            <?php foreach ($doctor as $anaesthetist) : ?>
+                                                <option value="<?= $anaesthetist->id; ?>" 
+                                                    <?= isset($form_data['anaesthetist_signature']) && $form_data['anaesthetist_signature'] == $anaesthetist->id ? 'selected' : ''; ?>>
+                                                    <?= $anaesthetist->doctor_name; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <span></span>
                                     </div>
-                                    <p class="mt-2" style="margin-top: 25px;">Date: <span
+                                    <!-- <p class="mt-2" style="margin-top: 25px;">Date: <span
                                             style="border-bottom: 1px solid #000; width: 130px; display: inline-block;">
                                             <input type="text" name="anaesthetist_date"
                                                 class="validity_date m_input_default"
@@ -472,20 +498,36 @@ $field_list = mandatory_section_field_list(2);
                                                 id="validity_date" readonly="true" style="width: 130px !important;" />
                                         </span>
 
-                                    </p>
+                                    </p> -->
+                                    <p class="mt-2" style="margin-top: 25px;">Date: <span style="border-bottom: 1px solid #000; width: 130px; display: inline-block;">
+    <input type="text" name="anaesthetist_date" class="validity_date m_input_default"
+           value="<?php echo $form_data['anaesthetist_date']; ?>" id="validity_date_anaesthetist"
+           readonly="true" style="width: 130px !important;" />
+</span></p>
+                                    
                                 </div>
                                 <div class="col-md-4 text-center">
                                     <p class="font-weight-bold">Doctor's Signature</p>
-                                    <div class="border-top pt-2" style="width: 200px; margin: 0 auto;">
+                                    <div class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;">
+                                        <select name="doctor_signature" class="form-control mx-auto" style="width: 200px;">
+                                            <option value="">Select Doctor</option>
+                                            <?php foreach ($doctor as $doc) : ?>
+                                                <option value="<?= $doc->id; ?>" 
+                                                    <?= isset($form_data['doctor_signature']) && $form_data['doctor_signature'] == $doc->id ? 'selected' : ''; ?>>
+                                                    <?= $doc->doctor_name; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <span></span>
                                     </div>
-                                    <p class="mt-2" style="margin-top: 25px;">Date: <span
-                                            style="border-bottom: 1px solid #000; width: 130px; display: inline-block;">
-                                            <input type="text" name="doctor_date" class="validity_date m_input_default"
-                                                value="<?php echo $form_data['doctor_date']; ?>" id="validity_date"
-                                                readonly="true" style="width: 130px !important;" />
-                                        </span>
-
-                                    </p>
+                                    <!-- <div class="border-top pt-2" style="width: 200px; margin: 0 auto;">
+                                    </div> -->
+                                    <p class="mt-2" style="margin-top: 25px;">Date: <span style="border-bottom: 1px solid #000; width: 130px; display: inline-block;">
+    <input type="text" name="doctor_date" class="validity_date m_input_default"
+           value="<?php echo $form_data['doctor_date']; ?>" id="validity_date_doctor"
+           readonly="true" style="width: 130px !important;" />
+</span></p>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -522,15 +564,20 @@ $field_list = mandatory_section_field_list(2);
 </body>
 
 <script>
+     $('.validity_date').datepicker({
+        format: 'dd-mm-yyyy',
+        autoclose: true,
+        startDate: new Date(),
+    });
     document.getElementById('vision_modal_form').addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent the default form submission
 
         var formData = new FormData(this); // Gather form data
-        formData.forEach(function (value, key) {
-            console.log(key + ': ' + value);
-        });
+        // formData.forEach(function (value, key) {
+        //     console.log(key + ': ' + value);
+        // });
 
-
+        // return;
         fetch('<?php echo base_url('vision/add'); ?>', { // Update with the correct URL
             method: 'POST',
             body: formData,
@@ -543,7 +590,8 @@ $field_list = mandatory_section_field_list(2);
                 return response; // Parse the JSON response
             })
             .then(data => {
-                console.log(data, '=====')
+                // console.log(data.ok, '=====')
+                // return;
                 // Handle success or error response
                 if (data.ok) {
                     // alert('Form submitted successfully!');
@@ -563,11 +611,11 @@ $field_list = mandatory_section_field_list(2);
         $('#flash_msg_text').html(val);
         $('#flash_session').slideDown('slow').delay(1500).slideUp('slow');
     }
-    $('.validity_date').datepicker({
-        format: 'dd-mm-yyyy',
-        autoclose: true,
-        startDate: new Date(),
-    });
+    // $('.validity_date').datepicker({
+    //     format: 'dd-mm-yyyy',
+    //     autoclose: true,
+    //     startDate: new Date(),
+    // });
 </script>
 
 
@@ -586,7 +634,7 @@ $field_list = mandatory_section_field_list(2);
         width: '435px' // Set your desired width
     });
 
-
+   
 
 </script>
 </body>

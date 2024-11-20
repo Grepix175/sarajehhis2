@@ -132,10 +132,28 @@ class Refraction_model extends CI_Model
 
     public function get_by_id($id)
     {
-        $this->db->select('hms_opd_refraction.*, hms_patient.*,hms_opd_booking.*');
+        // $this->db->select('hms_opd_refraction.*, hms_patient.*,hms_opd_booking.*,hms_doctors.doctor_name as optometrist_signature_name,hms_doctors.doctor_name as doctor_signature_name');
+        // $this->db->from($this->table);
+        // $this->db->join('hms_patient', 'hms_patient.id = hms_opd_refraction.patient_id', 'left');
+        // $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_opd_refraction.booking_id', 'left');
+        // $this->db->join('hms_doctors', 'hms_doctors.id = hms_opd_refraction.optometrist_signature', 'left');
+        // $this->db->join('hms_doctors', 'hms_doctors.id = hms_opd_refraction.doctor_signature', 'left');
+        // $this->db->where('hms_opd_refraction.id', $id);
+        // $this->db->where('hms_opd_refraction.is_deleted', '0');
+        // $query = $this->db->get();
+        // return $query->row_array();
+        $this->db->select('hms_opd_refraction.id as ref_id,
+            hms_opd_refraction.*, 
+            hms_patient.*, 
+            hms_opd_booking.*, 
+            optometrist.doctor_name as optometrist_signature_name, 
+            doctor.doctor_name as doctor_signature_name
+        ');
         $this->db->from($this->table);
         $this->db->join('hms_patient', 'hms_patient.id = hms_opd_refraction.patient_id', 'left');
         $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_opd_refraction.booking_id', 'left');
+        $this->db->join('hms_doctors as optometrist', 'optometrist.id = hms_opd_refraction.optometrist_signature', 'left');
+        $this->db->join('hms_doctors as doctor', 'doctor.id = hms_opd_refraction.doctor_signature', 'left');
         $this->db->where('hms_opd_refraction.id', $id);
         $this->db->where('hms_opd_refraction.is_deleted', '0');
         $query = $this->db->get();
@@ -194,13 +212,16 @@ class Refraction_model extends CI_Model
     // Method to save or update a refraction record
     public function save($data)
     {
+        // echo "<pre>";
+        // print_r($data);
+        // die;
         if (!empty($data['id'])) {
             // For updates, remove the 'created_date' if present to avoid updating it
             unset($data['created_date']);
             
             // Update only the modified_date and other fields
             $data['modified_date'] = date('Y-m-d H:i:s'); // Set current time for modified_date
-            $this->db->where('patient_id', $data['id']);
+            $this->db->where('id', $data['id']);
             $this->db->update('hms_opd_refraction', $data);
         } else {
             // Set the created_date for new records

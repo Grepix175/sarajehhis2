@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Tokenno_model extends CI_Model
 {
     var $table = 'hms_token';
-    var $column = array('hms_token.id', 'hms_token.token_no', 'hms_token.status', 'hms_token.patient_id');
+    var $column = array('hms_token.id', 'hms_token.token_no', 'hms_token.status', 'hms_token.patient_id','hms_token.opd_status');
 
     var $order = array('id' => 'desc');
 
@@ -42,7 +42,7 @@ class Tokenno_model extends CI_Model
     }
     public function _get_datatables_query()
     {
-        $this->db->select("hms_token.token_no, hms_token.status, hms_token.patient_id, hms_patient.patient_name,hms_patient.patient_code, hms_token.created_date, hms_patient.emergency_status");
+        $this->db->select("hms_token.token_no, hms_token.status, hms_token.patient_id,hms_token.opd_status, hms_patient.patient_name,hms_patient.patient_code, hms_token.created_date, hms_patient.emergency_status");
         $this->db->from("hms_token");
         $this->db->join('hms_patient', 'hms_patient.id = hms_token.patient_id', 'left');
 
@@ -225,6 +225,20 @@ class Tokenno_model extends CI_Model
     // 	return $query->result();
     // }
 
-
+    public function update_opd_status($patient_id = '')
+	{
+		$this->db->set('hms_token.opd_status', 1);
+		$this->db->where('hms_token.patient_id', $patient_id);
+		$query = $this->db->update('hms_token');
+		
+		return $query;
+	}
+    public function update_patient_list_opd_status($patient_id = '')
+	{
+		$this->db->set('hms_token.opd_status', 0);
+		$this->db->where('hms_token.patient_id', $patient_id);
+		$query = $this->db->update('hms_token');		
+		return $query;
+	}
 }
 ?>

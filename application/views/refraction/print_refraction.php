@@ -298,7 +298,7 @@ $field_list = mandatory_section_field_list(2);
 <body>
     <div class="container-fluid">
         <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p>
-        <table class="patient-info-table" style=" margin-top: 20px; ">
+        <!-- <table class="patient-info-table" style=" margin-top: 20px; ">
             <tr>
                 <td class="left-column">
                     <table>
@@ -339,11 +339,11 @@ $field_list = mandatory_section_field_list(2);
                     </table>
                 </td>
             </tr>
-        </table>
+        </table> -->
         <!-- Header section for Name, Date, Age -->
         <div class="row">
             <div class="col-md-6">
-                <!-- <div class="date-section">
+                <div class="date-section">
                     <label for="date">Date:</label>
                     <span
                         style="width: 100%; padding: 10px;"><?php echo date('d-m-Y H:i', strtotime($form_data['date'])); ?></span>
@@ -357,11 +357,11 @@ $field_list = mandatory_section_field_list(2);
                         <label for="age">Age:</label>
                         <span style="padding: 10px;"> <?php echo $form_data['age']; ?></span>
                     </div>
-                    <div class="name-section">
+                    <!-- <div class="name-section">
                         <label for="age">Token No:</label>
                         <span style="padding: 10px;"> <?php echo $form_data['token_no']; ?></span>
-                    </div>
-                </div> -->
+                    </div> -->
+                </div>
             </div>
             <div class="col-md-6">
                 <div class="dials">
@@ -382,7 +382,7 @@ $field_list = mandatory_section_field_list(2);
             <div class="col-md-6">
                 <!-- Prescription Notes / Rejection -->
                 <div class="section-title" style="display: flex; justify-content: space-between;">
-                    <span>Prescription Notes / Rejection:</span>
+                    <span>Rejection</span>
                 </div>
                 <!-- <textarea rows="4" style="width: 100%; border: 1px solid #000; padding: 10px;"></textarea> -->
                 <div class="rx-symbol">℞</div>
@@ -575,12 +575,14 @@ $field_list = mandatory_section_field_list(2);
                 <div class="signature-section" style="display: flex; justify-content: space-between;">
                     <div>
                         <label for="optometrist">Signature of Optometrist:</label>
+                        <br />
                         <!-- <input type="text" id="optometrist"> -->
-                        ___________________________________
+                        <strong><?php echo $form_data['optometrist_signature_name'];?></strong>
                     </div>
                     <div>
                         <label for="doctor">Signature of Doctor:</label>
-                        ____________________________________
+                        <br />
+                        <strong><?php echo $form_data['doctor_signature_name'];?></strong>
                         <!-- <input type="text" id="doctor"> -->
                     </div>
                 </div>

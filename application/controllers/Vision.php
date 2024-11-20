@@ -8,6 +8,7 @@ class Vision extends CI_Controller
         parent::__construct();
         $this->load->model('vision/vision_model');
         $this->load->model('opd/opd_model', 'opd');
+        $this->load->model('doctors/Doctors_model', 'doctor');
         $this->load->library('form_validation');
     }
 
@@ -173,6 +174,7 @@ class Vision extends CI_Controller
         $data['booking_id'] = isset($booking_id) ? $booking_id : '';
         $data['patient_id'] = isset($patient_id) ? $patient_id : '';
         $data['booking_data'] = $this->vision_model->get_booking_patient_details($data['patient_id']);
+        $data['doctor'] = $this->doctor->doctors_list();
         // echo "<pre>";
         // print_r($data['booking_data']);
         // die;
@@ -332,7 +334,8 @@ class Vision extends CI_Controller
             // Retrieve the brand by ID
             $result = $this->vision_model->get_by_id($id);
             $data['booking_data'] = $this->vision_model->get_booking_patient_details_edit($result['booking_id']);
-            // echo "<pre>";print_r($data['booking_data']);die;
+            $data['doctor'] = $this->doctor->doctors_list();
+            // echo "<pre>";print_r($result);die;
             // If no result is found, you might want to handle this case
             if (!$result) {
                 // Optionally, set an error message or redirect
@@ -345,7 +348,7 @@ class Vision extends CI_Controller
             $data['page_title'] = "Update Vision";
             $data['form_error'] = '';
             $data['form_data'] = array(
-                'data_id' => $result['id'],
+                'data_id' => $result['vision_id'],
                 'patient_code' => $result['patient_code'],
                 'patient_name' => $result['patient_name'],
                 'booking_id' => $result['booking_id'],
@@ -372,7 +375,10 @@ class Vision extends CI_Controller
                 'is_deleted' => $result['is_deleted'],
             );
 
-
+                // echo "<pre>";
+                // print_r('$post');
+                // print_r($data['form_data']);
+                // die;
 
             // Check if there is form submission
             if ($this->input->post()) {
@@ -584,7 +590,7 @@ class Vision extends CI_Controller
         $data['print_status'] = "1";
 
         // Fetch the form data based on the ID
-        $data['form_data'] = $this->vision_model->get_by_id($id);
+        $data['form_data'] = $this->vision_model->print_vision_details($id);
         // echo "<pre>";print_r($data['form_data']);die;
 
         // Fetch the side effect name based on the side_effect ID from form data
