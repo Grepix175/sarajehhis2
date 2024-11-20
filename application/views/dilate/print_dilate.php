@@ -37,21 +37,26 @@ $field_list = mandatory_section_field_list(2);
 
     <style>
         .footer {
-            position: absolute; /* Fixed position at the bottom */
+            position: absolute;
+            /* Fixed position at the bottom */
             bottom: 0;
             left: 0;
             right: 0;
             text-align: center;
-            font-size: 11px; /* Smaller font size for footer text */
+            font-size: 11px;
+            /* Smaller font size for footer text */
         }
 
         .footer hr {
             border: none;
-            border-top: 1px solid #000; /* Line style */
-            margin: 0; /* Remove margins */
+            border-top: 1px solid #000;
+            /* Line style */
+            margin: 0;
+            /* Remove margins */
         }
+
         /* table {s */
-        td{
+        td {
             width: auto !important;
             text-align: unset !important;
         }
@@ -97,14 +102,17 @@ $field_list = mandatory_section_field_list(2);
         h3 {
             text-align: center;
         }
+
         select {
-            width: 300px!important;
+            width: 300px !important;
         }
+
         span#select2-medicine_name_dropdown-container,
         span#select2-salt_dropdown-container {
             text-align: left;
             width: 300px;
         }
+
         .patient-info-table {
             width: 100%;
             border: 1px solid #000;
@@ -119,6 +127,7 @@ $field_list = mandatory_section_field_list(2);
             vertical-align: top;
             text-align: left;
         }
+
         .left-column,
         .right-column {
             width: 50%;
@@ -131,28 +140,29 @@ $field_list = mandatory_section_field_list(2);
         }
 
         /* Ensure that the tables in both columns align to the top */
-        .left-column table, 
+        .left-column table,
         .right-column table {
-            width: 100%; /* Ensures full width usage */
-            border-collapse: collapse; /* Remove spaces between inner table cells */
+            width: 100%;
+            /* Ensures full width usage */
+            border-collapse: collapse;
+            /* Remove spaces between inner table cells */
         }
-        
     </style>
     <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datetimepicker.css">
     <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datetimepicker.js"></script>
     <!-- <body onLoad="set_tpa(<?php echo $form_data['insurance_type']; ?>); set_married(<?php echo $form_data['marital_status']; ?>);">  -->
 
 <body>
-    
-<div class="panel-body"   style="padding:20px;">
-    <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p>
+
+    <div class="panel-body" style="padding:20px;">
+        <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p>
 
 
         <?php
         // Loop through the contact lens data
-        $age_y = $booking_data['age_y']??'';
-        $age_m = $booking_data['age_m']??'';
-        $age_d = $booking_data['age_d']??'';
+        $age_y = $booking_data['age_y'] ?? '';
+        $age_m = $booking_data['age_m'] ?? '';
+        $age_d = $booking_data['age_d'] ?? '';
 
         $age = "";
         if ($age_y > 0) {
@@ -183,11 +193,11 @@ $field_list = mandatory_section_field_list(2);
                     <table>
                         <tr>
                             <td class="info-label">Patient</td>
-                            <td class="info-content">: <?php echo $booking_data['patient_name']??''; ?></td>
+                            <td class="info-content">: <?php echo $booking_data['patient_name'] ?? ''; ?></td>
                         </tr>
                         <tr>
                             <td class="info-label">Patient Reg. No</td>
-                            <td class="info-content">: <?php echo $booking_data['patient_code']??''; ?></td>
+                            <td class="info-content">: <?php echo $booking_data['patient_code'] ?? ''; ?></td>
                         </tr>
                         <tr>
                             <td class="info-label">Token No</td>
@@ -195,7 +205,7 @@ $field_list = mandatory_section_field_list(2);
                         </tr>
                         <tr>
                             <td class="info-label">OPD No</td>
-                            <td class="info-content">: <?php echo $form_data['booking_id']??''; ?></td>
+                            <td class="info-content">: <?php echo $form_data['booking_id'] ?? ''; ?></td>
                         </tr>
                     </table>
                 </td>
@@ -203,107 +213,108 @@ $field_list = mandatory_section_field_list(2);
                     <table>
                         <tr>
                             <td class="info-label">Mobile no.</td>
-                            <td class="info-content">: <?php echo $booking_data['mobile_no']??''; ?></td>
+                            <td class="info-content">: <?php echo $booking_data['mobile_no'] ?? ''; ?></td>
                         </tr>
                         <tr>
                             <td class="info-label">Age</td>
-                            <td class="info-content">: <?php echo $age??''; ?></td>
+                            <td class="info-content">: <?php echo $age ?? ''; ?></td>
                         </tr>
                         <tr>
                             <td class="info-label">Gender</td>
-                            <td class="info-content">: <?php echo ($booking_data['gender'] == '0') ? 'Female' : 'Male'; ?></td>
+                            <td class="info-content">:
+                                <?php echo ($booking_data['gender'] == '0') ? 'Female' : 'Male'; ?></td>
                         </tr>
                     </table>
                 </td>
             </tr>
         </table>
-                    
-                        <h3>Dilate</h3>
 
-                        
+        <h3>Dilate</h3>
 
 
 
-                    <!-- <h5>With Intermidiate effect below mentioned device is chargeable to patient for Contact Lens</h5> -->
-                    <div class="pat-col">
-                        <table width="100%" cellpadding="0" cellspacing="0" border="1px">
-                            <thead>
-                                <tr>
-                                    <th>No.</th>
-                                    <th>Drop Name</th>
-                                    <th>Salt</th>
-                                    <th>Percentage</th>
-                                    <th>Dilate start time</th>
-                                    <th>Dilate Time</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (!empty($form_data['items'])): ?>
-                                    <?php $i = 1; ?>
-                                    <?php foreach ($form_data['items'] as $item): ?>
-                                        <tr>
-                                            <td><?php echo $i; ?>.</td>
 
-                                            <!-- Drop Name (Medicine Name) -->
-                                            <td>
-                                                <?php 
-                                                // Find and display medicine name from the list
-                                                $medicine_name = '';
-                                                foreach ($medicines as $medicine) {
-                                                    if ($medicine['id'] == $item['drop_name']) {
-                                                        $medicine_name = $medicine['medicine_name'];
-                                                        break;
-                                                    }
-                                                }
-                                                echo $medicine_name;
-                                                ?>
-                                            </td>
 
-                                            <!-- Salt -->
-                                            <td><?php echo $item['salt']; ?></td>
+        <!-- <h5>With Intermidiate effect below mentioned device is chargeable to patient for Contact Lens</h5> -->
+        <div class="pat-col">
+            <table width="100%" cellpadding="0" cellspacing="0" border="1px">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Drop Name</th>
+                        <th>Salt</th>
+                        <th>Percentage</th>
+                        <th>Dilate start time</th>
+                        <th>Dilate Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($form_data['items'])): ?>
+                        <?php $i = 1; ?>
+                        <?php foreach ($form_data['items'] as $item): ?>
+                            <tr>
+                                <td><?php echo $i; ?>.</td>
 
-                                            <!-- Percentage -->
-                                            <td><?php echo $item['percentage']; ?>%</td>
+                                <!-- Drop Name (Medicine Name) -->
+                                <td>
+                                    <?php
+                                    // Find and display medicine name from the list
+                                    $medicine_name = '';
+                                    foreach ($medicines as $medicine) {
+                                        if ($medicine['id'] == $item['drop_name']) {
+                                            $medicine_name = $medicine['medicine_name'];
+                                            break;
+                                        }
+                                    }
+                                    echo $medicine_name;
+                                    ?>
+                                </td>
 
-                                            <td><?php echo $booking_data['dilate_start_time']; ?></td>
-                                            
-                                            <td><?php echo $booking_data['dilate_time']; ?></td>
-                                        </tr>
-                                        <?php $i++; ?>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <tr>
-                                        <td>1.</td>
-                                        <td>No Data Available</td>
-                                        <td>No Data Available</td>
-                                        <td>No Data Available</td>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
+                                <!-- Salt -->
+                                <td><?php echo $item['salt']; ?></td>
 
-                    </div>
+                                <!-- Percentage -->
+                                <td><?php echo $item['percentage']; ?>%</td>
 
-                        
-                        
-                    </div>
-                </div>
-                <div class="grp" style="width: 100%; text-align: left; margin-top: 10px;padding:20px;">
-                    <div class="box-right">
-                        <span>
-                            <strong>
-                                Remarks:
-                            </strong>
-                            <?php echo isset($form_data['remarks']) ? htmlspecialchars($form_data['remarks']) : 'No remarks available.'; ?>
-                        </span>
-                    </div>
-                </div>
+                                <td><?php echo $booking_data['dilate_start_time']; ?></td>
 
-            </form>
-            
-        </section>
+                                <td><?php echo $booking_data['dilate_time']; ?></td>
+                            </tr>
+                            <?php $i++; ?>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td>1.</td>
+                            <td>No Data Available</td>
+                            <td>No Data Available</td>
+                            <td>No Data Available</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+
+        </div>
+
+
+
     </div>
-    
+    </div>
+    <div class="grp" style="width: 100%; text-align: left; margin-top: 10px;padding:20px;">
+        <div class="box-right">
+            <span>
+                <strong>
+                    Remarks:
+                </strong>
+                <?php echo isset($form_data['remarks']) ? htmlspecialchars($form_data['remarks']) : 'No remarks available.'; ?>
+            </span>
+        </div>
+    </div>
+
+    </form>
+
+    </section>
+    </div>
+
     </div>
     <div class="footer">
         <hr />
@@ -320,8 +331,8 @@ $field_list = mandatory_section_field_list(2);
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-   $(document).ready(function () {
-    // Initialize Select2 for all existing dropdowns
+    $(document).ready(function () {
+        // Initialize Select2 for all existing dropdowns
         $('.hospital_code_dropdown, .item_description_dropdown, .manufacturer_dropdown, .unit_dropdown').select2({
             width: '100%'
         });

@@ -170,6 +170,119 @@ $field_list = mandatory_section_field_list(2);
             color: #000080;
         }
     </style>
+     <style>
+        .footer {
+            position: absolute;
+            /* Fixed position at the bottom */
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 11px;
+            /* Smaller font size for footer text */
+        }
+
+        .footer hr {
+            border: none;
+            border-top: 1px solid #000;
+            /* Line style */
+            margin: 0;
+            /* Remove margins */
+        }
+
+        /* table {s */
+        td {
+            width: auto !important;
+            text-align: unset !important;
+        }
+
+        .itemTable th,
+        .itemTable td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+            width: 20%;
+        }
+
+
+        th {
+            /* background-color: #f0f0f0; */
+        }
+
+        input[type="text"],
+        /* input[type="select"], */
+        input[type="number"] {
+            width: 100%;
+            padding: 6px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        td {
+            padding: 6px;
+        }
+
+        button {
+            margin-top: 10px;
+        }
+
+        .pat-col {
+            width: 100% !important;
+        }
+
+        h5 {
+            text-align: left;
+        }
+
+        h3 {
+            text-align: center;
+        }
+
+        select {
+            width: 300px !important;
+        }
+
+        span#select2-medicine_name_dropdown-container,
+        span#select2-salt_dropdown-container {
+            text-align: left;
+            width: 300px;
+        }
+
+        .patient-info-table {
+            width: 100%;
+            border: 1px solid #000;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+            margin-bottom: 10px;
+
+        }
+
+        .patient-info-table td {
+            padding: 5px;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        .left-column,
+        .right-column {
+            width: 50%;
+        }
+
+        /* Ensure all labels and contents in both columns align vertically */
+        .left-column td,
+        .right-column td {
+            padding: 2px;
+        }
+
+        /* Ensure that the tables in both columns align to the top */
+        .left-column table,
+        .right-column table {
+            width: 100%;
+            /* Ensures full width usage */
+            border-collapse: collapse;
+            /* Remove spaces between inner table cells */
+        }
+    </style>
 
 
 
@@ -184,12 +297,56 @@ $field_list = mandatory_section_field_list(2);
 
 <body>
     <div class="container-fluid">
+        <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p>
+        <table class="patient-info-table" style=" margin-top: 20px; ">
+            <tr>
+                <td class="left-column">
+                    <table>
+                        <tr>
+                            <td class="info-label">Patient</td>
+                            <td class="info-content">: <?php echo $form_data['patient_name'] ?? ''; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Patient Reg. No</td>
+                            <td class="info-content">: <?php echo $form_data['patient_code'] ?? ''; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Token No</td>
+                            <td class="info-content">: <?php echo $form_data['token_no'] ?? ''; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">OPD No</td>
+                            <td class="info-content">: <?php echo $form_data['booking_code'] ?? ''; ?></td>
+                        </tr>
+                    </table>
+                </td>
+                <td class="right-column">
+                    <table>
+                        <tr>
+                            <td class="info-label">Mobile no.</td>
+                            <td class="info-content">: <?php echo $form_data['mobile_no'] ?? ''; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Age</td>
+                            <td class="info-content">: <?php echo $form_data['age'] ?? ''; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Gender</td>
+                            <td class="info-content">:
+                                <?php echo ($form_data['gender'] == '0') ? 'Female' : 'Male'; ?>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
         <!-- Header section for Name, Date, Age -->
         <div class="row">
             <div class="col-md-6">
-                <div class="date-section">
+                <!-- <div class="date-section">
                     <label for="date">Date:</label>
-                    <span style="width: 100%; padding: 10px;"><?php echo date('d-m-Y H:i', strtotime($form_data['date'])); ?></span>                    
+                    <span
+                        style="width: 100%; padding: 10px;"><?php echo date('d-m-Y H:i', strtotime($form_data['date'])); ?></span>
                 </div>
                 <div class="name-age-section">
                     <div class="name-section" style="width: 37%;">
@@ -204,7 +361,7 @@ $field_list = mandatory_section_field_list(2);
                         <label for="age">Token No:</label>
                         <span style="padding: 10px;"> <?php echo $form_data['token_no']; ?></span>
                     </div>
-                </div>
+                </div> -->
             </div>
             <div class="col-md-6">
                 <div class="dials">
@@ -419,7 +576,7 @@ $field_list = mandatory_section_field_list(2);
                     <div>
                         <label for="optometrist">Signature of Optometrist:</label>
                         <!-- <input type="text" id="optometrist"> -->
-                         ___________________________________
+                        ___________________________________
                     </div>
                     <div>
                         <label for="doctor">Signature of Doctor:</label>

@@ -465,10 +465,11 @@ class Refraction extends CI_Controller
                 $auto_refraction_data = []; // Default to an empty array if there's an error
             }
         ///////////// Age calculation //////////
-        $age_y = $result->age_y;
-        $age_m = $result->age_m;
-        $age_d = $result->age_d;
-        $age_h = $result->age_h;
+        $age_y = $result['age_y'];
+        $age_m = $result['age_m'];
+        $age_d = $result['age_d'];
+        $age_h = $result['age_h'];
+        
         $age = "";
         if ($age_y > 0) {
             $year = 'Years';
@@ -496,6 +497,9 @@ class Refraction extends CI_Controller
 
             $age .= " " . $age_h . " " . $hours;
         }
+        // echo "<pre>";
+        // print_r($age);
+        // die;
         ///////////////////////////////////////
 
         $data['form_data'] = array(
@@ -506,6 +510,9 @@ class Refraction extends CI_Controller
             'pres_id' => $result['pres_id'],
             'patient_id' => $result['patient_id'],
             'patient_name' => $result['patient_name'],
+            'patient_code' => $result['patient_code'],
+            'mobile_no' => $result['mobile_no'],
+            'gender' => $result['gender'],
             'token_no' => $result['token_no'],
             'age' => $age,
             'lens' => $result['lens'],

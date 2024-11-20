@@ -585,6 +585,7 @@ class Vision extends CI_Controller
 
         // Fetch the form data based on the ID
         $data['form_data'] = $this->vision_model->get_by_id($id);
+        // echo "<pre>";print_r($data['form_data']);die;
 
         // Fetch the side effect name based on the side_effect ID from form data
         if (!empty($data['form_data']['side_effects'])) {
@@ -595,7 +596,6 @@ class Vision extends CI_Controller
         // Fetch the OPD billing details based on the ID
         $booking_id = isset($data['form_data']['booking_id']) ? $data['form_data']['booking_id'] : '';
         $data['billing_data'] = $this->vision_model->get_patient_name_by_booking_id($booking_id);
-        // echo "<pre>";print_r($data);die;
 
         // Load the print view with the data
         $this->load->view('vision/print_vision', $data);
