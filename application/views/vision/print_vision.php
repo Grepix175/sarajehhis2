@@ -34,11 +34,11 @@
                 page-break-inside: avoid; /* Avoid breaking tables */
             }
 
-            th, td {
+            /* th, td {
                 border: 1px solid black;
                 padding: 8px;
                 word-wrap: break-word; /* Ensure text breaks to fit */
-            }
+            } */
 
             label, input, textarea, p {
                 font-size: 10pt; /* Adjust font size for printing */
@@ -66,15 +66,186 @@
             margin-bottom: 0;
         }
     </style>
+     <style>
+        .footer {
+            position: absolute; /* Fixed position at the bottom */
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 11px; /* Smaller font size for footer text */
+        }
+
+        .footer hr {
+            border: none;
+            border-top: 1px solid #000; /* Line style */
+            margin: 0; /* Remove margins */
+        }
+        /* table {s */
+        td{
+            /* width: auto !important;
+            text-align: unset !important; */
+        }
+
+        .itemTable th,
+        .itemTable td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+            width: 20%;
+        }
+
+
+        th {
+            /* background-color: #f0f0f0; */
+        }
+
+        input[type="text"],
+        /* input[type="select"], */
+        input[type="number"] {
+            width: 100%;
+            padding: 6px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        td {
+            /* padding: 6px; */
+        }
+
+        button {
+            margin-top: 10px;
+        }
+
+        .pat-col {
+            width: 100% !important;
+        }
+
+        h5 {
+            text-align: left;
+        }
+
+        h3 {
+            text-align: center;
+        }
+        select {
+            width: 300px!important;
+        }
+        span#select2-medicine_name_dropdown-container,
+        span#select2-salt_dropdown-container {
+            text-align: left;
+            width: 300px;
+        }
+        .patient-info-table {
+            width: 100%;
+            border: 1px solid #000;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+            margin-bottom: 10px;
+
+        }
+
+        .patient-info-table td {
+            padding: 5px;
+            vertical-align: top;
+            text-align: left;
+        }
+        .left-column,
+        .right-column {
+            width: 15%;
+        }
+
+        /* Ensure all labels and contents in both columns align vertically */
+        .left-column td,
+        .right-column td {
+            padding: 2px;
+        }
+
+        /* Ensure that the tables in both columns align to the top */
+        .left-column table, 
+        .right-column table {
+            width: 100%; 
+            /* border-collapse: collapse; */
+        }
+        
+    </style>
 </head>
 <body>
 <div class="container-fluid">
     <section class="content">
-        <p class="text-center">Sara Eye HOSPITALS</p>
-        <p class="font-weight-bold">Mobile no.: <?php echo isset($billing_data['mobile_no']) ? htmlspecialchars($billing_data['mobile_no']) : ''; ?></p>
-        
-        <div class="form-group border p-3 rounded">
-            <table class="table table-borderless">
+    <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p>
+        <!-- <p class="font-weight-bold">Mobile no.: <?php echo isset($billing_data['mobile_no']) ? htmlspecialchars($billing_data['mobile_no']) : ''; ?></p> -->
+        <?php
+        // Loop through the contact lens data
+        $age_y = $form_data['age_y']??'';
+        $age_m = $form_data['age_m']??'';
+        $age_d = $form_data['age_d']??'';
+
+        $age = "";
+        if ($age_y > 0) {
+            $year = 'Years';
+            if ($age_y == 1) {
+                $year = 'Year';
+            }
+            $age .= $age_y . " " . $year;
+        }
+        if ($age_m > 0) {
+            $month = 'Months';
+            if ($age_m == 1) {
+                $month = 'Month';
+            }
+            $age .= ", " . $age_m . " " . $month;
+        }
+        if ($age_d > 0) {
+            $day = 'Days';
+            if ($age_d == 1) {
+                $day = 'Day';
+            }
+            $age .= ", " . $age_d . " " . $day;
+        }
+        ?>
+        <div class="panel-body"  style="">
+            <table class="patient-info-table" style="margin-top: 20px; ">
+                <tr>
+                    <td class="left-column">
+                        <table>
+                            <tr>
+                                <td class="info-label">Patient</td>
+                                <td class="info-content">: <?php echo $form_data['patient_name']??''; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="info-label">Patient Reg. No</td>
+                                <td class="info-content">: <?php echo $form_data['patient_code']??''; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="info-label">Token No</td>
+                                <td class="info-content">: <?php echo $form_data['token_no'] ?? ''; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="info-label">OPD No</td>
+                                <td class="info-content">: <?php echo $form_data['booking_code']??''; ?></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="right-column">
+                        <table>
+                            <tr>
+                                <td class="info-label">Mobile no.</td>
+                                <td class="info-content">: <?php echo $form_data['mobile_no']??''; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="info-label">Age</td>
+                                <td class="info-content">: <?php echo $age??''; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="info-label">Gender</td>
+                                <td class="info-content">: <?php echo ($form_data['gender'] == '0') ? 'Female' : 'Male'; ?></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <!-- <table class="table table-borderless">
                 <tbody>
                     <tr>
                         <td>
@@ -104,7 +275,7 @@
                     </tr>
 
                 </tbody>
-            </table>
+            </table> -->
         </div>
 
 

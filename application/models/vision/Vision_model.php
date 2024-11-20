@@ -135,8 +135,10 @@ class Vision_model extends CI_Model
     
     public function get_by_id($id)
     {
-        $this->db->select('hms_vision.*');
+        $this->db->select('hms_vision.*,hms_opd_booking.*,hms_patient.*');
         $this->db->from($this->table);
+        $this->db->join('hms_patient', 'hms_patient.patient_code = hms_vision.patient_code', 'left');
+        $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_vision.booking_id', 'left');
         $this->db->where('hms_vision.id', $id);
         $this->db->where('hms_vision.is_deleted', '0');
         $query = $this->db->get();
