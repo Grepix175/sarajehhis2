@@ -93,7 +93,7 @@ class Prosthetic extends CI_Controller
             $row[] = '<input type="checkbox" name="refraction_ids[]" value="' . $prosthetic->refraction_id . '">';
 
             $row[] = $prosthetic->token;
-            $row[] = $prosthetic->booking_id;
+            $row[] = $prosthetic->booking_code;
             $row[] = $prosthetic->patient_code;
             $row[] = $prosthetic->patient_name;
             // $row[] = $prosthetic->patient_category_name;
@@ -116,7 +116,7 @@ class Prosthetic extends CI_Controller
 
             // Add action buttons
             $row[] = '<a onClick="return edit_refraction(' . $prosthetic->refraction_id . ');" class="btn-custom" href="javascript:void(0)" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
-                    <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("prosthetic/print_prosthetic/" . $prosthetic->booking_id."/".$prosthetic->id) . '\');">
+                    <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("prosthetic/print_prosthetic/" . $prosthetic->booking_id."/".$prosthetic->patient_id) . '\');">
                         <i class="fa fa-print"></i> Print
                     </a>';
             $row[] = $prosthetic->emergency_status;
@@ -139,6 +139,10 @@ class Prosthetic extends CI_Controller
 
     public function add($booking_id = null, $id = null)
     {
+        // echo "<pre>";
+        // print_r($booking_id);
+        // print_r($id);
+        // die('okay');
         // echo "plp";die;
         // Load required models and libraries
         $this->load->library('form_validation');
@@ -151,8 +155,8 @@ class Prosthetic extends CI_Controller
         // echo "<pre>";print_r($plist);die('ok');
         $data['booking_id'] = isset($booking_id) ? $booking_id : '';
         $result_refraction = $this->prosthetic->get_prescription_refraction_new_by_id($booking_id, $id);
-        // echo "<pre>";print_r($booking_id);die;
         $data['booking_data'] = $this->prosthetic->get_bookings_by_id($booking_id);
+        // echo "<pre>";print_r($data['booking_data']['opd_id']);die;
         $data['doctor'] = $this->doctor->doctors_list();
         // echo "<pre>";print_r($data['booking_data']);die('kkkk');
 
@@ -161,7 +165,8 @@ class Prosthetic extends CI_Controller
        
         // // Initialize form data
         $data['form_data'] = array(
-            'booking_id' => isset($data['booking_data']['booking_id']) ? $data['booking_data']['booking_id'] : '', // Booking ID
+            // 'booking_id' => isset($data['booking_data']['booking_id']) ? $data['booking_data']['booking_id'] : '', // Booking ID
+            'booking_id' => isset($data['booking_data']['opd_id']) ? $data['booking_data']['opd_id'] : '', // Booking ID
             
             'branch_id' => isset($data['booking_data']['branch_id']) ? $data['booking_data']['branch_id'] : '', // To be filled from form
             'booking_code' => isset($data['booking_data']['booking_code']) ? $data['booking_data']['booking_code'] : '', // To be filled from form
@@ -174,9 +179,10 @@ class Prosthetic extends CI_Controller
             'created_by' => $this->session->userdata('user_id'), // User ID from session
             'created_date' => date('Y-m-d H:i:s'), // Current timestamp
             'ip_address' => $this->input->ip_address(), // IP address
-            'booking_id' => isset($data['booking_data']['booking_id']) ? $data['booking_data']['booking_id'] : '', // Booking ID
            
-        );       
+        );      
+        // echo "<pre>";print_r($data['form_data']);die('kkkk');
+
         $newProstheticFields = array(
             'indication' => isset($data['indication']) ? $data['indication'] : '',
             'anterior_segment_evaluation' => isset($data['anterior_segment_evaluation']) ? $data['anterior_segment_evaluation'] : '',
@@ -212,10 +218,11 @@ class Prosthetic extends CI_Controller
             // Prepare the data for saving
             $id = $this->input->post('id');
             $branch_id = $this->input->post('branch_id');
+            $booking_id = $this->input->post('booking_id');
             $booking_code = $this->input->post('booking_code');
             $pres_id = $this->input->post('pres_id');
             $patient_id = $this->input->post('patient_id');
-            $booking_id = $this->input->post('booking_code');
+            $booking_id = $this->input->post('booking_id');
             $referred_by = $this->input->post('referred_by');
             $workup_by = $this->input->post('workup_by');
             $optometrist_signature = $this->input->post('optometrist_signature');
@@ -411,7 +418,7 @@ class Prosthetic extends CI_Controller
         // echo "ppk";die;
         $data['print_status'] = "1";
         $data['data_list'] = $this->prosthetic->search_report_data($booking_id,$id);
-        $data['booking_data'] = $this->prosthetic->get_booking_by_id($booking_id);
+        $data['booking_data'] = $this->prosthetic->get_booking_by_id($booking_id,$id);
         $data['doctor'] = $this->doctor->doctors_list();
 
 

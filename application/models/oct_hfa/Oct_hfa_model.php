@@ -67,7 +67,7 @@ class Oct_hfa_model extends CI_Model
         // Joining tables
         $this->db->join('hms_patient', 'hms_patient.id = hms_oct_hfa.patient_id', 'left');
         $this->db->join('hms_patient_category', 'hms_patient_category.id = hms_patient.patient_category', 'left');
-        $this->db->join('hms_opd_booking', 'hms_opd_booking.booking_code = hms_oct_hfa.booking_id', 'left');
+        $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_oct_hfa.booking_id', 'left');
         $this->db->join('hms_doctors', 'hms_doctors.id = hms_opd_booking.attended_doctor', 'left');
         
         // Filter deleted entries
@@ -181,7 +181,7 @@ class Oct_hfa_model extends CI_Model
     public function get_by_id($id)
     {
         // echo $id;die;
-        $this->db->select('hms_oct_hfa.*, hms_patient.*');
+        $this->db->select('hms_oct_hfa.id as oct_hfa_id,hms_oct_hfa.*, hms_patient.*');
         $this->db->from($this->table);
         $this->db->join('hms_patient', 'hms_patient.id = hms_oct_hfa.patient_id', 'left');
         $this->db->where('hms_oct_hfa.id', $id);
@@ -233,7 +233,8 @@ class Oct_hfa_model extends CI_Model
         $this->db->from('hms_std_eye_prescription_history');
         
         // Filter by the given patient_id
-        $this->db->where('booking_code', $booking_id);
+        // $this->db->where('booking_code', $booking_id);
+        $this->db->where('booking_id', $booking_id);
         
         // Fetch the result
         $query = $this->db->get();
@@ -317,7 +318,7 @@ class Oct_hfa_model extends CI_Model
 	{
         // echo $booking_id;die;
 		// Select all fields from both tables
-		$this->db->select('hms_opd_booking.*, hms_patient.*'); // Select all fields
+		$this->db->select('hms_opd_booking.id as opd_id,hms_opd_booking.*, hms_patient.*'); // Select all fields
 		$this->db->from('hms_opd_booking'); // Start with the bookings table
 		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
 
@@ -333,16 +334,17 @@ class Oct_hfa_model extends CI_Model
 		return null; // Return null if no data found
 	}
 
-    public function get_booking_by_id($booking_id)
+    public function get_booking_by_id($booking_id,$patient_id)
 	{
         // echo $booking_id;die;
 		// Select all fields from both tables
-		$this->db->select('hms_opd_booking.*, hms_patient.*'); // Select all fields
+		$this->db->select('hms_opd_booking.id as opd_id,hms_opd_booking.*, hms_patient.*'); // Select all fields
 		$this->db->from('hms_opd_booking'); // Start with the bookings table
 		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
 
 		// Filter by the booking ID
-		$this->db->where('hms_opd_booking.booking_code', $booking_id); // Assuming 'id' is the primary key for bookings
+		$this->db->where('hms_opd_booking.id', $booking_id); // Assuming 'id' is the primary key for bookings
+		// $this->db->where('hms_opd_booking.patient_id', $patient_id); // Assuming 'id' is the primary key for bookings
 		$query = $this->db->get();
 
 		// Check if any results were returned

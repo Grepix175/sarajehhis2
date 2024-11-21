@@ -38,11 +38,11 @@ class Dilate extends CI_Controller
     {
         $list = $this->dilate->get_datatables();
         // Assuming you want to fetch booking data based on the first patient's booking_id
+        // echo "<pre>";print_r($list);die;
         $data['booking_data'] = $this->dilate->get_booking_by_id($list[0]->booking_id,$list[0]->patient_id);
-        $data['opd'] = $this->dilate->get_booking_by_p_id($list[0]->booking_id);
+        $data['opd'] = $this->dilate->get_booking_by_p_id($list[0]->booking_id,$list[0]->patient_id);
         $data = array();
         $no = $_POST['start'];
-        // echo "<pre>";print_r($list);die;
         
         // Group records by patient_id
         $grouped_data = [];
@@ -50,6 +50,7 @@ class Dilate extends CI_Controller
             $grouped_data[$dilated->patient_id][] = $dilated;
         }
         
+        // echo "<pre>";print_r($grouped_data);die;
         // Iterate through grouped data (grouped by patient_id)
         foreach ($grouped_data as $patient_id => $records) {
             // echo "<pre>";print_r($records);die;
@@ -97,7 +98,9 @@ class Dilate extends CI_Controller
 
             // Created at date (showing created date from the first record in the group)
             $row[] = date('d-M-Y', strtotime($records[0]->created_date));
-
+            // echo "<pre>";
+            // print_r($patient_id);
+            // die('okay');
             // Add action buttons
             $row[] = '<a onClick="return edit_dilate(\'' . $patient_id . '\');" class="btn-custom" href="javascript:void(0)" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
                     <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("dilate/print_dilate/" . $patient_id) . '\');">
@@ -126,7 +129,10 @@ class Dilate extends CI_Controller
 
     public function add($booking_id = null, $patient_id = null)
     {
-
+        // echo "<pre>";
+        // print_r($booking_id);
+        // print_r($patient_id);
+        // die('okay');
         // Load required models and libraries
         $this->load->library('form_validation');
         $this->load->model('contact_lens/contact_lens_model'); // Ensure this model is loaded
@@ -143,7 +149,10 @@ class Dilate extends CI_Controller
         $data['unit_list'] = $this->dilate->unit_list();
         $data['manuf_company_list'] = $this->dilate->manuf_company_list();
         // echo $booking_id;die;
-        $data['booking_data'] = $this->dilate->get_booking_by_p_id($booking_id);
+        $data['booking_data'] = $this->dilate->get_booking_by_p_id($booking_id,$patient_id);
+        //  echo "<pre>";
+        // print_r($data['booking_data']);
+        // die('okay');
         $data['medicines'] = $this->dilate->get_all_medicines();
         // echo "<pre>";print_r($booking_id);die;
         // Initialize form data
@@ -312,7 +321,7 @@ class Dilate extends CI_Controller
             // echo "<pre>";
             // print_r($result);
             // die;
-            $data['booking_data'] = $this->dilate->get_booking_by_p_id($result[0]['patient_id']);
+            $data['booking_data'] = $this->dilate->get_booking_by_p_id($result[0]['booking_id'],$result[0]['patient_id']);
             $data['medicine'] = $this->dilate->get_item_by_medicine($result['drop_name']);
             $data['medicines'] = $this->dilate->get_all_medicines();
             // echo "<pre>";print_r($result);die;
@@ -615,6 +624,7 @@ class Dilate extends CI_Controller
         // Fetch the form data based on the ID
         $result = $this->dilate->get_by_id($id);
         // echo "<pre>";
+        // print_r($result[0]['booking_id']);
         // print_r($result[0]['patient_id']);
         // die();
         $data['booking_data'] = $this->dilate->get_booking_by_id($result[0]['booking_id'],$result[0]['patient_id']);

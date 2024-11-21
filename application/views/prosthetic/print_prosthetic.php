@@ -529,7 +529,7 @@ $field_list = mandatory_section_field_list(2);
                     <span>
                         <?php
                         if (isset($data_list[0]->created_date) && !empty($data_list[0]->created_date)) {
-                            echo htmlspecialchars(date('Y-m-d', strtotime($data_list[0]->created_date)));
+                            echo htmlspecialchars(date('d-m-Y', strtotime($data_list[0]->created_date)));
                         } else {
                             echo date('Y-m-d');
                         }

@@ -284,13 +284,16 @@ class Help_desk extends CI_Controller
 
         }
       }
+      // echo "<pre>";
+      // print_r($prescription);
+      // die;
       if (in_array('2413', $users_data['permission']['action'])) {
         if ($dilate_exists == 1) {
             // Enable the "Dilate" button if dilate exists
             $dilate = '<a class="btn-custom " disabled href="javascript:void(0)" title="Dilate" style="pointer-events: none; opacity: 0.6;">Dilate</a>';
           } else {
             // Disable the "Dilate" button and change its style to look inactive
-            $dilate = '<a class="btn-custom" href="' . base_url("dilate/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Dilate" data-url="512">Dilate</a>';
+            $dilate = '<a class="btn-custom" href="' . base_url("dilate/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Dilate" data-url="512">Dilate</a>';
         }
       
       }
