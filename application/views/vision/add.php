@@ -472,7 +472,7 @@ $field_list = mandatory_section_field_list(2);
                                     </p> -->
                                     <p class="mt-2" style="margin-top: 25px;">Date: <span style="border-bottom: 1px solid #000; width: 130px; display: inline-block;">
                                         <input type="text" name="optometrist_date" class="validity_date m_input_default"
-                                            value="<?php echo date('d-m-Y', strtotime($form_data['optometrist_date'])); ?>" id="validity_date_optometrist"
+                                            value="<?php echo !empty($form_data['optometrist_date']) ? date('d-m-Y', strtotime($form_data['optometrist_date'])) : ''; ?>" id="validity_date_optometrist"
                                             readonly="true" style="width: 130px !important;" />
                                     </span></p>
                                 </div>
@@ -501,7 +501,7 @@ $field_list = mandatory_section_field_list(2);
                                     </p> -->
                                     <p class="mt-2" style="margin-top: 25px;">Date: <span style="border-bottom: 1px solid #000; width: 130px; display: inline-block;">
                                         <input type="text" name="anaesthetist_date" class="validity_date m_input_default"
-                                            value="<?php echo date('d-m-Y', strtotime($form_data['anaesthetist_date'])); ?>" id="validity_date_anaesthetist"
+                                            value="<?php echo !empty($form_data['anaesthetist_date']) ? date('d-m-Y', strtotime($form_data['anaesthetist_date'])) : ''; ?>" id="validity_date_anaesthetist"
                                             readonly="true" style="width: 130px !important;" />
                                     </span></p>
                                     
@@ -524,7 +524,7 @@ $field_list = mandatory_section_field_list(2);
                                     </div> -->
                                     <p class="mt-2" style="margin-top: 25px;">Date: <span style="border-bottom: 1px solid #000; width: 130px; display: inline-block;">
                                         <input type="text" name="doctor_date" class="validity_date m_input_default"
-                                            value="<?php echo date('d-m-Y', strtotime($form_data['doctor_date'])); ?>" id="validity_date_doctor"
+                                            value="<?php echo !empty($form_data['doctor_date']) ? date('d-m-Y', strtotime($form_data['doctor_date'])) : ''; ?>" id="validity_date_doctor"
                                             readonly="true" style="width: 130px !important;" />
                                     </span></p>
                                     
