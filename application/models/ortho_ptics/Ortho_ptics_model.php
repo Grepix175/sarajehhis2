@@ -79,6 +79,8 @@ class Ortho_ptics_model extends CI_Model
         
         // Group by to prevent duplicate rows
         $this->db->group_by('hms_ortho_ptics.id');
+
+        $this->db->order_by('hms_ortho_ptics.created_date', 'DESC');
         
         $i = 0;
         foreach ($this->column as $item) {

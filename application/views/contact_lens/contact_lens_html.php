@@ -197,13 +197,13 @@
         <div style="margin-bottom: 24px; display: flex; justify-content: space-between;">
             <div style="text-align: left; width: 48%;">
                 <p style="font-weight: bold; font-size: 10px; margin-top: 10px;">Signature of Optometrist</p>
-                <strong style="font-size: 15px; border-bottom: 1px solid #000;"><?php echo $data_list[0]['optometrist_signature_name']; ?></strong> <!-- Increased font size -->
+                <strong style="display: inline-block; font-size: 15px; text-align: center; width: 200px; border-top:1px solid black; margin-top: 24px;"><?php echo $data_list[0]['optometrist_signature_name']; ?></strong> <!-- Increased font size -->
                 <!-- <div style="border-top: 1px solid #000; padding-top: 8px; width: 50%; margin-top: 30px;">
                 </div> -->
             </div>
             <div style="text-align: right; width: 48%;">
                 <p style="font-weight: bold; font-size: 10px; margin-top: 10px;">Signature of Doctor</p>
-                 <strong style="font-size: 15px; border-bottom: 1px solid #000;"><?php echo $data_list[0]['doctor_signature_name']; ?></strong> <!-- Increased font size -->
+                 <strong style="display: inline-block; font-size: 15px; text-align: center; width: 200px; border-top:1px solid black; margin-top: 24px;"><?php echo $data_list[0]['doctor_signature_name']; ?></strong> <!-- Increased font size -->
                 
             </div>
         </div>

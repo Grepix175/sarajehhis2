@@ -319,7 +319,7 @@ $field_list = mandatory_section_field_list(2);
                             <div class="row mb-4">
                                 <div class="col-md-6 text-left">
                                     <p class="font-weight-bold">Signature of Optometrist:</p>
-                                    <div class="border-bottom pt-2 mx-auto" style="display: inline-block; width: 200px; border-bottom:1px solid black; margin-top: 24px;">
+                                    <div class="border-bottom pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;">
                                         <select name="optometrist_signature" class="form-control mx-auto" style="width: 200px;">
                                             <option value="">Select Optometrist</option>
                                             <?php foreach ($doctor as $optometrist) : ?>
@@ -334,7 +334,7 @@ $field_list = mandatory_section_field_list(2);
                                 </div>
                                 <div class="col-md-6 text-right">
                                     <p class="font-weight-bold">Signature of Doctor:</p>
-                                    <div class="border-bottom pt-2 mx-auto" style="display: inline-block; width: 200px; border-bottom:1px solid black; margin-top: 24px;">
+                                    <div class="border-bottom pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;">
                                         <select name="doctor_signature" class="form-control mx-auto" style="width: 200px;">
                                             <option value="">Select Doctor</option>
                                             <?php foreach ($doctor as $doc) : ?>

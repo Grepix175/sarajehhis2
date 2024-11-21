@@ -157,7 +157,7 @@ class Vision_model extends CI_Model
         doctor.doctor_name as doctor_signature_name
     ');
         $this->db->from($this->table);
-        $this->db->join('hms_patient', 'hms_patient.id = hms_vision.patient_code', 'left');
+        $this->db->join('hms_patient', 'hms_patient.patient_code = hms_vision.patient_code', 'left');
         $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_vision.booking_id', 'left');
         $this->db->join('hms_doctors as optometrist', 'optometrist.id = hms_vision.optometrist_signature', 'left');
         $this->db->join('hms_doctors as anaesthetist', 'anaesthetist.id = hms_vision.anaesthetist_signature', 'left');

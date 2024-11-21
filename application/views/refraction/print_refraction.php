@@ -577,12 +577,12 @@ $field_list = mandatory_section_field_list(2);
                         <label for="optometrist">Signature of Optometrist:</label>
                         <br />
                         <!-- <input type="text" id="optometrist"> -->
-                        <strong><?php echo $form_data['optometrist_signature_name'];?></strong>
+                        <span class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;"><strong><?php echo $form_data['optometrist_signature_name'];?></strong></span>
                     </div>
                     <div>
                         <label for="doctor">Signature of Doctor:</label>
                         <br />
-                        <strong><?php echo $form_data['doctor_signature_name'];?></strong>
+                        <span class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;"><strong><?php echo $form_data['doctor_signature_name'];?></strong></span>
                         <!-- <input type="text" id="doctor"> -->
                     </div>
                 </div>

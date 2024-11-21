@@ -346,7 +346,8 @@ $field_list = mandatory_section_field_list(2);
 
             <div class="grp-full">
               <div class="grp">
-                <label>Patient Category <span class="star">*</span>
+                <label>Patient Category 
+                  <!-- <span class="star">*</span> -->
                 </label>
 
                 <div class="box-right">

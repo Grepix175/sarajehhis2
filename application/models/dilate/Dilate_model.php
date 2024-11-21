@@ -55,7 +55,9 @@ class Dilate_model extends CI_Model
 		$this->db->join('hms_patient', 'hms_patient.id = hms_dilated.patient_id', 'left');
 		$this->db->join('hms_opd_booking', 'hms_opd_booking.booking_code = hms_dilated.booking_id', 'left');
 		$this->db->join('hms_medicine_entry', 'hms_medicine_entry.id = hms_dilated.drop_name', 'left'); // Correct join based on the relationship
+		$this->db->group_by('hms_dilated.id');
 
+        $this->db->order_by('hms_dilated.created_date', 'DESC');
 		// Adjust branch filtering logic
 		if (!empty($search['branch_type']) && trim(strtolower($search['branch_type'])) == "self") {
 			$this->db->where('hms_dilated.branch_id', $user_data['parent_id']);
@@ -71,6 +73,7 @@ class Dilate_model extends CI_Model
 		if (!empty($search['start_date'])) {
 			$start_date = date('Y-m-d', strtotime($search['start_date'])) . ' 00:00:00';
 			$this->db->where('hms_dilated.created_date >=', $start_date);
+			$this->db->where('hms_opd_booking.created_date >=', $start_date);
 		}
 
 		
@@ -83,6 +86,7 @@ class Dilate_model extends CI_Model
 		if (!empty($search['end_date'])) {
 			$end_date = date('Y-m-d', strtotime($search['end_date'])) . ' 23:59:59';
 			$this->db->where('hms_dilated.created_date <=', $end_date);
+			$this->db->where('hms_opd_booking.created_date <=', $end_date);
 		}
 
 		// Update search for `medicine_name` instead of `drop_name`
@@ -196,17 +200,19 @@ class Dilate_model extends CI_Model
 	}
 
 
-    public function get_booking_by_id($booking_id) {
+    public function get_booking_by_id($booking_id,$patient_id) {
+		// echo "<pre>";print_r($booking_id);die;
         // Select all fields from both tables
         $this->db->select('hms_opd_booking.*, hms_patient.*');
         $this->db->from('hms_opd_booking');
         $this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left');
         $this->db->where('hms_opd_booking.booking_code', $booking_id);
+        $this->db->where('hms_opd_booking.patient_id', $patient_id);
         $query = $this->db->get();
+		// echo $this->db->last_query();die;
         if ($query->num_rows() > 0) {
             return $query->row_array();
         }
-		// echo $this->db->last_query();die;
         return null;
     }
     public function get_booking_by_p_id($booking_id) {
@@ -341,6 +347,8 @@ class Dilate_model extends CI_Model
 		$this->db->join('hms_medicine', 'hms_medicine.id = hms_dilated.drop_name', 'left');
 		$this->db->join('hms_opd_booking', 'hms_opd_booking.booking_code = hms_dilated.booking_id', 'left');
 
+		$this->db->group_by('hms_dilated.id');
+
 		// Get the result and return it as an associative array
 		$query = $this->db->get();
 
@@ -408,7 +416,8 @@ class Dilate_model extends CI_Model
 				$insert_data[] = $data;
 			}
 		}
-		// echo "<pre>";print_r($insert_data);die;
+		// echo "<pre>";print_r($insert_data);
+		// echo "<pre>";print_r($update_data);die('update');
 		// Insert new records
 		if (!empty($insert_data)) {
 			$this->db->insert_batch('hms_dilated', $insert_data);

@@ -218,12 +218,12 @@
                                 <td class="info-content">: <?php echo $form_data['patient_code']??''; ?></td>
                             </tr>
                             <tr>
-                                <td class="info-label">Token No</td>
-                                <td class="info-content">: <?php echo $form_data['token_no'] ?? ''; ?></td>
-                            </tr>
-                            <tr>
                                 <td class="info-label">OPD No</td>
                                 <td class="info-content">: <?php echo $form_data['booking_code']??''; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="info-label">Token No</td>
+                                <td class="info-content">: <?php echo $form_data['token_no'] ?? ''; ?></td>
                             </tr>
                         </table>
                     </td>
@@ -394,21 +394,21 @@
                         <td class="small text-center">
                             <p class="font-weight-bold pt-4">Optometrist's Signature</p>
                             <br />
-                            <span><?php echo isset($form_data['optometrist_signature_name']) ? htmlspecialchars($form_data['optometrist_signature_name']) : ''; ?></span>
+                            <span class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;"><strong><?php echo isset($form_data['optometrist_signature_name']) ? htmlspecialchars($form_data['optometrist_signature_name']) : ''; ?></strong></span>
                             <!-- <div class="border-top pt-4">______________________</div> Increased padding for more space -->
                             <p class="mt-2 small">Date: <?php echo isset($form_data['optometrist_date']) ? date('F j, Y', strtotime($form_data['optometrist_date'])) : '__________________'; ?></p>
                         </td>
                         <td class="small text-center">
                             <p class="font-weight-bold pt-4">Anaesthetist's Signature</p>
                             <br />
-                            <span><?php echo isset($form_data['anaesthetist_signature']) ? htmlspecialchars($form_data['anaesthetist_signature']) : ''; ?></span>
+                            <span class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;"><strong><?php echo isset($form_data['anaesthetist_signature']) ? htmlspecialchars($form_data['anaesthetist_signature']) : ''; ?></strong></span>
                             <!-- <div class="border-top pt-4">______________________</div> Increased padding for more space -->
                             <p class="mt-2 small">Date: <?php echo isset($form_data['anaesthetist_date']) ? date('F j, Y', strtotime($form_data['anaesthetist_date'])) : '__________________'; ?></p>
                         </td>
                         <td class="small text-center">
                             <p class="font-weight-bold pt-4">Doctor's Signature</p>
                             <br />
-                            <span><?php echo isset($form_data['doctor_signature_name']) ? htmlspecialchars($form_data['doctor_signature_name']) : ''; ?></span>
+                            <span class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;"><strong><?php echo isset($form_data['doctor_signature_name']) ? htmlspecialchars($form_data['doctor_signature_name']) : ''; ?></strong></span>
                             <!-- <div class="border-top pt-4">______________________</div> Increased padding for more space -->
                             <p class="mt-2 small">Date: <?php echo isset($form_data['doctor_date']) ? date('F j, Y', strtotime($form_data['doctor_date'])) : '__________________'; ?></p>
                         </td>
