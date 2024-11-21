@@ -187,12 +187,12 @@ class Contact_lens_model extends CI_Model
 			'patient_id' => $post['patient_id'],
 			'modified_date' => date('Y-m-d H:i:s')
 		];
+		// echo "<pre>";
+		// print_r($post);
+		// die('sagar');
 
 		// If `data_id` exists, perform an update
 		if (!empty($data_id) && $data_id > 0) {
-			// echo "<pre>";
-			// print_r($data);
-			// die;
 			// Update the main contact lens entry (assuming related table for this entry)
 			$this->db->where('id', $data_id);
 			$this->db->update($this->table, $data);
@@ -211,18 +211,18 @@ class Contact_lens_model extends CI_Model
 		} else { // If `data_id` is not provided, perform an insert
 			// Insert new data into the main table
 			
-			$data['created_date'] = date('Y-m-d H:i:s');
-			$this->db->set('ip_address', $_SERVER['REMOTE_ADDR']);
-			$this->db->set('created_by', $user_data['id']);
-			$this->db->insert($this->table, $data);
+			// $data['created_date'] = date('Y-m-d H:i:s');
+			// $this->db->set('ip_address', $_SERVER['REMOTE_ADDR']);
+			// $this->db->set('created_by', $user_data['id']);
+			// $this->db->insert($this->table, $data);
 
+			if (isset($post['contact_lens_items']) && !empty($post['contact_lens_items'])) {
+				$this->insert_items($data_id, $post['contact_lens_items'], $user_data, $post);
+			}
 			// Get the last inserted ID for the new record
 			$data_id = $this->db->insert_id();
 
 			// Insert the items if available
-			if (isset($post['contact_lens_items']) && !empty($post['contact_lens_items'])) {
-				$this->insert_items($data_id, $post['contact_lens_items'], $user_data, $post);
-			}
 			// After successful insert, update the patient's status to 'low_vision'
 			if (!empty($data['patient_id'])) {
 				// Retrieve the current 'pat_status' value for the given patient
@@ -253,8 +253,8 @@ class Contact_lens_model extends CI_Model
 	{
 		$items = json_decode($contact_lens_items_json, true);
 		// echo "<pre>";
-		// print_r($post);
-		// die;
+		// print_r($items);
+		// die('okkk');
 		foreach ($items as $item) {
 			$item_data = [
 				// 'contact_lens_id' => $data_id,

@@ -205,7 +205,7 @@ $field_list = mandatory_section_field_list(2);
                         </tr>
                         <tr>
                             <td class="info-label">Token No</td>
-                            <td class="info-content">: <?php echo $form_data['token_no'] ?? ''; ?></td>
+                            <td class="info-content">: <?php echo $booking_data['token_no'] ?? ''; ?></td>
                         </tr>
                     </table>
                 </td>
