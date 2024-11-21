@@ -367,11 +367,15 @@ class Low_vision_model extends CI_Model
 
     function get_by_low_vision_status($booking_id = '', $patient_id = '')
 	{
+        // echo "<pre>";
+        // print_r($booking_id);
+        // print_r($patient_id);
+        // die;
 		$user_data = $this->session->userdata('auth_users');
 		$this->db->select('booking_id');
 		$this->db->from('hms_low_vision');
 		$this->db->where('hms_low_vision.booking_id', $booking_id);
-		// $this->db->where('hms_low_vision.patient_id', $patient_id);
+		$this->db->where('hms_low_vision.patient_id', $patient_id);
 		$this->db->where('hms_low_vision.is_deleted', 0);
 
 		$query = $this->db->get();

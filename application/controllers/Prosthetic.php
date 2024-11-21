@@ -315,7 +315,7 @@ class Prosthetic extends CI_Controller
            // Assuming $result['auto_refraction'] could be a JSON string
         //    $color_vision = json_decode($result['color_vision'], true); // Decode into an associative array
         //    $contrast_sensivity = json_decode($result['contrast_sensivity'], true); // Decode into an associative array
-           $data['booking_data'] = $this->prosthetic->get_booking_by_id($result['booking_id']);
+           $data['booking_data'] = $this->prosthetic->get_booking_by_id($result['booking_id'],$result['patient_id']);
            $data['doctor'] = $this->doctor->doctors_list();
         //    echo "<pre>";print_r($data['doctor']);die;
 

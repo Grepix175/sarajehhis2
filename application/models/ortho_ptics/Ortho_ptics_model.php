@@ -202,7 +202,7 @@ class Ortho_ptics_model extends CI_Model
         return $query->row_array();
     }
 
-    public function get_ortho_by_booking_id($booking_id)
+    public function get_ortho_by_booking_id($booking_id,$patient_id)
     {
        
         // Select fields from hms_ortho_ptics and hms_patient
@@ -210,6 +210,7 @@ class Ortho_ptics_model extends CI_Model
         $this->db->from($this->table);
         $this->db->join('hms_patient', 'hms_patient.id = hms_ortho_ptics.patient_id', 'left');
         $this->db->where('hms_ortho_ptics.booking_id', $booking_id);
+        $this->db->where('hms_ortho_ptics.patient_id', $patient_id);
         $this->db->where('hms_ortho_ptics.is_deleted', '0');
         $query = $this->db->get();
 //         // Print the result set
