@@ -379,7 +379,7 @@ class Prosthetic_model extends CI_Model
 		$this->db->select('booking_id');
 		$this->db->from('hms_prosthetic');
 		$this->db->where('hms_prosthetic.booking_id', $booking_id);
-		// $this->db->where('hms_prosthetic.patient_id', $patient_id);
+		$this->db->where('hms_prosthetic.patient_id', $patient_id);
 		$this->db->where('hms_prosthetic.is_deleted', 0);
 
 		$query = $this->db->get();

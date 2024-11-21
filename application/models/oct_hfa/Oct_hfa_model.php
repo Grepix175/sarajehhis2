@@ -190,13 +190,14 @@ class Oct_hfa_model extends CI_Model
         return $query->row_array();
     }
 
-    public function get_by_booking_id($booking_id)
+    public function get_by_booking_id($booking_id,$patient_id)
     {
         // Select fields from hms_oct_hfa and hms_patient
         $this->db->select('hms_oct_hfa.*, hms_patient.*');
         $this->db->from($this->table);
         $this->db->join('hms_patient', 'hms_patient.id = hms_oct_hfa.patient_id', 'left');
         $this->db->where('hms_oct_hfa.booking_id', $booking_id);
+        $this->db->where('hms_oct_hfa.patient_id', $patient_id);
         $this->db->where('hms_oct_hfa.is_deleted', '0');
         $query = $this->db->get();
         

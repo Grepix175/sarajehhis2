@@ -94,10 +94,10 @@ class Help_desk extends CI_Controller
       $contact_lens_txt = '';
       $patient_status = $this->opd->get_by_id_patient_status($prescription->booking_id);
       $contact_lens_status = $this->contact_lens->get_by_contact_lens_status($prescription->booking_id, $prescription->patient_id);
-      $low_vision_status = $this->low_vision->get_by_low_vision_status($prescription->booking_code, $prescription->patient_code);
-      $prosthetic_status = $this->prosthetic->get_by_low_vision_status($prescription->booking_code, $prescription->patient_code);
-      $oct_hfa_status = $this->oct_hfa->get_by_booking_id($prescription->booking_code);
-      $ortho_ptics_status = $this->ortho_ptics->get_ortho_by_booking_id($prescription->booking_code);
+      $low_vision_status = $this->low_vision->get_by_low_vision_status($prescription->booking_id, $prescription->patient_id);
+      $prosthetic_status = $this->prosthetic->get_by_low_vision_status($prescription->booking_id, $prescription->patient_id);
+      $oct_hfa_status = $this->oct_hfa->get_by_booking_id($prescription->booking_id, $prescription->patient_id);
+      $ortho_ptics_status = $this->ortho_ptics->get_ortho_by_booking_id($prescription->booking_id, $prescription->patient_id);
       // echo $oct_hfa_status;die;
     //   echo "<pre>";
     // print_r($ortho_ptics_status);
