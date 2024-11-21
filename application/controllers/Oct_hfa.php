@@ -94,7 +94,7 @@ class Oct_hfa extends CI_Controller
             $row[] = '<input type="checkbox" name="refraction_ids[]" value="' . $oct_hfa->refraction_id . '">';
 
             $row[] = $oct_hfa->token;
-            $row[] = $oct_hfa->booking_id;
+            $row[] = $oct_hfa->booking_code;
             $row[] = $oct_hfa->patient_code;
             $row[] = $oct_hfa->patient_name;
             // $row[] = $oct_hfa->patient_category_name;
@@ -117,7 +117,7 @@ class Oct_hfa extends CI_Controller
 
             // Add action buttons
             $row[] = '<a onClick="return edit_refraction(' . $oct_hfa->refraction_id . ');" class="btn-custom" href="javascript:void(0)" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
-                    <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("oct_hfa/print_oct_hfa/" . $oct_hfa->booking_id."/".$oct_hfa->id) . '\');">
+                    <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("oct_hfa/print_oct_hfa/" . $oct_hfa->booking_id."/".$oct_hfa->patient_id) . '\');">
                         <i class="fa fa-print"></i> Print
                     </a>';
             $row[] = $oct_hfa->emergency_status;
@@ -140,6 +140,10 @@ class Oct_hfa extends CI_Controller
 
     public function add($booking_id = null, $id = null)
     {
+        // echo "<pre>";
+        // print_r($booking_id);
+        // print_r($id);
+        // die('sagar');
         // echo "plp";die;
         // Load required models and libraries
         $this->load->library('form_validation');
@@ -159,15 +163,16 @@ class Oct_hfa extends CI_Controller
         $result_refraction = $this->oct_hfa->get_prescription_refraction_new_by_id($booking_id, $id);
         // echo "<pre>";print_r($booking_id);die;
         $data['booking_data'] = $this->oct_hfa->get_bookings_by_id($booking_id);
-        $data['doctor'] = $this->doctor->doctors_list();
         // echo "<pre>";print_r($data['booking_data']);die('kkkk');
+        $data['doctor'] = $this->doctor->doctors_list();
 
         $oct_hfa_auto_refraction = isset($result_refraction['auto_refraction'])?json_decode($result_refraction['auto_refraction']):'';
         $data['refrtsn_auto_ref'] = (array) $oct_hfa_auto_refraction;
        
         // // Initialize form data
         $data['form_data'] = array(
-            'booking_id' => isset($data['booking_data']['booking_id']) ? $data['booking_data']['booking_id'] : '', // Booking ID
+            // 'booking_id' => isset($data['booking_data']['booking_id']) ? $data['booking_data']['booking_id'] : '', // Booking ID
+            'booking_id' => isset($data['booking_data']['opd_id']) ? $data['booking_data']['opd_id'] : '', // Booking ID
             
             'branch_id' => isset($data['booking_data']['branch_id']) ? $data['booking_data']['branch_id'] : '', // To be filled from form
             'booking_code' => isset($data['booking_data']['booking_code']) ? $data['booking_data']['booking_code'] : '', // To be filled from form
@@ -180,7 +185,7 @@ class Oct_hfa extends CI_Controller
             'created_by' => $this->session->userdata('user_id'), // User ID from session
             'created_date' => date('Y-m-d H:i:s'), // Current timestamp
             'ip_address' => $this->input->ip_address(), // IP address
-            'booking_id' => isset($data['booking_data']['booking_id']) ? $data['booking_data']['booking_id'] : '', // Booking ID
+            // 'booking_id' => isset($data['booking_data']['booking_id']) ? $data['booking_data']['booking_id'] : '', // Booking ID
            
         );       
         // $chief_complaints = array(
@@ -220,7 +225,8 @@ class Oct_hfa extends CI_Controller
             $booking_code = $this->input->post('booking_code');
             $pres_id = $this->input->post('pres_id');
             $patient_id = $this->input->post('patient_id');
-            $booking_id = $this->input->post('booking_code');
+            // $booking_id = $this->input->post('booking_code');
+            $booking_id = $this->input->post('booking_id');
             $remarks = $this->input->post('remarks');
             $ocular_history = $this->input->post('ocular_history');
             $medical_history = $this->input->post('medical_history');
@@ -518,9 +524,9 @@ class Oct_hfa extends CI_Controller
            // Assuming $result['auto_refraction'] could be a JSON string
         //    $color_vision = json_decode($result['color_vision'], true); // Decode into an associative array
         //    $contrast_sensivity = json_decode($result['contrast_sensivity'], true); // Decode into an associative array
-           $data['booking_data'] = $this->oct_hfa->get_booking_by_id($result['booking_id']);
+           $data['booking_data'] = $this->oct_hfa->get_booking_by_id($result['booking_id'],$result['patient_id']);
+        //    echo "<pre>";print_r($data['booking_data']);die;
            $data['doctor'] = $this->doctor->doctors_list();
-        //    echo "<pre>";print_r($data['doctor']);die;
 
             // Check if decoding was successful
             if (json_last_error() !== JSON_ERROR_NONE) {
@@ -632,14 +638,15 @@ class Oct_hfa extends CI_Controller
         // echo "ppk";die;
         $data['print_status'] = "1";
         $data['data_list'] = $this->oct_hfa->search_report_data($booking_id,$id);
-        $data['booking_data'] = $this->oct_hfa->get_booking_by_id($booking_id);
+        $data['booking_data'] = $this->oct_hfa->get_booking_by_id($booking_id,$id);
+        // echo "<pre>";print_r($booking_id);print_r($id);die;
+        // echo "<pre>";print_r($data['booking_data']);die;
         $data['doctor'] = $this->doctor->doctors_list();
 
 
         // Fetch the OPD billing details based on the ID
         // $booking_id = isset($data['form_data']['booking_id'])?$data['form_data']['booking_id']:'';
         // $data['billing_data'] = $this->vision_model->get_patient_name_by_booking_id($booking_id);
-        // echo "<pre>";print_r($data['data_list'][0]);die;
 
         // Load the print view with the data
         $this->load->view('oct_hfa/print_oct_hfa', $data);

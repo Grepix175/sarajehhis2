@@ -102,7 +102,8 @@ class Vision extends CI_Controller
             $gender = array('0' => 'Female', '1' => 'Male', '2' => 'Others');
             // $row[] = $vision->id;
             $row[] = '<input type="checkbox" name="prescription[]" class="checklist" value="' . $vision->id . '">' . $check_script;
-            $row[] = $vision->patient_code_auto;
+            // $row[] = $vision->patient_code_auto;
+            $row[] = $vision->token_no;
             $row[] = $vision->booking_code;
             $row[] = $vision->patient_code;
             $row[] = $vision->patient_name;

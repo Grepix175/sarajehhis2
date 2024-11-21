@@ -53,7 +53,7 @@ class Dilate_model extends CI_Model
 
 		// Example joins
 		$this->db->join('hms_patient', 'hms_patient.id = hms_dilated.patient_id', 'left');
-		$this->db->join('hms_opd_booking', 'hms_opd_booking.booking_code = hms_dilated.booking_id', 'left');
+		$this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_dilated.booking_id', 'left');
 		$this->db->join('hms_medicine_entry', 'hms_medicine_entry.id = hms_dilated.drop_name', 'left'); // Correct join based on the relationship
 		$this->db->group_by('hms_dilated.id');
 
@@ -201,12 +201,13 @@ class Dilate_model extends CI_Model
 
 
     public function get_booking_by_id($booking_id,$patient_id) {
-		// echo "<pre>";print_r($booking_id);die;
+		// echo "<pre>";print_r($booking_id);
+		// echo "<pre>";print_r($patient_id);die;
         // Select all fields from both tables
         $this->db->select('hms_opd_booking.*, hms_patient.*');
         $this->db->from('hms_opd_booking');
         $this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left');
-        $this->db->where('hms_opd_booking.booking_code', $booking_id);
+        $this->db->where('hms_opd_booking.id', $booking_id);
         $this->db->where('hms_opd_booking.patient_id', $patient_id);
         $query = $this->db->get();
 		// echo $this->db->last_query();die;
@@ -215,13 +216,14 @@ class Dilate_model extends CI_Model
         }
         return null;
     }
-    public function get_booking_by_p_id($booking_id) {
+    public function get_booking_by_p_id($booking_id,$patient_id) {
 		// echo "hihi";die;
         // Select all fields from both tables
-        $this->db->select('hms_opd_booking.*, hms_patient.*');
+        $this->db->select('hms_opd_booking.id as opd_id,hms_opd_booking.*, hms_patient.*');
         $this->db->from('hms_opd_booking');
         $this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left');
-        $this->db->where('hms_opd_booking.patient_id', $booking_id);
+        $this->db->where('hms_opd_booking.id', $booking_id);
+        $this->db->where('hms_opd_booking.patient_id', $patient_id);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->row_array();
@@ -365,7 +367,9 @@ class Dilate_model extends CI_Model
 	{
 		$user_data = $this->session->userdata('auth_users');
 		$post = $this->input->post();
-		
+		// echo "<pre>";
+        // print_r($post);
+        // die('okay');
 		// Fetch dilate_start_time, dilate_time, and dilate_status from hms_opd_booking using booking_id
 		$this->db->select('dilate_start_time, dilate_time, dilate_status');
 		$this->db->where('id', $post['booking_id']);
@@ -388,7 +392,8 @@ class Dilate_model extends CI_Model
 			$data = array(
 				'branch_id' => $user_data['parent_id'],
 				'patient_id' => $post['patient_id'], // Assuming patient_id is passed in POST
-				'booking_id' => $post['booking_code'], // Assuming booking_id is passed in POST
+				// 'booking_id' => $post['booking_code'], // Assuming booking_id is passed in POST
+				'booking_id' => $post['booking_id'], // Assuming booking_id is passed in POST
 				'drop_name' => $item['medicine_name'], // Fetching medicine_name from item
 				'salt' => $item['salt'], // Fetching salt from item
 				'percentage' => $item['percentage'], // Fetching percentage from item

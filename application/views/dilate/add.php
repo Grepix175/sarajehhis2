@@ -112,9 +112,9 @@ $field_list = mandatory_section_field_list(2);
                 <input type="hidden" name="data_id" id="patient_id"
                     value="<?php echo isset($form_data['data_id']) ? $form_data['data_id'] : ''; ?>">
                 <input type="hidden" name="booking_id" id="booking_id"
-                    value="<?php echo isset($form_data['booking_id']) ? $form_data['booking_id'] : ''; ?>">
+                    value="<?php echo isset($booking_data['opd_id']) ? $booking_data['opd_id'] : ''; ?>">
                 <input type="hidden" name="patient_id" id="patient_id"
-                    value="<?php echo isset($form_data['patient_id']) ? $form_data['patient_id'] : ''; ?>">
+                    value="<?php echo isset($booking_data['patient_id']) ? $booking_data['patient_id'] : ''; ?>">
                 <div class="content-inner">
                     <?php //echo "<pre>";print_r($form_data['booking_id']);print_r($booking_id);die; ?>
                     

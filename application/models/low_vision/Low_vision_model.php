@@ -64,7 +64,8 @@ class Low_vision_model extends CI_Model
         // Joining tables
         $this->db->join('hms_patient', 'hms_patient.id = hms_low_vision.patient_id', 'left');
         $this->db->join('hms_patient_category', 'hms_patient_category.id = hms_patient.patient_category', 'left');
-        $this->db->join('hms_opd_booking', 'hms_opd_booking.booking_code = hms_low_vision.booking_id', 'left');
+        // $this->db->join('hms_opd_booking', 'hms_opd_booking.booking_code = hms_low_vision.booking_id', 'left');
+        $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_low_vision.booking_id', 'left');
         $this->db->join('hms_doctors', 'hms_doctors.id = hms_opd_booking.attended_doctor', 'left');
         
         // Filter deleted entries
@@ -227,7 +228,7 @@ class Low_vision_model extends CI_Model
 	{
         // echo $booking_id;die;
 		// Select all fields from both tables
-		$this->db->select('hms_opd_booking.*, hms_patient.*'); // Select all fields
+		$this->db->select('hms_opd_booking.id as opd_id,hms_opd_booking.*, hms_patient.*'); // Select all fields
 		$this->db->from('hms_opd_booking'); // Start with the bookings table
 		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
 
@@ -252,7 +253,7 @@ class Low_vision_model extends CI_Model
 		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
 
 		// Filter by the booking ID
-		$this->db->where('hms_opd_booking.booking_code', $booking_id); // Assuming 'id' is the primary key for bookings
+		$this->db->where('hms_opd_booking.id', $booking_id); // Assuming 'id' is the primary key for bookings
 		$query = $this->db->get();
 
 		// Check if any results were returned

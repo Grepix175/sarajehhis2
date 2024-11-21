@@ -74,7 +74,8 @@ class Low_vision extends CI_Controller
             $row[] = '<input type="checkbox" name="refraction_ids[]" value="' . $low_vision->refraction_id . '">';
 
             $row[] = $low_vision->token;
-            $row[] = $low_vision->booking_id;
+            // $row[] = $low_vision->booking_id;
+            $row[] = $low_vision->booking_code;
             $row[] = $low_vision->patient_code;
             $row[] = $low_vision->patient_name;
             // $row[] = $low_vision->patient_category_name;
@@ -121,6 +122,10 @@ class Low_vision extends CI_Controller
 
     public function add($booking_id = null, $id = null)
     {
+        // echo "<pre>";
+        // print_r($booking_id);
+        // print_r($id);
+        // die('oka');
         // echo "plp";die;
         // Load required models and libraries
         $this->load->library('form_validation');
@@ -153,7 +158,8 @@ class Low_vision extends CI_Controller
 
         // // Initialize form data
         $data['form_data'] = array(
-            'booking_id' => isset($data['booking_data']['booking_id']) ? $data['booking_data']['booking_id'] : '', // Booking ID
+            // 'booking_id' => isset($data['booking_data']['booking_id']) ? $data['booking_data']['booking_id'] : '', // Booking ID
+            'booking_id' => isset($data['booking_data']['opd_id']) ? $data['booking_data']['opd_id'] : '', // Booking ID
             'low_vision_col_vis_l' => '', // Left eye dry sph
             'low_vision_col_vis_r' => '', // Left eye dry cyl
             'low_vision_contra_sens_l' => '', // Left eye dry axis
@@ -207,10 +213,10 @@ class Low_vision extends CI_Controller
             // Prepare the data for saving
             $id = $this->input->post('id');
             $branch_id = $this->input->post('branch_id');
-            // $booking_code = $this->input->post('booking_code');
+            $booking_code = $this->input->post('booking_code');
             $pres_id = $this->input->post('pres_id');
             $patient_id = $this->input->post('patient_id');
-            $booking_id = $this->input->post('booking_code');
+            $booking_id = $this->input->post('booking_id');
             $optometrist_signature = $this->input->post('optometrist_signature');
             $doctor_signature = $this->input->post('doctor_signature');
             $created_by = $this->session->userdata('user_id');
@@ -233,7 +239,7 @@ class Low_vision extends CI_Controller
             $data_to_save = [
                 'id' => isset($id) ? $id : '',
                 'branch_id' => isset($branch_id) ? $branch_id : '',
-                // 'booking_code' => isset($booking_code) ? $booking_code : '',
+                'booking_code' => isset($booking_code) ? $booking_code : '',
                 'pres_id' => isset($pres_id) ? $pres_id : '',
                 'patient_id' => isset($patient_id) ? $patient_id : '',
                 'booking_id' => isset($booking_id) ? $booking_id : '',

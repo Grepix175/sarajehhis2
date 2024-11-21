@@ -97,7 +97,8 @@ class Ortho_ptics extends CI_Controller
             $row[] = '<input type="checkbox" name="refraction_ids[]" value="' . $ortho_ptics->refraction_id . '">';
 
             $row[] = $ortho_ptics->token;
-            $row[] = $ortho_ptics->booking_id;
+            // $row[] = $ortho_ptics->booking_id;
+            $row[] = $ortho_ptics->booking_code;
             $row[] = $ortho_ptics->patient_code;
             $row[] = $ortho_ptics->patient_name;
             // $row[] = $ortho_ptics->patient_category_name;
@@ -120,7 +121,7 @@ class Ortho_ptics extends CI_Controller
 
             // Add action buttons
             $row[] = '<a onClick="return edit_refraction(' . $ortho_ptics->refraction_id . ');" class="btn-custom" href="javascript:void(0)" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
-                    <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("ortho_ptics/print_oct_hfa/" . $ortho_ptics->booking_id."/".$ortho_ptics->id) . '\');">
+                    <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("ortho_ptics/print_oct_hfa/" . $ortho_ptics->booking_id."/".$ortho_ptics->patient_id) . '\');">
                         <i class="fa fa-print"></i> Print
                     </a>';
             $row[] = $ortho_ptics->emergency_status;
@@ -145,6 +146,8 @@ class Ortho_ptics extends CI_Controller
     {
         // echo "plp";die;
         // Load required models and libraries
+        // echo "<pre>";print_r($booking_id);
+        // echo "<pre>";print_r($id);die;
         $this->load->library('form_validation');
        
         $data['page_title'] = 'Add Oct/hfa Record';
@@ -170,7 +173,8 @@ class Ortho_ptics extends CI_Controller
        
         // // Initialize form data
         $data['form_data'] = array(
-            'booking_id' => isset($data['booking_data']['booking_id']) ? $data['booking_data']['booking_id'] : '', // Booking ID
+            // 'booking_id' => isset($data['booking_data']['booking_id']) ? $data['booking_data']['booking_id'] : '', // Booking ID
+            'booking_id' => isset($data['booking_data']['opd_id']) ? $data['booking_data']['opd_id'] : '', // Booking ID
             
             'branch_id' => isset($data['booking_data']['branch_id']) ? $data['booking_data']['branch_id'] : '', // To be filled from form
             'booking_code' => isset($data['booking_data']['booking_code']) ? $data['booking_data']['booking_code'] : '', // To be filled from form
@@ -221,7 +225,7 @@ class Ortho_ptics extends CI_Controller
             $booking_code = $this->input->post('booking_code');
             $pres_id = $this->input->post('pres_id');
             $patient_id = $this->input->post('patient_id');
-            $booking_id = $this->input->post('booking_code');
+            $booking_id = $this->input->post('booking_id');
             $remarks = $this->input->post('remarks');
             $referred_by = $this->input->post('referred_by');
             $main_complaints = $this->input->post('main_complaints');
@@ -347,7 +351,7 @@ class Ortho_ptics extends CI_Controller
            // Assuming $result['auto_refraction'] could be a JSON string
         //    $color_vision = json_decode($result['color_vision'], true); // Decode into an associative array
         //    $contrast_sensivity = json_decode($result['contrast_sensivity'], true); // Decode into an associative array
-           $data['booking_data'] = $this->ortho_ptics->get_booking_by_id($result['booking_id']);
+           $data['booking_data'] = $this->ortho_ptics->get_booking_by_id($result['booking_id'],$result['patient_id']);
            $data['doctor'] = $this->doctor->doctors_list();
         //    echo "<pre>";print_r($data['eom_tbl']);die;
 
@@ -460,7 +464,7 @@ class Ortho_ptics extends CI_Controller
         // echo "ppk";die;
         $data['print_status'] = "1";
         $data['data_list'] = $this->ortho_ptics->search_report_data($booking_id,$id);
-        $data['booking_data'] = $this->ortho_ptics->get_booking_by_id($booking_id);
+        $data['booking_data'] = $this->ortho_ptics->get_booking_by_id($booking_id,$id);
         $data['doctor'] = $this->doctor->doctors_list();
 
         $refraction_tbl = json_decode($data['data_list']['refraction_tbl']); // Adjust this method according to your model
@@ -476,7 +480,7 @@ class Ortho_ptics extends CI_Controller
         // Fetch the OPD billing details based on the ID
         // $booking_id = isset($data['form_data']['booking_id'])?$data['form_data']['booking_id']:'';
         // $data['billing_data'] = $this->vision_model->get_patient_name_by_booking_id($booking_id);
-        // echo "<pre>";print_r($data['data_list'][0]);die;
+        // echo "<pre>";print_r($data['booking_data']);die;
 
         // Load the print view with the data
         $this->load->view('ortho_ptics/print_ortho_paedic', $data);
