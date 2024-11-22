@@ -125,29 +125,59 @@ class Token_no extends CI_Controller
 
     public function book_patient()
     {
-        $patientId = $this->input->post('patient_id'); // Get patient ID from POST
-        // $bookedPatients = $this->session->userdata('booked_patients') ?? [];
+        // $patientId = $this->input->post('patient_id'); // Get patient ID from POST
+        // // $bookedPatients = $this->session->userdata('booked_patients') ?? [];
 
-        // Check if the patient is already booked
-        // if (in_array($patientId, $bookedPatients)) {
-        //     echo json_encode(['status' => 'error', 'message' => 'This patient is already booked.']);
-        //     return;
+        // // Check if the patient is already booked
+        // // if (in_array($patientId, $bookedPatients)) {
+        // //     echo json_encode(['status' => 'error', 'message' => 'This patient is already booked.']);
+        // //     return;
+        // // }
+
+        // // Simulate booking logic (e.g., save booking to the database)
+        // // Add patient ID to session
+        // // $bookedPatients[] = $patientId;
+        // // $this->session->set_userdata('booked_patients', $bookedPatients);
+        // $result = $this->token_no->update_opd_status($patientId);
+        // if ($result) {
+        //     // Only return JSON
+        //     echo json_encode(['status' => 'success', 'message' => 'Patient booked successfully.']);
+        //     exit; // Ensure no further output
+        // } else {
+        //     echo json_encode(['status' => 'error', 'message' => 'Failed to update status.']);
+        //     exit; // Ensure no further output
         // }
+        // public function book_patient() {
+            $patient_id = $this->input->post('patient_id');
+            $this->load->model('token_no');
+        
+            // Perform booking logic
+            $booking_result = $this->token_no->book_patient($patient_id);
+        
+            if ($booking_result) {
+                echo json_encode(['status' => 'success']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Booking failed.']);
+            }
+        // }
+    }
 
-        // Simulate booking logic (e.g., save booking to the database)
-        // Add patient ID to session
-        // $bookedPatients[] = $patientId;
-        // $this->session->set_userdata('booked_patients', $bookedPatients);
-        $result = $this->token_no->update_opd_status($patientId);
-        if ($result) {
-            // Only return JSON
-            echo json_encode(['status' => 'success', 'message' => 'Patient booked successfully.']);
-            exit; // Ensure no further output
+    public function check_booking_status() {
+        $patient_id = $this->input->post('patient_id');
+        // $this->load->model('Booking_model');
+    
+        // Check status in the database
+        $status = $this->token_no->get_booking_status($patient_id);
+        // echo "<pre>";
+        // print_r($status);
+        // die('sagar');
+        if ($status == 1) {
+            echo json_encode(['status' => '1']); // Already in progress
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Failed to update status.']);
-            exit; // Ensure no further output
+            echo json_encode(['status' => '0']); // Not booked yet
         }
     }
+    
 
     public function clear_booking_session()
     {

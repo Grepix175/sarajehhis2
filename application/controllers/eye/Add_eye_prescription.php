@@ -2162,7 +2162,7 @@ class Add_eye_prescription extends CI_Controller
     $this->m_pdf->pdf->WriteHTML($stylesheet, 1);
     $this->m_pdf->pdf->setAutoTopMargin = 'stretch';
 
-    $this->m_pdf->pdf->SetHeader($header_replace_part);
+    $this->m_pdf->pdf->SetHeader($print_setting->page_header . $header_replace_part);
     $this->m_pdf->pdf->setAutoBottomMargin = 'stretch';
     $this->m_pdf->pdf->SetFooter($print_setting->page_footer);
     $pdfFilePath = $data['form_data']['patient_name'] . '_report.pdf';

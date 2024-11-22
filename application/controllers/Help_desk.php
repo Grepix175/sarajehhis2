@@ -315,6 +315,7 @@ class Help_desk extends CI_Controller
         // $btn_contact_lens = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title=" Contact Lens"> Contact Lens</a>';
         $btn_ortho_ptics = '<a class="btn-custom" href="' . base_url("ortho_ptics/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Ortho Paedic" data-url="512">Ortho Paedic</a>';
       }
+      $btn_doctor = '<a class="btn-custom" href="' . '#' . '" title="Ortho Paedic" data-url="512">Doctore</a>';
       
       if (in_array('2413', $users_data['permission']['action'])) {
         $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . "'";
@@ -330,7 +331,7 @@ class Help_desk extends CI_Controller
 
       // . $btn_print_chasma_pre
       $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission . $btn_contact_lens . $btn_low_vision.
-        $btn_hess_chart.$btn_refraction_below8.$dilate.$btn_prosthetic.$btn_oct_hfa.$btn_ortho_ptics;
+        $btn_hess_chart.$btn_refraction_below8.$dilate.$btn_prosthetic.$btn_oct_hfa.$btn_ortho_ptics.$btn_doctor;
         $row[] = $prescription->emergency_status; // Add emergency_status to the row
       // echo "<pre>";print_r($row);die;
       $data[] = $row;

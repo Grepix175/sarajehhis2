@@ -512,9 +512,9 @@ $user_role = $users_data['users_role'];
     }
 
     $(document).ready(function () {
-      setInterval(function () {
-        reload_table();
-      }, 60000);
+      // setInterval(function () {
+      //   reload_table();
+      // }, 60000);
       $('.start_datepicker').datepicker({
         format: 'yyyy-mm-dd', // Use the correct date format
         autoclose: true,
@@ -567,42 +567,103 @@ $user_role = $users_data['users_role'];
     //   window.location.href = url;
     // });
 
+    // $(document).on('click', '.book-now-btn-url', function () {
+    //   const btn = $(this); // Get the clicked button
+    //   const patientId = btn.data('id'); // Patient ID from data attribute
+    //   const bookingUrl = btn.data('url'); // Redirect URL from data attribute
+    //   // Disable the button and show "Booking..." text
+    //   // btn.prop('disabled', true).text('Booking...');
+    //   btn.prop('disabled', true).text('In Progess');
+
+    //   // Send AJAX request to backend to handle booking
+    //   $.ajax({
+    //     url: '<?= base_url("token_no/book_patient"); ?>', // Call `book_patient` method
+    //     type: 'POST',
+    //     data: { patient_id: patientId },
+    //     success: function (response) {
+    //       console.log(response, '==========')
+    //       const data = JSON.parse(response);
+    //       if (data.status === 'success') {
+    //         // If booking is successful, open the booking page in a new tab
+    //         // window.open(bookingUrl, '_blank');
+    //         window.location.href = bookingUrl;
+    //         // btn.text('Booked');
+    //       }
+    //       // else {
+    //       //   // If the patient is already booked or error occurs
+    //       //   // alert(data.message);
+    //       //   btn.prop('disabled', false).text('Booking...');
+    //       // }
+    //     },
+    //     error: function () {
+    //       // Handle AJAX error
+    //       alert('An error occurred. Please try again.');
+    //       btn.prop('disabled', false).text('Book Now');
+    //     }
+    //   });
+    // });
+
     $(document).on('click', '.book-now-btn-url', function () {
       const btn = $(this); // Get the clicked button
       const patientId = btn.data('id'); // Patient ID from data attribute
       const bookingUrl = btn.data('url'); // Redirect URL from data attribute
-      console.log(bookingUrl, '=======')
-      // Disable the button and show "Booking..." text
-      // btn.prop('disabled', true).text('Booking...');
-      btn.prop('disabled', true).text('In Progess');
 
-      // Send AJAX request to backend to handle booking
+      // Disable the button and show "In Progress" text
+      btn.prop('disabled', true).text('In Progress');
+
+      // Send AJAX request to check booking status
       $.ajax({
-        url: '<?= base_url("token_no/book_patient"); ?>', // Call `book_patient` method
+        url: '<?= base_url("token_no/check_booking_status"); ?>', // Backend URL to check status
         type: 'POST',
         data: { patient_id: patientId },
         success: function (response) {
-          console.log(response, '==========')
           const data = JSON.parse(response);
-          if (data.status === 'success') {
-            // If booking is successful, open the booking page in a new tab
-            // window.open(bookingUrl, '_blank');
-            window.location.href = bookingUrl;
-            // btn.text('Booked');
+          console.log(data, '==========');
+
+          if (data.status === '1') {
+            // If the status is 1, show alert message
+            alert('Booking is already in progress for this patient.');
+            btn.prop('disabled', false).text('Book Now');
+            return;
+          } else if (data.status === '0') {
+            // If status is 0, proceed with booking
+            $.ajax({
+              url: '<?= base_url("token_no/book_patient"); ?>', // Call `book_patient` method
+              type: 'POST',
+              data: { patient_id: patientId },
+              success: function (bookingResponse) {
+                const bookingData = JSON.parse(bookingResponse);
+                console.log(bookingData,'============')
+                if (bookingData.status === 'success') {
+                  window.location.href = bookingUrl; // Redirect to booking URL
+                } else {
+                  alert(bookingData.message || 'An error occurred.');
+                  btn.prop('disabled', false).text('Book Now');
+                }
+              },
+              error: function () {
+                alert('An error occurred while booking. Please try again.');
+                btn.prop('disabled', false).text('Book Now');
+              }
+            });
           }
-          // else {
-          //   // If the patient is already booked or error occurs
-          //   // alert(data.message);
-          //   btn.prop('disabled', false).text('Booking...');
-          // }
         },
         error: function () {
           // Handle AJAX error
-          alert('An error occurred. Please try again.');
+          alert('An error occurred while checking status. Please try again.');
           btn.prop('disabled', false).text('Book Now');
         }
       });
     });
+
+
+
+
+
+
+
+
+
     $(document).on('click', '.refresh-btn', function () {
       const patientId = $(this).data('patient_id'); // Get the patient ID from the button
       const refreshButton = $(this); // Store the reference to the button for UI updates

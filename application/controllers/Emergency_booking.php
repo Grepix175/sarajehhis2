@@ -168,23 +168,19 @@ class Emergency_booking extends CI_Controller
       $btn_prescription = "";
       $blank_btn_print = '';
       $opd_consolidated_bill = '';
-
+      $btn_history = '';
       if ($users_data['parent_id'] == $test->branch_id) {
         if ($test->booking_status != 1) {
           if (in_array('531', $users_data['permission']['action'])) {
             $btn_confirm = ' <a class="btn-custom" onclick="return confirm_booking(' . $test->id . ');" title="Confirm Booking"><i class="fa fa-pencil"></i> Confirm </a>';
           }
         }
-
-        if (in_array('524', $users_data['permission']['action'])) {
-          $btn_edit = ' <a class="btn-custom" href="' . base_url("emergency_booking/edit_booking/" . $test->id) . '" title="Edit Booking"><i class="fa fa-pencil"></i> Edit</a>';
-          $btn_edit = ' <a class="btn-custom" href="' . base_url("emergency_booking/edit_booking/" . $test->id) . '" title="Edit Booking"><i class="fa fa-pencil"></i> Edit</a>';
+        if ($test->status == 0) {
+          $flag = 'eye_history';
+          $type = 'eme_booking';
+          $btn_history .= '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $test->id . "?flag=" . $flag . "&type=" . $type) . '" title="Add Prescription"><i class="fa fa-history"></i> History</a>';
         }
-
-
-        if (in_array('525', $users_data['permission']['action'])) {
-          $btn_delete = ' <a class="btn-custom" onClick="return delete_opd_booking(' . $test->id . ')" href="javascript:void(0)" title="Delete" data-url="512"><i class="fa fa-trash"></i> Delete</a>';
-        }
+        
       }
       $btn_prescription = '';
       $checking_status = '';
@@ -202,33 +198,39 @@ class Emergency_booking extends CI_Controller
           }
         }
 
-        $btn_history = '';
+        
         if (in_array('2413', $users_data['permission']['action'])) {
-          if ($test->status == 0) {
-            $flag = 'eye_history';
-            $type = 'eme_booking';
-            $btn_history .= '<li><a href="' . base_url("eye/add_eye_prescription/test/" . $test->id . "?flag=" . $flag . "&type=" . $type) . '" title="Add Prescription"><i class="fa fa-history"></i> History</a></li>';
+          
+
+          if (in_array('524', $users_data['permission']['action'])) {
+            $btn_edit = '<li> <a href="' . base_url("emergency_booking/edit_booking/" . $test->id) . '" title="Edit Booking"><i class="fa fa-pencil"></i> Edit</a></li>';
+            $btn_edit = '<li> <a href="' . base_url("emergency_booking/edit_booking/" . $test->id) . '" title="Edit Booking"><i class="fa fa-pencil"></i> Edit</a> </li>';
+          }
+  
+  
+          if (in_array('525', $users_data['permission']['action'])) {
+            $btn_delete = '<li> <a onClick="return delete_opd_booking(' . $test->id . ')" href="javascript:void(0)" title="Delete" data-url="512"><i class="fa fa-trash"></i> Delete</a> </li>';
           }
 
           $btn_prescription .= '<li><a  href="' . base_url("eye/add_eye_prescription/test/" . $test->id) . '" title="Add Prescription"><i class="fa fa-eye"></i> Add Adv. Eye Prescription</a></li>';
 
-          $btn_prescription .= '<li> <a onClick="return update_patient_arrival(' . $test->id . ')" href="javascript:void(0)" title="Patient Status" data-url="512"><i class="fa fa-pencil"></i> Patient Status</a></li>';
+          // $btn_prescription .= '<li> <a onClick="return update_patient_arrival(' . $test->id . ')" href="javascript:void(0)" title="Patient Status" data-url="512"><i class="fa fa-pencil"></i> Patient Status</a></li>';
 
 
           if (in_array('525', $users_data['permission']['action'])) {
-            $btn_prescription .= '<li> <a onClick="return update_eye_appontment_type(' . $test->id . ')" href="javascript:void(0)" title=" Update Appointment" data-url="512"><i class="fa fa-pencil"></i> Update Appointment</a></li>';
+            // $btn_prescription .= '<li> <a onClick="return update_eye_appontment_type(' . $test->id . ')" href="javascript:void(0)" title=" Update Appointment" data-url="512"><i class="fa fa-pencil"></i> Update Appointment</a></li>';
 
-            $btn_prescription .= '<li> <a onClick="return update_patient_arrival(' . $test->id . ')" href="javascript:void(0)" title="Patient Status" data-url="512"><i class="fa fa-pencil"></i> Patient Status</a></li>';
+            // $btn_prescription .= '<li> <a onClick="return update_patient_arrival(' . $test->id . ')" href="javascript:void(0)" title="Patient Status" data-url="512"><i class="fa fa-pencil"></i> Patient Status</a></li>';
 
             $btn_prescription .= '<li> <a href="' . base_url("eyes_patient_prescription_history/history/" . $test->patient_id) . '" title="Prescription History" data-url="512"><i class="fa fa-pencil"></i> Prescription History</a></li>';
           }
-          if ($test->dilate_status == 0) {
-            $btn_prescription .= '<li><a href="javascript:void(0)"  onclick="dilated(' . $test->id . ');" style="color:orange!important;"><i class="fa fa-hand-o-right"></i> Dilate</a></li>';
-          } else if ($test->dilate_status == 1) {
-            $btn_prescription .= '<li><a href="javascript:void(0)" style="color:red!important;"><i class="fa fa-hand-o-right"></i> D</a></li>';
-          } else if ($test->dilate_status == 2) {
-            $btn_prescription .= '<li><a href="javascript:void(0)" style="color:green!important;"><i class="fa fa-hand-o-right"></i>Dilated</a></li>';
-          }
+          // if ($test->dilate_status == 0) {
+          //   $btn_prescription .= '<li><a href="javascript:void(0)"  onclick="dilated(' . $test->id . ');" style="color:orange!important;"><i class="fa fa-hand-o-right"></i> Dilate</a></li>';
+          // } else if ($test->dilate_status == 1) {
+          //   $btn_prescription .= '<li><a href="javascript:void(0)" style="color:red!important;"><i class="fa fa-hand-o-right"></i> D</a></li>';
+          // } else if ($test->dilate_status == 2) {
+          //   $btn_prescription .= '<li><a href="javascript:void(0)" style="color:green!important;"><i class="fa fa-hand-o-right"></i>Dilated</a></li>';
+          // }
         }
 
 
@@ -240,10 +242,10 @@ class Emergency_booking extends CI_Controller
           //$btn_prescription .='</div>';                
         }
         if (in_array('1441', $users_data['permission']['action'])) {
-          $btn_prescription .= '<li><a  href="' . base_url("eye/biometric_details/add/" . $test->id) . '" title="Biometric Details"><i class="fa fa-eye"></i> Biometric Test Form</a></li>';
-          $print_url_eye = "'" . base_url('eye/biometric_details/biometric_details_print/' . $test->id) . "'";
-          $btn_prescription .= '<li><a  href="javascript:void(0)" onClick="return print_window_page(' . $print_url_eye . ')" title="Print" ><i class="fa fa-eye"></i
-                > Print Biometric  </a></li>';
+          // $btn_prescription .= '<li><a  href="' . base_url("eye/biometric_details/add/" . $test->id) . '" title="Biometric Details"><i class="fa fa-eye"></i> Biometric Test Form</a></li>';
+          // $print_url_eye = "'" . base_url('eye/biometric_details/biometric_details_print/' . $test->id) . "'";
+          // $btn_prescription .= '<li><a  href="javascript:void(0)" onClick="return print_window_page(' . $print_url_eye . ')" title="Print" ><i class="fa fa-eye"></i
+          //       > Print Biometric  </a></li>';
         }
       } elseif ($test->booking_type == 2) /* for pedic*/ {
         $prescription_count_pedic = $this->emergency_booking->get_prescription_count_for_pedic($test->id);
@@ -349,7 +351,8 @@ class Emergency_booking extends CI_Controller
       $print_consolidated_url = "'" . base_url('emergency_booking/print_consolidate_dbooking_report/' . $test->id . '/' . $test->branch_id) . "'";
       // $opd_consolidated_bill = '<li> <a onClick="return print_window_page(' . $print_consolidated_url . ')" style="' . $test->id . '" title="Print Consolidated Bill"><i class="fa fa-print"></i> Print Consolidated Bill</a></li>';
       $opd_consolidated_bill = '';
-      $btn_print_label = ' <a onClick="return print_label(' . $test->id . ');"  href="javascript:void(0)" style="' . $test->id . '" title="Print"><i class="fa fa-print"></i> Print Label</a>';
+      // $btn_print_label = ' <a onClick="return print_label(' . $test->id . ');"  href="javascript:void(0)" style="' . $test->id . '" title="Print"><i class="fa fa-print"></i> Print Label</a>';
+      $btn_print_label = '';
       $print_mlc = '';
       if (!empty($test->mlc)) {
         $print_mlcs = "'" . base_url('emergency_booking/mlc_print/' . $test->id . '/' . $test->branch_id) . "'";
@@ -415,31 +418,32 @@ class Emergency_booking extends CI_Controller
                   }*/
 
       if (in_array('542', $users_data['permission']['action'])) {
-        $btn_upload_pre = '<li><a onclick="return upload_opd_prescription(' . $test->id . ')" href="javascript:void(0)" title="Upload Prescription"><i class="fa fa-info-circle"></i> Upload Prescription </a></li>';
+        // $btn_upload_pre = '<li><a onclick="return upload_opd_prescription(' . $test->id . ')" href="javascript:void(0)" title="Upload Prescription"><i class="fa fa-info-circle"></i> Upload Prescription </a></li>';
       }
 
       if (in_array('534', $users_data['permission']['action'])) {
-        $btn_view_upload_pre = '<li><a href="' . base_url('/emergency_booking/view_opd_files/' . $test->id . '/' . $test->branch_id) . '" title="View Prescription" data-url="512"><i class="fa fa-circle"></i> View Prescription Files</a></li>';
+        // $btn_view_upload_pre = '<li><a href="' . base_url('/emergency_booking/view_opd_files/' . $test->id . '/' . $test->branch_id) . '" title="View Prescription" data-url="512"><i class="fa fa-circle"></i> View Prescription Files</a></li>';
       }
 
 
 
       // added By Nitin Sharma 02/02/2024
-      $btn_view_test = '<li><a onclick="return view_test_report(' . $test->patient_id . ')" href="javascript:void(0)" title="View Test Report"><i class="fa fa-list"></i> View Test Report</a></li>';
+      // $btn_view_test = '<li><a onclick="return view_test_report(' . $test->patient_id . ')" href="javascript:void(0)" title="View Test Report"><i class="fa fa-list"></i> View Test Report</a></li>';
       // Added By Nitin Sharma Ipd Booking Button  06/02/2024
-      $ipd_booking = '<li><a href="' . base_url('ipd_booking/add/?ipd=' . $test->patient_id . '') . '" title="IPD Booking"><i class="fa fa-plus"></i> Ipd Booking</a></li>';
+      // $ipd_booking = '<li><a href="' . base_url('ipd_booking/add/?ipd=' . $test->patient_id . '') . '" title="IPD Booking"><i class="fa fa-plus"></i> Ipd Booking</a></li>';
       // Added By Nitin Sharma Ipd Booking Button  06/02/2024
+      // $btn_upload_pre . $btn_view_upload_pre . $btn_view_test . $ipd_booking
       $btn_a = '<div class="slidedown">
         <button disabled class="btn-custom">More <span class="caret"></span></button>
         <ul class="slidedown-content">
-          ' . $btn_barcode . $opd_consolidated_bill . $btn_history . $btn_prescription . $btn_download_prescription . $checking_status . $btn_download_image . $btn_upload_pre . $btn_view_upload_pre . $btn_view_test . $ipd_booking . $btn_print_label . '
+          ' . $btn_barcode . $opd_consolidated_bill . $btn_edit . $btn_delete . $btn_prescription . $btn_download_prescription . $checking_status . $btn_download_image  . $btn_print_label . '
         </ul>
       </div> ';
       // Added By Nitin Sharma Ipd Booking Button  06/02/2024
       // added By Nitin Sharma 02/02/2024
       // End Action Button //
       // . $btn_a . $print_mlc
-      $row[] = $btn_confirm . $btn_edit . $btn_delete . $btn_print . $btn_a;
+      $row[] = $btn_confirm . $btn_history . $btn_print . $btn_a;
       $row[] = $test->emergency_status;
       $data[] = $row;
       $i++;

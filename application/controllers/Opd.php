@@ -263,7 +263,7 @@ class Opd extends CI_Controller
           if (in_array('525', $users_data['permission']['action'])) {
             // $btn_prescription .= '<li> <a onClick="return update_eye_appontment_type(' . $test->id . ')" href="javascript:void(0)" title=" Update Appointment" data-url="512"><i class="fa fa-pencil"></i> Update Appointment</a></li>';
 
-            $btn_prescription .= '<li> <a onClick="return update_patient_arrival(' . $test->id . ')" href="javascript:void(0)" title="Patient Status" data-url="512"><i class="fa fa-pencil"></i> Patient Status</a></li>';
+            // $btn_prescription .= '<li> <a onClick="return update_patient_arrival(' . $test->id . ')" href="javascript:void(0)" title="Patient Status" data-url="512"><i class="fa fa-pencil"></i> Patient Status</a></li>';
 
             $btn_prescription .= '<li> <a href="' . base_url("eyes_patient_prescription_history/history/" . $test->patient_id) . '" title="Prescription History" data-url="512"><i class="fa fa-pencil"></i> Prescription History</a></li>';
           }
@@ -460,11 +460,11 @@ class Opd extends CI_Controller
                   }*/
 
       if (in_array('542', $users_data['permission']['action'])) {
-        $btn_upload_pre = '<li><a onclick="return upload_opd_prescription(' . $test->id . ')" href="javascript:void(0)" title="Upload Prescription"><i class="fa fa-info-circle"></i> Upload Prescription </a></li>';
+        // $btn_upload_pre = '<li><a onclick="return upload_opd_prescription(' . $test->id . ')" href="javascript:void(0)" title="Upload Prescription"><i class="fa fa-info-circle"></i> Upload Prescription </a></li>';
       }
 
       if (in_array('534', $users_data['permission']['action'])) {
-        $btn_view_upload_pre = '<li><a href="' . base_url('/opd/view_opd_files/' . $test->id . '/' . $test->branch_id) . '" title="View Prescription" data-url="512"><i class="fa fa-circle"></i> View Prescription Files</a></li>';
+        // $btn_view_upload_pre = '<li><a href="' . base_url('/opd/view_opd_files/' . $test->id . '/' . $test->branch_id) . '" title="View Prescription" data-url="512"><i class="fa fa-circle"></i> View Prescription Files</a></li>';
       }
 
 
@@ -474,10 +474,11 @@ class Opd extends CI_Controller
       // Added By Nitin Sharma Ipd Booking Button  06/02/2024
       // $ipd_booking = '<li><a href="' . base_url('ipd_booking/add/?ipd=' . $test->patient_id . '') . '" title="IPD Booking"><i class="fa fa-plus"></i> Ipd Booking</a></li>';
       // Added By Nitin Sharma Ipd Booking Button  06/02/2024
+      // . $btn_upload_pre . $btn_view_upload_pre . $btn_view_test . $ipd_booking . $btn_print_label
       $btn_a = '<div class="slidedown">
         <button disabled class="btn-custom">More <span class="caret"></span></button>
         <ul class="slidedown-content">
-          ' . $btn_barcode . $opd_consolidated_bill . $btn_edit . $btn_delete . $btn_prescription . $btn_download_prescription . $checking_status . $btn_download_image . $btn_upload_pre . $btn_view_upload_pre . $btn_view_test . $ipd_booking . $btn_print_label . '
+          ' . $btn_barcode . $opd_consolidated_bill . $btn_edit . $btn_delete . $btn_prescription . $btn_download_prescription . $checking_status . $btn_download_image  . '
         </ul>
       </div> ';
       // Added By Nitin Sharma Ipd Booking Button  06/02/2024
