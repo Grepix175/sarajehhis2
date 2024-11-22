@@ -381,9 +381,9 @@ $field_list = mandatory_section_field_list(2);
         <div class="row">
             <div class="col-md-6">
                 <!-- Prescription Notes / Rejection -->
-                <div class="section-title" style="display: flex; justify-content: space-between;">
+                <!-- <div class="section-title" style="display: flex; justify-content: space-between;">
                     <span>Rejection</span>
-                </div>
+                </div> -->
                 <!-- <textarea rows="4" style="width: 100%; border: 1px solid #000; padding: 10px;"></textarea> -->
                 <div class="rx-symbol">℞</div>
 

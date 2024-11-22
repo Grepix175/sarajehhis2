@@ -1623,7 +1623,7 @@ $field_list = mandatory_section_field_list(3);
                   <div class="col-md-5"><b></b></div>
                   <div class="col-md-7">
                     <button class="btn-save" id="btnsubmit"><i class="fa fa-floppy-o"></i> Submit</button>
-                    <a href="<?php echo base_url('opd'); ?>" class="btn-anchor"><i class="fa fa-sign-out"></i> Exit</a>
+                    <a href="<?php echo base_url('emergency_booking'); ?>" class="btn-anchor"><i class="fa fa-sign-out"></i> Exit</a>
                   </div>
                 </div>
               </div>

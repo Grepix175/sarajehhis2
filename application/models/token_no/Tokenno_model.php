@@ -240,5 +240,29 @@ class Tokenno_model extends CI_Model
 		$query = $this->db->update('hms_token');		
 		return $query;
 	}
+
+    public function get_booking_status($patient_id) {
+        $this->db->select('opd_status');
+        $this->db->from('hms_token'); // Replace 'bookings' with your table name
+        $this->db->where('patient_id', $patient_id);
+        $query = $this->db->get();
+        $result = $query->row();
+
+        if ($result) {
+            // echo "<pre>";
+            // print_r($result->opd_status);
+            // die('status');
+            return $result->opd_status; // Return status (1 or 0)
+        }
+        return 0; // Default to not booked
+    }
+
+    public function book_patient($patient_id) {
+        // Update database to mark patient as booked
+        $data = ['opd_status' => 1]; // Assuming 1 means booked
+        $this->db->where('patient_id', $patient_id);
+        return $this->db->update('hms_token', $data);
+    }
+
 }
 ?>

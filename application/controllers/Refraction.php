@@ -448,7 +448,7 @@ class Refraction extends CI_Controller
     {
         // echo "ppk";die;
         $data['print_status'] = "1";
-
+        $data['page_title'] = "Refraction";
         // Fetch the form data based on the ID
         $result = $this->refraction->get_by_id($id);
         $plist = $this->refraction->get_patient_name_by_booking_id($booking_id);

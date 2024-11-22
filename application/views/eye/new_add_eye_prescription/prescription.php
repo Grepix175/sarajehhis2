@@ -257,8 +257,8 @@ $users_data = $this->session->userdata('auth_users');
           ?>
           
           
-          <input type="checkbox" name="print_drawing_flag" checked id="checkboxdrawing" value="1">
-                <label for="checkboxdrawing">Hess Chart</label>
+          <input type="checkbox" name="print_drawing_flag" checked id="checkboxdrawing" value="1"  style="display: none;">
+                <label for="checkboxdrawing" style="display: none;">Hess Chart</label>
 
           <?php
 

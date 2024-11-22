@@ -882,7 +882,7 @@ $field_list = mandatory_section_field_list(2);
                 <div class="form-group col-md-12" style="padding:0px;padding-top:5px;">
                     <h4>Informed Consent for Contact Lens Trial</h4>
                     <p>
-                        I, ____________________________, underwent contact lens trial & understood
+                        I, <strong><?php echo $booking_data['patient_name'];?></strong>, underwent contact lens trial & understood
                         the process of contact lens handling (insertion, removal & care regimen).
                         I am responsible for delivered contact lens now.
                     </p>
