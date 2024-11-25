@@ -103,7 +103,6 @@
                     success: function (result) {
                         var data = JSON.parse(result)
                         if (data && data.success) {
-                            alert('okay');
                             $('#load_add_medicine_unit_modal_popup').modal('hide');
                             flash_session_msg(data.message);
                             reload_table();
