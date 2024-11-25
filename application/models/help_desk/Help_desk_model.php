@@ -24,6 +24,7 @@ class Help_desk_model extends CI_Model
 		$this->db->join('hms_patient', 'hms_patient.id = hms_std_eye_prescription.patient_id', 'left');
 
 		$this->db->where('hms_std_eye_prescription.is_deleted', '0');
+		$this->db->where("hms_std_eye_prescription.id IN (SELECT MAX(id) FROM hms_std_eye_prescription GROUP BY patient_id)", NULL, FALSE);
 		
 		// Handle branch_id filtering
 		if (!empty($search['branch_id'])) {
