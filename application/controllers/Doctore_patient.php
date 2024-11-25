@@ -426,11 +426,7 @@ class Doctore_patient extends CI_Controller
 
     public function doctore_patient_excel()
     {
-        $list = $this->doctore_patient->get_datatables();
-        echo "<pre>";
-        print_r($list);
-        ;
-        die('sagar');
+       
         // Starting the PHPExcel library
         $this->load->library('excel');
         $this->excel->IO_factory();
