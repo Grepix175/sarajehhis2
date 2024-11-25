@@ -220,7 +220,8 @@ class Opd extends CI_Controller
             $btn_confirm = ' <a class="btn-custom" onclick="return confirm_booking(' . $test->id . ');" title="Confirm Booking"><i class="fa fa-pencil"></i> Confirm </a>';
           }
         }
-        if ($test->status == 0) {
+        // if ($test->status == 0) {
+        if ($test->history_status == 0) {
           $flag = 'eye_history';
           $type = 'opd_booking';
           $btn_history .= '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $test->id . "?flag=" . $flag . "&type=" . $type) . '" title="Add Prescription"><i class="fa fa-history"></i> History</a>';
@@ -1258,14 +1259,11 @@ class Opd extends CI_Controller
       // $patient_exists = $this->opd->where('patient_id', $patient_id)->get('hms_opd_booking')->row();
       $patient_exists = $this->opd->patient_exists($patient_id);
       //   echo "<pre>";
-      // print_r($patient_exists['patient_name']);
+      // print_r('Patient ' . $patient_exists['patient_name'] . ' is already in OPD.');
       // die;
       if ($patient_exists) {
         // Redirect to OPD list page with a warning message
-        $this->session->set_flashdata(
-          'warning', 
-          'Patient "' . $patient_exists->patient_name . '" is already in OPD.'
-      );
+        $this->session->set_flashdata('warning','Patient ' . $patient_exists['patient_name'] . ' is already in OPD.');
         redirect('opd'); // Change 'opd_list' to your OPD list page route
         return;
       }

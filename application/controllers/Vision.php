@@ -215,10 +215,21 @@ class Vision extends CI_Controller
         $post = $this->input->post();
         // echo "<pre>";
         // print_r('abhay');
-        // print_r($post);
+        // print_r($post['patient_code']);
         // die;
         // Check if the form is submitted
         if (isset($post) && !empty($post)) {
+            $patient_exists = $this->vision_model->patient_exists($post['patient_code']);
+            //   echo "<pre>";
+            // print_r( $patient_exists);
+            // die;
+            if ($patient_exists) {
+                // Redirect to OPD list page with a warning message
+                $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in Vision.');
+                echo json_encode(['faield' => true, 'message' => 'Patient ' . $patient_exists['patient_name'] . ' is already in Vision.']);
+                // redirect('help_desk'); // Change 'opd_list' to your OPD list page route
+                return;
+            }
             // Validate the form
             $valid_response = $this->_validate();
 
@@ -244,6 +255,59 @@ class Vision extends CI_Controller
 
         // Load the view with the data
         $this->load->view('vision/add', $data);
+    }
+
+    public function book_patient()
+    {
+        // public function book_patient() {
+        $patient_id = $this->input->post('patient_id');
+        // $this->load->model('token_no');
+
+        // Perform booking logic
+        $booking_result = $this->vision_model->book_patient($patient_id);
+
+        if ($booking_result) {
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Booking failed.']);
+        }
+        // }
+    }
+
+    public function check_booking_status()
+    {
+        $patient_id = $this->input->post('patient_id');
+        // $this->load->model('Booking_model');
+
+        // Check status in the database
+        $status = $this->vision_model->get_booking_status($patient_id);
+        // echo "<pre>";
+        // print_r($status);
+        // die('sagar');
+        if ($status == 1) {
+            echo json_encode(['status' => '1']); // Already in progress
+        } else {
+            echo json_encode(['status' => '0']); // Not booked yet
+        }
+    }
+
+    public function update_status_opd()
+    {
+        $patientId = $this->input->post('patient_id');
+
+        if (!$patientId) {
+            echo json_encode(['status' => 'error', 'message' => 'Patient ID is required.']);
+            return;
+        }
+
+        // Update status logic
+        $updated = $this->vision_model->update_patient_list_opd_status($patientId, 'new_status'); // Adjust as needed
+
+        if ($updated) {
+            echo json_encode(['status' => 'success', 'message' => 'Status updated successfully.']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to update status.']);
+        }
     }
 
     // public function add($booking_id = null)

@@ -312,7 +312,7 @@ $user_role = $users_data['users_role'];
                         echo 'checked';
                       } ?>> FastTrack
                     <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value=""
-                      type="radio" <?php echo 'checked';?>> All
+                      type="radio" <?php echo 'checked'; ?>> All
                   </div>
                 </div>
 
@@ -428,7 +428,7 @@ $user_role = $users_data['users_role'];
                 <?php } ?>
 
 
-                
+
                 <div class="row m-b-5">
                   <div class="col-xs-4"><label>Status</label></div>
                   <div class="col-xs-8">
@@ -512,8 +512,8 @@ $user_role = $users_data['users_role'];
                       <span>Normal</span>
                     </label>
                     <label class="radio-label">
-                      <input type="radio" name="priority_type" value="" id="priority_all"
-                        onclick="return form_submit();" checked>
+                      <input type="radio" name="priority_type" value="" id="priority_all" onclick="return form_submit();"
+                        checked>
                       <span>All</span>
                     </label>
                   </div>
@@ -915,7 +915,45 @@ $user_role = $users_data['users_role'];
       if (isset($flash_success) && !empty($flash_success)) {
         echo 'flash_session_msg("' . $flash_success . '");';
       }
+      $flash_warning = $this->session->flashdata('warning');
+      if (isset($flash_warning) && !empty($flash_warning)) {
+        echo 'flash_session_msg("' . $flash_warning . '", "warning");';
+      }
       ?>
+
+      function flash_session_msg(message, type) {
+        // if (type === "success") {
+        //   // Display success message in green
+        //   showAlert(message, "green");
+        // } else 
+        if (type === "warning") {
+          // Display warning message in yellow
+          showAlert(message, "orange");
+        }
+      }
+
+      // Helper function to show styled alerts
+      function showAlert(message, color) {
+        const alertBox = document.createElement("div");
+        alertBox.style.position = "fixed";
+        alertBox.style.top = "20px";
+        alertBox.style.right = "20px";
+        alertBox.style.padding = "15px";
+        alertBox.style.borderRadius = "5px";
+        alertBox.style.backgroundColor = color;
+        alertBox.style.color = "white";
+        alertBox.style.fontSize = "16px";
+        alertBox.style.zIndex = "1000";
+        alertBox.innerText = message;
+
+        // Append the alert box to the body
+        document.body.appendChild(alertBox);
+
+        // Automatically remove the alert after 3 seconds
+        setTimeout(() => {
+          alertBox.remove();
+        }, 7000);
+      }
 
       function confirm_booking(id) {
         var $modal = $('#load_add_modal_popup');
