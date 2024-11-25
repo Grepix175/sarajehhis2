@@ -520,4 +520,50 @@ class Oct_hfa_model extends CI_Model
 
 	}
 
+    public function get_booking_status($patient_id) {
+        $this->db->select('octhfa_status');
+        $this->db->from('hms_patient'); // Replace 'bookings' with your table name
+        $this->db->where('id', $patient_id);
+        $query = $this->db->get();
+        $result = $query->row();
+
+        if ($result) {
+            // echo "<pre>";
+            // print_r($result->opd_status);
+            // die('status');
+            return $result->opd_status; // Return status (1 or 0)
+        }
+        return 0; // Default to not booked
+    }
+
+    public function book_patient($patient_id) {
+        // Update database to mark patient as booked
+        $data = ['octhfa_status' => 1]; // Assuming 1 means booked
+        $this->db->where('id', $patient_id);
+        return $this->db->update('hms_patient', $data);
+    }
+
+    public function update_patient_list_opd_status($patient_id = '')
+	{
+		$this->db->set('hms_patient.octhfa_status', 0);
+		$this->db->where('hms_patient.id', $patient_id);
+		$query = $this->db->update('hms_patient');		
+		return $query;
+	}
+
+    public function patient_exists($patient_id = "")
+	{
+        
+		$user_data = $this->session->userdata('auth_users');
+		$this->db->select('hms_oct_hfa.id as oct_hfa_id*, hms_patient.id,hms_patient.patient_name');
+
+		$this->db->from('hms_oct_hfa');
+		$this->db->join('hms_patient', 'hms_patient.id = hms_oct_hfa.patient_id');
+		$this->db->where('hms_oct_hfa.branch_id', $user_data['parent_id']);
+		$this->db->where('hms_oct_hfa.patient_id', $patient_id);
+		$this->db->where('hms_oct_hfa.is_deleted', '0');
+		$query = $this->db->get();
+		return $query->row_array();
+	}
+
 }

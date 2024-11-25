@@ -392,4 +392,50 @@ class Prosthetic_model extends CI_Model
 
 	}
 
+    public function get_booking_status($patient_id) {
+        $this->db->select('prosthetic_status');
+        $this->db->from('hms_patient'); // Replace 'bookings' with your table name
+        $this->db->where('id', $patient_id);
+        $query = $this->db->get();
+        $result = $query->row();
+
+        if ($result) {
+            // echo "<pre>";
+            // print_r($result->opd_status);
+            // die('status');
+            return $result->opd_status; // Return status (1 or 0)
+        }
+        return 0; // Default to not booked
+    }
+
+    public function book_patient($patient_id) {
+        // Update database to mark patient as booked
+        $data = ['prosthetic_status' => 1]; // Assuming 1 means booked
+        $this->db->where('id', $patient_id);
+        return $this->db->update('hms_patient', $data);
+    }
+
+    public function update_patient_list_opd_status($patient_id = '')
+	{
+		$this->db->set('hms_patient.prosthetic_status', 0);
+		$this->db->where('hms_patient.id', $patient_id);
+		$query = $this->db->update('hms_patient');		
+		return $query;
+	}
+
+    public function patient_exists($patient_id = "")
+	{
+        
+		$user_data = $this->session->userdata('auth_users');
+		$this->db->select('hms_prosthetic.id as pros_id*, hms_patient.id,hms_patient.patient_name');
+
+		$this->db->from('hms_prosthetic');
+		$this->db->join('hms_patient', 'hms_patient.id = hms_prosthetic.patient_id');
+		$this->db->where('hms_prosthetic.branch_id', $user_data['parent_id']);
+		$this->db->where('hms_prosthetic.patient_id', $patient_id);
+		$this->db->where('hms_prosthetic.is_deleted', '0');
+		$query = $this->db->get();
+		return $query->row_array();
+	}
+
 }

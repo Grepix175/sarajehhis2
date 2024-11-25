@@ -712,16 +712,6 @@ $field_list = mandatory_section_field_list(2);
         yesButton.addEventListener("click", () => {
             window.location.href = redirectUrl;
         });
-
-        // noButton.addEventListener("click", () => {
-        //     // Remove the alert box
-        //     alertBox.remove();
-        // });
-
-        // Automatically remove the alert after 7 seconds
-        // setTimeout(() => {
-        //     alertBox.remove();
-        // }, 7000);
     }
 
 

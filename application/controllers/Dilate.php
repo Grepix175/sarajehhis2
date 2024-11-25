@@ -174,6 +174,18 @@ class Dilate extends CI_Controller
         // Check if the form is submitted
         if (isset($post) && !empty($post)) {
 
+            $patient_exists = $this->dilate->patient_exists($post['patient_id']);
+            //   echo "<pre>";
+            // print_r( $patient_exists);
+            // die;
+            if ($patient_exists) {
+                // Redirect to OPD list page with a warning message
+                $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in Dilate.');
+                echo json_encode(['faield' => true, 'message' => 'Patient ' . $patient_exists['patient_name'] . ' is already in Dilate.']);
+                // redirect('help_desk'); // Change 'opd_list' to your OPD list page route
+                return;
+            }
+
             $this->dilate->save(); // Save the validated data
             $this->session->set_flashdata('success', 'Contact Lens store successfully.');
             echo json_encode(['success' => true, 'message' => 'Contact Lens store successfully.']);
@@ -182,6 +194,59 @@ class Dilate extends CI_Controller
         }
         // Load the view with the data
         $this->load->view('dilate/add', $data);
+    }
+
+    public function book_patient()
+    {
+        // public function book_patient() {
+        $patient_id = $this->input->post('patient_id');
+        // $this->load->model('token_no');
+
+        // Perform booking logic
+        $booking_result = $this->dilate->book_patient($patient_id);
+
+        if ($booking_result) {
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Booking failed.']);
+        }
+        // }
+    }
+
+    public function check_booking_status()
+    {
+        $patient_id = $this->input->post('patient_id');
+        // $this->load->model('Booking_model');
+
+        // Check status in the database
+        $status = $this->dilate->get_booking_status($patient_id);
+        // echo "<pre>";
+        // print_r($status);
+        // die('sagar');
+        if ($status == 1) {
+            echo json_encode(['status' => '1']); // Already in progress
+        } else {
+            echo json_encode(['status' => '0']); // Not booked yet
+        }
+    }
+
+    public function update_status_opd()
+    {
+        $patientId = $this->input->post('patient_id');
+
+        if (!$patientId) {
+            echo json_encode(['status' => 'error', 'message' => 'Patient ID is required.']);
+            return;
+        }
+
+        // Update status logic
+        $updated = $this->dilate->update_patient_list_opd_status($patientId, 'new_status'); // Adjust as needed
+
+        if ($updated) {
+            echo json_encode(['status' => 'success', 'message' => 'Status updated successfully.']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to update status.']);
+        }
     }
 
 
