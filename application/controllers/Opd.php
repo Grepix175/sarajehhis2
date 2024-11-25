@@ -1255,9 +1255,21 @@ class Opd extends CI_Controller
 
 
     if (isset($post) && !empty($post)) {
-      // echo "<pre>";
-      // print_r($data['form_data']);
+      // $patient_exists = $this->opd->where('patient_id', $patient_id)->get('hms_opd_booking')->row();
+      $patient_exists = $this->opd->patient_exists($patient_id);
+      //   echo "<pre>";
+      // print_r($patient_exists['patient_name']);
       // die;
+      if ($patient_exists) {
+        // Redirect to OPD list page with a warning message
+        $this->session->set_flashdata(
+          'warning', 
+          'Patient "' . $patient_exists->patient_name . '" is already in OPD.'
+      );
+        redirect('opd'); // Change 'opd_list' to your OPD list page route
+        return;
+      }
+    
       $data['form_data'] = $this->_validateform();
       if ($this->form_validation->run() == TRUE) {
         $booking_id = $this->opd->save_booking();
@@ -1348,10 +1360,7 @@ class Opd extends CI_Controller
         }
         redirect(base_url('opd/?status=print'));
       } else {
-
-
         $data['form_error'] = validation_errors();
-
       }
     }
 

@@ -1203,7 +1203,11 @@ class Add_eye_prescription extends CI_Controller
         // print_r('$post');
         // die;
         return redirect(base_url('hess_chart'));
-      }else{
+      }else if($flag == 'doct_patie_add_eye'){
+        return redirect(base_url('doctore_patient'));
+
+      }
+      else{
         return redirect(base_url('refraction_below8'));
       }
     }

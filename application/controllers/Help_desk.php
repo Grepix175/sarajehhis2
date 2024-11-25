@@ -15,6 +15,7 @@ class Help_desk extends CI_Controller
     $this->load->model('prosthetic/Prosthetic_model', 'prosthetic');
     $this->load->model('oct_hfa/Oct_hfa_model', 'oct_hfa');
     $this->load->model('ortho_ptics/Ortho_ptics_model', 'ortho_ptics');
+    $this->load->model('doctore_patient/Doctore_patient_model','doctore_patient');
     error_reporting(0);
   }
 
@@ -98,9 +99,10 @@ class Help_desk extends CI_Controller
       $prosthetic_status = $this->prosthetic->get_by_low_vision_status($prescription->booking_id, $prescription->patient_id);
       $oct_hfa_status = $this->oct_hfa->get_by_booking_id($prescription->booking_id, $prescription->patient_id);
       $ortho_ptics_status = $this->ortho_ptics->get_ortho_by_booking_id($prescription->booking_id, $prescription->patient_id);
+      $doct_patient_status = $this->doctore_patient->get_doct_patient_booking_id($prescription->booking_id, $prescription->patient_id);
       // echo $oct_hfa_status;die;
     //   echo "<pre>";
-    // print_r($ortho_ptics_status);
+    // print_r($doct_patient_status);
     // die;
      
       $refraction_exists = $this->opd->get_by_id_refraction($prescription->booking_id);
@@ -124,6 +126,9 @@ class Help_desk extends CI_Controller
         : '';
       $ortho_ptics = ($ortho_ptics_status == 1)
         ? '<font style="background-color: #228B30;color:white">Ortho/Paedic</font>'
+        : '';
+      $doct_patient = ($doct_patient_status == 1)
+        ? '<font style="background-color: #228B30;color:white">Doctore</font>'
         : '';
       $refraction_below8 = ($prescription->refraction_below8 == 1)
         ? '<font style="background-color: #228B30;color:white">Refraction Below 8 Year</font>'
@@ -315,7 +320,19 @@ class Help_desk extends CI_Controller
         // $btn_contact_lens = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title=" Contact Lens"> Contact Lens</a>';
         $btn_ortho_ptics = '<a class="btn-custom" href="' . base_url("ortho_ptics/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Ortho Paedic" data-url="512">Ortho Paedic</a>';
       }
-      $btn_doctor = '<a class="btn-custom" href="' . '#' . '" title="Ortho Paedic" data-url="512">Doctore</a>';
+      if ($doct_patient_status == '1') {
+        $btn_doctor = '<a class="btn-custom disabled" href="javascript:void(0);" title="Ortho Paedic" style="pointer-events: none; opacity: 0.6;" data-url="512"> Doctore</a>';
+      } else {
+        // $btn_contact_lens = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title=" Contact Lens"> Contact Lens</a>';
+        $btn_doctor = '<button type="button" class="btn-custom open-popup" 
+                  id="open-popup" 
+                  data-booking-id="' . $prescription->booking_id . '" 
+                  data-patient-id="' . $prescription->patient_id . '" 
+                  data-referred-by="' . $prescription->attended_doctor . '" 
+                  data-url="' . $prescription->url . '" 
+                  title="Doctore">Doctore</button>';
+      }
+      // $btn_doctor = 
       
       if (in_array('2413', $users_data['permission']['action'])) {
         $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . "'";

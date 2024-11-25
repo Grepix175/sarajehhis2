@@ -25,15 +25,16 @@ $users_data = $this->session->userdata('auth_users');
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>jquery.min.js"></script>
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap.min.js"></script>
 
-  <!-- datatable js -->
-  <script src="<?php echo ROOT_JS_PATH; ?>jquery.dataTables.min.js"></script>
-  <script src="<?php echo ROOT_JS_PATH; ?>dataTables.bootstrap.min.js"></script>
-
   <style>
     span {
       font-weight: normal;
     }
   </style>
+
+  <!-- datatable js -->
+  <script src="<?php echo ROOT_JS_PATH; ?>jquery.dataTables.min.js"></script>
+  <script src="<?php echo ROOT_JS_PATH; ?>dataTables.bootstrap.min.js"></script>
+
   <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datepicker.css">
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datepicker.js"></script>
   <script type="text/javascript">
@@ -49,32 +50,23 @@ $users_data = $this->session->userdata('auth_users');
           "order": [],
           "pageLength": '20',
           "ajax": {
-            "url": "<?php echo base_url('help_desk/ajax_list') ?>",
+            "url": "<?php echo base_url('doctore_patient/ajax_list') ?>",
             "type": "POST",
           },
           "columnDefs": [
             {
-              "targets": [0, -1], // last column
-              "orderable": false, // set not orderable
+              "targets": [0, -1], // Last and first columns
+              "orderable": false,  // Set not orderable
             },
-            {
-              // "targets": -1, // Hide the last column (emergency_status)
-              // "visible": false,
-            },
-            {
-              "targets": 5, // Ensure the fifth column is visible
-              "visible": true,
-            }
           ],
           "createdRow": function (row, data, dataIndex) {
-            // console.log(data)
-            // Access emergency_status (assuming it's the last column in the data array)
-            var emergencyStatus = data[data.length - 1]; // Get the emergency_status value
-            // console.log(emergencyStatus)
+            // Assuming emergency_status is at the last index of the data array
+            var emergencyStatus = data[data.length - 1]; // Adjust if emergency_status is elsewhere
 
-            // Change the background color of the first column based on emergency_status
-            var firstColumn = $('td', row).eq(1); // Get the first column cell
+            // Access the first column (you can change this index as needed)
+            var firstColumn = $('td', row).eq(1); // Target the first column (change the index if needed)
 
+            // Change background color based on emergency_status
             if (emergencyStatus == 1) {
               firstColumn.css({
                 'background-color': 'red',   // Red background for emergency_status 1
@@ -100,13 +92,7 @@ $users_data = $this->session->userdata('auth_users');
                 'font-weight': 'bold'         // Bold font by default
               });
             }
-          },
-        });
-
-        // Toggle columns visibility
-        $('.tog-col').on('click', function (e) {
-          var column = table.column($(this).attr('data-column'));
-          column.visible(!column.visible());
+          }
         });
       });
 
@@ -129,7 +115,7 @@ $users_data = $this->session->userdata('auth_users');
 
 
       $('#adv_search').on('click', function () {
-        $modal.load('<?php echo base_url() . 'help_desk/advance_search/' ?>',
+        $modal.load('<?php echo base_url() . 'doctore_patient/advance_search/' ?>',
           {
           },
           function () {
@@ -140,21 +126,14 @@ $users_data = $this->session->userdata('auth_users');
 
     });
 
-    function edit_prescription(id) {
-      var $modal = $('#load_add_modal_popup');
-      $modal.load('<?php echo base_url() . 'help_desk/edit/' ?>' + id,
-        {
-          //'id1': '1',
-          //'id2': '2'
-        },
-        function () {
-          $modal.modal('show');
-        });
+    function edit_vision(id) {
+      // Redirect to the edit page for doctore_patient with the specified ID
+      window.location.href = '<?php echo base_url('doctore_patient/edit/'); ?>' + id;
     }
 
     function view_prescription(id) {
       var $modal = $('#load_add_modal_popup');
-      $modal.load('<?php echo base_url() . 'help_desk/view/' ?>' + id,
+      $modal.load('<?php echo base_url() . 'doctore_patient/view/' ?>' + id,
         {
           //'id1': '1',
           //'id2': '2'
@@ -190,7 +169,7 @@ $users_data = $this->session->userdata('auth_users');
           .one('click', '#delete', function (e) {
             $.ajax({
               type: "POST",
-              url: "<?php echo base_url('help_desk/deleteall'); ?>",
+              url: "<?php echo base_url('doctore_patient/delete_multiple'); ?>",
               data: { row_id: allVals },
               success: function (result) {
                 flash_session_msg(result);
@@ -244,9 +223,48 @@ $users_data = $this->session->userdata('auth_users');
                     onkeyup="return form_submit();" class="numeric m_input_default" maxlength="10" value="" type="text">
                 </div>
               </div>
+              <div class="row m-b-5">
+                  <div class="col-xs-5"><label>Status</label></div>
+                  <div class="col-xs-7">
+                    <!-- Pending (Default) -->
+                    <label class="radio-label">
+                      <input type="radio" name="status" value="0" id="search_type_default"
+                        onclick="return form_submit();" checked="checked">
+                      <span style="margin-top: 5px;">Pending</span>
+                    </label>
+
+                    <!-- Completed -->
+                    <label class="radio-label">
+                      <input type="radio" name="status" value="1" id="search_type_waiting"
+                        onclick="return form_submit();">
+                      <span style="margin-top: 5px;">Completed</span>
+                    </label>
+
+                    <!-- All -->
+                    <label class="radio-label">
+                      <input type="radio" name="status" value="" id="search_type_process"
+                        onclick="return form_submit();">
+                      <span style="margin-top: 5px;">All</span>
+                    </label>
+                  </div>
 
 
-
+                </div>
+              <div class="row m-b-5">
+                <div class="col-xs-5"><label> Booking Type</label></div>
+                <div class="col-xs-7">
+                  <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="3"
+                    type="radio" <?php if ($form_data['emergency_booking'] == '3') {
+                      echo 'checked';
+                    } ?>> Normal
+                  <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="4"
+                    type="radio" <?php if ($form_data['emergency_booking'] == '4') {
+                      echo 'checked';
+                    } ?>> FastTrack
+                  <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value=""
+                    type="radio" <?php echo 'checked'; ?>> All
+                </div>
+              </div>
 
             </div> <!-- 4 -->
 
@@ -266,21 +284,49 @@ $users_data = $this->session->userdata('auth_users');
                     onkeyup="return form_submit();" class="alpha_space m_input_default" value="" type="text">
                 </div>
               </div>
-              <div class="row m-b-5">
-                <div class="col-xs-4"><label> Booking Type</label></div>
-                <div class="col-xs-8">
-                  <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="3"
-                    type="radio" <?php if ($form_data['emergency_booking'] == '3') {
-                      echo 'checked';
-                    } ?>> Normal
-                  <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="4"
-                    type="radio" <?php if ($form_data['emergency_booking'] == '4') {
-                      echo 'checked';
-                    } ?>> FastTrack
-                  <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value=""
-                    type="radio" <?php echo 'checked'; ?>> All
+               <div class="row m-b-5">
+                  <div class="col-xs-4"><label>Doctor</label></div>
+                  <div class="col-xs-8">
+                    <select name="doc_id" id="doc_id" onChange="return form_submit();">
+                      <option value="">Select Doctor</option>
+                      <?php
+                      if (!empty($attended_doctor_list)) {
+                        foreach ($attended_doctor_list as $doct) {
+                          ?>
+                          <option <?php if ($form_data['doc_id'] == $doct->id) {
+                            echo 'selected="selected"';
+                          } ?> value="<?php echo $doct->id; ?>">
+                            <?php echo $doct->doctor_name; ?>
+                          </option>
+                          <?php
+                        }
+                      }
+                      ?>
+                    </select>
+                  </div>
                 </div>
-              </div>
+               <div class="row m-b-5">
+                  <div class="col-xs-4"><label>Room No.</label></div>
+                  <div class="col-xs-8">
+                    <select name="room_id" id="room_id" onChange="return form_submit();">
+                      <option value="">Select Room No.</option>
+                      <?php
+                      if (!empty($room_no_list)) {
+                        foreach ($room_no_list as $room) {
+                          ?>
+                          <option <?php if ($form_data['room_id'] == $room->id) {
+                            echo 'selected="selected"';
+                          } ?> value="<?php echo $room->id; ?>">
+                            <?php echo $room->room_no; ?>
+                          </option>
+                          <?php
+                        }
+                      }
+                      ?>
+                    </select>
+                  </div>
+                </div>
+              
 
               <?php
               $users_data = $this->session->userdata('auth_users');
@@ -314,8 +360,8 @@ $users_data = $this->session->userdata('auth_users');
               ?>
               <?php if (in_array('1', $permission_section)) { ?>
                 <div class="row m-b-5">
-                  <div class="col-xs-5"><label>Branch</label></div>
-                  <div class="col-xs-7">
+                  <div class="col-xs-4"><label>Branch</label></div>
+                  <div class="col-xs-8">
 
 
 
@@ -367,7 +413,7 @@ $users_data = $this->session->userdata('auth_users');
 
             </div> <!-- 4 -->
 
-            <div class="col-sm-4 d-flex justify-content-center" style="margin-left: 177px;margin-top: 35px;">
+            <div class="col-sm-4 d-flex justify-content-center" style="margin-left: 177px;margin-top: 30px;">
 
               <!--<a class="btn-custom" id="reset_date" onclick="reset_search();"><i class="fa fa-refresh"></i> Reset</a>
           <br>
@@ -388,7 +434,9 @@ $users_data = $this->session->userdata('auth_users');
           <div class="row">
             <div class="col-sm-12">
               <div id="additional_selection">
+
                 <div class="col-xs-2"><label style="margin-left: -15px;">Type</label></div>
+
                 <div class="col-xs-10" style="margin-left: -43px;">
                   <label class="radio-label">
                     <input type="radio" name="priority_type" value="1" id="priority_red"
@@ -436,12 +484,15 @@ $users_data = $this->session->userdata('auth_users');
                   </th>
                   <th> Token No. </th>
                   <th> OPD No. </th>
-                  <th> <?php echo $data = get_setting_value('PATIENT_REG_NO'); ?> </th>
+                  <th> Patient Reg. No. </th>
                   <th> Patient Name </th>
                   <th> Gender </th>
-                  <th> Mobile </th>
+                  <th> Mobile No </th>
                   <th> Age </th>
+                  <th> Status </th>
                   <th> Patient Status </th>
+                  <th> Doctore </th>
+                  <th> Room No </th>
                   <th> Created Date </th>
                   <th> Action </th>
                 </tr>
@@ -510,46 +561,20 @@ $users_data = $this->session->userdata('auth_users');
     <script>
       $(document).ready(function () {
         form_submit();
-        $('#load_add_medicine_unit_modal_popup').on('shown.bs.modal', function (e) {
-          $(this).find('.inputFocus').focus();
-        })
       });
       function reset_search() {
         $('#start_date_patient').val('');
         $('#end_date_patient').val('');
         $('#patient_code').val('');
         $('#patient_name').val('');
-        $('#mobile_no').val('');
 
         $.ajax({
-          url: "<?php echo base_url(); ?>help_desk/reset_search/",
+          url: "<?php echo base_url(); ?>doctore_patient/reset_search/",
           success: function (result) {
-            // $('#additional_selection').hide();
             reload_table();
           }
         });
       }
-
-      $(document).on('click', '.open-popup', function () {
-        // Get the data attributes from the clicked button
-        var bookingId = $(this).data('booking-id');
-        var patientId = $(this).data('patient-id');
-        var referredBy = $(this).data('referred-by');
-
-        // Build the dynamic URL with route parameters
-        var routeUrl = '<?php echo base_url(); ?>doctore_patient/add/' + bookingId + '/' + patientId + '/' + referredBy;
-
-        // Select the modal
-        var $modal = $('#load_add_medicine_unit_modal_popup');
-
-        // Load the modal content
-        $modal.load(routeUrl, function () {
-          // Show the modal once content is loaded
-          $modal.modal('show');
-        });
-      });
-
-
 
       $('.start_datepicker').datepicker({
         format: 'dd-mm-yyyy',
@@ -575,7 +600,7 @@ $users_data = $this->session->userdata('auth_users');
         event.preventDefault();
 
         $.ajax({
-          url: "<?php echo base_url('help_desk/advance_search/'); ?>",
+          url: "<?php echo base_url('doctore_patient/advance_search/'); ?>",
           type: "post",
           data: $(this).serialize(),
           success: function (result) {
@@ -654,7 +679,7 @@ $users_data = $this->session->userdata('auth_users');
         var toDate = document.getElementById('end_date_patient').value;
 
 
-        var url = '<?php echo base_url("help_desk/help_desk_excel"); ?>';
+        var url = '<?php echo base_url("doctore_patient/doctore_patient_excel"); ?>';
 
 
         if (fromDate || toDate) {
@@ -681,25 +706,10 @@ $users_data = $this->session->userdata('auth_users');
 
 
 
-        var url = '<?php echo base_url("help_desk/help_desk_pdf"); ?>';
+        var url = '<?php echo base_url("doctore_patient/doctore_patient_pdf"); ?>';
         url += '?start_date=' + encodeURIComponent(fromDate) + '&end_date=' + encodeURIComponent(toDate);
 
         window.location.href = url;
-      });
-      $(document).ready(function () {
-        var $modal = $('#load_add_medicine_unit_modal_popup');
-        $('#modal_add').on('click', function () {
-          $modal.load('<?php echo base_url() . 'room_master/add/' ?>',
-            {
-              //'id1': '1',
-              //'id2': '2'
-            },
-            function () {
-              $modal.modal('show');
-            });
-
-        });
-
       });
 
     </script>
@@ -714,7 +724,7 @@ $users_data = $this->session->userdata('auth_users');
           <!-- <div class="modal-body"></div> -->
           <div class="modal-footer">
             <a data-dismiss="modal" class="btn-anchor"
-              onClick="return print_window_page('<?php echo base_url("help_desk/print_prescriptions"); ?>');">Print</a>
+              onClick="return print_window_page('<?php echo base_url("doctore_patient/print_prescriptions"); ?>');">Print</a>
 
 
             <button type="button" data-dismiss="modal" class="btn-cancel" id="cancel">Close</button>
@@ -757,8 +767,6 @@ $users_data = $this->session->userdata('auth_users');
 
     <!-- Confirmation Box end -->
     <div id="load_add_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
-    <div id="load_add_medicine_unit_modal_popup" class="modal fade" role="dialog" data-backdrop="static"
-      data-keyboard="false"></div>
   </div><!-- container-fluid -->
 </body>
 
