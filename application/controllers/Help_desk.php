@@ -235,19 +235,49 @@ class Help_desk extends CI_Controller
         // }
       }
       // echo "<pre>";
-      // print_r($contact_lens_status);
+      // print_r($prescription);
       // die;
       if ($contact_lens_status == '1') {
         $btn_contact_lens = '<a class="btn-custom disabled" href="javascript:void(0);" title="Contact Lens" style="pointer-events: none; opacity: 0.6;" data-url="512">  Contact Lens</a>';
       } else {
         // $btn_contact_lens = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title=" Contact Lens"> Contact Lens</a>';
-        $btn_contact_lens = '<a class="btn-custom" href="' . base_url("contact_lens/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Contact Lens" data-url="512">Contact Lens</a>';
+        // $btn_contact_lens = '<a class="btn-custom" href="' . base_url("contact_lens/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Contact Lens" data-url="512">Contact Lens</a>';
+        if ($prescription->cont_lens_status == 1) {
+          // Render disabled button for already booked patients
+          $btn_contact_lens = '<div class="action-buttons">
+                  <button class="btn-custom book-now-btn book-now-btn-contact-lens" disabled>
+                      <i class="fa fa-spinner fa-spin"></i> In Progress
+                  </button>
+                  <a href="javascript:void(0);" title="Refresh" class="btn btn-secondary refresh-btn-contact-lens" data-patient_id="' . $prescription->patient_id . '" >
+                      <i class="fa fa-refresh"></i>
+                  </a>
+                  </div>';
+        } else {
+          $btn_contact_lens = '<button class="btn-custom book-now-btn-url-contact-lens" title="Book Now" 
+                  data-id="' . $prescription->patient_id . '" 
+                  data-url="' . base_url("contact_lens/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '">Contact Lens</button>';
+        }
       }
       if ($low_vision_status == '1') {
         $btn_low_vision = '<a class="btn-custom disabled" href="javascript:void(0);" title="Contact Lens" style="pointer-events: none; opacity: 0.6;" data-url="512"> Low Vision</a>';
       } else {
         // $btn_contact_lens = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title=" Contact Lens"> Contact Lens</a>';
-        $btn_low_vision = '<a class="btn-custom" href="' . base_url("low_vision/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Contact Lens" data-url="512">Low vision</a>';
+        // $btn_low_vision = '<a class="btn-custom" href="' . base_url("low_vision/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Contact Lens" data-url="512">Low vision</a>';
+        if ($prescription->low_vision_status == 1) {
+          // Render disabled button for already booked patients
+          $btn_low_vision = '<div class="action-buttons">
+                  <button class="btn-custom book-now-btn book-now-btn-low-vision" disabled>
+                      <i class="fa fa-spinner fa-spin"></i> In Progress
+                  </button>
+                  <a href="javascript:void(0);" title="Refresh" class="btn btn-secondary refresh-btn-low-vision" data-patient_id="' . $prescription->patient_id . '" >
+                      <i class="fa fa-refresh"></i>
+                  </a>
+                  </div>';
+        } else {
+          $btn_low_vision = '<button class="btn-custom book-now-btn-url-low-vision" title="Low vision" 
+                  data-id="' . $prescription->patient_id . '" 
+                  data-url="' . base_url("low_vision/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '">Low vision</button>';
+        }
       }
       if ($prescription->drawing_flag == 0) {
         $flag = 'hess_chart';
@@ -317,7 +347,24 @@ class Help_desk extends CI_Controller
           $dilate = '<a class="btn-custom " disabled href="javascript:void(0)" title="Dilate" style="pointer-events: none; opacity: 0.6;">Dilate</a>';
         } else {
           // Disable the "Dilate" button and change its style to look inactive
-          $dilate = '<a class="btn-custom" href="' . base_url("dilate/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Dilate" data-url="512">Dilate</a>';
+          // $dilate = '<a class="btn-custom" href="' . base_url("dilate/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Dilate" data-url="512">Dilate</a>';
+          if ($prescription->help_dilate_status == 1) {
+            // Render disabled button for already booked patients
+            $dilate = '<div class="action-buttons">
+                    <button class="btn-custom book-now-btn book-now-btn-dilate" disabled>
+                        <i class="fa fa-spinner fa-spin"></i> In Progress
+                    </button>
+                    <a href="javascript:void(0);" title="Refresh" class="btn btn-secondary refresh-btn-dilate" data-patient_id="' . $prescription->patient_id . '" >
+                        <i class="fa fa-refresh"></i>
+                    </a>
+                    </div>';
+            // $row[] = '<a title="Print"><i class="fa fa-refresh"></i></a>';
+          } else {
+            // Render active button for patients not yet booked
+            $dilate = '<button class="btn-custom book-now-btn-url-dilate" title="Dilate" 
+                    data-id="' . $prescription->patient_id . '" 
+                    data-url="' . base_url("dilate/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '">Dilate</button>';
+          }
         }
 
       }
@@ -326,18 +373,68 @@ class Help_desk extends CI_Controller
       } else {
         // $btn_contact_lens = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title=" Contact Lens"> Contact Lens</a>';
         $btn_prosthetic = '<a class="btn-custom" href="' . base_url("prosthetic/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Contact Lens" data-url="512">Prosthetic</a>';
+        if ($prescription->prosthetic_status == 1) {
+          // Render disabled button for already booked patients
+          $btn_prosthetic = '<div class="action-buttons">
+                  <button class="btn-custom book-now-btn book-now-btn-prosthetic" disabled>
+                      <i class="fa fa-spinner fa-spin"></i> In Progress
+                  </button>
+                  <a href="javascript:void(0);" title="Refresh" class="btn btn-secondary refresh-btn-prosthetic" data-patient_id="' . $prescription->patient_id . '" >
+                      <i class="fa fa-refresh"></i>
+                  </a>
+                  </div>';
+          // $row[] = '<a title="Print"><i class="fa fa-refresh"></i></a>';
+        } else {
+          // Render active button for patients not yet booked
+          $btn_prosthetic = '<button class="btn-custom book-now-btn-url-prosthetic" title="Prosthetic" 
+                  data-id="' . $prescription->patient_id . '" 
+                  data-url="' . base_url("prosthetic/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '">Prosthetic</button>';
+        }
       }
       if ($oct_hfa_status == '1') {
         $btn_oct_hfa = '<a class="btn-custom disabled" href="javascript:void(0);" title="OCT HFA" style="pointer-events: none; opacity: 0.6;" data-url="512"> OCT HFA</a>';
       } else {
         // $btn_contact_lens = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title=" Contact Lens"> Contact Lens</a>';
-        $btn_oct_hfa = '<a class="btn-custom" href="' . base_url("oct_hfa/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="OCT HFA" data-url="512">OCT HFA</a>';
+        // $btn_oct_hfa = '<a class="btn-custom" href="' . base_url("oct_hfa/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="OCT HFA" data-url="512">OCT HFA</a>';
+        if ($prescription->octhfa_status == 1) {
+          // Render disabled button for already booked patients
+          $btn_oct_hfa = '<div class="action-buttons">
+                  <button class="btn-custom book-now-btn book-now-btn-octhfa" disabled>
+                      <i class="fa fa-spinner fa-spin"></i> In Progress
+                  </button>
+                  <a href="javascript:void(0);" title="Refresh" class="btn btn-secondary refresh-btn-octhfa" data-patient_id="' . $prescription->patient_id . '" >
+                      <i class="fa fa-refresh"></i>
+                  </a>
+                  </div>';
+        } else {
+          // Render active button for patients not yet booked
+          $btn_oct_hfa = '<button class="btn-custom book-now-btn-url-octhfa" title="octhfa" 
+                  data-id="' . $prescription->patient_id . '" 
+                  data-url="' . base_url("oct_hfa/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '">OCT HFA</button>';
+        }
       }
       if ($ortho_ptics_status == '1') {
         $btn_ortho_ptics = '<a class="btn-custom disabled" href="javascript:void(0);" title="Ortho Paedic" style="pointer-events: none; opacity: 0.6;" data-url="512"> Ortho Paedic</a>';
       } else {
         // $btn_contact_lens = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title=" Contact Lens"> Contact Lens</a>';
-        $btn_ortho_ptics = '<a class="btn-custom" href="' . base_url("ortho_ptics/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Ortho Paedic" data-url="512">Ortho Paedic</a>';
+        // $btn_ortho_ptics = '<a class="btn-custom" href="' . base_url("ortho_ptics/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Ortho Paedic" data-url="512">Ortho Paedic</a>';
+        if ($prescription->ortho_ptics_status == 1) {
+          // Render disabled button for already booked patients
+          $btn_ortho_ptics = '<div class="action-buttons">
+                  <button class="btn-custom book-now-btn book-now-btn-ortho-ptics" disabled>
+                      <i class="fa fa-spinner fa-spin"></i> In Progress
+                  </button>
+                  <a href="javascript:void(0);" title="Refresh" class="btn btn-secondary refresh-btn-ortho-ptics" data-patient_id="' . $prescription->patient_id . '" >
+                      <i class="fa fa-refresh"></i>
+                  </a>
+                  </div>';
+        } else {
+          // Render active button for patients not yet booked
+          $btn_ortho_ptics = '<button class="btn-custom book-now-btn-url-ortho-ptics" title="octhfa" 
+                  data-id="' . $prescription->patient_id . '" 
+                  data-url="' . base_url("ortho_ptics/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '">Ortho Paedic</button>';
+        }
+
       }
       if ($doct_patient_status == '1') {
         $btn_doctor = '<a class="btn-custom disabled" href="javascript:void(0);" title="Ortho Paedic" style="pointer-events: none; opacity: 0.6;" data-url="512"> Doctore</a>';
@@ -374,7 +471,7 @@ class Help_desk extends CI_Controller
             // Render active button for patients not yet booked
             $send_to_vission = '<button class="btn-custom book-now-btn-url-vision" title="Book Now" 
                     data-id="' . $prescription->patient_code . '" 
-                    data-url="' .base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '">Vision</button>';
+                    data-url="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '">Vision</button>';
           }
         }
       }

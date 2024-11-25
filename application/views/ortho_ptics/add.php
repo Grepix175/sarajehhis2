@@ -347,7 +347,8 @@ $field_list = mandatory_section_field_list(2);
                             <div class="col-xs-8">
                                 <input type="text" name="patient_name"
                                     value="<?php echo isset($booking_data['patient_name']) ? $booking_data['patient_name'] : 'N/A'; ?>"
-                                    readonly="" style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
+                                    readonly=""
+                                    style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
                             </div>
                         </div>
                         <div class="row m-b-5">
@@ -355,7 +356,8 @@ $field_list = mandatory_section_field_list(2);
                             <div class="col-xs-8">
                                 <input type="text" name="patient_code"
                                     value="<?php echo isset($booking_data['patient_code']) ? $booking_data['patient_code'] : 'N/A'; ?>"
-                                    readonly="" style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
+                                    readonly=""
+                                    style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
                             </div>
                         </div>
                         <div class="row m-b-5">
@@ -363,7 +365,8 @@ $field_list = mandatory_section_field_list(2);
                             <div class="col-xs-8">
                                 <input type="text" name="booking_code"
                                     value="<?php echo isset($booking_data['booking_code']) ? $booking_data['booking_code'] : 'N/A'; ?>"
-                                    readonly="" style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
+                                    readonly=""
+                                    style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
                             </div>
 
                         </div>
@@ -372,7 +375,8 @@ $field_list = mandatory_section_field_list(2);
                             <div class="col-xs-8">
                                 <input type="text" name="token_no"
                                     value="<?php echo isset($booking_data['token_no']) ? $booking_data['token_no'] : 'N/A'; ?>"
-                                    readonly="" style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
+                                    readonly=""
+                                    style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
                             </div>
                         </div>
                     </div>
@@ -382,14 +386,16 @@ $field_list = mandatory_section_field_list(2);
                             <div class="col-xs-8">
                                 <input type="text" name="mobile_no"
                                     value="<?php echo isset($booking_data['mobile_no']) ? $booking_data['mobile_no'] : 'N/A'; ?>"
-                                    readonly="" style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
+                                    readonly=""
+                                    style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
                             </div>
                         </div>
                         <div class="row m-b-5">
                             <div class="col-xs-4"><strong>Age</strong></div>
                             <div class="col-xs-8">
                                 <input type="text" name="mobile_no" value="<?php echo isset($age) ? $age : 'N/A'; ?>"
-                                    readonly="" style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
+                                    readonly=""
+                                    style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
                             </div>
                         </div>
                         <div class="row m-b-5">
@@ -397,7 +403,8 @@ $field_list = mandatory_section_field_list(2);
                             <div class="col-xs-8">
                                 <input type="text" name="gender"
                                     value="<?php echo ($booking_data['gender'] == '0') ? 'Female' : 'Male'; ?>"
-                                    readonly="" style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
+                                    readonly=""
+                                    style="width:100% !important;height:25px;background:#f8f8f8;font-size:13px;padding:2px;">
                             </div>
                         </div>
                     </div>
@@ -434,8 +441,7 @@ $field_list = mandatory_section_field_list(2);
                                         <div class="col-xs-2"><strong>Referred by</strong></div>
                                         <div class="col-xs-10 box-right" style="margin-left: 85px;">
                                             <select name="referred_by" id="refered_id"
-                                                class="m_input_default select-height"
-                                                >
+                                                class="m_input_default select-height">
                                                 <option value="">Select Doctor</option>
                                                 <?php
                                                 if (!empty($referal_doctor_list)) {
@@ -479,8 +485,8 @@ $field_list = mandatory_section_field_list(2);
                                     <div class="grp">
                                         <label>Hours of near work/computer use & related details: </label>
                                         <div class="box-right" style="margin-left: 45px;">
-                                            <input type="text" name="hours_of_work_computer" class="txt_firstCap input-height"
-                                                id="hours_of_work_computer"
+                                            <input type="text" name="hours_of_work_computer"
+                                                class="txt_firstCap input-height" id="hours_of_work_computer"
                                                 value="<?php echo isset($form_data['hours_of_work_computer']) ? htmlspecialchars($form_data['hours_of_work_computer']) : ''; ?>"
                                                 style="width: 374px;" />
                                             <?php echo form_error('hours_of_work_computer'); ?>
@@ -492,8 +498,8 @@ $field_list = mandatory_section_field_list(2);
                                         <label>Associated Symptoms:</label>
                                         <div class="box-right" style="margin-left: 45px;">
 
-                                            <input type="text" name="associated_symptoms" class="txt_firstCap input-height"
-                                                id="associated_symptoms"
+                                            <input type="text" name="associated_symptoms"
+                                                class="txt_firstCap input-height" id="associated_symptoms"
                                                 value="<?php echo isset($form_data['associated_symptoms']) ? htmlspecialchars($form_data['associated_symptoms']) : ''; ?>"
                                                 style="width: 374px;" />
                                             <?php echo form_error('time'); ?>
@@ -504,8 +510,8 @@ $field_list = mandatory_section_field_list(2);
                                             etc.):</label>
                                         <div class="box-right" style="margin-left: 45px;">
 
-                                            <input type="text" name="previ_his_of_ortho" class="txt_firstCap input-height"
-                                                id="previ_his_of_ortho"
+                                            <input type="text" name="previ_his_of_ortho"
+                                                class="txt_firstCap input-height" id="previ_his_of_ortho"
                                                 value="<?php echo isset($form_data['previ_his_of_ortho']) ? htmlspecialchars($form_data['previ_his_of_ortho']) : ''; ?>"
                                                 style="width: 374px;" />
                                             <?php echo form_error('previ_his_of_ortho'); ?>
@@ -515,8 +521,8 @@ $field_list = mandatory_section_field_list(2);
                                         <label>General Health & Medication Details:</label>
                                         <div class="box-right" style="margin-left: 45px;">
 
-                                            <input type="text" name="gene_heal_medi_deta" class="txt_firstCap input-height"
-                                                id="gene_heal_medi_deta"
+                                            <input type="text" name="gene_heal_medi_deta"
+                                                class="txt_firstCap input-height" id="gene_heal_medi_deta"
                                                 value="<?php echo isset($form_data['gene_heal_medi_deta']) ? htmlspecialchars($form_data['gene_heal_medi_deta']) : ''; ?>"
                                                 style="width: 374px;" />
                                             <?php echo form_error('time'); ?>
@@ -537,59 +543,79 @@ $field_list = mandatory_section_field_list(2);
                                             <tbody>
                                                 <tr>
                                                     <td>Visual Acuity</td>
-                                                    <td><input type="text" value="<?php echo $refraction_tbl['visual_acuity_od']; ?>"
+                                                    <td><input type="text"
+                                                            value="<?php echo $refraction_tbl['visual_acuity_od']; ?>"
                                                             name="visual_acuity_od" id="visual_acuity_od"></td>
-                                                    <td><input type="text" value="<?php echo $refraction_tbl['visual_acuity_os']; ?>"
+                                                    <td><input type="text"
+                                                            value="<?php echo $refraction_tbl['visual_acuity_os']; ?>"
                                                             name="visual_acuity_os" id="visual_acuity_os"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Duchrome</td>
-                                                    <td><input type="text" value="<?php echo $refraction_tbl['duchrome_od']; ?>"
+                                                    <td><input type="text"
+                                                            value="<?php echo $refraction_tbl['duchrome_od']; ?>"
                                                             name="duchrome_od" id="duchrome_od"></td>
-                                                    <td><input type="text" value="<?php echo $refraction_tbl['duchrome_os']; ?>"
+                                                    <td><input type="text"
+                                                            value="<?php echo $refraction_tbl['duchrome_os']; ?>"
                                                             name="duchrome_os" id="duchrome_os"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>PGP</td>
-                                                    <td><input type="text" value="<?php echo $refraction_tbl['pgp_od']; ?>"
+                                                    <td><input type="text"
+                                                            value="<?php echo $refraction_tbl['pgp_od']; ?>"
                                                             name="pgp_od" id="pgp_od"></td>
-                                                    <td><input type="text" value="<?php echo $refraction_tbl['pgp_os']; ?>"
+                                                    <td><input type="text"
+                                                            value="<?php echo $refraction_tbl['pgp_os']; ?>"
                                                             name="pgp_os" id="pgp_os"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Static Retinoscopy</td>
-                                                    <td><input type="text" value="<?php echo $refraction_tbl['static_retinoscopy_od']; ?>"
-                                                            name="static_retinoscopy_od" id="static_retinoscopy_od"></td>
-                                                    <td><input type="text" value="<?php echo $refraction_tbl['static_retinoscopy_os']; ?>"
-                                                            name="static_retinoscopy_os" id="static_retinoscopy_os"></td>
+                                                    <td><input type="text"
+                                                            value="<?php echo $refraction_tbl['static_retinoscopy_od']; ?>"
+                                                            name="static_retinoscopy_od" id="static_retinoscopy_od">
+                                                    </td>
+                                                    <td><input type="text"
+                                                            value="<?php echo $refraction_tbl['static_retinoscopy_os']; ?>"
+                                                            name="static_retinoscopy_os" id="static_retinoscopy_os">
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Acceptance(PMT)</td>
-                                                    <td><input type="text" value="<?php echo $refraction_tbl['acceptance_od']; ?>"
+                                                    <td><input type="text"
+                                                            value="<?php echo $refraction_tbl['acceptance_od']; ?>"
                                                             name="acceptance_od" id="acceptance_od"></td>
-                                                    <td><input type="text" value="<?php echo $refraction_tbl['acceptance_os']; ?>"
+                                                    <td><input type="text"
+                                                            value="<?php echo $refraction_tbl['acceptance_os']; ?>"
                                                             name="acceptance_os" id="acceptance_os"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>JCC Refining</td>
-                                                    <td><input type="text" value="<?php echo $refraction_tbl['jcc_refining_od']; ?>"
+                                                    <td><input type="text"
+                                                            value="<?php echo $refraction_tbl['jcc_refining_od']; ?>"
                                                             name="jcc_refining_od" id="jcc_refining_od"></td>
-                                                    <td><input type="text" value="<?php echo $refraction_tbl['jcc_refining_os']; ?>"
+                                                    <td><input type="text"
+                                                            value="<?php echo $refraction_tbl['jcc_refining_os']; ?>"
                                                             name="jcc_refining_os" id="jcc_refining_os"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Add</td>
-                                                    <td><input type="text" value="<?php echo $refraction_tbl['add_od']; ?>"
+                                                    <td><input type="text"
+                                                            value="<?php echo $refraction_tbl['add_od']; ?>"
                                                             name="add_od" id="add_od"></td>
-                                                    <td><input type="text" value="<?php echo $refraction_tbl['add_os']; ?>"
+                                                    <td><input type="text"
+                                                            value="<?php echo $refraction_tbl['add_os']; ?>"
                                                             name="add_os" id="add_os"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>After Binocular Balancing(Final Rx)</td>
-                                                    <td><input type="text" value="<?php echo $refraction_tbl['after_binocular_balancing_od']; ?>"
-                                                            name="after_binocular_balancing_od" id="after_binocular_balancing_od"></td>
-                                                    <td><input type="text" value="<?php echo $refraction_tbl['after_binocular_balancing_os']; ?>"
-                                                            name="after_binocular_balancing_os" id="after_binocular_balancing_os"></td>
+                                                    <td><input type="text"
+                                                            value="<?php echo $refraction_tbl['after_binocular_balancing_od']; ?>"
+                                                            name="after_binocular_balancing_od"
+                                                            id="after_binocular_balancing_od"></td>
+                                                    <td><input type="text"
+                                                            value="<?php echo $refraction_tbl['after_binocular_balancing_os']; ?>"
+                                                            name="after_binocular_balancing_os"
+                                                            id="after_binocular_balancing_os"></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -632,8 +658,8 @@ $field_list = mandatory_section_field_list(2);
                                     <div class="grp">
                                         <label>Stereopsis(Near) with Randot Stereo: </label>
                                         <div class="box-right" style="margin-left: 45px;">
-                                            <input type="text" name="stere_with_rando_stere" class="txt_firstCap input-height"
-                                                id="stere_with_rando_stere"
+                                            <input type="text" name="stere_with_rando_stere"
+                                                class="txt_firstCap input-height" id="stere_with_rando_stere"
                                                 value="<?php echo isset($form_data['stere_with_rando_stere']) ? htmlspecialchars($form_data['stere_with_rando_stere']) : ''; ?>"
                                                 style="width: 374px;" />
                                             <?php echo form_error('stere_with_rando_stere'); ?>
@@ -674,57 +700,71 @@ $field_list = mandatory_section_field_list(2);
                                             </table>
                                         </div>
                                     </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <table class="table table-bordered">
-                                            <thead class="bg-info">
-                                                <tr>
-                                                    <th width="25%"></th>
-                                                    <th width="25%">D</th>
-                                                    <th width="25%">N</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>WFDT</td>
-                                                    <td><input type="text" value="<?php echo $wfdt_tbl['wfdt_d']; ?>"
-                                                            name="wfdt_d" id="wfdt_d"></td>
-                                                    <td><input type="text" value="<?php echo $wfdt_tbl['wfdt_n']; ?>"
-                                                            name="wfdt_n" id="wfdt_n"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Cover Test</td>
-                                                    <td><input type="text" value="<?php echo $wfdt_tbl['cover_test_d']; ?>"
-                                                            name="cover_test_d" id="cover_test_d"></td>
-                                                    <td><input type="text" value="<?php echo $wfdt_tbl['cover_test_n']; ?>"
-                                                            name="cover_test_n" id="cover_test_n"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Maddox Rod: Horizontal</td>
-                                                    <td><input type="text" value="<?php echo $wfdt_tbl['maddox_rod_horizontal_d']; ?>"
-                                                            name="maddox_rod_horizontal_d" id="maddox_rod_horizontal_d"></td>
-                                                    <td><input type="text" value="<?php echo $wfdt_tbl['maddox_rod_horizontal_n']; ?>"
-                                                            name="maddox_rod_horizontal_n" id="maddox_rod_horizontal_n"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Maddox Rod: Vertical</td>
-                                                    <td><input type="text" value="<?php echo $wfdt_tbl['maddox_rod_vertical_d']; ?>"
-                                                            name="maddox_rod_vertical_d" id="maddox_rod_vertical_d"></td>
-                                                    <td><input type="text" value="<?php echo $wfdt_tbl['maddox_rod_vertical_n']; ?>"
-                                                            name="maddox_rod_vertical_n" id="maddox_rod_vertical_n"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>PBCT</td>
-                                                    <td><input type="text" value="<?php echo $wfdt_tbl['pbct_d']; ?>"
-                                                            name="pbct_d" id="pbct_d"></td>
-                                                    <td><input type="text" value="<?php echo $wfdt_tbl['pbct_n']; ?>"
-                                                            name="pbct_n" id="pbct_n"></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <table class="table table-bordered">
+                                                <thead class="bg-info">
+                                                    <tr>
+                                                        <th width="25%"></th>
+                                                        <th width="25%">D</th>
+                                                        <th width="25%">N</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>WFDT</td>
+                                                        <td><input type="text"
+                                                                value="<?php echo $wfdt_tbl['wfdt_d']; ?>" name="wfdt_d"
+                                                                id="wfdt_d"></td>
+                                                        <td><input type="text"
+                                                                value="<?php echo $wfdt_tbl['wfdt_n']; ?>" name="wfdt_n"
+                                                                id="wfdt_n"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Cover Test</td>
+                                                        <td><input type="text"
+                                                                value="<?php echo $wfdt_tbl['cover_test_d']; ?>"
+                                                                name="cover_test_d" id="cover_test_d"></td>
+                                                        <td><input type="text"
+                                                                value="<?php echo $wfdt_tbl['cover_test_n']; ?>"
+                                                                name="cover_test_n" id="cover_test_n"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Maddox Rod: Horizontal</td>
+                                                        <td><input type="text"
+                                                                value="<?php echo $wfdt_tbl['maddox_rod_horizontal_d']; ?>"
+                                                                name="maddox_rod_horizontal_d"
+                                                                id="maddox_rod_horizontal_d"></td>
+                                                        <td><input type="text"
+                                                                value="<?php echo $wfdt_tbl['maddox_rod_horizontal_n']; ?>"
+                                                                name="maddox_rod_horizontal_n"
+                                                                id="maddox_rod_horizontal_n"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Maddox Rod: Vertical</td>
+                                                        <td><input type="text"
+                                                                value="<?php echo $wfdt_tbl['maddox_rod_vertical_d']; ?>"
+                                                                name="maddox_rod_vertical_d" id="maddox_rod_vertical_d">
+                                                        </td>
+                                                        <td><input type="text"
+                                                                value="<?php echo $wfdt_tbl['maddox_rod_vertical_n']; ?>"
+                                                                name="maddox_rod_vertical_n" id="maddox_rod_vertical_n">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>PBCT</td>
+                                                        <td><input type="text"
+                                                                value="<?php echo $wfdt_tbl['pbct_d']; ?>" name="pbct_d"
+                                                                id="pbct_d"></td>
+                                                        <td><input type="text"
+                                                                value="<?php echo $wfdt_tbl['pbct_n']; ?>" name="pbct_n"
+                                                                id="pbct_n"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                </div>
-                                    
+
                                 </section>
                                 <section style="padding-left:15px;">
                                     <div class="grp">
@@ -751,14 +791,14 @@ $field_list = mandatory_section_field_list(2);
                                         <label>Heterophoria Method:</label>
                                         <div class="box-right" style="margin-left: 45px;">
 
-                                            <input type="text" name="heterophoria_method" class="txt_firstCap input-height"
-                                                id="heterophoria_method"
+                                            <input type="text" name="heterophoria_method"
+                                                class="txt_firstCap input-height" id="heterophoria_method"
                                                 value="<?php echo isset($form_data['heterophoria_method']) ? htmlspecialchars($form_data['heterophoria_method']) : ''; ?>"
                                                 style="width: 374px;" />
                                             <?php echo form_error('heterophoria_method'); ?>
                                         </div>
                                     </div>
-                                    
+
                                 </section>
 
                             </div>
@@ -913,6 +953,12 @@ $field_list = mandatory_section_field_list(2);
                     // Redirect to the vision list page
                     // flash_session_msg(data.message);
                     window.location.href = '<?php echo base_url('ortho_ptics'); ?>'; // Adjust this URL as necessary
+                } else if (data.faield) {
+                    showAlert(
+                        data.message,
+                        "#ffc107", // Yellow color for a warning
+                        "<?php echo base_url('ortho_ptics'); ?>" // URL for redirection
+                    );
                 } else {
                     alert('Error: ' + data.message);
                 }
@@ -922,6 +968,38 @@ $field_list = mandatory_section_field_list(2);
                 // alert('There was a problem with the submission.');
             });
     });
+
+    function showAlert(message, color, redirectUrl) {
+        // Create the alert box
+        const alertBox = document.createElement("div");
+        alertBox.style.position = "fixed";
+        alertBox.style.top = "20px";
+        alertBox.style.right = "20px";
+        alertBox.style.padding = "15px";
+        alertBox.style.borderRadius = "5px";
+        alertBox.style.backgroundColor = color;
+        alertBox.style.color = "white";
+        alertBox.style.fontSize = "16px";
+        alertBox.style.zIndex = "1000";
+        alertBox.style.boxShadow = "0 2px 10px rgba(0, 0, 0, 0.1)";
+        alertBox.innerHTML = `
+        <p>${message}</p>
+        <div style="margin-top: 10px; display: flex; justify-content: flex-end;">
+            <button id="yesButton" style="margin-right: 10px; padding: 5px 10px; border: none; border-radius: 3px; background-color: #28a745; color: white; cursor: pointer;">Yes</button>
+        </div>
+    `;
+
+        // Append the alert box to the body
+        document.body.appendChild(alertBox);
+
+        // Add event listeners for buttons
+        const yesButton = document.getElementById("yesButton");
+        // const noButton = document.getElementById("noButton");
+
+        yesButton.addEventListener("click", () => {
+            window.location.href = redirectUrl;
+        });
+    }
 
 
 </script>

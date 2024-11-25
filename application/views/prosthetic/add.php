@@ -975,6 +975,12 @@ $field_list = mandatory_section_field_list(2);
                     // Redirect to the vision list page
                     // flash_session_msg(data.message);
                     window.location.href = '<?php echo base_url('prosthetic'); ?>'; // Adjust this URL as necessary
+                }else if (data.faield) {
+                    showAlert(
+                        data.message,
+                        "#ffc107", // Yellow color for a warning
+                        "<?php echo base_url('prosthetic'); ?>" // URL for redirection
+                    );
                 } else {
                     alert('Error: ' + data.message);
                 }
@@ -984,6 +990,38 @@ $field_list = mandatory_section_field_list(2);
                 // alert('There was a problem with the submission.');
             });
     });
+
+    function showAlert(message, color, redirectUrl) {
+        // Create the alert box
+        const alertBox = document.createElement("div");
+        alertBox.style.position = "fixed";
+        alertBox.style.top = "20px";
+        alertBox.style.right = "20px";
+        alertBox.style.padding = "15px";
+        alertBox.style.borderRadius = "5px";
+        alertBox.style.backgroundColor = color;
+        alertBox.style.color = "white";
+        alertBox.style.fontSize = "16px";
+        alertBox.style.zIndex = "1000";
+        alertBox.style.boxShadow = "0 2px 10px rgba(0, 0, 0, 0.1)";
+        alertBox.innerHTML = `
+        <p>${message}</p>
+        <div style="margin-top: 10px; display: flex; justify-content: flex-end;">
+            <button id="yesButton" style="margin-right: 10px; padding: 5px 10px; border: none; border-radius: 3px; background-color: #28a745; color: white; cursor: pointer;">Yes</button>
+        </div>
+    `;
+
+        // Append the alert box to the body
+        document.body.appendChild(alertBox);
+
+        // Add event listeners for buttons
+        const yesButton = document.getElementById("yesButton");
+        // const noButton = document.getElementById("noButton");
+
+        yesButton.addEventListener("click", () => {
+            window.location.href = redirectUrl;
+        });
+    }
 
 
 </script>

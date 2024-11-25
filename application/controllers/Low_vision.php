@@ -194,6 +194,18 @@ class Low_vision extends CI_Controller
         // echo "<pre>";print_r($post);die('ss');
         if (isset($post) && !empty($post)) {
             // echo "<pre>";print_r($post);die('dfk');
+            $patient_exists = $this->low_vision->patient_exists($post['patient_id']);
+            //   echo "<pre>";
+            // print_r( $patient_exists);
+            // die;
+            if ($patient_exists) {
+                // Redirect to OPD list page with a warning message
+                $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in Low Vision.');
+                echo json_encode(['faield' => true, 'message' => 'Patient ' . $patient_exists['patient_name'] . ' is already in Low Vision.']);
+                // redirect('help_desk'); // Change 'opd_list' to your OPD list page route
+                return;
+            }
+
         
             // Prepare the refraction data based on received fields
             $color_vision_data = [
@@ -281,6 +293,59 @@ class Low_vision extends CI_Controller
 
         // Load the view with the data
         $this->load->view('low_vision/add', $data);
+    }
+
+    public function book_patient()
+    {
+        // public function book_patient() {
+        $patient_id = $this->input->post('patient_id');
+        // $this->load->model('token_no');
+
+        // Perform booking logic
+        $booking_result = $this->low_vision->book_patient($patient_id);
+
+        if ($booking_result) {
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Booking failed.']);
+        }
+        // }
+    }
+
+    public function check_booking_status()
+    {
+        $patient_id = $this->input->post('patient_id');
+        // $this->load->model('Booking_model');
+
+        // Check status in the database
+        $status = $this->low_vision->get_booking_status($patient_id);
+        // echo "<pre>";
+        // print_r($status);
+        // die('sagar');
+        if ($status == 1) {
+            echo json_encode(['status' => '1']); // Already in progress
+        } else {
+            echo json_encode(['status' => '0']); // Not booked yet
+        }
+    }
+
+    public function update_status_opd()
+    {
+        $patientId = $this->input->post('patient_id');
+
+        if (!$patientId) {
+            echo json_encode(['status' => 'error', 'message' => 'Patient ID is required.']);
+            return;
+        }
+
+        // Update status logic
+        $updated = $this->low_vision->update_patient_list_opd_status($patientId, 'new_status'); // Adjust as needed
+
+        if ($updated) {
+            echo json_encode(['status' => 'success', 'message' => 'Status updated successfully.']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to update status.']);
+        }
     }
 
     public function fill_eye_data_auto_refraction($modal)

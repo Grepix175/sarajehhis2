@@ -550,8 +550,8 @@ $users_data = $this->session->userdata('auth_users');
       });
 
       $(document).on('click', '.book-now-btn-url', function () {
-        const btn = $(this); 
-        const patientId = btn.data('id'); 
+        const btn = $(this);
+        const patientId = btn.data('id');
         const bookingUrl = btn.data('url');
 
         btn.prop('disabled', true).text('In Progress');
@@ -569,7 +569,7 @@ $users_data = $this->session->userdata('auth_users');
               return;
             } else if (data.status === '0') {
               $.ajax({
-                url: '<?= base_url("refraction/book_patient"); ?>', 
+                url: '<?= base_url("refraction/book_patient"); ?>',
                 type: 'POST',
                 data: { patient_id: patientId },
                 success: function (bookingResponse) {
@@ -609,7 +609,7 @@ $users_data = $this->session->userdata('auth_users');
         refreshButton.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
 
         $.ajax({
-          url: 'refraction/update_status_opd', 
+          url: 'refraction/update_status_opd',
           type: 'POST',
           data: { patient_id: patientId },
           dataType: 'json',
@@ -624,7 +624,7 @@ $users_data = $this->session->userdata('auth_users');
             console.error('AJAX Error:', error);
             alert('An error occurred while updating the status.');
           },
-          
+
         });
       });
 
@@ -670,9 +670,9 @@ $users_data = $this->session->userdata('auth_users');
       }
       ?>
 
-$(document).on('click', '.book-now-btn-url-vision', function () {
-        const btn = $(this); 
-        const patientId = btn.data('id'); 
+      $(document).on('click', '.book-now-btn-url-vision', function () {
+        const btn = $(this);
+        const patientId = btn.data('id');
         const bookingUrl = btn.data('url');
 
         btn.prop('disabled', true).text('In Progress');
@@ -690,7 +690,7 @@ $(document).on('click', '.book-now-btn-url-vision', function () {
               return;
             } else if (data.status === '0') {
               $.ajax({
-                url: '<?= base_url("vision/book_patient"); ?>', 
+                url: '<?= base_url("vision/book_patient"); ?>',
                 type: 'POST',
                 data: { patient_id: patientId },
                 success: function (bookingResponse) {
@@ -730,7 +730,7 @@ $(document).on('click', '.book-now-btn-url-vision', function () {
         refreshButton.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
 
         $.ajax({
-          url: 'vision/update_status_opd', 
+          url: 'vision/update_status_opd',
           type: 'POST',
           data: { patient_id: patientId },
           dataType: 'json',
@@ -745,7 +745,7 @@ $(document).on('click', '.book-now-btn-url-vision', function () {
             console.error('AJAX Error:', error);
             alert('An error occurred while updating the status.');
           },
-          
+
         });
       });
 
@@ -793,6 +793,87 @@ $(document).on('click', '.book-now-btn-url-vision', function () {
 
         <?php } ?>
       });
+
+      $(document).on('click', '.book-now-btn-url-contact-lens', function () {
+        const btn = $(this);
+        const patientId = btn.data('id');
+        const bookingUrl = btn.data('url');
+        btn.prop('disabled', true).text('In Progress');
+
+        $.ajax({
+          url: '<?= base_url("contact_lens/check_booking_status"); ?>', // Backend URL to check status
+          type: 'POST',
+          data: { patient_id: patientId },
+          success: function (response) {
+            const data = JSON.parse(response);
+
+            if (data.status === '1') {
+              alert('Booking is already in progress for this patient.');
+              btn.prop('disabled', false).text('Book Now');
+              return;
+            } else if (data.status === '0') {
+              $.ajax({
+                url: '<?= base_url("contact_lens/book_patient"); ?>',
+                type: 'POST',
+                data: { patient_id: patientId },
+                success: function (bookingResponse) {
+                  const bookingData = JSON.parse(bookingResponse);
+                  if (bookingData.status === 'success') {
+                    window.location.href = bookingUrl; // Redirect to booking URL
+                  } else {
+                    alert(bookingData.message || 'An error occurred.');
+                    btn.prop('disabled', false).text('Book Now');
+                  }
+                },
+                error: function () {
+                  alert('An error occurred while booking. Please try again.');
+                  btn.prop('disabled', false).text('Book Now');
+                }
+              });
+            }
+          },
+          error: function () {
+            // Handle AJAX error
+            alert('An error occurred while checking status. Please try again.');
+            btn.prop('disabled', false).text('Book Now');
+          }
+        });
+      });
+
+
+      $(document).on('click', '.refresh-btn-contact-lens', function () {
+        const patientId = $(this).data('patient_id');
+        
+        const refreshButton = $(this);
+
+        if (!patientId) {
+          alert('Patient ID is missing!');
+          return;
+        }
+
+        refreshButton.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
+
+        $.ajax({
+          url: 'contact_lens/update_status_opd',
+          type: 'POST',
+          data: { patient_id: patientId },
+          dataType: 'json',
+          success: function (response) {
+            if (response.status === 'success') {
+              reload_table();
+            } else {
+              alert(response.message || 'Failed to update status.');
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX Error:', error);
+            alert('An error occurred while updating the status.');
+          },
+
+        });
+      });
+
+
 
 
       $('#patient_adv_search').on('click', function () {
@@ -862,6 +943,402 @@ $(document).on('click', '.book-now-btn-url-vision', function () {
         });
 
       });
+
+      $(document).on('click', '.book-now-btn-url-low-vision', function () {
+        const btn = $(this);
+        const patientId = btn.data('id');
+        const bookingUrl = btn.data('url');
+        btn.prop('disabled', true).text('In Progress');
+
+        $.ajax({
+          url: '<?= base_url("low_vision/check_booking_status"); ?>', // Backend URL to check status
+          type: 'POST',
+          data: { patient_id: patientId },
+          success: function (response) {
+            const data = JSON.parse(response);
+
+            if (data.status === '1') {
+              alert('Booking is already in progress for this patient.');
+              btn.prop('disabled', false).text('Book Now');
+              return;
+            } else if (data.status === '0') {
+              $.ajax({
+                url: '<?= base_url("low_vision/book_patient"); ?>',
+                type: 'POST',
+                data: { patient_id: patientId },
+                success: function (bookingResponse) {
+                  const bookingData = JSON.parse(bookingResponse);
+                  if (bookingData.status === 'success') {
+                    window.location.href = bookingUrl; // Redirect to booking URL
+                  } else {
+                    alert(bookingData.message || 'An error occurred.');
+                    btn.prop('disabled', false).text('Book Now');
+                  }
+                },
+                error: function () {
+                  alert('An error occurred while booking. Please try again.');
+                  btn.prop('disabled', false).text('Book Now');
+                }
+              });
+            }
+          },
+          error: function () {
+            // Handle AJAX error
+            alert('An error occurred while checking status. Please try again.');
+            btn.prop('disabled', false).text('Book Now');
+          }
+        });
+      });
+
+
+      $(document).on('click', '.refresh-btn-low-vision', function () {
+        const patientId = $(this).data('patient_id');
+        
+        const refreshButton = $(this);
+
+        if (!patientId) {
+          alert('Patient ID is missing!');
+          return;
+        }
+
+        refreshButton.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
+
+        $.ajax({
+          url: 'low_vision/update_status_opd',
+          type: 'POST',
+          data: { patient_id: patientId },
+          dataType: 'json',
+          success: function (response) {
+            if (response.status === 'success') {
+              reload_table();
+            } else {
+              alert(response.message || 'Failed to update status.');
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX Error:', error);
+            alert('An error occurred while updating the status.');
+          },
+
+        });
+      });
+
+
+      $(document).on('click', '.book-now-btn-url-dilate', function () {
+        const btn = $(this);
+        const patientId = btn.data('id');
+        const bookingUrl = btn.data('url');
+        btn.prop('disabled', true).text('In Progress');
+        $.ajax({
+          url: '<?= base_url("dilate/check_booking_status"); ?>', // Backend URL to check status
+          type: 'POST',
+          data: { patient_id: patientId },
+          success: function (response) {
+            const data = JSON.parse(response);
+
+            if (data.status === '1') {
+              alert('Booking is already in progress for this patient.');
+              btn.prop('disabled', false).text('Book Now');
+              return;
+            } else if (data.status === '0') {
+              $.ajax({
+                url: '<?= base_url("dilate/book_patient"); ?>',
+                type: 'POST',
+                data: { patient_id: patientId },
+                success: function (bookingResponse) {
+                  const bookingData = JSON.parse(bookingResponse);
+                  if (bookingData.status === 'success') {
+                    window.location.href = bookingUrl; // Redirect to booking URL
+                  } else {
+                    alert(bookingData.message || 'An error occurred.');
+                    btn.prop('disabled', false).text('Book Now');
+                  }
+                },
+                error: function () {
+                  alert('An error occurred while booking. Please try again.');
+                  btn.prop('disabled', false).text('Book Now');
+                }
+              });
+            }
+          },
+          error: function () {
+            // Handle AJAX error
+            alert('An error occurred while checking status. Please try again.');
+            btn.prop('disabled', false).text('Book Now');
+          }
+        });
+      });
+
+
+      $(document).on('click', '.refresh-btn-dilate', function () {
+        const patientId = $(this).data('patient_id');
+        
+        const refreshButton = $(this);
+
+        if (!patientId) {
+          alert('Patient ID is missing!');
+          return;
+        }
+
+        refreshButton.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
+
+        $.ajax({
+          url: 'dilate/update_status_opd',
+          type: 'POST',
+          data: { patient_id: patientId },
+          dataType: 'json',
+          success: function (response) {
+            if (response.status === 'success') {
+              reload_table();
+            } else {
+              alert(response.message || 'Failed to update status.');
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX Error:', error);
+            alert('An error occurred while updating the status.');
+          },
+
+        });
+      });
+
+      // prosthetic_status
+      
+      $(document).on('click', '.book-now-btn-url-prosthetic', function () {
+        const btn = $(this);
+        const patientId = btn.data('id');
+        const bookingUrl = btn.data('url');
+        btn.prop('disabled', true).text('In Progress');
+        $.ajax({
+          url: '<?= base_url("prosthetic/check_booking_status"); ?>', // Backend URL to check status
+          type: 'POST',
+          data: { patient_id: patientId },
+          success: function (response) {
+            const data = JSON.parse(response);
+
+            if (data.status === '1') {
+              alert('Booking is already in progress for this patient.');
+              btn.prop('disabled', false).text('Book Now');
+              return;
+            } else if (data.status === '0') {
+              $.ajax({
+                url: '<?= base_url("prosthetic/book_patient"); ?>',
+                type: 'POST',
+                data: { patient_id: patientId },
+                success: function (bookingResponse) {
+                  const bookingData = JSON.parse(bookingResponse);
+                  if (bookingData.status === 'success') {
+                    window.location.href = bookingUrl; // Redirect to booking URL
+                  } else {
+                    alert(bookingData.message || 'An error occurred.');
+                    btn.prop('disabled', false).text('Book Now');
+                  }
+                },
+                error: function () {
+                  alert('An error occurred while booking. Please try again.');
+                  btn.prop('disabled', false).text('Book Now');
+                }
+              });
+            }
+          },
+          error: function () {
+            // Handle AJAX error
+            alert('An error occurred while checking status. Please try again.');
+            btn.prop('disabled', false).text('Book Now');
+          }
+        });
+      });
+
+
+      $(document).on('click', '.refresh-btn-prosthetic', function () {
+        const patientId = $(this).data('patient_id');
+        
+        const refreshButton = $(this);
+
+        if (!patientId) {
+          alert('Patient ID is missing!');
+          return;
+        }
+
+        refreshButton.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
+
+        $.ajax({
+          url: 'prosthetic/update_status_opd',
+          type: 'POST',
+          data: { patient_id: patientId },
+          dataType: 'json',
+          success: function (response) {
+            if (response.status === 'success') {
+              reload_table();
+            } else {
+              alert(response.message || 'Failed to update status.');
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX Error:', error);
+            alert('An error occurred while updating the status.');
+          },
+
+        });
+      });
+
+      // book-now-btn-url-octhfa
+      $(document).on('click', '.book-now-btn-url-octhfa', function () {
+        const btn = $(this);
+        const patientId = btn.data('id');
+        const bookingUrl = btn.data('url');
+        btn.prop('disabled', true).text('In Progress');
+        $.ajax({
+          url: '<?= base_url("oct_hfa/check_booking_status"); ?>', // Backend URL to check status
+          type: 'POST',
+          data: { patient_id: patientId },
+          success: function (response) {
+            const data = JSON.parse(response);
+
+            if (data.status === '1') {
+              alert('Booking is already in progress for this patient.');
+              btn.prop('disabled', false).text('Book Now');
+              return;
+            } else if (data.status === '0') {
+              $.ajax({
+                url: '<?= base_url("oct_hfa/book_patient"); ?>',
+                type: 'POST',
+                data: { patient_id: patientId },
+                success: function (bookingResponse) {
+                  const bookingData = JSON.parse(bookingResponse);
+                  if (bookingData.status === 'success') {
+                    window.location.href = bookingUrl; // Redirect to booking URL
+                  } else {
+                    alert(bookingData.message || 'An error occurred.');
+                    btn.prop('disabled', false).text('Book Now');
+                  }
+                },
+                error: function () {
+                  alert('An error occurred while booking. Please try again.');
+                  btn.prop('disabled', false).text('Book Now');
+                }
+              });
+            }
+          },
+          error: function () {
+            // Handle AJAX error
+            alert('An error occurred while checking status. Please try again.');
+            btn.prop('disabled', false).text('Book Now');
+          }
+        });
+      });
+
+
+      $(document).on('click', '.refresh-btn-octhfa', function () {
+        const patientId = $(this).data('patient_id');
+        
+        const refreshButton = $(this);
+
+        if (!patientId) {
+          alert('Patient ID is missing!');
+          return;
+        }
+
+        refreshButton.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
+
+        $.ajax({
+          url: 'oct_hfa/update_status_opd',
+          type: 'POST',
+          data: { patient_id: patientId },
+          dataType: 'json',
+          success: function (response) {
+            if (response.status === 'success') {
+              reload_table();
+            } else {
+              alert(response.message || 'Failed to update status.');
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX Error:', error);
+            alert('An error occurred while updating the status.');
+          },
+
+        });
+      });
+
+      $(document).on('click', '.book-now-btn-url-ortho-ptics', function () {
+        const btn = $(this);
+        const patientId = btn.data('id');
+        const bookingUrl = btn.data('url');
+        btn.prop('disabled', true).text('In Progress');
+        $.ajax({
+          url: '<?= base_url("ortho_ptics/check_booking_status"); ?>', // Backend URL to check status
+          type: 'POST',
+          data: { patient_id: patientId },
+          success: function (response) {
+            const data = JSON.parse(response);
+
+            if (data.status === '1') {
+              alert('Booking is already in progress for this patient.');
+              btn.prop('disabled', false).text('Book Now');
+              return;
+            } else if (data.status === '0') {
+              $.ajax({
+                url: '<?= base_url("ortho_ptics/book_patient"); ?>',
+                type: 'POST',
+                data: { patient_id: patientId },
+                success: function (bookingResponse) {
+                  const bookingData = JSON.parse(bookingResponse);
+                  if (bookingData.status === 'success') {
+                    window.location.href = bookingUrl; // Redirect to booking URL
+                  } else {
+                    alert(bookingData.message || 'An error occurred.');
+                    btn.prop('disabled', false).text('Book Now');
+                  }
+                },
+                error: function () {
+                  alert('An error occurred while booking. Please try again.');
+                  btn.prop('disabled', false).text('Book Now');
+                }
+              });
+            }
+          },
+          error: function () {
+            // Handle AJAX error
+            alert('An error occurred while checking status. Please try again.');
+            btn.prop('disabled', false).text('Book Now');
+          }
+        });
+      });
+
+
+      $(document).on('click', '.refresh-btn-ortho-ptics', function () {
+        const patientId = $(this).data('patient_id');
+        
+        const refreshButton = $(this);
+
+        if (!patientId) {
+          alert('Patient ID is missing!');
+          return;
+        }
+
+        refreshButton.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
+
+        $.ajax({
+          url: 'ortho_ptics/update_status_opd',
+          type: 'POST',
+          data: { patient_id: patientId },
+          dataType: 'json',
+          success: function (response) {
+            if (response.status === 'success') {
+              reload_table();
+            } else {
+              alert(response.message || 'Failed to update status.');
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX Error:', error);
+            alert('An error occurred while updating the status.');
+          },
+
+        });
+      });
+
 
     </script>
     <!-- Confirmation Box -->
