@@ -495,6 +495,19 @@ class Opd_model extends CI_Model
 
 
 
+	public function patient_exists($patient_id = "")
+	{
+		$user_data = $this->session->userdata('auth_users');
+		$this->db->select('hms_opd_booking.id as opd_id*, hms_patient.id,hms_patient.patient_name');
+
+		$this->db->from('hms_opd_booking');
+		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id');
+		$this->db->where('hms_opd_booking.branch_id', $user_data['parent_id']);
+		$this->db->where('hms_opd_booking.patient_id', $patient_id);
+		$this->db->where('hms_opd_booking.is_deleted', '0');
+		$query = $this->db->get();
+		return $query->row_array();
+	}
 	public function delete_booking($id = "")
 	{
 		if (!empty($id) && $id > 0) {

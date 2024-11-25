@@ -171,11 +171,11 @@ class Add_new_prescription_model extends CI_Model
 				"left_eye_discussion" => $post['left_eye_dicussion'],
 
 				/*"patient_bp"=>$post['patient_bp'],
-							   "patient_temp"=>$post['patient_temp'],
-							   "patient_weight"=>$post['patient_weight'],
-							   "patient_height"=>$post['patient_height'],
-							   "patient_spo2"=>$post['patient_spo2'],
-							   "patient_rbs"=>$post['patient_rbs'],*/
+										   "patient_temp"=>$post['patient_temp'],
+										   "patient_weight"=>$post['patient_weight'],
+										   "patient_height"=>$post['patient_height'],
+										   "patient_spo2"=>$post['patient_spo2'],
+										   "patient_rbs"=>$post['patient_rbs'],*/
 				"prv_history" => $post['prv_history'],
 				"personal_history" => $post['personal_history'],
 				//"chief_complaints"=>$post['chief_complaints'],
@@ -210,11 +210,11 @@ class Add_new_prescription_model extends CI_Model
 				"age_m" => $post['age_m'],
 				"age_d" => $post['age_d'],
 				/*"patient_bp"=>$post['patient_bp'],
-							   "patient_temp"=>$post['patient_temp'],
-							   "patient_weight"=>$post['patient_weight'],
-							   "patient_height"=>$post['patient_height'],
-							   "patient_spo2"=>$post['patient_spo2'],
-							   "patient_rbs"=>$post['patient_rbs'],*/
+										   "patient_temp"=>$post['patient_temp'],
+										   "patient_weight"=>$post['patient_weight'],
+										   "patient_height"=>$post['patient_height'],
+										   "patient_spo2"=>$post['patient_spo2'],
+										   "patient_rbs"=>$post['patient_rbs'],*/
 				"prv_history" => $post['prv_history'],
 				"personal_history" => $post['personal_history'],
 				//"chief_complaints"=>$post['chief_complaints'],
@@ -724,9 +724,9 @@ class Add_new_prescription_model extends CI_Model
 				//'staff_refrenace_id'=>$staff_refrenace_id,
 				//'booking_date'=>date('Y-m-d',strtotime($post['next_appointment_date']))
 				/*$this->db->set('patient_id',$patient_id);
-						 $this->db->set('type',1);
-						 $this->db->set('created_by',$user_data['id']);
-						 $this->db->set('created_date',date('Y-m-d H:i:s'));*/
+									 $this->db->set('type',1);
+									 $this->db->set('created_by',$user_data['id']);
+									 $this->db->set('created_date',date('Y-m-d H:i:s'));*/
 				$this->db->insert('hms_opd_booking', $data_test);
 				$booking_id = $this->db->insert_id();
 
@@ -1649,13 +1649,13 @@ class Add_new_prescription_model extends CI_Model
 		$history_flag = 0;
 		$drawing_flag = 0;
 		$refraction_below8 = 0;
-		if($post['flag'] == 'refraction_below_8_years'){
+		if ($post['flag'] == 'refraction_below_8_years') {
 			$history_flag = 1;
 			$refraction_below8 = 1;
-		}elseif($post['flag'] == 'hess_chart'){
+		} elseif ($post['flag'] == 'hess_chart') {
 			$history_flag = 1;
 			$drawing_flag = isset($post['print_drawing_flag']) ? '1' : '0';
-		}else{
+		} else {
 
 			$history_flag = isset($post['print_history_flag']) ? '1' : '0';
 		}
@@ -1664,27 +1664,27 @@ class Add_new_prescription_model extends CI_Model
 		$glassesprescriptions_flag = isset($post['print_glassesprescriptions_flag']) ? '1' : '0';
 		$intermediate_glasses_prescriptions_flag = isset($post['print_intermediate_glasses_prescriptions_flag']) ? '1' : '0';
 		$examination_flag = isset($post['print_examination_flag']) ? '1' : '0';
-		
+
 		$diagnosis_flag = isset($post['print_diagnosis_flag']) ? '1' : '0';
 		$investigations_flag = isset($post['print_investigations_flag']) ? '1' : '0';
 		$advice_flag = isset($post['print_advice_flag']) ? '1' : '0';
 		$biometry_flag = isset($post['print_biometry_flag']) ? '1' : '0';
 		$biometry_flag = isset($post['print_biometry_flag']) ? '1' : '0';
-		
-		if($post['flag'] == 'refraction_below_8_years'){
+
+		if ($post['flag'] == 'refraction_below_8_years') {
 			$refstatus = 'Refraction below 8 years';
 			$pres_data = array('branch_id' => $post['branch_id'], 'booking_code' => $post['booking_code'], 'patient_id' => $post['patient_id'], 'booking_id' => $post['booking_id'], 'refraction_below8' => $refraction_below8, 'status' => 1, 'ip_address' => $_SERVER['REMOTE_ADDR'], 'created_by' => $post['branch_id']);
 
-		}elseif($post['flag'] == 'hess_chart'){
+		} elseif ($post['flag'] == 'hess_chart') {
 			$refstatus = 'Hess chart';
 			$pres_data = array('branch_id' => $post['branch_id'], 'booking_code' => $post['booking_code'], 'patient_id' => $post['patient_id'], 'booking_id' => $post['booking_id'], 'drawing_flag' => $drawing_flag, 'status' => 1, 'ip_address' => $_SERVER['REMOTE_ADDR'], 'created_by' => $post['branch_id']);
-		}else{
+		} else {
 
-			$pres_data = array('branch_id' => $post['branch_id'], 'booking_code' => $post['booking_code'], 'patient_id' => $post['patient_id'], 'booking_id' => $post['booking_id'], 'history_flag' => $history_flag, 'contactlens_flag' => $contactlens_flag, 'glassesprescriptions_flag' => $glassesprescriptions_flag, 'intermediate_glasses_prescriptions_flag' => $intermediate_glasses_prescriptions_flag, 'examination_flag' => $examination_flag, 'drawing_flag' => $drawing_flag, 'diagnosis_flag' => $diagnosis_flag, 'investigations_flag' => $investigations_flag, 'advice_flag' => $advice_flag, 'biometry_flag' => $biometry_flag,'refraction_below8' => $refraction_below8, 'status' => 1, 'ip_address' => $_SERVER['REMOTE_ADDR'], 'created_by' => $post['branch_id']);
+			$pres_data = array('branch_id' => $post['branch_id'], 'booking_code' => $post['booking_code'], 'patient_id' => $post['patient_id'], 'booking_id' => $post['booking_id'], 'history_flag' => $history_flag, 'contactlens_flag' => $contactlens_flag, 'glassesprescriptions_flag' => $glassesprescriptions_flag, 'intermediate_glasses_prescriptions_flag' => $intermediate_glasses_prescriptions_flag, 'examination_flag' => $examination_flag, 'drawing_flag' => $drawing_flag, 'diagnosis_flag' => $diagnosis_flag, 'investigations_flag' => $investigations_flag, 'advice_flag' => $advice_flag, 'biometry_flag' => $biometry_flag, 'refraction_below8' => $refraction_below8, 'status' => 1, 'ip_address' => $_SERVER['REMOTE_ADDR'], 'created_by' => $post['branch_id']);
 		}
-		
 
-		
+
+
 		if (!empty($post['prescrption_id']) || $post['prescrption_id'] != '') {
 			if (!empty($post['sale_id']) || $post['sale_id'] != 0) {
 				$sale_id = $post['sale_id'];
@@ -1705,21 +1705,21 @@ class Add_new_prescription_model extends CI_Model
 				$this->db->select('pat_status');
 				$this->db->where('id', $post['patient_id']);
 				$query = $this->db->get('hms_patient');
-				
-				if($refstatus != '' && !empty($refstatus)){
+
+				if ($refstatus != '' && !empty($refstatus)) {
 					if ($query->num_rows() > 0) {
-						
+
 						$current_status = $query->row()->pat_status;
 						// Concatenate the current status with the new status (e.g., 'Low vision')
 						$new_status = $current_status . ', ' . $refstatus;
-				
+
 						// Update the 'pat_status' field with the concatenated value
 						$this->db->where('id', $post['patient_id']);
 						$this->db->update('hms_patient', ['pat_status' => $new_status]);
 					}
 				}
 			}
-			
+
 		} else {
 			if (!empty($post['advs']['medication'])) {
 				$sale_no = generate_unique_id(16);
@@ -1750,9 +1750,38 @@ class Add_new_prescription_model extends CI_Model
 				$this->db->set('created_date', date('Y-m-d H:i:s'));
 				$this->db->insert('hms_std_eye_prescription', $pres_data);
 				// echo $refstatus;die;
-				
+
 				//echo $this->db->last_query(); exit;
 				$prescriptionid = $this->db->insert_id();
+
+				if ($post['flag'] == 'doct_patie_add_eye') {
+					$this->db->select('status');
+					$this->db->where('patient_id', $post['patient_id']); // Assuming 'patient_id' is the column in hms_doct_patient
+					$this->db->where('booking_id', $post['booking_id']); // Assuming 'patient_id' is the column in hms_doct_patient
+					$query = $this->db->get('hms_doct_patient');
+
+					// Check if the record exists
+					if ($query->num_rows() > 0) {
+						$current_status = $query->row()->status;
+
+						// Update the 'status' column to 1 if it is currently 0
+						if ($current_status == 0) {
+							$this->db->where('patient_id', $post['patient_id']);
+							$this->db->where('booking_id', $post['booking_id']);
+							$this->db->update('hms_doct_patient', ['status' => 1]);
+
+							if ($this->db->affected_rows() > 0) {
+								log_message('info', 'Status updated successfully for patient_id: ' . $post['patient_id']);
+							} else {
+								log_message('error', 'Failed to update status for patient_id: ' . $post['patient_id']);
+							}
+						} else {
+							log_message('info', 'Status is already 1 for patient_id: ' . $post['patient_id']);
+						}
+					} else {
+						log_message('error', 'No record found in hms_doct_patient for patient_id: ' . $post['patient_id']);
+					}
+				}
 			}
 		}
 		$medi_total_amount = 0;
@@ -2493,7 +2522,7 @@ class Add_new_prescription_model extends CI_Model
 			'refraction_col_vis_r' => $post['refraction_col_vis_r']
 		);
 
-		
+
 
 		$conta_sens = array(
 			'refraction_contra_sens_l' => $refraction_contra_sens_l,
@@ -2532,7 +2561,7 @@ class Add_new_prescription_model extends CI_Model
 			'ropgas_os' => $post['ropgas_os']
 		);
 
-		$ref_data = array('branch_id' => $post['branch_id'], 'pres_id' => $prescriptionid, 'booking_code' => $post['booking_code'], 'patient_id' => $post['patient_id'], 'booking_id' => $post['booking_id'], 'visual_acuity' => json_encode($visal_acuity), 'keratometry' => json_encode($keratometry), 'pgp' => json_encode($pgp), 'auto_refraction' => json_encode($auto_ref),'auto_refraction_dilated' => json_encode($auto_ref_plated), 'dry_refraction' => json_encode($dry_ref), 'refraction_delated' => json_encode($ref_dtd), 'retinoscopy' => json_encode($retinoscopy), 'pmt' => json_encode($pmt), 'glass_prescription' => json_encode($glass_pres), 'inter_glass_presc' => json_encode($inter_gls_pres), 'contact_lens_presc' => json_encode($cont_lens_pres), 'color_vision' => json_encode($color_vision), 'contrast_sensivity' => json_encode($conta_sens), 'intraocular_press' => json_encode($intra_press), 'orthoptics' => json_encode($orthoptics), 'status' => 1, 'ip_address' => $_SERVER['REMOTE_ADDR'], 'created_by' => $user_data['id'], 'created_date' => date('Y-m-d H:i:s'),'UnVn' => json_encode($UnVn),'PgVnq' => json_encode($PgVnq),'pupillary_reaction' => json_encode($pupillary_reaction),'ropgas' => json_encode($ropgas),'vision_with_cl' => $post['vision_with_cl'],'hirschberg_test' => $post['hirschberg_test'],'average_k1' => $post['average_k1'],'average_k2' => $post['average_k2'],'eye1' => $post['eye1'],'eye2' => $post['eye2']);
+		$ref_data = array('branch_id' => $post['branch_id'], 'pres_id' => $prescriptionid, 'booking_code' => $post['booking_code'], 'patient_id' => $post['patient_id'], 'booking_id' => $post['booking_id'], 'visual_acuity' => json_encode($visal_acuity), 'keratometry' => json_encode($keratometry), 'pgp' => json_encode($pgp), 'auto_refraction' => json_encode($auto_ref), 'auto_refraction_dilated' => json_encode($auto_ref_plated), 'dry_refraction' => json_encode($dry_ref), 'refraction_delated' => json_encode($ref_dtd), 'retinoscopy' => json_encode($retinoscopy), 'pmt' => json_encode($pmt), 'glass_prescription' => json_encode($glass_pres), 'inter_glass_presc' => json_encode($inter_gls_pres), 'contact_lens_presc' => json_encode($cont_lens_pres), 'color_vision' => json_encode($color_vision), 'contrast_sensivity' => json_encode($conta_sens), 'intraocular_press' => json_encode($intra_press), 'orthoptics' => json_encode($orthoptics), 'status' => 1, 'ip_address' => $_SERVER['REMOTE_ADDR'], 'created_by' => $user_data['id'], 'created_date' => date('Y-m-d H:i:s'), 'UnVn' => json_encode($UnVn), 'PgVnq' => json_encode($PgVnq), 'pupillary_reaction' => json_encode($pupillary_reaction), 'ropgas' => json_encode($ropgas), 'vision_with_cl' => $post['vision_with_cl'], 'hirschberg_test' => $post['hirschberg_test'], 'average_k1' => $post['average_k1'], 'average_k2' => $post['average_k2'], 'eye1' => $post['eye1'], 'eye2' => $post['eye2']);
 
 		// history tabs
 		$visit_comm = $post['visit_comm'];
@@ -4040,7 +4069,7 @@ class Add_new_prescription_model extends CI_Model
 	{
 		$this->db->select('hms_std_eye_prescription.*, hms_opd_booking.id AS opd_id, hms_opd_booking.token_no');
 		$this->db->from('hms_std_eye_prescription');
-		$this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_std_eye_prescription.booking_id','left');
+		$this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_std_eye_prescription.booking_id', 'left');
 		$this->db->where('hms_std_eye_prescription.id', $presc_id);
 		$this->db->where('hms_std_eye_prescription.booking_id', $booking_id);
 		// echo $this->db->get_compiled_select(); 
