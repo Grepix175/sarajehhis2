@@ -517,7 +517,7 @@ class Doctore_patient extends CI_Controller
                     $gender[$doctore_patient->gender],
                     $doctore_patient->mobile_no, // Make sure this is retrieved correctly
                     $age,
-                    $doctore_patient->status == 0 ? '<font color="green">Pending</font>' : '<font color="red">Completed</font>',
+                    $doctore_patient->status == 0 ? 'Pending' : 'Completed',
                     $last_status,
                     $doctore_patient->doctor_name,
                     $doctore_patient->room_no,
