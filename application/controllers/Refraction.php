@@ -24,8 +24,8 @@ class Refraction extends CI_Controller
             $start_date = date('d-m-Y');
             $end_date = date('d-m-Y');
         }
-        $data['form_data'] = array('patient_name' => '', 'patient_code' => '','mobile_no' => '', 'start_date' => $start_date, 'end_date' => $end_date);
-        
+        $data['form_data'] = array('patient_name' => '', 'patient_code' => '', 'mobile_no' => '', 'start_date' => $start_date, 'end_date' => $end_date);
+
         $this->load->view('refraction/list', $data);
     }
 
@@ -46,28 +46,28 @@ class Refraction extends CI_Controller
             $age_y = $refraction->age_y;
             $age_m = $refraction->age_m;
             $age_d = $refraction->age_d;
-      
+
             $age = "";
             if ($age_y > 0) {
-              $year = 'Years';
-              if ($age_y == 1) {
-                $year = 'Year';
-              }
-              $age .= $age_y . " " . $year;
+                $year = 'Years';
+                if ($age_y == 1) {
+                    $year = 'Year';
+                }
+                $age .= $age_y . " " . $year;
             }
             if ($age_m > 0) {
-              $month = 'Months';
-              if ($age_m == 1) {
-                $month = 'Month';
-              }
-              $age .= ", " . $age_m . " " . $month;
+                $month = 'Months';
+                if ($age_m == 1) {
+                    $month = 'Month';
+                }
+                $age .= ", " . $age_m . " " . $month;
             }
             if ($age_d > 0) {
-              $day = 'Days';
-              if ($age_d == 1) {
-                $day = 'Day';
-              }
-              $age .= ", " . $age_d . " " . $day;
+                $day = 'Days';
+                if ($age_d == 1) {
+                    $day = 'Day';
+                }
+                $age .= ", " . $age_d . " " . $day;
             }
             $gender = array('0' => 'Female', '1' => 'Male', '2' => 'Others');
             // Add a checkbox for selecting the record
@@ -93,7 +93,7 @@ class Refraction extends CI_Controller
             $last_status = trim(end($statuses));
 
             // Display the last status with the desired styling
-            $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';
+            $row[] = '<font style="background-color: #228B30;color:white">' . $last_status . '</font>';
             // Trim any whitespace from the statuses and get the last one
             $last_status = trim(end($statuses));
 
@@ -103,7 +103,7 @@ class Refraction extends CI_Controller
 
             // Add action buttons
             $row[] = '<a onClick="return edit_refraction(' . $refraction->refraction_id . ');" class="btn-custom" href="javascript:void(0)" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
-                    <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("refraction/print_refraction/" . $refraction->booking_id."/".$refraction->refraction_id) . '\');">
+                    <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("refraction/print_refraction/" . $refraction->booking_id . "/" . $refraction->refraction_id) . '\');">
                         <i class="fa fa-print"></i> Print
                     </a>';
             $row[] = $refraction->emergency_status; // Add emergency_status to the row
@@ -131,7 +131,7 @@ class Refraction extends CI_Controller
         // $data['side_effects'] = $this->refraction->get_all_side_effects(); // Fetch side effects
         $data['page_title'] = 'Add refraction Record';
         // $pres_id = 28;
-        
+
         $plist = $this->refraction->get_patient_name_by_booking_id($booking_id);
         // echo "<pre>";print_r($plist);die('ok');
         $data['booking_id'] = isset($booking_id) ? $booking_id : '';
@@ -139,7 +139,7 @@ class Refraction extends CI_Controller
         $result_refraction = $this->refraction->get_prescription_refraction_new_by_id($booking_id, $id);
         // echo "<pre>";print_r($result_refraction);die;
 
-        $refraction_auto_refraction = isset($result_refraction['auto_refraction'])?json_decode($result_refraction['auto_refraction']):'';
+        $refraction_auto_refraction = isset($result_refraction['auto_refraction']) ? json_decode($result_refraction['auto_refraction']) : '';
         $data['refrtsn_auto_ref'] = (array) $refraction_auto_refraction;
 
         $data['doctor'] = $this->doctor->doctors_list();
@@ -147,7 +147,7 @@ class Refraction extends CI_Controller
         // $patient_details = $this->refraction->get_patient_name_by_booking_id($booking_id);
         // echo "<pre>";
         // print_r($plist);
-        
+
         // if ($booking_id && $patient_details) {
         //     $data['patient_name'] = $patient_details['patient_name'];
         // } else {
@@ -156,7 +156,7 @@ class Refraction extends CI_Controller
 
         // // Initialize form data
         $data['form_data'] = array(
-            'booking_id' => isset($plist['booking_id'])?$plist['booking_id']:'', // Booking ID
+            'booking_id' => isset($plist['booking_id']) ? $plist['booking_id'] : '', // Booking ID
             'refraction_ar_l_dv_sph' => '', // Left eye dry sph
             'refraction_ar_l_dv_cyl' => '', // Left eye dry cyl
             'refraction_ar_l_dv_axis' => '', // Left eye dry axis
@@ -181,10 +181,10 @@ class Refraction extends CI_Controller
             'refraction_ar_r_b2_sph' => '', // Right eye B2 sph
             'refraction_ar_r_b2_cyl' => '', // Right eye B2 cyl
             'refraction_ar_r_b2_axis' => '', // Right eye B2 axis
-            'branch_id' => isset($plist['branch_id'])?$plist['branch_id']:'', // To be filled from form
-            'booking_code' => isset($plist['booking_code'])?$plist['booking_code']:'', // To be filled from form
-            'pres_id' => isset($id)?$id:'', // To be filled from form
-            'patient_id' => isset($plist['patient_id'])?$plist['patient_id']:'', // To be filled from form
+            'branch_id' => isset($plist['branch_id']) ? $plist['branch_id'] : '', // To be filled from form
+            'booking_code' => isset($plist['booking_code']) ? $plist['booking_code'] : '', // To be filled from form
+            'pres_id' => isset($id) ? $id : '', // To be filled from form
+            'patient_id' => isset($plist['patient_id']) ? $plist['patient_id'] : '', // To be filled from form
             'lens' => '', // To be filled from form
             'comment' => '', // To be filled from form
             'optometrist_signature' => '', // To be filled from form
@@ -198,10 +198,21 @@ class Refraction extends CI_Controller
         // echo "<pre>";print_r($data);die;
 
         $post = $this->input->post();
-        
+
         // // Check if the form is submitted
-        // echo "<pre>";print_r($plist);die('ss');
+        // echo "<pre>";print_r($post);die('ss');
         if (isset($post) && !empty($post)) {
+            $patient_exists = $this->refraction->patient_exists($post['patient_id']);
+            //   echo "<pre>";
+            // print_r( $patient_exists);
+            // die;
+            if ($patient_exists) {
+                // Redirect to OPD list page with a warning message
+                $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in Refraction above 8 years.');
+                echo json_encode(['faield' => true, 'message' => 'Patient ' . $patient_exists['patient_name'] . ' is already in Refraction above 8 years.']);
+                // redirect('help_desk'); // Change 'opd_list' to your OPD list page route
+                return;
+            }
             // echo "<pre>";
             // // print_r('abhay');
             // print_r($post);
@@ -235,13 +246,13 @@ class Refraction extends CI_Controller
             ];
 
 
-        
+
             // Convert the refraction data to JSON
             $auto_refraction_json = json_encode($refraction_data);
-        
+            $user_data = $this->session->userdata('auth_users');
             // Prepare the data for saving
             $id = $this->input->post('id');
-            $branch_id = $this->input->post('booking_id');
+            $branch_id = $user_data['parent_id'];
             $booking_code = $this->input->post('booking_code');
             $pres_id = $this->input->post('pres_id');
             $patient_id = $this->input->post('patient_id');
@@ -253,8 +264,8 @@ class Refraction extends CI_Controller
             $created_by = $this->session->userdata('user_id');
 
             $data_to_save = [
-                'id' => isset($id)?$id:'',
-                'branch_id' => isset($branch_id)?$branch_id:'',
+                'id' => isset($id) ? $id : '',
+                'branch_id' => isset($branch_id) ? $branch_id : '',
                 'booking_code' => isset($booking_code) ? $booking_code : '',
                 'pres_id' => isset($pres_id) ? $pres_id : '',
                 'patient_id' => isset($patient_id) ? $patient_id : '',
@@ -272,20 +283,73 @@ class Refraction extends CI_Controller
             ];
             // echo "<pre>";print_r($data_to_save);die; 
 
-        
+
             // Save the data
             $this->refraction->save($data_to_save);
             $this->session->set_flashdata('success', 'Refraction store successfully.');
             echo json_encode(['success' => true, 'message' => 'Refraction store successfully.']);
             return; // Exit to prevent further output
         }
-        
+
 
         // If the form is not submitted or validation fails, load the view with the existing data
 
 
         // Load the view with the data
         $this->load->view('refraction/add', $data);
+    }
+
+    public function book_patient()
+    {
+        // public function book_patient() {
+        $patient_id = $this->input->post('patient_id');
+        // $this->load->model('token_no');
+
+        // Perform booking logic
+        $booking_result = $this->refraction->book_patient($patient_id);
+
+        if ($booking_result) {
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Booking failed.']);
+        }
+        // }
+    }
+
+    public function check_booking_status()
+    {
+        $patient_id = $this->input->post('patient_id');
+        // $this->load->model('Booking_model');
+
+        // Check status in the database
+        $status = $this->refraction->get_booking_status($patient_id);
+        // echo "<pre>";
+        // print_r($status);
+        // die('sagar');
+        if ($status == 1) {
+            echo json_encode(['status' => '1']); // Already in progress
+        } else {
+            echo json_encode(['status' => '0']); // Not booked yet
+        }
+    }
+
+    public function update_status_opd()
+    {
+        $patientId = $this->input->post('patient_id');
+
+        if (!$patientId) {
+            echo json_encode(['status' => 'error', 'message' => 'Patient ID is required.']);
+            return;
+        }
+
+        // Update status logic
+        $updated = $this->refraction->update_patient_list_opd_status($patientId, 'new_status'); // Adjust as needed
+
+        if ($updated) {
+            echo json_encode(['status' => 'success', 'message' => 'Status updated successfully.']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to update status.']);
+        }
     }
 
     public function fill_eye_data_auto_refraction($modal)
@@ -318,8 +382,8 @@ class Refraction extends CI_Controller
             $data['doctor'] = $this->doctor->doctors_list();
 
             // Prepare data for the view
-           // Assuming $result['auto_refraction'] could be a JSON string
-           $auto_refraction_data = json_decode($result['auto_refraction'], true); // Decode into an associative array
+            // Assuming $result['auto_refraction'] could be a JSON string
+            $auto_refraction_data = json_decode($result['auto_refraction'], true); // Decode into an associative array
 
             // Check if decoding was successful
             if (json_last_error() !== JSON_ERROR_NONE) {
@@ -368,10 +432,10 @@ class Refraction extends CI_Controller
                 'refraction_ar_r_b2_cyl' => $auto_refraction_data['refraction_ar_r_b2_cyl'] ?? '',
                 'refraction_ar_r_b2_axis' => $auto_refraction_data['refraction_ar_r_b2_axis'] ?? '',
             );
-            
+
             // Check if there is form submission
             if ($this->input->post()) {
-                
+
                 // Validate the form
                 $data['form_data'] = $this->_validate(); // Adjust validation method as needed
                 if ($this->form_validation->run() == TRUE) {
@@ -444,7 +508,7 @@ class Refraction extends CI_Controller
         }
     }
 
-    public function print_refraction($booking_id = NULL ,$id = NULL)
+    public function print_refraction($booking_id = NULL, $id = NULL)
     {
         // echo "ppk";die;
         $data['print_status'] = "1";
@@ -457,23 +521,23 @@ class Refraction extends CI_Controller
         $result_refraction = $this->refraction->get_prescription_refraction_new_by_id($booking_id, $id);
         // echo "<pre>";print_r($result_refraction);die;
 
-        $refraction_auto_refraction = isset($result_refraction['auto_refraction'])?json_decode($result_refraction['auto_refraction']):'';
+        $refraction_auto_refraction = isset($result_refraction['auto_refraction']) ? json_decode($result_refraction['auto_refraction']) : '';
         $data['refrtsn_auto_ref'] = (array) $refraction_auto_refraction;
 
         $auto_refraction_data = json_decode($result['auto_refraction'], true); // Decode into an associative array
 
-            // Check if decoding was successful
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                // Handle JSON decode error (for example, log it and set $auto_refraction_data to an empty array)
-                log_message('error', 'JSON decode error: ' . json_last_error_msg());
-                $auto_refraction_data = []; // Default to an empty array if there's an error
-            }
+        // Check if decoding was successful
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            // Handle JSON decode error (for example, log it and set $auto_refraction_data to an empty array)
+            log_message('error', 'JSON decode error: ' . json_last_error_msg());
+            $auto_refraction_data = []; // Default to an empty array if there's an error
+        }
         ///////////// Age calculation //////////
         $age_y = $result['age_y'];
         $age_m = $result['age_m'];
         $age_d = $result['age_d'];
         $age_h = $result['age_h'];
-        
+
         $age = "";
         if ($age_y > 0) {
             $year = 'Years';
@@ -562,7 +626,7 @@ class Refraction extends CI_Controller
         // }
 
         // Fetch the OPD billing details based on the ID
-        $booking_id = isset($data['form_data']['booking_id'])?$data['form_data']['booking_id']:'';
+        $booking_id = isset($data['form_data']['booking_id']) ? $data['form_data']['booking_id'] : '';
         // $data['billing_data'] = $this->vision_model->get_patient_name_by_booking_id($booking_id);
         // echo "<pre>";print_r($data);die;
 
@@ -584,7 +648,7 @@ class Refraction extends CI_Controller
         redirect('Refraction');
     }
 
-    
+
     public function refraction_excel()
     {
         // Starting the PHPExcel library
@@ -614,7 +678,7 @@ class Refraction extends CI_Controller
         $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
 
         // Field names (header row) should start in row 3
-        $fields = array('Token No','OPD No','Patient Reg No.','Patient Name','Patient Category', 'Mobile No', 'Consultant', 'Lens', 'Comment','Status');
+        $fields = array('Token No', 'OPD No', 'Patient Reg No.', 'Patient Name', 'Patient Category', 'Mobile No', 'Consultant', 'Lens', 'Comment', 'Status');
 
         $col = 0; // Initialize the column index
         foreach ($fields as $field) {
@@ -706,7 +770,7 @@ class Refraction extends CI_Controller
 
         // Stream the generated PDF to the browser
         $this->pdf->stream("refraction_list_" . time() . ".pdf", array("Attachment" => 1));
-    }    
+    }
     public function reset_search()
     {
         $this->session->unset_userdata('prescription_search');

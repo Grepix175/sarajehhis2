@@ -18,7 +18,7 @@ class Help_desk_model extends CI_Model
 		$search = $this->session->userdata('prescription_search');
 
 		// Select fields with proper aliasing if needed
-		$this->db->select("hms_std_eye_prescription.*, hms_patient.simulation_id, hms_patient.patient_name, hms_patient.patient_code, hms_patient.pat_status, hms_patient.mobile_no,hms_patient.gender, hms_patient.age_y, hms_patient.age_m, hms_patient.age_d, hms_opd_booking.dilate_status, hms_opd_booking.app_type, hms_opd_booking.token_no, hms_patient.emergency_status,hms_opd_booking.attended_doctor");
+		$this->db->select("hms_std_eye_prescription.*, hms_patient.simulation_id, hms_patient.patient_name, hms_patient.patient_code, hms_patient.pat_status, hms_patient.mobile_no,hms_patient.gender, hms_patient.age_y, hms_patient.age_m, hms_patient.age_d, hms_patient.ref_abouve_status,hms_patient.vision_status,hms_patient.cont_lens_status,hms_patient.hess_chart_status,hms_patient.ref_below_status,hms_patient.dilate_status,hms_patient.prosthetic_status,hms_patient.octhfa_status,hms_patient.ortho_ptics_status,hms_patient.doctor_status, hms_opd_booking.dilate_status, hms_opd_booking.app_type, hms_opd_booking.token_no, hms_patient.emergency_status,hms_opd_booking.attended_doctor");
 		$this->db->from('hms_std_eye_prescription');
 		$this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_std_eye_prescription.booking_id','left');
 		$this->db->join('hms_patient', 'hms_patient.id = hms_std_eye_prescription.patient_id', 'left');

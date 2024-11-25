@@ -15,7 +15,7 @@ class Help_desk extends CI_Controller
     $this->load->model('prosthetic/Prosthetic_model', 'prosthetic');
     $this->load->model('oct_hfa/Oct_hfa_model', 'oct_hfa');
     $this->load->model('ortho_ptics/Ortho_ptics_model', 'ortho_ptics');
-    $this->load->model('doctore_patient/Doctore_patient_model','doctore_patient');
+    $this->load->model('doctore_patient/Doctore_patient_model', 'doctore_patient');
     error_reporting(0);
   }
 
@@ -101,10 +101,10 @@ class Help_desk extends CI_Controller
       $ortho_ptics_status = $this->ortho_ptics->get_ortho_by_booking_id($prescription->booking_id, $prescription->patient_id);
       $doct_patient_status = $this->doctore_patient->get_doct_patient_booking_id($prescription->booking_id, $prescription->patient_id);
       // echo $oct_hfa_status;die;
-    //   echo "<pre>";
-    // print_r($doct_patient_status);
-    // die;
-     
+      //   echo "<pre>";
+      // print_r($doct_patient_status);
+      // die;
+
       $refraction_exists = $this->opd->get_by_id_refraction($prescription->booking_id);
       $dilate_exists = $this->opd->get_by_id_dilate($prescription->patient_id);
       $pat_status = ($patient_status == 1)
@@ -188,17 +188,17 @@ class Help_desk extends CI_Controller
 
       // Check if there are any valid statuses
       if (!empty($statuses)) {
-          // Loop through each status and format it with your desired style
-          foreach ($statuses as $status) {
-              // Apply the style to each non-empty status
-              $formatted_statuses[] = '<font style="background-color: #228B30;color:white;">' . $status . '</font>';
-          }
+        // Loop through each status and format it with your desired style
+        foreach ($statuses as $status) {
+          // Apply the style to each non-empty status
+          $formatted_statuses[] = '<font style="background-color: #228B30;color:white;">' . $status . '</font>';
+        }
 
-          // Join the formatted statuses with ' / ' as the separator
-          $row[] = implode(' / ', $formatted_statuses);
+        // Join the formatted statuses with ' / ' as the separator
+        $row[] = implode(' / ', $formatted_statuses);
       } else {
-          // If no valid statuses are found, display a default message (history)
-          $row[] = '<font style="background-color: #228B30;color:white;">History</font>';
+        // If no valid statuses are found, display a default message (history)
+        $row[] = '<font style="background-color: #228B30;color:white;">History</font>';
       }
 
 
@@ -257,19 +257,20 @@ class Help_desk extends CI_Controller
         $btn_hess_chart = '<a class="btn-custom disabled" href="javascript:void(0);" title="Hess Chart" style="pointer-events: none; opacity: 0.6;" data-url="512">  Hess Chart</a>';
       }
 
-      if ($prescription->refraction_below8 == 0) {
-        
+      // if ($prescription->refraction_below8 == 0) {
+      if ($prescription->ref_below_status == 0) {
+
 
         $flag = 'refraction_below_8_years';
         $type = 'help_desk';
         $btn_refraction_below8 = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . "&type=" . $type . '" title="Refraction below 8 Years">Refraction Below 8 Years</a>';
-        
+
       } else {
 
         $btn_refraction_below8 = '<a class="btn-custom disabled" href="javascript:void(0);" title="Refraction below 8 Years" style="pointer-events: none; opacity: 0.6;" data-url="512">Refraction Below 8 Years</a>';
       }
 
-      
+
 
 
       /* if(in_array('2413',$users_data['permission']['action'])) 
@@ -282,10 +283,28 @@ class Help_desk extends CI_Controller
       }
       if (in_array('2413', $users_data['permission']['action'])) {
         if ($refraction_exists == 1) {
+          // if ($prescription->ref_abouve_status == 1) {
 
           $refraction = '<a class="btn-custom disabled " style="pointer-events: none; opacity: 0.6;" href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction above 8 years</a>';
         } else {
-          $refraction = '<a class="btn-custom" href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction above 8 years</a>';
+          // $refraction = '<a class="btn-custom" href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction above 8 years</a>';
+          if ($prescription->ref_abouve_status == 1) {
+            // Render disabled button for already booked patients
+            $refraction = '<div class="action-buttons">
+                    <button class="btn-custom book-now-btn book-now-btn" disabled>
+                        <i class="fa fa-spinner fa-spin"></i> In Progress
+                    </button>
+                    <a href="javascript:void(0);" title="Refresh" class="btn btn-secondary refresh-btn" data-patient_id="' . $prescription->patient_id . '" >
+                        <i class="fa fa-refresh"></i>
+                    </a>
+                    </div>';
+            // $row[] = '<a title="Print"><i class="fa fa-refresh"></i></a>';
+          } else {
+            // Render active button for patients not yet booked
+            $refraction = '<button class="btn-custom book-now-btn-url" title="Book Now" 
+                    data-id="' . $prescription->patient_id . '" 
+                    data-url="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '">Refraction above 8 years</button>';
+          }
 
         }
       }
@@ -294,13 +313,13 @@ class Help_desk extends CI_Controller
       // die;
       if (in_array('2413', $users_data['permission']['action'])) {
         if ($dilate_exists == 1) {
-            // Enable the "Dilate" button if dilate exists
-            $dilate = '<a class="btn-custom " disabled href="javascript:void(0)" title="Dilate" style="pointer-events: none; opacity: 0.6;">Dilate</a>';
-          } else {
-            // Disable the "Dilate" button and change its style to look inactive
-            $dilate = '<a class="btn-custom" href="' . base_url("dilate/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Dilate" data-url="512">Dilate</a>';
+          // Enable the "Dilate" button if dilate exists
+          $dilate = '<a class="btn-custom " disabled href="javascript:void(0)" title="Dilate" style="pointer-events: none; opacity: 0.6;">Dilate</a>';
+        } else {
+          // Disable the "Dilate" button and change its style to look inactive
+          $dilate = '<a class="btn-custom" href="' . base_url("dilate/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Dilate" data-url="512">Dilate</a>';
         }
-      
+
       }
       if ($prosthetic_status == '1') {
         $btn_prosthetic = '<a class="btn-custom disabled" href="javascript:void(0);" title="Contact Lens" style="pointer-events: none; opacity: 0.6;" data-url="512"> Prosthetic</a>';
@@ -333,13 +352,30 @@ class Help_desk extends CI_Controller
                   title="Doctore">Doctore</button>';
       }
       // $btn_doctor = 
-      
+
       if (in_array('2413', $users_data['permission']['action'])) {
         $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . "'";
         if ($patient_status == 1) {
           $send_to_vission = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Vision</a>';
         } else {
-          $send_to_vission = '<a class="btn-custom" href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Vision" data-url="512">Vision</a>';
+          // $send_to_vission = '<a class="btn-custom" href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Vision" data-url="512">Vision</a>';
+          if ($prescription->vision_status == 1) {
+            // Render disabled button for already booked patients
+            $send_to_vission = '<div class="action-buttons">
+                    <button class="btn-custom book-now-btn book-now-btn" disabled>
+                        <i class="fa fa-spinner fa-spin"></i> In Progress
+                    </button>
+                    <a href="javascript:void(0);" title="Refresh" class="btn btn-secondary refresh-btn-vision" data-patient_id="' . $prescription->patient_code . '" >
+                        <i class="fa fa-refresh"></i>
+                    </a>
+                    </div>';
+            // $row[] = '<a title="Print"><i class="fa fa-refresh"></i></a>';
+          } else {
+            // Render active button for patients not yet booked
+            $send_to_vission = '<button class="btn-custom book-now-btn-url-vision" title="Book Now" 
+                    data-id="' . $prescription->patient_code . '" 
+                    data-url="' .base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '">Vision</button>';
+          }
         }
       }
 
@@ -347,9 +383,9 @@ class Help_desk extends CI_Controller
       // $btn_print_chasma_pre = ' <a class="btn-custom" onClick="return print_window_page(' . $print_chasma_url . ')" href="javascript:void(0)" title="Print Chasma Detail"  data-url="512"><i class="fa fa-print"></i> Print Chasma Detail</a>';
 
       // . $btn_print_chasma_pre
-      $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission . $btn_contact_lens . $btn_low_vision.
-        $btn_hess_chart.$btn_refraction_below8.$dilate.$btn_prosthetic.$btn_oct_hfa.$btn_ortho_ptics.$btn_doctor;
-        $row[] = $prescription->emergency_status; // Add emergency_status to the row
+      $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission . $btn_contact_lens . $btn_low_vision .
+        $btn_hess_chart . $btn_refraction_below8 . $dilate . $btn_prosthetic . $btn_oct_hfa . $btn_ortho_ptics . $btn_doctor;
+      $row[] = $prescription->emergency_status; // Add emergency_status to the row
       // echo "<pre>";print_r($row);die;
       $data[] = $row;
       $i++;
