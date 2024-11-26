@@ -215,7 +215,7 @@ class Vision extends CI_Controller
         $post = $this->input->post();
         // echo "<pre>";
         // print_r('abhay');
-        // print_r($post['patient_code']);
+        // print_r($post);
         // die;
         // Check if the form is submitted
         if (isset($post) && !empty($post)) {
@@ -223,12 +223,15 @@ class Vision extends CI_Controller
             //   echo "<pre>";
             // print_r( $patient_exists);
             // die;
-            if ($patient_exists) {
-                // Redirect to OPD list page with a warning message
-                $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in Vision.');
-                echo json_encode(['faield' => true, 'message' => 'Patient ' . $patient_exists['patient_name'] . ' is already in Vision.']);
-                // redirect('help_desk'); // Change 'opd_list' to your OPD list page route
-                return;
+            if (empty($post['data_id'])) {
+
+                if ($patient_exists) {
+                    // Redirect to OPD list page with a warning message
+                    $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in Vision.');
+                    echo json_encode(['faield' => true, 'message' => 'Patient ' . $patient_exists['patient_name'] . ' is already in Vision.']);
+                    // redirect('help_desk'); // Change 'opd_list' to your OPD list page route
+                    return;
+                }
             }
             // Validate the form
             $valid_response = $this->_validate();
