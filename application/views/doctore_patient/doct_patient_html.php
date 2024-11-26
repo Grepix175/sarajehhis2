@@ -62,6 +62,9 @@
         <?php
         if (!empty($data_list)) {
             foreach ($data_list as $ortho_paedic) {
+        //         echo "<pre>";
+        // print_r($ortho_paedic);
+        // die;
                 $age_y = $ortho_paedic->age_y;
                 $age_m = $ortho_paedic->age_m;
                 $age_d = $ortho_paedic->age_d;

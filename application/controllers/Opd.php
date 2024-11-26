@@ -220,11 +220,31 @@ class Opd extends CI_Controller
             $btn_confirm = ' <a class="btn-custom" onclick="return confirm_booking(' . $test->id . ');" title="Confirm Booking"><i class="fa fa-pencil"></i> Confirm </a>';
           }
         }
-        // if ($test->status == 0) {
-        if ($test->history_status == 0) {
+        if ($test->status == 0) {
           $flag = 'eye_history';
           $type = 'opd_booking';
-          $btn_history .= '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $test->id . "?flag=" . $flag . "&type=" . $type) . '" title="Add Prescription"><i class="fa fa-history"></i> History</a>';
+          // if ($test->history_status == 0) {
+          //   $btn_history .= '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $test->id . "?flag=" . $flag . "&type=" . $type) . '" title="History"><i class="fa fa-history"></i> History</a>';
+          // }
+          if ($test->history_status == 1) {
+            // Render disabled button for already booked patients
+            $btn_history = '<div class="action-buttons">
+                              <button class="btn-custom book-now-btn book-now-btn-ortho-ptics" disabled>
+                                  <i class="fa fa-spinner fa-spin"></i> In Progress
+                              </button>
+                              <a href="javascript:void(0);" title="Refresh" class="btn btn-secondary refresh-btn-history" data-patient_id="' . $test->patient_id . '" >
+                                  <i class="fa fa-refresh"></i>
+                              </a>
+                              </div>';
+          } else {
+            // Render active button for patients not yet booked
+            // $btn_doctor = '<button class="btn-custom book-now-btn-url-ortho-ptics" title="octhfa" 
+            //                   data-id="' . $prescription->patient_id . '" 
+            //                   data-url="' . base_url("ortho_ptics/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '">Doctore</button>';
+            $btn_history = '<button class="btn-custom book-now-btn-url-history" title="Hess Chart" 
+                  data-id="' . $test->patient_id . '" 
+                  data-url="' . base_url("eye/add_eye_prescription/test/" . $test->id ) . '?flag=' . $flag . "&type=" . $type . '">History</button>';
+          }
         }
 
       }
@@ -248,7 +268,7 @@ class Opd extends CI_Controller
         if (in_array('2413', $users_data['permission']['action'])) {
           if (in_array('524', $users_data['permission']['action'])) {
             $btn_edit = ' <a class="" href="' . base_url("opd/edit_booking/" . $test->id) . '" title="Edit Booking"><i class="fa fa-pencil"></i> Edit</a>';
-            $btn_edit = ' <a class="" href="' . base_url("opd/edit_booking/" . $test->id) . '" title="Edit Booking"><i class="fa fa-pencil"></i> Edit</a>';
+            // $btn_edit = ' <a class="" href="' . base_url("opd/edit_booking/" . $test->id) . '" title="Edit Booking"><i class="fa fa-pencil"></i> Edit</a>';
           }
 
 
@@ -479,7 +499,7 @@ class Opd extends CI_Controller
       $btn_a = '<div class="slidedown">
         <button disabled class="btn-custom">More <span class="caret"></span></button>
         <ul class="slidedown-content">
-          ' . $btn_barcode . $opd_consolidated_bill . $btn_edit . $btn_delete . $btn_prescription . $btn_download_prescription . $checking_status . $btn_download_image  . '
+          ' . $btn_barcode . $opd_consolidated_bill . $btn_edit . $btn_delete . $btn_prescription . $btn_download_prescription . $checking_status . $btn_download_image . '
         </ul>
       </div> ';
       // Added By Nitin Sharma Ipd Booking Button  06/02/2024
@@ -503,7 +523,58 @@ class Opd extends CI_Controller
     echo json_encode($output);
   }
 
+  public function book_patient()
+  {
+      // public function book_patient() {
+      $patient_id = $this->input->post('patient_id');
+      // $this->load->model('token_no');
 
+      // Perform booking logic
+      $booking_result = $this->opd->book_patient($patient_id);
+
+      if ($booking_result) {
+          echo json_encode(['status' => 'success']);
+      } else {
+          echo json_encode(['status' => 'error', 'message' => 'Booking failed.']);
+      }
+      // }
+  }
+
+  public function check_booking_status()
+  {
+      $patient_id = $this->input->post('patient_id');
+      // $this->load->model('Booking_model');
+
+      // Check status in the database
+      $status = $this->opd->get_booking_status($patient_id);
+      // echo "<pre>";
+      // print_r($status);
+      // die('sagar');
+      if ($status == 1) {
+          echo json_encode(['status' => '1']); // Already in progress
+      } else {
+          echo json_encode(['status' => '0']); // Not booked yet
+      }
+  }
+
+  public function update_status_opd()
+  {
+      $patientId = $this->input->post('patient_id');
+
+      if (!$patientId) {
+          echo json_encode(['status' => 'error', 'message' => 'Patient ID is required.']);
+          return;
+      }
+
+      // Update status logic
+      $updated = $this->opd->update_patient_list_opd_status($patientId, 'new_status'); // Adjust as needed
+
+      if ($updated) {
+          echo json_encode(['status' => 'success', 'message' => 'Status updated successfully.']);
+      } else {
+          echo json_encode(['status' => 'error', 'message' => 'Failed to update status.']);
+      }
+  }
   public function download_image($id = "", $branch_id = '')
   {
     $data['type'] = 2;
@@ -1263,11 +1334,11 @@ class Opd extends CI_Controller
       // die;
       if ($patient_exists) {
         // Redirect to OPD list page with a warning message
-        $this->session->set_flashdata('warning','Patient ' . $patient_exists['patient_name'] . ' is already in OPD.');
+        $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in OPD.');
         redirect('opd'); // Change 'opd_list' to your OPD list page route
         return;
       }
-    
+
       $data['form_data'] = $this->_validateform();
       if ($this->form_validation->run() == TRUE) {
         $booking_id = $this->opd->save_booking();

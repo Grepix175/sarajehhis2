@@ -197,12 +197,13 @@ class Doctore_patient_model extends CI_Model
         // print_r($post);
         // die('sagar');
         $data = array(
+            'branch_id' => $user_data['parent_id'],
             'patient_id' => isset($post['patient_id']) ? $post['patient_id'] : '',
             'booking_id' => isset($post['booking_id']) ? $post['booking_id'] : '',
             'referred_by' => isset($post['referred_by']) ? $post['referred_by'] : '',
             'room_id' => isset($post['room_no']) ? $post['room_no'] : '',
             'status' => 0,
-            'created_by' => $user_data['parent_id'],
+            'created_by' => $user_data['id'],
             'ip_address' => $_SERVER['REMOTE_ADDR'],
         );
     
@@ -376,4 +377,81 @@ class Doctore_patient_model extends CI_Model
         $query = $this->db->get();
         return $query->result();
     }
+
+    public function get_booking_status($patient_id) {
+        $this->db->select('doctor_status');
+        $this->db->from('hms_patient'); // Replace 'bookings' with your table name
+        $this->db->where('id', $patient_id);
+        $query = $this->db->get();
+        $result = $query->row();
+
+        if ($result) {
+            // echo "<pre>";
+            // print_r($result->opd_status);
+            // die('status');
+            return $result->opd_status; // Return status (1 or 0)
+        }
+        return 0; // Default to not booked
+    }
+
+    public function book_patient($patient_id) {
+        // Update database to mark patient as booked
+        $data = ['doctor_status' => 1]; // Assuming 1 means booked
+        $this->db->where('id', $patient_id);
+        return $this->db->update('hms_patient', $data);
+    }
+
+    public function update_patient_list_opd_status($patient_id = '')
+	{
+		$this->db->set('hms_patient.doctor_status', 0);
+		$this->db->where('hms_patient.id', $patient_id);
+		$query = $this->db->update('hms_patient');		
+		return $query;
+	}
+
+    public function patient_exists($patient_id = "")
+	{
+        
+		$user_data = $this->session->userdata('auth_users');
+		$this->db->select('hms_doct_patient.id as doc_pat_id*, hms_patient.id,hms_patient.patient_name');
+
+		$this->db->from('hms_doct_patient');
+		$this->db->join('hms_patient', 'hms_patient.id = hms_doct_patient.patient_id');
+		// $this->db->where('hms_doct_patient.branch_id', $user_data['parent_id']);
+		$this->db->where('hms_doct_patient.patient_id', $patient_id);
+		$this->db->where('hms_doct_patient.is_deleted', '0');
+		$query = $this->db->get();
+		return $query->row_array();
+	}
+
+    public function get_booking_doc_status($patient_id) {
+        $this->db->select('patient_history_status');
+        $this->db->from('hms_doct_patient'); // Replace 'bookings' with your table name
+        $this->db->where('patient_id', $patient_id);
+        $query = $this->db->get();
+        $result = $query->row();
+
+        if ($result) {
+            // echo "<pre>";
+            // print_r($result->opd_status);
+            // die('status');
+            return $result->opd_status; // Return status (1 or 0)
+        }
+        return 0; // Default to not booked
+    }
+
+    public function book_doc_patient($patient_id) {
+        // Update database to mark patient as booked
+        $data = ['patient_history_status' => 1]; // Assuming 1 means booked
+        $this->db->where('patient_id', $patient_id);
+        return $this->db->update('hms_doct_patient', $data);
+    }
+
+    public function update_patient_list_doc_status($patient_id = '')
+	{
+		$this->db->set('hms_doct_patient.patient_history_status', 0);
+		$this->db->where('hms_doct_patient.patient_id', $patient_id);
+		$query = $this->db->update('hms_doct_patient');		
+		return $query;
+	}
 }

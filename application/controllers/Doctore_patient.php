@@ -34,6 +34,7 @@ class Doctore_patient extends CI_Controller
 
     public function ajax_list()
     {
+        $users_data = $this->session->userdata('auth_users');
         $list = $this->doctore_patient->get_datatables();
         // echo "<pre>";
         // print_r($list);
@@ -128,19 +129,66 @@ class Doctore_patient extends CI_Controller
             $row[] = $doctore_patient->doctor_name;
             $row[] = $doctore_patient->room_no;
             $row[] = date('d-M-Y', strtotime($doctore_patient->created_date));
-            if ($doctore_patient->status == 0) {
-                $flag = 'doct_patie_add_eye';
-                $type = 'doct_patient';
-                $row[] = ' <a href="' . base_url("eye/add_eye_prescription/test/" . $doctore_patient->booking_id) . '?flag=' . $flag . "&type=" . $type . '" class="btn-custom" href="javascript:void(0)" style="' . $doctore_patient->id . '" title="Edit"> Add Adv. Eye Prescription</a>
-                           ';
-            } else {
-                $row[] = '<a class="btn-custom disabled" href="javascript:void(0);" title="Refraction below 8 Years" style="pointer-events: none; opacity: 0.6;" data-url="512">Add Adv. Eye Prescription</a>';
 
+            $btn_history = '';
+            $btn_prescription = "";
+            // if ($doctore_patient->status == 0) {
+            //     $flag = 'doct_patie_add_eye';
+            //     $type = 'doct_patient';
+            //     $row[] = ' <a href="' . base_url("eye/add_eye_prescription/test/" . $doctore_patient->booking_id) . '?flag=' . $flag . "&type=" . $type . '" class="btn-custom" href="javascript:void(0)" style="' . $doctore_patient->id . '" title="Edit"> Add Adv. Eye Prescription</a>
+            //                ';
+            // } else {
+            //     $row[] = '<a class="btn-custom disabled" href="javascript:void(0);" title="Refraction below 8 Years" style="pointer-events: none; opacity: 0.6;" data-url="512">Add Adv. Eye Prescription</a>';
+
+            // }
+
+            if (in_array('524', $users_data['permission']['action'])) {
+                // $btn_edit = ' <a class="" href="' . base_url("opd/edit_booking/" . $doctore_patient->booking_id) . '" title="Edit Booking"><i class="fa fa-pencil"></i> Edit</a>';
+                $btn_edit = '<a onClick="return edit_medicine_unit(' . $doctore_patient->id . ');" href="javascript:void(0)" style="' . $room_master->id . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>';
+
+                // $btn_edit = ' <a class="" href="' . base_url("opd/edit_booking/" . $test->id) . '" title="Edit Booking"><i class="fa fa-pencil"></i> Edit</a>';
             }
+            $btn_prescription .= '<li><a  href="' . base_url("eye/add_eye_prescription/test/" . $doctore_patient->id) . '" title="Add Prescription"><i class="fa fa-eye"></i> Add Adv. Eye Prescription</a></li>';
+            if (in_array('1419', $users_data['permission']['action'])) {
+                $print_url_eye = "'" . base_url('eye/add_prescription/print_blank_prescriptions/' . $doctore_patient->booking_id . '/' . $doctore_patient->branch_id) . "'";
+                // $btn_prescription .= '<div class="btn-ipd">';
+                $btn_prescription .= '<li><a  href="javascript:void(0)" onClick="return print_window_page(' . $print_url_eye . ')" title="Print" ><i class="fa fa-eye"></i
+                      > Blank Eye Prescription  </a></li>';
+                //$btn_prescription .='</div>';                
+            }
+            if ($doctore_patient->status == 0) {
+                $flag = 'eye_history';
+                $type = 'opd_booking';
+                // $btn_history .= '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $doctore_patient->booking_id . "?flag=" . $flag . "&type=" . $type) . '" title="Add Prescription"><i class="fa fa-history"></i> History</a>';
+                if ($doctore_patient->patient_history_status == 1) {
+                    // Render disabled button for already booked patients
+                    $btn_history = '<div class="action-buttons">
+                                      <button class="btn-custom book-now-btn book-now-btn-ortho-ptics" disabled style="width: 71%;">
+                                          <i class="fa fa-spinner fa-spin"></i> In Progress
+                                      </button>
+                                      <a href="javascript:void(0);" title="Refresh" class="btn btn-secondary refresh-btn-history" data-patient_id="' . $doctore_patient->patient_id . '" >
+                                          <i class="fa fa-refresh"></i>
+                                      </a>
+                                      </div>';
+                  } else {
+                   
+                    $btn_history = '<button class="btn-custom book-now-btn-url-history" title="Hess Chart" 
+                          data-id="' . $doctore_patient->patient_id . '" 
+                          data-url="' . base_url("eye/add_eye_prescription/test/" . $doctore_patient->booking_id ) . '?flag=' . $flag . "&type=" . $type . '" >History</button>';
+                  }
+            }
+            $btn_a = '<div class="slidedown">
+              <button disabled class="btn-custom">More <span class="caret"></span></button>
+              <ul class="slidedown-content">
+                ' . $btn_edit . $btn_prescription . '
+              </ul>
+            </div> ';
             // Add action buttons
             //            <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("doctore_patient/print_vision/" . $doctore_patient->id) . '\');">
             //     <i class="fa fa-print"></i> Print
             // </a>
+            $row[] = $btn_history . $btn_a;
+
             $row[] = $doctore_patient->emergency_status;
 
 
@@ -159,11 +207,11 @@ class Doctore_patient extends CI_Controller
 
     public function add($booking_id = null, $patient_id = null, $referred_by = null)
     {
-        // echo "<pre>";
-        // print_r($booking_id);
-        // print_r($patient_id);
-        // print_r($referred_by);
-        // die('sagar');
+        echo "<pre>";
+        print_r($booking_id);
+        print_r($patient_id);
+        print_r($referred_by);
+        die('sagar');
         // Load required models and libraries
         $this->load->library('form_validation');
         $this->load->model('doctore_patient/doctore_patient_model'); // Ensure this model is loaded
@@ -196,6 +244,18 @@ class Doctore_patient extends CI_Controller
         $post = $this->input->post();
         // Check if the form is submitted
         if (isset($post) && !empty($post)) {
+
+            $patient_exists = $this->doctore_patient->patient_exists($post['patient_id']);
+            //   echo "<pre>";
+            // print_r( $patient_exists);
+            // die;
+            if ($patient_exists) {
+                // Redirect to OPD list page with a warning message
+                $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in Refraction above 8 years.');
+                echo json_encode(['faield' => true, 'message' => 'Patient ' . $patient_exists['patient_name'] . ' is already in Refraction above 8 years.']);
+                // redirect('help_desk'); // Change 'opd_list' to your OPD list page route
+                return;
+            }
             // Validate the form
             $valid_response = $this->_validate();
 
@@ -226,7 +286,110 @@ class Doctore_patient extends CI_Controller
         // Load the view with the data
         $this->load->view('doctore_patient/add', $data);
     }
+    public function book_patient()
+    {
+        // public function book_patient() {
+        $patient_id = $this->input->post('patient_id');
+        // $this->load->model('token_no');
 
+        // Perform booking logic
+        $booking_result = $this->doctore_patient->book_patient($patient_id);
+
+        if ($booking_result) {
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Booking failed.']);
+        }
+        // }
+    }
+
+    public function check_booking_status()
+    {
+        $patient_id = $this->input->post('patient_id');
+        // $this->load->model('Booking_model');
+
+        // Check status in the database
+        $status = $this->doctore_patient->get_booking_status($patient_id);
+        // echo "<pre>";
+        // print_r($status);
+        // die('sagar');
+        if ($status == 1) {
+            echo json_encode(['status' => '1']); // Already in progress
+        } else {
+            echo json_encode(['status' => '0']); // Not booked yet
+        }
+    }
+
+    public function update_status_opd()
+    {
+        $patientId = $this->input->post('patient_id');
+
+        if (!$patientId) {
+            echo json_encode(['status' => 'error', 'message' => 'Patient ID is required.']);
+            return;
+        }
+
+        // Update status logic
+        $updated = $this->doctore_patient->update_patient_list_opd_status($patientId, 'new_status'); // Adjust as needed
+
+        if ($updated) {
+            echo json_encode(['status' => 'success', 'message' => 'Status updated successfully.']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to update status.']);
+        }
+    }
+    public function book_doc_patient()
+    {
+        // public function book_patient() {
+        $patient_id = $this->input->post('patient_id');
+        // $this->load->model('token_no');
+
+        // Perform booking logic
+        $booking_result = $this->doctore_patient->book_doc_patient($patient_id);
+
+        if ($booking_result) {
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Booking failed.']);
+        }
+        // }
+    }
+
+    public function check_doc_booking_status()
+    {
+        $patient_id = $this->input->post('patient_id');
+        // $this->load->model('Booking_model');
+
+        // Check status in the database
+        $status = $this->doctore_patient->get_booking_doc_status($patient_id);
+        // echo "<pre>";
+        // print_r($status);
+        // die('sagar');
+        if ($status == 1) {
+            echo json_encode(['status' => '1']); // Already in progress
+        } else {
+            echo json_encode(['status' => '0']); // Not booked yet
+        }
+    }
+
+    public function update_status_doc()
+    {
+        $patientId = $this->input->post('patient_id');
+
+        if (!$patientId) {
+            echo json_encode(['status' => 'error', 'message' => 'Patient ID is required.']);
+            return;
+        }
+
+        // Update status logic
+        $updated = $this->doctore_patient->update_patient_list_doc_status($patientId, 'new_status'); // Adjust as needed
+
+        if ($updated) {
+            echo json_encode(['status' => 'success', 'message' => 'Status updated successfully.']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to update status.']);
+        }
+    }
     // public function add($booking_id = null)
     // {
     //     $data['side_effects'] = $this->doctore_patient->get_all_side_effects(); // Fetch side effects
@@ -298,6 +461,10 @@ class Doctore_patient extends CI_Controller
 
     public function edit($id = "")
     {
+        // echo "<pre>";
+        //     print_r('$post');
+        //     print_r($id);
+        //     die;
         // Check user permissions
         unauthorise_permission('411', '2486');
         $data['side_effects'] = $this->doctore_patient->get_all_side_effects(); // Fetch side effects
@@ -305,13 +472,14 @@ class Doctore_patient extends CI_Controller
 
         // Validate the ID
         if (isset($id) && !empty($id) && is_numeric($id)) {
-            $data['page_title'] = 'Edit Vision Record';
+            $data['page_title'] = 'Edit Doctore';
             // $data['doctore_patient'] = 
 
             // Retrieve the brand by ID
             $result = $this->doctore_patient->get_by_id($id);
             $data['booking_data'] = $this->doctore_patient->get_booking_patient_details_edit($result['booking_id']);
             $data['doctor'] = $this->doctor->doctors_list();
+            $data['room_no_list'] = $this->doctore_patient->room_no_list();
             // echo "<pre>";print_r($result);die;
             // If no result is found, you might want to handle this case
             if (!$result) {
@@ -325,31 +493,11 @@ class Doctore_patient extends CI_Controller
             $data['page_title'] = "Update Doctore";
             $data['form_error'] = '';
             $data['form_data'] = array(
-                'data_id' => $result['vision_id'],
-                'patient_code' => $result['patient_code'],
-                'patient_name' => $result['patient_name'],
-                'booking_id' => $result['booking_id'],
-                'procedure_purpose' => $result['procedure_purpose'],
-                'side_effects' => $result['side_effects'],
-                'informed_consent' => $result['informed_consent'],
-                'previous_ffa' => $result['previous_ffa'],
-                'history_allergy' => $result['history_allergy'],
-                'history_asthma' => $result['history_asthma'],
-                'history_epilepsy' => $result['history_epilepsy'],
-                'accompanied_attendant' => $result['accompanied_attendant'],
-                's_creatinine' => $result['s_creatinine'],
-                'blood_sugar' => $result['blood_sugar'],
-                'blood_pressure' => $result['blood_pressure'],
-                'reason_ffa_not_done' => $result['reason_ffa_not_done'],
-                'optometrist_signature' => $result['optometrist_signature'],
-                'optometrist_date' => $result['optometrist_date'],
-                'anaesthetist_signature' => $result['anaesthetist_signature'],
-                'anaesthetist_date' => $result['anaesthetist_date'],
-                'doctor_signature' => $result['doctor_signature'],
-                'doctor_date' => $result['doctor_date'],
-                'created_at' => $result['created_at'],
-                'updated_at' => $result['updated_at'],
-                'is_deleted' => $result['is_deleted'],
+                'data_id' => $result['doc_pat_id'],
+                "booking_id" => $result['booking_id'],
+                "patient_id" => $result['patient_id'],
+                "room_no" => $result['room_id'],
+                "referred_by" => $result['referred_by'],
             );
 
             // echo "<pre>";
@@ -368,7 +516,7 @@ class Doctore_patient extends CI_Controller
                 if ($this->form_validation->run() == TRUE) {
                     // Save the updated brand details
                     $this->doctore_patient->save();
-                    echo 1; // Return a success response
+                    echo json_encode(['success' => true, 'message' => 'Room no Update successfully.']);; // Return a success response
                     return;
                 } else {
                     // Capture validation errors
@@ -426,7 +574,7 @@ class Doctore_patient extends CI_Controller
 
     public function doctore_patient_excel()
     {
-       
+
         // Starting the PHPExcel library
         $this->load->library('excel');
         $this->excel->IO_factory();
@@ -506,7 +654,7 @@ class Doctore_patient extends CI_Controller
                 $gender = array('0' => 'Female', '1' => 'Male', '2' => 'Others');
                 $statuses = explode(',', $doctore_patient->pat_status);
 
-            // Trim any whitespace from the statuses and get the last one
+                // Trim any whitespace from the statuses and get the last one
                 $last_status = trim(end($statuses));
                 // Prepare data to be populated
                 $data = array(

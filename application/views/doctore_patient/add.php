@@ -33,13 +33,13 @@
                                                 } ?> value="<?php echo $room->id; ?>">
                                                     <?php echo $room->room_no; ?>
                                                 </option>
-    
+
                                                 <?php
                                             }
                                         }
                                         ?>
                                     </select>
-    
+
                                     <?php if (!empty($form_error)) {
                                         echo form_error('room_no');
                                     } ?>
@@ -106,7 +106,15 @@
                             $('#load_add_medicine_unit_modal_popup').modal('hide');
                             flash_session_msg(data.message);
                             reload_table();
-                        } else {
+                        } else if (data.faield) {
+                            $('#load_add_medicine_unit_modal_popup').modal('hide');
+                            showAlert(
+                                data.message,
+                                "#ffc107", // Yellow color for a warning
+                                "<?php echo base_url('doctore_patient'); ?>" // URL for redirection
+                            );
+                        }
+                        else {
                             $("#load_add_medicine_unit_modal_popup").html(data);
                         }
                         $('#overlay-loader').hide();
@@ -117,6 +125,38 @@
                     }
                 });
             });
+
+            function showAlert(message, color, redirectUrl) {
+                // Create the alert box
+                const alertBox = document.createElement("div");
+                alertBox.style.position = "fixed";
+                alertBox.style.top = "20px";
+                alertBox.style.right = "20px";
+                alertBox.style.padding = "15px";
+                alertBox.style.borderRadius = "5px";
+                alertBox.style.backgroundColor = color;
+                alertBox.style.color = "white";
+                alertBox.style.fontSize = "16px";
+                alertBox.style.zIndex = "1000";
+                alertBox.style.boxShadow = "0 2px 10px rgba(0, 0, 0, 0.1)";
+                alertBox.innerHTML = `
+        <p>${message}</p>
+        <div style="margin-top: 10px; display: flex; justify-content: flex-end;">
+            <button id="yesButton" style="margin-right: 10px; padding: 5px 10px; border: none; border-radius: 3px; background-color: #28a745; color: white; cursor: pointer;">Yes</button>
+        </div>
+    `;
+
+                // Append the alert box to the body
+                document.body.appendChild(alertBox);
+
+                // Add event listeners for buttons
+                const yesButton = document.getElementById("yesButton");
+                // const noButton = document.getElementById("noButton");
+
+                yesButton.addEventListener("click", () => {
+                    window.location.href = redirectUrl;
+                });
+            }
 
 
             $("button[data-number=1]").click(function () {
