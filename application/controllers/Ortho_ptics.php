@@ -150,7 +150,7 @@ class Ortho_ptics extends CI_Controller
         // echo "<pre>";print_r($id);die;
         $this->load->library('form_validation');
        
-        $data['page_title'] = 'Add Oct/hfa Record';
+        $data['page_title'] = 'Add Ortho Ptics';
         $pres_id = 28;
 
         $result = $this->ortho_ptics->get_chief_complaints_by_patient_id($booking_id); // Adjust this method according to your model
@@ -223,12 +223,14 @@ class Ortho_ptics extends CI_Controller
             //   echo "<pre>";
             // print_r( $patient_exists);
             // die;
-            if ($patient_exists) {
-                // Redirect to OPD list page with a warning message
-                $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in Ortho Ptics.');
-                echo json_encode(['faield' => true, 'message' => 'Patient ' . $patient_exists['patient_name'] . ' is already in Ortho Ptics.']);
-                // redirect('help_desk'); // Change 'opd_list' to your OPD list page route
-                return;
+            if(empty($post['id'])){
+                if ($patient_exists) {
+                    // Redirect to OPD list page with a warning message
+                    $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in Ortho Ptics.');
+                    echo json_encode(['faield' => true, 'message' => 'Patient ' . $patient_exists['patient_name'] . ' is already in Ortho Ptics.']);
+                    // redirect('help_desk'); // Change 'opd_list' to your OPD list page route
+                    return;
+                }
             }
     
             // Prepare the data for saving
@@ -392,7 +394,7 @@ class Ortho_ptics extends CI_Controller
 
         // Validate the ID
         if (isset($id) && !empty($id) && is_numeric($id)) {
-            $data['page_title'] = 'Edit Ortho Paedic Record';
+            $data['page_title'] = 'Edit Ortho Paedic';
             $data['referal_doctor_list'] = $this->opd_billing->referal_doctor_list();
             // Retrieve the refraction record by ID
             $result = $this->ortho_ptics->get_by_id($id); // Adjust this method according to your model

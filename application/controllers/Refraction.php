@@ -204,14 +204,17 @@ class Refraction extends CI_Controller
         if (isset($post) && !empty($post)) {
             $patient_exists = $this->refraction->patient_exists($post['patient_id']);
             //   echo "<pre>";
-            // print_r( $patient_exists);
+            // print_r( empty($post['id']));
             // die;
-            if ($patient_exists) {
-                // Redirect to OPD list page with a warning message
-                $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in Refraction above 8 years.');
-                echo json_encode(['faield' => true, 'message' => 'Patient ' . $patient_exists['patient_name'] . ' is already in Refraction above 8 years.']);
-                // redirect('help_desk'); // Change 'opd_list' to your OPD list page route
-                return;
+            if(empty($post['id'])){
+
+                if ($patient_exists) {
+                    // Redirect to OPD list page with a warning message
+                    $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in Refraction above 8 years.');
+                    echo json_encode(['faield' => true, 'message' => 'Patient ' . $patient_exists['patient_name'] . ' is already in Refraction above 8 years.']);
+                    // redirect('help_desk'); // Change 'opd_list' to your OPD list page route
+                    return;
+                }
             }
             // echo "<pre>";
             // // print_r('abhay');
@@ -378,7 +381,7 @@ class Refraction extends CI_Controller
                 return;
             }
 
-            $data['booking_data'] = $this->refraction->get_booking_by_id($result['booking_code']);
+            $data['booking_data'] = $this->refraction->get_booking_by_id($result['booking_id']);
             $data['doctor'] = $this->doctor->doctors_list();
 
             // Prepare data for the view

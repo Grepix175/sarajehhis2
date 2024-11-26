@@ -183,12 +183,14 @@ class Contact_lens extends CI_Controller
             //   echo "<pre>";
             // print_r( $patient_exists);
             // die;
-            if ($patient_exists) {
-                // Redirect to OPD list page with a warning message
-                $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in contact lens.');
-                echo json_encode(['faield' => true, 'message' => 'Patient ' . $patient_exists['patient_name'] . ' is already in contact lens.']);
-                // redirect('help_desk'); // Change 'opd_list' to your OPD list page route
-                return;
+            if(empty($post['data_id'])){
+                if ($patient_exists) {
+                    // Redirect to OPD list page with a warning message
+                    $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in contact lens.');
+                    echo json_encode(['faield' => true, 'message' => 'Patient ' . $patient_exists['patient_name'] . ' is already in contact lens.']);
+                    // redirect('help_desk'); // Change 'opd_list' to your OPD list page route
+                    return;
+                }
             }
 
             $this->contact_lens->save(); // Save the validated data

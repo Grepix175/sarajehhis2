@@ -217,12 +217,14 @@ class Prosthetic extends CI_Controller
             //   echo "<pre>";
             // print_r( $patient_exists);
             // die;
-            if ($patient_exists) {
-                // Redirect to OPD list page with a warning message
-                $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in Prosthetic.');
-                echo json_encode(['faield' => true, 'message' => 'Patient ' . $patient_exists['patient_name'] . ' is already in Prosthetic.']);
-                // redirect('help_desk'); // Change 'opd_list' to your OPD list page route
-                return;
+            if(empty($post['id'])){
+                if ($patient_exists) {
+                    // Redirect to OPD list page with a warning message
+                    $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in Prosthetic.');
+                    echo json_encode(['faield' => true, 'message' => 'Patient ' . $patient_exists['patient_name'] . ' is already in Prosthetic.']);
+                    // redirect('help_desk'); // Change 'opd_list' to your OPD list page route
+                    return;
+                }
             }
         
             // Prepare the data for saving

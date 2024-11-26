@@ -807,7 +807,7 @@ $field_list = mandatory_section_field_list(2);
                     <div class="col-md-1">
                         <div class="fixed">
                             <div class="btns">
-                                <button class="btn-update" id="form_submit">
+                                <button class="btn-update" id="form_submit" style="margin-bottom: 10px !important;">
                                     <i class="fa fa-save"></i> Save</button>
                                 <a href="<?php echo base_url('ortho_ptics'); ?>" class="btn-update"
                                     style="text-decoration:none!important;color:#FFF;padding:8px 2em;"><i

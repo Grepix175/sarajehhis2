@@ -122,9 +122,13 @@ class Add_eye_prescription extends CI_Controller
     $data['vitals_list'] = $this->general_model->vitals_list();
     $result = $this->add_prescript->get_new_data_by_id($booking_id);
     $data['booking_data'] = $this->add_prescript->get_booking_by_id($booking_id);
-
-
+    
+    
     $type = $this->input->get('type') ?? '';
+    // echo $pres_id;
+    // echo "<pre>";
+    // print_r($post);
+    // die;
     if ($type == 'eme_booking' || $type == 'help_desk') {
       // $token_no = $this->emergency_booking->get_booking_details($booking_id);
       $token_no = $this->opd->get_opd_details($booking_id);
@@ -147,7 +151,10 @@ class Add_eye_prescription extends CI_Controller
       $this->session->set_userdata('drawing_data', $drawing_list);
     }
 
-
+    // echo $pres_id;
+    // echo "<pre>";
+    // print_r($drawing_list);
+    // die;
     $data['form_data'] = array('history_flag' => 1, 'contactlens_flag' => 1, 'glassesprescriptions_flag' => 1, 'intermediate_glasses_prescriptions_flag' => 1, 'examination_flag' => 1, 'diagnosis_flag' => 1, 'investigations_flag' => 1, 'advice_flag' => 1, 'token_no' => $token_no['token_no'] ?? '', 'symptom_fever' => '', 'symptom_cough' => '', 'symptom_smell_taste', 'symptom_loose_stools' => '', 'symptom_local_zone' => '', 'symptom_travel' => '', 'symptom_contact' => '');
     // echo "<pre>";
     //     print_r($data['form_data']);
@@ -174,9 +181,12 @@ class Add_eye_prescription extends CI_Controller
     $data['advice_sets'] = $this->add_prescript->get_advice_sets($result['branch_id']);
     $data['procedure_eye_region'] = $this->general_model->procedure_eye_region();
     /* Advice Tab */
-
-
+    $pres_result = '';
     if (!empty($pres_id)) {
+      // echo "<pre>";
+      // print_r(!empty($pres_id));
+      // // print_r($booking_id);
+      // die('sddadsa');
 
       $pres_result = $this->add_prescript->get_prescription_by_id($booking_id, $pres_id);
       // echo "<pre>"; print_r($pres_result); die;
@@ -1184,26 +1194,29 @@ class Add_eye_prescription extends CI_Controller
     $data['booking_id'] = $result['id'];
     $data['doctor_list'] = $this->add_prescript->get_doctor_list_both($result['branch_id']);
     $flag = $this->input->get('flag');
+    // $type = $this->input->get('type');
     // unauthorise_permission('351','2108');
     if (!empty($post)) {
+      // echo "<pre>"; print_r($pres_result); die('sasga');
+
         //  echo "<pre>";
         // print_r( $post);
         // die;
       $emeId = $test_id = $this->uri->segment(4);
       ;
-      if ($post['flag'] == 'eye_history') {
+      if ($post['flag'] == 'eye_history' && empty($pres_result)) {
         $patient_exists = $this->add_prescript->patient_exists($post['patient_id'],$post['booking_id']);
         //   echo "<pre>";
         // print_r( $patient_exists);
         // die;
         if ($patient_exists) {
           // Redirect to OPD list page with a warning message
-          $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in Hess Chart.');
+          $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in History.');
           return redirect(base_url('help_desk')); // Change 'opd_list' to your OPD list page route
           // return;
         }
       }
-      if ($post['flag'] == 'hess_chart') {
+      if ($post['flag'] == 'hess_chart' && empty($pres_result)) {
         $patient_exists = $this->hess_chart->patient_exists($post['patient_id']);
         //   echo "<pre>";
         // print_r( $patient_exists);
@@ -1215,7 +1228,11 @@ class Add_eye_prescription extends CI_Controller
           // return;
         }
       }
-      if ($post['flag'] == 'refraction_below_8_years') {
+      // echo "<pre>";
+      // print_r($pres_result);
+      // print_r($post['flag']);
+      // die('sagsa');
+      if ($post['flag'] == 'refraction_below_8_years' && empty($pres_result)) {
         $patient_exists = $this->refraction_below8->patient_exists($post['patient_id']);
         //   echo "<pre>";
         // print_r( $patient_exists);
@@ -1248,8 +1265,11 @@ class Add_eye_prescription extends CI_Controller
       } else if ($flag == 'doct_patie_add_eye') {
         return redirect(base_url('doctore_patient'));
 
-      } else {
+      } else if($flag == 'refraction_below_8_years') {
         return redirect(base_url('refraction_below8'));
+      }else{
+        return redirect(base_url('eyes_prescription'));
+
       }
     }
 

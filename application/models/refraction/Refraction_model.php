@@ -265,7 +265,8 @@ class Refraction_model extends CI_Model
 		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
 
 		// Filter by the booking ID
-		$this->db->where('hms_opd_booking.booking_code', $booking_id); // Assuming 'id' is the primary key for bookings
+		// $this->db->where('hms_opd_booking.booking_code', $booking_id); // Assuming 'id' is the primary key for bookings
+		$this->db->where('hms_opd_booking.id', $booking_id); // Assuming 'id' is the primary key for bookings
 		$query = $this->db->get();
 
 		// Check if any results were returned

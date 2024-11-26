@@ -105,7 +105,8 @@
                         if (data && data.success) {
                             $('#load_add_medicine_unit_modal_popup').modal('hide');
                             flash_session_msg(data.message);
-                            reload_table();
+                            // reload_table();
+                            window.location.href = '<?php echo base_url('ortho_ptics'); ?>';
                         } else if (data.faield) {
                             $('#load_add_medicine_unit_modal_popup').modal('hide');
                             showAlert(
