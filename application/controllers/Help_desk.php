@@ -282,21 +282,47 @@ class Help_desk extends CI_Controller
       if ($prescription->drawing_flag == 0) {
         $flag = 'hess_chart';
         $type = 'help_desk';
-        $btn_hess_chart = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . "&type=" . $type . '" title="Hess Chart">Hess Chart</a>';
+        // $btn_hess_chart = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . "&type=" . $type . '" title="Hess Chart">Hess Chart</a>';
+        if ($prescription->hess_chart_status == 1) {
+          // Render disabled button for already booked patients
+          $btn_hess_chart = '<div class="action-buttons">
+                  <button class="btn-custom book-now-btn book-now-btn-hess-chart" disabled>
+                      <i class="fa fa-spinner fa-spin"></i> In Progress
+                  </button>
+                  <a href="javascript:void(0);" title="Refresh" class="btn btn-secondary refresh-btn-hess-chart" data-patient_id="' . $prescription->patient_id . '" >
+                      <i class="fa fa-refresh"></i>
+                  </a>
+                  </div>';
+        } else {
+          $btn_hess_chart = '<button class="btn-custom book-now-btn-url-hess-chart" title="Hess Chart" 
+                  data-id="' . $prescription->patient_id . '" 
+                  data-url="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . "&type=" . $type . '">Hess Chart</button>';
+        }
       } else {
         $btn_hess_chart = '<a class="btn-custom disabled" href="javascript:void(0);" title="Hess Chart" style="pointer-events: none; opacity: 0.6;" data-url="512">  Hess Chart</a>';
       }
 
       // if ($prescription->refraction_below8 == 0) {
-      if ($prescription->ref_below_status == 0) {
-
-
+      if ($prescription->refraction_below8 == 0) {
         $flag = 'refraction_below_8_years';
         $type = 'help_desk';
-        $btn_refraction_below8 = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . "&type=" . $type . '" title="Refraction below 8 Years">Refraction Below 8 Years</a>';
-
+        // $btn_refraction_below8 = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . "&type=" . $type . '" title="Refraction below 8 Years">Refraction Below 8 Years</a>';
+        if ($prescription->ref_below_status == 1) {
+          // Render disabled button for already booked patients
+          $btn_refraction_below8 = '<div class="action-buttons">
+                  <button class="btn-custom book-now-btn book-now-btn-refraction-below" disabled>
+                      <i class="fa fa-spinner fa-spin"></i> In Progress
+                  </button>
+                  <a href="javascript:void(0);" title="Refresh" class="btn btn-secondary refresh-btn-refraction-below" data-patient_id="' . $prescription->patient_id . '" >
+                      <i class="fa fa-refresh"></i>
+                  </a>
+                  </div>';
+        } else {
+          $btn_refraction_below8 = '<button class="btn-custom book-now-btn-url-refraction-below" title="Refraction below 8 Years" 
+                  data-id="' . $prescription->patient_id . '" 
+                  data-url="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . "&type=" . $type . '">Refraction below 8 Years</button>';
+        }
       } else {
-
         $btn_refraction_below8 = '<a class="btn-custom disabled" href="javascript:void(0);" title="Refraction below 8 Years" style="pointer-events: none; opacity: 0.6;" data-url="512">Refraction Below 8 Years</a>';
       }
 
@@ -440,13 +466,37 @@ class Help_desk extends CI_Controller
         $btn_doctor = '<a class="btn-custom disabled" href="javascript:void(0);" title="Ortho Paedic" style="pointer-events: none; opacity: 0.6;" data-url="512"> Doctore</a>';
       } else {
         // $btn_contact_lens = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title=" Contact Lens"> Contact Lens</a>';
-        $btn_doctor = '<button type="button" class="btn-custom open-popup" 
+        // $btn_doctor = '<button type="button" class="btn-custom open-popup" 
+        //           id="open-popup" 
+        //           data-booking-id="' . $prescription->booking_id . '" 
+        //           data-patient-id="' . $prescription->patient_id . '" 
+        //           data-referred-by="' . $prescription->attended_doctor . '" 
+        //           data-url="' . $prescription->url . '" 
+        //           title="Doctore">Doctore</button>';
+
+        if ($prescription->doctor_status == 1) {
+          // Render disabled button for already booked patients
+          $btn_doctor = '<div class="action-buttons">
+                            <button class="btn-custom book-now-btn book-now-btn-ortho-ptics" disabled>
+                                <i class="fa fa-spinner fa-spin"></i> In Progress
+                            </button>
+                            <a href="javascript:void(0);" title="Refresh" class="btn btn-secondary refresh-btn-doctore" data-patient_id="' . $prescription->patient_id . '" >
+                                <i class="fa fa-refresh"></i>
+                            </a>
+                            </div>';
+        } else {
+          // Render active button for patients not yet booked
+          // $btn_doctor = '<button class="btn-custom book-now-btn-url-ortho-ptics" title="octhfa" 
+          //                   data-id="' . $prescription->patient_id . '" 
+          //                   data-url="' . base_url("ortho_ptics/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '">Doctore</button>';
+          $btn_doctor = '<button type="button" class="btn-custom open-popup" 
                   id="open-popup" 
                   data-booking-id="' . $prescription->booking_id . '" 
                   data-patient-id="' . $prescription->patient_id . '" 
                   data-referred-by="' . $prescription->attended_doctor . '" 
                   data-url="' . $prescription->url . '" 
                   title="Doctore">Doctore</button>';
+        }
       }
       // $btn_doctor = 
 

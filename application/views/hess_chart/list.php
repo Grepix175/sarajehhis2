@@ -252,20 +252,20 @@ $users_data = $this->session->userdata('auth_users');
                 </div>
               </div>
               <div class="row m-b-5">
-                  <div class="col-xs-4"><label> Booking Type</label></div>
-                  <div class="col-xs-8">
-                    <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="3"
-                      type="radio" <?php if ($form_data['emergency_booking'] == '3') {
-                        echo 'checked';
-                      } ?>> Normal
-                    <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="4"
-                      type="radio" <?php if ($form_data['emergency_booking'] == '4') {
-                        echo 'checked';
-                      } ?>> FastTrack
-                    <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value=""
-                      type="radio" <?php echo 'checked';?>> All
-                  </div>
+                <div class="col-xs-4"><label> Booking Type</label></div>
+                <div class="col-xs-8">
+                  <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="3"
+                    type="radio" <?php if ($form_data['emergency_booking'] == '3') {
+                      echo 'checked';
+                    } ?>> Normal
+                  <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="4"
+                    type="radio" <?php if ($form_data['emergency_booking'] == '4') {
+                      echo 'checked';
+                    } ?>> FastTrack
+                  <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value=""
+                    type="radio" <?php echo 'checked'; ?>> All
                 </div>
+              </div>
 
               <?php
               $users_data = $this->session->userdata('auth_users');
@@ -551,7 +551,45 @@ $users_data = $this->session->userdata('auth_users');
       if (isset($flash_success) && !empty($flash_success)) {
         echo 'flash_session_msg("' . $flash_success . '");';
       }
+      $flash_warning = $this->session->flashdata('warning');
+      if (isset($flash_warning) && !empty($flash_warning)) {
+        echo 'flash_session_msg("' . $flash_warning . '", "warning");';
+      }
       ?>
+
+      function flash_session_msg(message, type) {
+        // if (type === "success") {
+        //   // Display success message in green
+        //   showAlert(message, "green");
+        // } else 
+        if (type === "warning") {
+          // Display warning message in yellow
+          showAlert(message, "orange");
+        }
+      }
+
+      // Helper function to show styled alerts
+      function showAlert(message, color) {
+        const alertBox = document.createElement("div");
+        alertBox.style.position = "fixed";
+        alertBox.style.top = "20px";
+        alertBox.style.right = "20px";
+        alertBox.style.padding = "15px";
+        alertBox.style.borderRadius = "5px";
+        alertBox.style.backgroundColor = color;
+        alertBox.style.color = "white";
+        alertBox.style.fontSize = "16px";
+        alertBox.style.zIndex = "1000";
+        alertBox.innerText = message;
+
+        // Append the alert box to the body
+        document.body.appendChild(alertBox);
+
+        // Automatically remove the alert after 3 seconds
+        setTimeout(() => {
+          alertBox.remove();
+        }, 8000);
+      }
 
 
       function delete_eye_prescription(prescription_id) {

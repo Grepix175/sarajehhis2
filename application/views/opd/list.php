@@ -103,6 +103,86 @@ $user_role = $users_data['users_role'];
 
     });
 
+    $(document).on('click', '.book-now-btn-url-history', function () {
+        const btn = $(this);
+        const patientId = btn.data('id');
+        const bookingUrl = btn.data('url');
+
+        btn.prop('disabled', true).text('In Progress');
+
+        $.ajax({
+          url: '<?= base_url("opd/check_booking_status"); ?>', // Backend URL to check status
+          type: 'POST',
+          data: { patient_id: patientId },
+          success: function (response) {
+            const data = JSON.parse(response);
+
+            if (data.status === '1') {
+              alert('Booking is already in progress for this patient.');
+              btn.prop('disabled', false).text('Book Now');
+              return;
+            } else if (data.status === '0') {
+              $.ajax({
+                url: '<?= base_url("opd/book_patient"); ?>',
+                type: 'POST',
+                data: { patient_id: patientId },
+                success: function (bookingResponse) {
+                  const bookingData = JSON.parse(bookingResponse);
+                  if (bookingData.status === 'success') {
+                    window.location.href = bookingUrl; // Redirect to booking URL
+                  } else {
+                    alert(bookingData.message || 'An error occurred.');
+                    btn.prop('disabled', false).text('Book Now');
+                  }
+                },
+                error: function () {
+                  alert('An error occurred while booking. Please try again.');
+                  btn.prop('disabled', false).text('Book Now');
+                }
+              });
+            }
+          },
+          error: function () {
+            // Handle AJAX error
+            alert('An error occurred while checking status. Please try again.');
+            btn.prop('disabled', false).text('Book Now');
+          }
+        });
+      });
+
+
+    $(document).on('click', '.refresh-btn-history', function () {
+        const patientId = $(this).data('patient_id');
+        const refreshButton = $(this);
+
+        if (!patientId) {
+          alert('Patient ID is missing!');
+          return;
+        }
+
+        refreshButton.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
+
+        $.ajax({
+          url: 'opd/update_status_opd',
+          type: 'POST',
+          data: { patient_id: patientId },
+          dataType: 'json',
+          success: function (response) {
+            if (response.status === 'success') {
+              reload_table();
+            } else {
+              alert(response.message || 'Failed to update status.');
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX Error:', error);
+            alert('An error occurred while updating the status.');
+          },
+
+        });
+      });
+
+
     function edit_patient(id) {
       var $modal = $('#load_add_modal_popup');
       $modal.load('<?php echo base_url() . 'patient/edit/' ?>' + id,

@@ -4649,6 +4649,22 @@ class Add_new_prescription_model extends CI_Model
 		//print_r($result);die;
 		return $result;
 	}
+	public function patient_exists($patient_id = "",$booking_id = "")
+	{
+        
+		$user_data = $this->session->userdata('auth_users');
+		$this->db->select('hms_std_eye_prescription.id as std_eye_id*, hms_patient.id,hms_patient.patient_name');
+
+		$this->db->from('hms_std_eye_prescription');
+		$this->db->join('hms_patient', 'hms_patient.id = hms_std_eye_prescription.patient_id');
+		$this->db->where('hms_std_eye_prescription.branch_id', $user_data['parent_id']);
+		$this->db->where('hms_std_eye_prescription.booking_id', $booking_id);
+		$this->db->where('hms_std_eye_prescription.patient_id', $patient_id);
+		$this->db->where('hms_std_eye_prescription.history_flag', 1);
+		$this->db->where('hms_std_eye_prescription.is_deleted', '0');
+		$query = $this->db->get();
+		return $query->row_array();
+	}
 
 	// Please code above this	
 //(SELECT (sum(debit)-sum(credit)) from hms_medicine_stock where m_id = hms_medicine_entry.id AND hms_medicine_sale_to_medicine.batch_no = batch_no) as stock_quantit

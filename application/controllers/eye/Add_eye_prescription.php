@@ -8,6 +8,8 @@ class Add_eye_prescription extends CI_Controller
     parent::__construct();
     auth_users();
     $this->load->model('eye/add_prescription/add_new_prescription_model', 'add_prescript');
+    $this->load->model('hess_chart/hess_chart_model', 'hess_chart');
+    $this->load->model('refraction_below8/Refraction_below8_model', 'refraction_below8');
     $this->load->model('general/general_model');
   }
 
@@ -123,15 +125,15 @@ class Add_eye_prescription extends CI_Controller
 
 
     $type = $this->input->get('type') ?? '';
-    if($type == 'eme_booking' || $type == 'help_desk'){
+    if ($type == 'eme_booking' || $type == 'help_desk') {
       // $token_no = $this->emergency_booking->get_booking_details($booking_id);
       $token_no = $this->opd->get_opd_details($booking_id);
-      
-    }else{
+
+    } else {
       $token_no = $this->opd->get_opd_details($booking_id);
     }
     $data['token_no'] = $token_no['token_no'] ?? '';
-    $this->opd->opd_status_update($booking_id);
+    
     $data['flag'] = $this->input->get('flag') ?? '';
 
 
@@ -145,7 +147,7 @@ class Add_eye_prescription extends CI_Controller
       $this->session->set_userdata('drawing_data', $drawing_list);
     }
 
-    
+
     $data['form_data'] = array('history_flag' => 1, 'contactlens_flag' => 1, 'glassesprescriptions_flag' => 1, 'intermediate_glasses_prescriptions_flag' => 1, 'examination_flag' => 1, 'diagnosis_flag' => 1, 'investigations_flag' => 1, 'advice_flag' => 1, 'token_no' => $token_no['token_no'] ?? '', 'symptom_fever' => '', 'symptom_cough' => '', 'symptom_smell_taste', 'symptom_loose_stools' => '', 'symptom_local_zone' => '', 'symptom_travel' => '', 'symptom_contact' => '');
     // echo "<pre>";
     //     print_r($data['form_data']);
@@ -175,15 +177,15 @@ class Add_eye_prescription extends CI_Controller
 
 
     if (!empty($pres_id)) {
-      
+
       $pres_result = $this->add_prescript->get_prescription_by_id($booking_id, $pres_id);
       // echo "<pre>"; print_r($pres_result); die;
       $result_edit = $this->add_prescript->get_prescription_new_by_id($booking_id, $pres_id);
       $result_refraction = $this->add_prescript->get_prescription_refraction_new_by_id($booking_id, $pres_id);
 
-    //   echo "<pre>";
-    // print_r($result_refraction);
-    // die;
+      //   echo "<pre>";
+      // print_r($result_refraction);
+      // die;
 
       $result_examination = $this->add_prescript->get_prescription_examination_id($booking_id, $pres_id);
 
@@ -352,7 +354,7 @@ class Add_eye_prescription extends CI_Controller
 
       $ropgas = json_decode($result_refraction['ropgas']);
       $data['ropgas'] = (array) $ropgas;
-      
+
 
       $data['refraction_data']['vision_with_cl'] = $result_refraction['vision_with_cl'];
       $data['refraction_data']['hirschberg_test'] = $result_refraction['hirschberg_test'];
@@ -1184,30 +1186,69 @@ class Add_eye_prescription extends CI_Controller
     $flag = $this->input->get('flag');
     // unauthorise_permission('351','2108');
     if (!empty($post)) {
-      $emeId = $test_id = $this->uri->segment(4);;
+        //  echo "<pre>";
+        // print_r( $post);
+        // die;
+      $emeId = $test_id = $this->uri->segment(4);
+      ;
+      if ($post['flag'] == 'eye_history') {
+        $patient_exists = $this->add_prescript->patient_exists($post['patient_id'],$post['booking_id']);
+        //   echo "<pre>";
+        // print_r( $patient_exists);
+        // die;
+        if ($patient_exists) {
+          // Redirect to OPD list page with a warning message
+          $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in Hess Chart.');
+          return redirect(base_url('help_desk')); // Change 'opd_list' to your OPD list page route
+          // return;
+        }
+      }
+      if ($post['flag'] == 'hess_chart') {
+        $patient_exists = $this->hess_chart->patient_exists($post['patient_id']);
+        //   echo "<pre>";
+        // print_r( $patient_exists);
+        // die;
+        if ($patient_exists) {
+          // Redirect to OPD list page with a warning message
+          $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in Hess Chart.');
+          return redirect(base_url('hess_chart')); // Change 'opd_list' to your OPD list page route
+          // return;
+        }
+      }
+      if ($post['flag'] == 'refraction_below_8_years') {
+        $patient_exists = $this->refraction_below8->patient_exists($post['patient_id']);
+        //   echo "<pre>";
+        // print_r( $patient_exists);
+        // die;
+        if ($patient_exists) {
+          // Redirect to OPD list page with a warning message
+          $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in Refraction Below8.');
+          return redirect(base_url('refraction_below8')); // Change 'opd_list' to your OPD list page route
+          // return;
+        }
+      }
       // echo"<pre>";
       // print_r($emeId);
       // die;
       $this->add_prescript->save($emeId);
+      $this->opd->opd_status_update($booking_id);
       $this->session->set_flashdata('success', 'Prescription successfully added.');
       $flag = $this->input->get('flag');
-      if(empty($flag))
-      {
-        $flag=$post['flag'];
+      if (empty($flag)) {
+        $flag = $post['flag'];
       }
-      if($flag == 'eye_history'){
+      if ($flag == 'eye_history') {
         redirect(base_url('help_desk'));
-        
-      }elseif(($flag == 'hess_chart')){
+
+      } elseif (($flag == 'hess_chart')) {
         // echo "<pre>";
         // print_r('$post');
         // die;
         return redirect(base_url('hess_chart'));
-      }else if($flag == 'doct_patie_add_eye'){
+      } else if ($flag == 'doct_patie_add_eye') {
         return redirect(base_url('doctore_patient'));
 
-      }
-      else{
+      } else {
         return redirect(base_url('refraction_below8'));
       }
     }
@@ -1885,7 +1926,7 @@ class Add_eye_prescription extends CI_Controller
 
     $ropgas = json_decode($result_refraction['ropgas']);
     $data['ropgas'] = (array) $ropgas;
-    
+
 
     $data['refraction_data']['vision_with_cl'] = $result_refraction['vision_with_cl'];
     $data['refraction_data']['hirschberg_test'] = $result_refraction['hirschberg_test'];
@@ -2110,7 +2151,7 @@ class Add_eye_prescription extends CI_Controller
     $header_replace_part = str_replace("{mobile_no}", $form_data['mobile_no'], $header_replace_part);
     $header_replace_part = str_replace("{gender}", $gender[$form_data['gender']], $header_replace_part);
 
-    
+
     // $header_replace_part = str_replace("{patient_address}", $form_data['paddress'] . ' ' . $form_data['paddress1'] . ' ' . $form_data['paddress2'], $header_replace_part);
     // $header_replace_part = str_replace("{patient_age}", $age, $header_replace_part);
     // $header_replace_part = str_replace("{app_id}", $form_data['booking_code'], $header_replace_part);
@@ -2149,12 +2190,12 @@ class Add_eye_prescription extends CI_Controller
     $this->m_pdf->pdf->WriteHTML($stylesheet,1); */
     $flag = $this->input->get('flag') ?? '';
     // die($flag);
-    if(!empty($flag) &&  $flag == 'refraction_below_8_years'){
+    if (!empty($flag) && $flag == 'refraction_below_8_years') {
       $middle_replace = $this->load->view('refraction_below8/view', $data, true);
-    }elseif(!empty($flag) &&  $flag == 'hess_chart'){
+    } elseif (!empty($flag) && $flag == 'hess_chart') {
       $middle_replace = $this->load->view('hess_chart/view', $data, true);
-    }else{
-      
+    } else {
+
       $middle_replace = $this->load->view('help_desk/view', $data, true);
 
     }
@@ -2326,7 +2367,7 @@ class Add_eye_prescription extends CI_Controller
     $result_edit = $this->add_prescript->get_prescription_new_by_id($booking_id, $pres_id);
     $data['drawing_list'] = $this->add_prescript->get_drawing($booking_id, $pres_id);
     $result_refraction = $this->add_prescript->get_prescription_refraction_new_by_id($booking_id, $pres_id);
-    
+
 
     $result_examination = $this->add_prescript->get_prescription_examination_id($booking_id, $pres_id);
     /* advice */

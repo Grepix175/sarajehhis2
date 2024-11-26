@@ -535,6 +535,49 @@ $users_data = $this->session->userdata('auth_users');
         var bookingId = $(this).data('booking-id');
         var patientId = $(this).data('patient-id');
         var referredBy = $(this).data('referred-by');
+        const btn = $(this);
+
+        btn.prop('disabled', true).text('In Progress');
+
+        $.ajax({
+          url: '<?= base_url("doctore_patient/check_booking_status"); ?>', // Backend URL to check status
+          type: 'POST',
+          data: { patient_id: patientId },
+          success: function (response) {
+            const data = JSON.parse(response);
+
+            if (data.status === '1') {
+              alert('Booking is already in progress for this patient.');
+              btn.prop('disabled', false).text('Book Now');
+              return;
+            } else if (data.status === '0') {
+              $.ajax({
+                url: '<?= base_url("doctore_patient/book_patient"); ?>',
+                type: 'POST',
+                data: { patient_id: patientId },
+                success: function (bookingResponse) {
+                  const bookingData = JSON.parse(bookingResponse);
+                  if (bookingData.status === 'success') {
+                    reload_table()
+                    // window.location.href = bookingUrl; // Redirect to booking URL
+                  } else {
+                    alert(bookingData.message || 'An error occurred.');
+                    btn.prop('disabled', false).text('Book Now');
+                  }
+                },
+                error: function () {
+                  alert('An error occurred while booking. Please try again.');
+                  btn.prop('disabled', false).text('Book Now');
+                }
+              });
+            }
+          },
+          error: function () {
+            // Handle AJAX error
+            alert('An error occurred while checking status. Please try again.');
+            btn.prop('disabled', false).text('Book Now');
+          }
+        });
 
         // Build the dynamic URL with route parameters
         var routeUrl = '<?php echo base_url(); ?>doctore_patient/add/' + bookingId + '/' + patientId + '/' + referredBy;
@@ -546,6 +589,37 @@ $users_data = $this->session->userdata('auth_users');
         $modal.load(routeUrl, function () {
           // Show the modal once content is loaded
           $modal.modal('show');
+        });
+      });
+
+      $(document).on('click', '.refresh-btn-doctore', function () {
+        const patientId = $(this).data('patient_id');
+        const refreshButton = $(this);
+
+        if (!patientId) {
+          alert('Patient ID is missing!');
+          return;
+        }
+
+        refreshButton.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
+
+        $.ajax({
+          url: 'doctore_patient/update_status_opd',
+          type: 'POST',
+          data: { patient_id: patientId },
+          dataType: 'json',
+          success: function (response) {
+            if (response.status === 'success') {
+              reload_table();
+            } else {
+              alert(response.message || 'Failed to update status.');
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX Error:', error);
+            alert('An error occurred while updating the status.');
+          },
+
         });
       });
 
@@ -668,7 +742,44 @@ $users_data = $this->session->userdata('auth_users');
       if (isset($flash_success) && !empty($flash_success)) {
         echo 'flash_session_msg("' . $flash_success . '");';
       }
+      $flash_warning = $this->session->flashdata('warning');
+      if (isset($flash_warning) && !empty($flash_warning)) {
+        echo 'flash_session_msg("' . $flash_warning . '", "warning");';
+      }
       ?>
+      function flash_session_msg(message, type) {
+        // if (type === "success") {
+        //   // Display success message in green
+        //   showAlert(message, "green");
+        // } else 
+        if (type === "warning") {
+          // Display warning message in yellow
+          showAlert(message, "orange");
+        }
+      }
+
+      // Helper function to show styled alerts
+      function showAlert(message, color) {
+        const alertBox = document.createElement("div");
+        alertBox.style.position = "fixed";
+        alertBox.style.top = "20px";
+        alertBox.style.right = "20px";
+        alertBox.style.padding = "15px";
+        alertBox.style.borderRadius = "5px";
+        alertBox.style.backgroundColor = color;
+        alertBox.style.color = "white";
+        alertBox.style.fontSize = "16px";
+        alertBox.style.zIndex = "1000";
+        alertBox.innerText = message;
+
+        // Append the alert box to the body
+        document.body.appendChild(alertBox);
+
+        // Automatically remove the alert after 3 seconds
+        setTimeout(() => {
+          alertBox.remove();
+        }, 8000);
+      }
 
       $(document).on('click', '.book-now-btn-url-vision', function () {
         const btn = $(this);
@@ -1182,7 +1293,7 @@ $users_data = $this->session->userdata('auth_users');
         });
       });
 
-      // book-now-btn-url-octhfa
+      // octhfa start
       $(document).on('click', '.book-now-btn-url-octhfa', function () {
         const btn = $(this);
         const patientId = btn.data('id');
@@ -1260,7 +1371,9 @@ $users_data = $this->session->userdata('auth_users');
 
         });
       });
+      // octhfa start
 
+      // ortho patics start
       $(document).on('click', '.book-now-btn-url-ortho-ptics', function () {
         const btn = $(this);
         const patientId = btn.data('id');
@@ -1339,7 +1452,166 @@ $users_data = $this->session->userdata('auth_users');
         });
       });
 
+      // hess chart start
+      $(document).on('click', '.book-now-btn-url-hess-chart', function () {
+        const btn = $(this);
+        const patientId = btn.data('id');
+        const bookingUrl = btn.data('url');
+        btn.prop('disabled', true).text('In Progress');
+        $.ajax({
+          url: '<?= base_url("hess_chart/check_booking_status"); ?>', // Backend URL to check status
+          type: 'POST',
+          data: { patient_id: patientId },
+          success: function (response) {
+            const data = JSON.parse(response);
 
+            if (data.status === '1') {
+              alert('Booking is already in progress for this patient.');
+              btn.prop('disabled', false).text('Book Now');
+              return;
+            } else if (data.status === '0') {
+              $.ajax({
+                url: '<?= base_url("hess_chart/book_patient"); ?>',
+                type: 'POST',
+                data: { patient_id: patientId },
+                success: function (bookingResponse) {
+                  const bookingData = JSON.parse(bookingResponse);
+                  if (bookingData.status === 'success') {
+                    window.location.href = bookingUrl; // Redirect to booking URL
+                  } else {
+                    alert(bookingData.message || 'An error occurred.');
+                    btn.prop('disabled', false).text('Book Now');
+                  }
+                },
+                error: function () {
+                  alert('An error occurred while booking. Please try again.');
+                  btn.prop('disabled', false).text('Book Now');
+                }
+              });
+            }
+          },
+          error: function () {
+            // Handle AJAX error
+            alert('An error occurred while checking status. Please try again.');
+            btn.prop('disabled', false).text('Book Now');
+          }
+        });
+      });
+
+
+      $(document).on('click', '.refresh-btn-hess-chart', function () {
+        const patientId = $(this).data('patient_id');
+        
+        const refreshButton = $(this);
+
+        if (!patientId) {
+          alert('Patient ID is missing!');
+          return;
+        }
+
+        refreshButton.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
+
+        $.ajax({
+          url: 'hess_chart/update_status_opd',
+          type: 'POST',
+          data: { patient_id: patientId },
+          dataType: 'json',
+          success: function (response) {
+            if (response.status === 'success') {
+              reload_table();
+            } else {
+              alert(response.message || 'Failed to update status.');
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX Error:', error);
+            alert('An error occurred while updating the status.');
+          },
+
+        });
+      });
+
+      // hess chart end
+      // Refraction below 8 Years start
+      $(document).on('click', '.book-now-btn-url-refraction-below', function () {
+        const btn = $(this);
+        const patientId = btn.data('id');
+        const bookingUrl = btn.data('url');
+        btn.prop('disabled', true).text('In Progress');
+        $.ajax({
+          url: '<?= base_url("refraction_below8/check_booking_status"); ?>', // Backend URL to check status
+          type: 'POST',
+          data: { patient_id: patientId },
+          success: function (response) {
+            const data = JSON.parse(response);
+
+            if (data.status === '1') {
+              alert('Booking is already in progress for this patient.');
+              btn.prop('disabled', false).text('Book Now');
+              return;
+            } else if (data.status === '0') {
+              $.ajax({
+                url: '<?= base_url("refraction_below8/book_patient"); ?>',
+                type: 'POST',
+                data: { patient_id: patientId },
+                success: function (bookingResponse) {
+                  const bookingData = JSON.parse(bookingResponse);
+                  if (bookingData.status === 'success') {
+                    window.location.href = bookingUrl; // Redirect to booking URL
+                  } else {
+                    alert(bookingData.message || 'An error occurred.');
+                    btn.prop('disabled', false).text('Book Now');
+                  }
+                },
+                error: function () {
+                  alert('An error occurred while booking. Please try again.');
+                  btn.prop('disabled', false).text('Book Now');
+                }
+              });
+            }
+          },
+          error: function () {
+            // Handle AJAX error
+            alert('An error occurred while checking status. Please try again.');
+            btn.prop('disabled', false).text('Book Now');
+          }
+        });
+      });
+
+
+      $(document).on('click', '.refresh-btn-refraction-below', function () {
+        const patientId = $(this).data('patient_id');
+        
+        const refreshButton = $(this);
+
+        if (!patientId) {
+          alert('Patient ID is missing!');
+          return;
+        }
+
+        refreshButton.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
+
+        $.ajax({
+          url: 'refraction_below8/update_status_opd',
+          type: 'POST',
+          data: { patient_id: patientId },
+          dataType: 'json',
+          success: function (response) {
+            if (response.status === 'success') {
+              reload_table();
+            } else {
+              alert(response.message || 'Failed to update status.');
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX Error:', error);
+            alert('An error occurred while updating the status.');
+          },
+
+        });
+      });
+
+      // Refraction below 8 Years end
     </script>
     <!-- Confirmation Box -->
 
