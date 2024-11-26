@@ -533,7 +533,7 @@ class Dilate extends CI_Controller
         // Fetching the OPD data
         $list = $this->dilate->get_datatables();
         // Assuming you want to fetch booking data based on the first patient's booking_id
-        $data['booking_data'] = $this->dilate->get_booking_by_id($list[0]->booking_id);
+        $data['booking_data'] = $this->dilate->get_booking_by_id($list[0]->booking_id,$list[0]->patient_id);
         // $data = array();
         // $no = $_POST['start'];
         // echo "<pre>";print_r($data['booking_data']);die;
@@ -598,7 +598,7 @@ class Dilate extends CI_Controller
         $list = $this->dilate->get_datatables();
         
         // Assuming you want to fetch booking data based on the first patient's booking_id
-        $data['booking_data'] = $this->dilate->get_booking_by_id($list[0]->booking_id);
+        $data['booking_data'] = $this->dilate->get_booking_by_id($list[0]->booking_id,$list[0]->booking_id);
         
         // Group records by patient_id
         $grouped_data = [];

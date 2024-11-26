@@ -207,11 +207,11 @@ class Doctore_patient extends CI_Controller
 
     public function add($booking_id = null, $patient_id = null, $referred_by = null)
     {
-        echo "<pre>";
-        print_r($booking_id);
-        print_r($patient_id);
-        print_r($referred_by);
-        die('sagar');
+        // echo "<pre>";
+        // print_r($booking_id);
+        // print_r($patient_id);
+        // print_r($referred_by);
+        // die('sagar');
         // Load required models and libraries
         $this->load->library('form_validation');
         $this->load->model('doctore_patient/doctore_patient_model'); // Ensure this model is loaded

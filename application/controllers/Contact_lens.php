@@ -518,7 +518,7 @@ class Contact_lens extends CI_Controller
         // echo "<pre>";
         // print_r($data);
         // die;
-        $data['data_list']['side_effect_name'] = $this->contact_lens->get_side_effect_name($data['data_list']['side_effects']);
+        // $data['data_list']['side_effect_name'] = $this->contact_lens->get_side_effect_name($data['data_list']['side_effects']);
         // Create main header
         $data['mainHeader'] = "Contact Lens List";
         // if (!empty($from_date) && !empty($to_date)) {
