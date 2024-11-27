@@ -463,7 +463,7 @@ class Help_desk extends CI_Controller
 
       }
       if ($doct_patient_status == '1') {
-        $btn_doctor = '<a class="btn-custom disabled" href="javascript:void(0);" title="Ortho Paedic" style="pointer-events: none; opacity: 0.6;" data-url="512"> Doctore</a>';
+        $btn_doctor = '<a class="btn-custom disabled" href="javascript:void(0);" title="Ortho Paedic" style="pointer-events: none; opacity: 0.6;" data-url="512"> Doctor</a>';
       } else {
         // $btn_contact_lens = '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . '" title=" Contact Lens"> Contact Lens</a>';
         // $btn_doctor = '<button type="button" class="btn-custom open-popup" 

@@ -1686,6 +1686,8 @@ class Add_new_prescription_model extends CI_Model
 
 
 		if (!empty($post['prescrption_id']) || $post['prescrption_id'] != '') {
+		// 	echo "sagar";
+		// echo "<pre>"; print_r($post);
 			if (!empty($post['sale_id']) || $post['sale_id'] != 0) {
 				$sale_id = $post['sale_id'];
 				$this->db->where('sales_id', $post['sale_id']);
@@ -1717,6 +1719,34 @@ class Add_new_prescription_model extends CI_Model
 						$this->db->where('id', $post['patient_id']);
 						$this->db->update('hms_patient', ['pat_status' => $new_status]);
 					}
+				}
+			}
+			if ($post['flag'] == 'doct_patie_add_eye') {
+				$this->db->select('status');
+				$this->db->where('patient_id', $post['patient_id']); // Assuming 'patient_id' is the column in hms_doct_patient
+				$this->db->where('booking_id', $post['booking_id']); // Assuming 'patient_id' is the column in hms_doct_patient
+				$query = $this->db->get('hms_doct_patient');
+
+				// Check if the record exists
+				if ($query->num_rows() > 0) {
+					$current_status = $query->row()->status;
+
+					// Update the 'status' column to 1 if it is currently 0
+					if ($current_status == 0) {
+						$this->db->where('patient_id', $post['patient_id']);
+						$this->db->where('booking_id', $post['booking_id']);
+						$this->db->update('hms_doct_patient', ['status' => 1]);
+
+						if ($this->db->affected_rows() > 0) {
+							log_message('info', 'Status updated successfully for patient_id: ' . $post['patient_id']);
+						} else {
+							log_message('error', 'Failed to update status for patient_id: ' . $post['patient_id']);
+						}
+					} else {
+						log_message('info', 'Status is already 1 for patient_id: ' . $post['patient_id']);
+					}
+				} else {
+					log_message('error', 'No record found in hms_doct_patient for patient_id: ' . $post['patient_id']);
 				}
 			}
 
@@ -1754,34 +1784,34 @@ class Add_new_prescription_model extends CI_Model
 				//echo $this->db->last_query(); exit;
 				$prescriptionid = $this->db->insert_id();
 
-				if ($post['flag'] == 'doct_patie_add_eye') {
-					$this->db->select('status');
-					$this->db->where('patient_id', $post['patient_id']); // Assuming 'patient_id' is the column in hms_doct_patient
-					$this->db->where('booking_id', $post['booking_id']); // Assuming 'patient_id' is the column in hms_doct_patient
-					$query = $this->db->get('hms_doct_patient');
+				// if ($post['flag'] == 'doct_patie_add_eye') {
+				// 	$this->db->select('status');
+				// 	$this->db->where('patient_id', $post['patient_id']); // Assuming 'patient_id' is the column in hms_doct_patient
+				// 	$this->db->where('booking_id', $post['booking_id']); // Assuming 'patient_id' is the column in hms_doct_patient
+				// 	$query = $this->db->get('hms_doct_patient');
 
-					// Check if the record exists
-					if ($query->num_rows() > 0) {
-						$current_status = $query->row()->status;
+				// 	// Check if the record exists
+				// 	if ($query->num_rows() > 0) {
+				// 		$current_status = $query->row()->status;
 
-						// Update the 'status' column to 1 if it is currently 0
-						if ($current_status == 0) {
-							$this->db->where('patient_id', $post['patient_id']);
-							$this->db->where('booking_id', $post['booking_id']);
-							$this->db->update('hms_doct_patient', ['status' => 1]);
+				// 		// Update the 'status' column to 1 if it is currently 0
+				// 		if ($current_status == 0) {
+				// 			$this->db->where('patient_id', $post['patient_id']);
+				// 			$this->db->where('booking_id', $post['booking_id']);
+				// 			$this->db->update('hms_doct_patient', ['status' => 1]);
 
-							if ($this->db->affected_rows() > 0) {
-								log_message('info', 'Status updated successfully for patient_id: ' . $post['patient_id']);
-							} else {
-								log_message('error', 'Failed to update status for patient_id: ' . $post['patient_id']);
-							}
-						} else {
-							log_message('info', 'Status is already 1 for patient_id: ' . $post['patient_id']);
-						}
-					} else {
-						log_message('error', 'No record found in hms_doct_patient for patient_id: ' . $post['patient_id']);
-					}
-				}
+				// 			if ($this->db->affected_rows() > 0) {
+				// 				log_message('info', 'Status updated successfully for patient_id: ' . $post['patient_id']);
+				// 			} else {
+				// 				log_message('error', 'Failed to update status for patient_id: ' . $post['patient_id']);
+				// 			}
+				// 		} else {
+				// 			log_message('info', 'Status is already 1 for patient_id: ' . $post['patient_id']);
+				// 		}
+				// 	} else {
+				// 		log_message('error', 'No record found in hms_doct_patient for patient_id: ' . $post['patient_id']);
+				// 	}
+				// }
 			}
 		}
 		$medi_total_amount = 0;

@@ -153,7 +153,7 @@
                             }
                             ?>
                             <!-- Additional vital inputs -->
-                            <div class="grp">
+                            <!-- <div class="grp">
                                 <label>BP <br>
                                     <input type="text" name="patient_bp" value="<?php echo $form_data['patient_bp']; ?>"
                                         class="numeric_slash w-70px m_tiny"> <br>
@@ -166,7 +166,7 @@
                                         class="price_float input-tiny m_tiny"> <br>
                                     &deg;F
                                 </label>
-                            </div>
+                            </div> -->
                             <!-- Add more vitals as needed -->
                         </div>
                     </div>
