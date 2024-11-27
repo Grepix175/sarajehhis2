@@ -296,7 +296,7 @@ class Help_desk extends CI_Controller
         } else {
           $btn_hess_chart = '<button class="btn-custom book-now-btn-url-hess-chart" title="Hess Chart" 
                   data-id="' . $prescription->patient_id . '" 
-                  data-url="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id) . '?flag=' . $flag . "&type=" . $type . '">Hess Chart</button>';
+                  data-url="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . "&type=" . $type . '">Hess Chart</button>';
         }
       } else {
         $btn_hess_chart = '<a class="btn-custom disabled" href="javascript:void(0);" title="Hess Chart" style="pointer-events: none; opacity: 0.6;" data-url="512">  Hess Chart</a>';
@@ -320,7 +320,7 @@ class Help_desk extends CI_Controller
         } else {
           $btn_refraction_below8 = '<button class="btn-custom book-now-btn-url-refraction-below" title="Refraction below 8 Years" 
                   data-id="' . $prescription->patient_id . '" 
-                  data-url="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id ) . '?flag=' . $flag . "&type=" . $type . '">Refraction below 8 Years</button>';
+                  data-url="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id  . '/' . $prescription->id ) . '?flag=' . $flag . "&type=" . $type . '">Refraction below 8 Years</button>';
         }
       } else {
         $btn_refraction_below8 = '<a class="btn-custom disabled" href="javascript:void(0);" title="Refraction below 8 Years" style="pointer-events: none; opacity: 0.6;" data-url="512">Refraction Below 8 Years</a>';

@@ -1,5 +1,6 @@
 
 <section>
+  
 	<div class="row">
 		<div class="col-xs-3">
 			Visit: <small class="mini_outline_btn d-none" onclick="clear_checkups();" id="clear_checkuptype">clear</small>
@@ -17,9 +18,15 @@
 		
 	</div>
    </section>
-	
+   
 	<section>
     <div class="row">
+    <?php
+			// echo "<pre>";
+			// print_r($symptom_fever);
+			// print_r($symptom_smell_taste);
+			// die('sagar');
+			?>
         <!-- Left Section (Health Screening Questionnaire) -->
         <div class="col-md-6">
             <!--<div class="row">-->
@@ -27,6 +34,7 @@
             <!--        <h4>Health Screening Questionnaire</h4>-->
             <!--    </div>-->
             <!--</div>-->
+          
             <div class="questionnaire">
                 <div class="col-xs-12 question-item">
                     <div class="question-text">Any H/O Fever or following symptoms in the last 15 days</div>

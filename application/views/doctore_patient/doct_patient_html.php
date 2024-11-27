@@ -55,7 +55,7 @@
             <th>Age</th>
             <th>Status</th>
             <th>Patient Status</th>
-            <th>Doctore</th>
+            <th>Doctor</th>
             <th>Room No</th>
             <th>Created Date</th>
         </tr>
