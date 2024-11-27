@@ -131,16 +131,17 @@ class Doctore_patient extends CI_Controller
             $row[] = date('d-M-Y', strtotime($doctore_patient->created_date));
 
             $btn_history = '';
+            $btn_add_eye_history='';
             $btn_prescription = "";
 
             if (in_array('524', $users_data['permission']['action'])) {
                 // $btn_edit = ' <a class="" href="' . base_url("opd/edit_booking/" . $doctore_patient->booking_id) . '" title="Edit Booking"><i class="fa fa-pencil"></i> Edit</a>';
-                $btn_edit = '<a onClick="return edit_medicine_unit(' . $doctore_patient->id . ');" href="javascript:void(0)" style="' . $doctore_patient->id . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>';
+                $btn_edit = '<a onClick="return edit_medicine_unit(' . $doctore_patient->id . ');" href="javascript:void(0)" style="' . $doctore_patient->id . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Room</a>';
 
             }
             if (in_array('2413', $users_data['permission']['action'])) {
                 
-                $btn_prescription .= '<li><a  href="' . base_url("eye/add_eye_prescription/test/" . $doctore_patient->booking_id . '/' . $doctore_patient->std_eye_id) . '" title="Add Prescription"><i class="fa fa-eye"></i> Add Adv. Eye Prescription</a></li>';
+                $btn_add_eye_history .= '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $doctore_patient->booking_id . '/' . $doctore_patient->std_eye_id) . '" title="Add Prescription"><i class="fa fa-eye"></i> Add Adv. Eye Prescription</a>';
             }
             if (in_array('525', $users_data['permission']['action'])) {
                 $btn_prescription .= '<li> <a href="' . base_url("eyes_patient_prescription_history/history/" . $doctore_patient->patient_id) . '" title="Prescription History" data-url="512"><i class="fa fa-pencil"></i> Prescription History</a></li>';
@@ -183,7 +184,7 @@ class Doctore_patient extends CI_Controller
             //            <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("doctore_patient/print_vision/" . $doctore_patient->id) . '\');">
             //     <i class="fa fa-print"></i> Print
             // </a>
-            $row[] = $btn_history . $btn_a;
+            $row[] = $btn_add_eye_history . $btn_history . $btn_a;
 
             $row[] = $doctore_patient->emergency_status;
 

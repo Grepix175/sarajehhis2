@@ -176,8 +176,15 @@
 							<div class="col-md-12">
 
 								<div class="grp_box">
-									<table>
-										<tr>
+									<table style="width: 50%; border-collapse: collapse; text-align: center;">
+										<thead>
+											<tr>
+												<th style="border: 1px solid #000; font-size:10px">Vital Name</th>
+												<th style="border: 1px solid #000;font-size:10x">Value</th>
+												<!-- <th style="border: 1px solid #000;font-size:10px">Unit</th> -->
+											</tr>
+										</thead>
+										<tbody>
 											<?php
 											if (!empty($vitals_list)) {
 												$i = 0; // Counter for the vitals
@@ -187,28 +194,33 @@
 													// Check if the value is not empty
 													if (!empty($vital_val)) {
 														?>
-														<td>
-															<label>
-																<?php echo $vitals->vitals_name; ?> <br>
-																<input name="data[<?php echo $vitals->id; ?>][name]"
-																	value="<?php echo $vital_val; ?>" type="text" class="w-50px m_tiny">
-																<br> <?php echo $vitals->vitals_unit; ?>
-															</label>
-														</td>
+														<tr>
+															<td
+																style="border: 1px solid #000; padding: 4px; font-size: 11px; text-align: center;">
+																<?php echo $vitals->vitals_name .' / '. $vitals->vitals_unit;; ?>
+															</td>
+															<td
+																style="border: 1px solid #000; padding: 4px; font-size: 11px; text-align: center;">
+																<?php echo $vital_val; ?>
+															</td>
+															<!-- <td
+																style="border: 1px solid #000; padding: 4px; font-size: 11px; text-align: center;">
+																<?php echo $vitals->vitals_unit; ?>
+															</td> -->
+														</tr>
+
+
 														<?php
 														$i++;
-														// Close the row after every 3 inputs
-														if ($i % 3 === 0) {
-															echo '</tr><tr>'; // Close current row and start a new row
-														}
 													}
 												}
 											}
 											?>
-										</tr>
+										</tbody>
 									</table>
-
 								</div>
+
+
 							</div>
 						</div>
 						<?php
@@ -4837,7 +4849,7 @@
 									echo '<strong style="float:left;width:100%;font-size:10px;">Lens: </strong> Nature- ' . $exam_lens['examnsn_lens_l_ntr'] . ', ';
 								}
 								/*if($exam_lens['examnsn_lens_l_psn'] !='Central'){ echo 'Position- '.$exam_lens['examnsn_lens_l_psn'].', ';}else{ echo 'Central, '; }
-																																																																	if($exam_lens['examnsn_lens_l_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_l_sz'].', ';}else{ echo 'Crystalline, ';}*/
+																																																																																									if($exam_lens['examnsn_lens_l_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_l_sz'].', ';}else{ echo 'Crystalline, ';}*/
 								if ($exam_lens['examnsn_lens_l_ntr'] == 'Cataract') {
 									echo ' LOCS Grading- ';
 									if ($exam_lens['examnsn_lens_l_locsg_ns'] != '') {
@@ -4861,7 +4873,7 @@
 									echo '<strong style="float:left;width:100%;font-size:10px;">Lens: </strong> Nature- ' . $exam_lens['examnsn_lens_r_ntr'] . ', ';
 								}
 								/*if($exam_lens['examnsn_lens_r_psn'] !='Central'){ echo 'Position- '.$exam_lens['examnsn_lens_r_psn'].', ';}else{ echo 'Central, '; }
-																																																																	if($exam_lens['examnsn_lens_r_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_r_sz'].', ';}else{ echo 'Crystalline, ';}*/
+																																																																																									if($exam_lens['examnsn_lens_r_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_r_sz'].', ';}else{ echo 'Crystalline, ';}*/
 								if ($exam_lens['examnsn_lens_r_ntr'] == 'Cataract') {
 									'Lens Grading- ';
 									if ($exam_lens['examnsn_lens_r_locsg_ns'] != '') {
