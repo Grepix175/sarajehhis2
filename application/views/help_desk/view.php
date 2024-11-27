@@ -176,12 +176,12 @@
 							<div class="col-md-12">
 
 								<div class="grp_box">
-									<table style="width: 50%; border-collapse: collapse; text-align: center;">
+									<table style="width: 100%; border-collapse: collapse; text-align: center;">
 										<thead>
 											<tr>
 												<th style="border: 1px solid #000; font-size:10px">Vital Name</th>
 												<th style="border: 1px solid #000;font-size:10x">Value</th>
-												<!-- <th style="border: 1px solid #000;font-size:10px">Unit</th> -->
+												<th style="border: 1px solid #000;font-size:10px">Unit</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -197,16 +197,16 @@
 														<tr>
 															<td
 																style="border: 1px solid #000; padding: 4px; font-size: 11px; text-align: center;">
-																<?php echo $vitals->vitals_name .' / '. $vitals->vitals_unit;; ?>
+																<?php echo $vitals->vitals_name; ?>
 															</td>
 															<td
 																style="border: 1px solid #000; padding: 4px; font-size: 11px; text-align: center;">
 																<?php echo $vital_val; ?>
 															</td>
-															<!-- <td
+															<td
 																style="border: 1px solid #000; padding: 4px; font-size: 11px; text-align: center;">
 																<?php echo $vitals->vitals_unit; ?>
-															</td> -->
+															</td>
 														</tr>
 
 
