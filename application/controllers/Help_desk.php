@@ -495,7 +495,7 @@ class Help_desk extends CI_Controller
                   data-patient-id="' . $prescription->patient_id . '" 
                   data-referred-by="' . $prescription->attended_doctor . '" 
                   data-url="' . $prescription->url . '" 
-                  title="Doctore">Doctore</button>';
+                  title="">Doctor</button>';
         }
       }
       // $btn_doctor = 
