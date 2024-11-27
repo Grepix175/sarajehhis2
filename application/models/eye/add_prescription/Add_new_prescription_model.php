@@ -1721,7 +1721,7 @@ class Add_new_prescription_model extends CI_Model
 					}
 				}
 			}
-			if ($post['flag'] == 'doct_patie_add_eye') {
+			if (!empty($post['patient_id']) && !empty($post['booking_id'])) {
 				$this->db->select('status');
 				$this->db->where('patient_id', $post['patient_id']); // Assuming 'patient_id' is the column in hms_doct_patient
 				$this->db->where('booking_id', $post['booking_id']); // Assuming 'patient_id' is the column in hms_doct_patient
