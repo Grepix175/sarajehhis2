@@ -1841,7 +1841,8 @@ class Add_eye_prescription extends CI_Controller
     {
         //echo $this->db->last_query();
         echo "<pre>"; print_r($result_advice['advice_tab']); exit;
-    }*/
+        }*/
+        // echo "<pre>"; print_r($result_advice['advice_tab']); exit;
 
     $advice_medication = json_decode($result_advice['medication_tab']);
     $data['advice_medication'] = (array) $advice_medication;

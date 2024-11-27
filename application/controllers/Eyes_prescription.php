@@ -199,7 +199,7 @@ public function index()
                   // $btn_print_chasma_pre = ' <a class="btn-custom" onClick="return print_window_page('.$print_chasma_url.')" href="javascript:void(0)" title="Print Chasma Detail"  data-url="512"><i class="fa fa-print"></i> Print Chasma Detail</a>';
        
 
-            $row[] =   $btn_print_pre.$btn_print_chasma_pre.$btn_upload_pre.$btn_view_upload_pre.$btn_edit.$btn_view.$btn_delete;                
+            $row[] =   $btn_print_pre.$btn_upload_pre.$btn_view_upload_pre.$btn_edit.$btn_view.$btn_delete;                
         
             $data[] = $row;
             $i++;
