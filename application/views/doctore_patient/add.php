@@ -106,7 +106,7 @@
                             $('#load_add_medicine_unit_modal_popup').modal('hide');
                             flash_session_msg(data.message);
                             // reload_table();
-                            window.location.href = '<?php echo base_url('ortho_ptics'); ?>';
+                            window.location.href = '<?php echo base_url('doctore_patient'); ?>';
                         } else if (data.faield) {
                             $('#load_add_medicine_unit_modal_popup').modal('hide');
                             showAlert(

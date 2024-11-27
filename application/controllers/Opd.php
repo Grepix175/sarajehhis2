@@ -276,7 +276,7 @@ class Opd extends CI_Controller
             $btn_delete = ' <a class="" onClick="return delete_opd_booking(' . $test->id . ')" href="javascript:void(0)" title="Delete" data-url="512"><i class="fa fa-trash"></i> Delete</a>';
           }
 
-          $btn_prescription .= '<li><a  href="' . base_url("eye/add_eye_prescription/test/" . $test->id) . '" title="Add Prescription"><i class="fa fa-eye"></i> Add Adv. Eye Prescription</a></li>';
+          // $btn_prescription .= '<li><a  href="' . base_url("eye/add_eye_prescription/test/" . $test->id) . '" title="Add Prescription"><i class="fa fa-eye"></i> Add Adv. Eye Prescription</a></li>';
 
           // $btn_prescription .= '<li> <a onClick="return update_patient_arrival(' . $test->id . ')" href="javascript:void(0)" title="Patient Status" data-url="512"><i class="fa fa-pencil"></i> Patient Status</a></li>';
 
@@ -286,7 +286,7 @@ class Opd extends CI_Controller
 
             // $btn_prescription .= '<li> <a onClick="return update_patient_arrival(' . $test->id . ')" href="javascript:void(0)" title="Patient Status" data-url="512"><i class="fa fa-pencil"></i> Patient Status</a></li>';
 
-            $btn_prescription .= '<li> <a href="' . base_url("eyes_patient_prescription_history/history/" . $test->patient_id) . '" title="Prescription History" data-url="512"><i class="fa fa-pencil"></i> Prescription History</a></li>';
+            // $btn_prescription .= '<li> <a href="' . base_url("eyes_patient_prescription_history/history/" . $test->patient_id) . '" title="Prescription History" data-url="512"><i class="fa fa-pencil"></i> Prescription History</a></li>';
           }
           // if ($test->dilate_status == 0) {
           //   $btn_prescription .= '<li><a href="javascript:void(0)"  onclick="dilated(' . $test->id . ');" style="color:orange!important;"><i class="fa fa-hand-o-right"></i> Dilate</a></li>';
@@ -301,8 +301,8 @@ class Opd extends CI_Controller
         if (in_array('1419', $users_data['permission']['action'])) {
           $print_url_eye = "'" . base_url('eye/add_prescription/print_blank_prescriptions/' . $test->id . '/' . $test->branch_id) . "'";
           // $btn_prescription .= '<div class="btn-ipd">';
-          $btn_prescription .= '<li><a  href="javascript:void(0)" onClick="return print_window_page(' . $print_url_eye . ')" title="Print" ><i class="fa fa-eye"></i
-                > Blank Eye Prescription  </a></li>';
+          // $btn_prescription .= '<li><a  href="javascript:void(0)" onClick="return print_window_page(' . $print_url_eye . ')" title="Print" ><i class="fa fa-eye"></i
+          //       > Blank Eye Prescription  </a></li>';
           //$btn_prescription .='</div>';                
         }
         // if (in_array('1441', $users_data['permission']['action'])) {

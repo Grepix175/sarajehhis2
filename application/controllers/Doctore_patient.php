@@ -16,7 +16,7 @@ class Doctore_patient extends CI_Controller
     public function index()
     {
         // echo "Hiii";die('okay');
-        $data['page_title'] = 'Doctore Patient List';
+        $data['page_title'] = 'Doctor Patient List';
         $this->load->model('default_search_setting/default_search_setting_model');
         $default_search_data = $this->default_search_setting_model->get_default_setting();
         if (isset($default_search_data[1]) && !empty($default_search_data) && $default_search_data[1] == 1) {
@@ -59,7 +59,7 @@ class Doctore_patient extends CI_Controller
                               })</script>";
             }
             $pat_status = '';
-            $patient_status = $this->opd->get_by_id_patient_status($prescription->booking_id);
+            $patient_status = $this->opd->get_by_id_patient_status($doctore_patient->booking_id);
             if ($patient_status == 1) {
                 $pat_status = '<font style="background-color: #228B22;color:white">Vision</font>';
             }
@@ -132,23 +132,19 @@ class Doctore_patient extends CI_Controller
 
             $btn_history = '';
             $btn_prescription = "";
-            // if ($doctore_patient->status == 0) {
-            //     $flag = 'doct_patie_add_eye';
-            //     $type = 'doct_patient';
-            //     $row[] = ' <a href="' . base_url("eye/add_eye_prescription/test/" . $doctore_patient->booking_id) . '?flag=' . $flag . "&type=" . $type . '" class="btn-custom" href="javascript:void(0)" style="' . $doctore_patient->id . '" title="Edit"> Add Adv. Eye Prescription</a>
-            //                ';
-            // } else {
-            //     $row[] = '<a class="btn-custom disabled" href="javascript:void(0);" title="Refraction below 8 Years" style="pointer-events: none; opacity: 0.6;" data-url="512">Add Adv. Eye Prescription</a>';
-
-            // }
 
             if (in_array('524', $users_data['permission']['action'])) {
                 // $btn_edit = ' <a class="" href="' . base_url("opd/edit_booking/" . $doctore_patient->booking_id) . '" title="Edit Booking"><i class="fa fa-pencil"></i> Edit</a>';
-                $btn_edit = '<a onClick="return edit_medicine_unit(' . $doctore_patient->id . ');" href="javascript:void(0)" style="' . $room_master->id . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>';
+                $btn_edit = '<a onClick="return edit_medicine_unit(' . $doctore_patient->id . ');" href="javascript:void(0)" style="' . $doctore_patient->id . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>';
 
-                // $btn_edit = ' <a class="" href="' . base_url("opd/edit_booking/" . $test->id) . '" title="Edit Booking"><i class="fa fa-pencil"></i> Edit</a>';
             }
-            $btn_prescription .= '<li><a  href="' . base_url("eye/add_eye_prescription/test/" . $doctore_patient->id) . '" title="Add Prescription"><i class="fa fa-eye"></i> Add Adv. Eye Prescription</a></li>';
+            if (in_array('2413', $users_data['permission']['action'])) {
+
+                $btn_prescription .= '<li><a  href="' . base_url("eye/add_eye_prescription/test/" . $doctore_patient->booking_id . '/' . $doctore_patient->std_eye_id) . '" title="Add Prescription"><i class="fa fa-eye"></i> Add Adv. Eye Prescription</a></li>';
+            }
+            if (in_array('525', $users_data['permission']['action'])) {
+                $btn_prescription .= '<li> <a href="' . base_url("eyes_patient_prescription_history/history/" . $doctore_patient->patient_id) . '" title="Prescription History" data-url="512"><i class="fa fa-pencil"></i> Prescription History</a></li>';
+              }
             if (in_array('1419', $users_data['permission']['action'])) {
                 $print_url_eye = "'" . base_url('eye/add_prescription/print_blank_prescriptions/' . $doctore_patient->booking_id . '/' . $doctore_patient->branch_id) . "'";
                 // $btn_prescription .= '<div class="btn-ipd">';
@@ -156,27 +152,27 @@ class Doctore_patient extends CI_Controller
                       > Blank Eye Prescription  </a></li>';
                 //$btn_prescription .='</div>';                
             }
-            if ($doctore_patient->status == 0) {
-                $flag = 'eye_history';
-                $type = 'opd_booking';
-                // $btn_history .= '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $doctore_patient->booking_id . "?flag=" . $flag . "&type=" . $type) . '" title="Add Prescription"><i class="fa fa-history"></i> History</a>';
-                if ($doctore_patient->patient_history_status == 1) {
-                    // Render disabled button for already booked patients
-                    $btn_history = '<div class="action-buttons">
-                                      <button class="btn-custom book-now-btn book-now-btn-ortho-ptics" disabled style="width: 71%;">
-                                          <i class="fa fa-spinner fa-spin"></i> In Progress
-                                      </button>
-                                      <a href="javascript:void(0);" title="Refresh" class="btn btn-secondary refresh-btn-history" data-patient_id="' . $doctore_patient->patient_id . '" >
-                                          <i class="fa fa-refresh"></i>
-                                      </a>
-                                      </div>';
-                  } else {
+            // if ($doctore_patient->status == 0) {
+            //     $flag = 'eye_history';
+            //     $type = 'opd_booking';
+            //     // $btn_history .= '<a class="btn-custom" href="' . base_url("eye/add_eye_prescription/test/" . $doctore_patient->booking_id . "?flag=" . $flag . "&type=" . $type) . '" title="Add Prescription"><i class="fa fa-history"></i> History</a>';
+            //     if ($doctore_patient->patient_history_status == 1) {
+            //         // Render disabled button for already booked patients
+            //         $btn_history = '<div class="action-buttons">
+            //                           <button class="btn-custom book-now-btn book-now-btn-ortho-ptics" disabled style="width: 71%;">
+            //                               <i class="fa fa-spinner fa-spin"></i> In Progress
+            //                           </button>
+            //                           <a href="javascript:void(0);" title="Refresh" class="btn btn-secondary refresh-btn-history" data-patient_id="' . $doctore_patient->patient_id . '" >
+            //                               <i class="fa fa-refresh"></i>
+            //                           </a>
+            //                           </div>';
+            //       } else {
                    
-                    $btn_history = '<button class="btn-custom book-now-btn-url-history" title="Hess Chart" 
-                          data-id="' . $doctore_patient->patient_id . '" 
-                          data-url="' . base_url("eye/add_eye_prescription/test/" . $doctore_patient->booking_id ) . '?flag=' . $flag . "&type=" . $type . '" >History</button>';
-                  }
-            }
+            //         $btn_history = '<button class="btn-custom book-now-btn-url-history" title="Hess Chart" 
+            //               data-id="' . $doctore_patient->patient_id . '" 
+            //               data-url="' . base_url("eye/add_eye_prescription/test/" . $doctore_patient->booking_id ) . '?flag=' . $flag . "&type=" . $type . '" >History</button>';
+            //       }
+            // }
             $btn_a = '<div class="slidedown">
               <button disabled class="btn-custom">More <span class="caret"></span></button>
               <ul class="slidedown-content">
@@ -216,7 +212,7 @@ class Doctore_patient extends CI_Controller
         $this->load->library('form_validation');
         $this->load->model('doctore_patient/doctore_patient_model'); // Ensure this model is loaded
         $data['side_effects'] = $this->doctore_patient->get_all_side_effects(); // Fetch side effects
-        $data['page_title'] = 'Add Doctore';
+        $data['page_title'] = 'Add Doctor';
         $data['booking_id'] = isset($booking_id) ? $booking_id : '';
         $data['patient_id'] = isset($patient_id) ? $patient_id : '';
         $data['booking_data'] = $this->doctore_patient->get_booking_patient_details($data['patient_id']);
@@ -472,7 +468,7 @@ class Doctore_patient extends CI_Controller
 
         // Validate the ID
         if (isset($id) && !empty($id) && is_numeric($id)) {
-            $data['page_title'] = 'Edit Doctore';
+            $data['page_title'] = 'Edit ';
             // $data['doctore_patient'] = 
 
             // Retrieve the brand by ID
@@ -484,20 +480,20 @@ class Doctore_patient extends CI_Controller
             // If no result is found, you might want to handle this case
             if (!$result) {
                 // Optionally, set an error message or redirect
-                show_error('Doctore not found', 404);
+                show_error('Doctor not found', 404);
                 return;
             }
 
 
             // Prepare data for the view
-            $data['page_title'] = "Update Doctore";
+            $data['page_title'] = "Update Doctor";
             $data['form_error'] = '';
             $data['form_data'] = array(
                 'data_id' => $result['doc_pat_id'],
                 "booking_id" => $result['booking_id'],
                 "patient_id" => $result['patient_id'],
                 "room_no" => $result['room_id'],
-                "referred_by" => $result['referred_by'],
+                "referred_by" => $result['doct_patient_referred_by_id'],
             );
 
             // echo "<pre>";
@@ -587,7 +583,7 @@ class Doctore_patient extends CI_Controller
         $to_date = $this->input->get('end_date');
 
         // Main header with date range if provided
-        $mainHeader = "Doctore Patient List";
+        $mainHeader = "Doctor Patient List";
         if (!empty($from_date) && !empty($to_date)) {
             $mainHeader .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
         }
@@ -602,7 +598,7 @@ class Doctore_patient extends CI_Controller
         $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
 
         // Field names (header row) should start in row 3
-        $fields = array('Token No', 'OPD No', 'Patient Reg No.', 'Patient Name', 'Gender', 'Mobile No', 'Age', 'Status', 'Patient Status', 'Doctore', 'Room No', 'Created Date');
+        $fields = array('Token No', 'OPD No', 'Patient Reg No.', 'Patient Name', 'Gender', 'Mobile No', 'Age', 'Status', 'Patient Status', 'Doctor', 'Room No', 'Created Date');
 
         $col = 0; // Initialize the column index
         foreach ($fields as $field) {
@@ -710,7 +706,7 @@ class Doctore_patient extends CI_Controller
         // die;
         $data['data_list']['side_effect_name'] = $this->doctore_patient->get_side_effect_name($data['data_list']['side_effects']);
         // Create main header
-        $data['mainHeader'] = "Doctore Patient List";
+        $data['mainHeader'] = "Doctor Patient List";
         // if (!empty($from_date) && !empty($to_date)) {
         // $data['mainHeader'] .= " (From: " . date('d-m-Y', strtotime($from_date)) . " To: " . date('d-m-Y', strtotime($to_date)) . ")";
         // }

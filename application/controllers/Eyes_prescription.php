@@ -181,7 +181,7 @@ public function index()
                 }
                 if(in_array('2413',$users_data['permission']['action'])) 
                 {
-                $btn_delete = ' <a class="btn-custom" onClick="return delete_eye_prescription('.$prescription->id.')" href="javascript:void(0)" title="Delete" data-url="512"><i class="fa fa-trash"></i> Delete</a>';
+                // $btn_delete = ' <a class="btn-custom" onClick="return delete_eye_prescription('.$prescription->id.')" href="javascript:void(0)" title="Delete" data-url="512"><i class="fa fa-trash"></i> Delete</a>';
                 }
             }
 
@@ -196,7 +196,7 @@ public function index()
                  } 
                  
                  $print_chasma_url = "'".base_url('eye/add_eye_prescription/print_chasma_details/'.$prescription->id.'/'.$prescription->booking_id)."'";
-                  $btn_print_chasma_pre = ' <a class="btn-custom" onClick="return print_window_page('.$print_chasma_url.')" href="javascript:void(0)" title="Print Chasma Detail"  data-url="512"><i class="fa fa-print"></i> Print Chasma Detail</a>';
+                  // $btn_print_chasma_pre = ' <a class="btn-custom" onClick="return print_window_page('.$print_chasma_url.')" href="javascript:void(0)" title="Print Chasma Detail"  data-url="512"><i class="fa fa-print"></i> Print Chasma Detail</a>';
        
 
             $row[] =   $btn_print_pre.$btn_print_chasma_pre.$btn_upload_pre.$btn_view_upload_pre.$btn_edit.$btn_view.$btn_delete;                

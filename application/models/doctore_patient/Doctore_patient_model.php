@@ -29,10 +29,11 @@ class Doctore_patient_model extends CI_Model
         // echo "<pre>";
         // print_r($search);
         // die;
-        $this->db->select("hms_doct_patient.*, hms_patient.id as patient_id,hms_patient.patient_name,hms_patient.patient_code,hms_patient.emergency_status,hms_patient.pat_status, hms_patient.patient_code_auto,hms_patient.gender,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h, hms_patient.mobile_no, hms_opd_booking.booking_code,hms_opd_booking.token_no,hms_doctors.doctor_name,hms_room_master.room_no");
+        $this->db->select("hms_doct_patient.*, hms_patient.id as patient_id,hms_patient.patient_name,hms_patient.patient_code,hms_patient.emergency_status,hms_patient.pat_status, hms_patient.patient_code_auto,hms_patient.gender,hms_patient.age,hms_patient.age_y,hms_patient.age_d,hms_patient.age_m,hms_patient.age_h, hms_patient.mobile_no, hms_opd_booking.booking_code,hms_opd_booking.token_no,hms_doctors.doctor_name,hms_room_master.room_no,hms_std_eye_prescription.id as std_eye_id");
         $this->db->from($this->table);
         $this->db->join('hms_patient', 'hms_patient.id = hms_doct_patient.patient_id', 'left');
         $this->db->join('hms_doctors', 'hms_doctors.id = hms_doct_patient.referred_by', 'left');
+        $this->db->join('hms_std_eye_prescription', 'hms_std_eye_prescription.booking_id = hms_doct_patient.booking_id', 'left');
         $this->db->join('hms_room_master', 'hms_room_master.id = hms_doct_patient.room_id', 'left');
         $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_doct_patient.booking_id', 'left');
         $this->db->where('hms_doct_patient.is_deleted', '0');
@@ -144,14 +145,22 @@ class Doctore_patient_model extends CI_Model
 
     public function get_by_id($id)
     {
-        $this->db->select('hms_doct_patient.id as doc_pat_id,hms_doct_patient.*,hms_opd_booking.*,hms_patient.*');
-        $this->db->from($this->table);
-        $this->db->join('hms_patient', 'hms_patient.id = hms_doct_patient.patient_id', 'left');
-        $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_doct_patient.booking_id', 'left');
-        $this->db->where('hms_doct_patient.id', $id);
-        $this->db->where('hms_doct_patient.is_deleted', '0');
-        $query = $this->db->get();
-        return $query->row_array();
+        $this->db->select('
+        hms_doct_patient.id as doc_pat_id,
+        hms_doct_patient.*,
+        hms_opd_booking.*,
+        hms_patient.*,
+        hms_doct_patient.referred_by as doct_patient_referred_by_id
+    ');
+    $this->db->from('hms_doct_patient');
+    $this->db->join('hms_patient', 'hms_patient.id = hms_doct_patient.patient_id', 'left');
+    $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_doct_patient.booking_id', 'left');
+    $this->db->where('hms_doct_patient.id', $id);
+    $this->db->where('hms_doct_patient.is_deleted', '0');
+    $query = $this->db->get();
+    
+    return $query->row_array();
+    
 
     }
 

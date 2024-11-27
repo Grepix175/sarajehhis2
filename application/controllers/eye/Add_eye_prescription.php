@@ -194,7 +194,7 @@ class Add_eye_prescription extends CI_Controller
       $result_refraction = $this->add_prescript->get_prescription_refraction_new_by_id($booking_id, $pres_id);
 
       //   echo "<pre>";
-      // print_r($result_refraction);
+      // print_r($result_edit);
       // die;
 
       $result_examination = $this->add_prescript->get_prescription_examination_id($booking_id, $pres_id);
@@ -332,7 +332,7 @@ class Add_eye_prescription extends CI_Controller
       $data['symptom_contact'] = $result_edit['symptom_contact'];
       //$data['pres_id']=$result_edit['id'];
       $data['pres_id'] = $pres_id;
-
+      
       // die('refe');
       // Refraction
       $refraction_visual_acuity = json_decode($result_refraction['visual_acuity']);
@@ -1912,7 +1912,7 @@ class Add_eye_prescription extends CI_Controller
     $data['symptom_travel'] = $result_edit['symptom_travel'];
     $data['symptom_contact'] = $result_edit['symptom_contact'];
     // echo "<pre>";
-    // print_r($data);
+    // print_r($result_edit['symptom_fever']);
     // die;
     //$data['pres_id']=$result_edit['id'];
     $data['pres_id'] = $pres_id;
