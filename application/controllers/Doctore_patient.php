@@ -139,8 +139,8 @@ class Doctore_patient extends CI_Controller
 
             }
             if (in_array('2413', $users_data['permission']['action'])) {
-                $flag = 'doct_patie_add_eye';
-                $btn_prescription .= '<li><a  href="' . base_url("eye/add_eye_prescription/test/" . $doctore_patient->booking_id . '/' . $doctore_patient->std_eye_id) . '?flag=' . $flag.   '" title="Add Prescription"><i class="fa fa-eye"></i> Add Adv. Eye Prescription</a></li>';
+                
+                $btn_prescription .= '<li><a  href="' . base_url("eye/add_eye_prescription/test/" . $doctore_patient->booking_id . '/' . $doctore_patient->std_eye_id) . '" title="Add Prescription"><i class="fa fa-eye"></i> Add Adv. Eye Prescription</a></li>';
             }
             if (in_array('525', $users_data['permission']['action'])) {
                 $btn_prescription .= '<li> <a href="' . base_url("eyes_patient_prescription_history/history/" . $doctore_patient->patient_id) . '" title="Prescription History" data-url="512"><i class="fa fa-pencil"></i> Prescription History</a></li>';
