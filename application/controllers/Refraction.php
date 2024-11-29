@@ -85,6 +85,7 @@ class Refraction extends CI_Controller
             // $row[] = $refraction->booking_id;
             // $row[] = $refraction->lens;
             // $row[] = $refraction->comment;
+            $row[] = $refraction->ref_status == 0 ? '<font color="green">Pending</font>' : '<font color="red">Completed</font>';
 
             // Check status and set active or not active
             $statuses = explode(',', $refraction->pat_status);
@@ -100,12 +101,28 @@ class Refraction extends CI_Controller
             // Display the last status with the desired styling
             // $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';            
             $row[] = date('d-M-Y', strtotime($refraction->created_date));
+            $send_to = '';
+        // echo "<pre>";print_r($list);die;
+
+            if ($refraction->ref_status == 0) {
+                $send_to = '<button type="button" class="btn-custom open-popup-send-to" 
+                            id="open-popup" 
+                            data-booking-id="' . $refraction->booking_id . '" 
+                            data-patient-id="' . $refraction->patient_id . '" 
+                            data-referred-by="' . $refraction->attended_doctor . '" 
+                            data-mod-type="refraction_above" 
+                            data-url="' . $refraction->url . '" 
+                            title="">Send To</button>';
+              }else{
+                $send_to = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Send To</a>';
+              }
 
             // Add action buttons
             $row[] = '<a onClick="return edit_refraction(' . $refraction->refraction_id . ');" class="btn-custom" href="javascript:void(0)" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
                     <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("refraction/print_refraction/" . $refraction->booking_id . "/" . $refraction->refraction_id) . '\');">
                         <i class="fa fa-print"></i> Print
-                    </a>';
+                    </a>
+                ' . $send_to;
             $row[] = $refraction->emergency_status; // Add emergency_status to the row
 
             $data[] = $row;

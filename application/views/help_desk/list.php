@@ -1612,6 +1612,28 @@ $users_data = $this->session->userdata('auth_users');
       });
 
       // Refraction below 8 Years end
+
+      $(document).on('click', '.open-popup-send-to', function () {
+        // Get the data attributes from the clicked button
+        var bookingId = $(this).data('booking-id');
+        var patientId = $(this).data('patient-id');
+        var modType = $(this).data('mod-type');
+        var referredBy = $(this).data('referred-by');        
+
+        // Build the dynamic URL with route parameters
+        var routeUrl = '<?php echo base_url(); ?>help_desk/add/' + bookingId + '/' + patientId + '/' + referredBy + '/' +  modType;
+
+        // Select the modal
+        var $modal = $('#load_add_medicine_unit_modal_popup');
+
+        // Load the modal content
+        $modal.load(routeUrl, function () {
+          // Show the modal once content is loaded
+          $modal.modal('show');
+        });
+      });
+
+
     </script>
     <!-- Confirmation Box -->
 

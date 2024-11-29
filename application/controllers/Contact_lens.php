@@ -99,6 +99,7 @@ class Contact_lens extends CI_Controller
             $row[] = $gender[$contact_lens->gender];
             $row[] = $contact_lens->mobile_no;
             $row[] = $age;
+            $row[] = $contact_lens->status == 0 ? '<font color="green">Pending</font>' : '<font color="red">Completed</font>';
             $statuses = explode(',', $contact_lens->pat_status);
 
             // Trim any whitespace from the statuses and get the last one
@@ -115,6 +116,22 @@ class Contact_lens extends CI_Controller
             // $row[] = $contact_lens->hospital_rate;
             $row[] = date('d-M-Y', strtotime($contact_lens->created_date));
 
+            $send_to = '';
+        // echo "<pre>";print_r($list);die;
+
+            if ($contact_lens->status == 0) {
+                $send_to = '<button type="button" class="btn-custom open-popup-send-to" 
+                            id="open-popup" 
+                            data-booking-id="' . $contact_lens->booking_id . '" 
+                            data-patient-id="' . $contact_lens->patient_id . '" 
+                            data-referred-by="' . $contact_lens->attended_doctor . '" 
+                            data-mod-type="contact_lens" 
+                            data-url="' . $contact_lens->url . '" 
+                            title="">Send To</button>';
+              }else{
+                $send_to = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Send To</a>';
+              }
+
             // Add action buttons
             $row[] = '<a onClick="return edit(' . $contact_lens->id . ', ' . $contact_lens->booking_id . ', ' . $contact_lens->patient_id . ');" class="btn-custom" href="javascript:void(0)" title="Edit">
             <i class="fa fa-pencil" aria-hidden="true"></i> Edit
@@ -124,7 +141,7 @@ class Contact_lens extends CI_Controller
             <i class="fa fa-print"></i> Print
         </a>
         
-        ';
+        '  . $send_to;
         $row[] = $contact_lens->emergency_status;
 
             $data[] = $row;

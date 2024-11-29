@@ -110,6 +110,7 @@ class Vision extends CI_Controller
             $row[] = $gender[$vision->gender];
             $row[] = $vision->mobile_no;
             $row[] = $age;
+            $row[] = $vision->status == 0 ? '<font color="green">Pending</font>' : '<font color="red">Completed</font>';
             $statuses = explode(',', $vision->pat_status);
 
             // Trim any whitespace from the statuses and get the last one
@@ -141,11 +142,27 @@ class Vision extends CI_Controller
             // $row[] = $vision->created_at;
             // $row[] = $vision->updated_at;
 
+            $send_to = '';
+        // echo "<pre>";print_r($list);die;
+
+            if ($vision->status == 0) {
+                $send_to = '<button type="button" class="btn-custom open-popup-send-to" 
+                            id="open-popup" 
+                            data-booking-id="' . $vision->booking_id . '" 
+                            data-patient-id="' . $vision->patient_id . '" 
+                            data-referred-by="' . $vision->attended_doctor . '" 
+                            data-mod-type="vision" 
+                            data-url="' . $vision->url . '" 
+                            title="">Send To</button>';
+              }else{
+                $send_to = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Send To</a>';
+              }
+
             // Add action buttons
             $row[] = '  <a onClick="return edit_vision(' . $vision->id . ');" class="btn-custom" href="javascript:void(0)" style="' . $vision->id . '" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
                        <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("vision/print_vision/" . $vision->id) . '\');">
                 <i class="fa fa-print"></i> Print
-            </a>';
+            </a>' . $send_to;
             $row[] = $vision->emergency_status;
 
 

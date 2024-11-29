@@ -10,10 +10,10 @@ class Oct_hfa_model extends CI_Model
     // Define the columns you want to retrieve from the table
     var $column = array(
         'hms_oct_hfa.id',
-        'hms_oct_hfa.branch_id', 
-        'hms_oct_hfa.booking_code', 
+        'hms_oct_hfa.branch_id',
+        'hms_oct_hfa.booking_code',
         'hms_oct_hfa.pres_id',
-        'hms_oct_hfa.patient_id', 
+        'hms_oct_hfa.patient_id',
         'hms_oct_hfa.booking_id',
         'hms_oct_hfa.chief_complaints', // New fields from INSERT statement
         'hms_oct_hfa.squint_history',
@@ -29,10 +29,10 @@ class Oct_hfa_model extends CI_Model
         'hms_oct_hfa.infection_history',
         'hms_oct_hfa.convulsion_history',
         'hms_oct_hfa.consanguinity_history',
-        'hms_oct_hfa.status', 
-        'hms_oct_hfa.is_deleted', 
-        'hms_oct_hfa.deleted_by', 
-        'hms_oct_hfa.deleted_date', 
+        'hms_oct_hfa.status',
+        'hms_oct_hfa.is_deleted',
+        'hms_oct_hfa.deleted_by',
+        'hms_oct_hfa.deleted_date',
         'hms_oct_hfa.ip_address',
         'hms_oct_hfa.created_by',
         'hms_oct_hfa.modified_by',
@@ -42,7 +42,7 @@ class Oct_hfa_model extends CI_Model
         'hms_patient.mobile_no',
         'hms_patient.patient_code'
     );
-    
+
 
 
     public function __construct()
@@ -55,27 +55,27 @@ class Oct_hfa_model extends CI_Model
     private function _get_datatables_query()
     {
         $search = $this->session->userdata('prescription_search');
-        
+
         // Use DISTINCT to avoid duplicate rows
         $this->db->distinct();
-        
+
         // Select relevant columns (including hms_oct_hfa and related tables)
-        $this->db->select("hms_oct_hfa.id as refraction_id, hms_oct_hfa.*, hms_patient.*, hms_patient_category.patient_category as patient_category_name, hms_opd_booking.*, hms_doctors.doctor_name, hms_opd_booking.token_no as token, hms_patient.emergency_status, hms_oct_hfa.created_date as created");
-        
+        $this->db->select("hms_oct_hfa.id as refraction_id, hms_oct_hfa.*, hms_patient.*, hms_patient_category.patient_category as patient_category_name, hms_opd_booking.*, hms_doctors.doctor_name, hms_opd_booking.token_no as token, hms_patient.emergency_status, hms_oct_hfa.status as oct_status,hms_oct_hfa.created_date as created");
+
         $this->db->from($this->table);
-        
+
         // Joining tables
         $this->db->join('hms_patient', 'hms_patient.id = hms_oct_hfa.patient_id', 'left');
         $this->db->join('hms_patient_category', 'hms_patient_category.id = hms_patient.patient_category', 'left');
         $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_oct_hfa.booking_id', 'left');
         $this->db->join('hms_doctors', 'hms_doctors.id = hms_opd_booking.attended_doctor', 'left');
-        
+
         // Filter deleted entries
         $this->db->where('hms_oct_hfa.is_deleted', '0');
-        
+
         // Group by to prevent duplicate rows
         $this->db->group_by('hms_oct_hfa.id');
-        
+
         $i = 0;
         foreach ($this->column as $item) {
             if ($_POST['search']['value']) {
@@ -105,13 +105,15 @@ class Oct_hfa_model extends CI_Model
                 $end_date = date('Y-m-d 23:59:59', strtotime($search['end_date']));
                 $this->db->where('hms_oct_hfa.created_date <=', $end_date);
             }
-
-            
-            if (!empty($search['priority_type']) && $search['priority_type'] !== '4') {
-				$this->db->where('hms_patient.emergency_status', $search['priority_type']);
-			} else if ($search['priority_type'] === '4') {				
-				$this->db->where('hms_patient.emergency_status', NULL);
+            if (isset($search['search_type']) && $search['search_type'] != "") {
+				$this->db->where('hms_oct_hfa.status', $search['search_type']);
 			}
+
+            if (!empty($search['priority_type']) && $search['priority_type'] !== '4') {
+                $this->db->where('hms_patient.emergency_status', $search['priority_type']);
+            } else if ($search['priority_type'] === '4') {
+                $this->db->where('hms_patient.emergency_status', NULL);
+            }
 
             if (!empty($search['patient_name'])) {
                 $this->db->like('hms_patient.patient_name', $search['patient_name'], 'after');
@@ -138,10 +140,10 @@ class Oct_hfa_model extends CI_Model
                 $this->db->like('hms_oct_hfa.remarks', $search['remarks']);
             }
             if ($search['emergency_booking'] == "4") {
-				$this->db->where('hms_opd_booking.opd_type', 1);
-			} else if ($search['emergency_booking'] == "3") {
-				$this->db->where('hms_opd_booking.opd_type', 0);
-			}
+                $this->db->where('hms_opd_booking.opd_type', 1);
+            } else if ($search['emergency_booking'] == "3") {
+                $this->db->where('hms_opd_booking.opd_type', 0);
+            }
         }
 
         // Handle ordering from DataTables or default ordering
@@ -163,7 +165,7 @@ class Oct_hfa_model extends CI_Model
 
         // Execute the query
         $query = $this->db->get();
-       
+
         // Display the last executed query for debugging
 
         // Return the query results as usual
@@ -190,7 +192,7 @@ class Oct_hfa_model extends CI_Model
         return $query->row_array();
     }
 
-    public function get_by_booking_id($booking_id,$patient_id)
+    public function get_by_booking_id($booking_id, $patient_id)
     {
         // Select fields from hms_oct_hfa and hms_patient
         $this->db->select('hms_oct_hfa.*, hms_patient.*');
@@ -200,7 +202,7 @@ class Oct_hfa_model extends CI_Model
         $this->db->where('hms_oct_hfa.patient_id', $patient_id);
         $this->db->where('hms_oct_hfa.is_deleted', '0');
         $query = $this->db->get();
-        
+
         // Check if the query returns any row
         if ($query->num_rows() > 0) {
             return true; // Record found
@@ -216,13 +218,13 @@ class Oct_hfa_model extends CI_Model
         // Select the chief_complaints field from hms_std_eye_prescription_history
         $this->db->select('chief_complaints');
         $this->db->from('hms_std_eye_prescription_history');
-        
+
         // Filter by the given patient_id
         $this->db->where('booking_id', $booking_id);
-        
+
         // Fetch the result
         $query = $this->db->get();
-        
+
         // Return the result as a single row (since patient_id is unique)
         return $query->row_array(); // Will return only the chief_complaints field in the array
     }
@@ -232,38 +234,38 @@ class Oct_hfa_model extends CI_Model
         // Select the chief_complaints field from hms_std_eye_prescription_history
         $this->db->select('chief_complaints');
         $this->db->from('hms_std_eye_prescription_history');
-        
+
         // Filter by the given patient_id
         // $this->db->where('booking_code', $booking_id);
         $this->db->where('booking_id', $booking_id);
-        
+
         // Fetch the result
         $query = $this->db->get();
-        
+
         // Return the result as a single row (since patient_id is unique)
         return $query->row_array(); // Will return only the chief_complaints field in the array
     }
 
     public function deleteall($ids = array())
-	{
+    {
         if (!empty($ids)) {
             $id_list = [];
-			foreach ($ids as $id) {
+            foreach ($ids as $id) {
                 if (!empty($id) && $id > 0) {
                     $id_list[] = $id;
-				}
-			}
+                }
+            }
             // echo "ok";die;
-			$branch_ids = implode(',', $id_list);
+            $branch_ids = implode(',', $id_list);
             // echo "<pre>";print_r($branch_ids);die;
-			$user_data = $this->session->userdata('auth_users');
-			$this->db->set('is_deleted', 1);
-			$this->db->set('deleted_by', $user_data['id']);
-			$this->db->set('deleted_date', date('Y-m-d H:i:s'));
-			$this->db->where('id IN (' . $branch_ids . ')');
-			$this->db->update('hms_oct_hfa');
-		}
-	}
+            $user_data = $this->session->userdata('auth_users');
+            $this->db->set('is_deleted', 1);
+            $this->db->set('deleted_by', $user_data['id']);
+            $this->db->set('deleted_date', date('Y-m-d H:i:s'));
+            $this->db->where('id IN (' . $branch_ids . ')');
+            $this->db->update('hms_oct_hfa');
+        }
+    }
 
     public function count_all()
     {
@@ -316,52 +318,52 @@ class Oct_hfa_model extends CI_Model
     }
 
     public function get_bookings_by_id($booking_id)
-	{
+    {
         // echo $booking_id;die;
-		// Select all fields from both tables
-		$this->db->select('hms_opd_booking.id as opd_id,hms_opd_booking.*, hms_patient.*'); // Select all fields
-		$this->db->from('hms_opd_booking'); // Start with the bookings table
-		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
+        // Select all fields from both tables
+        $this->db->select('hms_opd_booking.id as opd_id,hms_opd_booking.*, hms_patient.*'); // Select all fields
+        $this->db->from('hms_opd_booking'); // Start with the bookings table
+        $this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
 
-		// Filter by the booking ID
-		$this->db->where('hms_opd_booking.id', $booking_id); // Assuming 'id' is the primary key for bookings
-		$query = $this->db->get();
+        // Filter by the booking ID
+        $this->db->where('hms_opd_booking.id', $booking_id); // Assuming 'id' is the primary key for bookings
+        $query = $this->db->get();
 
-		// Check if any results were returned
-		if ($query->num_rows() > 0) {
-			return $query->row_array(); // Return the first result as an associative array
-		}
+        // Check if any results were returned
+        if ($query->num_rows() > 0) {
+            return $query->row_array(); // Return the first result as an associative array
+        }
 
-		return null; // Return null if no data found
-	}
+        return null; // Return null if no data found
+    }
 
-    public function get_booking_by_id($booking_id,$patient_id)
-	{
+    public function get_booking_by_id($booking_id, $patient_id)
+    {
         // echo $booking_id;die;
-		// Select all fields from both tables
-		$this->db->select('hms_opd_booking.id as opd_id,hms_opd_booking.*, hms_patient.*'); // Select all fields
-		$this->db->from('hms_opd_booking'); // Start with the bookings table
-		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
+        // Select all fields from both tables
+        $this->db->select('hms_opd_booking.id as opd_id,hms_opd_booking.*, hms_patient.*'); // Select all fields
+        $this->db->from('hms_opd_booking'); // Start with the bookings table
+        $this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
 
-		// Filter by the booking ID
-		$this->db->where('hms_opd_booking.id', $booking_id); // Assuming 'id' is the primary key for bookings
-		// $this->db->where('hms_opd_booking.patient_id', $patient_id); // Assuming 'id' is the primary key for bookings
-		$query = $this->db->get();
+        // Filter by the booking ID
+        $this->db->where('hms_opd_booking.id', $booking_id); // Assuming 'id' is the primary key for bookings
+        // $this->db->where('hms_opd_booking.patient_id', $patient_id); // Assuming 'id' is the primary key for bookings
+        $query = $this->db->get();
 
-		// Check if any results were returned
-		if ($query->num_rows() > 0) {
-			return $query->row_array(); // Return the first result as an associative array
-		}
+        // Check if any results were returned
+        if ($query->num_rows() > 0) {
+            return $query->row_array(); // Return the first result as an associative array
+        }
 
-		return null; // Return null if no data found
-	}
+        return null; // Return null if no data found
+    }
 
     // Method to save or update a refraction record
     public function save($data, $chief_complaints)
     {
         // Debugging prints (remove in production)
         // echo "<pre>"; print_r($chief_complaints); echo "<br>"; print_r($data); die;
-
+        $post = $this->input->post();
         // Start a transaction to ensure atomic operations
         $this->db->trans_start();
 
@@ -371,7 +373,7 @@ class Oct_hfa_model extends CI_Model
             if (isset($data['created_date'])) {
                 unset($data['created_date']);
             }
-        
+
             // Update the existing record in hms_oct_hfa table
             $this->db->where('id', $data['id']);
             if (!$this->db->update($this->table, $data)) {
@@ -382,11 +384,112 @@ class Oct_hfa_model extends CI_Model
             }
         } else {
             // Insert new record into hms_oct_hfa table
-            if (!$this->db->insert($this->table, $data)) {
-                // If insert fails, log the error and rollback
-                log_message('error', 'Failed to insert record in ' . $this->table . ': ' . $this->db->last_query());
-                $this->db->trans_rollback();
-                return false; // Return false if insert fails
+            // if (!$this->db->insert($this->table, $data)) {
+            //     // If insert fails, log the error and rollback
+            //     log_message('error', 'Failed to insert record in ' . $this->table . ': ' . $this->db->last_query());
+            //     $this->db->trans_rollback();
+            //     return false; // Return false if insert fails
+            // }
+            if (!empty($post['send_to_type'] === 'OCT HFA') || $post['mod_type'] === 'help_desk') {
+                // Insert a new record
+                $this->db->insert($this->table, $data);
+            }
+
+            if ($post['mod_type'] === 'refraction_above') {
+                $data = ['status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_opd_refraction');
+                // echo $this->db->last_query(); 
+                // die('okay');
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_opd_refraction', $data);
+                }
+
+            } else if ($post['mod_type'] === 'vision') {
+                $data = ['status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_vision');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_vision', $data);
+                }
+            } else if ($post['mod_type'] === 'contact_lens') {
+                $data = ['status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_contact_lens');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_contact_lens', $data);
+                }
+            } else if ($post['mod_type'] == 'low_vision') {
+                $data = ['status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_low_vision');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_low_vision', $data);
+                }
+            } else if ($post['mod_type'] == 'prosthetic') {
+                $data = ['status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_prosthetic');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_prosthetic', $data);
+                }
+            }
+            else if ($post['mod_type'] == 'oct_hfa') {
+                $data = ['status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_oct_hfa');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_oct_hfa', $data);
+                }
+            }
+            else if ($post['mod_type'] == 'ortho_ptics') {
+                $data = ['status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_ortho_ptics');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_ortho_ptics', $data);
+                }
             }
             if (!empty($data['patient_id'])) {
                 // echo "Ok";die;
@@ -394,13 +497,13 @@ class Oct_hfa_model extends CI_Model
                 $this->db->select('pat_status');
                 $this->db->where('id', $data['patient_id']);
                 $query = $this->db->get('hms_patient');
-                
+
                 if ($query->num_rows() > 0) {
                     $current_status = $query->row()->pat_status;
-            
+
                     // Concatenate the current status with the new status (e.g., 'Low vision')
                     $new_status = $current_status . ', ' . 'OCT-HFA';
-            
+
                     // Update the 'pat_status' field with the concatenated value
                     $this->db->where('id', $data['patient_id']);
                     $this->db->update('hms_patient', ['pat_status' => $new_status]);
@@ -409,7 +512,7 @@ class Oct_hfa_model extends CI_Model
         }
         // echo $data['patient_id'];die;
 
-        
+
 
         // Now, update the chief_complaints in the hms_std_eye_prescription_history table
         if (!empty($chief_complaints)) {
@@ -502,25 +605,26 @@ class Oct_hfa_model extends CI_Model
 
 
     function get_by_low_vision_status($booking_id = '', $patient_id = '')
-	{
-		$user_data = $this->session->userdata('auth_users');
-		$this->db->select('booking_id');
-		$this->db->from('hms_oct_hfa');
-		$this->db->where('hms_oct_hfa.booking_id', $booking_id);
-		// $this->db->where('hms_oct_hfa.patient_id', $patient_id);
-		$this->db->where('hms_oct_hfa.is_deleted', 0);
+    {
+        $user_data = $this->session->userdata('auth_users');
+        $this->db->select('booking_id');
+        $this->db->from('hms_oct_hfa');
+        $this->db->where('hms_oct_hfa.booking_id', $booking_id);
+        // $this->db->where('hms_oct_hfa.patient_id', $patient_id);
+        $this->db->where('hms_oct_hfa.is_deleted', 0);
 
-		$query = $this->db->get();
+        $query = $this->db->get();
 
-		if ($query->num_rows() > 0) {
-			return 1; // Return 1 if a match is found
-		}
+        if ($query->num_rows() > 0) {
+            return 1; // Return 1 if a match is found
+        }
 
-		return 0; //
+        return 0; //
 
-	}
+    }
 
-    public function get_booking_status($patient_id) {
+    public function get_booking_status($patient_id)
+    {
         $this->db->select('octhfa_status');
         $this->db->from('hms_patient'); // Replace 'bookings' with your table name
         $this->db->where('id', $patient_id);
@@ -536,7 +640,8 @@ class Oct_hfa_model extends CI_Model
         return 0; // Default to not booked
     }
 
-    public function book_patient($patient_id) {
+    public function book_patient($patient_id)
+    {
         // Update database to mark patient as booked
         $data = ['octhfa_status' => 1]; // Assuming 1 means booked
         $this->db->where('id', $patient_id);
@@ -544,26 +649,26 @@ class Oct_hfa_model extends CI_Model
     }
 
     public function update_patient_list_opd_status($patient_id = '')
-	{
-		$this->db->set('hms_patient.octhfa_status', 0);
-		$this->db->where('hms_patient.id', $patient_id);
-		$query = $this->db->update('hms_patient');		
-		return $query;
-	}
+    {
+        $this->db->set('hms_patient.octhfa_status', 0);
+        $this->db->where('hms_patient.id', $patient_id);
+        $query = $this->db->update('hms_patient');
+        return $query;
+    }
 
     public function patient_exists($patient_id = "")
-	{
-        
-		$user_data = $this->session->userdata('auth_users');
-		$this->db->select('hms_oct_hfa.id as oct_hfa_id*, hms_patient.id,hms_patient.patient_name');
+    {
 
-		$this->db->from('hms_oct_hfa');
-		$this->db->join('hms_patient', 'hms_patient.id = hms_oct_hfa.patient_id');
-		$this->db->where('hms_oct_hfa.branch_id', $user_data['parent_id']);
-		$this->db->where('hms_oct_hfa.patient_id', $patient_id);
-		$this->db->where('hms_oct_hfa.is_deleted', '0');
-		$query = $this->db->get();
-		return $query->row_array();
-	}
+        $user_data = $this->session->userdata('auth_users');
+        $this->db->select('hms_oct_hfa.id as oct_hfa_id*, hms_patient.id,hms_patient.patient_name');
+
+        $this->db->from('hms_oct_hfa');
+        $this->db->join('hms_patient', 'hms_patient.id = hms_oct_hfa.patient_id');
+        $this->db->where('hms_oct_hfa.branch_id', $user_data['parent_id']);
+        $this->db->where('hms_oct_hfa.patient_id', $patient_id);
+        $this->db->where('hms_oct_hfa.is_deleted', '0');
+        $query = $this->db->get();
+        return $query->row_array();
+    }
 
 }

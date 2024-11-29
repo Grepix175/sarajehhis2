@@ -81,6 +81,7 @@ class Low_vision extends CI_Controller
             // $row[] = $low_vision->patient_category_name;
             $row[] = $low_vision->mobile_no;
             $row[] = $age;
+            $row[] = $low_vision->low_status == 0 ? '<font color="green">Pending</font>' : '<font color="red">Completed</font>';
             // $row[] = "Dr. " . $low_vision->doctor_name;
             // $row[] = $low_vision->booking_id;
             // $row[] = $low_vision->lens;
@@ -97,11 +98,24 @@ class Low_vision extends CI_Controller
             $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';
             $row[] = date('d-M-Y', strtotime($low_vision->created));
 
+            if ($low_vision->low_status == 0) {
+                $send_to = '<button type="button" class="btn-custom open-popup-send-to" 
+                            id="open-popup" 
+                            data-booking-id="' . $low_vision->booking_id . '" 
+                            data-patient-id="' . $low_vision->patient_id . '" 
+                            data-referred-by="' . $low_vision->attended_doctor . '" 
+                            data-mod-type="low_vision" 
+                            data-url="' . $low_vision->url . '" 
+                            title="">Send To</button>';
+              }else{
+                $send_to = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Send To</a>';
+              }
+
             // Add action buttons
             $row[] = '<a onClick="return edit_refraction(' . $low_vision->refraction_id . ');" class="btn-custom" href="javascript:void(0)" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
                     <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("low_vision/print_low_vision/" . $low_vision->booking_id."/".$low_vision->refraction_id) . '\');">
                         <i class="fa fa-print"></i> Print
-                    </a>';
+                    </a>' . $send_to;
             $row[] = $low_vision->emergency_status;
 
 

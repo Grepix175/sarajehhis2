@@ -122,7 +122,9 @@ class Add_eye_prescription extends CI_Controller
     $data['vitals_list'] = $this->general_model->vitals_list();
     $result = $this->add_prescript->get_new_data_by_id($booking_id);
     $data['booking_data'] = $this->add_prescript->get_booking_by_id($booking_id);
-    
+    // echo $pres_id;
+    // echo "<pre>";
+    // print_r($data['booking_data']);
     
     $type = $this->input->get('type') ?? '';
     // echo $pres_id;

@@ -426,6 +426,8 @@ class Dilate_model extends CI_Model
 		// Insert new records
 		if (!empty($insert_data)) {
 			$this->db->insert_batch('hms_dilated', $insert_data);
+		}else{
+
 		}
 
 		// Update existing records

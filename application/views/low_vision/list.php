@@ -220,6 +220,21 @@ $users_data = $this->session->userdata('auth_users');
                     onkeyup="return form_submit();" class="numeric m_input_default" maxlength="10" value="" type="text">
                 </div>
               </div>
+              <div class="row m-b-5">
+                <div class="col-xs-5"><label> Booking Type</label></div>
+                <div class="col-xs-7">
+                  <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="3"
+                    type="radio" <?php if ($form_data['emergency_booking'] == '3') {
+                      echo 'checked';
+                    } ?>> Normal
+                  <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="4"
+                    type="radio" <?php if ($form_data['emergency_booking'] == '4') {
+                      echo 'checked';
+                    } ?>> FastTrack
+                  <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value=""
+                    type="radio" <?php echo 'checked'; ?>> All
+                </div>
+              </div>
 
             </div> <!-- 4 -->
 
@@ -240,163 +255,174 @@ $users_data = $this->session->userdata('auth_users');
                 </div>
               </div>
               <div class="row m-b-5">
-                <div class="col-xs-4"><label> Booking Type</label></div>
+                <div class="col-xs-4"><label>Status</label></div>
                 <div class="col-xs-8">
-                  <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="3"
-                    type="radio" <?php if ($form_data['emergency_booking'] == '3') {
-                      echo 'checked';
-                    } ?>> Normal
-                  <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="4"
-                    type="radio" <?php if ($form_data['emergency_booking'] == '4') {
-                      echo 'checked';
-                    } ?>> FastTrack
-                  <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value=""
-                    type="radio" <?php echo 'checked'; ?>> All
+                  <!-- Pending (Default) -->
+                  <label class="radio-label">
+                    <input type="radio" name="search_type" value="0" id="search_type_default"
+                      onclick="return form_submit();" checked="checked">
+                    <span style="margin-top: 5px;">Pending</span>
+                  </label>
+
+                  <!-- Completed -->
+                  <label class="radio-label">
+                    <input type="radio" name="search_type" value="1" id="search_type_waiting"
+                      onclick="return form_submit();">
+                    <span style="margin-top: 5px;">Completed</span>
+                  </label>
+
+                  <!-- All -->
+                  <label class="radio-label">
+                    <input type="radio" name="search_type" value="" id="search_type_process"
+                      onclick="return form_submit();">
+                    <span style="margin-top: 5px;">All</span>
+                  </label>
                 </div>
-              </div>
-
-              <?php
-              $users_data = $this->session->userdata('auth_users');
-
-              if (array_key_exists("permission", $users_data)) {
-                $permission_section = $users_data['permission']['section'];
-                $permission_action = $users_data['permission']['action'];
-              } else {
-                $permission_section = array();
-                $permission_action = array();
-              }
-              //print_r($permission_action);
-              
-              $new_branch_data = array();
-              $users_data = $this->session->userdata('auth_users');
-              $sub_branch_details = $this->session->userdata('sub_branches_data');
-              $parent_branch_details = $this->session->userdata('parent_branches_data');
+                </div>
 
 
-              if (!empty($users_data['parent_id'])) {
-                $new_branch_data['id'] = $users_data['parent_id'];
+                <?php
+                $users_data = $this->session->userdata('auth_users');
 
-                $users_new_data[] = $new_branch_data;
-                $merg_branch = array_merge($users_new_data, $sub_branch_details);
+                if (array_key_exists("permission", $users_data)) {
+                  $permission_section = $users_data['permission']['section'];
+                  $permission_action = $users_data['permission']['action'];
+                } else {
+                  $permission_section = array();
+                  $permission_action = array();
+                }
+                //print_r($permission_action);
+                
+                $new_branch_data = array();
+                $users_data = $this->session->userdata('auth_users');
+                $sub_branch_details = $this->session->userdata('sub_branches_data');
+                $parent_branch_details = $this->session->userdata('parent_branches_data');
 
-                $ids = array_column($merg_branch, 'id');
-                $branch_id = implode(',', $ids);
-                $option = '<option value="' . $branch_id . '">All</option>';
-              }
 
-              ?>
-              <?php if (in_array('1', $permission_section)) { ?>
-                <div class="row m-b-5">
-                  <div class="col-xs-5"><label>Branch</label></div>
-                  <div class="col-xs-7">
+                if (!empty($users_data['parent_id'])) {
+                  $new_branch_data['id'] = $users_data['parent_id'];
+
+                  $users_new_data[] = $new_branch_data;
+                  $merg_branch = array_merge($users_new_data, $sub_branch_details);
+
+                  $ids = array_column($merg_branch, 'id');
+                  $branch_id = implode(',', $ids);
+                  $option = '<option value="' . $branch_id . '">All</option>';
+                }
+
+                ?>
+                <?php if (in_array('1', $permission_section)) { ?>
+                  <div class="row m-b-5">
+                    <div class="col-xs-5"><label>Branch</label></div>
+                    <div class="col-xs-7">
 
 
 
-                    <select name="branch_id" id="branch_id" onchange="return form_submit();">
-                      <?php echo $option; ?>
-                      <option selected="selected" <?php if (isset($_POST['branch_id']) && $_POST['branch_id'] == $users_data['parent_id']) {
-                        echo 'selected="selected"';
-                      } ?>
-                        value="<?php echo $users_data['parent_id']; ?>">Self</option>';
-                      <?php
-                      if (!empty($sub_branch_details)) {
-                        $i = 0;
-                        foreach ($sub_branch_details as $key => $value) {
-                          ?>
-                          <option value="<?php echo $sub_branch_details[$i]['id']; ?>" <?php if (isset($_POST['branch_id']) && $_POST['branch_id'] == $sub_branch_details[$i]['id']) {
-                               echo 'selected="selected"';
-                             } ?>>
-                            <?php echo $sub_branch_details[$i]['branch_name']; ?>
-                          </option>
-                          <?php
-                          $i = $i + 1;
+                      <select name="branch_id" id="branch_id" onchange="return form_submit();">
+                        <?php echo $option; ?>
+                        <option selected="selected" <?php if (isset($_POST['branch_id']) && $_POST['branch_id'] == $users_data['parent_id']) {
+                          echo 'selected="selected"';
+                        } ?>
+                          value="<?php echo $users_data['parent_id']; ?>">Self</option>';
+                        <?php
+                        if (!empty($sub_branch_details)) {
+                          $i = 0;
+                          foreach ($sub_branch_details as $key => $value) {
+                            ?>
+                            <option value="<?php echo $sub_branch_details[$i]['id']; ?>" <?php if (isset($_POST['branch_id']) && $_POST['branch_id'] == $sub_branch_details[$i]['id']) {
+                                 echo 'selected="selected"';
+                               } ?>>
+                              <?php echo $sub_branch_details[$i]['branch_name']; ?>
+                            </option>
+                            <?php
+                            $i = $i + 1;
+                          }
+
                         }
-
-                      }
-                      ?>
-                    </select>
+                        ?>
+                      </select>
 
 
+                    </div>
                   </div>
-                </div>
 
-              <?php } else { ?>
-                <input type="hidden" name="branch_id" id="branch_id" value="<?php echo $users_data['parent_id']; ?>">
-              <?php } ?>
+                <?php } else { ?>
+                  <input type="hidden" name="branch_id" id="branch_id" value="<?php echo $users_data['parent_id']; ?>">
+                <?php } ?>
 
 
-              <script>
-                $(document).ready(function () {
-                  // Function to show/hide additional selection based on radio button selection
-                  $('input[name="search_type"]').change(function () {
-                    if ($(this).val() == "0") { // If Pending is selected
-                      $('#additional_selection').show();
-                    } else {
-                      $('#additional_selection').hide();
-                    }
+                <script>
+                  $(document).ready(function () {
+                    // Function to show/hide additional selection based on radio button selection
+                    $('input[name="search_type"]').change(function () {
+                      if ($(this).val() == "0") { // If Pending is selected
+                        $('#additional_selection').show();
+                      } else {
+                        $('#additional_selection').hide();
+                      }
+                    });
                   });
-                });
-              </script>
+                </script>
 
 
-            </div> <!-- 4 -->
+              </div> <!-- 4 -->
 
-            <div class="col-sm-4 d-flex justify-content-center" style="margin-left: 178px;margin-top: 30px;">
+              <div class="col-sm-4 d-flex justify-content-center" style="margin-left: 178px;margin-top: 30px;">
 
-              <!--<a class="btn-custom" id="reset_date" onclick="reset_search();"><i class="fa fa-refresh"></i> Reset</a>
+                <!--<a class="btn-custom" id="reset_date" onclick="reset_search();"><i class="fa fa-refresh"></i> Reset</a>
 <br>
   <a href="javascript:void(0)" class="btn-a-search" id="patient_adv_search">
     <i class="fa fa-cubes" aria-hidden="true"></i> 
     Search
   </a>-->
-              <a class="btn-custom" id="reset_date" onclick="reset_search();"> Reset</a>
-              <!--<a href="javascript:void(0)" class="btn-custom" id="patient_adv_search">
+                <a class="btn-custom" id="reset_date" onclick="reset_search();"> Reset</a>
+                <!--<a href="javascript:void(0)" class="btn-custom" id="patient_adv_search">
     <i class="fa fa-cubes" aria-hidden="true"></i> 
     Advance Search
   </a>-->
-            </div> <!-- 4 -->
+              </div> <!-- 4 -->
 
 
-          </div> <!-- row -->
+            </div> <!-- row -->
 
-          <div class="row">
-            <div class="col-sm-12">
-              <div id="additional_selection">
+            <div class="row">
+              <div class="col-sm-12">
+                <div id="additional_selection">
 
-                <div class="col-xs-2"><label style="margin-left: -15px;">Type</label></div>
+                  <div class="col-xs-2"><label style="margin-left: -15px;">Type</label></div>
 
-                <div class="col-xs-10" style="margin-left: -43px;">
-                  <label class="radio-label">
-                    <input type="radio" name="priority_type" value="1" id="priority_red"
-                      onclick="return form_submit();">
-                    <span>Priority</span>
-                  </label>
+                  <div class="col-xs-10" style="margin-left: -43px;">
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="1" id="priority_red"
+                        onclick="return form_submit();">
+                      <span>Priority</span>
+                    </label>
 
-                  <label class="radio-label">
-                    <input type="radio" name="priority_type" value="2" id="fasttrack_blue"
-                      onclick="return form_submit();">
-                    <span>Fast Track OPD Consultation</span>
-                  </label>
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="2" id="fasttrack_blue"
+                        onclick="return form_submit();">
+                      <span>Fast Track OPD Consultation</span>
+                    </label>
 
-                  <label class="radio-label">
-                    <input type="radio" name="priority_type" value="3" id="priority_yellow"
-                      onclick="return form_submit();">
-                    <span>Post-Operative</span>
-                  </label>
-                  <label class="radio-label">
-                    <input type="radio" name="priority_type" value="4" id="priority_normal"
-                      onclick="return form_submit();">
-                    <span>Normal</span>
-                  </label>
-                  <label class="radio-label">
-                    <input type="radio" name="priority_type" value="" id="priority_all" onclick="return form_submit();"
-                      checked>
-                    <span>All</span>
-                  </label>
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="3" id="priority_yellow"
+                        onclick="return form_submit();">
+                      <span>Post-Operative</span>
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="4" id="priority_normal"
+                        onclick="return form_submit();">
+                      <span>Normal</span>
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" name="priority_type" value="" id="priority_all"
+                        onclick="return form_submit();" checked>
+                      <span>All</span>
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
 
         </form>
@@ -419,6 +445,7 @@ $users_data = $this->session->userdata('auth_users');
                   <!-- <th> Consultant </th> -->
                   <!-- <th> Lens </th> -->
                   <!-- <th> Comment </th> -->
+                  <th> Status </th>
                   <th> Patient Status </th>
                   <th> Created Date </th>
                   <th> Action </th>
@@ -584,6 +611,26 @@ $users_data = $this->session->userdata('auth_users');
 
         window.location.href = url;
       });
+      $(document).on('click', '.open-popup-send-to', function () {
+        // Get the data attributes from the clicked button
+        var bookingId = $(this).data('booking-id');
+        var patientId = $(this).data('patient-id');
+        var referredBy = $(this).data('referred-by');
+        var modType = $(this).data('mod-type');
+        console.log(bookingId)
+        console.log(patientId)
+        // Build the dynamic URL with route parameters
+        var routeUrl = '<?php echo base_url(); ?>help_desk/add/' + bookingId + '/' + patientId + '/' + modType + '/' + referredBy;
+
+        // Select the modal
+        var $modal = $('#load_add_medicine_unit_modal_popup');
+
+        // Load the modal content
+        $modal.load(routeUrl, function () {
+          // Show the modal once content is loaded
+          $modal.modal('show');
+        });
+      });
     </script>
 
     <!-- Confirmation Modals -->
@@ -617,6 +664,8 @@ $users_data = $this->session->userdata('auth_users');
     </div>
 
     <div id="load_add_vision_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
+    <div id="load_add_medicine_unit_modal_popup" class="modal fade" role="dialog" data-backdrop="static"
+      data-keyboard="false"></div>
   </div>
 </body>
 

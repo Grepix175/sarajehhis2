@@ -16,6 +16,10 @@ class Help_desk extends CI_Controller
     $this->load->model('oct_hfa/Oct_hfa_model', 'oct_hfa');
     $this->load->model('ortho_ptics/Ortho_ptics_model', 'ortho_ptics');
     $this->load->model('doctore_patient/Doctore_patient_model', 'doctore_patient');
+    $this->load->model('refraction/Refraction_model', 'refraction');
+    $this->load->model('eye/add_prescription/add_new_prescription_model', 'add_prescript');
+    $this->load->model('general/general_model');
+    $this->load->model('dilate/Dilate_model', 'dilate');
     error_reporting(0);
   }
 
@@ -106,6 +110,7 @@ class Help_desk extends CI_Controller
       // die;
 
       $refraction_exists = $this->opd->get_by_id_refraction($prescription->booking_id);
+
       $dilate_exists = $this->opd->get_by_id_dilate($prescription->patient_id);
       $pat_status = ($patient_status == 1)
         ? '<font style="background-color: #228B22;color:white">Vision</font>'
@@ -301,7 +306,9 @@ class Help_desk extends CI_Controller
       } else {
         $btn_hess_chart = '<a class="btn-custom disabled" href="javascript:void(0);" title="Hess Chart" style="pointer-events: none; opacity: 0.6;" data-url="512">  Hess Chart</a>';
       }
-
+      // echo "<pre>";
+      // print_r($prescription->refraction_below8);
+      // die('sagar');
       // if ($prescription->refraction_below8 == 0) {
       if ($prescription->refraction_below8 == 0) {
         $flag = 'refraction_below_8_years';
@@ -320,7 +327,7 @@ class Help_desk extends CI_Controller
         } else {
           $btn_refraction_below8 = '<button class="btn-custom book-now-btn-url-refraction-below" title="Refraction below 8 Years" 
                   data-id="' . $prescription->patient_id . '" 
-                  data-url="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id  . '/' . $prescription->id ) . '?flag=' . $flag . "&type=" . $type . '">Refraction below 8 Years</button>';
+                  data-url="' . base_url("eye/add_eye_prescription/test/" . $prescription->booking_id . '/' . $prescription->id) . '?flag=' . $flag . "&type=" . $type . '">Refraction below 8 Years</button>';
         }
       } else {
         $btn_refraction_below8 = '<a class="btn-custom disabled" href="javascript:void(0);" title="Refraction below 8 Years" style="pointer-events: none; opacity: 0.6;" data-url="512">Refraction Below 8 Years</a>';
@@ -338,11 +345,15 @@ class Help_desk extends CI_Controller
         $btn_print_pre = ' <a class="btn-custom" onClick="return print_window_page(' . $print_url . ')" href="javascript:void(0)" title="Print History"  data-url="512"><i class="fa fa-print"></i> Print History</a>';
       }
       if (in_array('2413', $users_data['permission']['action'])) {
+        // echo "<pre>";
+        // print_r($refraction_exists == 1);
+        // die('sagar');
         if ($refraction_exists == 1) {
           // if ($prescription->ref_abouve_status == 1) {
 
           $refraction = '<a class="btn-custom disabled " style="pointer-events: none; opacity: 0.6;" href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction above 8 years</a>';
         } else {
+
           // $refraction = '<a class="btn-custom" href="' . base_url("refraction/add/" . $prescription->patient_id . '/' . $prescription->id) . '" title="Refraction" data-url="512">Refraction above 8 years</a>';
           if ($prescription->ref_abouve_status == 1) {
             // Render disabled button for already booked patients
@@ -364,9 +375,6 @@ class Help_desk extends CI_Controller
 
         }
       }
-      // echo "<pre>";
-      // print_r($prescription);
-      // die;
       if (in_array('2413', $users_data['permission']['action'])) {
         if ($dilate_exists == 1) {
           // Enable the "Dilate" button if dilate exists
@@ -500,38 +508,57 @@ class Help_desk extends CI_Controller
       }
       // $btn_doctor = 
 
-      if (in_array('2413', $users_data['permission']['action'])) {
-        $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . "'";
-        if ($patient_status == 1) {
-          $send_to_vission = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Vision</a>';
-        } else {
-          // $send_to_vission = '<a class="btn-custom" href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Vision" data-url="512">Vision</a>';
-          if ($prescription->vision_status == 1) {
-            // Render disabled button for already booked patients
-            $send_to_vission = '<div class="action-buttons">
-                    <button class="btn-custom book-now-btn book-now-btn" disabled>
-                        <i class="fa fa-spinner fa-spin"></i> In Progress
-                    </button>
-                    <a href="javascript:void(0);" title="Refresh" class="btn btn-secondary refresh-btn-vision" data-patient_id="' . $prescription->patient_code . '" >
-                        <i class="fa fa-refresh"></i>
-                    </a>
-                    </div>';
-            // $row[] = '<a title="Print"><i class="fa fa-refresh"></i></a>';
-          } else {
-            // Render active button for patients not yet booked
-            $send_to_vission = '<button class="btn-custom book-now-btn-url-vision" title="Book Now" 
-                    data-id="' . $prescription->patient_code . '" 
-                    data-url="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '">Vision</button>';
-          }
-        }
-      }
+      // if (in_array('2413', $users_data['permission']['action'])) {
+      //   $print_url = "'" . base_url('eye/add_eye_prescription/view_prescription/' . $prescription->id . '/' . $prescription->booking_id) . "'";
+      //   if ($patient_status == 1) {
+      //     $send_to_vission = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Vision</a>';
+      //   } else {
+      //     // $send_to_vission = '<a class="btn-custom" href="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '" title="Vision" data-url="512">Vision</a>';
+      //     if ($prescription->vision_status == 1) {
+      //       // Render disabled button for already booked patients
+      //       $send_to_vission = '<div class="action-buttons">
+      //               <button class="btn-custom book-now-btn book-now-btn" disabled>
+      //                   <i class="fa fa-spinner fa-spin"></i> In Progress
+      //               </button>
+      //               <a href="javascript:void(0);" title="Refresh" class="btn btn-secondary refresh-btn-vision" data-patient_id="' . $prescription->patient_code . '" >
+      //                   <i class="fa fa-refresh"></i>
+      //               </a>
+      //               </div>';
+      //     } else {
+      //       $send_to_vission = '<button class="btn-custom book-now-btn-url-vision" title="Book Now" 
+      //               data-id="' . $prescription->patient_code . '" 
+      //               data-url="' . base_url("vision/add/" . $prescription->booking_id . '/' . $prescription->patient_id) . '">Vision</button>';
+      //     }
+      //   }
+      // }
 
       // $print_chasma_url = "'" . base_url('eye/add_eye_prescription/print_chasma_details/' . $prescription->id . '/' . $prescription->booking_id) . "'";
       // $btn_print_chasma_pre = ' <a class="btn-custom" onClick="return print_window_page(' . $print_chasma_url . ')" href="javascript:void(0)" title="Print Chasma Detail"  data-url="512"><i class="fa fa-print"></i> Print Chasma Detail</a>';
+      if (empty($prescription->send_to_status)) {
+        $send_to = '<button type="button" class="btn-custom open-popup-send-to" 
+                    id="open-popup" 
+                    data-booking-id="' . $prescription->booking_id . '" 
+                    data-patient-id="' . $prescription->patient_id . '" 
+                    data-referred-by="' . $prescription->attended_doctor . '" 
+                    data-mod-type="help_desk" 
+                    data-url="' . $prescription->url . '" 
+                    title="">Send To</button>';
+      } else {
+        $send_to = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Send To</a>';
+      }
+      // $send_to = '<button type="button" class="btn-custom open-popup-send-to" 
+      //               id="open-popup" 
+      //               data-booking-id="' . $prescription->booking_id . '" 
+      //               data-patient-id="' . $prescription->patient_id . '" 
+      //               data-referred-by="' . $prescription->attended_doctor . '" 
+      //               data-url="' . $prescription->url . '" 
+      //               title="">Send To</button>';
 
       // . $btn_print_chasma_pre
-      $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission . $btn_contact_lens . $btn_low_vision .
-        $btn_hess_chart . $btn_refraction_below8 . $dilate . $btn_prosthetic . $btn_oct_hfa . $btn_ortho_ptics . $btn_doctor;
+      // $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $refraction . $send_to_vission . $btn_contact_lens . $btn_low_vision .
+      //   $btn_hess_chart . $btn_refraction_below8 . $dilate . $btn_prosthetic . $btn_oct_hfa . $btn_ortho_ptics . $btn_doctor;
+      $row[] = $btn_print_pre . $btn_edit . $send_to;
+      // . $btn_doctor
       $row[] = $prescription->emergency_status; // Add emergency_status to the row
       // echo "<pre>";print_r($row);die;
       $data[] = $row;
@@ -749,6 +776,261 @@ class Help_desk extends CI_Controller
       $response = "Help Desk successfully deleted.";
       echo $response;
     }
+  }
+
+  public function add($booking_id = null, $patient_id = null, $mod_type = null, $referred_by = null)
+  {
+    // $post = $this->input->post();
+    // echo "<pre>";
+    // print_r($booking_id);
+    // print_r($patient_id);
+    // print_r($referred_by);
+    // print_r($mod_type);
+    // die('sagar');
+    // Load required models and libraries
+    $user_data = $this->session->userdata('auth_users');
+    $this->load->library('form_validation');
+    $this->load->model('doctore_patient/doctore_patient_model'); // Ensure this model is loaded
+    $data['page_title'] = 'Send To';
+    $data['booking_id'] = isset($booking_id) ? $booking_id : '';
+    $data['patient_id'] = isset($patient_id) ? $patient_id : '';
+    $data['booking_data'] = $this->doctore_patient->get_booking_patient_details($data['patient_id']);
+
+    $get_by_send_to_status = $this->add_prescript->get_by_send_to_status($data['booking_id'], $data['patient_id']);
+    $result = [];
+    foreach ($get_by_send_to_status as $row) {
+      // Split `send_to_status` by commas and trim whitespace
+      $statuses = array_map('trim', explode(',', $row['send_to_status']));
+
+      // Filter out empty values
+      $statuses = array_filter($statuses);
+
+      // Add to the result array
+      $result[] = $statuses;
+    }
+    $data['send_to_status'] = $result;
+    // Initialize form data
+    $data['form_data'] = array(
+      "booking_id" => $booking_id,
+      "patient_id" => $patient_id,
+      "mod_type" => $mod_type,
+      "send_to_type" => '',
+      "referred_by" => $referred_by,
+    );
+    // echo "<pre>";
+    // print_r($data['form_data']);
+    // die('sagar');
+    // Option for drop-down
+    $data['dropdown_options'] = array(
+      'Refraction above 8 years',
+      'Vision',
+      'Contact Lens',
+      'Low Vision',
+      'Hess Chart',
+      'Refraction below 8 years',
+      'Dilate',
+      'Prosthetic',
+      'OCT HFA',
+      'Ortho Paedic'
+    );
+
+
+    $post = $this->input->post();
+    // Check if the form is submitted
+    if (isset($post) && !empty($post)) {
+      // echo "<pre>";
+      // print_r($post);
+      // die('sagar');
+      // Validate the form
+      $valid_response = $this->_validate();
+
+      // Check if validation passed
+      if ($valid_response === true) {
+        $this->add_prescript->send_to_status_update($post['booking_id'], $post['patient_id'], $post['send_to_type']);
+        // If validation passes, save the record
+        if ($post['send_to_type'] === 'Refraction above 8 years') {
+          // echo "<pre>";
+          // print_r('sagar');
+          // die('okay');
+          $data_to_save = [
+            // 'id' => isset($id) ? $id : '',
+            'branch_id' => $user_data['parent_id'],
+            'booking_code' => '',
+            'pres_id' => '',
+            'patient_id' => $post['patient_id'] ?? '',
+            'booking_id' => $post['booking_id'] ?? '',
+            'auto_refraction' => '', // JSON string of refraction data
+            'lens' => '',
+            'comment' => '',
+            'optometrist_signature' => '',
+            'doctor_signature' => '',
+            'status' => 0, // Or whatever default value you need
+            'is_deleted' => 0, // Assuming this is default
+            'created_by' => $user_data['id'], // Check if user_id exists
+            'created_date' => date('Y-m-d H:i:s'), // Current timestamp
+            'ip_address' => $this->input->ip_address(), // Capture IP address
+            // 'send_to_type'=>$post['send_to_type']
+          ];
+          $this->refraction->save($data_to_save);
+          $this->session->set_flashdata('success', 'Send to successfully.');
+          $url = base_url() . 'refraction';
+          echo json_encode(['success' => true, 'url' => $url, 'message' => 'Refraction above 8 years store successfully.']);
+          return; // Exit to prevent further output
+        }
+        if ($post['send_to_type'] === 'Contact Lens') {
+          // $this->load->model('vision/vision_model');
+          $data_to_save = [
+            'booking_id' => $post['booking_id'] ?? '',
+            'patient_id' => $post['patient_id'] ?? '',
+            'status' => 0, // Or whatever default value you need
+            'is_deleted' => 0, // Assuming this is default
+            'created_at' => date('Y-m-d H:i:s'), // Current timestamp
+            // 'send_to_type'=>$post['send_to_type']
+          ];
+          $this->contact_lens->save();
+          $this->session->set_flashdata('success', 'Send to successfully.');
+          $url = base_url() . 'contact_lens';
+          echo json_encode(['success' => true, 'url' => $url, 'message' => 'Refraction above 8 years store successfully.']);
+          return;
+
+        }
+        if ($post['send_to_type'] === 'Vision') {
+          $this->load->model('vision/vision_model');
+          $data_to_save = [
+            'booking_id' => $post['booking_id'] ?? '',
+            'patient_id' => $post['patient_id'] ?? '',
+            'status' => 0, // Or whatever default value you need
+            'is_deleted' => 0, // Assuming this is default
+            'created_at' => date('Y-m-d H:i:s'), // Current timestamp
+            // 'send_to_type'=>$post['send_to_type']
+          ];
+          $this->vision_model->save($data_to_save);
+          $this->session->set_flashdata('success', 'Send to successfully.');
+          $url = base_url() . 'vision';
+          echo json_encode(['success' => true, 'url' => $url, 'message' => 'Refraction above 8 years store successfully.']);
+          return;
+
+        }
+        if ($post['send_to_type'] === 'Low Vision') {
+          $data_to_save = [
+            'booking_id' => $post['booking_id'] ?? '',
+            'patient_id' => $post['patient_id'] ?? '',
+            'status' => 0, // Or whatever default value you need
+            'is_deleted' => 0, // Assuming this is default
+            'created_date' => date('Y-m-d H:i:s'), // Current timestamp
+            // 'send_to_type'=>$post['send_to_type']
+          ];
+          $this->low_vision->save($data_to_save);
+          $this->session->set_flashdata('success', 'Send to successfully.');
+          $url = base_url() . 'low_vision';
+          echo json_encode(['success' => true, 'url' => $url, 'message' => 'Refraction above 8 years store successfully.']);
+          return;
+
+        }
+        // if ($post['send_to_type'] === 'Dilate') {
+        //   $data_to_save = [
+        //     'booking_id' => $post['booking_id'] ?? '',
+        //     'patient_id' => $post['patient_id'] ?? '',
+        //     'status' => 0, // Or whatever default value you need
+        //     'is_deleted' => 0, // Assuming this is default
+        //     'created_date' => date('Y-m-d H:i:s'), // Current timestamp
+        //     // 'send_to_type'=>$post['send_to_type']
+        //   ];
+        //   $this->dilate->save($data_to_save);
+        //   $this->session->set_flashdata('success', 'Send to successfully.');
+        //   $url = base_url() . 'dilate';
+        //   echo json_encode(['success' => true, 'url' => $url, 'message' => 'Refraction above 8 years store successfully.']);
+        //   return; 
+
+        // }
+        if ($post['send_to_type'] === 'Prosthetic') {
+          $data_to_save = [
+            'booking_id' => $post['booking_id'] ?? '',
+            'patient_id' => $post['patient_id'] ?? '',
+            'status' => 0, // Or whatever default value you need
+            'is_deleted' => 0, // Assuming this is default
+            'created_date' => date('Y-m-d H:i:s'), // Current timestamp
+            // 'send_to_type'=>$post['send_to_type']
+          ];
+          $this->prosthetic->save($data_to_save);
+          $this->session->set_flashdata('success', 'Send to successfully.');
+          $url = base_url() . 'prosthetic';
+          echo json_encode(['success' => true, 'url' => $url, 'message' => 'Refraction above 8 years store successfully.']);
+          return;
+
+        }
+        if ($post['send_to_type'] === 'OCT HFA') {
+          $data_to_save = [
+            'booking_id' => $post['booking_id'] ?? '',
+            'patient_id' => $post['patient_id'] ?? '',
+            'status' => 0, // Or whatever default value you need
+            'is_deleted' => 0, // Assuming this is default
+            'created_date' => date('Y-m-d H:i:s'), // Current timestamp
+            // 'send_to_type'=>$post['send_to_type']
+          ];
+          $this->oct_hfa->save($data_to_save,$chief_complaints = '');
+          $this->session->set_flashdata('success', 'Send to successfully.');
+          $url = base_url() . 'oct_hfa';
+          echo json_encode(['success' => true, 'url' => $url, 'message' => 'Refraction above 8 years store successfully.']);
+          return;
+
+        }
+        if ($post['send_to_type'] === 'Ortho Paedic') {
+          $data_to_save = [
+            'booking_id' => $post['booking_id'] ?? '',
+            'patient_id' => $post['patient_id'] ?? '',
+            'status' => 0, // Or whatever default value you need
+            'is_deleted' => 0, // Assuming this is default
+            'created_date' => date('Y-m-d H:i:s'), // Current timestamp
+            // 'send_to_type'=>$post['send_to_type']
+          ];
+          $this->ortho_ptics->save($data_to_save);
+          $this->session->set_flashdata('success', 'Send to successfully.');
+          $url = base_url() . 'ortho_ptics';
+          echo json_encode(['success' => true, 'url' => $url, 'message' => 'Refraction above 8 years store successfully.']);
+          return;
+
+        }
+
+        // $this->doctore_patient->save($this->input->post()); // Save the validated data
+      } else {
+        // Handle validation errors
+        $data['form_data'] = $valid_response['form_data']; // Retain form data for re-display
+        $data['form_error'] = validation_errors(); // Get validation errors
+      }
+    }
+    $this->load->view('help_desk/send_to_add', $data);
+  }
+
+  private function _validate()
+  {
+    $this->load->library('form_validation');
+    $post = $this->input->post();
+
+    // Assuming this function returns the necessary fields
+    $field_list = mandatory_section_field_list(2);
+    $users_data = $this->session->userdata('auth_users');
+    $data['form_data'] = [];
+    $data['photo_error'] = [];
+
+    $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+
+    // Validation rules for required fields
+    $this->form_validation->set_rules('send_to_type', 'Send to Name', 'trim|required');
+
+
+    // Run validation
+    if ($this->form_validation->run() == FALSE) {
+      // Prepare form data to retain user inputs
+      $data['form_data'] = array(
+        "data_id" => isset($post['data_id']) ? $post['data_id'] : '',
+        "send_to_type" => isset($post['send_to_type']) ? $post['send_to_type'] : '',
+
+      );
+
+      return $data; // Return the form data with errors
+    }
+    return true; // Return true if validation passes
   }
 
 }
