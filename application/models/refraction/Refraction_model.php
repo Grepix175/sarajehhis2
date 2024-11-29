@@ -44,7 +44,7 @@ class Refraction_model extends CI_Model
     private function _get_datatables_query()
     {
         $search = $this->session->userdata('prescription_search');
-        $this->db->select("hms_opd_refraction.id as refraction_id,hms_opd_refraction.*,hms_patient.*,hms_patient_category.patient_category as patient_category_name,hms_opd_booking.*,hms_doctors.doctor_name");
+        $this->db->select("hms_opd_refraction.id as refraction_id,hms_opd_refraction.*,hms_opd_refraction.status as ref_status,hms_patient.*,hms_patient_category.patient_category as patient_category_name,hms_opd_booking.*,hms_doctors.doctor_name");
         $this->db->from($this->table);
         $this->db->join('hms_patient', 'hms_patient.id = hms_opd_refraction.patient_id', 'left');
         $this->db->join('hms_patient_category', 'hms_patient_category.id=hms_patient.patient_category', 'left');
@@ -72,38 +72,41 @@ class Refraction_model extends CI_Model
         }
         if (!empty($search)) {
 
-			if (!empty($search['start_date'])) {
-				$start_date = date('Y-m-d 00:00:00', strtotime($search['start_date']));
-				$this->db->where('hms_opd_refraction.created_date >=', $start_date);
-			}
+            if (!empty($search['start_date'])) {
+                $start_date = date('Y-m-d 00:00:00', strtotime($search['start_date']));
+                $this->db->where('hms_opd_refraction.created_date >=', $start_date);
+            }
 
-			if (!empty($search['end_date'])) {
-				$end_date = date('Y-m-d 23:59:59', strtotime($search['end_date']));
-				$this->db->where('hms_opd_refraction.created_date <=', $end_date);
-			}
+            if (!empty($search['end_date'])) {
+                $end_date = date('Y-m-d 23:59:59', strtotime($search['end_date']));
+                $this->db->where('hms_opd_refraction.created_date <=', $end_date);
+            }
 
             if (!empty($search['priority_type']) && $search['priority_type'] !== '4') {
-				$this->db->where('hms_patient.emergency_status', $search['priority_type']);
-			} else if ($search['priority_type'] === '4') {				
-				$this->db->where('hms_patient.emergency_status', NULL);
-			}
+                $this->db->where('hms_patient.emergency_status', $search['priority_type']);
+            } else if ($search['priority_type'] === '4') {
+                $this->db->where('hms_patient.emergency_status', NULL);
+            }
 
-			if (!empty($search['patient_name'])) {
-				$this->db->like('hms_patient.patient_name', $search['patient_name'], 'after');
-			}
+            if (!empty($search['patient_name'])) {
+                $this->db->like('hms_patient.patient_name', $search['patient_name'], 'after');
+            }
 
-			if (!empty($search['patient_code'])) {
-				$this->db->where('hms_patient.patient_code', $search['patient_code']);
-			}
+            if (!empty($search['patient_code'])) {
+                $this->db->where('hms_patient.patient_code', $search['patient_code']);
+            }
             if (!empty($search['mobile_no'])) {
-				$this->db->where('hms_patient.mobile_no', $search['mobile_no']);
+                $this->db->where('hms_patient.mobile_no', $search['mobile_no']);
+            }
+            if (isset($search['search_type']) && $search['search_type'] != "") {
+				$this->db->where('hms_opd_refraction.status', $search['search_type']);
 			}
             if ($search['emergency_booking'] == "4") {
-				$this->db->where('hms_opd_booking.opd_type', 1);
-			} else if ($search['emergency_booking'] == "3") {
-				$this->db->where('hms_opd_booking.opd_type', 0);
-			}
-		}
+                $this->db->where('hms_opd_booking.opd_type', 1);
+            } else if ($search['emergency_booking'] == "3") {
+                $this->db->where('hms_opd_booking.opd_type', 0);
+            }
+        }
         if (isset($_POST['order'])) {
             // Order by the specified column and direction
             $this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
@@ -212,34 +215,144 @@ class Refraction_model extends CI_Model
     // Method to save or update a refraction record
     public function save($data)
     {
-        // echo "<pre>";
-        // print_r($data);
-        // die;
+
         if (!empty($data['id'])) {
             // For updates, remove the 'created_date' if present to avoid updating it
             unset($data['created_date']);
-            
+
             // Update only the modified_date and other fields
             $data['modified_date'] = date('Y-m-d H:i:s'); // Set current time for modified_date
             $this->db->where('id', $data['id']);
             $this->db->update('hms_opd_refraction', $data);
         } else {
+            $post = $this->input->post();
+            // echo $this->db->last_query();
+            // echo "<pre>";
+            // print_r($post);
+            // die('munaa');
             // Set the created_date for new records
             $data['created_date'] = date('Y-m-d H:i:s'); // Set current time for created_date
             $data['modified_date'] = date('Y-m-d H:i:s'); // Set current time for modified_date
-            
-            // Insert a new record
-            $this->db->insert($this->table, $data);
 
-            if (!empty($data['patient_id'])) {
+            if ($post['send_to_type'] === 'Refraction above 8 years' || $post['mod_type'] === 'help_desk') {
+                // Insert a new record
+                $this->db->insert($this->table, $data);
+
+            }
+            if ($post['mod_type'] === 'refraction_above') {
+                $data = ['status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $data['booking_id']);
+                $this->db->where('patient_id', $data['patient_id']);
+                $query = $this->db->get('hms_opd_refraction');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $data['booking_id']);
+                    $this->db->where('patient_id', $data['patient_id']);
+                    $this->db->update('hms_opd_refraction', $data);
+                }
+                
+
+            } else if ($post['mod_type'] == 'vision') {
+                $data = ['status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_vision');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_vision', $data);
+                } 
+            }
+            else if($post['mod_type'] == 'contact_lens'){
+                $data = ['status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_vision');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_contact_lens', $data);
+                } 
+            }
+            else if ($post['mod_type'] == 'low_vision') {
+                $data = ['status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_low_vision');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_low_vision', $data);
+                }
+            }
+            else if ($post['mod_type'] == 'prosthetic') {
+                $data = ['status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_prosthetic');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_prosthetic', $data);
+                }
+            }
+            else if ($post['mod_type'] == 'oct_hfa') {
+                $data = ['status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_oct_hfa');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_oct_hfa', $data);
+                }
+            }
+            else if ($post['mod_type'] == 'ortho_ptics') {
+                $data = ['status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_ortho_ptics');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_ortho_ptics', $data);
+                }
+            }
+
+            // echo $this->db->last_query();
+            // echo "<pre>";
+            // print_r($data);
+            // die('munaa');
+
+            if (!empty($data['patient_id']) && !empty($data['booking_id'])) {
                 // Retrieve the current 'pat_status' value for the given patient
                 $this->db->select('pat_status');
                 $this->db->where('id', $data['patient_id']);
                 $query = $this->db->get('hms_patient');
-            
+
                 if ($query->num_rows() > 0) {
                     $current_status = $query->row()->pat_status;
-            
+
                     // Concatenate the current status with 'Low vision'
                     $new_status = $current_status . ', Refraction above 8 years';
                     // echo "<pre>";print_r($new_status);die;
@@ -247,7 +360,7 @@ class Refraction_model extends CI_Model
                         'pat_status' => $new_status,
                         'ref_abouve_status' => 1 // Update ref_abouve_status to 1
                     ];
-            
+
                     // Update the 'pat_status' field with the concatenated value
                     $this->db->where('id', $data['patient_id']);
                     $this->db->update('hms_patient', $update_data);
@@ -257,45 +370,45 @@ class Refraction_model extends CI_Model
     }
 
     public function get_booking_by_id($booking_id)
-	{
+    {
         // echo $booking_id;die;
-		// Select all fields from both tables
-		$this->db->select('hms_opd_booking.*, hms_patient.*'); // Select all fields
-		$this->db->from('hms_opd_booking'); // Start with the bookings table
-		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
+        // Select all fields from both tables
+        $this->db->select('hms_opd_booking.*, hms_patient.*'); // Select all fields
+        $this->db->from('hms_opd_booking'); // Start with the bookings table
+        $this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
 
-		// Filter by the booking ID
-		// $this->db->where('hms_opd_booking.booking_code', $booking_id); // Assuming 'id' is the primary key for bookings
-		$this->db->where('hms_opd_booking.id', $booking_id); // Assuming 'id' is the primary key for bookings
-		$query = $this->db->get();
+        // Filter by the booking ID
+        // $this->db->where('hms_opd_booking.booking_code', $booking_id); // Assuming 'id' is the primary key for bookings
+        $this->db->where('hms_opd_booking.id', $booking_id); // Assuming 'id' is the primary key for bookings
+        $query = $this->db->get();
 
-		// Check if any results were returned
-		if ($query->num_rows() > 0) {
-			return $query->row_array(); // Return the first result as an associative array
-		}
+        // Check if any results were returned
+        if ($query->num_rows() > 0) {
+            return $query->row_array(); // Return the first result as an associative array
+        }
 
-		return null; // Return null if no data found
-	}
-    
+        return null; // Return null if no data found
+    }
+
     public function get_booking_byp_id($booking_id)
-	{
+    {
         // echo $booking_id;die;
-		// Select all fields from both tables
-		$this->db->select('hms_opd_booking.*, hms_patient.*'); // Select all fields
-		$this->db->from('hms_opd_booking'); // Start with the bookings table
-		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
+        // Select all fields from both tables
+        $this->db->select('hms_opd_booking.*, hms_patient.*'); // Select all fields
+        $this->db->from('hms_opd_booking'); // Start with the bookings table
+        $this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
 
-		// Filter by the booking ID
-		$this->db->where('hms_opd_booking.patient_id', $booking_id); // Assuming 'id' is the primary key for bookings
-		$query = $this->db->get();
+        // Filter by the booking ID
+        $this->db->where('hms_opd_booking.patient_id', $booking_id); // Assuming 'id' is the primary key for bookings
+        $query = $this->db->get();
 
-		// Check if any results were returned
-		if ($query->num_rows() > 0) {
-			return $query->row_array(); // Return the first result as an associative array
-		}
+        // Check if any results were returned
+        if ($query->num_rows() > 0) {
+            return $query->row_array(); // Return the first result as an associative array
+        }
 
-		return null; // Return null if no data found
-	}
+        return null; // Return null if no data found
+    }
 
     // Method to delete a refraction record
     public function delete($pres_id = "")
@@ -307,7 +420,8 @@ class Refraction_model extends CI_Model
         }
     }
 
-    public function get_booking_status($patient_id) {
+    public function get_booking_status($patient_id)
+    {
         $this->db->select('ref_abouve_status');
         $this->db->from('hms_patient'); // Replace 'bookings' with your table name
         $this->db->where('id', $patient_id);
@@ -323,7 +437,8 @@ class Refraction_model extends CI_Model
         return 0; // Default to not booked
     }
 
-    public function book_patient($patient_id) {
+    public function book_patient($patient_id)
+    {
         // Update database to mark patient as booked
         $data = ['ref_abouve_status' => 1]; // Assuming 1 means booked
         $this->db->where('id', $patient_id);
@@ -331,25 +446,25 @@ class Refraction_model extends CI_Model
     }
 
     public function update_patient_list_opd_status($patient_id = '')
-	{
-		$this->db->set('hms_patient.ref_abouve_status', 0);
-		$this->db->where('hms_patient.id', $patient_id);
-		$query = $this->db->update('hms_patient');		
-		return $query;
-	}
+    {
+        $this->db->set('hms_patient.ref_abouve_status', 0);
+        $this->db->where('hms_patient.id', $patient_id);
+        $query = $this->db->update('hms_patient');
+        return $query;
+    }
 
     public function patient_exists($patient_id = "")
-	{
-        
-		$user_data = $this->session->userdata('auth_users');
-		$this->db->select('hms_opd_refraction.id as opd_ref_id*, hms_patient.id,hms_patient.patient_name');
+    {
 
-		$this->db->from('hms_opd_refraction');
-		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_refraction.patient_id');
-		$this->db->where('hms_opd_refraction.branch_id', $user_data['parent_id']);
-		$this->db->where('hms_opd_refraction.patient_id', $patient_id);
-		$this->db->where('hms_opd_refraction.is_deleted', '0');
-		$query = $this->db->get();
-		return $query->row_array();
-	}
+        $user_data = $this->session->userdata('auth_users');
+        $this->db->select('hms_opd_refraction.id as opd_ref_id*, hms_patient.id,hms_patient.patient_name');
+
+        $this->db->from('hms_opd_refraction');
+        $this->db->join('hms_patient', 'hms_patient.id = hms_opd_refraction.patient_id');
+        $this->db->where('hms_opd_refraction.branch_id', $user_data['parent_id']);
+        $this->db->where('hms_opd_refraction.patient_id', $patient_id);
+        $this->db->where('hms_opd_refraction.is_deleted', '0');
+        $query = $this->db->get();
+        return $query->row_array();
+    }
 }

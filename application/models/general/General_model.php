@@ -7677,7 +7677,78 @@ LEFT JOIN `hms_vaccination_sale` ON `hms_vaccination_sale`.`id` = `hms_payment`.
 
     }
 
+
+
     ///write above
+
+    // save data module wise
+    function save_data_module($post){
+        $user_data = $this->session->userdata('auth_users');
+        if ($post['send_to_type'] === 'Refraction above 8 years') {
+            // echo "<pre>";
+            // print_r('sagar');
+            // die('okay');
+            $data_to_save = [
+                // 'id' => isset($id) ? $id : '',
+                'branch_id' => $user_data['parent_id'],
+                'booking_code' => '',
+                'pres_id' => '',
+                'patient_id' => $post['patient_id'] ?? '',
+                'booking_id' => $post['booking_id'] ?? '',
+                'auto_refraction' => '', // JSON string of refraction data
+                'lens' => '',
+                'comment' => '',
+                'optometrist_signature' => '',
+                'doctor_signature' => '',
+                'status' => 0, // Or whatever default value you need
+                'is_deleted' => 0, // Assuming this is default
+                'created_by' => $user_data['id'], // Check if user_id exists
+                'created_date' => date('Y-m-d H:i:s'), // Current timestamp
+                'ip_address' => $this->input->ip_address(), // Capture IP address
+            ];
+            $this->refraction->save($data_to_save);
+            $this->session->set_flashdata('success', 'Send to successfully.');
+            $url = base_url() . 'refraction';
+            echo json_encode(['success' => true, 'url' => $url, 'message' => 'Refraction above 8 years store successfully.']);
+            return; // Exit to prevent further output
+        }else if($post['send_to_type'] === 'Vision'){
+            // echo "<pre>";
+            // print_r($post);
+            // die('sagar');
+            $data_to_save = [
+                'booking_id' => $post['booking_id'] ?? '',
+                'status' => 0, // Or whatever default value you need
+                'is_deleted' => 0, // Assuming this is default
+                'created_at' => date('Y-m-d H:i:s'), // Current timestamp
+            ];
+
+        }
+        else if($post['send_to_type'] === 'Contact Lens'){
+            
+        }
+        else if($post['send_to_type'] === 'Low Vision'){
+            
+        }
+        else if($post['send_to_type'] === 'Hess Chart'){
+            
+        }
+        else if($post['send_to_type'] === 'Refraction below 8 years'){
+            
+        }
+        else if($post['send_to_type'] === 'Dilate'){
+            
+        }
+        else if($post['send_to_type'] === 'Prosthetic'){
+            
+        }
+        else if($post['send_to_type'] === 'OCT HFA'){
+            
+        }
+        else if($post['send_to_type'] === 'Ortho Paedic'){
+            
+        }
+
+    }
 
 
 }

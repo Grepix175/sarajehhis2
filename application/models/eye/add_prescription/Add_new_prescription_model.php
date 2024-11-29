@@ -1656,8 +1656,9 @@ class Add_new_prescription_model extends CI_Model
 			$history_flag = 1;
 			$drawing_flag = isset($post['print_drawing_flag']) ? '1' : '0';
 		} else {
-
 			$history_flag = isset($post['print_history_flag']) ? '1' : '0';
+			$drawing_flag = 1;
+			$refraction_below8 = 1;
 		}
 		// echo "<pre>"; print_r($drawing_flag); die('sagar');
 		$contactlens_flag = isset($post['print_contactlens_flag']) ? '1' : '0';
@@ -4565,9 +4566,14 @@ class Add_new_prescription_model extends CI_Model
 	public function get_booking_by_id($booking_id)
 	{
 		// Select all fields from both tables
-		$this->db->select('hms_opd_booking.*, hms_patient.*'); // Select all fields
+		$this->db->select('hms_opd_booking.*, hms_patient.*,hms_opd_refraction.id as ref_abv_id,hms_vision.id as vision_id,hms_contact_lens.id as contact_lens_id,hms_low_vision.id as low_visi_id,hms_std_eye_prescription.id as std_eye_presc_id'); // Select all fields
 		$this->db->from('hms_opd_booking'); // Start with the bookings table
 		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left'); // Join with the patient table
+		$this->db->join('hms_opd_refraction', 'hms_opd_refraction.booking_id = hms_opd_booking.id', 'left'); // Join with the patient table
+		$this->db->join('hms_vision', 'hms_vision.booking_id = hms_opd_booking.id', 'left'); // Join with the patient table
+		$this->db->join('hms_contact_lens', 'hms_contact_lens.booking_id = hms_opd_booking.id', 'left'); // Join with the patient table
+		$this->db->join('hms_low_vision', 'hms_low_vision.booking_id = hms_opd_booking.id', 'left'); // Join with the patient table
+		$this->db->join('hms_std_eye_prescription', 'hms_std_eye_prescription.booking_id = hms_opd_booking.id', 'left'); // Join with the patient table
 
 		// Filter by the booking ID
 		$this->db->where('hms_opd_booking.id', $booking_id); // Assuming 'id' is the primary key for bookings
@@ -4694,6 +4700,46 @@ class Add_new_prescription_model extends CI_Model
 		$this->db->where('hms_std_eye_prescription.is_deleted', '0');
 		$query = $this->db->get();
 		return $query->row_array();
+	}
+
+	public function send_to_status_update($booking_id,$patient_id,$status) {
+        // Update database to mark patient as booked
+        // $data = ['send_to_status' => $status]; // Assuming 1 means booked
+        // $this->db->where('booking_id', $booking_id);
+        // $this->db->where('patient_id', $patient_id);
+        // return $this->db->update('hms_std_eye_prescription', $data);
+
+		$this->db->select('send_to_status');
+		$this->db->where('patient_id', $patient_id);
+		$this->db->where('booking_id', $booking_id);
+		$query = $this->db->get('hms_std_eye_prescription');
+	
+		if ($query->num_rows() > 0) {
+			$current_status = $query->row()->send_to_status;
+	
+			// Concatenate the current status with 'Low vision'
+			$new_status = $current_status . ','. $status;
+			// echo "<pre>";print_r($new_status);die;
+			$update_data = [
+				'send_to_status' => $new_status,
+			];
+	
+			// Update the 'pat_status' field with the concatenated value
+			$this->db->where('patient_id', $patient_id);
+			$this->db->where('booking_id', $booking_id);
+			$this->db->update('hms_std_eye_prescription', $update_data);
+		}
+    }
+
+	public function get_by_send_to_status($booking_id, $patient_id)
+	{
+		$this->db->select("send_to_status");
+		$this->db->where('hms_std_eye_prescription.booking_id', $booking_id);
+		$this->db->where('hms_std_eye_prescription.patient_id', $patient_id);
+		$this->db->from('hms_std_eye_prescription');
+		$result = $this->db->get()->result_array();
+		//print_r($result);die;
+		return $result;
 	}
 
 	// Please code above this	

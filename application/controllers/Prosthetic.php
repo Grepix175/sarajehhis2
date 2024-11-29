@@ -99,6 +99,8 @@ class Prosthetic extends CI_Controller
             // $row[] = $prosthetic->patient_category_name;
             $row[] = $prosthetic->mobile_no;
             $row[] = $age;
+            $row[] = $prosthetic->pro_status == 0 ? '<font color="green">Pending</font>' : '<font color="red">Completed</font>';
+
             // $row[] = "Dr. " . $prosthetic->doctor_name;
             // $row[] = $prosthetic->booking_id;
             // $row[] = $prosthetic->lens;
@@ -113,12 +115,23 @@ class Prosthetic extends CI_Controller
             // Display the last status with the desired styling
             $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';
             $row[] = date('d-M-Y', strtotime($prosthetic->created));
-
+            if ($prosthetic->pro_status == 0) {
+                $send_to = '<button type="button" class="btn-custom open-popup-send-to" 
+                            id="open-popup" 
+                            data-booking-id="' . $prosthetic->booking_id . '" 
+                            data-patient-id="' . $prosthetic->patient_id . '" 
+                            data-referred-by="' . $prosthetic->attended_doctor . '" 
+                            data-mod-type="prosthetic" 
+                            data-url="' . $prosthetic->url . '" 
+                            title="">Send To</button>';
+              }else{
+                $send_to = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Send To</a>';
+              }
             // Add action buttons
             $row[] = '<a onClick="return edit_refraction(' . $prosthetic->refraction_id . ');" class="btn-custom" href="javascript:void(0)" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
                     <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("prosthetic/print_prosthetic/" . $prosthetic->booking_id."/".$prosthetic->patient_id) . '\');">
                         <i class="fa fa-print"></i> Print
-                    </a>';
+                    </a>' . $send_to;
             $row[] = $prosthetic->emergency_status;
 
 

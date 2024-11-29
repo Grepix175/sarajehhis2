@@ -292,6 +292,31 @@ $users_data = $this->session->userdata('auth_users');
                     value="<?php echo $form_data['end_date'] ?>" type="text">
                 </div>
               </div>
+              <div class="row m-b-5">
+                  <div class="col-xs-5"><label>Status</label></div>
+                  <div class="col-xs-7">
+                    <!-- Pending (Default) -->
+                    <label class="radio-label">
+                      <input type="radio" name="search_type" value="0" id="search_type_default"
+                        onclick="return form_submit();" checked="checked">
+                      <span style="margin-top: 5px;">Pending</span>
+                    </label>
+
+                    <!-- Completed -->
+                    <label class="radio-label">
+                      <input type="radio" name="search_type" value="1" id="search_type_waiting"
+                        onclick="return form_submit();">
+                      <span style="margin-top: 5px;">Completed</span>
+                    </label>
+
+                    <!-- All -->
+                    <label class="radio-label">
+                      <input type="radio" name="search_type" value="" id="search_type_process"
+                        onclick="return form_submit();">
+                      <span style="margin-top: 5px;">All</span>
+                    </label>
+                  </div>
+                </div>
               <!-- <div class="row m-b-5">
                 <div class="col-xs-5"><label>Patient Name</label></div>
                 <div class="col-xs-7">
@@ -450,6 +475,7 @@ $users_data = $this->session->userdata('auth_users');
                   <th> Mobile No </th>
                   <th> Age </th>
                   <th> Status</th>
+                  <th> Patient Status</th>
                   <th> Created Date </th>
                   <th> Action </th>
                 </tr>
@@ -673,6 +699,26 @@ $users_data = $this->session->userdata('auth_users');
 
         window.location.href = url;
       });
+      $(document).on('click', '.open-popup-send-to', function () {
+        // Get the data attributes from the clicked button
+        var bookingId = $(this).data('booking-id');
+        var patientId = $(this).data('patient-id');
+        var referredBy = $(this).data('referred-by');  
+        var modType = $(this).data('mod-type');      
+        console.log(bookingId)
+        console.log(patientId)
+        // Build the dynamic URL with route parameters
+        var routeUrl = '<?php echo base_url(); ?>help_desk/add/' + bookingId + '/' + patientId + '/' + modType  + '/' +  referredBy;
+
+        // Select the modal
+        var $modal = $('#load_add_medicine_unit_modal_popup');
+
+        // Load the modal content
+        $modal.load(routeUrl, function () {
+          // Show the modal once content is loaded
+          $modal.modal('show');
+        });
+      });
 
     </script>
     <!-- Confirmation Box -->
@@ -729,6 +775,8 @@ $users_data = $this->session->userdata('auth_users');
 
     <!-- Confirmation Box end -->
     <div id="load_add_modal_popup" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"></div>
+    <div id="load_add_medicine_unit_modal_popup" class="modal fade" role="dialog" data-backdrop="static"
+    data-keyboard="false"></div>
   </div><!-- container-fluid -->
 </body>
 

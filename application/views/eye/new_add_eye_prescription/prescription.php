@@ -48,13 +48,14 @@ $users_data = $this->session->userdata('auth_users');
       /*margin: auto;*/
       margin-top: 10px;
     }
+
     input[type="text"],
-        input[type="number"] {
-            width: 100%;
-            padding: 6px;
-            box-sizing: border-box;
-            outline: none;
-        }
+    input[type="number"] {
+      width: 100%;
+      padding: 6px;
+      box-sizing: border-box;
+      outline: none;
+    }
 
     .question-item {
       display: flex;
@@ -157,115 +158,267 @@ $users_data = $this->session->userdata('auth_users');
         } ?>">
         <input type="hidden" name="sale_id" value="<?php echo $sale_id; ?>">
         <?php
-        
+
         if (empty($flag)) {
-          
+
           ?>
-          <div class="row">
+          <!-- <div class="row">
             <div class="col-md-2">
               <label class="col-md-12 col-sm-12" for="printsummary-labels"><strong>Print only:</strong></label>
             </div>
             <div class="col-md-10 col-sm-10">
               <div class="ckbox ckbox-default col-md-3 col-sm-3">
-                <input type="checkbox" name="print_history_flag" <?php if ($form_data['history_flag'] == 1) {
-                  echo 'checked';
-                } ?> id="checkboxhistory" value="1">
+                <?php
+                // if ($form_data['history_flag'] == 1) {
+                //   echo 'checked';
+                // } 
+                ?>
+                <input type="checkbox" name="print_history_flag" id="checkboxhistory" value="1" checked>
                 <label for="checkboxhistory">History</label>
               </div>
 
               <div class="ckbox ckbox-default col-md-3 col-sm-3">
-                <input type="checkbox" name="print_contactlens_flag" id="checkboxcontactlens" <?php if ($form_data['contactlens_flag'] == 1) {
-                  echo 'checked';
-                } ?> value="1">
+                <?php
+                // if ($form_data['contactlens_flag'] == 1) {
+                //   echo 'checked';
+                // } 
+                ?>
+                <input type="checkbox" name="print_contactlens_flag" id="checkboxcontactlens" value="1" checked>
                 <label for="checkboxcontactlens">Contact Lens</label>
               </div>
               <div class="ckbox ckbox-default col-md-3 col-sm-3">
-                <input type="checkbox" name="print_glassesprescriptions_flag" id="checkboxglasses" <?php if ($form_data['glassesprescriptions_flag'] == 1) {
-                  echo 'checked';
-                } ?> value="1">
+                <?php
+                //  if ($form_data['glassesprescriptions_flag'] == 1) {
+                //   echo 'checked';
+                // } 
+                ?>
+                <input type="checkbox" name="print_glassesprescriptions_flag" id="checkboxglasses" value="1" checked>
                 <label for="checkboxglasses">Glasses</label>
               </div>
 
               <div class="ckbox ckbox-default col-md-3 col-sm-3">
-                <input type="checkbox" name="print_intermediate_glasses_prescriptions_flag" <?php if ($form_data['intermediate_glasses_prescriptions_flag'] == 1) {
-                  echo 'checked';
-                } ?>
-                  id="checkboxinterglasses" value="1">
+                <?php
+                // if ($form_data['intermediate_glasses_prescriptions_flag'] == 1) {
+                //   echo 'checked';
+                // } 
+                ?>
+                <input type="checkbox" name="print_intermediate_glasses_prescriptions_flag" id="checkboxinterglasses"
+                  value="1" checked>
                 <label for="checkboxinterglasses">Intermediate Glasses</label>
               </div>
 
               <div class="ckbox ckbox-default col-md-3 col-sm-3">
-                <input type="checkbox" name="print_examination_flag" <?php if ($form_data['examination_flag'] == 1) {
-                  echo 'checked';
-                } ?> id="checkboxexamination" value="1">
+                <?php
+                // if ($form_data['examination_flag'] == 1) {
+                //   echo 'checked';
+                // } 
+                ?>
+                <input type="checkbox" name="print_examination_flag" id="checkboxexamination" value="1" checked>
                 <label for="checkboxexamination">Examination</label>
               </div>
 
               <div class="ckbox ckbox-default col-md-3 col-sm-3">
-              
-                <input type="checkbox" name="print_drawing_flag" <?php if ($form_data['drawing_flag'] == 1) {
-                  echo 'checked';
-                } ?> id="checkboxdrawing" value="1">
+                <?php
+                // if ($form_data['drawing_flag'] == 1) {
+                //   echo 'checked';
+                // }  
+                ?>
+                <input type="checkbox" name="print_drawing_flag" id="checkboxdrawing" value="1" checked>
                 <label for="checkboxdrawing">Hess Chart</label>
               </div>
 
               <div class="ckbox ckbox-default col-md-3 col-sm-3">
-                <input type="checkbox" name="print_diagnosis_flag" <?php if ($form_data['diagnosis_flag'] == 1) {
-                  echo 'checked';
-                } ?> id="checkboxdiagnosis" value="1">
+                <?php
+                // if ($form_data['diagnosis_flag'] == 1) {
+                //   echo 'checked';
+                // } 
+                ?>
+                <input type="checkbox" name="print_diagnosis_flag" id="checkboxdiagnosis" value="1" checked>
                 <label for="checkboxdiagnosis">Diagnosis</label>
               </div>
 
               <div class="ckbox ckbox-default col-md-3 col-sm-3">
-                <input type="checkbox" name="print_investigations_flag" <?php if ($form_data['investigations_flag'] == 1) {
-                  echo 'checked';
-                } ?> id="checkboxinvestigations" value="1">
+                <?php
+                // if ($form_data['investigations_flag'] == 1) {
+                //   echo 'checked';
+                // } 
+                ?>
+                <input type="checkbox" name="print_investigations_flag" id="checkboxinvestigations" value="1" checked>
                 <label for="checkboxinvestigations">Investigations</label>
               </div>
 
               <div class="ckbox ckbox-default col-md-3 col-sm-3">
-                <input type="checkbox" name="print_advice_flag" id="checkboxadvice" <?php if ($form_data['advice_flag'] == 1) {
-                  echo 'checked';
-                } ?> value="1">
+                <?php
+                // if ($form_data['advice_flag'] == 1) {
+                //   echo 'checked';
+                // } 
+                ?>
+                <input type="checkbox" name="print_advice_flag" id="checkboxadvice" value="1" checked>
                 <label for="checkboxadvice">Advice</label>
               </div>
 
               <div class="ckbox ckbox-default col-md-3 col-sm-3">
-                <input type="checkbox" name="print_biometry_flag" id="checkboxadvice" <?php if ($form_data['biometry_flag'] == 1) {
-                  echo 'checked';
-                } ?> value="1">
+                <?php
+                // if ($form_data['biometry_flag'] == 1) {
+                //   echo 'checked';
+                // } 
+                ?>
+                <input type="checkbox" name="print_biometry_flag" id="checkboxadvice" value="1" checked>
                 <label for="checkboxadvice">Biometry</label>
               </div>
               <div>
               </div>
             </div>
+          </div> -->
+          <?php
+          // echo "<pre>";
+          // print_r($booking_id);
+          // print_r($patient_id);
+          // die;
+          ?>
+          <?php
+          // Assuming $pat_status is the string
+          $pat_status = $booking_data['pat_status'] ?? '';
 
+          // Step 1: Convert the string to an array by splitting by commas
+          $pat_status_array = explode(',', $pat_status);
+
+          // Step 2: Trim the whitespace from each item in the array
+          $pat_status_array = array_map('trim', $pat_status_array);
+
+          // Step 3: Remove duplicate values from the array
+          $pat_status_array = array_unique($pat_status_array);
+
+          $button_actions = [
+            'refraction_above_8_years' => 'Refraction above 8 years',
+            'vision' => 'Vision',
+            'contact_lens' => 'Contact Lens',
+            'low_vision' => 'Low Vision',
+            'hess_chart' => 'Hess Chart',
+            'refraction_below_8_years' => 'Refraction below 8 years',
+            'dilate' => 'Dilate',
+            'prosthetic' => 'Prosthetic',
+            'oct_hfa' => 'OCT HFA',
+            'ortho_paedic' => 'Ortho Paedic'
+          ];
+          ?>
+          <div class="row">
+            <div class="col-md-2">
+              <label class="col-md-12 col-sm-12" for="printsummary-labels"><strong>Print Preview: </strong></label>
+            </div>
+            <div class="col-md-10 col-sm-10">
+              <div class="col-md-10 col-sm-10">
+                <!-- <div class="button-group">
+                  <a href="javascript:void(0)" class="btn btn-custom"
+                    onclick="return print_window_page('<?php echo base_url('refraction/print_refraction/' . $booking_id . '/' . $booking_data['ref_abv_id']); ?>');">
+                    <i class="fa fa-print"></i> Refraction above 8 years preview
+                  </a>
+                  <a href="javascript:void(0)" class="btn btn-custom"
+                    onclick="return print_window_page('<?php echo base_url('vision/print_vision/' . $booking_data['vision_id']); ?>');">
+                    <i class="fa fa-print"></i> Vision Preview
+                  </a>
+                  <a href="javascript:void(0)" class="btn btn-custom"
+                    onclick="return print_window_page('<?php echo base_url('contact_lens/print_contact_lens/' . $booking_data['contact_lens_id'] . '/' . $booking_id . '/' . $booking_data['patient_id']); ?>' );">
+                    <i class="fa fa-print"></i> Contact Lens Preview
+                  </a>
+                  <a href="javascript:void(0)" class="btn btn-custom"
+                    onclick="return print_window_page('<?php echo base_url('low_vision/print_low_vision/' . $booking_id . '/' . $booking_data['low_visi_id']); ?>');">
+                    <i class="fa fa-print"></i> Low Vision Preview
+                  </a>
+                  <a href="javascript:void(0)" class="btn btn-custom"
+                    onclick="return print_window_page('<?php echo base_url('eye/add_eye_prescription/view_prescription/' . $booking_data['std_eye_presc_id'] . '/' . $booking_id); ?>?flag=hess_chart&type=help_desk');">
+                    <i class="fa fa-print"></i> Hess Chart Preview
+                  </a>
+                  <a href="javascript:void(0)" class="btn btn-custom"
+                    onclick="return print_window_page('<?php echo base_url('eye/add_eye_prescription/view_prescription/' . $booking_data['std_eye_presc_id'] . '/' . $booking_id); ?>?flag=refraction_below_8_years&type=help_desk');">
+                    <i class="fa fa-print"></i> Refraction below 8 years Preview
+                  </a>
+                  <a href="javascript:void(0)" class="btn btn-custom"
+                    onclick="return print_window_page('<?php echo base_url('dilate/print_dilate/' . $booking_data['patient_id']); ?>');">
+                    <i class="fa fa-print"></i> Dilate Preview
+                  </a>
+                  <a href="javascript:void(0)" class="btn btn-custom"
+                    onclick="return print_window_page('<?php echo base_url('prosthetic/print_prosthetic/' . $booking_id . '/' . $booking_data['patient_id']); ?>');">
+                    <i class="fa fa-print"></i> Prosthetic Preview
+                  </a>
+                  <a href="javascript:void(0)" class="btn btn-custom"
+                    onclick="return print_window_page('<?php echo base_url('oct_hfa/print_oct_hfa/' . $booking_id . '/' . $booking_data['patient_id']); ?>');">
+                    <i class="fa fa-print"></i> OCT HFA Preview
+                  </a>
+                  <a href="javascript:void(0)" class="btn btn-custom"
+                    onclick="return print_window_page('<?php echo base_url('ortho_ptics/print_oct_hfa/' . $booking_id . '/' . $booking_data['patient_id']); ?>');">
+                    <i class="fa fa-print"></i> Ortho Paedic Preview
+                  </a> 
+
+                </div> -->
+                <div class="button-group">
+                  <?php foreach ($button_actions as $key => $action): ?>
+                    <a href="javascript:void(0)" class="btn btn-custom" onclick="return print_window_page('<?php
+                    // Set URL based on the action
+                    switch ($key) {
+                      case 'refraction_above_8_years':
+                        echo base_url('refraction/print_refraction/' . $booking_id . '/' . $booking_data['ref_abv_id']);
+                        break;
+                      case 'vision':
+                        echo base_url('vision/print_vision/' . $booking_data['vision_id']);
+                        break;
+                      case 'contact_lens':
+                        echo base_url('contact_lens/print_contact_lens/' . $booking_data['contact_lens_id'] . '/' . $booking_id . '/' . $booking_data['patient_id']);
+                        break;
+                      case 'low_vision':
+                        echo base_url('low_vision/print_low_vision/' . $booking_id . '/' . $booking_data['low_visi_id']);
+                        break;
+                      case 'hess_chart':
+                        echo base_url('eye/add_eye_prescription/view_prescription/' . $booking_data['std_eye_presc_id'] . '/' . $booking_id) . '?flag=hess_chart&type=help_desk';
+                        break;
+                      case 'refraction_below_8_years':
+                        echo base_url('eye/add_eye_prescription/view_prescription/' . $booking_data['std_eye_presc_id'] . '/' . $booking_id) . '?flag=refraction_below_8_years&type=help_desk';
+                        break;
+                      case 'dilate':
+                        echo base_url('dilate/print_dilate/' . $booking_data['patient_id']);
+                        break;
+                      case 'prosthetic':
+                        echo base_url('prosthetic/print_prosthetic/' . $booking_id . '/' . $booking_data['patient_id']);
+                        break;
+                      case 'oct_hfa':
+                        echo base_url('oct_hfa/print_oct_hfa/' . $booking_id . '/' . $booking_data['patient_id']);
+                        break;
+                      case 'ortho_paedic':
+                        echo base_url('ortho_ptics/print_oct_hfa/' . $booking_id . '/' . $booking_data['patient_id']);
+                        break;
+                    }
+                    ?>');" <?php echo in_array($action, $pat_status_array) ? '' : 'disabled'; ?>>
+                      <i class="fa fa-print"></i> <?php echo $action; ?> Preview
+                    </a>
+                  <?php endforeach; ?>
+                </div>
+              </div>
+            </div>
           </div>
           <?php
-        }
-        else if($flag == 'eye_history'){
+        } else if ($flag == 'eye_history') {
           ?>
-          <input type="checkbox" name="print_history_flag" <?php if ($form_data['history_flag'] == 1) {
-            echo 'checked';
-          } ?>
-            id="checkboxhistory" value="1" hidden>
+            <input type="checkbox" name="print_history_flag" <?php if ($form_data['history_flag'] == 1) {
+              echo 'checked';
+            } ?>
+              id="checkboxhistory" value="1" hidden>
 
           <?php
-        }
-        else if($flag == 'hess_chart'){
-          
+        } else if ($flag == 'hess_chart') {
+
           ?>
-          
-          
-          <input type="checkbox" name="print_drawing_flag" checked id="checkboxdrawing" value="1"  style="display: none;">
-                <label for="checkboxdrawing" style="display: none;">Hess Chart</label>
+
+
+              <input type="checkbox" name="print_drawing_flag" checked id="checkboxdrawing" value="1" style="display: none;">
+              <label for="checkboxdrawing" style="display: none;">Hess Chart</label>
 
           <?php
 
-        }
-         else {
+        } else {
           ?>
-          <!-- <input type="checkbox" name="print_history_flag" <?php if ($form_data['history_flag'] == 1) {echo 'checked';} ?>
+              <!-- <input type="checkbox" name="print_history_flag" <?php if ($form_data['history_flag'] == 1) {
+                echo 'checked';
+              } ?>
             id="checkboxhistory" value="1" hidden> -->
 
           <?php
@@ -273,95 +426,107 @@ $users_data = $this->session->userdata('auth_users');
         ?>
         <?php
         // echo "<pre>";
-    //   print_r($data['form_data']);
-    //   // print_r($booking_id);
-    //   die; 
+        //   print_r($data['form_data']);
+        //   // print_r($booking_id);
+        //   die; 
         ?>
 
-<?php
-            // Loop through the contact lens data
-            $age_y = $booking_data['age_y'];
-            $age_m = $booking_data['age_m'];
-            $age_d = $booking_data['age_d'];
+        <?php
+        // Loop through the contact lens data
+        $age_y = $booking_data['age_y'];
+        $age_m = $booking_data['age_m'];
+        $age_d = $booking_data['age_d'];
 
-            $age = "";
-            if ($age_y > 0) {
-                $year = 'Years';
-                if ($age_y == 1) {
-                    $year = 'Year';
-                }
-                $age .= $age_y . " " . $year;
-            }
-            if ($age_m > 0) {
-                $month = 'Months';
-                if ($age_m == 1) {
-                    $month = 'Month';
-                }
-                $age .= ", " . $age_m . " " . $month;
-            }
-            if ($age_d > 0) {
-                $day = 'Days';
-                if ($age_d == 1) {
-                    $day = 'Day';
-                }
-                $age .= ", " . $age_d . " " . $day;
-            }
+        $age = "";
+        if ($age_y > 0) {
+          $year = 'Years';
+          if ($age_y == 1) {
+            $year = 'Year';
+          }
+          $age .= $age_y . " " . $year;
+        }
+        if ($age_m > 0) {
+          $month = 'Months';
+          if ($age_m == 1) {
+            $month = 'Month';
+          }
+          $age .= ", " . $age_m . " " . $month;
+        }
+        if ($age_d > 0) {
+          $day = 'Days';
+          if ($age_d == 1) {
+            $day = 'Day';
+          }
+          $age .= ", " . $age_d . " " . $day;
+        }
         ?>
-        <div class="row" style="margin-bottom:10px;">
-            <div class="col-xs-5">
-                <div class="row m-b-5">
-                    <div class="col-xs-4"><strong>Patient</strong></div>
-                    <div class="col-xs-8">
-                        <input type="text" name="patient_name" value="<?php echo isset($booking_data['patient_name']) ? $booking_data['patient_name'] : 'N/A'; ?>" readonly="">
-                    </div>
-                </div>
-                <div class="row m-b-5">
-                    <div class="col-xs-4"><strong>Patient Reg. No</strong></div>
-                    <div class="col-xs-8">
-                        <input type="text" name="patient_code" value="<?php echo isset($booking_data['patient_code']) ? $booking_data['patient_code'] : 'N/A'; ?>" readonly="">
-                    </div>
-                </div>
-                <div class="row m-b-5">
-                    <div class="col-xs-4"><strong>OPD No</strong></div>
-                    <div class="col-xs-8">
-                        <input type="text" name="booking_code" value="<?php echo isset($booking_data['booking_code']) ? $booking_data['booking_code'] : 'N/A'; ?>" readonly="">
-                    </div>
-                    
-                </div>
-                <div class="row m-b-5">
-                        <div class="col-xs-4"><strong>Token No</strong></div>
-                        <div class="col-xs-8">
-                            <input type="text" name="token_no" value="<?php echo isset($booking_data['token_no']) ? $booking_data['token_no'] : 'N/A'; ?>" readonly="">
-                        </div>
-                    </div>
+        <div class="row mt-3" style="margin-bottom:10px;">
+          <div class="col-xs-5">
+            <div class="row m-b-5">
+              <div class="col-xs-4"><strong>Patient</strong></div>
+              <div class="col-xs-8">
+                <input type="text" name="patient_name"
+                  value="<?php echo isset($booking_data['patient_name']) ? $booking_data['patient_name'] : 'N/A'; ?>"
+                  readonly="">
+              </div>
             </div>
-            <div class="col-xs-5">
-                <div class="row m-b-5">
-                    <div class="col-xs-4"><strong>Mobile no.</strong></div>
-                    <div class="col-xs-8">
-                        <input type="text" name="mobile_no" value="<?php echo isset($booking_data['mobile_no']) ? $booking_data['mobile_no'] : 'N/A'; ?>" readonly="">
-                    </div>
-                </div>
-                <div class="row m-b-5">
-                    <div class="col-xs-4"><strong>Age</strong></div>
-                    <div class="col-xs-8">
-                        <input type="text" name="mobile_no" value="<?php echo isset($age) ? $age : 'N/A'; ?>" readonly="">
-                    </div>
-                </div>
-                <div class="row m-b-5">
-                    <div class="col-xs-4"><strong>Gender</strong></div>
-                    <div class="col-xs-8">
-                        <input type="text" name="gender" value="<?php echo ($booking_data['gender'] == '0') ? 'Female' : 'Male'; ?>" readonly="">
-                    </div>
-                </div>
+            <div class="row m-b-5">
+              <div class="col-xs-4"><strong>Patient Reg. No</strong></div>
+              <div class="col-xs-8">
+                <input type="text" name="patient_code"
+                  value="<?php echo isset($booking_data['patient_code']) ? $booking_data['patient_code'] : 'N/A'; ?>"
+                  readonly="">
+              </div>
             </div>
+            <div class="row m-b-5">
+              <div class="col-xs-4"><strong>OPD No</strong></div>
+              <div class="col-xs-8">
+                <input type="text" name="booking_code"
+                  value="<?php echo isset($booking_data['booking_code']) ? $booking_data['booking_code'] : 'N/A'; ?>"
+                  readonly="">
+              </div>
+
+            </div>
+            <div class="row m-b-5">
+              <div class="col-xs-4"><strong>Token No</strong></div>
+              <div class="col-xs-8">
+                <input type="text" name="token_no"
+                  value="<?php echo isset($booking_data['token_no']) ? $booking_data['token_no'] : 'N/A'; ?>"
+                  readonly="">
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-5">
+            <div class="row m-b-5">
+              <div class="col-xs-4"><strong>Mobile no.</strong></div>
+              <div class="col-xs-8">
+                <input type="text" name="mobile_no"
+                  value="<?php echo isset($booking_data['mobile_no']) ? $booking_data['mobile_no'] : 'N/A'; ?>"
+                  readonly="">
+              </div>
+            </div>
+            <div class="row m-b-5">
+              <div class="col-xs-4"><strong>Age</strong></div>
+              <div class="col-xs-8">
+                <input type="text" name="mobile_no" value="<?php echo isset($age) ? $age : 'N/A'; ?>" readonly="">
+              </div>
+            </div>
+            <div class="row m-b-5">
+              <div class="col-xs-4"><strong>Gender</strong></div>
+              <div class="col-xs-8">
+                <input type="text" name="gender"
+                  value="<?php echo ($booking_data['gender'] == '0') ? 'Female' : 'Male'; ?>" readonly="">
+              </div>
+            </div>
+          </div>
         </div>
 
-        
-        
+
+
         <!-- <div class="col-md-2">
           <label class="col-md-12 col-sm-12" for="printsummary-labels"><strong>Token No: </strong>
-            <?php //echo $token_no; ?>
+            <?php //echo $token_no; 
+            ?>
           </label>
         </div> -->
         <hr>
@@ -374,24 +539,19 @@ $users_data = $this->session->userdata('auth_users');
             $class9 = 'class="active"';
             $classtab8 = 'fade in active';
           }
-          
-        }else if($flag == 'eye_history'){
+        } else if ($flag == 'eye_history') {
           $classtab1 = $class1 = '';
           if (in_array('2429', $users_data['permission']['action'])) {
             $class1 = 'class="active"';
             $classtab1 = 'fade in active';
           }
-
-        } 
-        else if($flag == 'refraction_below_8_years'){
+        } else if ($flag == 'refraction_below_8_years') {
           $classtab2 = $class2 = '';
           if (in_array('2429', $users_data['permission']['action'])) {
             $class2 = 'class="active"';
             $classtab2 = 'fade in active';
           }
-
-        } 
-        else {
+        } else {
           $class1 = $class2 = $class3 = $class4 = $class5 = $class6 = $class7 = '';
           $classtab1 = $classtab2 = $classtab3 = $classtab4 = $classtab8 = $classtab5 = $classtab6 = $classtab7 = $class8 = '';
 
@@ -434,13 +594,13 @@ $users_data = $this->session->userdata('auth_users');
                     <?php if (in_array('2416', $users_data['permission']['action'])) { ?>
                       <li <?php echo $class1; ?>><a data-toggle="tab" href="#history">History</a></li>
                     <?php } ?>
-                    <?php } elseif ($flag === 'hess_chart') { ?> <!-- Additional elseif condition -->
-                      <?php if (in_array('2429', $users_data['permission']['action'])) { ?>
+                  <?php } elseif ($flag === 'hess_chart') { ?> <!-- Additional elseif condition -->
+                    <?php if (in_array('2429', $users_data['permission']['action'])) { ?>
                       <li <?php echo $class9; ?>><a data-toggle="tab" href="#Drawing">Hess Chart</a></li>
                     <?php } ?>
-                    <?php } elseif ($flag === 'refraction_below_8_years') { ?> <!-- Additional elseif condition -->
-                      <?php if (in_array('2417', $users_data['permission']['action'])) { ?>
-                        <li <?php echo $class2; ?>><a data-toggle="tab" href="#refraction">Refraction</a></li>
+                  <?php } elseif ($flag === 'refraction_below_8_years') { ?> <!-- Additional elseif condition -->
+                    <?php if (in_array('2417', $users_data['permission']['action'])) { ?>
+                      <li <?php echo $class2; ?>><a data-toggle="tab" href="#refraction">Refraction</a></li>
                     <?php } ?>
 
                   <?php } else { ?>
@@ -515,17 +675,17 @@ $users_data = $this->session->userdata('auth_users');
                         $.ajax({ //dilated_stop
                           url: "<?php echo base_url(); ?>opd/dilated_stop",
                           type: "POST",
-                          data: { booked_id: '<?php echo $booking_id; ?>' },
+                          data: {
+                            booked_id: '<?php echo $booking_id; ?>'
+                          },
                           success: function (result) {
-                            setTimeout(function () {
-                            }, 1300);
+                            setTimeout(function () { }, 1300);
                           }
                         });
                         clearInterval(x);
                         document.getElementById("demo").innerHTML = "Dilated";
                         $('#d_start').html('');
-                      }
-                      else {
+                      } else {
                         $('#d_start').html('<input type="button" class="btn btn-danger btn-sm" onclick="dilate_stop(<?php echo $booking_id; ?>);" value="Stop">');
                       }
                     }, 1000);
@@ -563,17 +723,17 @@ $users_data = $this->session->userdata('auth_users');
                         $.ajax({
                           url: "<?php echo base_url(); ?>opd/cyclo_stop",
                           type: "POST",
-                          data: { booked_id: '<?php echo $booking_id; ?>' },
+                          data: {
+                            booked_id: '<?php echo $booking_id; ?>'
+                          },
                           success: function (result) {
-                            setTimeout(function () {
-                            }, 1300);
+                            setTimeout(function () { }, 1300);
                           }
                         });
                         clearInterval(x);
                         document.getElementById("cyclodemo").innerHTML = "Cyclo";
                         $('#c_start').html('');
-                      }
-                      else {
+                      } else {
                         $('#c_start').html('<input type="button" class="btn btn-danger btn-sm" onclick="cyclo_stop(<?php echo $booking_id; ?>);" value="Stop">');
                       }
                     }, 1000);
@@ -597,7 +757,8 @@ $users_data = $this->session->userdata('auth_users');
                 <?php $this->load->view('eye/new_add_eye_prescription/pages/examination'); ?>
               </div>
               <div id="Drawing" class="tab-pane <?php echo $classtab8; ?>">
-                <?php //$this->load->view('eye/new_add_eye_prescription/pages/drawing'); ?>
+                <?php //$this->load->view('eye/new_add_eye_prescription/pages/drawing'); 
+                ?>
                 <div class="row" style="padding-left:15px;"><a class="btn-save" href="#" id="form_submit"
                     onclick="print_window_page('<?php echo base_url('eye/add_eye_prescription/drawing_prescription/' . $booking_id . '/' . $pres_id); ?>');">Add
                     Drawing</a></div>
@@ -650,7 +811,8 @@ $users_data = $this->session->userdata('auth_users');
             </div>
           </div>
         </div>
-        <?php // echo "dddss";die; ?>
+        <?php // echo "dddss";die; 
+        ?>
       </form>
     </section> <!-- section close -->
 
@@ -707,7 +869,9 @@ $users_data = $this->session->userdata('auth_users');
       $.ajax({
         url: "<?php echo base_url(); ?>opd/dilated_start",
         type: "POST",
-        data: { booked_id: id },
+        data: {
+          booked_id: id
+        },
         success: function (result) {
           flash_session_msg(result);
           location.reload();
@@ -719,7 +883,9 @@ $users_data = $this->session->userdata('auth_users');
       $.ajax({
         url: "<?php echo base_url(); ?>opd/dilate_m_stop",
         type: "POST",
-        data: { booked_id: id },
+        data: {
+          booked_id: id
+        },
         success: function (result) {
           flash_session_msg(result);
           location.reload();
@@ -731,18 +897,9 @@ $users_data = $this->session->userdata('auth_users');
       $.ajax({
         url: "<?php echo base_url(); ?>opd/cyclo_start",
         type: "POST",
-        data: { booked_id: id },
-        success: function (result) {
-          flash_session_msg(result);
-          location.reload();
-        }
-      });
-    }
-    function cyclo_stop(id) {
-      $.ajax({
-        url: "<?php echo base_url(); ?>opd/cyclo_m_stop",
-        type: "POST",
-        data: { booked_id: id },
+        data: {
+          booked_id: id
+        },
         success: function (result) {
           flash_session_msg(result);
           location.reload();
@@ -750,6 +907,19 @@ $users_data = $this->session->userdata('auth_users');
       });
     }
 
+    function cyclo_stop(id) {
+      $.ajax({
+        url: "<?php echo base_url(); ?>opd/cyclo_m_stop",
+        type: "POST",
+        data: {
+          booked_id: id
+        },
+        success: function (result) {
+          flash_session_msg(result);
+          location.reload();
+        }
+      });
+    }
   </script>
 
 </body>
