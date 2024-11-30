@@ -436,7 +436,7 @@ class Oct_hfa_model extends CI_Model
                     $this->db->where('patient_id', $post['patient_id']);
                     $this->db->update('hms_contact_lens', $data);
                 }
-            } else if ($post['mod_type'] == 'low_vision') {
+            } else if ($post['mod_type'] === 'low_vision') {
                 $data = ['status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
                 $this->db->where('patient_id', $post['patient_id']);
@@ -449,7 +449,7 @@ class Oct_hfa_model extends CI_Model
                     $this->db->where('patient_id', $post['patient_id']);
                     $this->db->update('hms_low_vision', $data);
                 }
-            } else if ($post['mod_type'] == 'prosthetic') {
+            } else if ($post['mod_type'] === 'prosthetic') {
                 $data = ['status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
                 $this->db->where('patient_id', $post['patient_id']);
@@ -463,7 +463,7 @@ class Oct_hfa_model extends CI_Model
                     $this->db->update('hms_prosthetic', $data);
                 }
             }
-            else if ($post['mod_type'] == 'oct_hfa') {
+            else if ($post['mod_type'] === 'oct_hfa') {
                 $data = ['status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
                 $this->db->where('patient_id', $post['patient_id']);
@@ -477,7 +477,7 @@ class Oct_hfa_model extends CI_Model
                     $this->db->update('hms_oct_hfa', $data);
                 }
             }
-            else if ($post['mod_type'] == 'ortho_ptics') {
+            else if ($post['mod_type'] === 'ortho_ptics') {
                 $data = ['status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
                 $this->db->where('patient_id', $post['patient_id']);
@@ -491,11 +491,11 @@ class Oct_hfa_model extends CI_Model
                     $this->db->update('hms_ortho_ptics', $data);
                 }
             }
-            if (!empty($data['patient_id'])) {
+            if (!empty($post['patient_id'])) {
                 // echo "Ok";die;
                 // Retrieve the current 'pat_status' value for the given patient
                 $this->db->select('pat_status');
-                $this->db->where('id', $data['patient_id']);
+                $this->db->where('id', $post['patient_id']);
                 $query = $this->db->get('hms_patient');
 
                 if ($query->num_rows() > 0) {
@@ -505,7 +505,7 @@ class Oct_hfa_model extends CI_Model
                     $new_status = $current_status . ', ' . 'OCT-HFA';
 
                     // Update the 'pat_status' field with the concatenated value
-                    $this->db->where('id', $data['patient_id']);
+                    $this->db->where('id', $post['patient_id']);
                     $this->db->update('hms_patient', ['pat_status' => $new_status]);
                 }
             }

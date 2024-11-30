@@ -328,7 +328,7 @@ class Low_vision_model extends CI_Model
                     $this->db->where('patient_id', $post['patient_id']);
                     $this->db->update('hms_contact_lens', $data);
                 }
-            } else if ($post['mod_type'] == 'low_vision') {
+            } else if ($post['mod_type'] === 'low_vision') {
                 $data = ['status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
                 $this->db->where('patient_id', $post['patient_id']);
@@ -342,7 +342,7 @@ class Low_vision_model extends CI_Model
                     $this->db->update('hms_low_vision', $data);
                 }
             }
-            else if ($post['mod_type'] == 'prosthetic') {
+            else if ($post['mod_type'] === 'prosthetic') {
                 $data = ['status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
                 $this->db->where('patient_id', $post['patient_id']);
@@ -356,7 +356,7 @@ class Low_vision_model extends CI_Model
                     $this->db->update('hms_prosthetic', $data);
                 }
             }
-            else if ($post['mod_type'] == 'oct_hfa') {
+            else if ($post['mod_type'] === 'oct_hfa') {
                 $data = ['status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
                 $this->db->where('patient_id', $post['patient_id']);
@@ -370,7 +370,7 @@ class Low_vision_model extends CI_Model
                     $this->db->update('hms_oct_hfa', $data);
                 }
             }
-            else if ($post['mod_type'] == 'ortho_ptics') {
+            else if ($post['mod_type'] === 'ortho_ptics') {
                 $data = ['status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
                 $this->db->where('patient_id', $post['patient_id']);
