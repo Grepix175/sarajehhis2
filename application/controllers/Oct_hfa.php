@@ -194,7 +194,7 @@ class Oct_hfa extends CI_Controller
             'patient_id' => isset($data['booking_data']['patient_id']) ? $data['booking_data']['patient_id'] : '', // To be filled from form
             'optometrist_signature' => '', // To be filled from form
             'doctor_signature' => '', // To be filled from form
-            'status' => 1, // Default value
+            'status' => 0, // Default value
             'is_deleted' => 0, // Default value
             'created_by' => $this->session->userdata('user_id'), // User ID from session
             'created_date' => date('Y-m-d H:i:s'), // Current timestamp
@@ -233,8 +233,9 @@ class Oct_hfa extends CI_Controller
         if (isset($post) && !empty($post)) {
             // echo "<pre>";print_r($post);die('dfk');
             $patient_exists = $this->oct_hfa->patient_exists($post['patient_id']);
+            $result_exists = $this->oct_hfa->get_by_id($post['id']);
             //   echo "<pre>";
-            // print_r( $patient_exists);
+            // print_r( $result_exists['status']);
             // die;
             if(empty($post['id'])){
                 if ($patient_exists) {
@@ -486,7 +487,7 @@ class Oct_hfa extends CI_Controller
                 'infection_history' => isset($infection_history) ? $infection_history : '',           
                 'convulsion_history' => isset($convulsion_history) ? $convulsion_history : '',           
                 'consanguinity_history' => isset($consanguinity_history) ? $consanguinity_history : '',           
-                'status' => 1,
+                'status' => isset($result_exists) && $result_exists['oct_status'] == 1 ? 1 : 0,
                 'is_deleted' => 0,
                 'created_by' => isset($created_by) ? $created_by : '',
                 'created_date' => date('Y-m-d H:i:s'),
@@ -644,7 +645,7 @@ class Oct_hfa extends CI_Controller
                 'patient_id' => $result['patient_id'],
                 'optometrist_signature' => $result['optometrist_signature'],
                 'doctor_signature' => $result['doctor_signature'],
-                'status' => $result['status'],
+                'status' => 0,
                 'is_deleted' => $result['is_deleted'],                
             );
             // foreach($this->fields as $keys){
@@ -671,7 +672,7 @@ class Oct_hfa extends CI_Controller
                     'booking_id' => $this->input->post('booking_id'),                   
                     'optometrist_signature' => $this->input->post('optometrist_signature'),
                     'doctor_signature' => $this->input->post('doctor_signature'),
-                    'status' => 1, // Or whatever default value you need
+                    'status' => 0, // Or whatever default value you need
                     'is_deleted' => 0, // Assuming this is default
                     'modified_date' => date('Y-m-d H:i:s'), // Current timestamp for update
                     'ip_address' => $this->input->ip_address(),

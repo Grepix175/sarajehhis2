@@ -106,8 +106,8 @@ class Prosthetic_model extends CI_Model
             }
 
             if (isset($search['search_type']) && $search['search_type'] != "") {
-				$this->db->where('hms_prosthetic.status', $search['search_type']);
-			}
+                $this->db->where('hms_prosthetic.status', $search['search_type']);
+            }
 
 
             if (!empty($search['priority_type']) && $search['priority_type'] !== '4') {
@@ -173,7 +173,7 @@ class Prosthetic_model extends CI_Model
     public function get_by_id($id)
     {
         // echo $id;die;
-        $this->db->select('hms_prosthetic.*, hms_patient.*');
+        $this->db->select('hms_prosthetic.*, hms_prosthetic.status as pro_status,hms_patient.*');
         $this->db->from($this->table);
         $this->db->join('hms_patient', 'hms_patient.id = hms_prosthetic.patient_id', 'left');
         $this->db->where('hms_prosthetic.id', $id);
@@ -355,7 +355,7 @@ class Prosthetic_model extends CI_Model
                     $this->db->where('patient_id', $post['patient_id']);
                     $this->db->update('hms_low_vision', $data);
                 }
-            }else if ($post['mod_type'] === 'prosthetic') {
+            } else if ($post['mod_type'] === 'prosthetic') {
                 $data = ['status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
                 $this->db->where('patient_id', $post['patient_id']);
@@ -368,8 +368,7 @@ class Prosthetic_model extends CI_Model
                     $this->db->where('patient_id', $post['patient_id']);
                     $this->db->update('hms_prosthetic', $data);
                 }
-            }
-            else if ($post['mod_type'] === 'dilate') {
+            } else if ($post['mod_type'] === 'dilate') {
                 $data = ['status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
                 $this->db->where('patient_id', $post['patient_id']);
@@ -382,8 +381,7 @@ class Prosthetic_model extends CI_Model
                     $this->db->where('patient_id', $post['patient_id']);
                     $this->db->update('hms_dilated', $data);
                 }
-            }
-            else if ($post['mod_type'] === 'oct_hfa') {
+            } else if ($post['mod_type'] === 'oct_hfa') {
                 $data = ['status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
                 $this->db->where('patient_id', $post['patient_id']);
@@ -396,8 +394,7 @@ class Prosthetic_model extends CI_Model
                     $this->db->where('patient_id', $post['patient_id']);
                     $this->db->update('hms_oct_hfa', $data);
                 }
-            }
-            else if ($post['mod_type'] === 'ortho_ptics') {
+            } else if ($post['mod_type'] === 'ortho_ptics') {
                 $data = ['status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
                 $this->db->where('patient_id', $post['patient_id']);
@@ -410,8 +407,7 @@ class Prosthetic_model extends CI_Model
                     $this->db->where('patient_id', $post['patient_id']);
                     $this->db->update('hms_ortho_ptics', $data);
                 }
-            }
-            else if ($post['mod_type'] === 'hess_chart') {
+            } else if ($post['mod_type'] === 'hess_chart') {
                 $data = ['hess_chart_status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
                 $this->db->where('patient_id', $post['patient_id']);
@@ -424,8 +420,7 @@ class Prosthetic_model extends CI_Model
                     $this->db->where('patient_id', $post['patient_id']);
                     $this->db->update('hms_std_eye_prescription', $data);
                 }
-            }
-            else if ($post['mod_type'] === 'refraction_below8') {
+            } else if ($post['mod_type'] === 'refraction_below8') {
                 $data = ['refra_below_status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
                 $this->db->where('patient_id', $post['patient_id']);
@@ -438,8 +433,7 @@ class Prosthetic_model extends CI_Model
                     $this->db->where('patient_id', $post['patient_id']);
                     $this->db->update('hms_std_eye_prescription', $data);
                 }
-            }
-            else if ($post['mod_type'] === 'send_to_token') {
+            } else if ($post['mod_type'] === 'send_to_token') {
                 $data = ['status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
                 $this->db->where('patient_id', $post['patient_id']);
@@ -454,23 +448,30 @@ class Prosthetic_model extends CI_Model
                 }
             }
             // Check if patient_id is provided
-            if (!empty($post['patient_id'])) {
-                // Retrieve the current 'pat_status' value for the given patient
-                $this->db->select('pat_status');
-                $this->db->where('id', $post['patient_id']);
-                $query = $this->db->get('hms_patient');
+            if (
 
-                if ($query->num_rows() > 0) {
-                    $current_status = $query->row()->pat_status;
-
-                    // Concatenate the current status with 'Low vision'
-                    $new_status = $current_status . ', Prosthetic';
-
-                    // Update the 'pat_status' field with the concatenated value
+                (isset($post['send_to_type']) &&
+                    in_array($post['send_to_type'], ['Prosthetic'])
+                )
+            ) {
+                if (!empty($post['patient_id'])) {
+                    // Retrieve the current 'pat_status' value for the given patient
+                    $this->db->select('pat_status');
                     $this->db->where('id', $post['patient_id']);
-                    if (!$this->db->update('hms_patient', ['pat_status' => $new_status])) {
-                        log_message('error', 'Failed to update pat_status for patient ID: ' . $data['patient_id']);
-                        return false;
+                    $query = $this->db->get('hms_patient');
+
+                    if ($query->num_rows() > 0) {
+                        $current_status = $query->row()->pat_status;
+
+                        // Concatenate the current status with 'Low vision'
+                        $new_status = $current_status . ', Prosthetic';
+
+                        // Update the 'pat_status' field with the concatenated value
+                        $this->db->where('id', $post['patient_id']);
+                        if (!$this->db->update('hms_patient', ['pat_status' => $new_status])) {
+                            log_message('error', 'Failed to update pat_status for patient ID: ' . $data['patient_id']);
+                            return false;
+                        }
                     }
                 }
             }

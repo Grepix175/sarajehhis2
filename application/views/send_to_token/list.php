@@ -565,47 +565,48 @@ $users_data = $this->session->userdata('auth_users');
           $('.inputFocus').focus();
         });
       });
-      document.getElementById('ortho_peadics_excel').addEventListener('click', function (e) {
-        e.preventDefault();
+      // document.getElementById('ortho_peadics_excel').addEventListener('click', function (e) {
+      //   e.preventDefault();
 
 
-        var fromDate = document.getElementById('start_date_patient').value;
-        var toDate = document.getElementById('end_date_patient').value;
+      //   var fromDate = document.getElementById('start_date_patient').value;
+      //   var toDate = document.getElementById('end_date_patient').value;
 
 
-        var url = '<?php echo base_url("send_to_token/ortho_peadics_excel"); ?>';
+      //   var url = '<?php echo base_url("send_to_token/ortho_peadics_excel"); ?>';
 
 
-        if (fromDate || toDate) {
-          url += '?';
-          if (fromDate) {
-            url += 'start_date=' + encodeURIComponent(fromDate);
-          }
-          if (toDate) {
-            url += (fromDate ? '&' : '') + 'end_date=' + encodeURIComponent(toDate);
-          }
-        }
-        window.location.href = url;
-      });
+      //   if (fromDate || toDate) {
+      //     url += '?';
+      //     if (fromDate) {
+      //       url += 'start_date=' + encodeURIComponent(fromDate);
+      //     }
+      //     if (toDate) {
+      //       url += (fromDate ? '&' : '') + 'end_date=' + encodeURIComponent(toDate);
+      //     }
+      //   }
+      //   window.location.href = url;
+      // });
 
-      document.getElementById('ortho_paedic_pdf').addEventListener('click', function (e) {
-        // alert();
-        e.preventDefault();
+      // document.getElementById('ortho_paedic_pdf').addEventListener('click', function (e) {
+      //   // alert();
+      //   e.preventDefault();
 
-        var fromDate = document.getElementById('start_date_patient').value;
-        var toDate = document.getElementById('end_date_patient').value;
-
-
-        var fromDateObj = new Date(fromDate);
-        var toDateObj = new Date(toDate);
+      //   var fromDate = document.getElementById('start_date_patient').value;
+      //   var toDate = document.getElementById('end_date_patient').value;
 
 
+      //   var fromDateObj = new Date(fromDate);
+      //   var toDateObj = new Date(toDate);
 
-        var url = '<?php echo base_url("send_to_token/ortho_paedic_pdf"); ?>';
-        url += '?start_date=' + encodeURIComponent(fromDate) + '&end_date=' + encodeURIComponent(toDate);
 
-        window.location.href = url;
-      });
+
+      //   var url = '<?php echo base_url("send_to_token/ortho_paedic_pdf"); ?>';
+      //   url += '?start_date=' + encodeURIComponent(fromDate) + '&end_date=' + encodeURIComponent(toDate);
+
+      //   window.location.href = url;
+      // });
+
       $(document).on('click', '.open-popup', function () {
         // Get the data attributes from the clicked button
         var bookingId = $(this).data('booking-id');

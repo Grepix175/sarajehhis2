@@ -212,7 +212,7 @@ class Ortho_ptics extends CI_Controller
             'distance_ipd' => '', // To be filled from form
             'ac_a_ratio' => '', // To be filled from form
             'heterophoria_method' => '', // To be filled from form
-            'status' => 1, // Default value
+            'status' => 0, // Default value
             'is_deleted' => 0, // Default value
             'created_by' => $this->session->userdata('user_id'), // User ID from session
             'created_date' => date('Y-m-d H:i:s'), // Current timestamp
@@ -235,6 +235,7 @@ class Ortho_ptics extends CI_Controller
             // echo "<pre>";print_r($post);die('dfk');
 
             $patient_exists = $this->ortho_ptics->patient_exists($post['patient_id']);
+            $result_exists = $this->ortho_ptics->get_by_id($post['id']);
             //   echo "<pre>";
             // print_r( $patient_exists);
             // die;
@@ -310,7 +311,7 @@ class Ortho_ptics extends CI_Controller
                 'distance_ipd' => isset($distance_ipd) ? $distance_ipd : '',           
                 'ac_a_ratio' => isset($ac_a_ratio) ? $ac_a_ratio : '',           
                 'heterophoria_method' => isset($heterophoria_method) ? $heterophoria_method : '',           
-                'status' => 1,
+                'status' => isset($result_exists) && $result_exists['ortho_status'] == 1 ? 1 : 0,
                 'is_deleted' => 0,
                 'created_by' => isset($created_by) ? $created_by : '',
                 'created_date' => date('Y-m-d H:i:s'),
@@ -495,7 +496,7 @@ class Ortho_ptics extends CI_Controller
                     'booking_id' => $this->input->post('booking_id'),                   
                     'optometrist_signature' => $this->input->post('optometrist_signature'),
                     'doctor_signature' => $this->input->post('doctor_signature'),
-                    'status' => 1, // Or whatever default value you need
+                    'status' => 0, // Or whatever default value you need
                     'is_deleted' => 0, // Assuming this is default
                     'modified_date' => date('Y-m-d H:i:s'), // Current timestamp for update
                     'ip_address' => $this->input->ip_address(),

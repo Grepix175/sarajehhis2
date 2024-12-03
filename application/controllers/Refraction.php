@@ -220,8 +220,9 @@ class Refraction extends CI_Controller
         // echo "<pre>";print_r($post);die('ss');
         if (isset($post) && !empty($post)) {
             $patient_exists = $this->refraction->patient_exists($post['patient_id']);
+            $result_exists = $this->refraction->get_by_id($post['id']);
             //   echo "<pre>";
-            // print_r( empty($post['id']));
+            // print_r( isset($result_exists) && $result_exists['ref_status'] == 1 ? 1 : 0);
             // die;
             if(empty($post['id'])){
 
@@ -295,7 +296,7 @@ class Refraction extends CI_Controller
                 'comment' => isset($comment) ? $comment : '',
                 'optometrist_signature' => isset($optometrist_signature) ? $optometrist_signature : '',
                 'doctor_signature' => isset($doctor_signature) ? $doctor_signature : '',
-                'status' => 1, // Or whatever default value you need
+                'status' => isset($result_exists) && $result_exists['ref_status'] == 1 ? 1 : 0, // Or whatever default value you need
                 'is_deleted' => 0, // Assuming this is default
                 'created_by' => isset($created_by) ? $created_by : '', // Check if user_id exists
                 'created_date' => date('Y-m-d H:i:s'), // Current timestamp

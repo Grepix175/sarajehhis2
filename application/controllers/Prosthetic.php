@@ -187,7 +187,7 @@ class Prosthetic extends CI_Controller
             'patient_id' => isset($data['booking_data']['patient_id']) ? $data['booking_data']['patient_id'] : '', // To be filled from form
             'optometrist_signature' => '', // To be filled from form
             'doctor_signature' => '', // To be filled from form
-            'status' => 1, // Default value
+            'status' => 0, // Default value
             'is_deleted' => 0, // Default value
             'created_by' => $this->session->userdata('user_id'), // User ID from session
             'created_date' => date('Y-m-d H:i:s'), // Current timestamp
@@ -227,8 +227,9 @@ class Prosthetic extends CI_Controller
         if (isset($post) && !empty($post)) {
             // echo "<pre>";print_r($post);die('dfk');
             $patient_exists = $this->prosthetic->patient_exists($post['patient_id']);
+            $result_exists = $this->prosthetic->get_by_id($post['id']);
             //   echo "<pre>";
-            // print_r( $patient_exists);
+            // print_r( $result_exists);
             // die;
             if(empty($post['id'])){
                 if ($patient_exists) {
@@ -270,7 +271,7 @@ class Prosthetic extends CI_Controller
                 'workup_by' => isset($workup_by) ? $workup_by : '',
                 'optometrist_signature' => isset($optometrist_signature) ? $optometrist_signature : '',
                 'doctor_signature' => isset($doctor_signature) ? $doctor_signature : '',                
-                'status' => 1,
+                'status' => isset($result_exists) && $result_exists['pro_status'] == 1 ? 1 : 0,
                 'is_deleted' => 0,
                 'created_by' => isset($created_by) ? $created_by : '',
                 'created_date' => date('Y-m-d H:i:s'),
@@ -418,7 +419,7 @@ class Prosthetic extends CI_Controller
                 'patient_id' => $result['patient_id'],
                 'optometrist_signature' => $result['optometrist_signature'],
                 'doctor_signature' => $result['doctor_signature'],
-                'status' => $result['status'],
+                'status' => $result['pro_status'],
                 'is_deleted' => $result['is_deleted'],                
             );
             foreach($this->fields as $keys){

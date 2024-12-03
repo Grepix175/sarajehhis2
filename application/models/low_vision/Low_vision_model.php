@@ -169,7 +169,7 @@ class Low_vision_model extends CI_Model
     public function get_by_id($id)
     {
         // echo $id;die;
-        $this->db->select('hms_low_vision.*, hms_patient.*');
+        $this->db->select('hms_low_vision.*,hms_low_vision.status as low_status, hms_patient.*');
         $this->db->from($this->table);
         $this->db->join('hms_patient', 'hms_patient.id = hms_low_vision.patient_id', 'left');
         $this->db->where('hms_low_vision.id', $id);

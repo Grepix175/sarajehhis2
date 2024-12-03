@@ -76,14 +76,14 @@ class Dilate_model extends CI_Model
 			$this->db->where('hms_dilated.created_date >=', $start_date);
 			$this->db->where('hms_opd_booking.created_date >=', $start_date);
 		}
-		
-		
+
+
 		if (!empty($search['priority_type']) && $search['priority_type'] !== '4') {
 			$this->db->where('hms_patient.emergency_status', $search['priority_type']);
 		} else if ($search['priority_type'] === '4') {
 			$this->db->where('hms_patient.emergency_status', NULL);
 		}
-		
+
 
 		if (!empty($search['end_date'])) {
 			$end_date = date('Y-m-d', strtotime($search['end_date'])) . ' 23:59:59';
@@ -342,7 +342,7 @@ class Dilate_model extends CI_Model
 
 	public function get_by_id($id)
 	{
-		
+
 		// Select fields from the main 'hms_dilated' table and join other related tables
 		$this->db->select("hms_dilated.*, hms_medicine.medicine_name,hms_opd_booking.token_no"); // Assuming you want to get medicine name
 
@@ -381,6 +381,7 @@ class Dilate_model extends CI_Model
 		$post = $this->input->post();
 		// echo "<pre>";
 		// print_r($datas);
+		// print_r($post);
 		// die('okay');
 		// Fetch dilate_start_time, dilate_time, and dilate_status from hms_opd_booking using booking_id
 		$this->db->select('dilate_start_time, dilate_time, dilate_status');
@@ -393,18 +394,57 @@ class Dilate_model extends CI_Model
 		$update_status_data = [];
 
 		// Loop through the items to gather data
-		foreach ($post['items'] as $item) {
-			// Check if the record already exists based on booking_id and drop_name (medicine_name)
-			$this->db->select('id, drop_name');
+		// foreach ($post['items'] as $item) {
+		// 	// Check if the record already exists based on booking_id and drop_name (medicine_name)
+			$this->db->select('status');
 			$this->db->where('booking_id', $post['booking_id']);
-			$this->db->where('drop_name', $item['medicine_name']);
+			$this->db->where('patient_id', $post['patient_id']);
+			// $this->db->where('drop_name', $item['medicine_name']);
 			$existing_record = $this->db->get('hms_dilated')->row();
+			$status = isset($existing_record) && $existing_record->status == 1 ? 1 : 0;
+		// echo "<pre>";
+		// print_r($existing_record->status);
+		// die('asdvajshgd');
+		// print_r($post);
+		// 	// Prepare common data array for both insert and update
+		// 	$data = array(
+		// 		'branch_id' => $user_data['parent_id'],
+		// 		'patient_id' => $post['patient_id'], // Assuming patient_id is passed in POST
+		// 		// 'booking_id' => $post['booking_code'], // Assuming booking_id is passed in POST
+		// 		'booking_id' => $post['booking_id'], // Assuming booking_id is passed in POST
+		// 		'drop_name' => $item['medicine_name'], // Fetching medicine_name from item
+		// 		'salt' => $item['salt'], // Fetching salt from item
+		// 		'percentage' => $item['percentage'], // Fetching percentage from item
+		// 		'remarks' => $post['remarks'], // Assuming remarks is passed in POST
+		// 		'dilate_start_time' => isset($booking_data->dilate_start_time) ? $booking_data->dilate_start_time : '', // Get from booking data
+		// 		'dilate_time' => isset($booking_data->dilate_time) ? $booking_data->dilate_time : '', // Get from booking data
+		// 		'dilate_status' => isset($booking_data->dilate_status) ? $booking_data->dilate_status : '', // Get from booking data
+		// 		// 'status' => $post['status'] ?? 1, // Default status
+		// 		'status' => 0, // Default status
+		// 		'ip_address' => $this->input->ip_address(), // Get the client's IP address
+		// 	);
 
-			// Prepare common data array for both insert and update
+		// 	// If the medicine already exists in the database, update it
+		// 	if ($existing_record) {
+		// 		// Prepare data for update
+		// 		$data['modified_by'] = $user_data['id'];
+		// 		$data['modified_date'] = date('Y-m-d H:i:s');
+		// 		$update_data[] = [
+		// 			'id' => $existing_record->id,
+		// 			'data' => $data,
+		// 		];
+		// 	} else {
+		// 		// If no record exists, prepare for insert
+		// 		$data['created_by'] = $user_data['id'];
+		// 		$data['created_date'] = date('Y-m-d H:i:s');
+		// 		$insert_data[] = $data;
+		// 	}
+		// }
+		foreach ($post['items'] as $item) {
+			// Prepare common data array for insertion
 			$data = array(
 				'branch_id' => $user_data['parent_id'],
 				'patient_id' => $post['patient_id'], // Assuming patient_id is passed in POST
-				// 'booking_id' => $post['booking_code'], // Assuming booking_id is passed in POST
 				'booking_id' => $post['booking_id'], // Assuming booking_id is passed in POST
 				'drop_name' => $item['medicine_name'], // Fetching medicine_name from item
 				'salt' => $item['salt'], // Fetching salt from item
@@ -413,27 +453,16 @@ class Dilate_model extends CI_Model
 				'dilate_start_time' => isset($booking_data->dilate_start_time) ? $booking_data->dilate_start_time : '', // Get from booking data
 				'dilate_time' => isset($booking_data->dilate_time) ? $booking_data->dilate_time : '', // Get from booking data
 				'dilate_status' => isset($booking_data->dilate_status) ? $booking_data->dilate_status : '', // Get from booking data
-				// 'status' => $post['status'] ?? 1, // Default status
-				'status' => 0, // Default status
+				'status' => $status, // Default status
 				'ip_address' => $this->input->ip_address(), // Get the client's IP address
+				'created_by' => $user_data['id'],
+				'created_date' => date('Y-m-d H:i:s'),
 			);
 
-			// If the medicine already exists in the database, update it
-			if ($existing_record) {
-				// Prepare data for update
-				$data['modified_by'] = $user_data['id'];
-				$data['modified_date'] = date('Y-m-d H:i:s');
-				$update_data[] = [
-					'id' => $existing_record->id,
-					'data' => $data,
-				];
-			} else {
-				// If no record exists, prepare for insert
-				$data['created_by'] = $user_data['id'];
-				$data['created_date'] = date('Y-m-d H:i:s');
-				$insert_data[] = $data;
-			}
+			// Add prepared data to insert array
+			$insert_data[] = $data;
 		}
+
 		// echo "<pre>";
 		// print_r($insert_data);
 		// echo "<pre>";
@@ -444,8 +473,9 @@ class Dilate_model extends CI_Model
 			$this->db->where('booking_id', $post['booking_id']);
 			$this->db->where('patient_id', $post['patient_id']);
 			$this->db->delete('hms_dilated');
+
 			$this->db->insert_batch('hms_dilated', $insert_data);
-		} 
+		}
 
 		// Update existing records
 		if (!empty($update_data)) {
@@ -455,47 +485,49 @@ class Dilate_model extends CI_Model
 			}
 		}
 
-		// Handle removing or deactivating any medicines not in the 'items' list (edit mode only)
-		// Get all existing medicines for the current booking_id
-		$this->db->select('id, drop_name');
-		$this->db->where('booking_id', $post['booking_id']);
-		$this->db->where('patient_id', $post['patient_id']);
-		$existing_medicines = $this->db->get('hms_dilated')->result_array();
-		// echo "<pre>";
-		// print_r($insert_data);
-		// echo "<pre>";
-		// print_r($update_data);
-		// die('update');
-		// Find medicines that exist in the database but not in 'post['items']' array
-		$medicine_names_in_post = array_column($post['items'], 'medicine_name');
-		foreach ($existing_medicines as $existing_medicine) {
-			// Check if the current medicine's 'drop_name' is not in the POST data and if the patient_id matches
-			if (!in_array($existing_medicine['drop_name'], $medicine_names_in_post)) {
-				// Mark the medicine as inactive (status = 0) only if the patient_id matches
-				$update_status_data[] = [
-					'id' => $existing_medicine['id'],
-					'data' => array(
-						'status' => 0, // Deactivate the record
-						'modified_by' => $user_data['id'],
-						'modified_date' => date('Y-m-d H:i:s'),
-					),
-				];
-			}
-		}
+		// // Handle removing or deactivating any medicines not in the 'items' list (edit mode only)
+		// // Get all existing medicines for the current booking_id
+		// $this->db->select('id, drop_name');
+		// $this->db->where('booking_id', $post['booking_id']);
+		// $this->db->where('patient_id', $post['patient_id']);
+		// $existing_medicines = $this->db->get('hms_dilated')->result_array();
+		// // echo "<pre>";
+		// // print_r($insert_data);
+		// // echo "<pre>";
+		// // print_r($update_data);
+		// // echo "<pre>";
+		// // print_r($existing_medicines);
+		// // die('update');
+		// // Find medicines that exist in the database but not in 'post['items']' array
+		// $medicine_names_in_post = array_column($post['items'], 'medicine_name');
+		// foreach ($existing_medicines as $existing_medicine) {
+		// 	// Check if the current medicine's 'drop_name' is not in the POST data and if the patient_id matches
+		// 	if (!in_array($existing_medicine['drop_name'], $medicine_names_in_post)) {
+		// 		// Mark the medicine as inactive (status = 0) only if the patient_id matches
+		// 		$update_status_data[] = [
+		// 			'id' => $existing_medicine['id'],
+		// 			'data' => array(
+		// 				'status' => 0, // Deactivate the record
+		// 				'modified_by' => $user_data['id'],
+		// 				'modified_date' => date('Y-m-d H:i:s'),
+		// 			),
+		// 		];
+		// 	}
+		// }
 
-		// Update the removed/deactivated medicines in the database
-		if (!empty($update_status_data)) {
-			foreach ($update_status_data as $record) {
-				$this->db->where('id', $record['id']);
-				$this->db->update('hms_dilated', $record['data']);
-			}
-		}
+		// // Update the removed/deactivated medicines in the database
+		// if (!empty($update_status_data)) {
+		// 	foreach ($update_status_data as $record) {
+		// 		$this->db->where('id', $record['id']);
+		// 		$this->db->update('hms_dilated', $record['data']);
+		// 	}
+		// }
 
-		if(empty($insert_data)) {
+		if (empty($insert_data)) {
 			if (!empty($post['send_to_type'] === 'Dilate') || $post['mod_type'] === 'help_desk') {
-                // Insert a new record
-                $this->db->insert('hms_dilated', $datas);
-            }
+				// Insert a new record
+				$this->db->insert('hms_dilated', $datas);
+			}
 			// Define a mapping of mod_type to their respective table names
 			$tableMap = [
 				'refraction_above' => 'hms_opd_refraction',
@@ -516,13 +548,13 @@ class Dilate_model extends CI_Model
 			// Check if mod_type exists in the mapping
 			if (isset($tableMap[$post['mod_type']])) {
 				$tableName = $tableMap[$post['mod_type']];
-				if ($post['mod_type'] === 'hess_chart'  || $post['send_to_type'] === 'Hess Chart') {
+				if ($post['mod_type'] === 'hess_chart' || $post['send_to_type'] === 'Hess Chart') {
 					$refstatus = 'Hess chart';
 					$data['hess_chart_status'] = 1;
-					
+
 				} elseif ($post['mod_type'] === 'refraction_below8' || $post['send_to_type'] === 'Refraction below 8 years') {
 					$refstatus = 'Refraction below 8 years';
-					$data['refra_below_status'] = 1; 
+					$data['refra_below_status'] = 1;
 				} else {
 					$data = ['status' => 1];
 				}
@@ -541,23 +573,30 @@ class Dilate_model extends CI_Model
 			}
 
 		}
+		if (
 
-		if (!empty($post['patient_id'])) {
-			// Retrieve the current 'pat_status' value for the given patient
-			$this->db->select('pat_status');
-			$this->db->where('id', $post['patient_id']);
-			$query = $this->db->get('hms_patient');
+			(isset($post['send_to_type']) &&
+				in_array($post['send_to_type'], ['Dilated'])
+			)
+		) {
 
-			if ($query->num_rows() > 0) {
-				$current_status = $query->row()->pat_status;
-
-				// Concatenate the current status with the new status (e.g., 'Low vision')
-				// $new_status = $current_status . ', ' . 'Dilated';
-				$new_status = $current_status . ', Dilated';
-
-				// Update the 'pat_status' field with the concatenated value
+			if (!empty($post['patient_id'])) {
+				// Retrieve the current 'pat_status' value for the given patient
+				$this->db->select('pat_status');
 				$this->db->where('id', $post['patient_id']);
-				$this->db->update('hms_patient', ['pat_status' => $new_status]);
+				$query = $this->db->get('hms_patient');
+
+				if ($query->num_rows() > 0) {
+					$current_status = $query->row()->pat_status;
+
+					// Concatenate the current status with the new status (e.g., 'Low vision')
+					// $new_status = $current_status . ', ' . 'Dilated';
+					$new_status = $current_status . ', Dilated';
+
+					// Update the 'pat_status' field with the concatenated value
+					$this->db->where('id', $post['patient_id']);
+					$this->db->update('hms_patient', ['pat_status' => $new_status]);
+				}
 			}
 		}
 
