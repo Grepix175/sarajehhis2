@@ -193,7 +193,7 @@ class Low_vision extends CI_Controller
             'follow_up' => '',
             'optometrist_signature' => '', // To be filled from form
             'doctor_signature' => '', // To be filled from form
-            'status' => 1, // Default value
+            'status' => 0, // Default value
             'is_deleted' => 0, // Default value
             'created_by' => $this->session->userdata('user_id'), // User ID from session
             'created_date' => date('Y-m-d H:i:s'), // Current timestamp
@@ -209,6 +209,7 @@ class Low_vision extends CI_Controller
         if (isset($post) && !empty($post)) {
             // echo "<pre>";print_r($post);die('dfk');
             $patient_exists = $this->low_vision->patient_exists($post['patient_id']);
+            $result_exists = $this->low_vision->get_by_id($id);
             //   echo "<pre>";
             // print_r( $patient_exists);
             // die;
@@ -285,7 +286,7 @@ class Low_vision extends CI_Controller
                 'final_advice' => isset($final_advice) ? $final_advice : '',
                 'referred_for' => isset($referred_for) ? $referred_for : '',
                 'follow_up' => isset($follow_up) ? $follow_up : '',
-                'status' => 1,
+                'status' => isset($result_exists) && $result_exists['status'] == 1 ? 1 : 0,
                 'is_deleted' => 0,
                 'created_by' => isset($created_by) ? $created_by : '',
                 'created_date' => date('Y-m-d H:i:s'),
@@ -423,7 +424,7 @@ class Low_vision extends CI_Controller
                 'low_vision_contra_sens_r' => $contrast_sensivity['low_vision_contra_sens_r']??'',  // Left eye dd sph
                 'optometrist_signature' => $result['optometrist_signature'],
                 'doctor_signature' => $result['doctor_signature'],
-                'status' => $result['status'],
+                'status' => $result['low_status'],
                 'is_deleted' => $result['is_deleted'],
                 'patient_name' => $result['patient_name'],
                 'amsler_grid' =>$result['amsler_grid'],

@@ -7,8 +7,8 @@ class Vision_model extends CI_Model
     var $side_effects_table = 'hms_side_effect'; // New table for side effects
     var $column = array(
         'hms_vision.id',
-        'hms_vision.patient_name',
-        'hms_vision.patient_code',
+        // 'hms_vision.patient_name',
+        // 'hms_vision.patient_code',
         'hms_vision.booking_id',
         'hms_vision.procedure_purpose',
         'hms_side_effect.side_effect_name', // Change to fetch side effect name
@@ -96,9 +96,9 @@ class Vision_model extends CI_Model
                 $this->db->like('hms_vision.patient_name', $search['patient_name'], 'after');
             }
 
-            if (!empty($search['patient_code'])) {
-                $this->db->where('hms_vision.patient_code', $search['patient_code']);
-            }
+            // if (!empty($search['patient_code'])) {
+            //     $this->db->where('hms_vision.patient_code', $search['patient_code']);
+            // }
             if ($search['emergency_booking'] == "4") {
                 $this->db->where('hms_opd_booking.opd_type', 1);
             } else if ($search['emergency_booking'] == "3") {
@@ -139,9 +139,9 @@ class Vision_model extends CI_Model
 
     public function get_by_id($id)
     {
-        $this->db->select('hms_vision.id as vision_id,hms_vision.*,hms_opd_booking.*,hms_patient.*');
+        $this->db->select('hms_vision.id as vision_id,hms_vision.*,hms_vision.status as visi_status,hms_opd_booking.*,hms_patient.*');
         $this->db->from($this->table);
-        $this->db->join('hms_patient', 'hms_patient.patient_code = hms_vision.patient_code', 'left');
+        $this->db->join('hms_patient', 'hms_patient.id = hms_vision.patient_id', 'left');
         $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_vision.booking_id', 'left');
         $this->db->where('hms_vision.id', $id);
         $this->db->where('hms_vision.is_deleted', '0');
@@ -161,7 +161,7 @@ class Vision_model extends CI_Model
         doctor.doctor_name as doctor_signature_name
     ');
         $this->db->from($this->table);
-        $this->db->join('hms_patient', 'hms_patient.patient_code = hms_vision.patient_code', 'left');
+        $this->db->join('hms_patient', 'hms_patient.id = hms_vision.patient_id', 'left');
         $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_vision.booking_id', 'left');
         $this->db->join('hms_doctors as optometrist', 'optometrist.id = hms_vision.optometrist_signature', 'left');
         $this->db->join('hms_doctors as anaesthetist', 'anaesthetist.id = hms_vision.anaesthetist_signature', 'left');
@@ -218,8 +218,15 @@ class Vision_model extends CI_Model
             'doctor_signature' => isset($post['doctor_signature']) ? $post['doctor_signature'] : '',
             'doctor_date' => isset($post['doctor_date']) ? date('Y-m-d', strtotime($post['doctor_date'])) : null,
         );
-
+        //  echo "<pre>";
+        // print_r($post);
+        // die;
         if (!empty($post['data_id']) && $post['data_id'] > 0) {
+            $result_exists = $this->get_by_id($post['data_id']);
+            $data['status'] = isset($result_exists) && $result_exists['visi_status'] == 1 ? 1 : 0;
+            //    echo "<pre>";
+            // print_r( $result_exists['visi_status']);
+            // die;
             // echo "<pre>";
             // print_r($data);
             // die;
@@ -577,9 +584,9 @@ class Vision_model extends CI_Model
 		$this->db->select('hms_vision.id as vision_id*, hms_patient.id,hms_patient.patient_name');
 
 		$this->db->from('hms_vision');
-		$this->db->join('hms_patient', 'hms_patient.patient_code = hms_vision.patient_code');
+		$this->db->join('hms_patient', 'hms_patient.id = hms_vision.patient_id');
 		// $this->db->where('hms_vision.branch_id', $user_data['parent_id']);
-		$this->db->where('hms_vision.patient_code', $patient_id);
+		$this->db->where('hms_vision.patient_id', $patient_id);
 		$this->db->where('hms_vision.is_deleted', '0');
 		$query = $this->db->get();
 		return $query->row_array();

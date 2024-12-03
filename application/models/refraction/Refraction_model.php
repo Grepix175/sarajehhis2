@@ -146,7 +146,8 @@ class Refraction_model extends CI_Model
         // $query = $this->db->get();
         // return $query->row_array();
         $this->db->select('hms_opd_refraction.id as ref_id,
-            hms_opd_refraction.*, 
+            hms_opd_refraction.*,
+            hms_opd_refraction.status as ref_status,
             hms_patient.*, 
             hms_opd_booking.*, 
             optometrist.doctor_name as optometrist_signature_name, 
@@ -215,8 +216,12 @@ class Refraction_model extends CI_Model
     // Method to save or update a refraction record
     public function save($data)
     {
-
+        // echo $this->db->last_query();
+            
         if (!empty($data['id'])) {
+            // echo "<pre>";
+            // print_r($data);
+            // die('munaa');
             // For updates, remove the 'created_date' if present to avoid updating it
             unset($data['created_date']);
 
@@ -225,11 +230,11 @@ class Refraction_model extends CI_Model
             $this->db->where('id', $data['id']);
             $this->db->update('hms_opd_refraction', $data);
         } else {
-            $post = $this->input->post();
-            // echo $this->db->last_query();
             // echo "<pre>";
-            // print_r($post);
-            // die('munaa');
+            // print_r($data);
+            // die('vvvvvvv');
+            $post = $this->input->post();
+            
             // Set the created_date for new records
             $data['created_date'] = date('Y-m-d H:i:s'); // Set current time for created_date
             $data['modified_date'] = date('Y-m-d H:i:s'); // Set current time for modified_date

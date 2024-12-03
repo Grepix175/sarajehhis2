@@ -171,11 +171,11 @@ class Add_new_prescription_model extends CI_Model
 				"left_eye_discussion" => $post['left_eye_dicussion'],
 
 				/*"patient_bp"=>$post['patient_bp'],
-																						   "patient_temp"=>$post['patient_temp'],
-																						   "patient_weight"=>$post['patient_weight'],
-																						   "patient_height"=>$post['patient_height'],
-																						   "patient_spo2"=>$post['patient_spo2'],
-																						   "patient_rbs"=>$post['patient_rbs'],*/
+																									   "patient_temp"=>$post['patient_temp'],
+																									   "patient_weight"=>$post['patient_weight'],
+																									   "patient_height"=>$post['patient_height'],
+																									   "patient_spo2"=>$post['patient_spo2'],
+																									   "patient_rbs"=>$post['patient_rbs'],*/
 				"prv_history" => $post['prv_history'],
 				"personal_history" => $post['personal_history'],
 				//"chief_complaints"=>$post['chief_complaints'],
@@ -210,11 +210,11 @@ class Add_new_prescription_model extends CI_Model
 				"age_m" => $post['age_m'],
 				"age_d" => $post['age_d'],
 				/*"patient_bp"=>$post['patient_bp'],
-																						   "patient_temp"=>$post['patient_temp'],
-																						   "patient_weight"=>$post['patient_weight'],
-																						   "patient_height"=>$post['patient_height'],
-																						   "patient_spo2"=>$post['patient_spo2'],
-																						   "patient_rbs"=>$post['patient_rbs'],*/
+																									   "patient_temp"=>$post['patient_temp'],
+																									   "patient_weight"=>$post['patient_weight'],
+																									   "patient_height"=>$post['patient_height'],
+																									   "patient_spo2"=>$post['patient_spo2'],
+																									   "patient_rbs"=>$post['patient_rbs'],*/
 				"prv_history" => $post['prv_history'],
 				"personal_history" => $post['personal_history'],
 				//"chief_complaints"=>$post['chief_complaints'],
@@ -724,9 +724,9 @@ class Add_new_prescription_model extends CI_Model
 				//'staff_refrenace_id'=>$staff_refrenace_id,
 				//'booking_date'=>date('Y-m-d',strtotime($post['next_appointment_date']))
 				/*$this->db->set('patient_id',$patient_id);
-																					 $this->db->set('type',1);
-																					 $this->db->set('created_by',$user_data['id']);
-																					 $this->db->set('created_date',date('Y-m-d H:i:s'));*/
+																								 $this->db->set('type',1);
+																								 $this->db->set('created_by',$user_data['id']);
+																								 $this->db->set('created_date',date('Y-m-d H:i:s'));*/
 				$this->db->insert('hms_opd_booking', $data_test);
 				$booking_id = $this->db->insert_id();
 
@@ -1758,19 +1758,19 @@ class Add_new_prescription_model extends CI_Model
 				// print_r($std_eye_data);
 				// print_r($tableName);
 				// print_r($data);
-				
+
 				// Check if the record exists
 				$this->db->where('booking_id', $post['booking_id']);
 				$this->db->where('patient_id', $post['patient_id']);
 				$query = $this->db->get($tableName);
-				
+
 				// If the record exists, perform the update
 				if ($query->num_rows() > 0) {
 					$this->db->where('booking_id', $post['booking_id']);
 					$this->db->where('patient_id', $post['patient_id']);
 					$this->db->update($tableName, $data);
-				// 	echo $this->db->last_query();;
-				// die('sa;as');
+					// 	echo $this->db->last_query();;
+					// die('sa;as');
 				}
 
 				if ($post['send_to_type'] === 'Hess Chart') {
@@ -1795,8 +1795,8 @@ class Add_new_prescription_model extends CI_Model
 						$this->db->update('hms_std_eye_prescription', $std_eye_data);
 					}
 				}
-			}else{
-				if($post['send_to_type'] === 'Refraction below 8 years'){
+			} else {
+				if ($post['send_to_type'] === 'Refraction below 8 years') {
 					$std_eye_data['refra_below_status'] = 0;
 					$this->db->where('booking_id', $post['booking_id']);
 					$this->db->where('patient_id', $post['patient_id']);
@@ -1807,7 +1807,7 @@ class Add_new_prescription_model extends CI_Model
 						$this->db->update('hms_std_eye_prescription', $std_eye_data);
 					}
 				}
-				if($post['send_to_type'] === 'Hess Chart'){
+				if ($post['send_to_type'] === 'Hess Chart') {
 					$std_eye_data['hess_chart_status'] = 0;
 					$this->db->where('booking_id', $post['booking_id']);
 					$this->db->where('patient_id', $post['patient_id']);
@@ -1819,55 +1819,70 @@ class Add_new_prescription_model extends CI_Model
 					}
 				}
 			}
+			// echo "sagar";
+			// echo "<pre>";
+			// print_r($post);
+			// print_r($pres_data);
+			// print_r($refstatus);
+			// die('sa;as');
 
+			if (
+				(!isset($post['flag']) || empty($post['flag'])) &&
+				(isset($post['send_to_type']) && 
+					in_array($post['send_to_type'], ['Refraction below 8 years', 'Hess Chart'])
+				)
+			) {
+				if (!empty($post['patient_id'])) {
+					// Retrieve the current 'pat_status' value for the given patient
+					$this->db->select('pat_status');
+					$this->db->where('id', $post['patient_id']);
+					$query = $this->db->get('hms_patient');
 
-			if (!empty($post['patient_id'])) {
-				// Retrieve the current 'pat_status' value for the given patient
-				$this->db->select('pat_status');
-				$this->db->where('id', $post['patient_id']);
-				$query = $this->db->get('hms_patient');
+					if ($refstatus != '' && !empty($refstatus)) {
+						if ($query->num_rows() > 0) {
 
-				if ($refstatus != '' && !empty($refstatus)) {
-					if ($query->num_rows() > 0) {
+							$current_status = $query->row()->pat_status;
+							// Concatenate the current status with the new status (e.g., 'Low vision')
+							if(in_array($post['send_to_type'], ['Refraction below 8 years', 'Hess Chart'])){
+								$refstatus = $post['send_to_type'];
+							}
+							$new_status = $current_status . ', ' . $refstatus;
 
-						$current_status = $query->row()->pat_status;
-						// Concatenate the current status with the new status (e.g., 'Low vision')
-						$new_status = $current_status . ', ' . $refstatus;
-
-						// Update the 'pat_status' field with the concatenated value
-						$this->db->where('id', $post['patient_id']);
-						$this->db->update('hms_patient', ['pat_status' => $new_status]);
-					}
-				}
-			}
-			if (!empty($post['patient_id']) && !empty($post['booking_id'])) {
-				$this->db->select('status');
-				$this->db->where('patient_id', $post['patient_id']); // Assuming 'patient_id' is the column in hms_doct_patient
-				$this->db->where('booking_id', $post['booking_id']); // Assuming 'patient_id' is the column in hms_doct_patient
-				$query = $this->db->get('hms_doct_patient');
-
-				// Check if the record exists
-				if ($query->num_rows() > 0) {
-					$current_status = $query->row()->status;
-
-					// Update the 'status' column to 1 if it is currently 0
-					if ($current_status == 0) {
-						$this->db->where('patient_id', $post['patient_id']);
-						$this->db->where('booking_id', $post['booking_id']);
-						$this->db->update('hms_doct_patient', ['status' => 1]);
-
-						if ($this->db->affected_rows() > 0) {
-							log_message('info', 'Status updated successfully for patient_id: ' . $post['patient_id']);
-						} else {
-							log_message('error', 'Failed to update status for patient_id: ' . $post['patient_id']);
+							// Update the 'pat_status' field with the concatenated value
+							$this->db->where('id', $post['patient_id']);
+							$this->db->update('hms_patient', ['pat_status' => $new_status]);
 						}
-					} else {
-						log_message('info', 'Status is already 1 for patient_id: ' . $post['patient_id']);
 					}
-				} else {
-					log_message('error', 'No record found in hms_doct_patient for patient_id: ' . $post['patient_id']);
 				}
 			}
+			// if (!empty($post['patient_id']) && !empty($post['booking_id'])) {
+			// 	$this->db->select('status');
+			// 	$this->db->where('patient_id', $post['patient_id']); // Assuming 'patient_id' is the column in hms_doct_patient
+			// 	$this->db->where('booking_id', $post['booking_id']); // Assuming 'patient_id' is the column in hms_doct_patient
+			// 	$query = $this->db->get('hms_doct_patient');
+
+			// 	// Check if the record exists
+			// 	if ($query->num_rows() > 0) {
+			// 		$current_status = $query->row()->status;
+
+			// 		// Update the 'status' column to 1 if it is currently 0
+			// 		if ($current_status == 0) {
+			// 			$this->db->where('patient_id', $post['patient_id']);
+			// 			$this->db->where('booking_id', $post['booking_id']);
+			// 			$this->db->update('hms_doct_patient', ['status' => 1]);
+
+			// 			if ($this->db->affected_rows() > 0) {
+			// 				log_message('info', 'Status updated successfully for patient_id: ' . $post['patient_id']);
+			// 			} else {
+			// 				log_message('error', 'Failed to update status for patient_id: ' . $post['patient_id']);
+			// 			}
+			// 		} else {
+			// 			log_message('info', 'Status is already 1 for patient_id: ' . $post['patient_id']);
+			// 		}
+			// 	} else {
+			// 		log_message('error', 'No record found in hms_doct_patient for patient_id: ' . $post['patient_id']);
+			// 	}
+			// }
 
 		} else {
 			if (!empty($post['advs']['medication'])) {

@@ -255,8 +255,11 @@ $field_list = mandatory_section_field_list(2);
                         </div>
                     </div>
                 </div>
-                <input type="hidden" name="data_id" id="patient_id"
+
+                <input type="hidden" name="data_id" id="data_id"
                     value="<?php echo isset($form_data['data_id']) ? $form_data['data_id'] : ''; ?>">
+                <input type="hidden" name="patient_id" id="patient_id"
+                    value="<?php echo isset($form_data['patient_id']) ? $form_data['patient_id'] : ''; ?>">
                 <input type="hidden" name="booking_id" id="booking_id"
                     value="<?php echo isset($form_data['booking_id']) ? $form_data['booking_id'] : ''; ?>">
                 <div class="content-inner">

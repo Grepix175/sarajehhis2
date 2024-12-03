@@ -206,8 +206,8 @@ class Vision extends CI_Controller
         // Initialize form data
         $data['form_data'] = array(
             "booking_id" => $booking_id,
-            "patient_name" => $patient_details['patient_name'] ?? '',
-            "patient_code" => $patient_details['patient_code'] ?? '',
+            // "patient_name" => $patient_details['patient_name'] ?? '',
+            // "patient_code" => $patient_details['patient_code'] ?? '',
             "procedure_purpose" => '',
             "side_effects" => '',
             'informed_consent' => '',
@@ -237,8 +237,9 @@ class Vision extends CI_Controller
         // Check if the form is submitted
         if (isset($post) && !empty($post)) {
             $patient_exists = $this->vision_model->patient_exists($post['patient_code']);
+            $result_exists = $this->vision_model->get_by_id($post['data_id']);
             //   echo "<pre>";
-            // print_r( $patient_exists);
+            // print_r( $result_exists['visi_status']);
             // die;
             if (empty($post['data_id'])) {
 
@@ -434,8 +435,9 @@ class Vision extends CI_Controller
             $data['form_error'] = '';
             $data['form_data'] = array(
                 'data_id' => $result['vision_id'],
-                'patient_code' => $result['patient_code'],
-                'patient_name' => $result['patient_name'],
+                // 'patient_code' => $result['patient_code'],
+                // 'patient_name' => $result['patient_name'],
+                'patient_id' => $result['patient_id'],
                 'booking_id' => $result['booking_id'],
                 'procedure_purpose' => $result['procedure_purpose'],
                 'side_effects' => $result['side_effects'],

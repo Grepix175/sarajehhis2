@@ -165,6 +165,10 @@ class Contact_lens_model extends CI_Model
 
 	public function get_by_id($id, $booking_id, $patient_id)
 	{
+		// echo "<pre>";
+		// print_r($booking_id);
+		// print_r($patient_id);
+		// die;
 		$this->db->select("hms_contact_lens.*");
 		$this->db->from('hms_contact_lens');
 		$this->db->where('hms_contact_lens.booking_id', $booking_id);
@@ -172,6 +176,7 @@ class Contact_lens_model extends CI_Model
 		$this->db->where('hms_contact_lens.is_deleted', '0');
 
 		$query = $this->db->get();
+		// echo $this->db->last_query();
 		return $query->result_array(); // Return all records as an array
 	}
 
@@ -198,6 +203,16 @@ class Contact_lens_model extends CI_Model
 
 		// If `data_id` exists, perform an update
 		if (!empty($data_id) && $data_id > 0) {
+			$result_exists = $this->get_by_id($post['data_id'],$post['booking_id'],$post['patient_id']);
+			$post['status'] = isset($result_exists) && $result_exists[0]['status'] == 1 ? 1 : 0;
+		// echo "<pre>";
+		// print_r($result_exists);
+		// // print_r($post);
+		// die('okkk');
+		// 	echo "<pre>";
+		// print_r($data);
+		// print_r($post);
+		// die('Edit');
 			// Update the main contact lens entry (assuming related table for this entry)
 			$this->db->where('id', $data_id);
 			$this->db->update($this->table, $data);
@@ -215,6 +230,10 @@ class Contact_lens_model extends CI_Model
 
 		} else { // If `data_id` is not provided, perform an insert
 			// Insert new data into the main table
+		// 	echo "<pre>";
+		// print_r($data);
+		// print_r($post);
+		// die('Edit');
 			
 			// $data['created_date'] = date('Y-m-d H:i:s');
 			// $this->db->set('ip_address', $_SERVER['REMOTE_ADDR']);
@@ -420,10 +439,12 @@ class Contact_lens_model extends CI_Model
 	// Helper function to insert items related to the main contact lens entry
 	private function insert_items($data_id, $contact_lens_items_json, $user_data, $post)
 	{
+		
 		$items = json_decode($contact_lens_items_json, true);
 		// echo "<pre>";
-		// print_r($items);
-		// die('okkk');
+		// print_r($post);
+		// die('asdvashd');
+       
 		foreach ($items as $item) {
 			$item_data = [
 				// 'contact_lens_id' => $data_id,
@@ -431,6 +452,7 @@ class Contact_lens_model extends CI_Model
 				'branch_id' => $user_data['parent_id'],
 				'booking_id' => $post['booking_id'],
 				'patient_id' => $post['patient_id'],
+				'status' => $post['status'],
 				'hospital_code' => isset($item['hospital_code_name']) ? $item['hospital_code_name'] : null,
 				'item_description' => isset($item['item_description_name']) ? $item['item_description_name'] : null,
 				'menufacturer' => isset($item['manufacturer_name']) ? $item['manufacturer_name'] : null,
@@ -440,6 +462,7 @@ class Contact_lens_model extends CI_Model
 				'optometrist_signature' => isset($post['optometrist_signature']) ? $post['optometrist_signature'] : null,
 				'doctor_signature' => isset($post['doctor_signature']) ? $post['doctor_signature'] : null,
 				'created_date' => date('Y-m-d H:i:s'),
+				// 'status'=> $status,
 				'ip_address' => $_SERVER['REMOTE_ADDR'],
 				'created_by' => $user_data['id']
 			];
