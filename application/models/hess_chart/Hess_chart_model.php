@@ -16,7 +16,9 @@ class Hess_chart_model extends CI_Model
 	{
 		$user_data = $this->session->userdata('auth_users');
 		$search = $this->session->userdata('prescription_search');
-
+		// echo "<pre>";
+		// print_r($search);
+		// die('sagar');
 		// Select fields with proper aliasing if needed
 		$this->db->select("hms_std_eye_prescription.*, hms_patient.simulation_id, hms_patient.patient_name,hms_patient.gender,hms_patient.pat_status, hms_patient.patient_code, hms_patient.mobile_no, hms_patient.age_y, hms_patient.age_m, hms_patient.age_d, hms_opd_booking.dilate_status, hms_opd_booking.app_type, hms_opd_booking.token_no, hms_patient.emergency_status");
 		$this->db->from('hms_std_eye_prescription');
@@ -24,7 +26,12 @@ class Hess_chart_model extends CI_Model
 		$this->db->join('hms_patient', 'hms_patient.id = hms_std_eye_prescription.patient_id', 'left');
 
 		$this->db->where('hms_std_eye_prescription.is_deleted', '0');
-		$this->db->where('hms_std_eye_prescription.drawing_flag', '1');
+		// $this->db->where('hms_std_eye_prescription.hess_chart_status', '0');
+		$this->db->where_in('hms_std_eye_prescription.hess_chart_status', [0, 1]);
+		// $this->db->where('hms_std_eye_prescription.drawing_flag', '1');
+		// if($search['search_type'] == 0){
+
+		// }
 		
 		// Handle branch_id filtering
 		if (!empty($search['branch_id'])) {
@@ -44,6 +51,10 @@ class Hess_chart_model extends CI_Model
 			if (!empty($search['end_date'])) {
 				$end_date = date('Y-m-d 23:59:59', strtotime($search['end_date']));
 				$this->db->where('hms_std_eye_prescription.created_date <=', $end_date);
+			}
+
+			if (isset($search['search_type']) && $search['search_type'] != "") {
+				$this->db->where('hms_std_eye_prescription.hess_chart_status', $search['search_type']);
 			}
 
 			if (!empty($search['priority_type']) && $search['priority_type'] !== '4') {

@@ -15,6 +15,7 @@ class Help_desk extends CI_Controller
     $this->load->model('prosthetic/Prosthetic_model', 'prosthetic');
     $this->load->model('oct_hfa/Oct_hfa_model', 'oct_hfa');
     $this->load->model('ortho_ptics/Ortho_ptics_model', 'ortho_ptics');
+    $this->load->model('send_to_token/Send_to_token_model', 'send_to_token');
     $this->load->model('doctore_patient/Doctore_patient_model', 'doctore_patient');
     $this->load->model('refraction/Refraction_model', 'refraction');
     $this->load->model('eye/add_prescription/add_new_prescription_model', 'add_prescript');
@@ -831,7 +832,8 @@ class Help_desk extends CI_Controller
       'Dilate',
       'Prosthetic',
       'OCT HFA',
-      'Ortho Paedic'
+      'Ortho Paedic',
+      'Sent To Token'
     );
 
 
@@ -848,149 +850,84 @@ class Help_desk extends CI_Controller
       if ($valid_response === true) {
         $this->add_prescript->send_to_status_update($post['booking_id'], $post['patient_id'], $post['send_to_type']);
         // If validation passes, save the record
-        if ($post['send_to_type'] === 'Refraction above 8 years') {
-          // echo "<pre>";
-          // print_r('sagar');
-          // die('okay');
+        $send_to_type_mapping = [
+          'Refraction above 8 years' => ['model' => 'refraction', 'url' => 'refraction'],
+          'Contact Lens' => ['model' => 'contact_lens', 'url' => 'contact_lens'],
+          'Vision' => ['model' => 'vision/vision_model', 'url' => 'vision'],
+          'Low Vision' => ['model' => 'low_vision', 'url' => 'low_vision'],
+          'Dilate' => ['model' => 'dilate', 'url' => 'dilate'],
+          'Prosthetic' => ['model' => 'prosthetic', 'url' => 'prosthetic'],
+          'OCT HFA' => ['model' => 'oct_hfa', 'url' => 'oct_hfa'],
+          'Ortho Paedic' => ['model' => 'ortho_ptics', 'url' => 'ortho_ptics'],
+          'Hess Chart' => ['model' => 'add_prescript', 'url' => 'hess_chart'],
+          'Refraction below 8 years' => ['model' => 'add_prescript', 'url' => 'refraction_below8'],
+          'Sent To Token' => ['model' => 'send_to_token', 'url' => 'send_to_token'],
+      ];
+      
+      if (isset($send_to_type_mapping[$post['send_to_type']])) {
+          $type = $send_to_type_mapping[$post['send_to_type']];
+          
+          // Load model if necessary
+          if (strpos($type['model'], '/') !== false) {
+              $this->load->model($type['model']);
+          }
+          
+          $model = strpos($type['model'], '/') !== false ? basename($type['model']) : $type['model'];
+      
           $data_to_save = [
-            // 'id' => isset($id) ? $id : '',
-            'branch_id' => $user_data['parent_id'],
-            'booking_code' => '',
-            'pres_id' => '',
-            'patient_id' => $post['patient_id'] ?? '',
-            'booking_id' => $post['booking_id'] ?? '',
-            'auto_refraction' => '', // JSON string of refraction data
-            'lens' => '',
-            'comment' => '',
-            'optometrist_signature' => '',
-            'doctor_signature' => '',
-            'status' => 0, // Or whatever default value you need
-            'is_deleted' => 0, // Assuming this is default
-            'created_by' => $user_data['id'], // Check if user_id exists
-            'created_date' => date('Y-m-d H:i:s'), // Current timestamp
-            'ip_address' => $this->input->ip_address(), // Capture IP address
-            // 'send_to_type'=>$post['send_to_type']
+              'branch_id' => $user_data['parent_id'] ?? null,
+              'booking_id' => $post['booking_id'] ?? '',
+              'patient_id' => $post['patient_id'] ?? '',
+              'status' => 0,
+              'is_deleted' => 0,
+              'created_date' => date('Y-m-d H:i:s'),
+              'created_by' => $user_data['id'] ?? null,
+              'ip_address' => $this->input->ip_address(),
           ];
-          $this->refraction->save($data_to_save);
+      
+          // Additional fields for specific types
+          if ($post['send_to_type'] === 'Refraction above 8 years') {
+              $data_to_save = array_merge($data_to_save, [
+                  'booking_code' => '',
+                  'pres_id' => '',
+                  'auto_refraction' => '',
+                  'lens' => '',
+                  'comment' => '',
+                  'optometrist_signature' => '',
+                  'doctor_signature' => '',
+              ]);
+          } 
+          if ($post['send_to_type'] === 'OCT HFA') {
+              // $data_to_save['chief_complaints'] = '';
+              $this->{$model}->save($data_to_save,$chief_complaints = '');
+          }elseif($post['send_to_type'] === 'Hess Chart' || $post['send_to_type'] === 'Refraction below 8 years'){
+            $prescrption_id = $this->add_prescript->get_prescription_std_eye_by_id($post['booking_id'], $post['patient_id']);
+            if(!empty($prescrption_id)){
+              $post['prescrption_id'] = $prescrption_id['id'];
+            }else{
+              $post['prescrption_id'] = '';
+            }
+            // echo "<pre>";
+            // print_r($model);
+            // die('sagar');
+            $this->{$model}->save($post);
+          }
+          else{
+
+            // Save data using model
+            $this->{$model}->save($data_to_save);
+          }
+      
+      
+          // Set success message and return response
           $this->session->set_flashdata('success', 'Send to successfully.');
-          $url = base_url() . 'refraction';
-          echo json_encode(['success' => true, 'url' => $url, 'message' => 'Refraction above 8 years store successfully.']);
-          return; // Exit to prevent further output
-        }
-        if ($post['send_to_type'] === 'Contact Lens') {
-          // $this->load->model('vision/vision_model');
-          $data_to_save = [
-            'booking_id' => $post['booking_id'] ?? '',
-            'patient_id' => $post['patient_id'] ?? '',
-            'status' => 0, // Or whatever default value you need
-            'is_deleted' => 0, // Assuming this is default
-            'created_at' => date('Y-m-d H:i:s'), // Current timestamp
-            // 'send_to_type'=>$post['send_to_type']
-          ];
-          $this->contact_lens->save();
-          $this->session->set_flashdata('success', 'Send to successfully.');
-          $url = base_url() . 'contact_lens';
-          echo json_encode(['success' => true, 'url' => $url, 'message' => 'Refraction above 8 years store successfully.']);
+          $url = base_url() . $type['url'];
+          echo json_encode(['success' => true, 'url' => $url, 'message' => ucfirst($post['send_to_type']) . ' stored successfully.']);
           return;
-
-        }
-        if ($post['send_to_type'] === 'Vision') {
-          $this->load->model('vision/vision_model');
-          $data_to_save = [
-            'booking_id' => $post['booking_id'] ?? '',
-            'patient_id' => $post['patient_id'] ?? '',
-            'status' => 0, // Or whatever default value you need
-            'is_deleted' => 0, // Assuming this is default
-            'created_at' => date('Y-m-d H:i:s'), // Current timestamp
-            // 'send_to_type'=>$post['send_to_type']
-          ];
-          $this->vision_model->save($data_to_save);
-          $this->session->set_flashdata('success', 'Send to successfully.');
-          $url = base_url() . 'vision';
-          echo json_encode(['success' => true, 'url' => $url, 'message' => 'Refraction above 8 years store successfully.']);
-          return;
-
-        }
-        if ($post['send_to_type'] === 'Low Vision') {
-          $data_to_save = [
-            'booking_id' => $post['booking_id'] ?? '',
-            'patient_id' => $post['patient_id'] ?? '',
-            'status' => 0, // Or whatever default value you need
-            'is_deleted' => 0, // Assuming this is default
-            'created_date' => date('Y-m-d H:i:s'), // Current timestamp
-            // 'send_to_type'=>$post['send_to_type']
-          ];
-          $this->low_vision->save($data_to_save);
-          $this->session->set_flashdata('success', 'Send to successfully.');
-          $url = base_url() . 'low_vision';
-          echo json_encode(['success' => true, 'url' => $url, 'message' => 'Refraction above 8 years store successfully.']);
-          return;
-
-        }
-        // if ($post['send_to_type'] === 'Dilate') {
-        //   $data_to_save = [
-        //     'booking_id' => $post['booking_id'] ?? '',
-        //     'patient_id' => $post['patient_id'] ?? '',
-        //     'status' => 0, // Or whatever default value you need
-        //     'is_deleted' => 0, // Assuming this is default
-        //     'created_date' => date('Y-m-d H:i:s'), // Current timestamp
-        //     // 'send_to_type'=>$post['send_to_type']
-        //   ];
-        //   $this->dilate->save($data_to_save);
-        //   $this->session->set_flashdata('success', 'Send to successfully.');
-        //   $url = base_url() . 'dilate';
-        //   echo json_encode(['success' => true, 'url' => $url, 'message' => 'Refraction above 8 years store successfully.']);
-        //   return; 
-
-        // }
-        if ($post['send_to_type'] === 'Prosthetic') {
-          $data_to_save = [
-            'booking_id' => $post['booking_id'] ?? '',
-            'patient_id' => $post['patient_id'] ?? '',
-            'status' => 0, // Or whatever default value you need
-            'is_deleted' => 0, // Assuming this is default
-            'created_date' => date('Y-m-d H:i:s'), // Current timestamp
-            // 'send_to_type'=>$post['send_to_type']
-          ];
-          $this->prosthetic->save($data_to_save);
-          $this->session->set_flashdata('success', 'Send to successfully.');
-          $url = base_url() . 'prosthetic';
-          echo json_encode(['success' => true, 'url' => $url, 'message' => 'Refraction above 8 years store successfully.']);
-          return;
-
-        }
-        if ($post['send_to_type'] === 'OCT HFA') {
-          $data_to_save = [
-            'booking_id' => $post['booking_id'] ?? '',
-            'patient_id' => $post['patient_id'] ?? '',
-            'status' => 0, // Or whatever default value you need
-            'is_deleted' => 0, // Assuming this is default
-            'created_date' => date('Y-m-d H:i:s'), // Current timestamp
-            // 'send_to_type'=>$post['send_to_type']
-          ];
-          $this->oct_hfa->save($data_to_save,$chief_complaints = '');
-          $this->session->set_flashdata('success', 'Send to successfully.');
-          $url = base_url() . 'oct_hfa';
-          echo json_encode(['success' => true, 'url' => $url, 'message' => 'Refraction above 8 years store successfully.']);
-          return;
-
-        }
-        if ($post['send_to_type'] === 'Ortho Paedic') {
-          $data_to_save = [
-            'booking_id' => $post['booking_id'] ?? '',
-            'patient_id' => $post['patient_id'] ?? '',
-            'status' => 0, // Or whatever default value you need
-            'is_deleted' => 0, // Assuming this is default
-            'created_date' => date('Y-m-d H:i:s'), // Current timestamp
-            // 'send_to_type'=>$post['send_to_type']
-          ];
-          $this->ortho_ptics->save($data_to_save);
-          $this->session->set_flashdata('success', 'Send to successfully.');
-          $url = base_url() . 'ortho_ptics';
-          echo json_encode(['success' => true, 'url' => $url, 'message' => 'Refraction above 8 years store successfully.']);
-          return;
-
-        }
+      }
+      
+      echo json_encode(['success' => false, 'message' => 'Invalid send_to_type provided.']);
+      return;
 
         // $this->doctore_patient->save($this->input->post()); // Save the validated data
       } else {

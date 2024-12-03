@@ -84,7 +84,10 @@ class Refraction_below8_model extends CI_Model
 		$this->db->join('hms_patient', 'hms_patient.id = hms_std_eye_prescription.patient_id', 'left');
 
 		$this->db->where('hms_std_eye_prescription.is_deleted', '0');
-		$this->db->where('hms_std_eye_prescription.refraction_below8', '1');
+		// $this->db->where('hms_std_eye_prescription.refra_below_status !=', '');
+		// $this->db->or_where('hms_std_eye_prescription.refra_below_status', 0);
+		$this->db->where_in('hms_std_eye_prescription.refra_below_status', [0, 1]);
+		
 		
 		// Handle branch_id filtering
 		if (!empty($search['branch_id'])) {
@@ -109,6 +112,9 @@ class Refraction_below8_model extends CI_Model
 				$this->db->where('hms_patient.emergency_status', $search['priority_type']);
 			} else if ($search['priority_type'] === '4') {				
 				$this->db->where('hms_patient.emergency_status', NULL);
+			}
+			if (isset($search['search_type']) && $search['search_type'] != "") {
+				$this->db->where('hms_std_eye_prescription.refra_below_status', $search['search_type']);
 			}
 
 			if (!empty($search['patient_name'])) {

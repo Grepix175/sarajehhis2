@@ -46,10 +46,11 @@ class Dilate_model extends CI_Model
 		hms_opd_booking.booking_code, 
 		hms_patient.patient_code as patient_no, 
 		hms_opd_booking.token_no as token,  
-		hms_medicine_entry.medicine_name, hms_patient.emergency_status"); 
+		hms_medicine_entry.medicine_name, hms_patient.emergency_status");
 		$this->db->from('hms_dilated'); // Main table
 		$this->db->where('hms_dilated.is_deleted', '0');
-		$this->db->where('hms_dilated.status', 1);
+		// $this->db->where('hms_dilated.status', 1);
+		// $this->db->where('hms_dilated.status', 0);
 
 		// Example joins
 		$this->db->join('hms_patient', 'hms_patient.id = hms_dilated.patient_id', 'left');
@@ -57,7 +58,7 @@ class Dilate_model extends CI_Model
 		$this->db->join('hms_medicine_entry', 'hms_medicine_entry.id = hms_dilated.drop_name', 'left'); // Correct join based on the relationship
 		$this->db->group_by('hms_dilated.id');
 
-        $this->db->order_by('hms_dilated.created_date', 'DESC');
+		$this->db->order_by('hms_dilated.created_date', 'DESC');
 		// Adjust branch filtering logic
 		if (!empty($search['branch_type']) && trim(strtolower($search['branch_type'])) == "self") {
 			$this->db->where('hms_dilated.branch_id', $user_data['parent_id']);
@@ -75,13 +76,14 @@ class Dilate_model extends CI_Model
 			$this->db->where('hms_dilated.created_date >=', $start_date);
 			$this->db->where('hms_opd_booking.created_date >=', $start_date);
 		}
-
+		
 		
 		if (!empty($search['priority_type']) && $search['priority_type'] !== '4') {
 			$this->db->where('hms_patient.emergency_status', $search['priority_type']);
-		} else if ($search['priority_type'] === '4') {				
+		} else if ($search['priority_type'] === '4') {
 			$this->db->where('hms_patient.emergency_status', NULL);
 		}
+		
 
 		if (!empty($search['end_date'])) {
 			$end_date = date('Y-m-d', strtotime($search['end_date'])) . ' 23:59:59';
@@ -89,6 +91,9 @@ class Dilate_model extends CI_Model
 			$this->db->where('hms_opd_booking.created_date <=', $end_date);
 		}
 
+		if (isset($search['search_type']) && $search['search_type'] != "") {
+			$this->db->where('hms_dilated.status', $search['search_type']);
+		}
 		// Update search for `medicine_name` instead of `drop_name`
 		if (!empty($search['drop_name'])) {
 			$this->db->like('hms_medicine_entry.medicine_name', $search['drop_name']); // Search by medicine_name
@@ -200,37 +205,39 @@ class Dilate_model extends CI_Model
 	}
 
 
-    public function get_booking_by_id($booking_id,$patient_id) {
+	public function get_booking_by_id($booking_id, $patient_id)
+	{
 		// echo "<pre>";print_r($booking_id);
 		// echo "<pre>";print_r($patient_id);die;
-        // Select all fields from both tables
-        $this->db->select('hms_opd_booking.*, hms_patient.*');
-        $this->db->from('hms_opd_booking');
-        $this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left');
-        $this->db->where('hms_opd_booking.id', $booking_id);
-        $this->db->where('hms_opd_booking.patient_id', $patient_id);
-        $query = $this->db->get();
+		// Select all fields from both tables
+		$this->db->select('hms_opd_booking.*, hms_patient.*');
+		$this->db->from('hms_opd_booking');
+		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left');
+		$this->db->where('hms_opd_booking.id', $booking_id);
+		$this->db->where('hms_opd_booking.patient_id', $patient_id);
+		$query = $this->db->get();
 		// echo $this->db->last_query();die;
-        if ($query->num_rows() > 0) {
-            return $query->row_array();
-        }
-        return null;
-    }
-    public function get_booking_by_p_id($booking_id,$patient_id) {
+		if ($query->num_rows() > 0) {
+			return $query->row_array();
+		}
+		return null;
+	}
+	public function get_booking_by_p_id($booking_id, $patient_id)
+	{
 		// echo "hihi";die;
-        // Select all fields from both tables
-        $this->db->select('hms_opd_booking.id as opd_id,hms_opd_booking.*, hms_patient.*');
-        $this->db->from('hms_opd_booking');
-        $this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left');
-        $this->db->where('hms_opd_booking.id', $booking_id);
-        $this->db->where('hms_opd_booking.patient_id', $patient_id);
-        $query = $this->db->get();
-        if ($query->num_rows() > 0) {
-            return $query->row_array();
-        }
+		// Select all fields from both tables
+		$this->db->select('hms_opd_booking.id as opd_id,hms_opd_booking.*, hms_patient.*');
+		$this->db->from('hms_opd_booking');
+		$this->db->join('hms_patient', 'hms_patient.id = hms_opd_booking.patient_id', 'left');
+		$this->db->where('hms_opd_booking.id', $booking_id);
+		$this->db->where('hms_opd_booking.patient_id', $patient_id);
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query->row_array();
+		}
 		// echo $this->db->last_query();die;
-        return null;
-    }
+		return null;
+	}
 
 	public function dilate_start($id = '')
 	{
@@ -274,29 +281,31 @@ class Dilate_model extends CI_Model
 		return $this->db->update('hms_dilated');
 	}
 
-    public function get_item_by_medicine($medicine_id) {
-        // Select all fields from hms_medicine_entry
-        $this->db->select('*');
-        $this->db->from('hms_medicine_entry');
-        $this->db->where('id', $medicine_id); // Assuming 'id' is the primary key in the medicine table
-        $query = $this->db->get();
+	public function get_item_by_medicine($medicine_id)
+	{
+		// Select all fields from hms_medicine_entry
+		$this->db->select('*');
+		$this->db->from('hms_medicine_entry');
+		$this->db->where('id', $medicine_id); // Assuming 'id' is the primary key in the medicine table
+		$query = $this->db->get();
 
-        // Check if any results were returned
-        if ($query->num_rows() > 0) {
-            return $query->row_array(); // Return the first result as an associative array
-        }
+		// Check if any results were returned
+		if ($query->num_rows() > 0) {
+			return $query->row_array(); // Return the first result as an associative array
+		}
 
-        return null; // Return null if no data found
-    }
+		return null; // Return null if no data found
+	}
 
-    public function get_all_medicines() {
-        $this->db->select('*');
-        $this->db->from('hms_medicine_entry');
-        $query = $this->db->get();
+	public function get_all_medicines()
+	{
+		$this->db->select('*');
+		$this->db->from('hms_medicine_entry');
+		$query = $this->db->get();
 
-        // Return the result set as an array
-        return $query->result_array();
-    }
+		// Return the result set as an array
+		return $query->result_array();
+	}
 
 
 	function search_report_data()
@@ -307,7 +316,7 @@ class Dilate_model extends CI_Model
 				hms_opd_booking.booking_code, 
 				hms_patient.patient_code as patient_no, 
 				hms_opd_booking.token_no,  
-				hms_medicine_entry.medicine_name"); 
+				hms_medicine_entry.medicine_name");
 		$this->db->from('hms_dilated'); // Main table
 		$this->db->where('hms_dilated.is_deleted', '0');
 		$this->db->where('hms_dilated.status', 1);
@@ -319,20 +328,21 @@ class Dilate_model extends CI_Model
 
 		$query = $this->db->get();
 
-        // Check if the query executed successfully
-        if ($query->num_rows() > 0) {
-            // Return the result as an array of objects
-            return $query->result();
-        } else {
-            // Return an empty array if no results were found
-            return [];
-        }
+		// Check if the query executed successfully
+		if ($query->num_rows() > 0) {
+			// Return the result as an array of objects
+			return $query->result();
+		} else {
+			// Return an empty array if no results were found
+			return [];
+		}
 	}
 
 
 
 	public function get_by_id($id)
 	{
+		
 		// Select fields from the main 'hms_dilated' table and join other related tables
 		$this->db->select("hms_dilated.*, hms_medicine.medicine_name,hms_opd_booking.token_no"); // Assuming you want to get medicine name
 
@@ -342,12 +352,14 @@ class Dilate_model extends CI_Model
 		// Apply where condition for the specific patient_id
 		$this->db->where('hms_dilated.patient_id', $id);
 		$this->db->where('hms_dilated.is_deleted', '0');
-		$this->db->where('hms_dilated.status', '1');
+		// $this->db->where('hms_dilated.status', '1');
+		// $this->db->where('hms_dilated.status', '0');
 
 		// Join with the 'hms_medicine' table (adjust if your table or field names are different)
 		// Assuming 'drop_name' stores the medicine name and not an ID. If it is an ID, adjust the join condition accordingly
 		$this->db->join('hms_medicine', 'hms_medicine.id = hms_dilated.drop_name', 'left');
-		$this->db->join('hms_opd_booking', 'hms_opd_booking.booking_code = hms_dilated.booking_id', 'left');
+		// $this->db->join('hms_opd_booking', 'hms_opd_booking.booking_code = hms_dilated.booking_id', 'left');
+		$this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_dilated.booking_id', 'left');
 
 		$this->db->group_by('hms_dilated.id');
 
@@ -363,13 +375,13 @@ class Dilate_model extends CI_Model
 
 
 
-	public function save()
+	public function save($datas = '')
 	{
 		$user_data = $this->session->userdata('auth_users');
 		$post = $this->input->post();
 		// echo "<pre>";
-        // print_r($post);
-        // die('okay');
+		// print_r($datas);
+		// die('okay');
 		// Fetch dilate_start_time, dilate_time, and dilate_status from hms_opd_booking using booking_id
 		$this->db->select('dilate_start_time, dilate_time, dilate_status');
 		$this->db->where('id', $post['booking_id']);
@@ -401,7 +413,8 @@ class Dilate_model extends CI_Model
 				'dilate_start_time' => isset($booking_data->dilate_start_time) ? $booking_data->dilate_start_time : '', // Get from booking data
 				'dilate_time' => isset($booking_data->dilate_time) ? $booking_data->dilate_time : '', // Get from booking data
 				'dilate_status' => isset($booking_data->dilate_status) ? $booking_data->dilate_status : '', // Get from booking data
-				'status' => $post['status'] ?? 1, // Default status
+				// 'status' => $post['status'] ?? 1, // Default status
+				'status' => 0, // Default status
 				'ip_address' => $this->input->ip_address(), // Get the client's IP address
 			);
 
@@ -421,14 +434,18 @@ class Dilate_model extends CI_Model
 				$insert_data[] = $data;
 			}
 		}
-		// echo "<pre>";print_r($insert_data);
-		// echo "<pre>";print_r($update_data);die('update');
+		// echo "<pre>";
+		// print_r($insert_data);
+		// echo "<pre>";
+		// print_r($update_data);
+		// die('update');
 		// Insert new records
 		if (!empty($insert_data)) {
+			$this->db->where('booking_id', $post['booking_id']);
+			$this->db->where('patient_id', $post['patient_id']);
+			$this->db->delete('hms_dilated');
 			$this->db->insert_batch('hms_dilated', $insert_data);
-		}else{
-
-		}
+		} 
 
 		// Update existing records
 		if (!empty($update_data)) {
@@ -444,7 +461,11 @@ class Dilate_model extends CI_Model
 		$this->db->where('booking_id', $post['booking_id']);
 		$this->db->where('patient_id', $post['patient_id']);
 		$existing_medicines = $this->db->get('hms_dilated')->result_array();
-
+		// echo "<pre>";
+		// print_r($insert_data);
+		// echo "<pre>";
+		// print_r($update_data);
+		// die('update');
 		// Find medicines that exist in the database but not in 'post['items']' array
 		$medicine_names_in_post = array_column($post['items'], 'medicine_name');
 		foreach ($existing_medicines as $existing_medicine) {
@@ -462,25 +483,6 @@ class Dilate_model extends CI_Model
 			}
 		}
 
-		if (!empty($post['patient_id'])) {
-			// Retrieve the current 'pat_status' value for the given patient
-			$this->db->select('pat_status');
-			$this->db->where('id', $post['patient_id']);
-			$query = $this->db->get('hms_patient');
-			
-			if ($query->num_rows() > 0) {
-				$current_status = $query->row()->pat_status;
-		
-				// Concatenate the current status with the new status (e.g., 'Low vision')
-				$new_status = $current_status . ', ' . 'Dilated';
-		
-				// Update the 'pat_status' field with the concatenated value
-				$this->db->where('id', $post['patient_id']);
-				$this->db->update('hms_patient', ['pat_status' => $new_status]);
-			}
-		}
-		
-
 		// Update the removed/deactivated medicines in the database
 		if (!empty($update_status_data)) {
 			foreach ($update_status_data as $record) {
@@ -489,7 +491,77 @@ class Dilate_model extends CI_Model
 			}
 		}
 
-		
+		if(empty($insert_data)) {
+			if (!empty($post['send_to_type'] === 'Dilate') || $post['mod_type'] === 'help_desk') {
+                // Insert a new record
+                $this->db->insert('hms_dilated', $datas);
+            }
+			// Define a mapping of mod_type to their respective table names
+			$tableMap = [
+				'refraction_above' => 'hms_opd_refraction',
+				'vision' => 'hms_vision',
+				'contact_lens' => 'hms_contact_lens',
+				'low_vision' => 'hms_low_vision',
+				'prosthetic' => 'hms_prosthetic',
+				'oct_hfa' => 'hms_oct_hfa',
+				'ortho_ptics' => 'hms_ortho_ptics',
+				'dilate' => 'hms_dilated',
+				'hess_chart' => 'hms_std_eye_prescription',
+				'refraction_below8' => 'hms_std_eye_prescription',
+				'send_to_token' => 'hms_send_to_token',
+			];
+
+			$tableName = '';
+			$data = [];
+			// Check if mod_type exists in the mapping
+			if (isset($tableMap[$post['mod_type']])) {
+				$tableName = $tableMap[$post['mod_type']];
+				if ($post['mod_type'] === 'hess_chart'  || $post['send_to_type'] === 'Hess Chart') {
+					$refstatus = 'Hess chart';
+					$data['hess_chart_status'] = 1;
+					
+				} elseif ($post['mod_type'] === 'refraction_below8' || $post['send_to_type'] === 'Refraction below 8 years') {
+					$refstatus = 'Refraction below 8 years';
+					$data['refra_below_status'] = 1; 
+				} else {
+					$data = ['status' => 1];
+				}
+
+				// Check if the record exists
+				$this->db->where('booking_id', $post['booking_id']);
+				$this->db->where('patient_id', $post['patient_id']);
+				$query = $this->db->get($tableName);
+
+				// If the record exists, perform the update
+				if ($query->num_rows() > 0) {
+					$this->db->where('booking_id', $post['booking_id']);
+					$this->db->where('patient_id', $post['patient_id']);
+					$this->db->update($tableName, $data);
+				}
+			}
+
+		}
+
+		if (!empty($post['patient_id'])) {
+			// Retrieve the current 'pat_status' value for the given patient
+			$this->db->select('pat_status');
+			$this->db->where('id', $post['patient_id']);
+			$query = $this->db->get('hms_patient');
+
+			if ($query->num_rows() > 0) {
+				$current_status = $query->row()->pat_status;
+
+				// Concatenate the current status with the new status (e.g., 'Low vision')
+				// $new_status = $current_status . ', ' . 'Dilated';
+				$new_status = $current_status . ', Dilated';
+
+				// Update the 'pat_status' field with the concatenated value
+				$this->db->where('id', $post['patient_id']);
+				$this->db->update('hms_patient', ['pat_status' => $new_status]);
+			}
+		}
+
+
 	}
 
 
@@ -1225,40 +1297,42 @@ class Dilate_model extends CI_Model
 		return $query->result();
 	}
 
-	public function get_booking_status($patient_id) {
-        $this->db->select('dilate_status');
-        $this->db->from('hms_patient'); // Replace 'bookings' with your table name
-        $this->db->where('id', $patient_id);
-        $query = $this->db->get();
-        $result = $query->row();
+	public function get_booking_status($patient_id)
+	{
+		$this->db->select('dilate_status');
+		$this->db->from('hms_patient'); // Replace 'bookings' with your table name
+		$this->db->where('id', $patient_id);
+		$query = $this->db->get();
+		$result = $query->row();
 
-        if ($result) {
-            // echo "<pre>";
-            // print_r($result->opd_status);
-            // die('status');
-            return $result->opd_status; // Return status (1 or 0)
-        }
-        return 0; // Default to not booked
-    }
+		if ($result) {
+			// echo "<pre>";
+			// print_r($result->opd_status);
+			// die('status');
+			return $result->opd_status; // Return status (1 or 0)
+		}
+		return 0; // Default to not booked
+	}
 
-    public function book_patient($patient_id) {
-        // Update database to mark patient as booked
-        $data = ['dilate_status' => 1]; // Assuming 1 means booked
-        $this->db->where('id', $patient_id);
-        return $this->db->update('hms_patient', $data);
-    }
+	public function book_patient($patient_id)
+	{
+		// Update database to mark patient as booked
+		$data = ['dilate_status' => 1]; // Assuming 1 means booked
+		$this->db->where('id', $patient_id);
+		return $this->db->update('hms_patient', $data);
+	}
 
-    public function update_patient_list_opd_status($patient_id = '')
+	public function update_patient_list_opd_status($patient_id = '')
 	{
 		$this->db->set('hms_patient.dilate_status', 0);
 		$this->db->where('hms_patient.id', $patient_id);
-		$query = $this->db->update('hms_patient');		
+		$query = $this->db->update('hms_patient');
 		return $query;
 	}
 
-    public function patient_exists($patient_id = "")
+	public function patient_exists($patient_id = "")
 	{
-        
+
 		$user_data = $this->session->userdata('auth_users');
 		$this->db->select('hms_dilated.id as dil_id*, hms_patient.id,hms_patient.patient_name');
 

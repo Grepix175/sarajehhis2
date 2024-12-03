@@ -466,7 +466,21 @@ class Ortho_ptics_model extends CI_Model
                     $this->db->where('patient_id', $post['patient_id']);
                     $this->db->update('hms_low_vision', $data);
                 }
-            } else if ($post['mod_type'] === 'prosthetic') {
+            }else if ($post['mod_type'] === 'dilate') {
+                $data = ['status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_dilated');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_dilated', $data);
+                }
+            }
+             else if ($post['mod_type'] === 'prosthetic') {
                 $data = ['status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
                 $this->db->where('patient_id', $post['patient_id']);
@@ -479,8 +493,7 @@ class Ortho_ptics_model extends CI_Model
                     $this->db->where('patient_id', $post['patient_id']);
                     $this->db->update('hms_prosthetic', $data);
                 }
-            }
-            else if ($post['mod_type'] === 'oct_hfa') {
+            }else if ($post['mod_type'] === 'oct_hfa') {
                 $data = ['status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
                 $this->db->where('patient_id', $post['patient_id']);
@@ -493,8 +506,7 @@ class Ortho_ptics_model extends CI_Model
                     $this->db->where('patient_id', $post['patient_id']);
                     $this->db->update('hms_oct_hfa', $data);
                 }
-            }
-            else if ($post['mod_type'] === 'ortho_ptics') {
+            }else if ($post['mod_type'] === 'ortho_ptics') {
                 $data = ['status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
                 $this->db->where('patient_id', $post['patient_id']);
@@ -508,6 +520,51 @@ class Ortho_ptics_model extends CI_Model
                     $this->db->update('hms_ortho_ptics', $data);
                 }
             }
+            else if ($post['mod_type'] === 'hess_chart') {
+                $data = ['hess_chart_status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_std_eye_prescription');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_std_eye_prescription', $data);
+                }
+            }
+            else if ($post['mod_type'] === 'refraction_below8') {
+                $data = ['refra_below_status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_std_eye_prescription');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_std_eye_prescription', $data);
+                }
+            }
+            else if ($post['mod_type'] === 'send_to_token') {
+                $data = ['status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_send_to_token');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_send_to_token', $data);
+                }
+            }
+
+
+
             if (!empty($post['patient_id'])) {
                 // echo "Ok";die;
                 // Retrieve the current 'pat_status' value for the given patient

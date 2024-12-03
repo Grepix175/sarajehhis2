@@ -291,6 +291,20 @@ class Vision_model extends CI_Model
                     $this->db->update('hms_contact_lens', $data);
                 } 
             }
+            else if ($post['mod_type'] === 'dilate') {
+                $data = ['status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_dilated');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_dilated', $data);
+                }
+            }
             else if ($post['mod_type'] === 'low_vision') {
                 $data = ['status' => 1]; // Assuming 1 means booked
                 $this->db->where('booking_id', $post['booking_id']);
@@ -347,30 +361,51 @@ class Vision_model extends CI_Model
                     $this->db->update('hms_ortho_ptics', $data);
                 }
             }
+            else if ($post['mod_type'] === 'hess_chart') {
+                $data = ['hess_chart_status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_std_eye_prescription');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_std_eye_prescription', $data);
+                }
+            }
+            else if ($post['mod_type'] === 'refraction_below8') {
+                $data = ['refra_below_status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_std_eye_prescription');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_std_eye_prescription', $data);
+                }
+            }
+            else if ($post['mod_type'] === 'send_to_token') {
+                $data = ['status' => 1]; // Assuming 1 means booked
+                $this->db->where('booking_id', $post['booking_id']);
+                $this->db->where('patient_id', $post['patient_id']);
+                $query = $this->db->get('hms_send_to_token');
+
+                // If the record exists, proceed with the update
+                if ($query->num_rows() > 0) {
+                    // Perform the update
+                    $this->db->where('booking_id', $post['booking_id']);
+                    $this->db->where('patient_id', $post['patient_id']);
+                    $this->db->update('hms_send_to_token', $data);
+                }
+            }
             // }
 
-            // if (!empty($data['patient_code'])) {
-            //     // Retrieve the current 'pat_status' value for the given patient
-            //     $this->db->select('pat_status');
-            //     $this->db->where('patient_code', $post['patient_code']);
-            //     $query = $this->db->get('hms_patient');
-
-            //     if ($query->num_rows() > 0) {
-            //         $current_status = $query->row()->pat_status;
-
-            //         // Concatenate the current status with 'Low vision'
-            //         $new_status = $current_status . ', Vision';
-            //         // echo "<pre>";print_r($new_status);die;
-
-            //         // Update the 'pat_status' field with the concatenated value
-            //         $this->db->where('patient_code', $post['patient_code']);
-            //         $this->db->update('hms_patient', ['pat_status' => $new_status]);
-            //     }
-            // }
-            // if (!empty($data['patient_id']) && !empty($data['booking_id'])) {
-            //     // Retrieve the current 'pat_status' value for the given patient
-                
-            // }
+            
             if (!empty($post['patient_id'])) {
                 // Retrieve the current 'pat_status' value for the given patient
                 $this->db->select('pat_status');
