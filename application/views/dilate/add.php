@@ -219,6 +219,11 @@ $field_list = mandatory_section_field_list(2);
                             </div>
                         </div>
                     </div>
+                    <?php
+                        // echo "<pre>";
+                        // print_r($form_data['items']);
+                        // die;
+                    ?>
 
                     <h3>Dilate</h3>
 
@@ -292,7 +297,7 @@ $field_list = mandatory_section_field_list(2);
                         </script>
 
 
-
+                        
 
                         <!-- <h5>With Intermidiate effect below mentioned device is chargeable to patient for Contact Lens</h5> -->
                         <div class="pat-col">
@@ -311,8 +316,10 @@ $field_list = mandatory_section_field_list(2);
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php if (!empty($form_data['items'])): ?>
-                                        <?php foreach ($form_data['items'] as $index => $item): ?>
+                                <?php if (!empty($form_data['items']) && is_array($form_data['items'])): ?>
+                                    <?php foreach ($form_data['items'] as $index => $item): ?>
+                                        <?php if (!empty($item)): 
+                                            // Ensure each item is not empty ?>
                                             <tr>
                                                 <td><input type="text" name="items[<?php echo $index; ?>][sl_no]"
                                                         value="<?php echo $index + 1; ?>" readonly></td>
@@ -350,7 +357,8 @@ $field_list = mandatory_section_field_list(2);
                                                 </td>
                                                 <td><button type="button" class="removeRowBtn">Remove</button></td>
                                             </tr>
-                                        <?php endforeach; ?>
+                                            <?php endif; ?>
+                                            <?php endforeach; ?>
                                     <?php else: ?>
                                         <tr>
                                             <td><input type="text" name="items[0][sl_no]" value="1" readonly></td>
@@ -391,9 +399,6 @@ $field_list = mandatory_section_field_list(2);
                                             <td><button type="button" class="removeRowBtn">Remove</button></td>
                                         </tr>
                                     <?php endif; ?>
-
-
-
                                 </tbody>
                             </table>
 
@@ -449,6 +454,7 @@ $field_list = mandatory_section_field_list(2);
                 salt_text: salt.options[salt.selectedIndex].text,
                 percentage: row.querySelector(`input[name="items[${index}][percentage]"]`).value
             };
+            console.log(item,'=============')
 
             items.push(item); // Add each item object to items array
         });

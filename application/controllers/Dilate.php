@@ -67,7 +67,7 @@ class Dilate extends CI_Controller
             $row[] = $records[0]->patient_no;
 
             // Booking code (showing booking_id from the first record)
-            $row[] = $records[0]->booking_id;
+            $row[] = $records[0]->booking_code;
 
             // Concatenate medicine names, salts, and percentages for all records with the same patient_id
             $medicine_names = [];
@@ -87,6 +87,7 @@ class Dilate extends CI_Controller
 
             // Age (showing age from the booking data)
             $row[] = implode(', ', $salts);
+            $row[] = $records[0]->status == 0 ? '<font color="green">Pending</font>' : '<font color="red">Completed</font>';
 
             $statuses = explode(',', $records[0]->pat_status);
 
@@ -98,14 +99,28 @@ class Dilate extends CI_Controller
 
             // Created at date (showing created date from the first record in the group)
             $row[] = date('d-M-Y', strtotime($records[0]->created_date));
+            
             // echo "<pre>";
             // print_r($patient_id);
             // die('okay');
             // Add action buttons
+            $send_to = '';
+            if ($records[0]->status == 0) {
+                $send_to = '<button type="button" class="btn-custom open-popup-send-to" 
+                            id="open-popup" 
+                            data-booking-id="' . $records[0]->booking_id . '" 
+                            data-patient-id="' . $records[0]->patient_id . '" 
+                            data-referred-by="' . $records[0]->attended_doctor . '" 
+                            data-mod-type="dilate" 
+                            data-url="' . $records[0]->url . '" 
+                            title="">Send To</button>';
+              }else{
+                $send_to = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Send To</a>';
+              }
             $row[] = '<a onClick="return edit_dilate(\'' . $patient_id . '\');" class="btn-custom" href="javascript:void(0)" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
                     <a href="javascript:void(0)" class="btn-custom" onClick="return print_window_page(\'' . base_url("dilate/print_dilate/" . $patient_id) . '\');">
                         <i class="fa fa-print"></i> Print
-                    </a>';
+                    </a>' . $send_to ;
             $row[] = $records[0]->emergency_status;
 
 
@@ -403,7 +418,10 @@ class Dilate extends CI_Controller
             $data['page_title'] = "Update Dilate";
             $data['form_error'] = '';
             $data['form_data'] = array(
-                'items' => $result ?? [],
+                // 'items' => $result ?? [],
+                'items' => array_filter($result, function ($item) {
+                    return !empty($item); // Remove empty items
+                }),
                 'data_id' => $id,
                 'booking_id' => $result[0]['booking_id'],
                 'patient_id' => $result[0]['patient_id'],

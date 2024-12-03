@@ -80,8 +80,8 @@ class Doctore_patient_model extends CI_Model
                 $this->db->like('hms_doct_patient.room_id', $search['room_id'], 'after');
             }
             if (isset($search['status']) && $search['status'] != "") {
-				$this->db->where('hms_doct_patient.status', $search['status']);
-			}
+                $this->db->where('hms_doct_patient.status', $search['status']);
+            }
             if (!empty($search['patient_name'])) {
                 $this->db->like('hms_patient.patient_name', $search['patient_name'], 'after');
             }
@@ -134,13 +134,13 @@ class Doctore_patient_model extends CI_Model
 
     public function room_no_list()
     {
-    	 $users_data = $this->session->userdata('auth_users');
-        $this->db->select('*');  
-        $this->db->where('is_deleted','0');
-        $this->db->where('hms_room_master.branch_id',$users_data['parent_id']);
+        $users_data = $this->session->userdata('auth_users');
+        $this->db->select('*');
+        $this->db->where('is_deleted', '0');
+        $this->db->where('hms_room_master.branch_id', $users_data['parent_id']);
         $query = $this->db->get('hms_room_master');
-        $result = $query->result(); 
-        return $result; 
+        $result = $query->result();
+        return $result;
     }
 
     public function get_by_id($id)
@@ -152,15 +152,15 @@ class Doctore_patient_model extends CI_Model
         hms_patient.*,
         hms_doct_patient.referred_by as doct_patient_referred_by_id
     ');
-    $this->db->from('hms_doct_patient');
-    $this->db->join('hms_patient', 'hms_patient.id = hms_doct_patient.patient_id', 'left');
-    $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_doct_patient.booking_id', 'left');
-    $this->db->where('hms_doct_patient.id', $id);
-    $this->db->where('hms_doct_patient.is_deleted', '0');
-    $query = $this->db->get();
-    
-    return $query->row_array();
-    
+        $this->db->from('hms_doct_patient');
+        $this->db->join('hms_patient', 'hms_patient.id = hms_doct_patient.patient_id', 'left');
+        $this->db->join('hms_opd_booking', 'hms_opd_booking.id = hms_doct_patient.booking_id', 'left');
+        $this->db->where('hms_doct_patient.id', $id);
+        $this->db->where('hms_doct_patient.is_deleted', '0');
+        $query = $this->db->get();
+
+        return $query->row_array();
+
 
     }
 
@@ -215,7 +215,7 @@ class Doctore_patient_model extends CI_Model
             'created_by' => $user_data['id'],
             'ip_address' => $_SERVER['REMOTE_ADDR'],
         );
-    
+
 
         if (!empty($post['data_id']) && $post['data_id'] > 0) {
             // echo "<pre>";
@@ -229,9 +229,15 @@ class Doctore_patient_model extends CI_Model
             // For insert
             $this->db->set('created_date', date('Y-m-d H:i:s'));
             $this->db->insert($this->table, $data);
-            // echo $this->db->last_query();
 
-            if (!empty($data['patient_id'])) {
+            $data = ['status' => 1]; // Assuming 1 means booked
+            $this->db->where('patient_id', $post['patient_id']);
+            $this->db->where('booking_id', $post['booking_id']);
+            $this->db->update('hms_send_to_token', $data);
+            
+            // echo $this->db->last_query();
+            
+            if (!empty($post['patient_id']) && !empty($post['booking_id'])) {
                 // Retrieve the current 'pat_status' value for the given patient
                 $this->db->select('pat_status');
                 $this->db->where('id', $post['patient_id']);
@@ -260,9 +266,9 @@ class Doctore_patient_model extends CI_Model
         // $this->db->update('hms_std_opd_patient_status');
     }
 
-    public function get_doct_patient_booking_id($booking_id,$patient_id)
+    public function get_doct_patient_booking_id($booking_id, $patient_id)
     {
-       
+
         // Select fields from hms_ortho_ptics and hms_patient
         $this->db->select('hms_doct_patient.*, hms_patient.*');
         $this->db->from($this->table);
@@ -271,7 +277,7 @@ class Doctore_patient_model extends CI_Model
         $this->db->where('hms_doct_patient.patient_id', $patient_id);
         $this->db->where('hms_doct_patient.is_deleted', '0');
         $query = $this->db->get();
-//         // Print the result set
+        //         // Print the result set
 // echo "<pre>";
 // print_r($query->result_array()); // Use result_array() to print as an array
 // die;
@@ -387,7 +393,8 @@ class Doctore_patient_model extends CI_Model
         return $query->result();
     }
 
-    public function get_booking_status($patient_id) {
+    public function get_booking_status($patient_id)
+    {
         $this->db->select('doctor_status');
         $this->db->from('hms_patient'); // Replace 'bookings' with your table name
         $this->db->where('id', $patient_id);
@@ -403,7 +410,8 @@ class Doctore_patient_model extends CI_Model
         return 0; // Default to not booked
     }
 
-    public function book_patient($patient_id) {
+    public function book_patient($patient_id)
+    {
         // Update database to mark patient as booked
         $data = ['doctor_status' => 1]; // Assuming 1 means booked
         $this->db->where('id', $patient_id);
@@ -411,29 +419,30 @@ class Doctore_patient_model extends CI_Model
     }
 
     public function update_patient_list_opd_status($patient_id = '')
-	{
-		$this->db->set('hms_patient.doctor_status', 0);
-		$this->db->where('hms_patient.id', $patient_id);
-		$query = $this->db->update('hms_patient');		
-		return $query;
-	}
+    {
+        $this->db->set('hms_patient.doctor_status', 0);
+        $this->db->where('hms_patient.id', $patient_id);
+        $query = $this->db->update('hms_patient');
+        return $query;
+    }
 
     public function patient_exists($patient_id = "")
-	{
-        
-		$user_data = $this->session->userdata('auth_users');
-		$this->db->select('hms_doct_patient.id as doc_pat_id*, hms_patient.id,hms_patient.patient_name');
+    {
 
-		$this->db->from('hms_doct_patient');
-		$this->db->join('hms_patient', 'hms_patient.id = hms_doct_patient.patient_id');
-		// $this->db->where('hms_doct_patient.branch_id', $user_data['parent_id']);
-		$this->db->where('hms_doct_patient.patient_id', $patient_id);
-		$this->db->where('hms_doct_patient.is_deleted', '0');
-		$query = $this->db->get();
-		return $query->row_array();
-	}
+        $user_data = $this->session->userdata('auth_users');
+        $this->db->select('hms_doct_patient.id as doc_pat_id*, hms_patient.id,hms_patient.patient_name');
 
-    public function get_booking_doc_status($patient_id) {
+        $this->db->from('hms_doct_patient');
+        $this->db->join('hms_patient', 'hms_patient.id = hms_doct_patient.patient_id');
+        // $this->db->where('hms_doct_patient.branch_id', $user_data['parent_id']);
+        $this->db->where('hms_doct_patient.patient_id', $patient_id);
+        $this->db->where('hms_doct_patient.is_deleted', '0');
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+
+    public function get_booking_doc_status($patient_id)
+    {
         $this->db->select('patient_history_status');
         $this->db->from('hms_doct_patient'); // Replace 'bookings' with your table name
         $this->db->where('patient_id', $patient_id);
@@ -449,7 +458,8 @@ class Doctore_patient_model extends CI_Model
         return 0; // Default to not booked
     }
 
-    public function book_doc_patient($patient_id) {
+    public function book_doc_patient($patient_id)
+    {
         // Update database to mark patient as booked
         $data = ['patient_history_status' => 1]; // Assuming 1 means booked
         $this->db->where('patient_id', $patient_id);
@@ -457,10 +467,10 @@ class Doctore_patient_model extends CI_Model
     }
 
     public function update_patient_list_doc_status($patient_id = '')
-	{
-		$this->db->set('hms_doct_patient.patient_history_status', 0);
-		$this->db->where('hms_doct_patient.patient_id', $patient_id);
-		$query = $this->db->update('hms_doct_patient');		
-		return $query;
-	}
+    {
+        $this->db->set('hms_doct_patient.patient_history_status', 0);
+        $this->db->where('hms_doct_patient.patient_id', $patient_id);
+        $query = $this->db->update('hms_doct_patient');
+        return $query;
+    }
 }

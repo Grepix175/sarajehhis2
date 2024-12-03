@@ -22,12 +22,12 @@ $users_data = $this->session->userdata('auth_users');
 
   <!-- js -->
   <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>jquery.min.js"></script>
+  <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap.min.js"></script>
   <style>
     span {
       font-weight: normal;
     }
   </style>
-  <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap.min.js"></script>
 
   <!-- datatable js -->
   <script src="<?php echo ROOT_JS_PATH; ?>jquery.dataTables.min.js"></script>
@@ -45,22 +45,22 @@ $users_data = $this->session->userdata('auth_users');
           "order": [],
           "pageLength": '20',
           "ajax": {
-            "url": "<?php echo base_url('dilate/ajax_list') ?>",
+            "url": "<?php echo base_url('send_to_token/ajax_list') ?>",
             "type": "POST",
           },
           "columnDefs": [
             {
-              "targets": [0, -1], // Targets first and last column
-              "orderable": false,  // Set not orderable
-            },
+              "targets": [0, -1], // Last column
+              "orderable": false, // Set not orderable
+            }
           ],
           "createdRow": function (row, data, dataIndex) {
-            // Access emergency_status value (assuming it's the last column)
-            var emergencyStatus = data[data.length - 1]; // Adjust index based on your structure
+            // Access emergency_status value (adjust index if necessary)
+            var emergencyStatus = data[data.length - 1]; // Assuming emergency_status is the last column
             // console.log(emergencyStatus); // Uncomment for debugging
 
-            // Get the first column cell (adjust index if needed)
-            var firstColumn = $('td', row).eq(1); // Adjust the column index if needed
+            // Get the first column cell (adjust index as needed)
+            var firstColumn = $('td', row).eq(1); // Adjust index based on your structure
 
             // Apply background color based on emergency_status
             if (emergencyStatus == 1) {
@@ -88,6 +88,8 @@ $users_data = $this->session->userdata('auth_users');
                 'font-weight': 'bold'         // Bold font by default
               });
             }
+
+
           }
         });
       });
@@ -97,7 +99,7 @@ $users_data = $this->session->userdata('auth_users');
     $(document).ready(function () {
       var $modal = $('#load_add_modal_popup');
       $('#doctor_add_modal').on('click', function () {
-        $modal.load('<?php echo base_url() . 'help_Desk/add/' ?>',
+        $modal.load('<?php echo base_url() . 'low_vision/add/' ?>',
           {
             //'id1': '1',
             //'id2': '2'
@@ -110,7 +112,7 @@ $users_data = $this->session->userdata('auth_users');
 
 
       $('#adv_search').on('click', function () {
-        $modal.load('<?php echo base_url() . 'dilate/advance_search/' ?>',
+        $modal.load('<?php echo base_url() . 'send_to_token/advance_search/' ?>',
           {
           },
           function () {
@@ -122,10 +124,9 @@ $users_data = $this->session->userdata('auth_users');
     });
 
 
-    function edit_dilate(id) {
-      // alert(id);
+    function edit_refraction(id) {
       // Redirect to the edit page for refraction with the specified ID
-      window.location.href = '<?php echo base_url('dilate/edit/'); ?>' + id;
+      window.location.href = '<?php echo base_url('send_to_token/edit/'); ?>' + id;
     }
 
     function reload_table() {
@@ -133,7 +134,6 @@ $users_data = $this->session->userdata('auth_users');
     }
 
     function checkboxValues() {
-
       $('#table').dataTable();
       var allVals = [];
       $(':checkbox').each(function () {
@@ -141,7 +141,6 @@ $users_data = $this->session->userdata('auth_users');
           allVals.push($(this).val());
         }
       });
-      // alert(allVals)
       allbranch_delete(allVals);
     }
 
@@ -154,7 +153,7 @@ $users_data = $this->session->userdata('auth_users');
           .one('click', '#delete', function (e) {
             $.ajax({
               type: "POST",
-              url: "<?php echo base_url('dilate/delete_multiple'); ?>",
+              url: "<?php echo base_url('send_to_token/deleteall'); ?>",
               data: { row_id: allVals },
               success: function (result) {
                 flash_session_msg(result);
@@ -201,27 +200,26 @@ $users_data = $this->session->userdata('auth_users');
           <div class="row">
             <div class="col-sm-4">
               <div class="row m-b-5">
-                <div class="col-xs-4"><label>From Date</label></div>
-                <div class="col-xs-8">
+                <div class="col-xs-5"><label>From Date</label></div>
+                <div class="col-xs-7">
                   <input id="start_date_patient" name="start_date" class="datepicker start_datepicker m_input_default"
                     type="text" value="<?php echo $form_data['start_date'] ?>">
                 </div>
               </div>
               <div class="row m-b-5">
-                <div class="col-xs-4"><label><?php echo $data = get_setting_value('PATIENT_REG_NO'); ?></label></div>
-                <div class="col-xs-8">
-                  <input name="patient_id" class="m_input_default" id="patient_id" onkeyup="return form_submit();"
-                    value="<?php echo $form_data['patient_id'] ?>" type="text" autofocus>
+                <div class="col-xs-5"><label><?php echo $data = get_setting_value('PATIENT_REG_NO'); ?></label></div>
+                <div class="col-xs-7">
+                  <input name="patient_code" class="m_input_default" id="patient_code" onkeyup="return form_submit();"
+                    value="<?php echo $form_data['patient_code'] ?>" type="text" autofocus>
                 </div>
               </div>
               <div class="row m-b-5">
-                <div class="col-xs-4"><label>Mobile No.</label></div>
-                <div class="col-xs-8">
+                <div class="col-xs-5"><label>Mobile No.</label></div>
+                <div class="col-xs-7">
                   <input name="mobile_no" value="<?php echo $form_data['mobile_no'] ?>" id="mobile_no"
                     onkeyup="return form_submit();" class="numeric m_input_default" maxlength="10" value="" type="text">
                 </div>
               </div>
-
               <div class="row m-b-5">
                 <div class="col-xs-4"><label> Booking Type</label></div>
                 <div class="col-xs-8">
@@ -238,41 +236,27 @@ $users_data = $this->session->userdata('auth_users');
                 </div>
               </div>
 
-              <script>
-                $(document).ready(function () {
-                  // Function to show/hide additional selection based on radio button selection
-                  $('input[name="search_type"]').change(function () {
-                    if ($(this).val() == "0") { // If Pending is selected
-                      $('#additional_selection').show();
-                    } else {
-                      $('#additional_selection').hide();
-                    }
-                  });
-                });
-              </script>
-
-
             </div> <!-- 4 -->
 
             <div class="col-sm-4">
               <div class="row m-b-5">
-                <div class="col-xs-5"><label>To Date</label></div>
-                <div class="col-xs-7">
+                <div class="col-xs-4"><label>To Date</label></div>
+                <div class="col-xs-8">
                   <input name="end_date" id="end_date_patient"
                     class="datepicker datepicker_to end_datepicker m_input_default"
                     value="<?php echo $form_data['end_date'] ?>" type="text">
                 </div>
               </div>
               <div class="row m-b-5">
-                <div class="col-xs-5"><label>Patient Name</label></div>
-                <div class="col-xs-7">
+                <div class="col-xs-4"><label>Patient Name</label></div>
+                <div class="col-xs-8">
                   <input name="patient_name" value="<?php echo $form_data['patient_name'] ?>" id="patient_name"
                     onkeyup="return form_submit();" class="alpha_space m_input_default" value="" type="text">
                 </div>
               </div>
               <div class="row m-b-5">
-                <div class="col-xs-5"><label>Status</label></div>
-                <div class="col-xs-7">
+                <div class="col-xs-4"><label>Status</label></div>
+                <div class="col-xs-8">
                   <!-- Pending (Default) -->
                   <label class="radio-label">
                     <input type="radio" name="search_type" value="0" id="search_type_default"
@@ -295,7 +279,7 @@ $users_data = $this->session->userdata('auth_users');
                   </label>
                 </div>
               </div>
-             
+
 
               <?php
               $users_data = $this->session->userdata('auth_users');
@@ -339,7 +323,7 @@ $users_data = $this->session->userdata('auth_users');
                       <option selected="selected" <?php if (isset($_POST['branch_id']) && $_POST['branch_id'] == $users_data['parent_id']) {
                         echo 'selected="selected"';
                       } ?>
-                value="<?php echo $users_data['parent_id']; ?>">Self</option>';
+            value="<?php echo $users_data['parent_id']; ?>">Self</option>';
                       <?php
                       if (!empty($sub_branch_details)) {
                         $i = 0;
@@ -366,6 +350,19 @@ $users_data = $this->session->userdata('auth_users');
                 <input type="hidden" name="branch_id" id="branch_id" value="<?php echo $users_data['parent_id']; ?>">
               <?php } ?>
 
+
+              <script>
+                $(document).ready(function () {
+                  // Function to show/hide additional selection based on radio button selection
+                  $('input[name="search_type"]').change(function () {
+                    if ($(this).val() == "0") { // If Pending is selected
+                      $('#additional_selection').show();
+                    } else {
+                      $('#additional_selection').hide();
+                    }
+                  });
+                });
+              </script>
 
 
             </div> <!-- 4 -->
@@ -394,7 +391,7 @@ $users_data = $this->session->userdata('auth_users');
 
                 <div class="col-xs-2"><label style="margin-left: -15px;">Type</label></div>
 
-                <div class="col-xs-10" style="margin-left: -80px;">
+                <div class="col-xs-10" style="margin-left: -43px;">
                   <label class="radio-label">
                     <input type="radio" name="priority_type" value="1" id="priority_red"
                       onclick="return form_submit();">
@@ -439,17 +436,11 @@ $users_data = $this->session->userdata('auth_users');
                   <th width="40" align="center"> <input type="checkbox" name="selectall" class="" id="selectAll" value="">
                   </th>
                   <th> Token No </th>
-                  <th> Patient Reg No. </th>
                   <th> OPD No. </th>
-                  <th> Drop Name </th>
+                  <th> Patient Reg No. </th>
                   <th> Patient Name </th>
-                  <!-- <th> Gender </th> -->
-                  <!-- <th> Patient Category </th> -->
-                  <th> Salt </th>
-                  <!-- <th> Age </th> -->
-                  <!-- <th> Consultant </th> -->
-                  <!-- <th> Lens </th> -->
-                  <!-- <th> Comment </th> -->
+                  <th> Mobile No </th>
+                  <th> Age </th>
                   <th> Status </th>
                   <th> Patient Status </th>
                   <th> Created Date </th>
@@ -464,16 +455,15 @@ $users_data = $this->session->userdata('auth_users');
         <div class="btns">
           <?php if (in_array('2486', $users_data['permission']['action'])) { ?>
             <!-- <button class="btn-update" id="1modal_add"
-                onclick="window.location.href='<?php echo base_url('dilate/add'); ?>'">
+                onclick="window.location.href='<?php echo base_url('send_to_token/add'); ?>'">
               <i class="fa fa-plus"></i> New
             </button> -->
           <?php } ?>
-          <a data-toggle="tooltip" title="Download list in excel" href="#" id="dilate_download_excel"
+          <a data-toggle="tooltip" title="Download list in excel" href="#" id="ortho_peadics_excel"
             class="btn-anchor m-b-2">
             <i class="fa fa-file-excel-o"></i> Excel
           </a>
-          <a data-toggle="tooltip" title="Download list in pdf" href="#" id="dilate_download_pdf"
-            class="btn-anchor m-b-2">
+          <a data-toggle="tooltip" title="Download list in pdf" href="#" id="ortho_paedic_pdf" class="btn-anchor m-b-2">
             <i class="fa fa-file-pdf-o"></i> PDF
           </a>
           <?php if (in_array('2488', $users_data['permission']['action'])) { ?>
@@ -503,12 +493,12 @@ $users_data = $this->session->userdata('auth_users');
       function reset_search() {
         $('#start_date_patient').val('');
         $('#end_date_patient').val('');
-        $('#patient_id').val('');
+        $('#patient_code').val('');
         $('#patient_name').val('');
         $('#mobile_no').val('');
 
         $.ajax({
-          url: "<?php echo base_url(); ?>dilate/reset_search/",
+          url: "<?php echo base_url(); ?>low_vision/reset_search/",
           success: function (result) {
             reload_table();
           }
@@ -539,7 +529,7 @@ $users_data = $this->session->userdata('auth_users');
         event.preventDefault();
 
         $.ajax({
-          url: "<?php echo base_url('dilate/advance_search/'); ?>",
+          url: "<?php echo base_url('low_vision/advance_search/'); ?>",
           type: "post",
           data: $(this).serialize(),
           success: function (result) {
@@ -555,7 +545,7 @@ $users_data = $this->session->userdata('auth_users');
         })
           .one('click', '#delete', function (e) {
             $.ajax({
-              url: "<?php echo base_url('dilate/delete/'); ?>" + rate_id,
+              url: "<?php echo base_url('low_vision/delete/'); ?>" + rate_id,
               success: function (result) {
                 flash_session_msg(result);
                 reload_table();
@@ -575,7 +565,7 @@ $users_data = $this->session->userdata('auth_users');
           $('.inputFocus').focus();
         });
       });
-      document.getElementById('dilate_download_excel').addEventListener('click', function (e) {
+      document.getElementById('ortho_peadics_excel').addEventListener('click', function (e) {
         e.preventDefault();
 
 
@@ -583,7 +573,7 @@ $users_data = $this->session->userdata('auth_users');
         var toDate = document.getElementById('end_date_patient').value;
 
 
-        var url = '<?php echo base_url("dilate/dilate_excel"); ?>';
+        var url = '<?php echo base_url("send_to_token/ortho_peadics_excel"); ?>';
 
 
         if (fromDate || toDate) {
@@ -598,7 +588,8 @@ $users_data = $this->session->userdata('auth_users');
         window.location.href = url;
       });
 
-      document.getElementById('dilate_download_pdf').addEventListener('click', function (e) {
+      document.getElementById('ortho_paedic_pdf').addEventListener('click', function (e) {
+        // alert();
         e.preventDefault();
 
         var fromDate = document.getElementById('start_date_patient').value;
@@ -610,22 +601,62 @@ $users_data = $this->session->userdata('auth_users');
 
 
 
-        var url = '<?php echo base_url("dilate/dilate_pdf"); ?>';
+        var url = '<?php echo base_url("send_to_token/ortho_paedic_pdf"); ?>';
         url += '?start_date=' + encodeURIComponent(fromDate) + '&end_date=' + encodeURIComponent(toDate);
 
         window.location.href = url;
       });
-
-      $(document).on('click', '.open-popup-send-to', function () {
+      $(document).on('click', '.open-popup', function () {
         // Get the data attributes from the clicked button
         var bookingId = $(this).data('booking-id');
         var patientId = $(this).data('patient-id');
-        var referredBy = $(this).data('referred-by');  
-        var modType = $(this).data('mod-type');      
-        console.log(bookingId)
-        console.log(patientId)
+        var referredBy = $(this).data('referred-by');
+        const btn = $(this);
+
+        btn.prop('disabled', true).text('In Progress');
+
+        $.ajax({
+          url: '<?= base_url("doctore_patient/check_booking_status"); ?>', // Backend URL to check status
+          type: 'POST',
+          data: { patient_id: patientId },
+          success: function (response) {
+            const data = JSON.parse(response);
+
+            if (data.status === '1') {
+              alert('Booking is already in progress for this patient.');
+              btn.prop('disabled', false).text('Book Now');
+              return;
+            } else if (data.status === '0') {
+              $.ajax({
+                url: '<?= base_url("doctore_patient/book_patient"); ?>',
+                type: 'POST',
+                data: { patient_id: patientId },
+                success: function (bookingResponse) {
+                  const bookingData = JSON.parse(bookingResponse);
+                  if (bookingData.status === 'success') {
+                    reload_table()
+                    // window.location.href = bookingUrl; // Redirect to booking URL
+                  } else {
+                    alert(bookingData.message || 'An error occurred.');
+                    btn.prop('disabled', false).text('Book Now');
+                  }
+                },
+                error: function () {
+                  alert('An error occurred while booking. Please try again.');
+                  btn.prop('disabled', false).text('Book Now');
+                }
+              });
+            }
+          },
+          error: function () {
+            // Handle AJAX error
+            alert('An error occurred while checking status. Please try again.');
+            btn.prop('disabled', false).text('Book Now');
+          }
+        });
+
         // Build the dynamic URL with route parameters
-        var routeUrl = '<?php echo base_url(); ?>help_desk/add/' + bookingId + '/' + patientId + '/' + modType  + '/' +  referredBy;
+        var routeUrl = '<?php echo base_url(); ?>doctore_patient/add/' + bookingId + '/' + patientId + '/' + referredBy;
 
         // Select the modal
         var $modal = $('#load_add_medicine_unit_modal_popup');
@@ -634,6 +665,37 @@ $users_data = $this->session->userdata('auth_users');
         $modal.load(routeUrl, function () {
           // Show the modal once content is loaded
           $modal.modal('show');
+        });
+      });
+
+      $(document).on('click', '.refresh-btn-doctore', function () {
+        const patientId = $(this).data('patient_id');
+        const refreshButton = $(this);
+
+        if (!patientId) {
+          alert('Patient ID is missing!');
+          return;
+        }
+
+        refreshButton.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
+
+        $.ajax({
+          url: 'doctore_patient/update_status_opd',
+          type: 'POST',
+          data: { patient_id: patientId },
+          dataType: 'json',
+          success: function (response) {
+            if (response.status === 'success') {
+              reload_table();
+            } else {
+              alert(response.message || 'Failed to update status.');
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX Error:', error);
+            alert('An error occurred while updating the status.');
+          },
+
         });
       });
     </script>

@@ -142,6 +142,7 @@ class Hess_chart extends CI_Controller
       $row[] = $gender[$prescription->gender];
       $row[] = $prescription->mobile_no;
       $row[] = $age;
+      $row[] = $prescription->hess_chart_status == 0 ? '<font color="green">Pending</font>' : '<font color="red">Completed</font>';
       $statuses = explode(',', $prescription->pat_status);
 
       // Trim any whitespace from the statuses and get the last one
@@ -223,8 +224,22 @@ class Hess_chart extends CI_Controller
       //     }
       // }
 
+      $send_to = '';
+      if ($prescription->hess_chart_status == 0) {
+          $send_to = '<button type="button" class="btn-custom open-popup-send-to" 
+                      id="open-popup" 
+                      data-booking-id="' . $prescription->booking_id . '" 
+                      data-patient-id="' . $prescription->patient_id . '" 
+                      data-referred-by="' . $prescription->attended_doctor . '" 
+                      data-mod-type="hess_chart" 
+                      data-url="' . $prescription->url . '" 
+                      title="">Send To</button>';
+        }else{
+          $send_to = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Send To</a>';
+        }
+
       // Add buttons to the row
-      $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $btn_contact_lens . $btn_hess_chart;
+      $row[] = $btn_print_pre . $btn_upload_pre . $btn_view_upload_pre . $btn_edit . $btn_view . $btn_delete . $btn_contact_lens . $btn_hess_chart . $send_to;
       $row[] = $prescription->emergency_status;
 
       $data[] = $row;
