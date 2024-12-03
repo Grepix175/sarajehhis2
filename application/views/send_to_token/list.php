@@ -459,17 +459,17 @@ $users_data = $this->session->userdata('auth_users');
               <i class="fa fa-plus"></i> New
             </button> -->
           <?php } ?>
-          <a data-toggle="tooltip" title="Download list in excel" href="#" id="ortho_peadics_excel"
+          <!-- <a data-toggle="tooltip" title="Download list in excel" href="#" id="ortho_peadics_excel"
             class="btn-anchor m-b-2">
             <i class="fa fa-file-excel-o"></i> Excel
           </a>
           <a data-toggle="tooltip" title="Download list in pdf" href="#" id="ortho_paedic_pdf" class="btn-anchor m-b-2">
             <i class="fa fa-file-pdf-o"></i> PDF
-          </a>
+          </a> -->
           <?php if (in_array('2488', $users_data['permission']['action'])) { ?>
-            <button class="btn-update" id="deleteAll" onclick="return checkboxValues();">
+            <!-- <button class="btn-update" id="deleteAll" onclick="return checkboxValues();">
               <i class="fa fa-trash"></i> Delete
-            </button>
+            </button> -->
           <?php } ?>
           <?php if (in_array('2486', $users_data['permission']['action'])) { ?>
             <button class="btn-update" onclick="reload_table()">
