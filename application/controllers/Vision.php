@@ -252,20 +252,20 @@ class Vision extends CI_Controller
                 }
             }
             // Validate the form
-            $valid_response = $this->_validate();
+            // $valid_response = $this->_validate();
 
             // Check if validation passed
-            if ($valid_response === true) {
+            // if ($valid_response === true) {
                 // If validation passes, save the record
                 $this->vision_model->save($this->input->post()); // Save the validated data
                 $this->session->set_flashdata('success', 'Vision store successfully.');
                 echo json_encode(['success' => true, 'message' => 'Vision store successfully.']);
                 return; // Exit to prevent further output
-            } else {
-                // Handle validation errors
-                $data['form_data'] = $valid_response['form_data']; // Retain form data for re-display
-                $data['form_error'] = validation_errors(); // Get validation errors
-            }
+            // } else {
+            //     // Handle validation errors
+            //     $data['form_data'] = $valid_response['form_data']; // Retain form data for re-display
+            //     $data['form_error'] = validation_errors(); // Get validation errors
+            // }
         }
 
 
@@ -365,7 +365,7 @@ class Vision extends CI_Controller
     {
         $this->load->library('form_validation');
         $post = $this->input->post();
-        // echo "<pre>";print_r($post);die;
+        echo "<pre>";print_r($post);die;
 
         // Assuming this function returns the necessary fields
         $field_list = mandatory_section_field_list(2);

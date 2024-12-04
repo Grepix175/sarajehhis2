@@ -336,7 +336,7 @@ $field_list = mandatory_section_field_list(2);
                                         <?php endif; ?>
                                     </select> -->
                                     <select name="side_effects" id="side_effects" class="m_input_default">
-                                        <option value="">Select Patient Category</option>
+                                        <option value="">Select Side Effects</option>
                                         <?php
 
                                         if (!empty($side_effects)) {
