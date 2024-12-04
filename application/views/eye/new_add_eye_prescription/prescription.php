@@ -288,17 +288,18 @@ $users_data = $this->session->userdata('auth_users');
 
           // Step 3: Remove duplicate values from the array
           $pat_status_array = array_unique($pat_status_array);
+          
 
           $button_actions = [
             'refraction_above_8_years' => 'Refraction above 8 years',
             'vision' => 'Vision',
             'contact_lens' => 'Contact Lens',
-            'low_vision' => 'Low Vision',
+            'low_vision' => 'Low vision',
             'hess_chart' => 'Hess Chart',
             'refraction_below_8_years' => 'Refraction below 8 years',
             'dilate' => 'Dilate',
             'prosthetic' => 'Prosthetic',
-            'oct_hfa' => 'OCT HFA',
+            'oct_hfa' => 'OCT-HFA',
             'ortho_paedic' => 'Ortho Paedic'
           ];
           ?>
@@ -351,6 +352,11 @@ $users_data = $this->session->userdata('auth_users');
                   </a> 
 
                 </div> -->
+                <?php
+                // echo "<pre>";
+                // print_r($button_actions);
+                // die('sagar');
+                ?>
                 <div class="button-group">
                   <?php foreach ($button_actions as $key => $action): ?>
                     <a href="javascript:void(0)" class="btn btn-custom" onclick="return print_window_page('<?php

@@ -591,7 +591,7 @@ class Dilate_model extends CI_Model
 
 					// Concatenate the current status with the new status (e.g., 'Low vision')
 					// $new_status = $current_status . ', ' . 'Dilated';
-					$new_status = $current_status . ', Dilated';
+					$new_status = $current_status . ', Dilate';
 
 					// Update the 'pat_status' field with the concatenated value
 					$this->db->where('id', $post['patient_id']);
