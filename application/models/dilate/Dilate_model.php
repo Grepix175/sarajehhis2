@@ -576,7 +576,7 @@ class Dilate_model extends CI_Model
 		if (
 
 			(isset($post['send_to_type']) &&
-				in_array($post['send_to_type'], ['Dilated'])
+				in_array($post['send_to_type'], ['Dilate'])
 			)
 		) {
 
