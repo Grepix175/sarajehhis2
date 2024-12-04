@@ -209,9 +209,9 @@ class Low_vision extends CI_Controller
         if (isset($post) && !empty($post)) {
             // echo "<pre>";print_r($post);die('dfk');
             $patient_exists = $this->low_vision->patient_exists($post['patient_id']);
-            $result_exists = $this->low_vision->get_by_id($id);
+            $result_exists = $this->low_vision->get_by_id($post['id']);
             //   echo "<pre>";
-            // print_r( $patient_exists);
+            // print_r( $result_exists);
             // die;
             if(empty($post['id'])){
                 if ($patient_exists) {
@@ -286,7 +286,7 @@ class Low_vision extends CI_Controller
                 'final_advice' => isset($final_advice) ? $final_advice : '',
                 'referred_for' => isset($referred_for) ? $referred_for : '',
                 'follow_up' => isset($follow_up) ? $follow_up : '',
-                'status' => isset($result_exists) && $result_exists['status'] == 1 ? 1 : 0,
+                'status' => isset($result_exists) && $result_exists['low_status'] == 1 ? 1 : 0,
                 'is_deleted' => 0,
                 'created_by' => isset($created_by) ? $created_by : '',
                 'created_date' => date('Y-m-d H:i:s'),
