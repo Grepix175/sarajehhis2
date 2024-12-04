@@ -965,7 +965,9 @@ $field_list = mandatory_section_field_list(3);
                         <!-- <a title="Add Patient Category" class="btn-new" id="patient_category_add_modal"><i
                             class="fa fa-plus"></i> New</a> -->
                       <?php } ?>
-
+                      <?php if (!empty($form_error)) {
+                  echo form_error('patient_category');
+                } ?>
                     </div>
                   </div>
                 </div>
