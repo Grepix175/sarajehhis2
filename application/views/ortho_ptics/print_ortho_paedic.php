@@ -595,25 +595,25 @@ $field_list = mandatory_section_field_list(2);
                         <div class="col-md-6">
                             <h4 style="margin-left: 0px;"><strong>History: </strong></h4>
                             <section>
-                                <div class="" style="margin-left: 15px; margin-top:15px">
+                                <div class="" style="margin-left: 15px; margin-top:5px">
                                     <label><strong>Main Complaints: </strong>
                                         <?php echo $data_list['main_complaints'] ?></label>
                                 </div>
-                                <div class="" style="margin-left: 15px; margin-top:25px;">
+                                <div class="" style="margin-left: 15px; margin-top:5px;">
                                     <label><strong>Hours of near work/computer use & related details:
                                         </strong> <?php echo $data_list['hours_of_work_computer']; ?></label>
                                 </div>
 
-                                <div class="" style="margin-left: 15px; margin-top:25px;">
+                                <div class="" style="margin-left: 15px; margin-top:5px;">
                                     <label><strong>Associated Symptoms:</strong>
                                         <?php echo $data_list['associated_symptoms']; ?></label>
 
                                 </div>
-                                <div class="" style="margin-left: 15px; margin-top:25px;">
+                                <div class="" style="margin-left: 15px; margin-top:5px;">
                                     <label><strong>Previous History of Orthoptics Treatment & related Details(Compliance
                                             etc.): </strong> <?php echo $data_list['previ_his_of_ortho']; ?></label>
                                 </div>
-                                <div class="" style="margin-left: 15px; margin-top:25px;">
+                                <div class="" style="margin-left: 15px; margin-top:5px;">
                                     <label><strong>General Health & Medication Details: </strong>
                                         <?php echo $data_list['gene_heal_medi_deta']; ?></label>
 
@@ -621,7 +621,7 @@ $field_list = mandatory_section_field_list(2);
                             </section>
                         </div>
                         <div class="col-md-6">
-                            <h4 style="margin-left: 15px;"><strong>Refraction: </strong></h4>
+                            <h4 style="margin-left: 5px;"><strong>Refraction: </strong></h4>
                             <!-- UnVn Row -->
                             <table class="table table-bordered">
                                 <thead class="bg-info">
@@ -681,13 +681,13 @@ $field_list = mandatory_section_field_list(2);
                     <div class="row">
                         <div class="col-md-3">
                             <section>
-                                <div class="" style="margin-left: 15px; margin-top:15px">
+                                <div class="" style="margin-left: 15px; margin-top:0px">
                                     <label><strong>Additional testing: </strong>
                                         <?php echo $data_list['addi_test'] ?></label>
                                 </div>
                             </section>
                             <section>
-                                <div class="" style="margin-left: 15px; margin-top:15px">
+                                <div class="" style="margin-left: 15px; margin-top:10px">
                                     <label><strong>Details regarding Adaption: </strong>
                                         <?php echo $data_list['addi_test'] ?></label>
                                 </div>
@@ -700,26 +700,26 @@ $field_list = mandatory_section_field_list(2);
                     <div class="row">
                         <div class="col-md-6">
                             <section>
-                                <div class="" style="margin-left: 15px; margin-top:15px">
+                                <div class="" style="margin-left: 15px; margin-top:5px">
                                     <label><strong>Sensory Evaluation: </strong>
                                         <?php echo $data_list['senso_evalu'] ?></label>
                                 </div>
                             </section>
                             <section>
-                                <div class="" style="margin-left: 15px; margin-top:15px">
+                                <div class="" style="margin-left: 15px; margin-top:5px">
                                     <label><strong>Stereopsis(Near) with Randot Stereo: </strong>
                                         <?php echo $data_list['stere_with_rando_stere'] ?></label>
                                 </div>
                             </section>
                             <section>
-                                <div class="" style="margin-left: 15px; margin-top:15px">
+                                <div class="" style="margin-left: 15px; margin-top:5px">
                                     <label><strong>Motor Evaluation: </strong>
                                         <?php echo $data_list['motor_evaluation'] ?></label>
                                 </div>
                             </section>
                         </div>
                         <div class="col-md-6">
-                            <section style="float:left;width:48%;margin-right: 10px;">
+                            <section style="float:left;width:48%;margin-right: 5px;">
                                 <table class="table table-bordered">
                                     <thead class="bg-info">
                                         <tr>
@@ -737,7 +737,7 @@ $field_list = mandatory_section_field_list(2);
                                     </tbody>
                                 </table>
                             </section>
-                            <section style="float:left;width:48%;margin-right: 10px;">
+                            <section style="float:left;width:48%;margin-right: 5px;">
                                 <table class="table table-bordered">
                                     <thead class="bg-info">
                                         <tr>
