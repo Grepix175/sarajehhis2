@@ -431,7 +431,7 @@ $field_list = mandatory_section_field_list(2);
                             <tr>
                                 <td class="info-label">Date/Time</td>
                                 <td class="info-content">:
-                                    <?php echo date('d-m-Y h:i A', strtotime($form_data['created_date'])); ?>
+                                    <?php echo date('d-m-Y h:i A', strtotime($booking_data['created_date'])); ?>
                             </tr>
                         </table>
                     </td>

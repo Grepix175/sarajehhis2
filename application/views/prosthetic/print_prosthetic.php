@@ -559,7 +559,7 @@ $field_list = mandatory_section_field_list(2);
                             <tr>
                                 <td class="info-label">Date/Time</td>
                                 <td class="info-content">:
-                                <?php echo date('d-m-Y h:i A', strtotime($booking_data['created_date'])); ?>
+                                    <?php echo date('d-m-Y h:i A', strtotime($booking_data['created_date'])); ?>
                                 </td>
                             </tr>
                         </table>
@@ -626,22 +626,7 @@ $field_list = mandatory_section_field_list(2);
                         <strong>CONTACT LENS CLINIC / PROSTHETIC WORK SHEET</strong>
                     </td>
                 </tr>
-            </table>
-
-
-
-            <?php //echo"<pre>";print_r($data_list[0]);die; ?>
-            <input type="hidden" id="id" name="id"
-                value="<?php echo isset($data_list['id']) ? $data_list['id'] : ''; ?>">
-            <input type="hidden" id="booking_id" name="booking_id"
-                value="<?php echo isset($data_list['booking_id']) ? $data_list['booking_id'] : ''; ?>">
-            <input type="hidden" id="branch_id" name="branch_id"
-                value="<?php echo isset($data_list['branch_id']) ? $data_list['branch_id'] : ''; ?>">
-            <input type="hidden" id="booking_code" name="booking_code"
-                value="<?php echo isset($data_list['booking_code']) ? $data_list['booking_code'] : ''; ?>">
-            <input type="hidden" id="pres_id" name="pres_id" value="<?php echo isset($id) ? $id : ''; ?>">
-            <input type="hidden" id="patient_id" name="patient_id"
-                value="<?php echo isset($data_list['patient_id']) ? $data_list['patient_id'] : ''; ?>">
+            </table>       
 
 
             <div class="panel-body" style="padding:0px;">
@@ -672,10 +657,7 @@ $field_list = mandatory_section_field_list(2);
 
 
                 <div class="grp" style="">
-                    <!-- <div class="col-md-2"> -->
-                    <!-- <div class="label_name">                <i onclick="refraction_ar_ltr_plated();" title="Copy Left to Right"></i></div> -->
-
-                    <!-- </div> -->
+                   
                     <div class="box-right">
                         <table class="table table-bordered"
                             style="width:100%; font-size:12px; border-collapse:collapse;">
@@ -1042,4 +1024,5 @@ $field_list = mandatory_section_field_list(2);
         </div>
     </div>
 </body>
+
 </html>

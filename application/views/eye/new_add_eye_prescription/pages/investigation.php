@@ -160,7 +160,7 @@
 
 							<?php //echo "<pre>"; print_r($ophthal_data['ophthal_test']);die();
 							$i = 0;
-							if ($ophthal_data['ophthal_test']) {
+							if (!empty($ophthal_data['ophthal_set']) && is_array($ophthal_data['ophthal_set'])) {
 								foreach ($ophthal_data['ophthal_set'] as $investigation) {
 									?>
 									<table class="table table-bordered add_opthal_<?php echo $i; ?>">
