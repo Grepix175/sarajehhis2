@@ -114,7 +114,7 @@ class Oct_hfa extends CI_Controller
 
             // Display the last status with the desired styling
             $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';
-            $row[] = date('d-M-Y', strtotime($oct_hfa->created));
+            $row[] = date('d-m-Y h:i A', strtotime($oct_hfa->created));
             $send_to = '';
             if ($oct_hfa->oct_status == 0) {
                 $send_to = '<button type="button" class="btn-custom open-popup-send-to" 
@@ -722,6 +722,7 @@ class Oct_hfa extends CI_Controller
     {
         // echo "ppk";die;
         $data['print_status'] = "1";
+        $data['page_title'] = "OCT HFA";
         $data['data_list'] = $this->oct_hfa->search_report_data($booking_id,$id);
         $data['booking_data'] = $this->oct_hfa->get_booking_by_id($booking_id,$id);
         // echo "<pre>";print_r($booking_id);print_r($id);die;

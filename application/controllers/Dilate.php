@@ -98,7 +98,7 @@ class Dilate extends CI_Controller
             $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';
 
             // Created at date (showing created date from the first record in the group)
-            $row[] = date('d-M-Y', strtotime($records[0]->created_date));
+            $row[] = date('d-m-Y h:i A', strtotime($records[0]->created_date));
             
             // echo "<pre>";
             // print_r($patient_id);
@@ -156,6 +156,7 @@ class Dilate extends CI_Controller
         $data['page_title'] = 'Add Dilate Record';
         $result = $this->add_prescript->get_new_data_by_id($booking_id);
         $data['datas'] = $result;
+       
 
         // echo "<pre>";print_r($booking_id);die;
         $data['booking_id'] = isset($booking_id) ? $booking_id : '';
@@ -406,6 +407,7 @@ class Dilate extends CI_Controller
             $data['booking_data'] = $this->dilate->get_booking_by_p_id($result[0]['booking_id'],$result[0]['patient_id']);
             $data['medicine'] = $this->dilate->get_item_by_medicine($result['drop_name']);
             $data['medicines'] = $this->dilate->get_all_medicines();
+            $data['datas'] = $result;
             // echo "<pre>";print_r($result);die;
 
             // If no result is found, handle the error
@@ -705,6 +707,7 @@ class Dilate extends CI_Controller
     public function print_dilate($id)
     {
         $data['print_status'] = "1";
+        $data['page_title'] = "Dilate";
 
         // Fetch the form data based on the ID
         $result = $this->dilate->get_by_id($id);

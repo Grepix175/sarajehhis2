@@ -128,7 +128,7 @@ class Doctore_patient extends CI_Controller
 
             $row[] = $doctore_patient->doctor_name;
             $row[] = $doctore_patient->room_no;
-            $row[] = date('d-M-Y', strtotime($doctore_patient->created_date));
+            $row[] = date('d-m-Y h:i A', strtotime($doctore_patient->created_date));
 
             $btn_history = '';
             $btn_add_eye_history='';

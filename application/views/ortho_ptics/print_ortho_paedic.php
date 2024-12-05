@@ -8,7 +8,7 @@ $field_list = mandatory_section_field_list(2);
 <html>
 
 <head>
-    <!-- <title><?php echo $page_title . PAGE_TITLE; ?></title> -->
+    <title><?php echo $page_title . PAGE_TITLE; ?></title>
     <meta name="viewport" content="width=1024">
 
 
@@ -444,9 +444,36 @@ $field_list = mandatory_section_field_list(2);
             text-align: left !important;
         }
 
-        /* ul{
-            font-size: 15px;
-        } */
+        /* Header Section */
+        .header-print {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-bottom: 2px solid black;
+        }
+
+        .logo {
+            width: 80px;
+            height: auto;
+        }
+
+        .hospital-info {
+            text-align: right;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .hospital-info h1 {
+            font-size: 18px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .hospital-info p {
+            margin: 5px 0 0;
+        }
     </style>
 
 
@@ -457,9 +484,17 @@ $field_list = mandatory_section_field_list(2);
 
 <body>
     <div class="container-fluid">
+        <div class="header-print">
+            <img width="280px" src="https://cdn.hexahealth.com/Image/996a9a6d-24fc-48f0-9464-93d36f0f8cfd.jpg">
+            <div class="hospital-info">
+                <h1>JAMSHEDPUR EYE HOSPITAL</h1>
+                <p>Sakchi, Jamshedpur- 831001, Jharkhand, India</p>
+                <p>Phone: (0657) 2432203, 2422933; Email: jamshedpureyehospital@gmail.com</p>
+            </div>
+        </div>
         <?php //echo "<pre>";print_r($data_list);die; ?>
         <div class="panel-body" style="padding:0px;">
-            <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p>
+            <!-- <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p> -->
             <?php
             // Loop through the contact lens data
             $age_y = $booking_data['age_y'] ?? '';
@@ -527,6 +562,12 @@ $field_list = mandatory_section_field_list(2);
                                     <?php echo ($booking_data['gender'] == '0') ? 'Female' : 'Male'; ?>
                                 </td>
                             </tr>
+                            <tr>
+                                <td class="info-label">Date/Time</td>
+                                <td class="info-content">:
+                                <?php echo date('d-m-Y h:i A', strtotime($booking_data['created_date'])); ?>
+                                </td>
+                            </tr>
                         </table>
                     </td>
                 </tr>
@@ -544,7 +585,8 @@ $field_list = mandatory_section_field_list(2);
                 $squint_history = (array) $squint_history;
                 // echo "<pre>";print_r($squint_history);die;
                 ?>
-                <div class="panel-body" style="float:left;width:100%;margin:2px 2px;position:relative; border:1px solid; padding:5px;">
+                <div class="panel-body"
+                    style="float:left;width:100%;margin:2px 2px;position:relative; border:1px solid; padding:5px;">
                     <div class="row" style="font-size: 15px; font-weight: normal;">
                         <div class="col-xs-2" style="margin-left: 15px;margin-top: 10px;"><strong>Referred by: </strong>
                             <?php echo $data_list['doctor_name']; ?></div>
@@ -769,7 +811,6 @@ $field_list = mandatory_section_field_list(2);
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </body>
 

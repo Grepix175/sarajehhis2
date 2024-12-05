@@ -8,7 +8,7 @@ $field_list = mandatory_section_field_list(2);
 <html>
 
 <head>
-    <!-- <title><?php echo $page_title . PAGE_TITLE; ?></title> -->
+    <title><?php echo $page_title . PAGE_TITLE; ?></title>
     <meta name="viewport" content="width=1024">
 
 
@@ -436,6 +436,37 @@ $field_list = mandatory_section_field_list(2);
             border: 1px solid #ddd;
             /* Define border style */
         }
+
+        /* Header Section */
+        .header-print {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-bottom: 2px solid black;
+        }
+
+        .logo {
+            width: 80px;
+            height: auto;
+        }
+
+        .hospital-info {
+            text-align: right;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .hospital-info h1 {
+            font-size: 18px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .hospital-info p {
+            margin: 5px 0 0;
+        }
     </style>
 
 
@@ -446,10 +477,18 @@ $field_list = mandatory_section_field_list(2);
 
 <body>
     <div class="container-fluid">
+        <div class="header-print">
+            <img width="280px" src="https://cdn.hexahealth.com/Image/996a9a6d-24fc-48f0-9464-93d36f0f8cfd.jpg">
+            <div class="hospital-info">
+                <h1>JAMSHEDPUR EYE HOSPITAL</h1>
+                <p>Sakchi, Jamshedpur- 831001, Jharkhand, India</p>
+                <p>Phone: (0657) 2432203, 2422933; Email: jamshedpureyehospital@gmail.com</p>
+            </div>
+        </div>
 
         <?php //echo "<pre>";print_r($data_list);die; ?>
         <div class="panel-body" style="padding:0px;">
-            <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p>
+            <!-- <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p> -->
             <?php
             // Loop through the contact lens data
             $age_y = $booking_data['age_y'] ?? '';
@@ -514,7 +553,14 @@ $field_list = mandatory_section_field_list(2);
                             <tr>
                                 <td class="info-label">Gender</td>
                                 <td class="info-content">:
-                                    <?php echo ($booking_data['gender'] == '0') ? 'Female' : 'Male'; ?></td>
+                                    <?php echo ($booking_data['gender'] == '0') ? 'Female' : 'Male'; ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="info-label">Date/Time</td>
+                                <td class="info-content">:
+                                <?php echo date('d-m-Y h:i A', strtotime($booking_data['created_date'])); ?>
+                                </td>
                             </tr>
                         </table>
                     </td>
@@ -583,7 +629,7 @@ $field_list = mandatory_section_field_list(2);
             </table>
 
 
-           
+
             <?php //echo"<pre>";print_r($data_list[0]);die; ?>
             <input type="hidden" id="id" name="id"
                 value="<?php echo isset($data_list['id']) ? $data_list['id'] : ''; ?>">
@@ -882,7 +928,8 @@ $field_list = mandatory_section_field_list(2);
                 <div class="form-group col-md-12" style="padding:0px;padding-top:5px;">
                     <h4>Informed Consent for Contact Lens Trial</h4>
                     <p>
-                        I, <strong><?php echo $booking_data['patient_name'];?></strong>, underwent contact lens trial & understood
+                        I, <strong><?php echo $booking_data['patient_name']; ?></strong>, underwent contact lens trial &
+                        understood
                         the process of contact lens handling (insertion, removal & care regimen).
                         I am responsible for delivered contact lens now.
                     </p>
@@ -993,13 +1040,6 @@ $field_list = mandatory_section_field_list(2);
             </div>
 
         </div>
-        <div id="load_add_type_modal_popup" class="modal fade" role="dialog" data-backdrop="static"
-            data-keyboard="false"></div>
-
-
-
+    </div>
 </body>
-
-
-
 </html>

@@ -263,20 +263,25 @@ class Dilate_model extends CI_Model
 		return $query;
 	}
 
-	public function dilate_stop($booked_id = 's')
+	public function dilate_stop($booked_id = '')
 	{
+		// echo "<pre>";
+		// print_r($booked_id);
+		// die('asdvhasd');
 		if (empty($booked_id)) {
 			return false;
 		}
 
 		// Assuming 'dilate_status' 2 means "stopped"
 		// Update hms_opd_booking table
-		$this->db->set('dilate_status', 2);  // Set status to 'stopped'
+		$this->db->set('dilate_time', '0000-00-00 00:00:00');
+		$this->db->set('dilate_status', 0);  // Set status to 'stopped'
 		$this->db->where('id', $booked_id);
 		$this->db->update('hms_opd_booking');
 
 		// Update hms_dilated table for the same booking_id
-		$this->db->set('dilate_status', 2);  // Set status to 'stopped'
+		$this->db->set('dilate_time', '0000-00-00 00:00:00');
+		$this->db->set('dilate_status', 0);  // Set status to 'stopped'
 		$this->db->where('booking_id', $booked_id);  // Assuming booking_id corresponds to id in hms_opd_booking
 		return $this->db->update('hms_dilated');
 	}
@@ -342,7 +347,9 @@ class Dilate_model extends CI_Model
 
 	public function get_by_id($id)
 	{
-
+		// echo "<pre>";
+		// print_r($id);
+		// die('askjbda');
 		// Select fields from the main 'hms_dilated' table and join other related tables
 		$this->db->select("hms_dilated.*, hms_medicine.medicine_name,hms_opd_booking.token_no"); // Assuming you want to get medicine name
 

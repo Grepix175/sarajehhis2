@@ -170,6 +170,10 @@ class Add_eye_prescription extends CI_Controller
     $data['lab_investigations'] = $this->general_model->lab_test_list();
     $data['ophthal_set'] = $this->general_model->ophthal_set();
     $data['lab_set'] = $this->general_model->lab_set();
+    
+    //  echo "<pre>";
+    //     print_r($data['lab_set']);
+    //     die('sagar');
     $data['radiology_set'] = $this->general_model->radiology_set();
     $data['xray_mri_investigation'] = $this->general_model->xray_mri_investigation();
     /* Investigation Tab */
@@ -1351,6 +1355,9 @@ class Add_eye_prescription extends CI_Controller
       $users_data = $this->session->userdata('auth_users');
       $this->load->model('general/general_model');
       $result = $this->add_prescript->get_commonly_icd($id);
+      // echo "<pre>";
+      // print_r($result);
+      // die;
       $icd_code = $result['icd_id'];
       $icd_name = $result['descriptions'];
 
@@ -1417,7 +1424,9 @@ class Add_eye_prescription extends CI_Controller
         'done_by' => $users_data['username'],
         'user_id' => $user_data['id']
       );
-
+      // echo "<pre>";
+      // print_r($data);
+      // die;
 
       $this->load->view('eye/new_add_eye_prescription/pages/diagnosis_hirerachy', $data);
     }
@@ -1819,7 +1828,7 @@ class Add_eye_prescription extends CI_Controller
     $form_data = $this->prescription->get_by_ids($pres_id);
     $data['form_data'] = $form_data;
     // echo "<pre>";
-    // print_r($data['form_data']['token_no']);
+    // print_r($pres_id);
     // die;
     $data['token_no'] = $data['form_data']['token_no'] ?? '';
     $data['page_title'] = $data['form_data']['patient_name'] . " Prescription";
@@ -1827,10 +1836,10 @@ class Add_eye_prescription extends CI_Controller
     $pres_result = $this->add_prescript->get_prescription_by_id($booking_id, $pres_id);
 
     $result_edit = $this->add_prescript->get_prescription_new_by_id($booking_id, $pres_id);
-    // echo "<pre>";
-    // print_r($result_edit);
-    // die;
     $data['drawing_list'] = $this->add_prescript->get_drawing($booking_id, $pres_id);
+    // echo "<pre>";
+    // print_r($data['drawing_list']);
+    // die;
     $result_refraction = $this->add_prescript->get_prescription_refraction_new_by_id($booking_id, $pres_id);
 
     $result_examination = $this->add_prescript->get_prescription_examination_id($booking_id, $pres_id);
@@ -2171,6 +2180,7 @@ class Add_eye_prescription extends CI_Controller
     $header_replace_part = str_replace("{booking_code}", $form_data['booking_code'], $header_replace_part);
     $header_replace_part = str_replace("{mobile_no}", $form_data['mobile_no'], $header_replace_part);
     $header_replace_part = str_replace("{gender}", $gender[$form_data['gender']], $header_replace_part);
+    $header_replace_part = str_replace("{created_date}", date('d-m-Y h:i A', strtotime($form_data['created_date'])), $header_replace_part);
 
 
     // $header_replace_part = str_replace("{patient_address}", $form_data['paddress'] . ' ' . $form_data['paddress1'] . ' ' . $form_data['paddress2'], $header_replace_part);
@@ -2211,12 +2221,18 @@ class Add_eye_prescription extends CI_Controller
     $this->m_pdf->pdf->WriteHTML($stylesheet,1); */
     $flag = $this->input->get('flag') ?? '';
     // die($flag);
+    $data['flag'] = $flag;
     if (!empty($flag) && $flag == 'refraction_below_8_years') {
       $middle_replace = $this->load->view('refraction_below8/view', $data, true);
     } elseif (!empty($flag) && $flag == 'hess_chart') {
+    //    echo "<pre>";
+    // print_r($data);
+    // die;
       $middle_replace = $this->load->view('hess_chart/view', $data, true);
     } else {
-
+      // echo "<pre>";
+      // print_r($data);
+      // die();
       $middle_replace = $this->load->view('help_desk/view', $data, true);
 
     }

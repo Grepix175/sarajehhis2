@@ -58,8 +58,7 @@ class Contact_lens extends CI_Controller
             $patient_status = $this->opd->get_by_id_patient_status($contact_lens->booking_id);
             if ($patient_status == 1) {
                 $pat_status = '<font style="background-color: #228B22;color:white">Vision</font>';
-            }
-            else {
+            } else {
                 $pat_status = '<font style="background-color: #1CAF9A;color:white">Not Arrived</font>';
             }
             $age_y = $contact_lens->age_y;
@@ -106,7 +105,7 @@ class Contact_lens extends CI_Controller
             $last_status = trim(end($statuses));
 
             // Display the last status with the desired styling
-            $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';
+            $row[] = '<font style="background-color: #228B30;color:white">' . $last_status . '</font>';
             // Trim any whitespace from the statuses and get the last one
             $last_status = trim(end($statuses));            // $row[] = $contact_lens->hospital_code;
             // $row[] = $contact_lens->item_description;
@@ -114,10 +113,10 @@ class Contact_lens extends CI_Controller
             // $row[] = $contact_lens->qty;
             // $row[] = $contact_lens->unit;
             // $row[] = $contact_lens->hospital_rate;
-            $row[] = date('d-M-Y', strtotime($contact_lens->created_date));
+            $row[] = date('d-m-Y h:i A', strtotime($contact_lens->created_date));
 
             $send_to = '';
-        // echo "<pre>";print_r($list);die;
+            // echo "<pre>";print_r($list);die;
 
             if ($contact_lens->status == 0) {
                 $send_to = '<button type="button" class="btn-custom open-popup-send-to" 
@@ -128,9 +127,9 @@ class Contact_lens extends CI_Controller
                             data-mod-type="contact_lens" 
                             data-url="' . $contact_lens->url . '" 
                             title="">Send To</button>';
-              }else{
+            } else {
                 $send_to = '<a class="btn-custom disabled" href="javascript:void(0);" title="Send To Vision" style="pointer-events: none; opacity: 0.6;" data-url="512"> Send To</a>';
-              }
+            }
 
             // Add action buttons
             $row[] = '<a onClick="return edit(' . $contact_lens->id . ', ' . $contact_lens->booking_id . ', ' . $contact_lens->patient_id . ');" class="btn-custom" href="javascript:void(0)" title="Edit">
@@ -141,8 +140,8 @@ class Contact_lens extends CI_Controller
             <i class="fa fa-print"></i> Print
         </a>
         
-        '  . $send_to;
-        $row[] = $contact_lens->emergency_status;
+        ' . $send_to;
+            $row[] = $contact_lens->emergency_status;
 
             $data[] = $row;
         }
@@ -193,14 +192,14 @@ class Contact_lens extends CI_Controller
         // die;
         // Check if the form is submitted
         if (isset($post) && !empty($post)) {
-        //     echo "<pre>";
-        //   print_r( 'sagar');
-        //   die;
+            //     echo "<pre>";
+            //   print_r( 'sagar');
+            //   die;
             $patient_exists = $this->contact_lens->patient_exists($post['patient_id']);
             //   echo "<pre>";
             // print_r( $patient_exists);
             // die;
-            if(empty($post['data_id'])){
+            if (empty($post['data_id'])) {
                 if ($patient_exists) {
                     // Redirect to OPD list page with a warning message
                     $this->session->set_flashdata('warning', 'Patient ' . $patient_exists['patient_name'] . ' is already in contact lens.');
@@ -637,19 +636,30 @@ class Contact_lens extends CI_Controller
     {
         $data['print_status'] = "1";
         $data['data_list'] = $this->contact_lens->search_report_data($id, $booking_id, $patient_id);
-        // echo "<pre>";
-        // print_r($data['data_list']);
-        // die;
+
+        $created_date = '';
+        if (!empty($data['data_list'][0]['contact_lens']) && is_array($data['data_list'][0]['contact_lens'])) {
+            foreach ($data['data_list'][0]['contact_lens'] as $contactLens) {
+                if (isset($contactLens['created_date'])) {
+                    $created_date = $contactLens['created_date'];
+                    // Optionally break the loop if you only need the first created_date
+                    break;
+                }
+            }
+        }
+        $data['created_date'] = $created_date;
+       
+
         $this->load->view('contact_lens/contact_lens_html', $data);
     }
 
 
     public function get_item_details()
     {
-        
+
         $this->load->model('hospital_code_entry/hospital_code_entry_model', 'hospital_entry');
         $hospital_code_id = $this->input->post('hospital_code');
-        
+
 
         if ($hospital_code_id) {
             // Fetch data based on hospital_code
@@ -669,9 +679,9 @@ class Contact_lens extends CI_Controller
     // public function get_item_details() {
     //     $hospital_code = $this->input->post('hospital_code');
     //     $this->load->model('hospital_code_entry/hospital_code_entry_model', 'hospital_entry');
-        
+
     //     $item_details = $this->hospital_entry->get_item_by_code($hospital_code); // Implement this in your model
-    
+
     //     if ($item_details) {
     //         echo json_encode(['item' => $item_details]);
     //     } else {

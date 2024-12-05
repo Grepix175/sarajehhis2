@@ -118,7 +118,7 @@ class Ortho_ptics extends CI_Controller
 
             // Display the last status with the desired styling
             $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';
-            $row[] = date('d-M-Y', strtotime($ortho_ptics->created));
+            $row[] = date('d-m-Y h:i A', strtotime($ortho_ptics->created));
 
             $send_to = '';
             if ($ortho_ptics->ortho_status == 0) {
@@ -546,6 +546,7 @@ class Ortho_ptics extends CI_Controller
     {
         // echo "ppk";die;
         $data['print_status'] = "1";
+        $data['page_title'] = "Ortho Peadics";
         $data['data_list'] = $this->ortho_ptics->search_report_data($booking_id,$id);
         $data['booking_data'] = $this->ortho_ptics->get_booking_by_id($booking_id,$id);
         $data['doctor'] = $this->doctor->doctors_list();

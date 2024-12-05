@@ -231,8 +231,8 @@ $users_data = $this->session->userdata('auth_users');
               </div>
 
               <div class="row m-b-5">
-                <div class="col-xs-4"><label> Booking Type</label></div>
-                <div class="col-xs-8">
+                <div class="col-xs-5"><label> Booking Type</label></div>
+                <div class="col-xs-7">
                   <input name="emergency_booking" id="emergency_booking" onclick="return form_submit();" value="3"
                     type="radio" <?php if ($form_data['emergency_booking'] == '3') {
                       echo 'checked';

@@ -288,7 +288,7 @@ $users_data = $this->session->userdata('auth_users');
 
           // Step 3: Remove duplicate values from the array
           $pat_status_array = array_unique($pat_status_array);
-          
+
 
           $button_actions = [
             'refraction_above_8_years' => 'Refraction above 8 years',
@@ -677,7 +677,7 @@ $users_data = $this->session->userdata('auth_users');
                       var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                       var seconds = Math.floor((distance % (1000 * 60)) / 1000);
                       document.getElementById("demo").innerHTML = 'Dilate Time ' + minutes + "m " + seconds + "s";
-                      if (distance > diff && dilate_status != '2') {
+                      if (distance >= diff && dilate_status !== '2') {
                         $.ajax({ //dilated_stop
                           url: "<?php echo base_url(); ?>opd/dilated_stop",
                           type: "POST",

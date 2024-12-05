@@ -162,7 +162,7 @@ public function index()
             $row[] = $status;
             $row[] = $app_type;
             $row[] = $pat_status; 
-            $row[] = date('d-M-Y',strtotime($prescription->created_date));  
+            $row[] = date('d-m-Y h:i A',strtotime($prescription->created_date));  
 
             //Action button /////
             $btn_edit = ""; 

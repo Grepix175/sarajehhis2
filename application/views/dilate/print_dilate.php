@@ -147,15 +147,54 @@ $field_list = mandatory_section_field_list(2);
             border-collapse: collapse;
             /* Remove spaces between inner table cells */
         }
+         /* Header Section */
+         .header-print {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-bottom: 2px solid black;
+        }
+
+        .logo {
+            width: 80px;
+            height: auto;
+        }
+
+        .hospital-info {
+            text-align: right;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .hospital-info h1 {
+            font-size: 18px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .hospital-info p {
+            margin: 5px 0 0;
+        }
     </style>
     <link rel="stylesheet" type="text/css" href="<?php echo ROOT_CSS_PATH; ?>bootstrap-datetimepicker.css">
     <script type="text/javascript" src="<?php echo ROOT_JS_PATH; ?>bootstrap-datetimepicker.js"></script>
     <!-- <body onLoad="set_tpa(<?php echo $form_data['insurance_type']; ?>); set_married(<?php echo $form_data['marital_status']; ?>);">  -->
 
 <body>
+<div class="container-fluid">
+    <div class="header-print">
+        <img width="280px" src="https://cdn.hexahealth.com/Image/996a9a6d-24fc-48f0-9464-93d36f0f8cfd.jpg">
+        <div class="hospital-info">
+            <h1>JAMSHEDPUR EYE HOSPITAL</h1>
+            <p>Sakchi, Jamshedpur- 831001, Jharkhand, India</p>
+            <p>Phone: (0657) 2432203, 2422933; Email: jamshedpureyehospital@gmail.com</p>
+        </div>
+    </div>
 
     <div class="panel-body" style="padding:20px;">
-        <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p>
+        <!-- <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p> -->
 
 
         <?php
@@ -222,7 +261,14 @@ $field_list = mandatory_section_field_list(2);
                         <tr>
                             <td class="info-label">Gender</td>
                             <td class="info-content">:
-                                <?php echo ($booking_data['gender'] == '0') ? 'Female' : 'Male'; ?></td>
+                                <?php echo ($booking_data['gender'] == '0') ? 'Female' : 'Male'; ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Date/Time</td>
+                            <td class="info-content">:
+                            <?php echo date('d-m-Y h:i A', strtotime($booking_data['created_date'])); ?>
+                            </td>
                         </tr>
                     </table>
                 </td>
@@ -298,7 +344,6 @@ $field_list = mandatory_section_field_list(2);
 
 
     </div>
-    </div>
     <div class="grp" style="width: 100%; text-align: left; margin-top: 10px;padding:20px;">
         <div class="box-right">
             <span>
@@ -309,13 +354,14 @@ $field_list = mandatory_section_field_list(2);
             </span>
         </div>
     </div>
+</div>
 
-    </form>
+    <!-- </form>
 
     </section>
     </div>
 
-    </div>
+    </div> -->
     <div class="footer">
         <hr />
         <p>Powered by Sara Software</p>

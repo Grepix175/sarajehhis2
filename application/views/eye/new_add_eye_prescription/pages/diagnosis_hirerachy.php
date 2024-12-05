@@ -12,7 +12,9 @@
 					<div class="row form-group">
 						<div class="col-md-8">
 							<input type="text" class="form-control"  name="icd_name" value="<?php echo $icd_detail['icd_name']; ?>" readonly>
-							<input type="hidden" id="third_step_icd" value="<?php echo $third_step['third_icd_code']; ?>" >
+							<!-- <input type="hidden" id="third_step_icd" value="<?php echo $third_step['third_icd_code']; ?>" > -->
+							<input type="hidden" id="third_step_icd" value="<?php echo !empty($third_step['third_icd_code']) ? $third_step['third_icd_code'] : ''; ?>">
+
 							<input type="hidden" name="data_type" id="data_type" value="<?php echo $icd_detail['data_type']; ?>" >
 							<input type="hidden" name="data_id" id="data_id" value="" >
 							<input type="hidden" name="is_code" id="is_code" value="<?php echo $icd_detail['is_code']; ?>">
