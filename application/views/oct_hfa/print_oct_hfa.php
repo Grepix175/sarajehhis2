@@ -576,21 +576,18 @@ $field_list = mandatory_section_field_list(2);
 
 
             <?php //echo"<pre>";print_r($data_list[0]);die; ?>
-            
+
 
 
             <div class="panel-body" style="padding:0px;">
                 <h4 style="float:left;width:100%;text-align:center;margin:2px 2px;position:relative;">
-                    <!-- <span style="position:absolute;height:2px;width:40%;background:#eee;"></span> -->
                     OCT/HFA
                 </h4>
                 <?php
                 $chief_complaints = json_decode($data_list[0]->chief_complaints); // Adjust this method according to your model
                 $chief_complaints = (array) $chief_complaints;
-                // echo "<pre>";print_r($data['chief_complaints']);die;
                 $squint_history = json_decode($data_list[0]->squint_history);
                 $squint_history = (array) $squint_history;
-                // echo "<pre>";print_r($squint_history);die;
                 ?>
                 <div class="row" style="font-size: 10px; font-weight: normal;">
                     <table style="width: 100%; border-collapse: collapse;padding-left:15px;">
@@ -1427,13 +1424,8 @@ $field_list = mandatory_section_field_list(2);
                     </div>
 
                 </div>
-                <div id="load_add_type_modal_popup" class="modal fade" role="dialog" data-backdrop="static"
-                    data-keyboard="false"></div>
-
-
-
+            </div>
+        </div>
+    </div>
 </body>
-
-
-
 </html>

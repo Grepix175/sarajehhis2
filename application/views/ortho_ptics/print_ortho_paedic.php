@@ -585,7 +585,7 @@ $field_list = mandatory_section_field_list(2);
                 $squint_history = (array) $squint_history;
                 // echo "<pre>";print_r($squint_history);die;
                 ?>
-                <div class="panel-body"
+                <div class=""
                     style="float:left;width:100%;margin:2px 2px;position:relative; border:1px solid; padding:5px;">
                     <div class="row" style="font-size: 15px; font-weight: normal;">
                         <div class="col-xs-2" style="margin-left: 15px;margin-top: 10px;"><strong>Referred by: </strong>
@@ -679,7 +679,7 @@ $field_list = mandatory_section_field_list(2);
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <section>
                                 <div class="" style="margin-left: 15px; margin-top:15px">
                                     <label><strong>Additional testing: </strong>
@@ -698,7 +698,7 @@ $field_list = mandatory_section_field_list(2);
                     </div>
                     <h4><strong>Binocular Vision assessment: </strong></h4>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <section>
                                 <div class="" style="margin-left: 15px; margin-top:15px">
                                     <label><strong>Sensory Evaluation: </strong>
@@ -718,7 +718,7 @@ $field_list = mandatory_section_field_list(2);
                                 </div>
                             </section>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-6">
                             <section style="float:left;width:48%;margin-right: 10px;">
                                 <table class="table table-bordered">
                                     <thead class="bg-info">
