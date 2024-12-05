@@ -6270,7 +6270,7 @@ LEFT JOIN `hms_vaccination_sale` ON `hms_vaccination_sale`.`id` = `hms_payment`.
     {
         $users_data = $this->session->userdata('auth_users');
         $this->db->select('id,test_name,test_code');
-        $this->db->where('dept_id', '119');
+        // $this->db->where('dept_id', '119');
         $this->db->where('test_head_id', $test_head_id);
         $this->db->where('branch_id', $users_data['parent_id']);
         $query = $this->db->get('path_test');
@@ -6283,7 +6283,7 @@ LEFT JOIN `hms_vaccination_sale` ON `hms_vaccination_sale`.`id` = `hms_payment`.
     {
         $users_data = $this->session->userdata('auth_users');
         $this->db->select('id,test_heads');
-        $this->db->where('dept_id', '119');
+        // $this->db->where('dept_id', '119');
         $this->db->where('branch_id', $users_data['parent_id']);
         $query = $this->db->get('path_test_heads');
         $result = $query->result();
@@ -6295,7 +6295,7 @@ LEFT JOIN `hms_vaccination_sale` ON `hms_vaccination_sale`.`id` = `hms_payment`.
     {
         $users_data = $this->session->userdata('auth_users');
         $this->db->select('id,test_name,test_code');
-        $this->db->where('dept_id', 122);
+        // $this->db->where('dept_id', 122);
         $this->db->where('branch_id', $users_data['parent_id']);
         $query = $this->db->get('path_test');
         $result = $query->result();
@@ -6337,7 +6337,7 @@ LEFT JOIN `hms_vaccination_sale` ON `hms_vaccination_sale`.`id` = `hms_payment`.
         $users_data = $this->session->userdata('auth_users');
         $this->db->select('id,test_name,test_code');
         $this->db->where('branch_id', $users_data['parent_id']);
-        $this->db->where('dept_id', 122);
+        // $this->db->where('dept_id', 122);
         //$this->db->where("(test_head_id='1327' OR test_head_id='1328')", NULL, FALSE);
         $query = $this->db->get('path_test');
         $result = $query->result();
@@ -6404,7 +6404,7 @@ LEFT JOIN `hms_vaccination_sale` ON `hms_vaccination_sale`.`id` = `hms_payment`.
     {
         $users_data = $this->session->userdata('auth_users');
         $this->db->select('id,test_name,test_code');
-        $this->db->where('dept_id', 122);
+        // $this->db->where('dept_id', 122);
         //$this->db->where('test_head_id',1327);
         $this->db->where('branch_id', $users_data['parent_id']);
         $query = $this->db->get('path_test');
@@ -6415,7 +6415,7 @@ LEFT JOIN `hms_vaccination_sale` ON `hms_vaccination_sale`.`id` = `hms_payment`.
     {
         $users_data = $this->session->userdata('auth_users');
         $this->db->select('id,test_name,test_code');
-        $this->db->where('dept_id', 122);
+        // $this->db->where('dept_id', 122);
         //$this->db->where('test_head_id',1328); 
         $this->db->where('branch_id', $users_data['parent_id']);
         $query = $this->db->get('path_test');

@@ -100,7 +100,7 @@ class Refraction extends CI_Controller
 
             // Display the last status with the desired styling
             // $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';            
-            $row[] = date('d-M-Y', strtotime($refraction->created_date));
+            $row[] = date('d-m-Y h:i A', strtotime($refraction->created_date));
             $send_to = '';
         // echo "<pre>";print_r($list);die;
 

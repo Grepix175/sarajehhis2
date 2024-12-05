@@ -4,6 +4,11 @@
 	<meta charset="euc-kr">
 
 </head>
+<?php
+// echo "<pre>";
+// print_r($form_data);
+// die('saha');
+?>
 
 <body style="font:8px 'Arial';">
 	<page size="A4">
@@ -4849,7 +4854,7 @@
 									echo '<strong style="float:left;width:100%;font-size:10px;">Lens: </strong> Nature- ' . $exam_lens['examnsn_lens_l_ntr'] . ', ';
 								}
 								/*if($exam_lens['examnsn_lens_l_psn'] !='Central'){ echo 'Position- '.$exam_lens['examnsn_lens_l_psn'].', ';}else{ echo 'Central, '; }
-																																																																																									if($exam_lens['examnsn_lens_l_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_l_sz'].', ';}else{ echo 'Crystalline, ';}*/
+																																																																																															if($exam_lens['examnsn_lens_l_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_l_sz'].', ';}else{ echo 'Crystalline, ';}*/
 								if ($exam_lens['examnsn_lens_l_ntr'] == 'Cataract') {
 									echo ' LOCS Grading- ';
 									if ($exam_lens['examnsn_lens_l_locsg_ns'] != '') {
@@ -4873,7 +4878,7 @@
 									echo '<strong style="float:left;width:100%;font-size:10px;">Lens: </strong> Nature- ' . $exam_lens['examnsn_lens_r_ntr'] . ', ';
 								}
 								/*if($exam_lens['examnsn_lens_r_psn'] !='Central'){ echo 'Position- '.$exam_lens['examnsn_lens_r_psn'].', ';}else{ echo 'Central, '; }
-																																																																																									if($exam_lens['examnsn_lens_r_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_r_sz'].', ';}else{ echo 'Crystalline, ';}*/
+																																																																																															if($exam_lens['examnsn_lens_r_sz'] !='Normal'){ echo 'Lens Size- '.$exam_lens['examnsn_lens_r_sz'].', ';}else{ echo 'Crystalline, ';}*/
 								if ($exam_lens['examnsn_lens_r_ntr'] == 'Cataract') {
 									'Lens Grading- ';
 									if ($exam_lens['examnsn_lens_r_locsg_ns'] != '') {

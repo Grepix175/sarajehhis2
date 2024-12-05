@@ -231,43 +231,47 @@ $field_list = mandatory_section_field_list(2);
                         <?php
                         if (empty($flag)) {
                             ?>
-                            <div class="input-group bg-warning" style="width:100px;float:right;border:1px solid #aaa;">
+                            <!-- <div class="input-group bg-warning" style="width:100px;float:right;border:1px solid #aaa;">
                                 <span class="input-group-addon alert alert-warning" style="border:0"
                                     id="demo">Undilated</span>
                                 <div id="d_start"><input type="button" class="btn-success btn btn-sm"
                                         onclick="dilate_strt('<?php echo $booking_id; ?>');" value="Start"></div>
-                            </div>
+                            </div> -->
+                            <div class="input-group bg-warning" style="width:100px;float:right;border:1px solid #aaa;">
+                    <span class="input-group-addon alert alert-warning" style="border:0" id="demo">Undilated</span>
+                    <div id="d_start"><input type="button" class="btn-success btn btn-sm"
+                        onclick="dilate_strt('<?php echo $booking_id; ?>');" value="Start"></div>
+                  </div>
                             <?php
                         }
                         ?>
-
+                        <?php
+                        // echo "<pre>";
+                        // print_r($datas[0]['dilate_time']);
+                        // die('sagar');
+                        ?>
                         <script type="text/javascript">
-                            var dltddate = '<?php echo $datas['dilate_time']; ?>';
-                            var dilate_status = '<?php echo $datas['dilate_status']; ?>';
-                            // console.log(dltddate)
+                            var dltddate = '<?php echo $datas[0]['dilate_time']; ?>';
+                            var dilate_status = '<?php echo $datas[0]['dilate_status']; ?>';
+                            console.log(typeof dilate_status);
+                          
 
-                            var dltddate2 = new Date('<?php echo $datas['dilate_start_time']; ?>').getTime();
-
-                            if (dltddate != '0000-00-00 00:00:00' && dltddate !== '') {
-                                var countDownDate = new Date(dltddate).getTime();
-
+                            var dltddate2 = new Date('<?php echo $datas[0]['dilate_start_time']; ?>').getTime();
+                            console.log(dltddate2,'=====')
+                            if (dltddate != '0000-00-00 00:00:00' && dltddate != '') {
+                                // var countDownDate = new Date(dltddate).getTime();
+                                var countDownDate = new Date("<?php echo $datas[0]['dilate_time']; ?>").getTime();
                                 var diff = countDownDate - dltddate2;
 
                                 var x = setInterval(function () {
                                     var now = new Date().getTime();
                                     var distance = now - dltddate2;
-
                                     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                                     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                                    // console.log(dilate_status)
-                                    // console.log(diff)
-
-                                    // Update the display with the current time difference
                                     document.getElementById("demo").innerHTML = 'Dilate Time ' + minutes + "m " + seconds + "s";
-
+                                   
                                     // Check if the dilate time has elapsed
-                                    if (distance >= diff && dilate_status !== '2') {
-                                        // alert('ok');
+                                    if (distance >= diff && dilate_status !== '2') {                                        // alert('ok');
 
                                         $.ajax({ // Call to stop dilation
                                             url: "<?php echo base_url(); ?>dilated/dilated_stop",

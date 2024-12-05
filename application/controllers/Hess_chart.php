@@ -157,7 +157,7 @@ class Hess_chart extends CI_Controller
       // $row[] = trim($pat_status . (!empty($pat_status) && !empty($hess_chart) && !empty($contact_lens_txt) ? ' / ' : '') . $contact_lens_txt);
       // $row[] = implode(' / ', $values);
     
-      $row[] = date('d-M-Y', strtotime($prescription->created_date));
+      $row[] = date('d-m-Y h:i A', strtotime($prescription->created_date));
 
       //Action button /////
       $btn_edit = "";

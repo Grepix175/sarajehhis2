@@ -138,7 +138,7 @@ class Vision extends CI_Controller
             // $row[] = $vision->anaesthetist_date;
             // $row[] = $vision->doctor_signature;
             // $row[] = $vision->doctor_date;
-            $row[] = date('d-M-Y', strtotime($vision->created_at));
+            $row[] = date('d-m-Y h:i A', strtotime($vision->created_at));
             // $row[] = $vision->created_at;
             // $row[] = $vision->updated_at;
 
@@ -675,7 +675,7 @@ class Vision extends CI_Controller
     public function print_vision($id)
     {
         $data['print_status'] = "1";
-
+        $data['page_title'] = "Vision";
         // Fetch the form data based on the ID
         $data['form_data'] = $this->vision_model->print_vision_details($id);
         // echo "<pre>";print_r($data['form_data']);die;

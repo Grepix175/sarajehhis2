@@ -114,7 +114,7 @@ class Prosthetic extends CI_Controller
 
             // Display the last status with the desired styling
             $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';
-            $row[] = date('d-M-Y', strtotime($prosthetic->created));
+            $row[] = date('d-m-Y h:i A', strtotime($prosthetic->created));
             if ($prosthetic->pro_status == 0) {
                 $send_to = '<button type="button" class="btn-custom open-popup-send-to" 
                             id="open-popup" 
@@ -496,6 +496,7 @@ class Prosthetic extends CI_Controller
     {
         // echo "ppk";die;
         $data['print_status'] = "1";
+        $data['page_title'] = "Prosthetic";
         $data['data_list'] = $this->prosthetic->search_report_data($booking_id,$id);
         $data['booking_data'] = $this->prosthetic->get_booking_by_id($booking_id,$id);
         $data['doctor'] = $this->doctor->doctors_list();

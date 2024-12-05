@@ -1,7 +1,8 @@
 <html>
 <?php error_reporting(E_ALL & ~E_DEPRECATED & ~E_WARNING); ?>
+
 <head>
-    <title>Contact Lens List</title>
+    <title>Contact Lens</title>
     <?php
     if ($print_status == 1) {
         ?>
@@ -14,28 +15,35 @@
     ?>
     <style>
         body {
-            font-size: 7px; /* Reduced font size */
+            font-size: 7px;
+            /* Reduced font size */
         }
-        table{
+
+        table {
             margin-top: 5px;
         }
+
         td {
             padding-left: 3px;
         }
 
         .footer {
-            position: absolute; /* Fixed position at the bottom */
+            position: absolute;
+            /* Fixed position at the bottom */
             bottom: 0;
             left: 0;
             right: 0;
             text-align: center;
-            font-size: 11px; /* Smaller font size for footer text */
+            font-size: 11px;
+            /* Smaller font size for footer text */
         }
 
         .footer hr {
             border: none;
-            border-top: 1px solid #000; /* Line style */
-            margin: 0; /* Remove margins */
+            border-top: 1px solid #000;
+            /* Line style */
+            margin: 0;
+            /* Remove margins */
         }
 
         .patient-info-table {
@@ -53,7 +61,8 @@
         .info-label {
             font-weight: bold;
             white-space: nowrap;
-            padding-right: 5px; /* Space between label and content */
+            padding-right: 5px;
+            /* Space between label and content */
         }
 
         .info-content {
@@ -72,16 +81,57 @@
         }
 
         /* Ensure that the tables in both columns align to the top */
-        .left-column table, 
+        .left-column table,
         .right-column table {
-            width: 100%; /* Ensures full width usage */
-            border-collapse: collapse; /* Remove spaces between inner table cells */
+            width: 100%;
+            /* Ensures full width usage */
+            border-collapse: collapse;
+            /* Remove spaces between inner table cells */
+        }
+
+        /* Header Section */
+        .header-print {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-bottom: 2px solid black;
+        }
+
+        .logo {
+            width: 80px;
+            height: auto;
+        }
+
+        .hospital-info {
+            text-align: right;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .hospital-info h1 {
+            font-size: 18px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .hospital-info p {
+            margin: 5px 0 0;
         }
     </style>
 </head>
 
 <body>
-    <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p>
+<div class="container-fluid">
+    <div class="header-print">
+        <img width="280px" src="https://cdn.hexahealth.com/Image/996a9a6d-24fc-48f0-9464-93d36f0f8cfd.jpg">
+        <div class="hospital-info">
+            <h1>JAMSHEDPUR EYE HOSPITAL</h1>
+            <p>Sakchi, Jamshedpur- 831001, Jharkhand, India</p>
+            <p>Phone: (0657) 2432203, 2422933; Email: jamshedpureyehospital@gmail.com</p>
+        </div>
+    </div>
 
     <?php
     // Loop through the contact lens data
@@ -146,7 +196,13 @@
                     </tr>
                     <tr>
                         <td class="info-label">Gender</td>
-                        <td class="info-content">: <?php echo ($data_list[0]['gender'] == '0') ? 'Female' : 'Male'; ?></td>
+                        <td class="info-content">: <?php echo ($data_list[0]['gender'] == '0') ? 'Female' : 'Male'; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="info-label">Date/Time</td>
+                        <td class="info-content">: <?php echo date('d-m-Y h:i A', strtotime($created_date)); ?>
+                        </td>
                     </tr>
                 </table>
             </td>
@@ -159,7 +215,8 @@
             <td><strong>Internal Communications</strong></td>
         </tr>
     </table>
-    <h3 style="font-size: 12px;"><strong>With Intermidiate effect below mentioned device is chargeable to patient for Contact Lens</strong></h3>
+    <h3 style="font-size: 12px;"><strong>With Intermidiate effect below mentioned device is chargeable to patient for
+            Contact Lens</strong></h3>
     <table width="100%" cellpadding="0" cellspacing="0" border="1px">
         <tr>
             <th>Sr. No</th>
@@ -175,7 +232,7 @@
         if (!empty($data_list)) {
             $i = 1;
             foreach ($data_list[0]['contact_lens'] as $contact_lens) {
-                
+
                 ?>
                 <tr>
                     <td><?php echo $i; ?>.</td>
@@ -197,14 +254,18 @@
         <div style="margin-bottom: 24px; display: flex; justify-content: space-between;">
             <div style="text-align: left; width: 48%;">
                 <p style="font-weight: bold; font-size: 10px; margin-top: 10px;">Signature of Optometrist</p>
-                <strong style="display: inline-block; font-size: 15px; text-align: center; width: 200px; border-top:1px solid black; margin-top: 24px;"><?php echo $data_list[0]['optometrist_signature_name']; ?></strong> <!-- Increased font size -->
+                <strong
+                    style="display: inline-block; font-size: 15px; text-align: center; width: 200px; border-top:1px solid black; margin-top: 24px;"><?php echo $data_list[0]['optometrist_signature_name']; ?></strong>
+                <!-- Increased font size -->
                 <!-- <div style="border-top: 1px solid #000; padding-top: 8px; width: 50%; margin-top: 30px;">
                 </div> -->
             </div>
             <div style="text-align: right; width: 48%;">
                 <p style="font-weight: bold; font-size: 10px; margin-top: 10px;">Signature of Doctor</p>
-                 <strong style="display: inline-block; font-size: 15px; text-align: center; width: 200px; border-top:1px solid black; margin-top: 24px;"><?php echo $data_list[0]['doctor_signature_name']; ?></strong> <!-- Increased font size -->
-                
+                <strong
+                    style="display: inline-block; font-size: 15px; text-align: center; width: 200px; border-top:1px solid black; margin-top: 24px;"><?php echo $data_list[0]['doctor_signature_name']; ?></strong>
+                <!-- Increased font size -->
+
             </div>
         </div>
     </div>
@@ -213,6 +274,7 @@
         <hr />
         <p>Powered by Sara Software</p>
     </div>
+</div>
 </body>
 
 </html>

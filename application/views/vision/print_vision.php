@@ -1,24 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informed Consent for Fundus Fluorescein Angiography</title>
+    <title><?php echo $page_title . PAGE_TITLE; ?></title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         @media print {
+
             /* Setting the page size to Tabloid */
             @page {
-                size: 11in 17in; /* Tabloid dimensions */
-                margin: 1in; /* Adjust margins as needed */
+                size: 11in 17in;
+                /* Tabloid dimensions */
+                margin: 1in;
+                /* Adjust margins as needed */
             }
 
             body {
                 margin: 0;
                 padding: 0;
                 width: 100%;
-                zoom: 1; /* Scale for better fit */
+                zoom: 1;
+                /* Scale for better fit */
             }
 
             /* Ensure the container fits the page */
@@ -31,27 +36,36 @@
             table {
                 width: 100% !important;
                 border-collapse: collapse;
-                page-break-inside: avoid; /* Avoid breaking tables */
+                page-break-inside: avoid;
+                /* Avoid breaking tables */
             }
 
             /* th, td {
                 border: 1px solid black;
                 padding: 8px;
                 word-wrap: break-word; /* Ensure text breaks to fit */
-            } */
+        }
 
-            label, input, textarea, p {
-                font-size: 10pt; /* Adjust font size for printing */
-            }
+        */ label,
+        input,
+        textarea,
+        p {
+            font-size: 10pt;
+            /* Adjust font size for printing */
+        }
 
-            .form-signatures, .form-section {
-                page-break-inside: avoid; /* Avoid breaking signatures across pages */
-            }
+        .form-signatures,
+        .form-section {
+            page-break-inside: avoid;
+            /* Avoid breaking signatures across pages */
+        }
 
-            /* Hide buttons and links during printing */
-            .modal-footer, a, button {
-                display: none !important;
-            }
+        /* Hide buttons and links during printing */
+        .modal-footer,
+        a,
+        button {
+            display: none !important;
+        }
         }
 
         .container-fluid {
@@ -66,23 +80,28 @@
             margin-bottom: 0;
         }
     </style>
-     <style>
+    <style>
         .footer {
-            position: absolute; /* Fixed position at the bottom */
+            position: absolute;
+            /* Fixed position at the bottom */
             bottom: 0;
             left: 0;
             right: 0;
             text-align: center;
-            font-size: 11px; /* Smaller font size for footer text */
+            font-size: 11px;
+            /* Smaller font size for footer text */
         }
 
         .footer hr {
             border: none;
-            border-top: 1px solid #000; /* Line style */
-            margin: 0; /* Remove margins */
+            border-top: 1px solid #000;
+            /* Line style */
+            margin: 0;
+            /* Remove margins */
         }
+
         /* table {s */
-        td{
+        td {
             /* width: auto !important;
             text-align: unset !important; */
         }
@@ -128,14 +147,17 @@
         h3 {
             text-align: center;
         }
+
         select {
-            width: 300px!important;
+            width: 300px !important;
         }
+
         span#select2-medicine_name_dropdown-container,
         span#select2-salt_dropdown-container {
             text-align: left;
             width: 300px;
         }
+
         .patient-info-table {
             width: 100%;
             border: 1px solid #000;
@@ -150,6 +172,7 @@
             vertical-align: top;
             text-align: left;
         }
+
         .left-column,
         .right-column {
             width: 15%;
@@ -162,90 +185,139 @@
         }
 
         /* Ensure that the tables in both columns align to the top */
-        .left-column table, 
+        .left-column table,
         .right-column table {
-            width: 100%; 
+            width: 100%;
             /* border-collapse: collapse; */
         }
-        
+
+
+        /* Header Section */
+        .header-print {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-bottom: 2px solid black;
+        }
+
+        .logo {
+            width: 80px;
+            height: auto;
+        }
+
+        .hospital-info {
+            text-align: right;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .hospital-info h1 {
+            font-size: 18px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .hospital-info p {
+            margin: 5px 0 0;
+        }
+    </style>
     </style>
 </head>
-<body>
-<div class="container-fluid">
-    <section class="content">
-    <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p>
-        <!-- <p class="font-weight-bold">Mobile no.: <?php echo isset($billing_data['mobile_no']) ? htmlspecialchars($billing_data['mobile_no']) : ''; ?></p> -->
-        <?php
-        // Loop through the contact lens data
-        $age_y = $form_data['age_y']??'';
-        $age_m = $form_data['age_m']??'';
-        $age_d = $form_data['age_d']??'';
 
-        $age = "";
-        if ($age_y > 0) {
-            $year = 'Years';
-            if ($age_y == 1) {
-                $year = 'Year';
+<body>
+    <div class="container-fluid">
+        <div class="header-print">
+            <img width="280px" src="https://cdn.hexahealth.com/Image/996a9a6d-24fc-48f0-9464-93d36f0f8cfd.jpg">
+            <div class="hospital-info">
+                <h1>JAMSHEDPUR EYE HOSPITAL</h1>
+                <p>Sakchi, Jamshedpur- 831001, Jharkhand, India</p>
+                <p>Phone: (0657) 2432203, 2422933; Email: jamshedpureyehospital@gmail.com</p>
+            </div>
+        </div>
+        <section class="content">
+            <!-- <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p> -->
+            <!-- <p class="font-weight-bold">Mobile no.: <?php echo isset($billing_data['mobile_no']) ? htmlspecialchars($billing_data['mobile_no']) : ''; ?></p> -->
+            <?php
+            // Loop through the contact lens data
+            $age_y = $form_data['age_y'] ?? '';
+            $age_m = $form_data['age_m'] ?? '';
+            $age_d = $form_data['age_d'] ?? '';
+
+            $age = "";
+            if ($age_y > 0) {
+                $year = 'Years';
+                if ($age_y == 1) {
+                    $year = 'Year';
+                }
+                $age .= $age_y . " " . $year;
             }
-            $age .= $age_y . " " . $year;
-        }
-        if ($age_m > 0) {
-            $month = 'Months';
-            if ($age_m == 1) {
-                $month = 'Month';
+            if ($age_m > 0) {
+                $month = 'Months';
+                if ($age_m == 1) {
+                    $month = 'Month';
+                }
+                $age .= ", " . $age_m . " " . $month;
             }
-            $age .= ", " . $age_m . " " . $month;
-        }
-        if ($age_d > 0) {
-            $day = 'Days';
-            if ($age_d == 1) {
-                $day = 'Day';
+            if ($age_d > 0) {
+                $day = 'Days';
+                if ($age_d == 1) {
+                    $day = 'Day';
+                }
+                $age .= ", " . $age_d . " " . $day;
             }
-            $age .= ", " . $age_d . " " . $day;
-        }
-        ?>
-        <div class="panel-body"  style="">
-            <table class="patient-info-table" style="margin-top: 20px; ">
-                <tr>
-                    <td class="left-column">
-                        <table>
-                            <tr>
-                                <td class="info-label">Patient</td>
-                                <td class="info-content">: <?php echo $form_data['patient_name']??''; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="info-label">Patient Reg. No</td>
-                                <td class="info-content">: <?php echo $form_data['patient_code']??''; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="info-label">OPD No</td>
-                                <td class="info-content">: <?php echo $form_data['booking_code']??''; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="info-label">Token No</td>
-                                <td class="info-content">: <?php echo $form_data['token_no'] ?? ''; ?></td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td class="right-column">
-                        <table>
-                            <tr>
-                                <td class="info-label">Mobile no.</td>
-                                <td class="info-content">: <?php echo $form_data['mobile_no']??''; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="info-label">Age</td>
-                                <td class="info-content">: <?php echo $age??''; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="info-label">Gender</td>
-                                <td class="info-content">: <?php echo ($form_data['gender'] == '0') ? 'Female' : 'Male'; ?></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-            <!-- <table class="table table-borderless">
+            ?>
+            <div class="panel-body" style="">
+                <table class="patient-info-table" style="margin-top: 20px; ">
+                    <tr>
+                        <td class="left-column">
+                            <table>
+                                <tr>
+                                    <td class="info-label">Patient</td>
+                                    <td class="info-content">: <?php echo $form_data['patient_name'] ?? ''; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="info-label">Patient Reg. No</td>
+                                    <td class="info-content">: <?php echo $form_data['patient_code'] ?? ''; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="info-label">OPD No</td>
+                                    <td class="info-content">: <?php echo $form_data['booking_code'] ?? ''; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="info-label">Token No</td>
+                                    <td class="info-content">: <?php echo $form_data['token_no'] ?? ''; ?></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="right-column">
+                            <table>
+                                <tr>
+                                    <td class="info-label">Mobile no.</td>
+                                    <td class="info-content">: <?php echo $form_data['mobile_no'] ?? ''; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="info-label">Age</td>
+                                    <td class="info-content">: <?php echo $age ?? ''; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="info-label">Gender</td>
+                                    <td class="info-content">:
+                                        <?php echo ($form_data['gender'] == '0') ? 'Female' : 'Male'; ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="info-label">Data/Time</td>
+                                    <td class="info-content">:
+                                        <?php echo date('d-m-Y h:i A', strtotime($form_data['created_at'])); ?>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <!-- <table class="table table-borderless">
                 <tbody>
                     <tr>
                         <td>
@@ -276,108 +348,52 @@
 
                 </tbody>
             </table> -->
-        </div>
+            </div>
 
 
-        <h3 class="text-center" style="margin-bottom:30px;">Informed Consent for Fundus Fluorescein Angiography</h3>
+            <h3 class="text-center" style="margin-bottom:30px;">Informed Consent for Fundus Fluorescein Angiography</h3>
 
-        <table class="table table-borderless">
-            <tbody>
-                <tr>
-                    <td class="small">
-                        <span class="font-weight-bold">Purpose of the Procedure : </span> 
-                        <?php echo isset($form_data['procedure_purpose']) ? htmlspecialchars($form_data['procedure_purpose']) : ''; ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="small">
-                        <span class="font-weight-bold">Side Effects : </span> 
-                        <?php echo isset($form_data['side_effect_name']) ? htmlspecialchars($form_data['side_effect_name']) : ''; ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="small mt-3 text-left" colspan="1">
-                        I have been informed about the procedure, benefits, and risks, and hereby consent to proceed with the investigation.
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-
-        <div class="form-signatures">
-            <table class="table table-borderless mb-4">
+            <table class="table table-borderless">
                 <tbody>
                     <tr>
-                        <td class="small text-center">
-                            <div class="pt-5"> 
-                                <span></span>
-                                <span></span>
-                            </div>
-                            <span class="font-weight-bold">Signature / LTI of patient</span>
+                        <td class="small">
+                            <span class="font-weight-bold">Purpose of the Procedure : </span>
+                            <?php echo isset($form_data['procedure_purpose']) ? htmlspecialchars($form_data['procedure_purpose']) : ''; ?>
                         </td>
-                        <td class="small text-center">
-                            <div class="pt-5"> 
-                                <span></span>
-                                <span></span>
-                            </div>
-                            <span class="font-weight-bold">Signature / LTI of relative</span>
+                    </tr>
+                    <tr>
+                        <td class="small">
+                            <span class="font-weight-bold">Side Effects : </span>
+                            <?php echo isset($form_data['side_effect_name']) ? htmlspecialchars($form_data['side_effect_name']) : ''; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="small mt-3 text-left" colspan="1">
+                            I have been informed about the procedure, benefits, and risks, and hereby consent to proceed
+                            with the investigation.
                         </td>
                     </tr>
                 </tbody>
             </table>
-        </div>
 
 
-
-
-        <div class="form-section mt-5">
-            <p class="font-weight-bold text-center">Check List Prior to FFA - for the evaluating Doctor and Assistant</p>
-            <table class="table table-bordered mt-3">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $questions = [
-                        'Informed Consent' => 'informed_consent',
-                        'Previous FFA' => 'previous_ffa',
-                        'History of Allergy' => 'history_allergy',
-                        'History of Asthma' => 'history_asthma',
-                        'History of Epilepsy (Flash photography)' => 'history_epilepsy',
-                        'Accompanied by Attendant' => 'accompanied_attendant',
-                        'S Creatinine' => 's_creatinine',
-                        'Blood Sugar' => 'blood_sugar',
-                        'Blood Pressure' => 'blood_pressure'
-                    ];
-
-                    foreach ($questions as $question => $name): ?>
-                        <tr>
-                            <th class="font-weight-bold mb-0 small"><?php echo $question; ?></th>
-                            <td>
-                                <p class="font-weight-bold mb-0 small">
-                                    <?php 
-                                    if (isset($form_data[$name])) {
-                                        echo ($form_data[$name] == 'yes') ? 'Yes' : (($form_data[$name] == 'no') ? 'No' : '');
-                                    } else {
-                                        echo ''; // If the value is not set at all
-                                    }
-                                    ?>
-                                </p>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-            <div class="grp-full">
-                <table class="table table-borderless">
+            <div class="form-signatures">
+                <table class="table table-borderless mb-4">
                     <tbody>
                         <tr>
-                            <td>
-                                <span class="font-weight-bold">FFA not done due to : </span> 
-                                <?php echo isset($form_data['reason_ffa_not_done']) ? htmlspecialchars($form_data['reason_ffa_not_done']) : ''; ?>
+                            <td class="small text-center">
+                                <div class="pt-5">
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <span class="font-weight-bold">Signature / LTI of patient</span>
+                            </td>
+                            <td class="small text-center">
+                                <div class="pt-5">
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <span class="font-weight-bold">Signature / LTI of relative</span>
                             </td>
                         </tr>
                     </tbody>
@@ -385,41 +401,109 @@
             </div>
 
 
-        </div>
-
-        <div class="form-signatures mt-5">
-            <table class="table table-borderless mb-4">
-                <tbody>
-                    <tr>
-                        <td class="small text-center">
-                            <p class="font-weight-bold pt-4">Optometrist's Signature</p>
-                            <br />
-                            <span class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;"><strong><?php echo isset($form_data['optometrist_signature_name']) ? htmlspecialchars($form_data['optometrist_signature_name']) : ''; ?></strong></span>
-                            <!-- <div class="border-top pt-4">______________________</div> Increased padding for more space -->
-                            <p class="mt-2 small"><?php echo isset($form_data['optometrist_date']) ? date('d-m-Y', strtotime($form_data['optometrist_date'])) : '__________________'; ?></p>
-                        </td>
-                        <td class="small text-center">
-                            <p class="font-weight-bold pt-4">Anaesthetist's Signature</p>
-                            <br />
-                            <span class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;"><strong><?php echo isset($form_data['anaesthetist_signature']) ? htmlspecialchars($form_data['anaesthetist_signature']) : ''; ?></strong></span>
-                            <!-- <div class="border-top pt-4">______________________</div> Increased padding for more space -->
-                            <p class="mt-2 small"><?php echo isset($form_data['anaesthetist_date']) ? date('d-m-Y', strtotime($form_data['anaesthetist_date'])) : '__________________'; ?></p>
-                        </td>
-                        <td class="small text-center">
-                            <p class="font-weight-bold pt-4">Doctor's Signature</p>
-                            <br />
-                            <span class="border-top pt-2 mx-auto" style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;"><strong><?php echo isset($form_data['doctor_signature_name']) ? htmlspecialchars($form_data['doctor_signature_name']) : ''; ?></strong></span>
-                            <!-- <div class="border-top pt-4">______________________</div> Increased padding for more space -->
-                            <p class="mt-2 small"><?php echo isset($form_data['doctor_date']) ? date('d-m-Y', strtotime($form_data['doctor_date'])) : '__________________'; ?></p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
 
 
-    </section>
-</div>
+            <div class="form-section mt-5">
+                <p class="font-weight-bold text-center">Check List Prior to FFA - for the evaluating Doctor and
+                    Assistant</p>
+                <table class="table table-bordered mt-3">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $questions = [
+                            'Informed Consent' => 'informed_consent',
+                            'Previous FFA' => 'previous_ffa',
+                            'History of Allergy' => 'history_allergy',
+                            'History of Asthma' => 'history_asthma',
+                            'History of Epilepsy (Flash photography)' => 'history_epilepsy',
+                            'Accompanied by Attendant' => 'accompanied_attendant',
+                            'S Creatinine' => 's_creatinine',
+                            'Blood Sugar' => 'blood_sugar',
+                            'Blood Pressure' => 'blood_pressure'
+                        ];
+
+                        foreach ($questions as $question => $name): ?>
+                            <tr>
+                                <th class="font-weight-bold mb-0 small"><?php echo $question; ?></th>
+                                <td>
+                                    <p class="font-weight-bold mb-0 small">
+                                        <?php
+                                        if (isset($form_data[$name])) {
+                                            echo ($form_data[$name] == 'yes') ? 'Yes' : (($form_data[$name] == 'no') ? 'No' : '');
+                                        } else {
+                                            echo ''; // If the value is not set at all
+                                        }
+                                        ?>
+                                    </p>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <div class="grp-full">
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <span class="font-weight-bold">FFA not done due to : </span>
+                                    <?php echo isset($form_data['reason_ffa_not_done']) ? htmlspecialchars($form_data['reason_ffa_not_done']) : ''; ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+
+            <div class="form-signatures mt-5">
+                <table class="table table-borderless mb-4">
+                    <tbody>
+                        <tr>
+                            <td class="small text-center">
+                                <p class="font-weight-bold pt-4">Optometrist's Signature</p>
+                                <br />
+                                <span class="border-top pt-2 mx-auto"
+                                    style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;"><strong><?php echo isset($form_data['optometrist_signature_name']) ? htmlspecialchars($form_data['optometrist_signature_name']) : ''; ?></strong></span>
+                                <!-- <div class="border-top pt-4">______________________</div> Increased padding for more space -->
+                                <p class="mt-2 small">
+                                    <?php echo isset($form_data['optometrist_date']) ? date('d-m-Y', strtotime($form_data['optometrist_date'])) : '__________________'; ?>
+                                </p>
+                            </td>
+                            <td class="small text-center">
+                                <p class="font-weight-bold pt-4">Anaesthetist's Signature</p>
+                                <br />
+                                <span class="border-top pt-2 mx-auto"
+                                    style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;"><strong><?php echo isset($form_data['anaesthetist_signature']) ? htmlspecialchars($form_data['anaesthetist_signature']) : ''; ?></strong></span>
+                                <!-- <div class="border-top pt-4">______________________</div> Increased padding for more space -->
+                                <p class="mt-2 small">
+                                    <?php echo isset($form_data['anaesthetist_date']) ? date('d-m-Y', strtotime($form_data['anaesthetist_date'])) : '__________________'; ?>
+                                </p>
+                            </td>
+                            <td class="small text-center">
+                                <p class="font-weight-bold pt-4">Doctor's Signature</p>
+                                <br />
+                                <span class="border-top pt-2 mx-auto"
+                                    style="display: inline-block; width: 200px; border-top:1px solid black; margin-top: 24px;"><strong><?php echo isset($form_data['doctor_signature_name']) ? htmlspecialchars($form_data['doctor_signature_name']) : ''; ?></strong></span>
+                                <!-- <div class="border-top pt-4">______________________</div> Increased padding for more space -->
+                                <p class="mt-2 small">
+                                    <?php echo isset($form_data['doctor_date']) ? date('d-m-Y', strtotime($form_data['doctor_date'])) : '__________________'; ?>
+                                </p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+        </section>
+    </div>
 
 </body>
+
 </html>

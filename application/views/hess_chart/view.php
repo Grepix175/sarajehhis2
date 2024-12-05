@@ -15,7 +15,10 @@
 			<span style="font-size:11px">OPD SUMMARY</span>
 		</h3>
 		<?php
-
+	// 	   echo "<pre>";
+    // print_r($drawing_list);
+    // print_r(!empty($form_data['drawing_flag']));
+    // die;
 		if (!empty($form_data['drawing_flag'])) {
 			if (!empty($drawing_list)) {
 				?>
@@ -50,7 +53,7 @@
 
 
 
-		<?php if ($form_data['biometry_flag']) { ?>
+		<?php if ($form_data['biometry_flag'] && $flag !== 'hess_chart') { ?>
 			<section class=" panel panel-default">
 				<div class="panel-body">
 					<div class="row">

@@ -96,7 +96,7 @@ class Low_vision extends CI_Controller
 
             // Display the last status with the desired styling
             $row[] = '<font style="background-color: #228B30;color:white">'.$last_status.'</font>';
-            $row[] = date('d-M-Y', strtotime($low_vision->created));
+            $row[] = date('d-m-Y h:i A', strtotime($low_vision->created));
 
             if ($low_vision->low_status == 0) {
                 $send_to = '<button type="button" class="btn-custom open-popup-send-to" 
@@ -540,6 +540,7 @@ class Low_vision extends CI_Controller
         // print_r($id);
         // die();
         $data['print_status'] = "1";
+        $data['page_title'] = "Low Vision";
         $data['data_list'] = $this->low_vision->search_report_data($booking_id,$id);
         $data['booking_data'] = $this->low_vision->get_booking_by_id($booking_id);
         $data['doctor'] = $this->doctor->doctors_list();

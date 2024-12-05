@@ -282,6 +282,37 @@ $field_list = mandatory_section_field_list(2);
             border-collapse: collapse;
             /* Remove spaces between inner table cells */
         }
+        /* Header Section */
+        .header-print {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-bottom: 2px solid black;
+        }
+
+        .logo {
+            width: 80px;
+            height: auto;
+        }
+
+        .hospital-info {
+            text-align: right;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .hospital-info h1 {
+            font-size: 18px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .hospital-info p {
+            margin: 5px 0 0;
+        }
+        
     </style>
 
 
@@ -296,50 +327,28 @@ $field_list = mandatory_section_field_list(2);
     ?>
 
 <body>
+    
     <div class="container-fluid">
-        <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p>
-        <!-- <table class="patient-info-table" style=" margin-top: 20px; ">
-            <tr>
-                <td class="left-column">
-                    <table>
-                        <tr>
-                            <td class="info-label">Patient</td>
-                            <td class="info-content">: <?php echo $form_data['patient_name'] ?? ''; ?></td>
-                        </tr>
-                        <tr>
-                            <td class="info-label">Patient Reg. No</td>
-                            <td class="info-content">: <?php echo $form_data['patient_code'] ?? ''; ?></td>
-                        </tr>
-                        <tr>
-                            <td class="info-label">Token No</td>
-                            <td class="info-content">: <?php echo $form_data['token_no'] ?? ''; ?></td>
-                        </tr>
-                        <tr>
-                            <td class="info-label">OPD No</td>
-                            <td class="info-content">: <?php echo $form_data['booking_code'] ?? ''; ?></td>
-                        </tr>
-                    </table>
-                </td>
-                <td class="right-column">
-                    <table>
-                        <tr>
-                            <td class="info-label">Mobile no.</td>
-                            <td class="info-content">: <?php echo $form_data['mobile_no'] ?? ''; ?></td>
-                        </tr>
-                        <tr>
-                            <td class="info-label">Age</td>
-                            <td class="info-content">: <?php echo $form_data['age'] ?? ''; ?></td>
-                        </tr>
-                        <tr>
-                            <td class="info-label">Gender</td>
-                            <td class="info-content">:
-                                <?php echo ($form_data['gender'] == '0') ? 'Female' : 'Male'; ?>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table> -->
+        <!-- <p style="text-align: center; font-size: 7px;"><strong>Sara Eye HOSPITALS</strong></p> -->
+        <!-- <div class="header">
+            <div class="image" align="left" style="border-right: 0;padding: 0;">
+                <img src="https://cdn.hexahealth.com/Image/996a9a6d-24fc-48f0-9464-93d36f0f8cfd.jpg" alt="Hospital Image" width="280px">
+            </div>
+            <div class="info" align="right" style="border-right:0; border-left: 0;width: 850px;">
+                <h2>JAMSHEDPUR EYE HOSPITAL</h2>
+                <h3>Sakchi, Jamshedpur- 831001, Jharkhand, India</h3>
+                <p>Phone (0657) 2432203, 2422933; Email : jamshedpureyehospital@gmail.com</p>
+            </div>
+        </div> -->
+        <div class="header-print">
+            <img width="280px" src="https://cdn.hexahealth.com/Image/996a9a6d-24fc-48f0-9464-93d36f0f8cfd.jpg">
+            <div class="hospital-info">
+                <h1>JAMSHEDPUR EYE HOSPITAL</h1>
+                <p>Sakchi, Jamshedpur- 831001, Jharkhand, India</p>
+                <p>Phone: (0657) 2432203, 2422933; Email: jamshedpureyehospital@gmail.com</p>
+            </div>
+        </div>
+        
         <!-- Header section for Name, Date, Age -->
         <div class="row">
             <div class="col-md-6">

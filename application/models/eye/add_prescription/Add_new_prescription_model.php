@@ -1661,23 +1661,25 @@ class Add_new_prescription_model extends CI_Model
 			$refraction_below8 = 0;
 		} elseif ($post['flag'] == 'hess_chart') {
 			$history_flag = 1;
-			$drawing_flag = isset($post['print_drawing_flag']) ? '0' : '0';
+			$drawing_flag = isset($post['print_drawing_flag']) ? '1' : '0';
 		} else {
-			$history_flag = isset($post['print_history_flag']) ? '1' : '0';
-			$drawing_flag = 0;
-			$refraction_below8 = 0;
+			$history_flag = !isset($post['print_history_flag']) ? '1' : '0';
+			$drawing_flag = 1;
+			$refraction_below8 = 1;
 		}
-		// echo "<pre>"; print_r($drawing_flag); die('sagar');
-		$contactlens_flag = isset($post['print_contactlens_flag']) ? '1' : '0';
-		$glassesprescriptions_flag = isset($post['print_glassesprescriptions_flag']) ? '1' : '0';
-		$intermediate_glasses_prescriptions_flag = isset($post['print_intermediate_glasses_prescriptions_flag']) ? '1' : '0';
-		$examination_flag = isset($post['print_examination_flag']) ? '1' : '0';
+		// echo "<pre>"; print_r($drawing_flag); die('EYEY');
 
-		$diagnosis_flag = isset($post['print_diagnosis_flag']) ? '1' : '0';
-		$investigations_flag = isset($post['print_investigations_flag']) ? '1' : '0';
-		$advice_flag = isset($post['print_advice_flag']) ? '1' : '0';
-		$biometry_flag = isset($post['print_biometry_flag']) ? '1' : '0';
-		$biometry_flag = isset($post['print_biometry_flag']) ? '1' : '0';
+		// echo "<pre>"; print_r($drawing_flag); die('sagar');
+		$contactlens_flag = !isset($post['print_contactlens_flag']) ? '1' : '0';
+		$glassesprescriptions_flag = !isset($post['print_glassesprescriptions_flag']) ? '1' : '0';
+		$intermediate_glasses_prescriptions_flag = !isset($post['print_intermediate_glasses_prescriptions_flag']) ? '1' : '0';
+		$examination_flag = !isset($post['print_examination_flag']) ? '1' : '0';
+
+		$diagnosis_flag = !isset($post['print_diagnosis_flag']) ? '1' : '0';
+		$investigations_flag = !isset($post['print_investigations_flag']) ? '1' : '0';
+		$advice_flag = !isset($post['print_advice_flag']) ? '1' : '0';
+		$biometry_flag = !isset($post['print_biometry_flag']) ? '1' : '0';
+		$biometry_flag = !isset($post['print_biometry_flag']) ? '1' : '0';
 
 		if ($post['flag'] == 'refraction_below_8_years') {
 			$refstatus = 'Refraction below 8 years';
@@ -4190,31 +4192,36 @@ class Add_new_prescription_model extends CI_Model
 			$this->db->insert('hms_std_eye_prescription_diagnosis_hierarchy', $data_diagnosis);
 			$this->db->insert('hms_std_eye_prescription_advice', $data_advice);
 		}
-		//   print_r($his_data);
-		//   print_r('else out');
-		//          die;
-
+		
 		// Set drawing $prescriptionid
-		$this->db->where('pres_id', $prescriptionid);
-		$this->db->where('booking_id', $post['booking_id']);
-		$this->db->delete('hms_eye_prescription_drawing');
-
-		$drawing_data = $this->session->userdata('drawing_data');
-		$user_data = $this->session->userdata('auth_users');
-		if (!empty($drawing_data)) {
-			foreach ($drawing_data as $drawing) {
-				$d_arr = array(
-					"booking_id" => $post['booking_id'],
-					"pres_id" => $prescriptionid,
-					"image" => $drawing['image'],
-					"remark" => $drawing['remark'],
-					"created_by" => $user_data['id'],
-					"created_date" => date('Y-m-d H:i:s')
-				);
-				$this->db->insert('hms_eye_prescription_drawing', $d_arr);
+		
+		if($post['flag'] === 'hess_chart' || empty($post['flag'])){			
+			// print_r($post['flag']);
+			// print_r('else out');
+			// die;
+			$this->db->where('pres_id', $prescriptionid);
+			$this->db->where('booking_id', $post['booking_id']);
+			$this->db->delete('hms_eye_prescription_drawing');
+			$drawing_data = $this->session->userdata('drawing_data');
+			$user_data = $this->session->userdata('auth_users');
+			if (!empty($drawing_data)) {
+				foreach ($drawing_data as $drawing) {
+					$d_arr = array(
+						"booking_id" => $post['booking_id'],
+						"pres_id" => $prescriptionid,
+						"image" => $drawing['image'],
+						"remark" => $drawing['remark'],
+						"created_by" => $user_data['id'],
+						"created_date" => date('Y-m-d H:i:s')
+					);
+					$this->db->insert('hms_eye_prescription_drawing', $d_arr);
+				}
 			}
+			$drawing_data = $this->session->unset_userdata('drawing_data');
 		}
-		$drawing_data = $this->session->unset_userdata('drawing_data');
+		// print_r($post['flag']);
+		// 	print_r('else out asdasdasd');
+		// 		   die;
 
 		// $prescriptionid
 

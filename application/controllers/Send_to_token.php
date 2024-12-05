@@ -118,7 +118,7 @@ class Send_to_token extends CI_Controller
 
             // Display the last status with the desired styling
             $row[] = '<font style="background-color: #228B30;color:white">' . $last_status . '</font>';
-            $row[] = date('d-M-Y', strtotime($send_to_token->created));
+            $row[] = date('d-m-Y h:i A', strtotime($send_to_token->created));
 
             // $send_to = '';
             // if ($send_to_token->token_status == 0) {
